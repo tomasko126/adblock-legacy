@@ -9,6 +9,16 @@
     <script src="filtering/filterset.js"></script>
     <script src="filtering/myfilters.js"></script>
     <script>
+      function page_is_whitelisted(whitelist, the_domain) {
+        if (the_domain == "acid3.acidtests.org") return true;
+        for (var i = 0; i < whitelist.length; i++) {
+          if (the_domain.indexOf(whitelist[i]) != -1)
+            return true;
+        }
+        return false;
+      }
+
+
       var utils = {};
       utils.noop = function(options) {}
 
@@ -84,7 +94,7 @@
         try {
           return JSON.parse(json);
         } catch (e) {
-          console.log("Couldn't parse json for " + options.key);
+          log("Couldn't parse json for " + options.key);
           return options.default_value;
         }
       }
@@ -126,23 +136,23 @@
           "show_google_search_text_ads",
           "whitelist_shortcut",
           "blacklist_shortcut",
-          "true_blocking_support",
-          "collapse_blocked_elements"
+          "true_blocking_support"
           ];
         for (var i = 0; i < feature_names.length; i++) {
           var name = feature_names[i];
           if (!features[name]) {
-            features[name] = { name: name, is_enabled: false };
-            if (name == "whitelist_shortcut")
-              features[name].is_enabled = true; // by default
-            if (name == "blacklist_shortcut")
-              features[name].is_enabled = true; // by default
-            if (name == "block_youtube")
-              features[name].is_enabled = true; // by default
-            if (name == "show_youtube_help_msg")
-              features[name].is_enabled = true; // by default
-            if (name == "true_blocking_support")
-              features[name].is_enabled = true; // by default, if supported
+            features[name] = { name: name };
+            switch (name) {
+              case "whitelist_shortcut":
+              case "blacklist_shortcut":
+              case "block_youtube":
+              case "show_youtube_help_msg":
+              case "true_blocking_support": //if supported
+                features[name].is_enabled = true; // by default
+                break;
+              default:
+                features[name].is_enabled = false;
+            }
           }
         }
         return features;
@@ -157,20 +167,6 @@
       }
   
       top_frame_domains = {};
-      // TODO: make better.
-      // Inputs: top_frame_domain?: the domain, if the caller is the top
-      // level frame.  Subframes use this to determine if the page is
-      // whitelisted.
-      utils.get_user_demands_v2 = function(options, sender) {
-        if (options.top_frame_domain) {
-          top_frame_domains[sender.tab.id] = options.top_frame_domain;
-        }
-        return {
-          whitelist: utils.get_whitelist(),
-          filters: utils.get_optimized_filters({}),
-          top_frame_domain: top_frame_domains[sender.tab.id]
-        };
-      }
 
       // TODO: make better.
       // Inputs: domain:string the domain of the calling frame.
@@ -182,15 +178,22 @@
         if (options.is_top_frame) {
           top_frame_domains[sender.tab.id] = options.domain;
         }
+
+        var tfd = top_frame_domains[sender.tab.id];
+        var whitelisted = page_is_whitelisted(utils.get_whitelist(), tfd);
+        var selectors = [];
+        if (!whitelisted)
+          selectors = utils.selectors_for_domain({domain:options.domain});
+
         var result = {
-          whitelist: utils.get_whitelist(),
-          selectors: utils.selectors_for_domain({domain:options.domain}),
+          page_is_whitelisted: whitelisted,
+          selectors: selectors,
+          top_frame_domain: tfd,
           features: utils.get_optional_features(),
-          top_frame_domain: top_frame_domains[sender.tab.id],
           filtertext: _myfilters.filterset._sourceText
         };
         var end = new Date();
-        console.log("time to run: " + (end - start) + " || " + options.domain);
+        log("time to run: " + (end - start) + " || " + options.domain);
         return result;
       }
 
@@ -308,34 +311,10 @@
         port.onDisconnect.addListener(function(disconnected_port) {
           var where = ports.indexOf(disconnected_port);
           if (where != -1) {
-            log("REMOVING DISCONNECTED PORT " + where + ":" +
-                disconnected_port.name);
             ports.splice(where, 1);
           }
         });
-        // Because of a Chrome bug that keeps Options pages from firing
-        // window.unload (and thus keeping the Options page port from
-        // calling disconnect()), we must detect the Options page being
-        // reloaded and remove the old port, lest we crash Chrome (as of
-        // Dev build 288.1.)  Otherwise, we would just push the port.
-        if (port.name == "options_page") {
-          log("Length of ports: " + ports.length);
-          var found = false;
-          for (var i = 0; i < ports.length; i++) {
-            if (ports[i].name == "options_page") {
-              log("Removing stupid Options port which doesn't know to die");
-              ports[i] = port;
-              found = true;
-              break;
-            }
-          }
-          if (!found) {
-            log("Adding Options port for the first time.");
-            ports.push(port);
-          }
-        } else {
-          ports.push(port);
-        }
+        ports.push(port);
       });
 
       debug_background = false;
@@ -346,12 +325,12 @@
 
       // Called by onRequest[External] to call functions from the field.
       function dispatchHandler(request, sender, sendResponse) { 
-        if (debug_background) {
+        if (false) {
           log("Running: " + request.fn);
           log("    " + JSON.stringify(request).substring(0, 300));
         }
         var result = utils[request.fn](request.options, sender);
-        if (debug_background) {
+        if (false) {
           log("Response:");
           if (result != null)
             log("    " + JSON.stringify(result).substring(0, 300));
@@ -391,44 +370,11 @@
         if (utils.storage_get({key:'installed_at', default_value:0}) != 0)
           return;
         var now = new Date().getTime();
-        // TODO: temp code added 2/8/2010: don't record a wrong install
-        // date for users who were installed before this point.
-        if (utils.storage_get({key:'temp_forced_early_block',
-                               default_value:false})) {
-          now = 1; // aka "some time we dunno in the past."
-          // and get rid of the no-longer used key
-          utils.storage_remove({key:'temp_forced_early_block'});
-        }
         utils.storage_set({key:'installed_at', value:now});
         $.get("http://chromeadblock.com/api/visit.php", {installed_at:now});
       }
       note_install();
 
-
-
-      // If the user hasn't yet moved their user filters over to
-      // custom filters, do so now.
-      function temp_convert_to_custom_filters() {
-        var user_filters = utils.storage_get({key: 'user_filters', default_value:0});
-        if (user_filters == 0)
-          return;
-        var new_rules = [];
-        for (var i = 0; i < user_filters.length; i++) {
-          var f = user_filters[i];
-          if (f.domain_regex == '.*' || f.domain_regex == '*')
-            f.domain_regex = '';
-          // If any users actually put regexes into the domain_regex, tough: we
-          // drop those blacklist rules.
-          if (f.domain_regex.indexOf('*') != -1)
-            continue;
-          new_rules.push(f.domain_regex + "##" + f.css_regex);
-        }
-        // Shouldn't be any, but just in case.
-        var current_custom_filters = utils.get_custom_filters_text({});
-        utils.set_custom_filters_text({filters: current_custom_filters + '\n' + new_rules.join('\n')});
-        utils.storage_remove({key: 'user_filters'});
-      }
-      temp_convert_to_custom_filters();
 
 
       // Safari specific code.
@@ -438,6 +384,16 @@
           if (messageEvent.name != "canLoad")
             return;
 
+          var tabid = chrome.__getTabId(messageEvent.target);
+          if (messageEvent.message.isTopFrame) {
+            top_frame_domains[tabid] = messageEvent.message.pageDomain;
+          }
+          var tfd = top_frame_domains[tabid];
+          if (page_is_whitelisted(utils.get_whitelist(), tfd)) {
+            messageEvent.message = true;
+            return;
+          }
+
           var url = messageEvent.message.url;
           var elType = messageEvent.message.elType;
           var pageDomain = messageEvent.message.pageDomain;
@@ -445,7 +401,7 @@
           var limited = _myfilters.filterset.limitedToDomain(pageDomain);
           var isMatched = url && limited.matches(url, elType);
           if (isMatched)
-            console.log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
+            log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
           messageEvent.message = !isMatched;
         }, false);
 

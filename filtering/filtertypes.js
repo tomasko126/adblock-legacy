@@ -12,6 +12,10 @@ Filter.adTypes = {
   NONE: 0,
   GENERAL: 1,
   GOOGLE_TEXT_AD: 2,
+  // temp: We need this until Gmail and Calendar no longer hide Bcc/Cc/
+  // Event Details fields upon click, when rules are on the page of the form
+  // ##anything[style="anything"]
+  STYLE_HIDE_BREAKING_GOOGLE_SERVICES: 4,
 }
 
 // Return a Filter instance for the given filter text.
@@ -128,6 +132,10 @@ var SelectorFilter = function(text) {
   if (text.indexOf('~all.google.domains') == 0)
     this._adType = Filter.adTypes.GOOGLE_TEXT_AD;
 
+  if (text.match(/google\..*style[\^\$\*]?=/))
+    this._adType = Filter.adTypes.STYLE_HIDE_BREAKING_GOOGLE_SERVICES;
+    
+
   if (text.indexOf("##") == -1) {
     try {
       text = SelectorFilter._old_style_to_new(text);
@@ -142,15 +150,6 @@ var SelectorFilter = function(text) {
   var parts = text.split('##');
   this._domains = Filter._domainInfo(parts[0], ',');
   this.selector = parts[1];
-
-  // Handle all the broken selectors that I've ever seen.  I may end up
-  // having to take code from AdBlockPlus to correctly parse all possible
-  // selectors, since people have verified their selectors against ABP's
-  // particular implementation.  For now though, I'll just one-off fix the
-  // invalid ones that I come across.
-
-  // ChinaList: #[id^="ad_thread"] -> [id^="ad_thread"]
-  this.selector = this.selector.replace(/^#\[/, '*[');
 }
 SelectorFilter.prototype = {
   // Inherit from Filter.
@@ -188,8 +187,17 @@ SelectorFilter._old_style_to_new = function(text) {
   // turn all [foo=bar baz] groups into [foo="bar baz"]
   // Specifically match:    = then not " then anything till ]
   segments = segments.replace(/=([^"][^\]]*)/g, '="$1"');
+  // turn all [foo] into .foo, #foo
+  // #div(adblock) means all divs with class or id adblock
+  // class must be a single class, not multiple (not #*(ad listitem))
+  // I haven't ever seen filters like #div(foo)(anotherfoo), so ignore these
+  var resultFilter = node + segments;
+  var match = resultFilter.match(/\[([^\=]*?)\]/);
+  if (match)
+    resultFilter = resultFilter.replace(match[0], "#" + match[1]) +
+     "," + resultFilter.replace(match[0], "." + match[1]);
 
-  return domain + "##" + node + segments;
+  return domain + "##" + resultFilter;
 }
 
 // Filters that block by URL regex or substring.

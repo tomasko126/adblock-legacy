@@ -17,6 +17,28 @@ function debug_print_selector_matches() {
     });
 }
 
+// Return the url tied to the given element.  null is OK if we can't find one.
+function urlForElement(el, type) {
+  // TODO: handle background images, based on 'type'.
+  switch (el.nodeName) {
+    case 'IMG': return el.src;
+    case 'SCRIPT': return el.src;
+    case 'EMBED': return el.src;
+    case 'IFRAME': return el.src;
+    case 'LINK': return el.href;
+    case 'OBJECT': 
+      var param = $('param[name="movie"][value]', el);
+      if (param.length > 0)
+        return param.get(0).value;
+      else
+        return null;
+    case 'BODY':
+      // TODO: make sure this isn't so slow that we must LBYL
+      var bgImage = $(el).css('background-image');
+      return (bgImage == "none" ? null: bgImage);
+  }
+}
+
 // Find all elements that load a resource, find which ones are loading ad
 // resources, and remove them.  Asynchronous.
 // first_run:bool - true is passed the first time this is called.
@@ -27,7 +49,7 @@ function remove_ad_elements_by_url(first_run) {
   var start = new Date();
 
   // map indexes to elements, and those same indexes to info about the element.
-  var els = $("img,script,embed,iframe,link,object,body");
+  var els = $("img,embed,iframe,link,object,body");
   var elInfo = els.map(function(id, el) { 
       var elType = typeForElement(el);
       return {
@@ -59,12 +81,6 @@ function purgeElement(el, elInfo) {
     $(el).parent().remove(); // removes el as well
   else if (el.nodeName == "BODY")
     $(el).css('background-image', null);
-  else if (el.nodeName == "SCRIPT") {
-    // Removing the element is useless as it has already run, and it makes
-    // bankrate.com display a blank screen in Chrome 5 dev, so we basically do
-    // nothing.
-    el.src = ""; 
-  }
   else
     $(el).remove();
   // TODO: i suspect i'm missing something else here... what did the old
@@ -170,8 +186,7 @@ function adblock_begin_v2() {
   extension_call('get_features_and_filters', opts, function(data) {
     log("==== ADBLOCKING PAGE: " + document.location.href);
 
-    // TODO: why send the whitelist just to check it?  do it in background.
-    if (page_is_whitelisted(data.whitelist, data.top_frame_domain))
+    if (data.page_is_whitelisted)
       return;
 
     listen_for_broadcasts();
@@ -213,11 +228,12 @@ function adblock_begin_v2() {
 adblock_begin_v2();
 
 //subscribe to the list when you click an abp: link
-$('a[href^="abp:subscribe?"][href*="location="]').click(function(event) {
+$('[href^="abp:"], [href^="ABP:"]').click(function(event) {
   event.preventDefault();
-  var url = $(this).attr('href');
-  url = url.substring(url.indexOf('location=') + 9);
-  if (url.indexOf('&title=') != -1)
-    url = url.substring(0, url.indexOf('&title='));
-  extension_call('subscribe_popup', {url:url});
+  var match = $(this).attr('href').
+      match(/^abp:(\/\/)?subscribe(\/)?\?(.*\&)?location\=([^\&]*).*$/i);
+  if (match) {
+    var url = match[4];
+    extension_call('subscribe_popup', {url:url});
+  }
 });

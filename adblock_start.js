@@ -16,27 +16,7 @@ function relativeToAbsoluteUrl(url) {
     if(!base) return document.baseURI + "/" + url;
     return base[0] + url;
 }
-// Return the url tied to the given element.  null is OK if we can't find one.
-function urlForElement(el, type) {
-  // TODO: handle background images, based on 'type'.
-  switch (el.nodeName) {
-    case 'IMG': return el.src;
-    case 'SCRIPT': return el.src;
-    case 'EMBED': return el.src;
-    case 'IFRAME': return el.src;
-    case 'LINK': return el.href;
-    case 'OBJECT': 
-      var param = $('param[name="movie"][value]', el);
-      if (param.length > 0)
-        return param.get(0).value;
-      else
-        return null;
-    case 'BODY':
-      // TODO: make sure this isn't so slow that we must LBYL
-      var bgImage = $(el).css('background-image');
-      return (bgImage == "none" ? null: bgImage);
-  }
-}
+
 // Return the ElementType element type of the given element.
 function typeForElement(el) {
   // TODO: handle background images that aren't just the BODY.
@@ -60,76 +40,49 @@ function browser_canLoad(event, data) {
     return safari.self.tab.canLoad(event, data);
   } else {
     // The first time this is called we must build our filters.
-    if (typeof _local_filterset == "undefined") {
-      _local_filterset = FilterSet.fromText(__sourceText);
+    if (typeof _limited_to_domain == "undefined") {
+      var local_filterset = FilterSet.fromText(__sourceText);
       delete __sourceText;
+      _limited_to_domain = local_filterset.limitedToDomain(data.pageDomain);
     }
 
-    // TODO: copied from background.html from Safari section.
-    var limited = _local_filterset.limitedToDomain(data.pageDomain);
-    var isMatched = data.url && limited.matches(data.url, data.elType);
+    // every time browser_canLoad is called on this page, the pageDomain will
+    // be the same -- so we can just check _limited_to_domain which we
+    // calculated once.  This takes less memory than storing local_filterset
+    // on the page.
+    var isMatched = data.url && _limited_to_domain.matches(data.url, data.elType);
     if (isMatched)
       log("CHROME TRUE BLOCK " + data.url);
     return !isMatched;
   }
 }
 
-// Returns true if node.parent contains no visible content other
-// than node itself.
-function parentIsEmptyWithoutMe(node) {
-  if (!node || !node.parentElement)
-    return false;
-  var parent = node.parentElement;
-  if (parent.nodeName == "BODY" || parent.nodeName == "FRAME")
-    return false;
-
-  var test_regex = /[\x21-\xFF]/; //all normal characters except spaces
-  for (var i=0;i<parent.childNodes.length;i++) {
-    switch (parent.childNodes[i].nodeName) {
-      case '#comment':
-      case 'SCRIPT':
-      case 'STYLE':
-      case 'BR':
-        break;
-      case '#text':
-        if (test_regex.test(parent.childNodes[i].nodeValue))
-          return false;
-        else
-          break;
-      default:
-        if (parent.childNodes[i] !== node)
-          return false;
+beforeLoadHandler = function(event) {
+  var el = event.target;
+  // Cancel the load if canLoad is false.
+  var elType = typeForElement(el);
+  var data = { 
+    url: relativeToAbsoluteUrl(event.url),
+    elType: elType,
+    pageDomain: document.domain, 
+    isTopFrame: (window == window.top) 
+  };
+  if (false == browser_canLoad(event, data)) {
+    event.preventDefault();
+    if (elType != ElementTypes.script &&
+        elType != ElementTypes.background &&
+        elType != ElementTypes.stylesheet) {
+      $(el).remove();
     }
   }
-
-  log("Collapsing empty parent of blocked element: " +
-      parent.nodeName + "#" + parent.id +
-      "." + parent.className);
-
-  return true;
 }
 
-function enableTrueBlocking(alsoCollapse) {
-  document.addEventListener("beforeload", function(event) {
-    var el = event.target;
-    // Cancel the load if canLoad is false.
-    var elType = typeForElement(el);
-    var url = relativeToAbsoluteUrl(urlForElement(el, elType));
-    if (false == browser_canLoad(event, { url: url, elType: elType, pageDomain: document.domain })) {
-      event.preventDefault();
-      if (el.nodeName != "BODY") {
-        // TODO: temp workaround Safari crashing bug.
-        // $(el).remove();
-        window.setTimeout(function() {
-          if (alsoCollapse) // then find the highest element that we can remove
-            while (parentIsEmptyWithoutMe(el))
-              el = el.parentElement;
+function enableTrueBlocking() {
+  document.addEventListener("beforeload", beforeLoadHandler, true);
+}
 
-          $(el).remove();
-        }, 0);
-      }
-    }
-  }, true);
+function disableTrueBlocking() {
+  document.removeEventListener("beforeload", beforeLoadHandler, true);
 }
 
 // Add style rules hiding the given list of selectors.
@@ -153,6 +106,10 @@ function block_list_via_css(selectors, title) {
   }
 }
 
+
+if (SAFARI)
+  enableTrueBlocking();
+
 var opts = { domain: document.domain };
 // The top frame should tell the background what domain it's on.  The
 // subframes will be told what domain the top is on.
@@ -161,7 +118,6 @@ if (window == window.top)
     
 extension_call('get_features_and_filters', opts, function(data) {
   var start = new Date();
-  __sourceText = data.filtertext;
 
   if (data.features.debug_logging.is_enabled) {
     DEBUG = true;
@@ -170,11 +126,17 @@ extension_call('get_features_and_filters', opts, function(data) {
   if (data.features.debug_time_logging.is_enabled)
     time_log = function(text) { console.log(text); };
 
-  if (page_is_whitelisted(data.whitelist, data.top_frame_domain))
+  if (data.page_is_whitelisted) {
+    disableTrueBlocking();
     return;
+  }
 
-  if (SAFARI || data.features.true_blocking_support.is_enabled)
-    enableTrueBlocking(data.features.collapse_blocked_elements.is_enabled);
+  if (!SAFARI) {
+    __sourceText = data.filtertext;
+
+    if (data.features.true_blocking_support.is_enabled && window == window.top)
+      enableTrueBlocking();
+  }
 
   block_list_via_css(data.selectors);
 
