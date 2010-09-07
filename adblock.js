@@ -66,7 +66,7 @@ function remove_ad_elements_by_url(first_run) {
       $(ad_ids).each(function(i, id) { purgeElement(els[id], elInfo[id]); });
 
       var end = new Date();
-      time_log("adblock_main run time: " + (end - start) + " || " +
+      time_log("adblock_main run time: " + (end - start) + " ms || " +
                document.location.href);
 
       if (first_run)
@@ -89,6 +89,12 @@ function purgeElement(el, elInfo) {
 
 // Run special site-specific code.
 function run_specials(features) {
+  if (document.location.host.indexOf('mail.live.com') != -1) {
+    //removing the space remaining in Hotmail/WLMail
+    $(".Unmanaged .WithSkyscraper #MainContent").
+      css("margin-right", "1px");
+  }
+
   if (document.domain.match("youtube") && features.block_youtube.is_enabled) {
     // Based heavily off of AdThwart's YouTube in-video ad blocking.
     // Thanks, Tom!
@@ -135,7 +141,9 @@ function run_specials(features) {
           css({"font-size": "x-small", "font-style": "italic",
                "text-align": "center", "color": "black",
                "font-weight": "normal", "background-color": "white"}).
-          append("<span>No video?  Reload the page.  If this happens a lot, disable YouTube ad blocking under <a target='_new' href='" + disable_url + "'>AdBlock Options</a>.</span>");
+          append("<span>" + translate("youtubevideomessage", 
+              ["<a target='_new' href='" + disable_url + "'>" + 
+              translate("optionstitle") + "</a>"]) + "</span>");
         var closer = $("<a>", {href:"#"}).
           css({"font-style":"normal", "margin-left":"20px"}).
           text("[x]").
@@ -190,8 +198,21 @@ function adblock_begin_v2() {
       return;
 
     listen_for_broadcasts();
-    blacklister_init();
-    whitelister_init();
+
+    // The wizards by default don't respond to contextmenu clicks,
+    // because Chrome can't hide the contextmenus on whitelisted
+    // pages.  Now that we know we're not whitelisted, make the
+    // wizards respond.
+    may_open_blacklist_ui = true;
+    may_open_whitelist_ui = true;
+
+    if (SAFARI) {
+      // Add entries to right click menu.  Unlike Chrome, we can make
+      // the menu items only appear on non-whitelisted pages.
+      window.addEventListener("contextmenu", function(event) {
+        safari.self.tab.setContextMenuEventUserInfo(event, true);
+      }, false);
+    }
 
     run_specials(data.features);
 
