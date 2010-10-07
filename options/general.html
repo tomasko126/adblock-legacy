@@ -31,18 +31,16 @@
       <table>
         <tr>
           <td><input type="checkbox" /></td>
-          <td><span>Show a button in the toolbar</span></td>
+          <td i18n="chromebutton_showoption"></td>
           <td><img src="/img/icon_screenshot.png"/></td>
         </tr>
       </table>
       <div id="chromebutton_upon_check" style="display:none; font-style: italic" class="info">
-        <div id="chromebutton_how_to_enable">
-          To show the button, install <a href="https://clients2.google.com/service/update2/crx?response=redirect&x=id%3Dpicdndbpdnapajibahnnogkjofaeooof%26uc%26lang%3Den-US&prod=chrome">this helper extension</a>.
-        </div>
-        <div id="chromebutton_how_to_disable" style="display:none">
-          To remove the button, right click it and choose Uninstall.  This only uninstalls
-          the Browser Button For AdBlock helper extension.
-        </div>
+        <div i18n="chromebutton_how_to_enable" 
+             i18n_replacement_el="chromebutton_install_link"></div>
+        <a id="chromebutton_install_link" 
+           href="https://clients2.google.com/service/update2/crx?response=redirect&x=id%3Dpicdndbpdnapajibahnnogkjofaeooof%26uc%26lang%3Den-US&prod=chrome"></a>
+        <div i18n="chromebutton_how_to_disable" style="display:none"></div>
       </div>
     </div>
     <script>
