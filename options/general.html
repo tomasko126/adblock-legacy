@@ -1,23 +1,5 @@
   <script>
     $(function() {
-      var linkUrl = "https://chrome.google.com/extensions/detail/" +
-                    icon_extension_id;
-      $("#link_to_icon").attr("href", linkUrl);
-
-      var imgUrl = chrome.extension.getURL("img/icon_screenshot.png");
-      $("#imgIconScreenshot").attr("src", imgUrl);
-
-      $("#want_a_button").click(function() {
-        $("#button_explanation").show();
-      });
-
-      if (!SAFARI) {
-        // If the icon extension is running, check the box.
-        chrome.extension.sendRequest(icon_extension_id, {}, function() {
-          $("#want_a_button").attr("checked", "checked");
-        });
-      }
-
       // Check or uncheck each option.
       extension_call('get_optional_features', {}, function(features) {
         for (var name in features) {
@@ -33,66 +15,53 @@
           );
         });
       });
+      
+      //translation
+      localizePage();
 
+      //clicking the checkbox label checks the checkbox
       $('.optionDescription').click(checkboxlabel_clicked);
-
     });
   </script>
 
   <div class="section" class="experiments">
-    <h2>General options</h2>
+    <h2 i18n="generaloptions"></h2>
 
-    <p id="chromeblock" style="display:none">
-      <input type="checkbox" class="feature" id="enable_true_blocking_support" />
-      <span class="optionDescription">Block most ads from even being downloaded, instead of just hiding them.</span>
-      <span style='font-style:italic; color:red'>Beta</span>
-      <br/>
-      <span style='font-style:italic; font-size: 12px; margin-left: 25px;'>
-        Note that Chrome doesn't fully support this, so a few resources might
-        still be downloaded and hidden if you're on a fast computer.
-      </span>
-    </p>
+    <div id="chromebutton" style="display:none">
+      <table>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td i18n="chromebutton_showoption"></td>
+          <td><img src="/img/icon_screenshot.png"/></td>
+        </tr>
+      </table>
+      <div id="chromebutton_upon_check" style="display:none; font-style: italic" class="info">
+        <div i18n="chromebutton_how_to_enable" 
+             i18n_replacement_el="chromebutton_install_link"></div>
+        <a id="chromebutton_install_link" 
+           href="https://clients2.google.com/service/update2/crx?response=redirect&x=id%3Dpicdndbpdnapajibahnnogkjofaeooof%26uc%26lang%3Den-US&prod=chrome"></a>
+        <div i18n="chromebutton_how_to_disable" style="display:none"></div>
+      </div>
+    </div>
     <script>
       $(function() {
-        if (!SAFARI) {
-          $("#chromeblock").show();
-        }
-      }); 
-    </script>
-
-    <table style="vertical-align:middle; margin-left:-3px">
-      <tr id="show_adblock_button_tr">
-        <td>
-          <p style="font-size:14px">
-            <input type="checkbox" id="want_a_button" />
-            <span class="optionDescription">Show the AdBlock button next to the address bar<span>
-          </p>
-        </td>
-        <td>
-          <img id="imgIconScreenshot" />
-        </td>
-      </tr>
-    </table>
-    <p id="button_explanation" class="info" style="display:none">
-      <span style="font-style:italic; font-size:12px; color:#222222">
-        To make the button optional, we put him in a helper extension all 
-        by himself, to be installed along with AdBlock.
-      </span>
-      <br/><br/>
-      To add the button, click <b>Install</b> on the 
-      <a id="link_to_icon" target="top">Browser Button for AdBlock</a> page.
-      <br/><br/>
-      To remove the button, right click him and choose Disable.
-    </p>
-    <script>
-      if (SAFARI) {
-        $("#show_adblock_button_tr").hide();
-      }
+        if (SAFARI)
+          return;
+        $("#chromebutton").show();
+        $("#chromebutton input").click(function() {
+          $("#chromebutton_upon_check").show();
+        });
+        chrome.extension.sendRequest(button_extension_id, {}, function() {
+          $("#chromebutton input").attr("checked", true);
+          $('[i18n="chromebutton_how_to_enable"]').hide();
+          $('[i18n="chromebutton_how_to_disable"]').show();
+        });
+      });
     </script>
 
     <p>
-      <input type="checkbox" class="feature" id="enable_show_google_search_text_ads" />
-      <span class="optionDescription">I like the text ads on Google search results; show me those.</span>
+      <input type="checkbox" class="feature" id="enable_show_google_search_text_ads"/>
+      <span class="optionDescription" i18n="googletextads"></span>
     </p>
     <script>
       // TODO: This is a dumb race condition, and still has a bug where
@@ -109,16 +78,21 @@
     </script>
 
     <p>
+      <input type="checkbox" class="feature" id="enable_show_context_menu_items" />
+      <span class="optionDescription" i18n="showcontextmenus"></span>
+    </p>
+
+    <p>
       <input type="checkbox" class="feature" id="enable_block_youtube" />
-      <span class="optionDescription">Block ads inside YouTube videos.</span>
-      <span style='font-style:italic; color:red'>Beta</span>
+      <span class="optionDescription" i18n="youtubeads"></span>
+      <span style='font-style:italic; color:red' i18n="betalabel"></span>
     </p>
   </div>
 
   <div class="sneaky">
     <input type="checkbox" class="feature" id="enable_debug_logging" />
-    <span class="optionDescription">Show debug statements in Console Log (which slows down AdBlock)</span>
+    <span class="optionDescription" i18n="debuginlogoption"></span>
     <br/>
     <input type="checkbox" class="feature" id="enable_debug_time_logging" />
-    <span class="optionDescription">Show timing statements in Console Log (which slows down AdBlock)</span>
+    <span class="optionDescription" i18n="timeinlogoption"></span>
   </div>

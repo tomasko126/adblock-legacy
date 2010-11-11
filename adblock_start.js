@@ -5,7 +5,7 @@ function relativeToAbsoluteUrl(url) {
     if(!url)
         return url;
     // If URL is already absolute, don't mess with it
-    if(url.match(/^http/))
+    if(/^http/.test(url))
         return url;
     // Leading / means absolute path
     if(url[0] == '/')
@@ -39,11 +39,13 @@ function browser_canLoad(event, data) {
   if (SAFARI) {
     return safari.self.tab.canLoad(event, data);
   } else {
-    // The first time this is called we must build our filters.
+    // If we haven't yet asynchronously loaded our filters, store for later.
     if (typeof _limited_to_domain == "undefined") {
-      var local_filterset = FilterSet.fromText(__sourceText);
-      delete __sourceText;
-      _limited_to_domain = local_filterset.limitedToDomain(data.pageDomain);
+      event.mustBePurged = true;
+      LOADED_TOO_FAST.push({data:event});
+      return true;
+      // We don't need these locally, so delete them to save memory.
+      delete _limited_to_domain._selectorFilters;
     }
 
     // every time browser_canLoad is called on this page, the pageDomain will
@@ -51,7 +53,9 @@ function browser_canLoad(event, data) {
     // calculated once.  This takes less memory than storing local_filterset
     // on the page.
     var isMatched = data.url && _limited_to_domain.matches(data.url, data.elType);
-    if (isMatched)
+    if (isMatched && event.mustBePurged)
+      log("Purging if possible " + data.url);
+    else if (isMatched)
       log("CHROME TRUE BLOCK " + data.url);
     return !isMatched;
   }
@@ -69,26 +73,15 @@ beforeLoadHandler = function(event) {
   };
   if (false == browser_canLoad(event, data)) {
     event.preventDefault();
-    if (elType != ElementTypes.script &&
-        elType != ElementTypes.background &&
-        elType != ElementTypes.stylesheet) {
+    if (elType & ElementTypes.background)
+      $(el).css("background-image", "none");
+    else if (!(elType & (ElementTypes.script | ElementTypes.stylesheet)))
       $(el).remove();
-    }
   }
 }
 
-function enableTrueBlocking() {
-  document.addEventListener("beforeload", beforeLoadHandler, true);
-}
-
-function disableTrueBlocking() {
-  document.removeEventListener("beforeload", beforeLoadHandler, true);
-}
-
 // Add style rules hiding the given list of selectors.
-// If title is specified, apply this title to the style element for later
-// identification.
-function block_list_via_css(selectors, title) {
+function block_list_via_css(selectors) {
   var d = document.documentElement;
   // Setting this small chokes Chrome -- don't do it!  I set it back to
   // 10000 from 100 on 1/10/2010 -- at some point you should just get rid
@@ -96,8 +89,6 @@ function block_list_via_css(selectors, title) {
   var chunksize = 10000;
   while (selectors.length > 0) {
     var css_chunk = document.createElement("style");
-    if (title)
-      css_chunk.title = title;
     css_chunk.type = "text/css";
     css_chunk.innerText += selectors.splice(0, chunksize).join(',') +
                                " { visibility:hidden !important; " +
@@ -106,41 +97,54 @@ function block_list_via_css(selectors, title) {
   }
 }
 
+function adblock_begin() {
+  if (!SAFARI)
+    LOADED_TOO_FAST = [];
 
-if (SAFARI)
-  enableTrueBlocking();
+  document.addEventListener("beforeload", beforeLoadHandler, true);
 
-var opts = { domain: document.domain };
-// The top frame should tell the background what domain it's on.  The
-// subframes will be told what domain the top is on.
-if (window == window.top)
-  opts.is_top_frame = true;
-    
-extension_call('get_features_and_filters', opts, function(data) {
-  var start = new Date();
+  var opts = { domain: document.domain, include_filters: !SAFARI };
+  // The top frame should tell the background what domain it's on.  The
+  // subframes will be told what domain the top is on.
+  if (window == window.top)
+    opts.is_top_frame = true;
 
-  if (data.features.debug_logging.is_enabled) {
-    DEBUG = true;
-    log = function(text) { console.log(text); };
-  }
-  if (data.features.debug_time_logging.is_enabled)
-    time_log = function(text) { console.log(text); };
+  extension_call('get_content_script_data', opts, function(data) {
+    var start = new Date();
 
-  if (data.page_is_whitelisted) {
-    disableTrueBlocking();
-    return;
-  }
+    if (data.features.debug_logging.is_enabled) {
+      DEBUG = true;
+      log = function(text) { console.log(text); };
+    }
+    if (data.features.debug_time_logging.is_enabled)
+      time_log = function(text) { console.log(text); };
 
-  if (!SAFARI) {
-    __sourceText = data.filtertext;
+    if (data.page_is_whitelisted || data.adblock_is_paused) {
+      document.removeEventListener("beforeload", beforeLoadHandler, true);
+      delete LOADED_TOO_FAST;
+      return;
+    }
 
-    if (data.features.true_blocking_support.is_enabled && window == window.top)
-      enableTrueBlocking();
-  }
+    //Chrome can't block resources immediately. Therefore all resources
+    //are cached first. Once the filters are loaded, simply remove them
+    if (!SAFARI) {
+      var local_filterset = FilterSet.fromText(data.filtertext);
+      _limited_to_domain = local_filterset.limitedToDomain(document.domain);
 
-  block_list_via_css(data.selectors);
+      for (var i=0; i < LOADED_TOO_FAST.length; i++)
+        beforeLoadHandler(LOADED_TOO_FAST[i].data);
+      delete LOADED_TOO_FAST;
+    }
 
-  var end = new Date();
-  time_log("adblock_start run time: " + (end - start) + " || " +
-           document.location.href);
-});
+    block_list_via_css(data.selectors);
+
+    var end = new Date();
+    time_log("adblock_start run time: " + (end - start) + " ms || " +
+             document.location.href);
+  });
+
+}
+
+// Safari loads adblock on about:blank pages, which is a waste of RAM and cycles.
+if (document.location != 'about:blank')
+  adblock_begin();

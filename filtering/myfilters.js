@@ -6,7 +6,6 @@
 // list of subscriptions into this._subscriptions.  Store to disk.
 // Inputs: none.
 function MyFilters() {
-  MyFilters._temp_convert_from_old_system();
   this._event_handlers = { 'updated': [] };
 
   var subscriptions_json = localStorage.getItem('filter_lists');
@@ -34,16 +33,6 @@ function MyFilters() {
     function() { that.freshen_async(); }, 
     hours * 60 * 60 * 1000
   );
-}
-
-// 7/24/2010: delete remnants of old filter system, now that everyone has
-// been converted from old to new without losing their old filters.
-// You can remove this code within a month or so -- no big deal if someone
-// never runs it.
-MyFilters._temp_convert_from_old_system = function() {
-  localStorage.removeItem('subscriptions');
-  localStorage.removeItem('optimized_filters');
-  localStorage.removeItem('converted_to_new_filters');
 }
 
 // Event fired when subscriptions have been updated, after the subscriptions
@@ -99,15 +88,7 @@ MyFilters.prototype.rebuild = function() {
 //         they aren't out of date.
 // Returns: null (asynchronous)
 MyFilters.prototype.freshen_async = function(force) {
-  var that = this; // temp along with 7/23/2010 code below
   function out_of_date(subscription) {
-    // temp code to add .expiresAfterHours property to pre-7/23/2010 subscriptions.
-    // Remove after you're confident everyone has updated since 7/23/2010.
-    if (subscription.expiresAfterHours == undefined) {
-      subscription.expiresAfterHours = 120;
-      localStorage.setItem('filter_lists', JSON.stringify(that._subscriptions));
-    } // end temp code
-
     if (force) return true;
 
     var millis = new Date().getTime() - subscription.last_update;
@@ -126,7 +107,7 @@ MyFilters.prototype.freshen_async = function(force) {
           return;
         if (Filter.isComment(text) == false) // every legit list starts thus
           return;
-          
+
         // In case the subscription disappeared while we were out
         // (which would happen if they unsubscribed to a user-submitted
         // filter)...
@@ -134,7 +115,7 @@ MyFilters.prototype.freshen_async = function(force) {
           return;
 
         that._updateSubscriptionText(filter_id, text);
-        
+
         that.update();
       },
       error: function() { log("Error fetching " + url); }
@@ -228,16 +209,21 @@ MyFilters.prototype._updateSubscriptionText = function(subscription_id, text) {
 
   // Record how many days until we need to update the subscription text
   sub_data.expiresAfterHours = 120; // The default
-  var expiresRegex = /(?:expires\:\ ?|expires\ after\ )(\d*[1-9]\d*)\ ?(h?)/i;
-  var expiresCheckLines = text.split('\n', 15); //15 lines should be enough
-  for (var i = 0; i < expiresCheckLines.length; i++) {
-    if (!Filter.isComment(expiresCheckLines[i]))
+  var expiresRegex = /(?:expires\:|expires\ after\ )\ *(\d*[1-9]\d*)\ ?(h?)/i;
+  var redirectRegex = /(?:redirect\:|redirects\ to\ )\ *(https?\:\/\/\S+)/i;
+  var checkLines = text.split('\n', 15); //15 lines should be enough
+  for (var i = 0; i < checkLines.length; i++) {
+    if (!Filter.isComment(checkLines[i]))
       continue;
-    var match = expiresCheckLines[i].match(expiresRegex);
+    var match = checkLines[i].match(redirectRegex);
+    if (match) {
+      sub_data.url = match[1]; //assuming the URL is always correct
+      sub_data.last_update = 0; //update ASAP
+    }
+    match = checkLines[i].match(expiresRegex);
     if (match) {
       var hours = parseInt(match[1]) * (match[2] == "h" ? 1 : 24);
       sub_data.expiresAfterHours = Math.min(hours, 21*24); // 3 week maximum
-      break;
     }
   }
 }
@@ -383,8 +369,12 @@ MyFilters.__make_subscription_options = function() {
       name: " - additional Polish filters",
     },
     "easylist_plus_romanian": {
-      url: "http://www.picpoc.ro/menetzrolist.txt",
+      url: "http://www.zoso.ro/pages/rolist.txt",
       name: " - additional Romanian filters",
+    },
+    "russian": { //id must not change!
+      url: "https://ruadlist.googlecode.com/svn/trunk/advblock.txt",
+      name: " - additional Russian filters",
     },
     "easylist_plus_vietnamese": {
       url: "http://adblockplus-vietnam.googlecode.com/svn/trunk/abpvn.txt",
@@ -407,7 +397,7 @@ MyFilters.__make_subscription_options = function() {
       name: "Hungarian filters",
     },
     "israeli": {
-      url: "http://israellist.googlecode.com/files/IsraelList.txt",
+      url: "https://secure.fanboy.co.nz/israelilist/IsraelList.txt",
       name: "Israeli filters",
     },
     "italian": {
@@ -415,7 +405,7 @@ MyFilters.__make_subscription_options = function() {
       name: "Italian filters",
     },
     "japanese": {
-      url: "http://www.fanboy.co.nz/adblock/fanboy-adblocklist-jpn.txt",
+      url: "https://secure.fanboy.co.nz/fanboy-japanese.txt",
       name: "Japanese filters",
     },
     "easylist_plun_korean": { // no longer w/ easylist, but ids mustn't change
@@ -425,10 +415,6 @@ MyFilters.__make_subscription_options = function() {
     "polish": {
       url: "http://www.niecko.pl/adblock/adblock.txt",
       name: "Polish filters",
-    },
-    "russian": {
-      url: "http://ruadlist.googlecode.com/svn/trunk/adblock.txt",
-      name: "Russian filters",
     },
     "easylist_plus_spanish": { //id must not change!
       url: "http://abp.mozilla-hispano.org/nauscopio/filtros.txt",

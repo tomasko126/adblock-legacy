@@ -1,7 +1,7 @@
-// TODO note: gamestar.de has a good <object> tag with <embed> in it;
-// thepiratebay.org [search for 'boots'] has good iframe tags.
+// Global lock so we can't open more than once on a tab.
+var may_open_blacklist_ui = true;
 
-function load_jquery_ui(callback) { 
+function load_jquery_ui(callback) {
   if (typeof global_have_loaded_jquery_ui != "undefined") {
     callback();
     return; // don't inject stylesheets more than once
@@ -15,40 +15,66 @@ function load_jquery_ui(callback) {
     $("head").append(link);
   }
   extension_call('readfile', 
-      {file:"jquery/jquery-ui-1.8.custom.min.js"}, 
-      function(result) {
-        eval(result); // suck it, Trebek
+    {file:"jquery/jquery-ui-1.8.custom.min.js"},
+    function(result) {
+      eval(result); // suck it, Trebek
 
-        load_css("jquery/css/custom-theme/jquery-ui-1.8.custom.css");
-        load_css("jquery/css/override-page.css");
+      load_css("jquery/css/custom-theme/jquery-ui-1.8.custom.css");
+      load_css("jquery/css/override-page.css");
 
-        var icon = chrome.extension.getURL("img/icon24.png");
-        var css_chunk = document.createElement("style");
-        css_chunk.innerText = ".ui-dialog-titlebar " +
-            " { background: #2191C0 url(" + icon + ") " +
-            " center left no-repeat !important; " +
-            " padding-left: 38px !important; }";
-        $("html").prepend(css_chunk);
-
+      if (SAFARI) {
+        // chrome.i18n.getMessage() lazily loads a file from disk using xhr,
+        // but the page itself doesn't have access to extension resources.
+        // Since we'll be using getMessage(), we have to ask the background
+        // page for the data.
+        extension_call('get_l10n_data', {}, function(data) {
+          chrome.i18n._setL10nData(data);
+          callback();
+        });
+      }
+      else {
         callback();
       }
+    }
   );
 }
 
+// Record the last element to be right-clicked, since that information isn't
+// passed to the contextmenu click handler that calls top_open_blacklist_ui
+var rightclicked_item = null;
+$("body").bind("contextmenu", function(e) {
+  rightclicked_item = e.srcElement;
+}).click(function() {
+  rightclicked_item = null;
+});
 if (window == window.top) {
   register_broadcast_listener('top_open_blacklist_ui', function(options) {
-    if (!may_open_blacklist)
+    if (!may_open_blacklist_ui)
       return;
 
-    stop_checking_for_blacklist_keypress();
+    may_open_blacklist_ui = false;
 
     load_jquery_ui(function() {
-      var blacklist_ui = new BlacklistUi();
+      // If they chose "Block an ad on this page..." ask them to click the ad
+      if (options.nothing_clicked)
+        rightclicked_item = null;
+
+      // If they right clicked in a frame in Chrome, use the frame instead
+      if (options.info && options.info.frameUrl) {
+        var frame = $("iframe").filter(function(i, el) {
+          return el.src == options.info.frameUrl;
+        });
+        if (frame.length == 1)
+          rightclicked_item = frame[0];
+      }
+      if (rightclicked_item && rightclicked_item.nodeName == "BODY")
+        rightclicked_item = null;
+      var blacklist_ui = new BlacklistUi(rightclicked_item);
       blacklist_ui.cancel(function() {
-        blacklister_init();
+        may_open_blacklist_ui = true;
       });
       blacklist_ui.block(function() {
-        // We would call blacklister_init() if we weren't about to reload.
+        may_open_blacklist_ui = true; // no-op, actually, since we now reload
         document.location.reload();
       });
       blacklist_ui.show();
@@ -91,42 +117,15 @@ register_broadcast_listener('send_content_to_back', function(options) {
     });
 });
 
-function check_for_blacklist_keypress(e) { 
-  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.keyCode == 75) { // K
-    extension_call('get_optional_features', {}, function(features) {
-      if (features.blacklist_shortcut.is_enabled)
-        page_broadcast('top_open_blacklist_ui', {});
-    });
-  }
-}  
 
-// Keypress doesn't work reliably in Safari, so make the blacklist
-// available in the context menu until we support just right clicking
-// on an ad or Flash object.
+// Safari context menu support, until we unify Chrome & Safari
+// support via port.js
 if (SAFARI) {
-  // Wait for right click
-  window.addEventListener("contextmenu", function(event) {
-    safari.self.tab.setContextMenuEventUserInfo(event, true);
-  }, false);
   // Handle right click menu item click
   safari.self.addEventListener("message", function(event) {
-    if (event.name != "show-blacklist-wizard")
-      return;
-    page_broadcast('top_open_blacklist_ui', {});
+    if (event.name == "show-blacklist-wizard")
+      page_broadcast('top_open_blacklist_ui', {});
+    else if (event.name == "show-clickwatcher-ui")
+      page_broadcast('top_open_blacklist_ui', {nothing_clicked:true});
   }, false);
-}
-
-// For the extension icon, so we can't open more than once on a tab.
-var may_open_blacklist = true;
-
-function stop_checking_for_blacklist_keypress() {
-  may_open_blacklist = false;
-  $("body").unbind("keydown", check_for_blacklist_keypress);
-}
-
-function blacklister_init() {
-  may_open_blacklist = true;
-  $("body").
-      unbind('keydown', check_for_blacklist_keypress). // just in case
-      keydown(check_for_blacklist_keypress);
 }

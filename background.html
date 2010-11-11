@@ -3,48 +3,18 @@
     <script src="port.js"></script>
     <script src="jquery/jquery-1.4.2.min.js"></script>
     <script src="functions.js"></script>
-    <script src="filteroptions.js"></script>
+    <script src="filtering/filteroptions.js"></script>
     <script src="filtering/fifocache.js"></script>
     <script src="filtering/filtertypes.js"></script>
     <script src="filtering/filterset.js"></script>
     <script src="filtering/myfilters.js"></script>
     <script>
-      function page_is_whitelisted(whitelist, the_domain) {
-        if (the_domain == "acid3.acidtests.org") return true;
-        for (var i = 0; i < whitelist.length; i++) {
-          if (the_domain.indexOf(whitelist[i]) != -1)
-            return true;
-        }
-        return false;
-      }
-
-
       var utils = {};
-      utils.noop = function(options) {}
-
+    </script>
+    <script src="button/temporary_background_code.js"></script>
+    <script>
 
       // V3 FILTERING
-
-      // Inputs: elementInfo: list of { url:string, type:ElementType, id } 
-      //                      objects.
-      //         domain: domain of page that requested these elements.
-      // If a url is empty or null, it will be ignored.
-      // Returns: array of ids that are ads.
-      utils.find_ads_in = function(options) {
-        // TODO: replace filter() and map() calls thruout with array ones
-        // when possible -- jquery is unnecessary on arrays
-        var filterset = _myfilters.filterset;
-        // limit to a domain
-        var limited = filterset.limitedToDomain(options.domain);
-        // TODO: timing tests to see if this is much slower than a normal loop
-        return options.elementInfo.
-          filter(function(el) {  
-              return el.url && limited.matches(el.url, el.type); 
-            }).
-          map(function(el) { 
-              return el.id; 
-            });
-      }
 
       // Inputs: domain: domain of page that requested the selectors.
       // Returns: the selector strings from all selector filters that should
@@ -120,6 +90,14 @@
         return xhr.responseText;
       }
 
+      if (SAFARI) {
+        // Return chrome.i18n._getL10nData() for content scripts who cannot
+        // call that function (since it loads extension files from disk.)
+        utils.get_l10n_data = function(options) {
+          return chrome.i18n._getL10nData();
+        }
+      }
+
 
       // OPTIONAL FEATURES
 
@@ -134,20 +112,16 @@
           "block_youtube",
           "show_youtube_help_msg",
           "show_google_search_text_ads",
-          "whitelist_shortcut",
-          "blacklist_shortcut",
-          "true_blocking_support"
+          "show_context_menu_items"
           ];
         for (var i = 0; i < feature_names.length; i++) {
           var name = feature_names[i];
           if (!features[name]) {
             features[name] = { name: name };
             switch (name) {
-              case "whitelist_shortcut":
-              case "blacklist_shortcut":
               case "block_youtube":
               case "show_youtube_help_msg":
-              case "true_blocking_support": //if supported
+              case "show_context_menu_items":
                 features[name].is_enabled = true; // by default
                 break;
               default:
@@ -173,7 +147,9 @@
       //         is_top_frame?:bool true if the caller is the top
       //           level frame.  Subframes use this frame's domain to determine 
       //           if they are whitelisted.
-      utils.get_features_and_filters = function(options, sender) {
+      //         include_filters?:bool true if selectors and filtertext should
+      //           be sent.  Defaults to false.
+      utils.get_content_script_data = function(options, sender) {
         var start = new Date();
         if (options.is_top_frame) {
           top_frame_domains[sender.tab.id] = options.domain;
@@ -182,21 +158,26 @@
         var tfd = top_frame_domains[sender.tab.id];
         var whitelisted = page_is_whitelisted(utils.get_whitelist(), tfd);
         var selectors = [];
-        if (!whitelisted)
+        var features = utils.get_optional_features();
+        if (!whitelisted && options.include_filters)
           selectors = utils.selectors_for_domain({domain:options.domain});
 
         var result = {
           page_is_whitelisted: whitelisted,
           selectors: selectors,
           top_frame_domain: tfd,
-          features: utils.get_optional_features()
+          adblock_is_paused: localStorage.getItem('adblock_is_paused'),
+          features: features
         };
-        if (!SAFARI)
-          result.filtertext = _myfilters.filterset._sourceText;
+        if (!SAFARI) {
+          if (!whitelisted && options.include_filters)
+            result.filtertext = _myfilters.filterset._sourceText;
+        }
         var end = new Date();
-        log("time to run: " + (end - start) + " || " + options.domain);
+        log("time to run: " + (end - start) + " ms || " + options.domain);
         return result;
       }
+
 
       // WHITELIST
 
@@ -221,10 +202,6 @@
           return;
         whitelist.splice(where, 1);
         utils.storage_set({key:'whitelist', value:whitelist});
-        utils.emit_broadcast({fn:'whitelist_updated', options: {}});
-      }
-      utils.clear_whitelist = function(options) {
-        utils.storage_set({key:'whitelist', value: []});
         utils.emit_broadcast({fn:'whitelist_updated', options: {}});
       }
 
@@ -261,7 +238,7 @@
       // Must be here because other pages cannot open popups...
       // Inputs: url: the URL of the list to subscribe to
       utils.subscribe_popup = function(options) {
-        window.open(chrome.extension.getURL('subscribe.html?' + options.url),
+        window.open(chrome.extension.getURL('pages/subscribe.html?' + options.url),
         "_blank", 'scrollbars=0,location=0,resizable=0,width=450,height=140');
       }
 
@@ -285,6 +262,7 @@
         });
       }
 
+
       utils.open_blacklist_ui_on_tab = function(options) {
         // emit_page_broadcast uses sender.tab.id to determine which page
         // to send to.  Fake it.
@@ -297,7 +275,7 @@
           sender
         );
       };
-
+      
       // Just like open_blacklist_ui
       utils.open_whitelist_ui_on_tab = function(options) {
         var sender = { tab: { id: options.tabid } };
@@ -306,6 +284,121 @@
           sender
         );
       };
+
+      // Turn on or off the context menus in Chrome based on whether the
+      // domain in question is whitelisted, adblock is paused, or the user
+      // has disabled the menus in the Options.
+      // Inputs:
+      //   url:string the url of the tab being right clicked
+      // Returns: null
+      utils.setChromeContextMenus = function(options) {
+        if (SAFARI)
+          return;
+        var showThem = true;
+
+        var domain = url_parts(options.url).domain;
+        var whitelist = utils.get_whitelist({});
+        var whitelisted = page_is_whitelisted(whitelist, domain);
+        var features = utils.get_optional_features({});
+        var disabled = !features.show_context_menu_items.is_enabled;
+        var paused = localStorage.getItem('adblock_is_paused');
+
+        chrome.contextMenus.removeAll();
+
+        if (paused || disabled || whitelisted)
+          return;
+        
+        chrome.contextMenus.create({
+          title: translate("contextmenuhidethis"),
+          contexts:["all"], 
+          onclick: function(info, tab) {
+            var sender = { tab: tab };
+            utils.emit_page_broadcast(
+              {fn:'top_open_blacklist_ui', options:{info: info}},
+              sender
+            );
+          }
+        });
+        chrome.contextMenus.create({
+          title: translate("contextmenuhideanything"),
+          contexts:["all"], 
+          onclick: function(info, tab) {
+            var sender = { tab: tab };
+            utils.emit_page_broadcast(
+              {fn:'top_open_blacklist_ui', options:{nothing_clicked: true}},
+              sender
+            );
+          }
+        });
+        chrome.contextMenus.create({
+          title: translate("contextmenuexcludedomain"),
+          contexts:["all"], 
+          onclick: function(info, tab) {
+            var sender = { tab: tab };
+            utils.emit_page_broadcast(
+              {fn:'top_open_whitelist_ui', options:{}},
+              sender
+            );
+          }
+        });
+      }
+
+      if (!SAFARI) {
+        // Set the button image and context menus according to the URL 
+        // of the current tab.
+        // TODO getCurrentTabInfo calculated is_whitelisted and disabled_site
+        // and then we recalculate this in setChromeContextMenus which is
+        // wasteful and unnecessarily complex.  Review exactly what we need to
+        // do on tab change and do it all in one place.
+        function updateButtonUIAndContextMenus() {
+          getCurrentTabInfo(function(info) {
+            utils.setChromeContextMenus({url: info.tab.url});
+
+            if (localStorage.getItem('adblock_is_paused')) {
+              chrome.browserAction.setIcon({path:"img/icon19-grayscale.png"});
+            } else if (info.disabled_site) {
+              chrome.browserAction.setIcon({path:"img/icon19-grayscale.png"});
+            } else if (info.whitelisted) {
+              chrome.browserAction.setIcon({path:"img/icon19-whitelisted.png"});
+            } else {
+              chrome.browserAction.setIcon({path:"img/icon19.png"});
+            }
+          });
+        }
+
+        chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab) {
+          if (tab.selected && changeInfo.url)
+            updateButtonUIAndContextMenus();
+        });
+        chrome.tabs.onSelectionChanged.addListener(function(tabid, selectInfo) {
+          updateButtonUIAndContextMenus();
+        });
+      }
+
+
+      // BROWSER ACTION BADGE
+      if (!SAFARI) {
+        // The string to display to the user in the "new version" div.
+        // Update this whenever a release warrants a browser action
+        // badge and an info div in the popup.  Note that it is
+        // not compared with the manifest -- you can set it to whatever
+        // value you want.
+        version_to_notify = '2.2';
+
+        var saw = localStorage.getItem('saw_badge_version');
+        if (saw == null) {
+          // If they've just installed, don't show the badge.
+          localStorage.setItem('saw_badge_version', version_to_notify);
+        }
+        else if (saw != version_to_notify) {
+          // If they haven't seen the latest, show it.
+          chrome.browserAction.setTitle({title:"New version!"});
+          chrome.browserAction.setBadgeBackgroundColor({color:[40,255,40,255]});
+          chrome.browserAction.setBadgeText({text:"\u2022"}); // bullet
+        }
+      }
+
+
 
       ports = [];
       chrome.extension.onConnect.addListener(function(port) {
@@ -318,43 +411,15 @@
         ports.push(port);
       });
 
-      debug_background = false;
-      if (utils.get_optional_features({}).debug_logging.is_enabled) {
+      if (utils.get_optional_features({}).debug_logging.is_enabled)
         log = function(text) { console.log(text); };
-        debug_background = true;
-      }
 
-      // Called by onRequest[External] to call functions from the field.
-      function dispatchHandler(request, sender, sendResponse) { 
-        if (false) {
-          log("Running: " + request.fn);
-          log("    " + JSON.stringify(request).substring(0, 300));
+      chrome.extension.onRequest.addListener(
+        function(request, sender, sendResponse) { 
+          var result = utils[request.fn](request.options, sender);
+          sendResponse(result);
         }
-        var result = utils[request.fn](request.options, sender);
-        if (false) {
-          log("Response:");
-          if (result != null)
-            log("    " + JSON.stringify(result).substring(0, 300));
-          else
-            log("    (undefined)");
-        }
-        sendResponse(result);
-      }
- 
-      // TODO maybe use the port now that we've created it, instead
-      // of these one-off connections?  Time it before changing it.
-      chrome.extension.onRequest.addListener(dispatchHandler);
-
-      if (!SAFARI) {
-        // Let the AdBlock icon control us as well.
-        chrome.extension.onRequestExternal.addListener(
-          function(request, sender, sendResponse) {
-            if (sender.id != icon_extension_id)
-              return;
-            dispatchHandler(request, sender, sendResponse);
-          }
-        );
-      }
+      );
 
       
       _myfilters = new MyFilters();
@@ -373,9 +438,12 @@
         var now = new Date().getTime();
         utils.storage_set({key:'installed_at', value:now});
         $.get("http://chromeadblock.com/api/visit.php", {installed_at:now});
+        // TODO: open in safari as well
+        if (!SAFARI) {
+          chrome.tabs.create({url: "pages/installed.html"});
+        }
       }
       note_install();
-
 
 
       // Safari specific code.
@@ -406,24 +474,28 @@
           messageEvent.message = !isMatched;
         }, false);
 
-        // Open Options page upon Toolbar button click.
         safari.application.addEventListener("command", function(commandEvent) {
+          // Open Options page upon Toolbar button click.
           if (commandEvent.command == "AdBlockOptions") {
             safari.application.activeBrowserWindow.openTab("foreground").url = chrome.extension.getURL("options/index.html");
           }
-          if (commandEvent.command == "show-blacklist-wizard") {
+          if (commandEvent.command in 
+              {"show-whitelist-wizard": 1, "show-blacklist-wizard": 1, "show-clickwatcher-ui": 1 }) {
             safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(commandEvent.command);
           }
         }, false);
 
-        // Right click handler for demo hack, because keyboard shortcuts aren't working
+        // Add context menus
         safari.application.addEventListener("contextmenu", function(event) {
           if (!event.userInfo)
             return;
-          event.contextMenu.appendContextMenuItem("show-blacklist-wizard", "Show Blacklist Wizard");
+          if (!utils.get_optional_features({}).show_context_menu_items.is_enabled)
+            return;
+          event.contextMenu.appendContextMenuItem("show-blacklist-wizard", translate("contextmenuhidethis"));
+          event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("contextmenuhideanything"));
+          event.contextMenu.appendContextMenuItem("show-whitelist-wizard", translate("contextmenuexcludedomain"));
         }, false);
       }
-
     </script>
   </head>
   <body>
