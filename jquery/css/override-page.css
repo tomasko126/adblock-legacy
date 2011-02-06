@@ -11,7 +11,12 @@
 span.ui-dialog-title {
   color: white !important;
 }
-.ui-dialog .ui-dialog-titlebar, .ui-dialog  .ui-dialog-content {
+.ui-dialog .ui-dialog-titlebar {
+  display: block !important;
+  padding-left: 38px !important;
+  background: #2191C0 url(../../img/icon24.png) center left no-repeat !important;
+}
+.ui-dialog  .ui-dialog-content {
   display: block !important;
 }
 .ui-dialog button { 
@@ -21,6 +26,7 @@ span.ui-dialog-title {
   padding: 0px 6px !important;
   height: 20px !important; 
   display: inline-block !important;
+  text-indent: 0px !important;
 }
 .ui-dialog:not(.ui-state-hover) button { 
   background: #0078AE !important;

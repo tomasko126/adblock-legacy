@@ -1,5 +1,5 @@
 // Global lock so we can't open more than once on a tab.
-var may_open_blacklist_ui = false;
+var may_open_blacklist_ui = true;
 
 function load_jquery_ui(callback) {
   if (typeof global_have_loaded_jquery_ui != "undefined") {
@@ -15,20 +15,12 @@ function load_jquery_ui(callback) {
     $("head").append(link);
   }
   extension_call('readfile', 
-    {file:"jquery/jquery-ui-1.8.custom.min.js"},
+    {file:"jquery/jquery-ui-1.8.6.custom.min.js"},
     function(result) {
       eval(result); // suck it, Trebek
 
       load_css("jquery/css/custom-theme/jquery-ui-1.8.custom.css");
       load_css("jquery/css/override-page.css");
-
-      var icon = chrome.extension.getURL("img/icon24.png");
-      var css_chunk = document.createElement("style");
-      css_chunk.innerText = ".ui-dialog-titlebar " +
-          " { background: #2191C0 url(" + icon + ") " +
-          " center left no-repeat !important; " +
-          " padding-left: 38px !important; }";
-      $("html").prepend(css_chunk);
 
       if (SAFARI) {
         // chrome.i18n.getMessage() lazily loads a file from disk using xhr,
@@ -75,6 +67,8 @@ if (window == window.top) {
         if (frame.length == 1)
           rightclicked_item = frame[0];
       }
+      if (rightclicked_item && rightclicked_item.nodeName == "BODY")
+        rightclicked_item = null;
       var blacklist_ui = new BlacklistUi(rightclicked_item);
       blacklist_ui.cancel(function() {
         may_open_blacklist_ui = true;

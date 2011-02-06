@@ -1,8 +1,4 @@
 ﻿{
-    "description": {
-        "message": "AdBlock per Chrome!  Impedisce il caricamento delle pubblicità sul web. I nostri utenti ci danno un voto di 4.5 su 5 !",
-        "description": "Extension description in manifest" 
-    },
     "buttoncancel": {
         "message": "Cancella",
         "description": "Cancel button" 
@@ -183,14 +179,6 @@
         "message": "changelog",
         "description": "changelog link" 
     },
-    "donatethanks": {
-        "message": "Urrà! Grazie!",
-        "description": "Tooltip if you hover the donate image" 
-    },
-    "optionsintro": {
-        "message": "Ti piace AdBlock? Mi chiamo Michael e per avere il tempo di sviluppare AdBlock e dare il supporto necessario agli utenti, ho deciso di lasciare il mio lavoro e trovarne uno meno impegnativo. Grazie per utilizzare AdBlock e sappi che, se puoi, apprezzerei <b>enormemente</b> una <a>donazione</a> di qualunqe entità :)",
-        "description": "Intro of the options page" 
-    },
     "tabgeneral": {
         "message": "Generale",
         "description": "A tab on the options page" 
@@ -199,36 +187,12 @@
         "message": "Lista Filtri",
         "description": "A tab on the options page" 
     },
-    "tabblacklist": {
-        "message": "Lista Nera",
-        "description": "A tab on the options page" 
-    },
-    "tabexcluded": {
-        "message": "Siti Esclusi",
-        "description": "A tab on the options page" 
-    },
     "generaloptions": {
         "message": "Opzioni Generali",
         "description": "Title of first tab page" 
     },
-    "blocknothideoption": {
-        "message": "Evita che le pubblicità vengano scaricate invece che semplicemente nascoste.",
-        "description": "Option on first tab page" 
-    },
     "betalabel": {
         "message": "Beta",
-        "description": "Option on first tab page" 
-    },
-    "blocknothidewarning": {
-        "message": "Chrome non suppora completamente questa opzione. Su computer veloci alcuni elementi potrebbero ancora essere scaricati e nascosti successivamente.",
-        "description": "Warning for block instead of hiding option" 
-    },
-    "buttonexplanation": {
-        "message": "<i>Abbiamo reso il pulsante un optional. Se lo desideri, usa l'estensione dedicata insieme ad AdBlock.</i><br/><br/>Per aggiungere il pulsante, clicca <b>Installa</b> sulla pagina <a>Browser Button for AdBlock</a>.<br/><br/>Per rimuovere il pulsante, cliccaci sopra con il tasto destro e scegli Disabilita.",
-        "description": "Explanation of how the button works" 
-    },
-    "buttonextension": {
-        "message": "Mostra il pulsante di AdBlock accanto alla barra degli indirizzi",
         "description": "Option on first tab page" 
     },
     "googletextads": {
@@ -243,16 +207,8 @@
         "message": "Aggiungi AdBlock al menù contestuale.",
         "description": "Option on first tab page" 
     },
-    "pleaserestart": {
-        "message": "(Richiede il riavvio di Chrome)",
-        "description": "Explaining that changing an optional feature requires restarting Chrome before it will take effect" 
-    },
     "debuginlogoption": {
         "message": "Mostra messaggi di debug nella Console (rallenta AdBlock)",
-        "description": "Option on first tab page" 
-    },
-    "timeinlogoption": {
-        "message": "Mostra la cronologia dei messaggi nella Console (rallenta AdBlock)",
         "description": "Option on first tab page" 
     },
     "updatedrightnow": {
@@ -346,10 +302,6 @@
     "filterstabtitle": {
         "message": "Abbonati a una lista filtri",
         "description": "Title of the filter list tab" 
-    },
-    "defaultsexplanation": {
-        "message": "Le impostazioni di default sono ottimizzate per utenti che abitano negli Stati Uniti. Per utenti di altri paesi sono disponibili altre liste qui sotto.",
-        "description": "Explanation of the filter lists" 
     },
     "filterlistlink": {
         "message": "Non abbonarti a più liste di quante te ne servano -- ciascuna rallenta un po' (veramente poco) le prestazioni. Altre liste si trovano <a>qui</a>.",
@@ -479,14 +431,6 @@
         "message": "Clicca col tasto destro su una pubblicità per bloccarla -- oppure bloccala qui manualmente.",
         "description": "Message at the top of the blacklist options tab" 
     },
-    "blacklisttabtitle": {
-        "message": "Blocca una pubblicità non presente nella lista filtri.",
-        "description": "Title of the third tab" 
-    },
-    "addnewfilter": {
-        "message": "Aggiungi un nuovo filtro:",
-        "description": "Subtitle on the third tab" 
-    },
     "linkblockadbyurl": {
         "message": "Blocca un pubblicità inserendo la sua URL",
         "description": "Link on the third tab" 
@@ -531,33 +475,9 @@
         "message": "<a>Segnala una pubblicità</a> ad AdBlock o al responsabile della lista.",
         "description": "A link for users who found an ad somewhere and want to report it" 
     },
-    "removelabel": {
-        "message": "Rimuovi",
-        "description": "link to remove a excluded site" 
-    },
-    "excludedsitestitle": {
-        "message": "Non bloccare le pubblicità sui domini che finiscono per...",
-        "description": "title of the 4th tab page" 
-    },
-    "excludedsitesexample": {
-        "message": "Ad esempio, 'google.com' disattiverà AdBlock su google.com, mail.google.com e www.google.com.",
-        "description": "text on the 4th tab page" 
-    },
-    "addbutton": {
-        "message": "Aggiungi",
-        "description": "add button" 
-    },
-    "removeallfromlist": {
-        "message": "Rimuovi tutti gli elementi dalla lista:",
-        "description": "option on 4th tab page" 
-    },
     "adblockreportinganad": {
         "message": "AdBlock - Segnala una pubblicità",
         "description": "title of ad report page" 
-    },
-    "adreport1": {
-        "message": "Hai appena trovato una pubblicità su questa pagina e vorresti segnalarla? Ti aiuterò a trovare il posto giusto per farlo.<br/> Ricorda: segnalare una pubblicità non è obbligatorio. Se non vuoi farlo, chiudi questa finestra e bloccala solo per te aggiungendo un filtro nella scheda 'Lista Nera' delle.",
-        "description": "Instructions on ad reporting page.  'Blacklist' should be the same text as the 'tabblacklist' message." 
     },
     "updateyourlists": {
         "message": "Aggiorna sempre i tuoi filtri",
@@ -590,10 +510,6 @@
     "correctfilters": {
         "message": "Filtri corretti",
         "description": "on the ad report page, label describing having the right set of filters" 
-    },
-    "reallyclearlist": {
-        "message": "Sei sicuro di voler cancellare la lista?",
-        "description": "confirmation of clearing a list of iteams" 
     },
     "pagelanguagecheck": {
         "message": "In che lingua è scritta questa pagna?",
@@ -687,16 +603,6 @@
         "message": "Altra lingua",
         "description": "multiple choice option" 
     },
-    "nodefaultfilter": {
-        "message": "Non esiste un filtro di default per questa lingua.<br/>Cerca una lista che la supporti qui $link$, oppure blocca questa pubblicità utilizzando la pagina 'Lista Nera' nelle Opzioni.",
-        "description": "instructions on ad report page pointing users to EasyList subscriptions list.  'Blacklist' should be the same message as 'tabblacklist'.",
-        "placeholders": {
-            "link": {
-                "content": "$1qui$2",
-                "example": "<a href='http://abp.org'>here</a>" 
-            } 
-        } 
-    },
     "retryaftersubscribe": {
         "message": "Abbonati a questa lista, poi prova ancora: $list_title$",
         "description": "instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
@@ -745,8 +651,8 @@
             } 
         } 
     },
-    "reporttous": {
-        "message": "Puoi sengalarci la pubblicità sul nostro $in_the_issue_tracker_link$ (in Inglese). (Sappiamo già che il blocco delle pubblicità non funziona nella maggior parte dei video; aspettiamo che la funzionalità venga implementata in Webkit.)",
+    "reporttous1": {
+        "message": "Puoi sengalarci la pubblicità sul nostro $in_the_issue_tracker_link$ (in Inglese).",
         "description": "NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us $in_the_issue_tracker_link$.'",
         "placeholders": {
             "in_the_issue_tracker_link": {
@@ -768,9 +674,5 @@
                 "example": "<a href='http://chrome.com/update_here.ctx'>update</a>" 
             } 
         } 
-    },
-    "cantundo": {
-        "message": "Questa azione non può essere annullata!",
-        "description": "Warning a user before confirming an action" 
     }
 }

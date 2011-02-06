@@ -1,7 +1,11 @@
 ﻿{
-  "description": {
-    "message": "AdBlock for Chrome!  Blocks ads all over the web.  Rated 4.5 out of 5 stars by our users!",
+  "description1": {
+    "message": "The most popular Chrome extension, with over 1.5 million users!  Blocks ads all over the web.",
     "description": "Extension description in manifest"
+  },
+  "free_description": {
+    "message": "The most popular Chrome extension -- but please pay $1.99 for AdBlock instead of installing this :)",
+    "description": "Extension description used in free version manifest"
   },
 
   "buttoncancel": {
@@ -23,6 +27,35 @@
   "optionstitle": {
     "message": "AdBlock Options",
     "description": "Title for the options page"
+  },
+
+  "installedtitle": {
+    "message": "AdBlock is now installed!",
+    "description": "Title for the installation success page"
+  },
+  "installisdone": {
+    "message": "Reload any open tabs, and watch the ads disappear.",
+    "description": "Message on the installation success page"
+  },
+  "donaterequest2": {
+    "message": "I recently quit my job to devote full time to AdBlock!  I now rely solely on your donations to support my family.  Please <a>donate</a> to help pay our bills -- and prove that my wife and I (pictured) aren't crazy for trying this.  Thanks :) - Michael",
+    "description": "Donation request on installation success page"
+  },
+  "setotheroptions": {
+    "message": "You can set other options and subscribe to filter lists via Wrench | Tools | Extensions | AdBlock Options.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_how_to_disable": {
+    "message": "To remove the button, right click it and choose Uninstall.  This only uninstalls the Browser Button For AdBlock helper extension.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_how_to_enable": {
+    "message": "To show the button, install <a>this helper extension</a>.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_showoption": {
+    "message": "Show a button in the toolbar",
+    "description": "Message on installation success page"
   },
 
   "youtubevideomessage": {
@@ -190,14 +223,6 @@
     "message": "changelog",
     "description": "changelog link"
   },
-  "donatethanks": {
-    "message": "Hooray! Thank you!",
-    "description": "Tooltip if you hover the donate image"
-  },
-  "optionsintro": {
-    "message": "Do you love AdBlock? My name's Michael. I've dropped to a less-than-full-time job in order to develop AdBlock and support my users. Please use and enjoy AdBlock, and if you can <a>make a donation</a> of any amount, I'd appreciate it <b>immensely</b> :)",
-    "description": "Intro of the options page"
-  },
   "tabgeneral": {
     "message": "General",
     "description": "A tab on the options page"
@@ -206,12 +231,8 @@
     "message": "Filter lists",
     "description": "A tab on the options page"
   },
-  "tabblacklist": {
-    "message": "Blacklist",
-    "description": "A tab on the options page"
-  },
-  "tabexcluded": {
-    "message": "Excluded sites",
+  "tabcustomize": {
+    "message": "Customize",
     "description": "A tab on the options page"
   },
 
@@ -219,17 +240,9 @@
     "message": "General options",
     "description": "Title of first tab page"
   },
-  "blocknothideoption": {
-    "message": "Block most ads from even being downloaded, instead of just hiding them.",
-    "description": "Option on first tab page"
-  },
   "betalabel": {
     "message": "Beta",
     "description": "Option on first tab page"
-  },
-  "blocknothidewarning": {
-    "message": "Note that Chrome doesn't fully support this, so a few resources might still be downloaded and hidden if you're on a fast computer.",
-    "description": "Warning for block instead of hiding option"
   },
   "googletextads": {
     "message": "I like the text ads on Google search results; show me those.",
@@ -243,16 +256,8 @@
     "message": "Add items to the right click menu.",
     "description": "Option on first tab page"
   },
-  "pleaserestart": {
-    "message": "(Requires restarting Chrome)",
-    "description": "Explaining that changing an optional feature requires restarting Chrome before it will take effect"
-  },
   "debuginlogoption": {
     "message": "Show debug statements in Console Log (which slows down AdBlock)",
-    "description": "Option on first tab page"
-  },
-  "timeinlogoption": {
-    "message": "Show timing statements in Console Log (which slows down AdBlock)",
     "description": "Option on first tab page"
   },
 
@@ -348,10 +353,6 @@
     "message": "Subscribe to filter lists",
     "description": "Title of the filter list tab"
   },
-  "defaultsexplanation": {
-    "message": "The defaults are great for English-speaking users in the US. Others may wish to subscribe to more lists.",
-    "description": "Explanation of the filter lists"
-  },
   "filterlistlink": {
     "message": "Don't subscribe to more than you need -- every one slows you down a tiny bit! Credits and more lists can be found <a>here</a>.",
     "description": "Explanation of the filter lists"
@@ -394,100 +395,108 @@
   },
   "filtereasylist_plus_bulgarian": {
     "message": " - additional Bulgarian filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterdutch": {
     "message": " - additional Dutch filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_finnish": {
     "message": " - additional Finnish filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_french": {
     "message": " - additional French filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_german": {
     "message": " - additional German filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_norwegian": {
     "message": " - additional Norwegian filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_polish": {
     "message": " - additional Polish filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_romanian": {
     "message": " - additional Romanian filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterrussian": {
     "message": " - additional Russian filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_vietnamese": {
     "message": " - additional Vietnamese filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterchinese": {
     "message": "Chinese filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterczech": {
     "message": "Czech filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterdanish": {
     "message": "Danish filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterhungarian": {
     "message": "Hungarian filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterisraeli": {
     "message": "Israeli filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filteritalian": {
     "message": "Italian filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterjapanese": {
     "message": "Japanese filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plun_korean": {
     "message": "Korean filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterpolish": {
     "message": "Polish filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_spanish": {
     "message": "Spanish filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterukranian": {
     "message": "Ukranian filters",
-    "description": "A filter list"
+    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
 
   "blacklistclickmessage": {
     "message": "Right click an ad on a page to block it -- or block it here manually.",
     "description": "Message at the top of the blacklist options tab"
   },
-  "blacklisttabtitle": {
-    "message": "Block an ad that the filter lists missed",
+  "tabcustomizetitle": {
+    "message": "Customize AdBlock",
     "description": "Title of the third tab"
   },
-  "addnewfilter": {
-    "message": "Add a new filter:",
-    "description": "Subtitle on the third tab"
+  "filterlistsrock": {
+    "message": "The filter lists block most ads on the web.  You can also:",
+    "description": "Header text on the Customize tab.  'Filter lists' should be the same text as the tabfilterlists message."
+  },
+  "blockmoreads": {
+    "message": "Block more ads:",
+    "description": "Section header on third tab"
+  },
+  "unblocktitle": {
+    "message": "Disable AdBlock on a certain webpage:",
+    "description": "Section header on third tab"
   },
   "linkblockadbyurl": {
     "message": "Block an ad by its URL",
@@ -497,6 +506,10 @@
     "message": "Hide a section of a webpage",
     "description": "Link on the third tab"
   },
+  "linkunblock": {
+    "message": "Show ads on a webpage or domain",
+    "description": "Link on the third tab"
+  },
   "blockurlwithtext": {
     "message": "Block URLs containing this text",
     "description": "Message of the url-blocking area"
@@ -504,6 +517,10 @@
   "csstomatch": {
     "message": "CSS to match",
     "description": "Message of the css-hiding area"
+  },
+  "excludedomainorurl": {
+    "message": "The domain or url where AdBlock shouldn't block anything",
+    "description": "Message of the exclude area"
   },
   "blockdomain": {
     "message": "Domain of page to apply on",
@@ -534,33 +551,13 @@
     "description": "A link for users who found an ad somewhere and want to report it"
   },
 
-  "removelabel": {
-    "message": "Remove",
-    "description": "link to remove a excluded site"
-  },
-  "excludedsitestitle": {
-    "message": "Don't block ads on domains that end with...",
-    "description": "title of the 4th tab page"
-  },
-  "excludedsitesexample": {
-    "message": "For example, 'google.com' will stop blocking ads on google.com, mail.google.com, and www.google.com.",
-    "description": "text on the 4th tab page"
-  },
-  "addbutton": {
-    "message": "Add",
-    "description": "add button"
-  },
-  "removeallfromlist": {
-    "message": "Remove all items from the list:",
-    "description": "option on 4th tab page"
-  },
   "adblockreportinganad": {
     "message": "AdBlock - Reporting an ad",
     "description": "title of ad report page"
   },
-  "adreport1": {
-    "message": "So you just found an ad on a web page? Well, I'll help you to find the correct place to report it!<br/> Remember: reporting ads is voluntary. If you don't wish to do this you can just close this window and block it only for yourself by adding its filter in the 'Blacklist' tab of the options page!",
-    "description": "Instructions on ad reporting page.  'Blacklist' should be the same text as the 'tabblacklist' message."
+  "adreport2": {
+    "message": "So you just found an ad on a web page? Well, I'll help you to find the correct place to report it!<br/> Remember: reporting ads is voluntary. If you don't wish to do this you can just close this window and block it only for yourself by adding its filter in the 'Customize' tab of the options page!",
+    "description": "Instructions on ad reporting page. 'Customize' should be the same text as the 'tabcustomize' message."
   },
   "updateyourlists": {
     "message": "Make sure your filter lists are up to date",
@@ -593,10 +590,6 @@
   "correctfilters": {
     "message": "Correct filters",
     "description": "on the ad report page, label describing having the right set of filters"
-  },
-  "reallyclearlist": {
-    "message": "Are you sure you would like to clear this list?",
-    "description": "confirmation of clearing a list of iteams"
   },
   "pagelanguagecheck": {
     "message": "In what language is that page written?",
@@ -690,9 +683,9 @@
     "message": "Other",
     "description": "multiple choice option"
   },
-  "nodefaultfilter": {
-    "message": "We don't have a default filter list for that language.<br/>Please try to find a suitable list that supports this language $link$ or block this ad for yourself on the Blacklist page.",
-    "description": "instructions on ad report page pointing users to EasyList subscriptions list.  'Blacklist' should be the same message as 'tabblacklist'.",
+  "nodefaultfilter1": {
+    "message": "We don't have a default filter list for that language.<br/>Please try to find a suitable list that supports this language $link$ or block this ad for yourself on the 'Customize' tab.",
+    "description": "instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same message as 'tabcustomize'.",
     "placeholders": {
       "link": {
         "content": "$1here$2",
@@ -748,8 +741,8 @@
       }
     }
   },
-  "reporttous": {
-    "message": "You can report the ad to us $in_the_issue_tracker_link$. (We are already aware that we can't block ads in most videos; we're waiting on support in WebKit.)",
+  "reporttous1": {
+    "message": "You can report the ad to us $in_the_issue_tracker_link$.",
     "description": "NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us $in_the_issue_tracker_link$.'",
     "placeholders": {
       "in_the_issue_tracker_link": {
@@ -772,10 +765,6 @@
       }
     }
   },
-  "cantundo": {
-    "message": "This action cannot be undone!",
-    "description": "Warning a user before confirming an action"
-  },
   "contextmenuhidethis": {
     "message": "Block this ad",
     "description": "Context menu entry"
@@ -787,5 +776,25 @@
   "contextmenuexcludedomain": {
     "message": "Don't run on this domain...",
     "description": "Context menu entry"
+  },
+  "filecleanerwarning": {
+    "message": "If you see this message every time you start AdBlock, please make sure you are not using a file cleaner that also cleans 'localStorage' files.",
+    "description": "Help for users who use hyperactive file cleaners"
+  },
+  "somequicksetup": {
+    "message": "Some quick setup",
+    "description": "Title of the options on the installation succes page"
+  },
+  "flashads": {
+    "message": "Videos and Flash",
+    "description": "Title of the final ad report question if the ad didn't appear in FF"
+  },
+  "cantblockflashwarning": {
+    "message": "Does the ad appear in or before a film or any other plugin like a Flash game?",
+    "description": "Text of the final ad report question"
+  },
+  "cantblockflash": {
+    "message": "We can't block ads inside Flash and other plugins yet. We are awaiting support from the browser and WebKit.",
+    "description": "Result of the final ad report question"
   }
 }

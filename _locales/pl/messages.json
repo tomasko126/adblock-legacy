@@ -1,9 +1,4 @@
 {
-  "description": {
-    "message": "AdBlock dla Chrome! Blokuje reklamy w sieci. Oceniony na 4,5 z 5 gwiazdek przez naszych użytkowników!",
-    "description": "Extension description in manifest"
-  },
-
   "buttoncancel": {
     "message": "Anuluj",
     "description": "Cancel button"
@@ -25,6 +20,31 @@
     "description": "Title for the options page"
   },
 
+  "installedtitle": {
+    "message": "AdBlock jest już zainstalowany!",
+    "description": "Title for the installation success page"
+  },
+  "installisdone": {
+    "message": "Odśwież otwarte karty i podziwiaj strony bez reklam.",
+    "description": "Message on the installation success page"
+  },
+  "setotheroptions": {
+    "message": "Możesz zmieniać ustawienia oraz subskrybować listy filtrów przez Klucz | Narzędzia | Rozszerzenia | Ustawienia AdBlock.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_how_to_disable": {
+    "message": "Aby usunąć guzik z paska narzędzi, kliknij go prawym przyciskiem myszy i wybierz Odinstaluj. To spowoduje odinstalowanie pomocniczego rozszerzenia Browser Button for AdBlock.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_how_to_enable": {
+    "message": "Aby guzik był widoczny, zainstaluj pomocnicze rozszerzenie <a>Browser Button for AdBlock</a>.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_showoption": {
+    "message": "Pokaż guzik w pasku narzędzi.",
+    "description": "Message on installation success page"
+  },
+  
   "youtubevideomessage": {
     "message": "Nie widzisz filmu? Odśwież stronę. Jeśli to się często zdarza, wyłącz blokowanie reklam w filmach YouTube tu: $link$.",
     "description": "Message on the YouTube video page that tells you that it might be the option that blocks the video.  $link$'s text is the title of the AdBlock Options page.",
@@ -65,7 +85,7 @@
     "description": "Warning if the user hasn't specified a filter"
   },
   "blacklistereditfilter": {
-    "message": "Samodzielnie wprowadź filtr i zatwierdź go wciskając OK.",
+    "message": "Samodzielnie wprowadź filtr i zatwierdź go przyciskiem OK.",
     "description": "Text if the user wants to manually edit a filter.  'OK' is the standard javascript popup button text."
   },
   "blacklistereditinvalid": {
@@ -145,7 +165,7 @@
   },
 
   "whitelistertext": {
-    "message": "AdBlock nie będzie działać na domenach kończących się na<br/>$domain$.",
+    "message": "AdBlock nie będzie działać w domenach kończących się na<br/>$domain$.",
     "description": "The message of the whitelister dialog, putting the domain name on a separate line",
     "placeholders": {
       "domain": {
@@ -190,14 +210,6 @@
     "message": "Lista zmian",
     "description": "changelog link"
   },
-  "donatethanks": {
-    "message": "Hurrra! Dziękuję!",
-    "description": "Tooltip if you hover the donate image"
-  },
-  "optionsintro": {
-    "message": "Lubisz AdBlock? Mam na imię Michael. Pracuję na pół etatu, żeby rozwijać AdBlock oraz dawać wsparcie techniczne użytkownikom. Proszę, korzystaj i czerp przyjemność z AdBlock, a jeśli możesz <a>wesprzeć mnie darowizną</a>, byłbym <b>niezmiernie</b> wdzięczny :)",
-    "description": "Intro of the options page"
-  },
   "tabgeneral": {
     "message": "Ogólne",
     "description": "A tab on the options page"
@@ -206,30 +218,14 @@
     "message": "Listy filtrów",
     "description": "A tab on the options page"
   },
-  "tabblacklist": {
-    "message": "Czarna lista",
-    "description": "A tab on the options page"
-  },
-  "tabexcluded": {
-    "message": "Biała lista",
-    "description": "A tab on the options page"
-  },
 
   "generaloptions": {
     "message": "Ustawienia ogólne",
     "description": "Title of first tab page"
   },
-  "blocknothideoption": {
-    "message": "Nie pobieraj reklam, zamiast jedynie je ukrywać.",
-    "description": "Option on first tab page"
-  },
   "betalabel": {
     "message": "Beta",
     "description": "Option on first tab page"
-  },
-  "blocknothidewarning": {
-    "message": "Chrome nie wspiera tego w pełni, jeżeli masz szybki komputer to niewielka ilość danych może zostać pobrana i ukryta.",
-    "description": "Warning for block instead of hiding option"
   },
   "googletextads": {
     "message": "Lubię reklamy tekstowe na liście wyników wyszukiwania Google, nie blokuj ich.",
@@ -243,16 +239,8 @@
     "message": "Dodaj pozycje do menu kontekstowego.",
     "description": "Option on first tab page"
   },
-  "pleaserestart": {
-    "message": "(Wymaga ponownego uruchomienia Chrome)",
-    "description": "Explaining that changing an optional feature requires restarting Chrome before it will take effect"
-  },
   "debuginlogoption": {
     "message": "Pokazuj komunikaty debugowania w logach konsoli (spowalnia AdBlock)",
-    "description": "Option on first tab page"
-  },
-  "timeinlogoption": {
-    "message": "Pokazuj komunikaty czasu w logach konsoli (spowalnia AdBlock)",
     "description": "Option on first tab page"
   },
 
@@ -347,10 +335,6 @@
   "filterstabtitle": {
     "message": "Subskrypcje list z filtrami",
     "description": "Title of the filter list tab"
-  },
-  "defaultsexplanation": {
-    "message": "Standardowe ustawienia są dostosowane do potrzeb anglojęzycznych użytkowników w Stanach Zjednoczonych. Inni użytkownicy mają możliwość subskrypcji większej ilości list.",
-    "description": "Explanation of the filter lists"
   },
   "filterlistlink": {
     "message": "Nie subskrybuj większej ilości list niż potrzebujesz, każda odrobinę spowalnia przeglądarkę! Wyrazy uznania oraz więcej list można znaleźć <a>tutaj</a>.",
@@ -478,16 +462,8 @@
   },
 
   "blacklistclickmessage": {
-    "message": "Kliknij w reklamę prawym klawiszem myszy by ją zablokować, lub zablokuj ją samodzielnie tutaj.",
+    "message": "Kliknij w reklamę prawym przyciskiem myszy by ją zablokować, lub zablokuj ją samodzielnie tutaj.",
     "description": "Message at the top of the blacklist options tab"
-  },
-  "blacklisttabtitle": {
-    "message": "Zablokuj reklamę, którą listy filtrów ominęły",
-    "description": "Title of the third tab"
-  },
-  "addnewfilter": {
-    "message": "Dodaj nowy filtr:",
-    "description": "Subtitle on the third tab"
   },
   "linkblockadbyurl": {
     "message": "Zablokuj reklamę poprzez jej adres URL",
@@ -506,7 +482,7 @@
     "description": "Message of the css-hiding area"
   },
   "blockdomain": {
-    "message": "Zastosuj na domenie",
+    "message": "Zastosuj w domenie",
     "description": "Message of the url and css -blocking area"
   },
   "manualfilteredit": {
@@ -534,33 +510,9 @@
     "description": "A link for users who found an ad somewhere and want to report it"
   },
 
-  "removelabel": {
-    "message": "Usuń",
-    "description": "link to remove a excluded site"
-  },
-  "excludedsitestitle": {
-    "message": "Nie blokuj reklam na domenach kończących się na...",
-    "description": "title of the 4th tab page"
-  },
-  "excludedsitesexample": {
-    "message": "Na przykład, 'google.com' zapobiegnie blokowaniu reklam na google.com, mail.google.com oraz www.google.com.",
-    "description": "text on the 4th tab page"
-  },
-  "addbutton": {
-    "message": "Dodaj",
-    "description": "add button"
-  },
-  "removeallfromlist": {
-    "message": "Usuń wszystkie domeny z listy:",
-    "description": "option on 4th tab page"
-  },
   "adblockreportinganad": {
     "message": "AdBlock - Zgłaszanie reklamy",
     "description": "title of ad report page"
-  },
-  "adreport1": {
-    "message": "Znalazłeś reklamę na jakiejś stronie, która nie została zablokowana? Dowiedz się gdzie możesz to zgłosić<br/> Pamiętaj: raportowanie reklam jest dobrowolne. Jeśli sobie tego nie życzysz, możesz po prostu zamknąć to okno i zablokować ją wyłącznie dla siebie, dodając filtr w zakładce 'Czarna lista' na stronie 'Ustawienia AdBlock'!",
-    "description": "Instructions on ad reporting page.  'Blacklist' should be the same text as the 'tabblacklist' message."
   },
   "updateyourlists": {
     "message": "Upewnij się, że twoje listy filtrów są aktualne",
@@ -571,7 +523,7 @@
     "description": "instruction on ad report page"
   },
   "reloadadpage": {
-    "message": "Przeładuj stronę z reklamą.",
+    "message": "Odśwież stronę z reklamą.",
     "description": "instruction on ad report page"
   },
   "adstillappear": {
@@ -593,10 +545,6 @@
   "correctfilters": {
     "message": "Właściwe filtry",
     "description": "on the ad report page, label describing having the right set of filters"
-  },
-  "reallyclearlist": {
-    "message": "Jesteś pewien, że chcesz wyczyścić listę?",
-    "description": "confirmation of clearing a list of items"
   },
   "pagelanguagecheck": {
     "message": "W jakim języku jest napisana ta strona?",
@@ -690,16 +638,6 @@
     "message": "Innym",
     "description": "multiple choice option"
   },
-  "nodefaultfilter": {
-    "message": "Nie posiadamy domyślnego filtru dla tego języka.<br/>Proszę postarać się znaleźć stosowną listę wspierającą ten język $link$ lub zablokować tę reklamę samodzielnie w zakładce 'Czarna lista' na stronie 'Ustawienia AdBlock'.",
-    "description": "instructions on ad report page pointing users to EasyList subscriptions list.  'Blacklist' should be the same message as 'tabblacklist'.",
-    "placeholders": {
-      "link": {
-        "content": "$1tutaj$2",
-        "example": "<a href='http://abp.org'>here</a>"
-      }
-    }
-  },
   "retryaftersubscribe": {
     "message": "Subskrybuj tę listę filtrów i spróbuj ponownie: $list_title$",
     "description": "instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
@@ -748,8 +686,8 @@
       }
     }
   },
-  "reporttous": {
-    "message": "Jeśli znasz angielski, możesz zgłosić reklamę do nas w $in_the_issue_tracker_link$. (Jesteśmy świadomi, że nie możemy blokować reklam w większości filmach wideo. Czekamy aż WebKit to umożliwi.)",
+  "reporttous1": {
+    "message": "Jeśli znasz angielski, możesz zgłosić reklamę do nas w $in_the_issue_tracker_link$.",
     "description": "NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us $in_the_issue_tracker_link$.'",
     "placeholders": {
       "in_the_issue_tracker_link": {
@@ -772,12 +710,8 @@
       }
     }
   },
-  "cantundo": {
-    "message": "Tej akcji nie można cofnąć!",
-    "description": "Warning a user before confirming an action"
-  },
   "contextmenuhidethis": {
-    "message": "Zablouk tę reklamę",
+    "message": "Zablokuj tę reklamę",
     "description": "Context menu entry"
   },
   "contextmenuhideanything": {
@@ -785,7 +719,11 @@
     "description": "Context menu entry"
   },
   "contextmenuexcludedomain": {
-    "message": "Wyłącz AdBlock na tej domenie...",
+    "message": "Wyłącz AdBlock w tej domenie...",
     "description": "Context menu entry"
+  },
+  "somequicksetup": {
+    "message": "Szybkie ustawienia niektórych opcji.",
+    "description": "Title of the options on the installation succes page"
   }
 }

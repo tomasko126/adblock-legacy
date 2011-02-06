@@ -1,7 +1,11 @@
 ﻿{
-  "description": {
-    "message": "AdBlock для Chrome!  Блокирует рекламу на всех веб-сайтах.  Оценка 4.5 из 5 от наших пользователей!",
+  "description1": {
+    "message": "Наиболее популярное расширение Chrome с 1.5 миллионами пользователей! Блокирует рекламу по всему Интернету.",
     "description": "Extension description in manifest"
+  },
+  "free_description": {
+    "message": "Наиболее популярные расширения Chrome - но, пожалуйста, заплатите $ 1,99 за AdBlock вместо установки этого:)",
+    "description": "Extension description used in free version manifest"
   },
 
   "buttoncancel": {
@@ -23,6 +27,35 @@
   "optionstitle": {
     "message": "Параметры AdBlock",
     "description": "Title for the options page"
+  },
+
+  "installedtitle": {
+    "message": "AdBlock установлен!",
+    "description": "Title for the installation success page"
+  },
+  "installisdone": {
+    "message": "Перезагрузите любую открытую вкладку, и посмотрите исчезла ли реклама.",
+    "description": "Message on the installation success page"
+  },
+  "donaterequest2": {
+    "message": "Я недавно оставил свою работу, чтобы посвятить все свое время AdBlock! Сейчас я полностью полагаюсь на Ваши пожертвования для поддержки моей семьи. Окажите <a>поддержку</a>, чтобы помочь оплатить наши счета - и доказать, что я и моя жена (на фото) не сумасшедшие из-за этой попытки. Спасибо:) - Michael",
+    "description": "Donation request on installation success page"
+  },
+  "setotheroptions": {
+    "message": "Вы можете задать другие параметры и подписаться на списки фильтров через Ключ | Инструменты | Расширения | AdBlock | Настройки.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_how_to_disable": {
+    "message": "Чтобы удалить кнопку, нажмите правую кнопку мыши и выберите команду Удалить. Это удаляет только вспомогательное расширение Кнопка браузера для AdBlock.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_how_to_enable": {
+    "message": "Чтобы показать кнопку, установите <a>это вспомогательное расширение</a>.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_showoption": {
+    "message": "Показать кнопку на панели инструментов",
+    "description": "Message on installation success page"
   },
 
   "youtubevideomessage": {
@@ -190,14 +223,6 @@
     "message": "журнал изменений",
     "description": "changelog link"
   },
-  "donatethanks": {
-    "message": "Ура! Спасибо!",
-    "description": "Tooltip if you hover the donate image"
-  },
-  "optionsintro": {
-    "message": "Понравился AdBlock? Меня зовут Michael. Я трачу почти полный рабочий день для разработки AdBlock и поддержки пользователей. Пожалуйста, используйте и наслаждайтесь AdBlock, и, если Вы можете <a>сделайте пожертвование</a> любой суммы, я был бы Вам <b>чрезвычайно</b> признателен :)",
-    "description": "Intro of the options page"
-  },
   "tabgeneral": {
     "message": "Общая",
     "description": "A tab on the options page"
@@ -206,12 +231,8 @@
     "message": "Списки фильтров",
     "description": "A tab on the options page"
   },
-  "tabblacklist": {
-    "message": "Черный список",
-    "description": "A tab on the options page"
-  },
-  "tabexcluded": {
-    "message": "Сайты-исключения",
+  "tabcustomize": {
+    "message": "Настройка",
     "description": "A tab on the options page"
   },
 
@@ -219,24 +240,8 @@
     "message": "Общие параметры",
     "description": "Title of first tab page"
   },
-  "blocknothideoption": {
-    "message": "Блокировать  большинство рекламы, даже не загружая, а не просто скрывая её.",
-    "description": "Option on first tab page"
-  },
   "betalabel": {
     "message": "Бета",
-    "description": "Option on first tab page"
-  },
-  "blocknothidewarning": {
-    "message": "Заметьте, что Chrome не полностью поддерживает эту возможность, поэтому некоторые ресурсы могут быть по-прежнему загружены и скрыты, если у Вас быстрый компьютер.",
-    "description": "Warning for block instead of hiding option"
-  },
-  "buttonexplanation": {
-    "message": "<i>Чтобы сделать кнопку необязательной, мы поместили её в отдельное вспомогательное расширение, которое устанавливается вместе с AdBlock.</i><br/><br/>Чтобы добавить кнопку, нажмите <b>Установить</b> на странице <a>Кнопка браузера для AdBlock</a>.<br/><br/>Чтобы удалить кнопку, щелкните её правой кнопкой мыши и выберите Удалить.",
-    "description": "Explanation of how the button works"
-  },
-  "buttonextension": {
-    "message": "Показать кнопку AdBlock рядом с адресной строкой.",
     "description": "Option on first tab page"
   },
   "googletextads": {
@@ -251,16 +256,8 @@
     "message": "Добавить элементы в меню правой кнопки мыши.",
     "description": "Option on first tab page"
   },
-  "pleaserestart": {
-    "message": "(Необходимо перезапустить Chrome).",
-    "description": "Explaining that changing an optional feature requires restarting Chrome before it will take effect"
-  },
   "debuginlogoption": {
     "message": "Показывать сообщения отладки в Журнале Консоли (замедляет AdBlock)",
-    "description": "Option on first tab page"
-  },
-  "timeinlogoption": {
-    "message": "Показывать отметки времени в Журнале Консоли (замедляет AdBlock)",
     "description": "Option on first tab page"
   },
 
@@ -355,10 +352,6 @@
   "filterstabtitle": {
     "message": "Подписка на списки фильтров",
     "description": "Title of the filter list tab"
-  },
-  "defaultsexplanation": {
-    "message": "По умолчанию отлично подходит для англоязычных пользователей в США. Другие могут по желанию подписаться на несколько списков.",
-    "description": "Explanation of the filter lists"
   },
   "filterlistlink": {
     "message": "Не подписывайтесь на больше чем нужно – каждый из них замедляет чуть-чуть работу! Первоисточники и дополнительные списки Вы можете найти <a>здесь</a>.",
@@ -489,13 +482,21 @@
     "message": "Щелкните правой кнопкой мыши рекламу на странице, чтобы заблокировать её - или заблокируйте здесь вручную.",
     "description": "Message at the top of the blacklist options tab"
   },
-  "blacklisttabtitle": {
-    "message": "Блокировка рекламы, отсутствующей в списках фильтров",
+  "tabcustomizetitle": {
+    "message": "Настройка AdBlock",
     "description": "Title of the third tab"
   },
-  "addnewfilter": {
-    "message": "Добавить новый фильтр:",
-    "description": "Subtitle on the third tab"
+  "filterlistsrock": {
+    "message": "Списки фильтров блокируют большинство рекламы в Интернете. Вы также можете:",
+    "description": "Header text on the Customize tab.  'Filter lists' should be the same text as the tabfilterlists message."
+  },
+  "blockmoreads": {
+    "message": "Блокировать больше рекламы:",
+    "description": "Section header on third tab"
+  },
+  "unblocktitle": {
+    "message": "Отключить AdBlock на определенных веб-страницах:",
+    "description": "Section header on third tab"
   },
   "linkblockadbyurl": {
     "message": "Блокировать рекламу по ее URL",
@@ -505,6 +506,10 @@
     "message": "Скрыть секцию веб-страницы",
     "description": "Link on the third tab"
   },
+  "linkunblock": {
+    "message": "Показывать рекламу на веб-странице или домене",
+    "description": "Link on the third tab"
+  },
   "blockurlwithtext": {
     "message": "Блокировать URL, содержащие этот текст",
     "description": "Message of the url-blocking area"
@@ -512,6 +517,10 @@
   "csstomatch": {
     "message": "Соответствующий CSS",
     "description": "Message of the css-hiding area"
+  },
+  "excludedomainorurl": {
+    "message": "Домен или URL, где AdBlock не должен ничего блокировать",
+    "description": "Message of the exclude area"
   },
   "blockdomain": {
     "message": "Домен страницы",
@@ -542,33 +551,13 @@
     "description": "A link for users who found an ad somewhere and want to report it"
   },
 
-  "removelabel": {
-    "message": "Удалить",
-    "description": "link to remove a excluded site"
-  },
-  "excludedsitestitle": {
-    "message": "Не блокировать рекламу на доменах, которые заканчиваются... ",
-    "description": "title of the 4th tab page"
-  },
-  "excludedsitesexample": {
-    "message": "Например, 'google.com' остановит блокировку рекламы на google.com, mail.google.com, и www.google.com.",
-    "description": "text on the 4th tab page"
-  },
-  "addbutton": {
-    "message": "Добавить",
-    "description": "add button"
-  },
-  "removeallfromlist": {
-    "message": "Удалить все элементы из списка:",
-    "description": "option on 4th tab page"
-  },
   "adblockreportinganad": {
-    "message": "AdBlock - отчеты о рекламе",
+    "message": "AdBlock - отчет о рекламе",
     "description": "title of ad report page"
   },
-  "adreport1": {
-    "message": "Итак, Вы только что нашли рекламу на веб-странице? Тогда я помогу Вам найти подходящее место, куда сообщить об этом!<br/> Помните: отчет о рекламе является добровольным. Если Вы не хотите это делать, можно просто закрыть это окно и заблокировать её только для себя, добавив фильтр на вкладку 'Черный список' на странице Параметры",
-    "description": "Instructions on ad reporting page.  'Blacklist' should be the same text as the 'tabblacklist' message."
+  "adreport2": {
+    "message": "Итак, Вы только что нашли рекламу на веб-странице? Хорошо, я помогу Вам найти подходящее место, куда сообщить об этом!<br/> Помните: объявления отчет о рекламе является добровольным. Если Вы не хотите делать это, Вы можете просто закрыть это окно и блокировать её только для себя, добавив её фильтр на вкладке 'Настройка' на странице Параметры!",
+    "description": "Instructions on ad reporting page. 'Customize' should be the same text as the 'tabcustomize' message."
   },
   "updateyourlists": {
     "message": "Убедитесь, что списки фильтров обновлены",
@@ -601,10 +590,6 @@
   "correctfilters": {
     "message": "Правильные фильтры",
     "description": "on the ad report page, label describing having the right set of filters"
-  },
-  "reallyclearlist": {
-    "message": "Вы уверены, что хотите очистить фильтры?",
-    "description": "confirmation of clearing a list of iteams"
   },
   "pagelanguagecheck": {
     "message": "На каком языке эта страница?",
@@ -698,9 +683,9 @@
     "message": "Другой",
     "description": "multiple choice option"
   },
-  "nodefaultfilter": {
-    "message": "У нас нет списка фильтров по умолчанию для данного языка. <br/> Пожалуйста, попробуйте найти подходящий список, поддерживающий этот язык $link$ или заблокируйте эту рекламу для себя на странице 'Черный список'.",
-    "description": "instructions on ad report page pointing users to EasyList subscriptions list.  'Blacklist' should be the same message as 'tabblacklist'.",
+  "nodefaultfilter1": {
+    "message": "У нас нет списка фильтров по умолчанию для этого языка.<br/>Пожалуйста, попробуйте найти подходящий список, который поддерживает этот язык $link$, или заблокируйте эту рекламу для себя на вкладке 'Настройка'",
+    "description": "instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same message as 'tabcustomize'.",
     "placeholders": {
       "link": {
         "content": "$1здесь$2",
@@ -756,8 +741,8 @@
       }
     }
   },
-  "reporttous": {
-    "message": "Если Вы знаете английский, Вы можете сообщить нам о рекламе $in_the_issue_tracker_link$. (Мы уже знаем, что мы не можем блокировать рекламу в большинстве видео, мы ждем на поддержку в WebKit.)",
+  "reporttous1": {
+    "message": "Если Вы знаете английский, Вы можете сообщить нам о рекламе $in_the_issue_tracker_link$.",
     "description": "NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us $in_the_issue_tracker_link$.'",
     "placeholders": {
       "in_the_issue_tracker_link": {
@@ -780,10 +765,6 @@
       }
     }
   },
-  "cantundo": {
-    "message": "Это действие нельзя отменить!",
-    "description": "Warning a user before confirming an action"
-  },
   "contextmenuhidethis": {
     "message": "Блокировать эту рекламу",
     "description": "Context menu entry"
@@ -795,5 +776,25 @@
   "contextmenuexcludedomain": {
     "message": "Не выполнять на этом домене...",
     "description": "Context menu entry"
+  },
+  "filecleanerwarning": {
+    "message": "Если вы видите это сообщение, каждый раз при запуске AdBlock, пожалуйста, убедитесь, что Вы не используете уборщик файлов, который также удаляет файлы 'localStorage'.",
+    "description": "Help for users who use hyperactive file cleaners"
+  },
+  "somequicksetup": {
+    "message": "Некоторые быстрые настройки",
+    "description": "Title of the options on the installation succes page"
+  },
+  "flashads": {
+    "message": "Видео и Флэш",
+    "description": "Title of the final ad report question if the ad didn't appear in FF"
+  },
+  "cantblockflashwarning": {
+    "message": "Отображается ли реклама перед фильмом или любым другим плагином как Flash-игра?",
+    "description": "Text of the final ad report question"
+  },
+  "cantblockflash": {
+    "message": "Мы еще не можем блокировать рекламу внутри Флэш и других плагинах. Мы ждем поддержки от браузера и WebKit.",
+    "description": "Result of the final ad report question"
   }
 }

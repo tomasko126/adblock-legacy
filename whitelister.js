@@ -1,5 +1,5 @@
 // Global lock so we can't open more than once on a tab.
-var may_open_whitelist_ui = false;
+var may_open_whitelist_ui = true;
 
 function verify_whitelist() {
   if (!may_open_whitelist_ui)
@@ -14,7 +14,8 @@ function verify_whitelist() {
     btns[translate("buttoncancel")] = function() { page.dialog('close');}
     btns[translate("buttonexclude")] = 
         function() {
-          extension_call('add_to_whitelist', {domain:domain}, function() {
+          extension_call('add_custom_filter', 
+                         {filter: '@@||' + domain + '^$document'}, function() {
             document.location.reload();
           });
         }

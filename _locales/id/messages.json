@@ -1,7 +1,11 @@
 ﻿{
-  "description": {
-    "message": "AdBlock untuk Chrome!  Tutup iklan di seluruh web.  telah diberi Rating 4.5 dari 5 bintang oleh para pengguna kami!",
+  "description1": {
+    "message": "Ekstensi Crhome paling populer, dengan lebih dari 1.5 juta pengguna!  Blokir iklan di seluruh web.",
     "description": "Extension description in manifest"
+  },
+  "free_description": {
+    "message": "Ekstensi Chrome paling polpuler -- Tapi silahkan anda membayar $1.99 untuk AdBlock daripada meng-install ini :)",
+    "description": "Extension description used in free version manifest"
   },
 
   "buttoncancel": {
@@ -25,8 +29,37 @@
     "description": "Title for the options page"
   },
 
+  "installedtitle": {
+    "message": "AdBlock sekarang sudah terpasang!",
+    "description": "Title for the installation success page"
+  },
+  "installisdone": {
+    "message": "Muat ulang semua tab yang terbuka, dan saksikan iklan-iklannya menghilang.",
+    "description": "Message on the installation success page"
+  },
+  "donaterequest2": {
+    "message": "Saya baru saja keluar dari pekerjaanku untuk mencurahkan waktu saya sepenuhnya kepada AdBlock!  Saya sekarang hanya mengandalkan sumbangan anda untuk membantu keluarga saya.  Silahkan <a>donate</a> untuk membantu membayar tagihan kami -- dan membuktikan bahwa istri saya dan saya sendiri (ada dalam gambar) tidak gila dengan mencoba hal ini.  Terima kasih :) - Michael",
+    "description": "Donation request on installation success page"
+  },
+  "setotheroptions": {
+    "message": "Anda dapat mengatur pilihan lain dan berlangganan kepada daftar filter melalui Wrench | Tools | Extensions | AdBlock Options.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_how_to_disable": {
+    "message": "Untuk menghilangkan tombolnya, Klik kanan tombolnya dan pilih Uninstall.  Hal ini hanya akan menghapus Tombol browser untuk ekstensi pembantu AdBlock.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_how_to_enable": {
+    "message": "Untuk memunculkan tombolnya, install <a>this helper extension</a>.",
+    "description": "Message on installation success page"
+  },
+  "chromebutton_showoption": {
+    "message": "Perlihatkan tombol pada toolbar",
+    "description": "Message on installation success page"
+  },
+
   "youtubevideomessage": {
-    "message": "Tidak ada video? Mual ulang halamannya. Jika hal ini sering terjadi, matikan blokir iklan YouTube dibawah $link$.",
+    "message": "Tidak ada video? Muat ulang halamannya. Jika hal ini sering terjadi, matikan blokir iklan YouTube dibawah $link$.",
     "description": "Message on the YouTube video page that tells you that it might be the option that blocks the video.  $link$'s text is the title of the AdBlock Options page.",
     "placeholders": {
       "link": {
@@ -190,14 +223,6 @@
     "message": "Perubahan",
     "description": "changelog link"
   },
-  "donatethanks": {
-    "message": "Horee! Terima kasih!",
-    "description": "Tooltip if you hover the donate image"
-  },
-  "optionsintro": {
-    "message": "Apa anda suka AdBlock? Nama saya Michael. Saya terjun ke kerja paruh waktu dalam rangka mengembangkan AdBlock dan mendukung para pengguna saya. Silahkan pergunakan dan nikmati AdBlock, dan jika anda bisa <a>memberi sumbangan</a> berapapun, saya akan menghargainya <b>dengan sangat</b> :)",
-    "description": "Intro of the options page"
-  },
   "tabgeneral": {
     "message": "Umum",
     "description": "A tab on the options page"
@@ -206,37 +231,13 @@
     "message": "Daftar Filter",
     "description": "A tab on the options page"
   },
-  "tabblacklist": {
-    "message": "Daftar hitam",
-    "description": "A tab on the options page"
-  },
-  "tabexcluded": {
-    "message": "situs situs yang tidak disertakan",
-    "description": "A tab on the options page"
-  },
 
   "generaloptions": {
     "message": "Pengaturan Umum",
     "description": "Title of first tab page"
   },
-  "blocknothideoption": {
-    "message": "Blokir mengunduh kebanyakan iklan, daripada menyembunyikannya.",
-    "description": "Option on first tab page"
-  },
   "betalabel": {
     "message": "Beta",
-    "description": "Option on first tab page"
-  },
-  "blocknothidewarning": {
-    "message": "Catat bahwa Chrome tdak sepenuhnya mendukung hal ini, jadi beberapa so a few sumber mungkin masih tetap terunduh dan tersembunyi jika anda menggunakan sebuah komputer yang cepat.",
-    "description": "Warning for block instead of hiding option"
-  },
-  "buttonexplanation": {
-    "message": "<i>Untuk membuat pilihan tombolnya, kami menaruh dia di sebuah ekstensi pembantu sendiri, untuk dipasang bersamaan dengan AdBlock.</i><br/><br/>Untuk menambah tombol, klik <b>Install</b> pada halaman <a>Browser Button for AdBlock</a>.<br/><br/>Untuk menghapus tombol, klik kanan dia dan pilih Disable.",
-    "description": "Explanation of how the button works"
-  },
-  "buttonextension": {
-    "message": "perlihatkan tombol AdBlock disamping address bar",
     "description": "Option on first tab page"
   },
   "googletextads": {
@@ -251,16 +252,8 @@
     "message": "Tambahkan item pada menu klik kanan.",
     "description": "Option on first tab page"
   },
-  "pleaserestart": {
-    "message": "(Diperlukan start ulang Chrome)",
-    "description": "Explaining that changing an optional feature requires restarting Chrome before it will take effect"
-  },
   "debuginlogoption": {
     "message": "Perlihatkan pernyataan debug pada Console Log (akan memperlambat AdBlock)",
-    "description": "Option on first tab page"
-  },
-  "timeinlogoption": {
-    "message": "Perlihatkan pernyataan waktu pada Console Log (akan memperlambat AdBlock)",
     "description": "Option on first tab page"
   },
 
@@ -355,10 +348,6 @@
   "filterstabtitle": {
     "message": "Berlangganan pada daftar filter",
     "description": "Title of the filter list tab"
-  },
-  "defaultsexplanation": {
-    "message": "Pengaturan dasar sangat bagus untuk pengguna yang berbahasa Inggris di Amerika. Yang lain dapat meminta untuk berlangganan ke lebih banyak daftar.",
-    "description": "Explanation of the filter lists"
   },
   "filterlistlink": {
     "message": "Jangan berangganan lebih dari yang anda butuhkan -- setiap satunya akan sedikit memperlambat anda! Kredit dan lebih banyak daftar dapat ditemukan <a>Disini</a>.",
@@ -489,14 +478,6 @@
     "message": "Klik kanan sebuah iklan pada halaman untuk memblokirnya -- atau blokir secara manual disini.",
     "description": "Message at the top of the blacklist options tab"
   },
-  "blacklisttabtitle": {
-    "message": "Blok sebuah iklan yang terlewat oleh daftar filter",
-    "description": "Title of the third tab"
-  },
-  "addnewfilter": {
-    "message": "Tambah sebuah filter baru:",
-    "description": "Subtitle on the third tab"
-  },
   "linkblockadbyurl": {
     "message": "Blok sebuah iklan oleh URLnya",
     "description": "Link on the third tab"
@@ -542,33 +523,9 @@
     "description": "A link for users who found an ad somewhere and want to report it"
   },
 
-  "removelabel": {
-    "message": "Hapus",
-    "description": "link to remove a excluded site"
-  },
-  "excludedsitestitle": {
-    "message": "Jangan blokir iklan pada domain yang berakhiran dengan...",
-    "description": "title of the 4th tab page"
-  },
-  "excludedsitesexample": {
-    "message": "Sebagai contoh, 'google.com' akan berhenti memblokir iklan pada google.com, mail.google.com, dan www.google.com.",
-    "description": "text on the 4th tab page"
-  },
-  "addbutton": {
-    "message": "Tambah",
-    "description": "add button"
-  },
-  "removeallfromlist": {
-    "message": "Hapus semua item dari daftar:",
-    "description": "option on 4th tab page"
-  },
   "adblockreportinganad": {
     "message": "AdBlock - Laporkan sebuah iklan",
     "description": "title of ad report page"
-  },
-  "adreport1": {
-    "message": "Jadi anda menemukan sebuah iklan di sebuah halaman Web? Baiklah, saya akan membantu anda untuk menemukan sebuah tempat yang tepat untuk melaporkannya!<br/> Ingat: melaporkan iklan iklan adalah sukarela. Jika anda tidak ingin melakukannya anda dapat menutup Window ini dan blokir iklan itu hanya untuk anda sendiri dengan menambahkan filternya di tab 'Blacklist' dari halaman pengaturan!",
-    "description": "Instructions on ad reporting page.  'Blacklist' should be the same text as the 'tabblacklist' message."
   },
   "updateyourlists": {
     "message": "Yakinkan daftar filter anda sudah diperbaharui",
@@ -601,10 +558,6 @@
   "correctfilters": {
     "message": "Filter yang benar",
     "description": "on the ad report page, label describing having the right set of filters"
-  },
-  "reallyclearlist": {
-    "message": "Anda yakin ingin membersihkan daftar ini?",
-    "description": "confirmation of clearing a list of iteams"
   },
   "pagelanguagecheck": {
     "message": "Ditulis dalam bahasa apa halaman itu?",
@@ -698,16 +651,6 @@
     "message": "Yang lain",
     "description": "multiple choice option"
   },
-  "nodefaultfilter": {
-    "message": "Kami tidak memiliki daftar filter baku untuk bahasa tersebut.<br/>Silahkan mencoba untuk menemukan daftar yang cocok yang mendukung bahasa tersebut $link$ atau blok iklan ini untuk anda sendiri pada halaman Blacklist.",
-    "description": "instructions on ad report page pointing users to EasyList subscriptions list.  'Blacklist' should be the same message as 'tabblacklist'.",
-    "placeholders": {
-      "link": {
-        "content": "$1disini$2",
-        "example": "<a href='http://abp.org'>here</a>"
-      }
-    }
-  },
   "retryaftersubscribe": {
     "message": "Berlangganan pada daftar filter ini, lalu coba lagi: $list_title$",
     "description": "instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
@@ -756,12 +699,12 @@
       }
     }
   },
-  "reporttous": {
-    "message": "Anda dapat melaporkan iklannya pada kami $in_the_issue_tracker_link$. (Kamu menyadari bahwa kami tidak bisa memblokir iklan di banyak video; kami menunggu dukungan pada WebKit.)",
+  "reporttous1": {
+    "message": "Jika anda dapat berbahasa Inggris, anda dapat melaporkan sebuah iklan kepada kami $in_the_issue_tracker_link$.",
     "description": "NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us $in_the_issue_tracker_link$.'",
     "placeholders": {
       "in_the_issue_tracker_link": {
-        "content": "$1di issue tracker$2",
+        "content": "$1in the issue tracker$2",
         "example": "<a href='issuetracker.html'>in the issue tracker</a>"
       }
     }
@@ -780,10 +723,6 @@
       }
     }
   },
-  "cantundo": {
-    "message": "Hal ini tidak dapat dibatalkan!",
-    "description": "Warning a user before confirming an action"
-  },
   "contextmenuhidethis": {
     "message": "Blok iklan ini",
     "description": "Context menu entry"
@@ -795,5 +734,25 @@
   "contextmenuexcludedomain": {
     "message": "Jangan jalankan pada domain ini...",
     "description": "Context menu entry"
+  },
+  "filecleanerwarning": {
+    "message": "Jika anda melihat pesan ini setiap kali anda memulai AdBlock, pastikan anda tidak menggunakan sebuah pembersih file yang juga membersihkan file file di 'localStorage'.",
+    "description": "Help for users who use hyperactive file cleaners"
+  },
+  "somequicksetup": {
+    "message": "Pengaturan cepat",
+    "description": "Title of the options on the installation succes page"
+  },
+  "flashads": {
+    "message": "Video dan Flash",
+    "description": "Title of the final ad report question if the ad didn't appear in FF"
+  },
+  "cantblockflashwarning": {
+    "message": "Apakah iklannya muncul didalam atau sebelum film atau plugin lainnya seperti game Flash?",
+    "description": "Text of the final ad report question"
+  },
+  "cantblockflash": {
+    "message": "Kami belum bisa memblokir iklan iklan didalam Flash dan plugin lainnya. Kami menunggu dukungan dari browser dan WebKit.",
+    "description": "Result of the final ad report question"
   }
 }
