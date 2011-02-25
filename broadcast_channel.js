@@ -1,5 +1,3 @@
-infinite_loop_workaround("broadcaster");
-
 // TODO: Wrap in a typeof check to work around Chrome bug that makes
 // adblock_start run multiple times on some pages (e.g. ebay.com homepage).  
 if (typeof dispatcher == "undefined") {
@@ -8,11 +6,11 @@ if (typeof dispatcher == "undefined") {
 }
 // Returns an object that you can define functions on.  Calls to
 // extension_broadcast() will execute that function on all listeners.
-function listen_for_broadcasts(portname) {
+function listen_for_broadcasts() {
   if (broadcaster_is_listening)
     return;
   broadcaster_is_listening = true;
-  port = chrome.extension.connect({name: portname || "Broadcast receiver"});
+  port = chrome.extension.connect({name: "Broadcast receiver"});
   port.onMessage.addListener(function(request) {
     if (dispatcher[request.fn] == null) {
       log("No dispatch function '" + request.fn + "'");

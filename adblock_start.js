@@ -1,5 +1,3 @@
-infinite_loop_workaround("adblock_start");
-
 // If url is relative, convert to absolute.
 function relativeToAbsoluteUrl(url) {
     // Author: Tom Joseph of AdThwart
@@ -7,7 +5,7 @@ function relativeToAbsoluteUrl(url) {
     if(!url)
         return url;
     // If URL is already absolute, don't mess with it
-    if(url.match(/^http/))
+    if(/^[a-z\-]+\:\/\//.test(url))
         return url;
     // Leading / means absolute path
     if(url[0] == '/')
@@ -18,35 +16,20 @@ function relativeToAbsoluteUrl(url) {
     if(!base) return document.baseURI + "/" + url;
     return base[0] + url;
 }
-// Return the url tied to the given element.  null is OK if we can't find one.
-function urlForElement(el, type) {
-  // TODO: handle background images, based on 'type'.
-  switch (el.nodeName) {
-    case 'IMG': return el.src;
-    case 'SCRIPT': return el.src;
-    case 'EMBED': return el.src;
-    case 'IFRAME': return el.src;
-    case 'LINK': return el.href;
-    case 'OBJECT': 
-      var param = $('param[name="movie"][value]', el);
-      if (param.length > 0)
-        return param.get(0).value;
-      else
-        return null;
-    case 'BODY':
-      // TODO: make sure this isn't so slow that we must LBYL
-      var bgImage = $(el).css('background-image');
-      return (bgImage == "none" ? null: bgImage);
-  }
-}
+
 // Return the ElementType element type of the given element.
 function typeForElement(el) {
   // TODO: handle background images that aren't just the BODY.
-  switch (el.nodeName) {
+  switch (el.nodeName.toUpperCase()) {
+    case 'INPUT': 
     case 'IMG': return ElementTypes.image;
     case 'SCRIPT': return ElementTypes.script;
     case 'OBJECT': 
     case 'EMBED': return ElementTypes.object;
+    case 'VIDEO': 
+    case 'AUDIO': 
+    case 'SOURCE': return ElementTypes.media;
+    case 'FRAME': 
     case 'IFRAME': return ElementTypes.subdocument;
     case 'LINK': return ElementTypes.stylesheet;
     case 'BODY': return ElementTypes.background;
@@ -54,114 +37,120 @@ function typeForElement(el) {
   }
 }
 
-function enableTrueBlocking() {
-  // Only works in Safari.
-  document.addEventListener("beforeload", function(event) {
-    const el = event.target;
-    // Cancel the load if canLoad is false.
-    var elType = typeForElement(el);
-    var url = relativeToAbsoluteUrl(urlForElement(el, elType));
-    if (false == safari.self.tab.canLoad(event, { url: url, elType: elType, pageDomain: document.domain })) {
-      event.preventDefault();
-      if (el.nodeName != "BODY")
-        $(el).remove();
+// Browser-agnostic canLoad function.
+// Returns false if data.url, data.elType, and data.pageDomain together
+// should not be blocked.
+function browser_canLoad(event, data) {
+  if (SAFARI) {
+    return safari.self.tab.canLoad(event, data);
+  } else {
+    // If we haven't yet asynchronously loaded our filters, store for later.
+    if (typeof _local_block_filterset == "undefined") {
+      if (!(data.elType & ElementTypes.script)) {
+        event.mustBePurged = true;
+        LOADED_TOO_FAST.push({data:event});
+      }
+      return true;
     }
-  }, true);
+
+    var isMatched = data.url && _local_block_filterset.matches(data.url, data.elType, document.domain);
+    if (isMatched && event.mustBePurged)
+      log("Purging if possible " + data.url);
+    else if (isMatched)
+      log("CHROME TRUE BLOCK " + data.url);
+    return !isMatched;
+  }
+}
+
+//Do not make the frame display a white area
+//Not calling .remove(); as this causes some sites to reload continuesly
+function removeFrame(el) {
+  var parentEl = $(el).parent();
+  var cols = (parentEl.attr('cols').indexOf(',') > 0);
+  if (!cols && parentEl.attr('rows').indexOf(',') <= 0)
+    return;
+  cols = (cols ? 'cols' : 'rows');
+  // Convert e.g. '40,20,10,10,10,10' into '40,20,10,0,10,10'
+  var sizes = parentEl.attr(cols).split(',');
+  sizes[$(el).prevAll().length] = 0;
+  parentEl.attr(cols, sizes.join(','));
+}
+
+beforeLoadHandler = function(event) {
+  var el = event.target;
+  // Cancel the load if canLoad is false.
+  var elType = typeForElement(el);
+  var data = { 
+    url: relativeToAbsoluteUrl(event.url),
+    elType: elType,
+    pageDomain: document.domain
+  };
+  if (!SAFARI)
+    GLOBAL_collect_resources[elType + ':|:' + data.url] = null;
+  if (false == browser_canLoad(event, data)) {
+    event.preventDefault();
+    if (el.nodeName == "FRAME")
+      removeFrame(el);
+    else if (elType & ElementTypes.background)
+      $(el).css("background-image", "none !important");
+    else if (!(elType & (ElementTypes.script | ElementTypes.stylesheet)))
+      $(el).remove();
+  }
 }
 
 // Add style rules hiding the given list of selectors.
-// If title is specified, apply this title to the style element for later
-// identification.
-function block_list_via_css(selectors, title) {
+function block_list_via_css(selectors) {
   var d = document.documentElement;
-  // Setting this small chokes Chrome -- don't do it!  I set it back to
-  // 10000 from 100 on 1/10/2010 -- at some point you should just get rid
-  // of the while loop if you never use chunking again.
-  var chunksize = 10000;
-  while (selectors.length > 0) {
-    var css_chunk = document.createElement("style");
-    if (title)
-      css_chunk.title = title;
-    css_chunk.type = "text/css";
-    css_chunk.innerText += selectors.splice(0, chunksize).join(',') +
-                               " { visibility:hidden !important; " +
-                               "   display:none !important; }";
-    d.insertBefore(css_chunk, null);
-  }
+  var css_chunk = document.createElement("style");
+  css_chunk.type = "text/css";
+  css_chunk.innerText = "/*This block of style rules is inserted by AdBlock*/" 
+                        + css_hide_for_selectors(selectors);
+  d.insertBefore(css_chunk, null);
 }
 
-function early_blacklist(user_filters) {
-  var blacklisted = [];
-  for (var i = 0; i < user_filters.length; i++) {
-    var filter = user_filters[i];
-    if (new RegExp(filter.domain_regex).test(document.domain))
-      blacklisted.push(filter.css_regex);
+function adblock_begin() {
+  if (!SAFARI) {
+    GLOBAL_collect_resources = {};
+    LOADED_TOO_FAST = [];
   }
-  if (blacklisted.length > 0) {
-    log("Blacklist adding " + blacklisted.length + " CSS rules.");
-    block_list_via_css(blacklisted);
-  }
+  document.addEventListener("beforeload", beforeLoadHandler, true);
+
+  var opts = { 
+    domain: document.domain, 
+    include_filters: true
+  };
+  extension_call('get_content_script_data', opts, function(data) {
+    if (data.features.debug_logging.is_enabled)
+      log = function(text) { console.log(text); };
+
+    if (data.page_is_whitelisted || data.adblock_is_paused) {
+      document.removeEventListener("beforeload", beforeLoadHandler, true);
+      delete LOADED_TOO_FAST;
+      delete GLOBAL_collect_resources;
+      return;
+    }
+
+    if (data.selectors)
+      block_list_via_css(data.selectors);
+
+    //Chrome can't block resources immediately. Therefore all resources
+    //are cached first. Once the filters are loaded, simply remove them
+    if (!SAFARI) {
+      // TODO speed: is there a faster way to do this?  e.g. send over a jsonified PatternFilter rather
+      // than the pattern text to reparse?  we should time those.  jsonified filter takes way more space
+      // but is much quicker to reparse.
+      _local_block_filterset = FilterSet.fromText(data.block, undefined, false);
+
+      for (var i=0; i < LOADED_TOO_FAST.length; i++)
+        beforeLoadHandler(LOADED_TOO_FAST[i].data);
+      delete LOADED_TOO_FAST;
+    }
+
+  });
+
 }
 
-// If we're on GMail, do a speed hack and return true.
-function gmail_hack() {
-  // TODO: move this into a more general place.
-  var isGmail = (document.domain == "mail.google.com");
-  if (isGmail)
-    block_list_via_css([".oM,.rh > #ra"]);
-
-  return isGmail;
-}
-
-function facebook_hack() {
-  // TODO: Put this somewhere general.  Or, maybe we could incorporate
-  // this approach into handling 'no-collapse' options, and then this 
-  // just becomes a filter rule with no-collapse.
-  if (document.domain.indexOf("facebook.com") != -1) {
-    var css_chunk = document.createElement("style");
-    css_chunk.innerText = '.profile_sidebar_ads * { visibility:hidden ' +
-       '!important; }';
-    var d = document.documentElement;
-    d.insertBefore(css_chunk, d.firstChild);
-  }
-}
-
-
-
-var opts = { domain: document.domain };
-// The top frame should tell the background what domain it's on.  The
-// subframes will be told what domain the top is on.
-if (window == window.top)
-  opts.is_top_frame = true;
-    
-// returns everyintg _v3 did, plus _optional_features and selectors.
-extension_call('get_features_and_filters', opts, function(data) {
-  var start = new Date();
-
-  if (data.features.debug_logging.is_enabled) {
-    DEBUG = true;
-    log = function(text) { console.log(text); };
-  }
-  if (data.features.debug_time_logging.is_enabled)
-    time_log = function(text) { console.log(text); };
-
-  if (page_is_whitelisted(data.whitelist, data.top_frame_domain))
-    return;
-
-  if (gmail_hack())
-    return;
-
-  facebook_hack();
-
-  if (SAFARI) {
-    enableTrueBlocking();
-  }
-
-  early_blacklist(data.user_filters);
-
-  block_list_via_css(data.selectors);
-
-  var end = new Date();
-  time_log("adblock_start run time: " + (end - start) + " || " +
-           document.location.href);
-});
+// Safari loads adblock on about:blank pages, which is a waste of RAM and cycles.
+// until crbug.com/63397 is fixed, ignore SVG images
+if (document.location != 'about:blank' && !/\.svg$/.test(document.location.href))
+  adblock_begin();

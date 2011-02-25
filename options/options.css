@@ -6,8 +6,11 @@
         padding: 0px; 
         margin: 0px;
       }
-      #user_filters,#whitelisted_domains {
-        margin: 10px;
+      #subscription_message {
+        height: 18px;
+      }
+      #subscription_message {
+        height: 18px;
       }
       .note {
         font-size: 12px;
@@ -19,39 +22,10 @@
         color: red;
       }
       .sneaky {
-        font-size: x-small;
+        font-size: 12px;
         color:gray;
         border-color: gray;
         margin-top: 50px;
-      }
-      .entry_table th {
-        font-style:italic;
-        text-align: left;
-        font-size: larger;
-        border-bottom: 1px solid black;
-      }
-      .entry_table td:not(.plain) {
-        vertical-align: top;
-      }
-      .entry_table {
-        font-size: 12px;
-      }
-      .help_table {
-        font-size: 12px;
-      }
-      .help_table td {
-        border: 1px solid gray;
-      }
-      .help_table td {
-        vertical-align:top;
-        padding-right:10px;
-      }
-      .help_table td:first-child {
-        font-style:italic;
-      }
-      #user_filter_help {
-        margin-left:15px;
-        margin-bottom:20px;
       }
       .info {
         background: #eeeeee;
@@ -86,13 +60,13 @@
         padding-left:30px;
       }
       .icon {
-        background-repeat: no-repeat;
+        background: url('../img/icon32.png') no-repeat;
         padding-left:45px;
       }
       .update_time {
         padding-left: 3em;
         color: gray;
       }
-      .optionDescription {
+      label {
         cursor: pointer;
       }

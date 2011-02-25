@@ -1,15 +1,16 @@
 <html>
   <head>
-    <title>AdBlock Options</title>
+    <title i18n="optionstitle"></title>
     <link rel="stylesheet" href="options.css" />
     <link rel="stylesheet" href="../jquery/css/custom-theme/jquery-ui-1.8.custom.css" />
     <script src="../port.js"></script>
-    <script src="../jquery/jquery-1.4.2.min.js"></script>
-    <script src="../jquery/jquery-ui-1.8.custom.min.js"></script>
+    <script src="../jquery/jquery-1.4.4-hacked-up.min.js"></script>
+    <script src="../jquery/jquery.cookie.js"></script>
+    <script src="../jquery/jquery-ui-1.8.6.custom.min.js"></script>
     <script src="../functions.js"></script>
     <script src="../broadcast_channel.js"></script>
     <script>
-      listen_for_broadcasts('options_page');
+      listen_for_broadcasts();
 
       function note_visit() {
         if (localStorage.getItem('visited_options_at') != null)
@@ -25,15 +26,15 @@
 
       function displayVersionNumber() {
         try {
-          var xhr = new XMLHttpRequest(); 
+          var xhr = new XMLHttpRequest();
           xhr.open("GET", chrome.extension.getURL('manifest.json'), false);
-          xhr.onreadystatechange = function() { 
-            if(this.readyState == 4) { 
+          xhr.onreadystatechange = function() {
+            if(this.readyState == 4) {
               var theManifest = JSON.parse(this.responseText);
-              $("#version_number").text(theManifest.version);
-            } 
-          }; 
-          xhr.send(); 
+              $("#version_number").text(translate("optionsversion", [theManifest.version]));
+            }
+          };
+          xhr.send();
         } catch (ex) {} // silently fail
       }
 
@@ -58,63 +59,37 @@
       }
 
       $(function() {
-        $("#tabpages").tabs({ spinner: "", cache: true });
+        $("#tabpages").tabs({ spinner: "", cache: true, cookie: {}  });
 
         displayVersionNumber();
 
-        $(".icon").css("background-image", "url(" + chrome.extension.getURL("img/icon32.png") + ")");
-
         note_visit();
+        
+        //translation
+        localizePage();
+
       });
     </script>
   </head>
   <body>
     <div style="float:right;"> 
-      Version <span id="version_number"></span>
-      (<a href="http://code.google.com/p/adblockforchrome/wiki/Changelog" target="_new">changelog</a>) 
+      <span id="version_number"></span>
+      (<a href="http://code.google.com/p/adblockforchrome/wiki/Changelog" target="_new" i18n="optionschangelog"></a>) 
     </div>
-    <h1 class="icon">AdBlock Options</h1>
-    <table>
-      <tr>
-        <td style="padding-right:10px">
-          <a class="donatelink" href="http://chromeadblock.com/paypal_donate/donation.php" target="_new">
-            <img src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif"
-                 title="Hooray! Thank you!"/></a>
-        </td>
-        <td style="font-style:italic; font-size:14px">
-          Do you love AdBlock?  My name's Michael.  I've dropped to a
-          less-than-full-time job in order to develop AdBlock and support my
-          users.  Please use and enjoy AdBlock, and if you can
-          <a class="donatelink" href="http://chromeadblock.com/paypal_donate/donation.php" target="_new">
-            make a donation</a>
-          of any amount, I'd appreciate it <b>immensely</b> :)
-        </td>
-      </tr>
-    </table>
-    <script>
-      $(function() {
-        if (SAFARI) {
-          $(".donatelink").each(function(i, el) {
-            el.href += "?browser=safari";
-          });
-        }
-      });
-    </script>
-    <br/>
-    <div style="padding-left:5px; margin-bottom:20px">
-      Want to contribute code, bug reports, or ad reports?  We
-      <a href="http://code.google.com/p/adblockforchrome/wiki/HowToContribute"
-         target="_new">
-        need your help!</a>
+    <h1 class="icon" i18n="optionstitle"></h1>
+
+    <div id="donate_and_link" style="margin: 1em 0px;">
+      <div style="font-size: 16px;" 
+           i18n="donaterequest2" i18n_replacement_el="donatelink"></div>
+      <a target="_new" href="http://chromeadblock.com/donate" id="donatelink"></a>
     </div>
 
     <div id="tabpages">
-         <ul>
-             <li><a href="general.html"><span>General</span></a></li>
-             <li><a href="filters.html"><span>Filter lists</span></a></li>
-             <li><a href="blacklist.html"><span>Blacklist</span></a></li>
-             <li><a href="whitelist.html"><span>Whitelist</span></a></li>
-         </ul>
+      <ul>
+        <li><a href="general.html"><span i18n="tabgeneral"></span></a></li>
+        <li><a href="filters.html"><span i18n="tabfilterlists"></span></a></li>
+        <li><a href="customize.html"><span i18n="tabcustomize"></span></a></li>
+      </ul>
     </div>
   </body>
 </html>
