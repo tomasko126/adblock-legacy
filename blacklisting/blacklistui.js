@@ -94,11 +94,44 @@ BlacklistUi.prototype.show = function() {
 BlacklistUi.prototype._build_page1 = function() {
   var that = this;
 
-  var page = $("<div>" + translate("sliderexplanation") +
-           "<br/><div id='slider'></div>" +
-           "<div id='selected_data' style='font-size:smaller; height:7em'>" +
-           "</div>" +
-           "</div>");
+  var link_to_block = $("<a>", {
+    id: "block_by_url_link",
+    href: "#",
+    tabIndex: -1,
+    css: { 
+      "font-size": "smaller !important",
+      "display": "none"
+    },
+    text: translate("block_by_url_instead"),
+    click: function(e) { 
+      var el = that._chain.current();
+      var elType = typeForElement(el[0]);
+      var type = ElementTypes.NONE;
+      if (elType == ElementTypes.image)
+        type = "image";
+      else if (elType == ElementTypes.object)
+        type = "object";
+      else if (elType == ElementTypes.media)
+        type = "media";
+      else if (elType == ElementTypes.subdocument)
+        type = "subdocument";
+      var srcUrl = relativeToAbsoluteUrl(el.attr("src") || el.attr("data"));
+      var tabUrl = document.location.href;
+      var query = '?' + type + '=' + escape(srcUrl) + '&url=' + escape(tabUrl);
+      window.open(chrome.extension.getURL('pages/resourceblock.html' 
+            + query), "_blank", 'location=0,width=1024,height=590');
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  var page = $("<div>").
+    append(translate("sliderexplanation")).
+    append("<br/>").
+    append("<div id='slider'></div>").
+    append("<div id='selected_data' style='font-size:smaller; height:7em'></div>").
+    append(link_to_block);
+
 
   var btns = {};
   btns[translate("buttonlooksgood")] = 
@@ -131,6 +164,7 @@ BlacklistUi.prototype._build_page1 = function() {
       'text-align': 'left',
       'font-size': '12px',
     });
+  page.dialog("widget").css("position", "fixed");
 
   var depth = 0;
   var guy = this._chain.current();
@@ -195,17 +229,15 @@ BlacklistUi.prototype._build_page2 = function() {
         var custom_filter = document.domain + '##' + $("#summary", that._ui_page2).text();
         that._ui_page2.dialog('close');
         custom_filter = prompt(translate("blacklistereditfilter"), custom_filter);
-        if (custom_filter.indexOf('##') == -1) 
-          custom_filter = "##" + custom_filter;
-        var valid_filter = global_filter_validation_regex.test(custom_filter);
-        if (valid_filter && custom_filter != null &&
-            custom_filter.indexOf('####') == -1) {
-          extension_call('add_custom_filter', { filter: custom_filter }, function() {
-            that._fire('block');
+        if (custom_filter) {//null => user clicked cancel
+          if (custom_filter.indexOf('##') == -1) 
+            custom_filter = "##" + custom_filter;
+          extension_call('add_custom_filter', { filter: custom_filter }, function(ex) {
+            if (!ex)
+              that._fire('block');
+            else
+              alert(translate("blacklistereditinvalid1", ex));
           });
-        } else {
-          if (custom_filter != null) //null => user clicked cancel
-            alert(translate("blacklistereditinvalid"));
         }
         page.remove();
       }
@@ -239,6 +271,8 @@ BlacklistUi.prototype._build_page2 = function() {
 }
 BlacklistUi.prototype._redrawPage1 = function() {
   var el = this._chain.current();
+  var show_link = (!SAFARI && (!!el.attr("src") || !!el.attr("data")));
+  $("#block_by_url_link", this._ui_page1).toggle(show_link);
   var text = '&lt;' + el[0].nodeName;
   var attrs = ["id", "class", "name", "src", "href"];
   for (var i in attrs) {

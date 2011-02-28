@@ -1,8 +1,4 @@
 ﻿{
-  "description": {
-      "message": "¡AdBlock para Chrome!  Bloquea anuncios en las webs.  ¡Calificado con 4.5 sobre 5 por nuestros usuarios!",
-      "description": "Extension description in manifest" 
-  },
   "buttoncancel": {
       "message": "Cancelar",
       "description": "Cancel button" 
@@ -64,10 +60,6 @@
   "blacklistereditfilter": {
       "message": "Por favor escribe el filtro correcto debajo y pulsa OK",
       "description": "Text if the user wants to manually edit a filter. 'OK' is the standard javascript popup button text." 
-  },
-  "blacklistereditinvalid": {
-      "message": "¡El filtro es inválido!",
-      "description": "Messagebox if the manually edited filter is invalid" 
   },
   "blacklisterblockedelement": {
       "message": "Elemento bloqueado: ",
@@ -191,14 +183,7 @@
       "message": "Listas de filtros",
       "description": "A tab on the options page" 
   },
-  "tabblacklist": {
-      "message": "Lista negra",
-      "description": "A tab on the options page" 
-  },
-  "tabexcluded": {
-      "message": "Sitios excluidos",
-      "description": "A tab on the options page" 
-  },
+
   "generaloptions": {
       "message": "Opciones generales",
       "description": "Title of first tab page" 
@@ -314,10 +299,6 @@
   "filterstabtitle": {
       "message": "Suscribirse a listas de filtros",
       "description": "Title of the filter list tab" 
-  },
-  "defaultsexplanation": {
-      "message": "Los filtros por defecto son geniales para los hablantes de inglés residentes en los Estados Unidos. Los demás pueden querer suscribirse a más filtros.",
-      "description": "Explanation of the filter lists" 
   },
   "filterlistlink": {
       "message": "No te sucribas a más de los que necesitas, ¡cada uno ralentiza un poquito tu navegación! Credits and more lists can be found <a>here</a>.",
@@ -447,14 +428,6 @@
       "message": "Haz clic derecho en un anuncio de la página para bloquearlo -- o bloquealo aquí manualmente.",
       "description": "Message at the top of the blacklist options tab" 
   },
-  "blacklisttabtitle": {
-      "message": "Bloquear un anuncio que falta en el filtro de anuncios",
-      "description": "Title of the third tab" 
-  },
-  "addnewfilter": {
-      "message": "Añadir un nuevo filtro: ",
-      "description": "Subtitle on the third tab" 
-  },
   "linkblockadbyurl": {
       "message": "Bloquear un anuncio por su URL",
       "description": "Link on the third tab" 
@@ -499,33 +472,9 @@
       "message": "<a>Reporta un anuncio</a> a Ablock o los mantenedores de los filtros de anuncios.",
       "description": "A link for users who found an ad somewhere and want to report it" 
   },
-  "removelabel": {
-      "message": "Borrar",
-      "description": "link to remove a excluded site" 
-  },
-  "excludedsitestitle": {
-      "message": "No bloquear anuncios de dominios que acaben en...",
-      "description": "title of the 4th tab page" 
-  },
-  "excludedsitesexample": {
-      "message": "Por ejemplo, 'google.com' hará que no se bloqueen anuncios en google.com, mail.google.com, y www.google.com.",
-      "description": "text on the 4th tab page" 
-  },
-  "addbutton": {
-      "message": "Añadir",
-      "description": "add button" 
-  },
-  "removeallfromlist": {
-      "message": "Borrar todos los elementos de la lista: ",
-      "description": "option on 4th tab page" 
-  },
   "adblockreportinganad": {
       "message": "AdBlock - Reportando un anuncio",
       "description": "title of ad report page" 
-  },
-  "adreport1": {
-      "message": "¿Así que has encontrado un anuncio en una página? Bueno, ¡te ayudaré a encontrar el sitio correcto para reportarlo!<br/> Recuerda: reportar anuncios es voluntario. ¡Si no quieres hacerlo puedes simplemente cerrar esta ventana y bloquearlo solo para tí añadiendo el filtro a la lista negra!",
-      "description": "Instructions on ad reporting page. 'Blacklist' should be the same text as the 'tabblacklist' message." 
   },
   "updateyourlists": {
       "message": "¡Asegurate de que tus filtros estén actualizados!",
@@ -558,10 +507,6 @@
   "correctfilters": {
       "message": "Filtros correctos",
       "description": "on the ad report page, label describing having the right set of filters" 
-  },
-  "reallyclearlist": {
-      "message": "¿Estás seguro de que quieres limpiar esta lista?",
-      "description": "confirmation of clearing a list of iteams" 
   },
   "pagelanguagecheck": {
       "message": "¿En que idioma está escrita esa página?",
@@ -655,16 +600,6 @@
       "message": "Otro",
       "description": "multiple choice option" 
   },
-  "nodefaultfilter": {
-      "message": "No tenemos un filtro por defecto para ese idioma.<br/>Por favor intenta encontrar una lista que soporte este idioma $link$ o bloquea ese anuncio por ti mismo en la lista negra.",
-      "description": "instructions on ad report page pointing users to EasyList subscriptions list. 'Blacklist' should be the same message as 'tabblacklist'.",
-      "placeholders": {
-          "link": {
-              "content": "$1here$2",
-              "example": "<a href='http: //abp.org'>here</a>" 
-          } 
-      } 
-  },
   "retryaftersubscribe": {
       "message": "Suscríbete a ese filtro, y vuelve a intentarlo: $list_title$",
       "description": "instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
@@ -709,7 +644,7 @@
       "placeholders": {
           "link": {
               "content": "$1",
-              "example": "EXAMPLE 1: <a href='mailto: someguy@list.com'>John Doe</a> EXAMPLE 2: <a href='http: //easylist.org'>EasyList forums</a>" 
+              "example": "EXAMPLE 1: <a href='mailto: someguy@list.com'>John Doe</a> EXAMPLE 2: <a href='http://easylist.org'>EasyList forums</a>" 
           } 
       } 
   },
@@ -733,37 +668,17 @@
       "placeholders": {
           "updatelink": {
               "content": "$1actualiza$2",
-              "example": "<a href='http: //chrome.com/update_here.ctx'>update</a>" 
+              "example": "<a href='http://chrome.com/update_here.ctx'>update</a>" 
           } 
       } 
-  },
-  "cantundo": {
-      "message": "¡Esta acción no puede ser deshecha!",
-      "description": "Warning a user before confirming an action" 
-  },
-  "chromebutton_how_to_disable": {
-    "message": "Para desinstalar el botón, hazle clic derecho y pulsa 'Unistall'.  Esto solo desinstala la extensión Botón de navegador de Adblock.",
-    "description": "Message on installation success page"
-  },
-  "chromebutton_how_to_enable": {
-    "message": "Para mostar el botón, instala <a>esta extensión extra</a>.",
-    "description": "Message on installation success page"
   },
   "contextmenuexcludedomain": {
     "message": "No ejecutar en este dominio...",
     "description": "Context menu entry"
   },
-  "contextmenuhideanything": {
-    "message": "Bloquear un anuncio en esta página...",
+  "block_an_ad_on_this_page": {
+    "message": "Bloquear un anuncio en esta página",
     "description": "Context menu entry"
-  },
-  "contextmenuhidethis": {
-    "message": "Bloquear este anuncio",
-    "description": "Context menu entry"
-  },
-  "donaterequest": {
-    "message": "Si te gusta Adblock, ¡por favor <a>dona</a> para que pueda mantener a mi familia!  Gracias :) - Michael",
-    "description": "Donation request on installation success page"
   },
   "installedtitle": {
     "message": "¡Adblock se ha instalado!",
