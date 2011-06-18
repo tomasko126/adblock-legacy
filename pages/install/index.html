@@ -70,7 +70,6 @@
 
       // Called after progress bar finishes
       function begin() {
-        var SAFARI = (!/chrome/i.test(navigator.userAgent) && /safari/i.test(navigator.userAgent));
         $("#header").fadeIn();
         var startCard = (SAFARI ? "#start-safari": "#start-chrome");
         $(startCard).css($("#wrapper").position()).fadeIn();
@@ -213,7 +212,7 @@
             if (GROUP == 2)
               return;
             // TODO end temp
-            var userId = storage_get("user_id");
+            var userId = storage_get("userid");
             var iframe = $("<iframe>", {
               src: "http://chromeadblock.com/pay/?source=I&header=install&u=" + userId,
               width: 750, height: 450, 
