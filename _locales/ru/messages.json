@@ -3,10 +3,6 @@
     "message": "Наиболее популярное расширение Chrome с более чем 2 миллионами пользователей! Блокирует рекламу по всему Интернету.",
     "description": "Extension description in manifest"
   },
-  "app_description1": {
-    "message": "Блокирует рекламу по всему Интернету!  Любимо миллионами пользователей Chrome и Safari!",
-    "description": "App description used in app version manifest"
-  },
   "buttoncancel": {
     "message": "Отмена",
     "description": "Cancel button"
@@ -399,10 +395,6 @@
     "message": " - дополнительные русские фильтры (рекомендуется)",
     "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
-  "filtereasylist_plus_vietnamese": {
-    "message": " - дополнительные вьетнамские фильтры",
-    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
-  },
   "filterchinese": {
     "message": "Китайские фильтры",
     "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
@@ -462,10 +454,6 @@
   },
   "blockmoreads": {
     "message": "Блокировать больше рекламы:",
-    "description": "Section header on third tab"
-  },
-  "unblocktitle": {
-    "message": "Отключить AdBlock на определенных веб-страницах:",
     "description": "Section header on third tab"
   },
   "linkblockadbyurl": {
@@ -1148,13 +1136,5 @@
   "modifypath": {
     "message": "Стр.:",
     "description": "Caption for the whitelist wizard slider that modifies the path part of a URL"
-  },
-  "undo": {
-    "message": "Отмена",
-    "description": "Button text to undo an action."
-  },
-  "unpause_adblock": {
-    "message": "Возобновить AdBlock",
-    "description": "Context menu entry unpause AdBlock."
   }
 }

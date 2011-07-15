@@ -358,10 +358,6 @@
     "message": " - Filtre suplimentare Ruse",
     "description": "A filter list"
   },
-  "filtereasylist_plus_vietnamese": {
-    "message": " - Filtre suplimentare Vietnameze",
-    "description": "A filter list"
-  },
   "filterchinese": {
     "message": "Filtre Chineze",
     "description": "A filter list"
@@ -943,10 +939,6 @@
   "typeunknown": {
     "message": "necunoscut",
     "description": "A resource type (lowercase!)"
-  },
-  "unblocktitle": {
-    "message": "Dezactivează AdBlock pe o pagină web anume:",
-    "description": "Section header on third tab"
   },
   "unpause": {
     "message": "anulați",

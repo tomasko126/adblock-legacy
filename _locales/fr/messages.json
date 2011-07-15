@@ -3,22 +3,9 @@
     "message": "La plus populaire des extensions Chrome, avec plus de 2 millions d'utilisateurs ! Bloque les publicités sur Internet.",
     "description": "Extension description in manifest"
   },
-  "app_description1": {
-    "message": "Bloque les publicités sur le web! Des millions d'utilisateurs Safari et Chrome l'aiment !",
-    "description": "App description used in app version manifest"
-  },
-
   "buttoncancel": {
     "message": "Annuler",
     "description": "Cancel button"
-  },
-  "undo": {
-    "message": "Annuler",
-    "description": "Button text to undo an action."
-  },
-  "unpause_adblock": {
-    "message": "Réactiver AdBlock",
-    "description": "Context menu entry unpause AdBlock."
   },
   "buttonok": {
     "message": "OK",
@@ -410,10 +397,6 @@
     "message": " - filtres russes additionnels",
     "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
-  "filtereasylist_plus_vietnamese": {
-    "message": " - filtres vietnamiens additionnels",
-    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
-  },
   "filterchinese": {
     "message": "Filtres chinois",
     "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
@@ -473,10 +456,6 @@
   },
   "blockmoreads": {
     "message": "Bloquer plus de publicités :",
-    "description": "Section header on third tab"
-  },
-  "unblocktitle": {
-    "message": "Désactiver AdBlock sur une page particulière :",
     "description": "Section header on third tab"
   },
   "linkblockadbyurl": {
