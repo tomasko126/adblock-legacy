@@ -1,5 +1,5 @@
 ! Chrome AdBlock auxiliarly filters
-! Last update: Tue Jul  5 15:55:19 EDT 2011
+! Last update: Thu Jul 21 17:09:49 EDT 2011
 ###RadAd_Skyscraper
 ###bbccom_leaderboard
 ###center_banner
@@ -49,6 +49,7 @@
 ##ispan#ab_pointer
 ##object#flashad
 ##object#ve_threesixty_swf[name="ve_threesixty_swf"]
+##script[src="//pagead2.googleadservices.com/pagead/show_ads.js"] + ins > ins > iframe
 ##script[src="http://pagead2.googlesyndication.com/pagead/show_ads.js"] + ins > ins > iframe
 ##table[cellpadding="0"][width="100%"] > * > * > * > div[id^="tpa"]
 01net.com##div#gAfc4
@@ -1300,5 +1301,4 @@ valueclick.net
 @@||google.com/adsense/$document,domain=google.com
 @@||instantservice.com/client/$elemhide,domain=instantservice.com
 @@|safari-extension://com.betafish.adblockforsafari-UAMUU4S2D9/$document
-@@||senato.it^$elemhide,domain=senato.it
 @@||vimcolorschemetest.googlecode.com/svn/html/$document,domain=vimcolorschemetest.googlecode.com

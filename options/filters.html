@@ -172,7 +172,7 @@
             $.cookie('noOversubscriptionWarning', 'true', {expires: (1/48)});
           }
         }
-        if ($(":checked").length <= 6)
+        if ($(":checked", "#filter_subscriptions").length <= 6)
           return true;
         return confirm(translate("you_know_thats_a_bad_idea_right"));
       }
