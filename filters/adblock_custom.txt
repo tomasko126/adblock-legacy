@@ -1,5 +1,5 @@
 ! Chrome AdBlock auxiliarly filters
-! Last update: Tue Sep  6 09:14:56 EDT 2011
+! Last update: Wed Sep  7 09:24:03 EDT 2011
 ###RadAd_Skyscraper
 ###bbccom_leaderboard
 ###center_banner
@@ -795,6 +795,7 @@ okcupid.com##DIV#welcome_block
 okcupid.com##DIV[class^="okad"]
 okcupid.com##P.ad_notifier
 ole.com.ar##DIV#caja_mo_ole
+omgpop.com##IFRAME#arcadeIFrame
 onet.pl##[class*="adslot_"]
 onet.pl##a.adv
 onet.pl##div#script_bxad_slot_bxad_slot

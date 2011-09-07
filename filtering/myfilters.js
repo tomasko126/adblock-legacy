@@ -16,9 +16,16 @@ function MyFilters() {
   }
 
   for (var id in this._subscriptions) {
-    // In case a default subscription was removed from the default list,
-    // change it to a user submitted list and vice versa
-    this._subscriptions[id].user_submitted = !this._official_options[id];
+    // Delete unsubscribed ex-official lists.
+    if (!this._official_options[id] && !this._subscriptions[id].user_submitted
+        && !this._subscriptions[id].subscribed) {
+      delete this._subscriptions[id];
+    } 
+    // Convert subscribed ex-official lists into user-submitted lists.
+    // Convert subscribed ex-user-submitted lists into official lists.
+    else {
+      this._subscriptions[id].user_submitted = !this._official_options[id];
+    }
   }
 
   // Use the stored properties, and only add any new properties and/or lists
@@ -129,7 +136,6 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
       listDidntExistBefore = true;
       this._subscriptions[id] = {
         user_submitted: true,
-        name: id.substr(4),
         url: id.substr(4)
       };
     }
@@ -405,7 +411,7 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "https://secure.fanboy.co.nz/fanboy-japanese.txt",
     },
     "easylist_plun_korean": {  // Korean filters
-      url: "http://abp-corset.googlecode.com/hg/corset.txt",
+      url: "https://secure.fanboy.co.nz/fanboy-korean.txt",
     },
     "polish": { // Polish filters
       url: "http://www.niecko.pl/adblock/adblock.txt",
@@ -425,7 +431,6 @@ MyFilters.prototype._make_subscription_options = function() {
 /* subscription properties:
 url: url of subscription
 initialUrl: the hardcoded url. Same as .url except when redirected
-name: name to display for subscription
 user_submitted (bool): submitted by the user or not
 requiresList: id of a list required for this list
 subscribed (bool): if you are subscribed to the list or not
