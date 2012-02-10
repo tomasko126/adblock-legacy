@@ -28,7 +28,7 @@ var elementTracker = {
     if (!(elType & (ElementTypes.image | ElementTypes.subdocument | ElementTypes.object)))
       return;
 
-    elementTracker._store(elType, event.url, 'elements', event.target);
+    elementTracker._store(elType, relativeToAbsoluteUrl(event.url), 'elements', event.target);
   },
 
   onBlockResults: function(request, sender, sendResponse) {
@@ -105,7 +105,7 @@ function adblock_begin_new_style() {
 
     if (data.settings.debug_logging)
       log = function() { 
-        if (arguments[0] != '[DEBUG]') // comment out for verbosity
+        if (VERBOSE_DEBUG || arguments[0] != '[DEBUG]')
           console.log.apply(console, arguments); 
       };
 
