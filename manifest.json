@@ -1,6 +1,6 @@
 {
   "name": "AdBlock",
-  "version": "2.5.30",
+  "version": "2.5.28",
   "description": "__MSG_description1__",
   "icons": {
     "16": "img/icon16.png",
@@ -8,7 +8,7 @@
     "128": "img/icon128.png"
   },
   "permissions": [
-    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation"
+    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking"
   ],
   "minimum_chrome_version": "6",
   "background_page": "background.html",
@@ -31,7 +31,6 @@
         "filtering/filterset.js",
 
 
-        "picreplacement/picreplacement.js",
         "adblock_start_common.js",
         "adblock_start.js",
         "adblock_start_new_style.js"

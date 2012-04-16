@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.5.30</string>
+	<string>2.5.28</string>
 	<key>CFBundleVersion</key>
-	<string>102.5.30</string>
+	<string>102.5.28</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -63,7 +63,6 @@
 				<string>functions.js</string>
 				<string>filtering/filteroptions.js</string>
 				<string>bandaids.js</string>
-				<string>picreplacement/picreplacement.js</string>
 				<string>adblock_start_common.js</string>
 				<string>adblock_start.js</string>
 			</array>
