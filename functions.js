@@ -1,13 +1,39 @@
-// Run a function on the background page.
-// Inputs: fn:string, options:object, callback?:function(return_value:any).
-extension_call = function(fn, options, callback) {
-  if (callback == null) callback = function() {};
-  chrome.extension.sendRequest({fn:fn, options:options}, callback);
+// Set to true to get noisier console.log statements
+VERBOSE_DEBUG = false;
+
+// Issue 6614: Don't run in a frame, to avoid manipulation by websites.
+if (window.location.origin + "/" === chrome.extension.getURL("")) {
+  // above line avoids content scripts making their host page break frames
+  if (window.top !== window)
+    window.location.replace("about:blank");
 }
 
-// These are replaced with console.log in adblock_start.js and background.html
-// if the user chooses.
+// Run a function on the background page.
+// Inputs (positional):
+//   first, a string - the name of the function to call
+//   then, any arguments to pass to the function (optional)
+//   then, a callback:function(return_value:any) (optional)
+BGcall = function() {
+  var args = [];
+  for (var i=0; i < arguments.length; i++)
+    args.push(arguments[i]);
+  var fn = args.shift();
+  var has_callback = (typeof args[args.length - 1] == "function");
+  var callback = (has_callback ? args.pop() : function() {});
+  chrome.extension.sendRequest({command: "call", fn:fn, args:args}, callback);
+}
+
+// These are replaced with console.log in adblock_start_common.js and
+// background.js if the user chooses.
 log = function() { };
+
+// Behaves very similarly to $.ready() but does not require jQuery.
+function onReady(callback) {
+  if (document.readyState === "complete")
+    window.setTimeout(callback, 0);
+  else
+    window.addEventListener("load", callback, false);
+}
 
 function translate(messageID, args) {
   return chrome.i18n.getMessage(messageID, args);
@@ -24,6 +50,9 @@ function localizePage() {
   $("[i18n_title]:not(.i18n-replaced)").each(function() {
     $(this).attr("title", translate($(this).attr("i18n_title")));
   });
+  $("[i18n_placeholder]:not(.i18n-replaced)").each(function() {
+    $(this).attr("placeholder", translate($(this).attr("i18n_placeholder")));
+  });
   $("[i18n_replacement_el]:not(.i18n-replaced)").each(function() {
     // Replace a dummy <a/> inside of localized text with a real element.
     // Give the real element the same text as the dummy link.
@@ -37,88 +66,62 @@ function localizePage() {
   });
 }
 
-// Returns true if anything in whitelist matches the_domain.
-//   url: the url of the page
-//   type: one out of ElementTypes, default ElementTypes.document,
-//         to check what the page is whitelisted for: hiding rules or everything
-function page_is_whitelisted(url, type) {
-  //special case this one
-  if (url == "http://acid3.acidtests.org/") return true;
-  url = url.replace(/\#.*$/, ''); // Remove anchors
-  var bg = chrome.extension.getBackgroundPage();
-  if (!type) 
-    type = bg.ElementTypes.document;
-  var both = { global:1, nonglobal: 1 };
-  for (var name in both) {
-    var whitelist = bg._myfilters[name]._whitelistFilters;
-    for (var i = 0; i < whitelist.length; i++) {
-      if (whitelist[i].matches(url, type, false))
-        return true;
+// Parse a URL. Based upon http://blog.stevenlevithan.com/archives/parseuri
+// parseUri 1.2.2, (c) Steven Levithan <stevenlevithan.com>, MIT License
+// Inputs: url: the URL you want to parse
+// Outputs: object containing all parts of |url| as attributes
+parseUri = function(url) {
+  var matches = /^(([^:]+(?::|$))(?:(?:\w+:)?\/\/)?(?:[^:@\/]*(?::[^:@\/]*)?@)?(([^:\/?#]*)(?::(\d*))?))((?:[^?#\/]*\/)*[^?#]*)(\?[^#]*)?(\#.*)?/.exec(url);
+  // The key values are identical to the JS location object values for that key
+  var keys = ["href", "origin", "protocol", "host", "hostname", "port",
+              "pathname", "search", "hash"];
+  var uri = {};
+  for (var i=0; i<keys.length; i++)
+    uri[keys[i]] = matches[i] || "";
+  return uri;
+};
+// Parses the search part of a URL into an key: value object.
+// e.g., ?hello=world&ext=adblock would become {hello:"world", ext:"adblock"}
+// Inputs: search: the search query of a URL. Must have &-separated values.
+parseUri.parseSearch = function(search) {
+  // Fails if a key exists twice (e.g., ?a=foo&a=bar would return {a:"bar"}
+  var queryKeys = {};
+  search.replace(/(?:^\?|&)([^&=]*)=?([^&]*)/g, function () {
+    if (arguments[1]) queryKeys[arguments[1]] = unescape(arguments[2]);
+  });
+  return queryKeys;
+}
+
+// TODO: move back into background.js since Safari can't use this
+// anywhere but in the background.  Do it after merging 6101 and 6238
+// and 5912 to avoid merge conflicts.
+// Inputs: key:string.
+// Returns value if key exists, else undefined.
+storage_get = function(key) {
+  var store = (window.SAFARI ? safari.extension.settings : localStorage);
+  var json = store.getItem(key);
+  if (json == null)
+    return undefined;
+  try {
+    return JSON.parse(json);
+  } catch (e) {
+    log("Couldn't parse json for " + key);
+    return undefined;
+  }
+}
+
+// Inputs: key:string, value:object.
+// Returns undefined.
+storage_set = function(key, value) {
+  var store = (window.SAFARI ? safari.extension.settings : localStorage);
+  try {
+    store.setItem(key, JSON.stringify(value));
+  } catch (ex) {
+    // Safari throws this error for all writes in Private Browsing mode.
+    // TODO: deal with the Safari case more gracefully.
+    if (ex.name == "QUOTA_EXCEEDED_ERR" && !SAFARI) {
+      alert(translate("storage_quota_exceeded"));
+      openTab("options/index.html#ui-tabs-2");
     }
   }
-  return false;
-}
-
-// Returns a data object for a url containing scheme and domain.
-function url_parts(url) {
-  var parts = url.match("(.*?)://(..*?)/");
-  if (!parts) // may be "about:blank" or similar
-    parts = url.match("(.*?):(.*)");
-  var scheme = parts[1];
-  var domain = parts[2];
-  return {
-    scheme: scheme,
-    domain: domain
-  };
-}
-
-
-// Get interesting information about the current tab.
-// Inputs:
-//   url: string
-//   callback: function(info).
-//   info object passed to callback: {
-//     tab: Tab object
-//     whitelisted: bool - whether the current tab's URL is whitelisted.
-//     domain: string
-//     disabled_site: bool - true if the url is e.g. about:blank or the 
-//                           Extension Gallery, where extensions don't run.
-//   }
-// Returns: null (asynchronous)
-function getCurrentTabInfo(callback) {
-  chrome.tabs.getSelected(undefined, function(tab) {
-    // TODO: use code from elsewhere to extract domain
-
-    var url = url_parts(tab.url);
-
-    var disabled_site = false;
-    if (url.scheme != 'http' && url.scheme != 'https')
-      disabled_site = true;
-    if (/\:\/\/chrome.google.com\/(extensions|webstore)\//.test(tab.url))
-      disabled_site = true;
-
-    var result = {
-      tab: tab,
-      disabled_site: disabled_site,
-      domain: url.domain,
-    };
-    if (!disabled_site)
-      result.whitelisted = page_is_whitelisted(tab.url);
-
-    callback(result);
-  });
-}
-
-
-// Return the CSS text that will hide elements matching the given 
-// array of selectors.
-function css_hide_for_selectors(selectors) {
-  var result = [];
-  var GROUPSIZE = 1000; // Hide in smallish groups to isolate bad selectors
-  for (var i = 0; i < selectors.length; i += GROUPSIZE) {
-    var line = selectors.slice(i, i + GROUPSIZE);
-    var rule = " { visibility:hidden !important; display:none !important; }";
-    result.push(line.join(',') + rule);
-  }
-  return result.join(' ');
 }

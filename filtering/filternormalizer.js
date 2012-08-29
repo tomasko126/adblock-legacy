@@ -50,40 +50,50 @@ var FilterNormalizer = {
         return false;
 
     // Convert old-style hiding rules to new-style.
-    if (/#.*\(/.test(filter) && !/##/.test(filter)) {
+    if (/#[\*a-z0-9_\-]*(\(|$)/.test(filter) && !/\#\@?\#./.test(filter)) {
       // Throws exception if unparseable.
+      var oldFilter = filter;
       filter = FilterNormalizer._old_style_hiding_to_new(filter);
+      log('Converted ' + oldFilter + ' to ' + filter);
     }
 
     // If it is a hiding rule...
     if (Filter.isSelectorFilter(filter)) {
-      //Regex to validate a user-created filter.
-      var filter_validation_regex = /^(((\*|[a-z0-9]+)|(\*|[a-z0-9]+)?((\[(\\\!)?[a-z0-9\-_]+((\~|\^|\$|\*|\|)?\=((\"|\').+(\"|\')|\w+))?\])+|\:\:?[a-z\-]+(\(.+\))?|\.[^\#\:\[]+|\#[a-z_][a-z0-9_\-\:\.]*)+)\ *((\>|\+|\~)\ *)?\,?)+$/i;
+      // The filter must be of a correct syntax
 
-      // All specified domains must be valid.
-      var parts = filter.split('##');
-      if (!filter_validation_regex.test(parts[1]))
-        throw "Failed filter validation regex";
-      if ($(parts[1] + ',html').length == 0)
-        throw "Caused other selector filters to fail";
+      try {
+        // Throws if the filter is invalid...
+        var selectorPart = filter.replace(/^.*?\#\@?\#/, '');
+        if (document.querySelector(selectorPart + ',html').length === 0)
+          throw "Causes other filters to fail";
+      } catch(ex) {
+        // ...however, the thing it throws is not human-readable. This is.
+        throw "Invalid CSS selector syntax";
+      }
 
-      // Ignore [style] special case that WebKit parses badly.
+      // On a few sites, we have to ignore [style] rules.
+      // Affects Chrome (crbug 68705) and Safari (issue 6225).
+      if (/style([\^\$\*]?=|\])/.test(filter)) {
+        var ignoreStyleRulesOnTheseSites = "~mail.google.com,~mail.yahoo.com";
+        if (filter.indexOf(ignoreStyleRulesOnTheseSites) == -1) {
+          if (filter[0] != "#") ignoreStyleRulesOnTheseSites += ",";
+          filter = ignoreStyleRulesOnTheseSites + filter;
+        }
+      }
+
       var parsedFilter = new SelectorFilter(filter);
-      if (/style([\^\$\*]?=|\])/.test(filter))
-        return null;
 
     } else { // If it is a blocking rule...
-      // This will throw an exception if the rule is invalid.
-      var parsedFilter = new PatternFilter(filter);
+      var parsedFilter = PatternFilter.fromText(filter); // throws if invalid
+      var types = parsedFilter._allowedElementTypes;
 
-      // Remove rules that only apply to unsupported resource types.
-      var unsupported = (ElementTypes.object_subrequest | ElementTypes.font |
-                         ElementTypes.dtd | ElementTypes.other |
-                         ElementTypes.xbl | ElementTypes.ping |
-                         ElementTypes.xmlhttprequest | ElementTypes.donottrack);
-      if (!Filter.isWhitelistFilter(filter))
-        unsupported |= (ElementTypes.document | ElementTypes.elemhide);
-      if (!(parsedFilter._allowedElementTypes & ~unsupported))
+      var whitelistOptions = (ElementTypes.document | ElementTypes.elemhide);
+      var hasWhitelistOptions = types & whitelistOptions;
+      if (!Filter.isWhitelistFilter(filter) && hasWhitelistOptions)
+        throw "$document and $elemhide may only be used on whitelist filters";
+
+      // In Safari, ignore rules with only Chrome-specific types (no-ops).
+      if (SAFARI && types === (types & ElementTypes.CHROMEONLY))
         return null;
     }
 
@@ -110,9 +120,9 @@ var FilterNormalizer = {
     // 1. a node -- this is optional and must be '*' or alphanumeric
     // 2. a series of ()-delimited arbitrary strings -- also optional
     //    the ()s can't be empty, and can't start with '='
-    if (rule.length == 0 || 
-        !/^(?:\*|[a-z0-9]*)(?:\([^=][^\)]*\))*$/i.test(rule))
-      throw new Error("bad selector filter");
+    if (rule.length == 0 ||
+        !/^(?:\*|[a-z0-9\-_]*)(?:\([^=][^\)]*?\))*$/i.test(rule))
+      throw "bad selector filter";
 
     var first_segment = rule.indexOf('(');
 
@@ -146,7 +156,7 @@ var FilterNormalizer = {
   _verifyDomains: function(domainInfo) {
     for (var name in { "applied_on":1, "not_applied_on":1 }) {
       for (var i = 0; i < domainInfo[name].length; i++) {
-        if (/^([a-z0-9\-_à-ÿ]+\.)*[a-z0-9]+$/i.test(domainInfo[name][i]) == false)
+        if (/^([a-z0-9\-_\u00DF-\u00F6\u00F8-\uFFFFFF]+\.)*[a-z0-9\u00DF-\u00F6\u00F8-\uFFFFFF]+$/i.test(domainInfo[name][i]) == false)
           throw "Invalid domain: " + domainInfo[name][i];
       }
     }

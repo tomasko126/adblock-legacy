@@ -15,35 +15,91 @@
 // unchanged in Chrome.
 
 if (typeof SAFARI == "undefined") {
+(function() {
 
 // True in Safari, false in Chrome.
 SAFARI = (typeof safari !== "undefined");
 
+// Safari 5.0 (533.x.x) with no menu support
+LEGACY_SAFARI = SAFARI && (navigator.appVersion.match(/\sSafari\/(\d+)\./) || [null,0])[1] < 534;
+
 if (SAFARI) {
+
+  var isOnGlobalPage = !!safari.extension.bars;
+
+  // Return the object on which you can add/remove event listeners.
+  // If there isn't one, don't explode.
+  var listeningContext = function() {
+    if (safari.self && safari.self.addEventListener)
+      return safari.self;
+    if (safari.application && safari.application.addEventListener)
+      return safari.application;
+    console.log("No add/remove event listener possible at this location!");
+    console.trace();
+    return { 
+      addEventListener: function() {}, 
+      removeEventListener: function() {} 
+    };
+  };
+  var listenFor = function(messageName, handler) {
+    var listener = function(messageEvent) {
+      if (messageEvent.name == messageName)
+        handler(messageEvent);
+    };
+    listeningContext().addEventListener("message", listener, false);
+    return listener;
+  };
+  var removeListener = function(listener) {
+    listeningContext().removeEventListener("message", listener, false);
+  };
+  // Return the object on which you can dispatch messages -- globally, or on the
+  // messageEvent if specified.  If there isn't one, don't explode.
+  var dispatchContext = function(messageEvent) {
+    // Can we dispatch on the messageEvent target?
+    var m = messageEvent;
+    if (m && m.target && m.target.page && m.target.page.dispatchMessage)
+      return m.target.page;
+    // Are we in some context where safari.self works, whatever that is?
+    var s = safari.self;
+    if (s && s.tab && s.tab.dispatchMessage)
+      return s.tab;
+    // Are we in the global page sending to the active tab?
+    var b = (safari.application && safari.application.activeBrowserWindow);
+    var p = (b && b.activeTab && b.activeTab.page);
+    if (p && p.dispatchMessage)
+      return p;
+    console.log("No dispatchMessage possible at this location!");
+    console.trace();
+    return { 
+      dispatchMessage: function() {}
+    };
+  };
+
+  // Track tabs that make requests to the global page, assigning them
+  // IDs so we can recognize them later.
+  var getTabId = (function() {
+    // Tab objects are destroyed when no one has a reference to them,
+    // so we keep a list of them, lest our IDs get lost.
+    var tabs = [];
+    var lastAssignedTabId = 0;
+    var theFunction = function(tab) {
+      // Clean up closed tabs, to avoid memory bloat.
+      tabs = tabs.filter(function(t) { return t.browserWindow != null; });
+
+      if (tab.id == undefined) {
+        // New tab
+        tab.id = lastAssignedTabId + 1;
+        lastAssignedTabId = tab.id;
+        tabs.push(tab); // save so it isn't garbage collected, losing our ID.
+      }
+      return tab.id;
+    };
+    return theFunction;
+  })();
+
+
   // Replace the 'chrome' object with a Safari adapter.
   chrome = {
-    // Track tabs that make requests to the global page, assigning them
-    // IDs so we can recognize them later.
-    __getTabId: (function() {
-      // Tab objects are destroyed when no one has a reference to them,
-      // so we keep a list of them, lest our IDs get lost.
-      var tabs = [];
-      var lastAssignedTabId = 0;
-      var theFunction = function(tab) {
-        // Clean up closed tabs, to avoid memory bloat.
-        tabs = tabs.filter(function(t) { return t.browserWindow != null; });
-
-        if (tab.id == undefined) {
-          // New tab
-          tab.id = lastAssignedTabId + 1;
-          lastAssignedTabId = tab.id;
-          tabs.push(tab); // save so it isn't garbage collected, losing our ID.
-        }
-        return tab.id;
-      };
-      return theFunction;
-    })(),
-
     extension: {
       getBackgroundPage: function() {
         return safari.extension.globalPage.contentWindow;
@@ -54,126 +110,82 @@ if (SAFARI) {
       },
 
       sendRequest: (function() {
-        // The function we'll return at the end of all this
-        function theFunction(data, callback) {
-          var callbackToken = "callback" + Math.random();
-
-          // Listen for a response for our specific request token.
-          addOneTimeResponseListener(callbackToken, callback);
-
-          safari.self.tab.dispatchMessage("request", {
-            data: data,
-            callbackToken: callbackToken
+        // Where to call .dispatchMessage() when sendRequest is called.
+        var dispatchTargets = [];
+        if (!isOnGlobalPage) {
+          // In a non-global context, the dispatch target is just the local
+          // object that lets you call .dispatchMessage().
+          dispatchTargets.push(dispatchContext());
+        }
+        else {
+          // In the global context, we must call .dispatchMessage() wherever
+          // someone has called .onRequest().  There's no good way to get at
+          // them directly, though, so .onRequest calls *us*, so we get access
+          // to a messageEvent object that points to their page that we can
+          // call .dispatchMessage() upon.
+          listenFor("onRequest registration", function(messageEvent) {
+            var context = dispatchContext(messageEvent);
+            if (dispatchTargets.indexOf(context) == -1)
+              dispatchTargets.push(context);
           });
         }
 
-        // Make a listener that, when it hears sendResponse for the given 
-        // callbackToken, calls callback(resultData) and deregisters the 
-        // listener.
-        function addOneTimeResponseListener(callbackToken, callback) {
+        // Dispatches a request to a list of recipients.  Calls the callback
+        // only once, using the first response received from any recipient.
+        function theFunction(data, callback) {
+          var callbackToken = "callback" + Math.random();
 
-          var responseHandler = function(messageEvent) {
-            if (messageEvent.name != "response")
-              return;
+          // Dispatch to each recipient.
+          dispatchTargets.forEach(function(target) {
+            var message = { data: data, callbackToken: callbackToken };
+            target.dispatchMessage("request", message);
+          });
+
+          // Listen for a response.  When we get it, call the callback and stop
+          // listening.
+          var listener = listenFor("response", function(messageEvent) {
             if (messageEvent.message.callbackToken != callbackToken)
               return;
-
-            callback(messageEvent.message.data);
-            // Change to calling in 0-ms setTimeout, as Safari team thinks
-            // this will work around their crashing until they can release
-            // a fix.
-            // safari.self.removeEventListener("message", responseHandler, false);
+            // Must wrap this call in a timeout to avoid crash, per Safari team
             window.setTimeout(function() {
-              safari.self.removeEventListener("message", responseHandler, false);
+              removeListener(listener);
             }, 0);
-          };
-
-          safari.self.addEventListener("message", responseHandler, false);
+            if (callback)
+              callback(messageEvent.message.data);
+          });
         }
-
         return theFunction;
       })(),
 
       onRequest: {
         addListener: function(handler) {
-          safari.application.addEventListener("message", function(messageEvent) {
-            // Only listen for "sendRequest" messages
-            if (messageEvent.name != "request")
-              return;
+          // If listening for requests from the global page, we must call the
+          // global page so it can get a messageEvent through which to send
+          // requests to us.
+          if (!isOnGlobalPage)
+            dispatchContext().dispatchMessage("onRequest registration", {});
 
+          listenFor("request", function(messageEvent) {
             var request = messageEvent.message.data;
-            var id = chrome.__getTabId(messageEvent.target);
 
-            var sender = { tab: { id: id, url: messageEvent.target.url } };
+            var sender = {}; // Empty in onRequest in non-global contexts.
+            if (isOnGlobalPage) { // But filled with sender data otherwise.
+              var id = getTabId(messageEvent.target);
+              sender.tab = { id: id, url: messageEvent.target.url };
+            }
+
             var sendResponse = function(dataToSend) {
               var responseMessage = { callbackToken: messageEvent.message.callbackToken, data: dataToSend };
-              messageEvent.target.page.dispatchMessage("response", responseMessage);
-            }
-            handler(request, sender, sendResponse);
-          }, false);
-        },
-      },
-
-      connect: function(port_data) {
-        var portUuid = "portUuid" + Math.random();
-        safari.self.tab.dispatchMessage("port-create", {name: port_data.name, uuid: portUuid});
-
-        var newPort = {
-          name: port_data.name,
-          onMessage: { 
-            addListener: function(listener) {
-              safari.self.addEventListener("message", function(messageEvent) {
-                // If the message was a port.postMessage to our port, notify our listener.
-                if (messageEvent.name != "port-postMessage") 
-                  return;
-                if (messageEvent.message.portUuid != portUuid)
-                  return;
-                listener(messageEvent.message.data);
-              });
-            } 
-          }
-        };
-        return newPort;
-      },
-
-      onConnect: {
-        addListener: function(handler) {
-          // Listen for port creations
-          safari.application.addEventListener("message", function(messageEvent) {
-            if (messageEvent.name != "port-create")
-              return;
-
-            var portName = messageEvent.message.name;
-            var portUuid = messageEvent.message.uuid;
-
-            var id = chrome.__getTabId(messageEvent.target);
-
-            var newPort = {
-              name: portName,
-              sender: { tab: { id: id, url: messageEvent.target.url } },
-              onDisconnect: { 
-                addListener: function() { 
-                  console.log("CHROME PORT LIBRARY: chrome.extension.onConnect.addListener: port.onDisconnect is not implemented, so I'm doing nothing.");
-                }
-              },
-              postMessage: function(data) {
-                if (! messageEvent.target.page) {
-                  console.log("Oops, this port has already disappeared -- cancelling.");
-                  return;
-                }
-                messageEvent.target.page.dispatchMessage("port-postMessage", { portUuid: portUuid, data: data });
-              }
+              dispatchContext(messageEvent).dispatchMessage("response", responseMessage);
             };
-
-            // Inform the onNewPort caller about the new port
-            handler(newPort);
+            handler(request, sender, sendResponse);
           });
         }
       },
 
       onRequestExternal: {
         addListener: function() {
-          console.log("CHROME PORT LIBRARY: onRequestExternal not supported.");
+          // CHROME PORT LIBRARY: onRequestExternal not supported.
         }
       }
     },
@@ -225,7 +237,7 @@ if (SAFARI) {
         // Fill in $N in message
         var message = safesub(msgData.message, $n_re, $n_subber);
         // Fill in $Place_Holder1$ in message
-        message = safesub(message, /\$([a-zA-Z0-9_]+?)\$/g, function(full, name) {
+        message = safesub(message, /\$(\w+?)\$/g, function(full, name) {
           var lowered = name.toLowerCase();
           if (lowered in placeholders)
             return placeholders[lowered];
@@ -274,7 +286,7 @@ if (SAFARI) {
           // Load all locale files that exist in that list
           result.messages = {};
           for (var i = 0; i < result.locales.length; i++) {
-            locale = result.locales[i];
+            var locale = result.locales[i];
             var file = "_locales/" + locale + "/messages.json";
             // Doesn't call the callback if file doesn't exist
             syncFetch(file, function(text) {
@@ -313,7 +325,8 @@ if (SAFARI) {
 
       return theI18nObject;
     })()
+
   };
 }
 
-} // end if (typeof SAFARI == "undefined")
+})(); } // end if (typeof SAFARI == "undefined") { (function() {
