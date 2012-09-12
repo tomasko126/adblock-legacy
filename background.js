@@ -80,7 +80,7 @@
   // Implement blocking via the Chrome webRequest API.
   if (!SAFARI) {
     // Stores url, whitelisting, and blocking info for a tabid+frameid
-    // TODO: can we avoid making this a global once 'old' style dies?
+    // TODO: can we avoid making this a global?
     frameData = {
       // Returns the data object for the frame with ID frameId on the tab with
       // ID tabId. If frameId is not specified, it'll return the data for all
@@ -203,7 +203,8 @@
       log("[DEBUG]", "Block result", blocked, details.type, frameDomain, details.url.substring(0, 100));
       if (blocked && elType === ElementTypes.image) {
         // 1x1 px transparant image.
-        return {redirectUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAAnAAAAJwEqCZFPAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="};
+        // Same URL as ABP and Ghostery to prevent conflict warnings (issue 7042)
+        return {redirectUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="};
       }
       if (blocked && elType === ElementTypes.subdocument) {
         return { redirectUrl: "about:blank" };
@@ -294,6 +295,24 @@
     var text = "\n" + get_custom_filters_text() + "\n";
     text = text.replace("\n" + filter + "\n", "\n");
     set_custom_filters_text(text.trim());
+  }
+
+  // Returns true if there's a recently created custom selector filter.  If
+  // |url| is truthy, the filter must have been created on |url|'s domain.
+  has_last_custom_filter = function(url) {
+    var filter = sessionStorage.getItem('last_custom_filter');
+    if (!filter)
+      return false;
+    if (!url)
+      return true;
+    return filter.split("##")[0] === parseUri(url).hostname;
+  }
+
+  remove_last_custom_filter = function() {
+    if (sessionStorage.getItem('last_custom_filter')) {
+      remove_custom_filter(sessionStorage.getItem('last_custom_filter'));
+      sessionStorage.removeItem('last_custom_filter');
+    }
   }
 
   get_settings = function() {
@@ -477,6 +496,14 @@
             {tab: tab}
           );
         });
+
+        if (has_last_custom_filter(info.tab.url)) {
+          addMenu(translate("undo_last_block"), function(tab) {
+            remove_last_custom_filter();
+            chrome.tabs.reload();
+          });
+        }
+
       }
 
       function setBrowserButton(info) {
@@ -512,6 +539,11 @@
     var custom_filters = get_custom_filters_text();
     try {
       if (FilterNormalizer.normalizeLine(filter)) {
+        if (Filter.isSelectorFilter(filter)) {
+          sessionStorage.setItem('last_custom_filter', filter);
+          if (!SAFARI)
+            updateButtonUIAndContextMenus();
+        }
         custom_filters = custom_filters + '\n' + filter;
         set_custom_filters_text(custom_filters);
         return null;

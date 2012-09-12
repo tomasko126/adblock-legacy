@@ -386,7 +386,7 @@ MyFilters.prototype._load_default_subscriptions = function() {
       case 'ja': return 'japanese';
       case 'ko': return 'easylist_plun_korean';
       case 'nl': return 'dutch';
-      case 'pl': return 'easylist_plus_polish';//sorry for the other Polish list
+      case 'pl': return 'easylist_plus_polish';
       case 'ro': return 'easylist_plus_romanian';
       case 'ru': return 'russian';
       case 'uk': return 'russian';
@@ -413,7 +413,7 @@ MyFilters.prototype._make_subscription_options = function() {
   // When modifying a list, IDs mustn't change!
   return {
     "adblock_custom": { // AdBlock custom filters
-      url: "http://chromeadblock.com/filters/adblock_custom.txt",
+      url: "https://chromeadblock.com/filters/adblock_custom.txt",
     },
     "easylist": { // EasyList
       url: "http://adblockplus.mozdev.org/easylist/easylist.txt"
@@ -455,7 +455,7 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "chinese": { // Additional Chinese filters
-      url: "http://adblock-chinalist.googlecode.com/svn/trunk/adblock.txt",
+      url: "https://adblock-chinalist.googlecode.com/svn/trunk/adblock.txt",
       requiresList: "easylist",
     },
     "czech": { // Czech filters
@@ -478,9 +478,6 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "easylist_plun_korean": {  // Korean filters
       url: "https://secure.fanboy.co.nz/fanboy-korean.txt",
-    },
-    "polish": { // Polish filters
-      url: "http://www.niecko.pl/adblock/adblock.txt",
     },
     "easylist_plus_spanish": {  // Spanish filters
       url: "http://abp.mozilla-hispano.org/nauscopio/filtros.txt",

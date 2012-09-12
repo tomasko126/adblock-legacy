@@ -1,7 +1,7 @@
 // Allows interaction with the server to track install rate
 // and log messages.
 STATS = (function() {
-  var stats_url = "http://chromeadblock.com/api/stats2.php";
+  var stats_url = "https://chromeadblock.com/api/stats2.php";
 
   //Get some information about the version, os, and browser
   var version = (function() {
@@ -11,12 +11,12 @@ STATS = (function() {
     var manifest = JSON.parse(xhr.responseText);
     return manifest.version;
   })();
-  var match = navigator.appVersion.match(/(CrOS|Windows|Mac|Linux)\ ?([^\)]*)\)/i);
-  var os = match ? match[1] : "Unknown";
-  var osVersion = match ? match[2] : "Unknown";
-  match = navigator.appVersion.match(/(?:Chrome|Version)\/([0-9.]+)/);
+  var match = navigator.userAgent.match(/(CrOS\ \w+|Windows\ NT|Mac\ OS\ X|Linux)\ ([\d\._]+)?/);
+  var os = (match || [])[1] || "Unknown";
+  var osVersion = (match || [])[2] || "Unknown";
+  match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d\.]+)/);
   var flavor = SAFARI ? "S": "E";
-  var browserVersion = match ? match[1] : "Unknown";
+  var browserVersion = (match || [])[1] || "Unknown";
 
   var firstRun = !storage_get("userid");
 
