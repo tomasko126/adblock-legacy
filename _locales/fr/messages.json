@@ -1,6 +1,6 @@
 ﻿{
-  "description1": {
-    "message": "La plus populaire des extensions Chrome, avec plus de 8 millions d'utilisateurs ! Bloque les publicités sur Internet.",
+  "description2": {
+    "message": "La plus populaire des extensions Chrome, avec plus de 10 millions d'utilisateurs ! Bloque les publicités sur Internet.",
     "description": "Extension description in manifest"
   },
   "buttoncancel": {
@@ -35,8 +35,8 @@
     "message": "AdBlock est maintenant installé!",
     "description": "Title for the installation success page"
   },
-  "chromebutton_how_to_hide": {
-    "message": "Pour cacher ce bouton, faites un clic droit dessus et choisissez 'Masquer le bouton'. Pour l'afficher à nouveau, allez dans Clé à molette | Outils | Extensions.",
+  "chromebutton_how_to_hide2": {
+    "message": "Pour cacher ce bouton, faites un clic droit dessus et choisissez 'Masquer le bouton'.  Pour l'afficher à nouveau, allez dans chrome://chrome/extensions.",
     "description": "Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "sliderexplanation": {
@@ -143,7 +143,6 @@
     "message": "Retour",
     "description": "Back to previous wizard page button"
   },
-
   "findingads": {
     "message": "Recherche des pubs...<br/><br/><i>Cela peut prendre un moment.</i>",
     "description": "When you press ctrl-shift-K the blacklister searches for ads"
@@ -156,7 +155,6 @@
     "message": "Cliquez sur la pub à bloquer.",
     "description": "When you have to click the ad to continue"
   },
-
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock ne s'exécutera pas sur les pages correspondantes à :",
     "description": "Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
@@ -169,12 +167,10 @@
     "message": "Ne pas exécuter AdBlock sur...",
     "description": "The title of the whitelister dialog"
   },
-
   "buttonexclude": {
     "message": "Exclure",
     "description": "Button for excluding a domain in the whitelister dialog"
   },
-
   "subscribingtitle": {
     "message": "Abonnement à la liste de filtres...",
     "description": "abp: link subscriber title"
@@ -187,7 +183,6 @@
     "message": "Erreur !",
     "description": "abp: link subscriber result"
   },
-
   "optionsversion": {
     "message": "Version $version$",
     "description": "Version number",
@@ -228,7 +223,7 @@
   },
   "i_like_googles_text_ads_dont_block_those": {
     "message": "J'aime les annonces textuelles Google; ne les bloquez pas.",
-    "description": "Install page text; slightly shorter than the 'googletextads' message." 
+    "description": "Install page text; slightly shorter than the 'googletextads' message."
   },
   "showcontextmenus": {
     "message": "Ajouter les éléments AdBlock dans le menu du clic droit",
@@ -420,10 +415,6 @@
   },
   "filtereasylist_plun_korean": {
     "message": "Filtres coréens",
-    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
-  },
-  "filterpolish": {
-    "message": "Filtres polonais",
     "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filtereasylist_plus_spanish": {
@@ -712,13 +703,17 @@
   },
   "updatefromoldversion": {
     "message": "Vous utilisez une version obsolète d'AdBlock. Merci de commencer par la $updatelink$.",
-    "description": "ad report page instruction",
+    "description": "Ad report page instructions to update AdBlock in Safari",
     "placeholders": {
       "updatelink": {
         "content": "$1mettre à jour$2",
         "example": "<a href='http://chrome.com/update_here.ctx'>update</a>"
       }
     }
+  },
+  "adblock_outdated_chrome": {
+    "message": "Vous utilisez une version obsolète d'AdBlock. Merci d'aller sur <a href='#'>la page des extensions</a>, activer le 'Mode développeur' et cliquer sur 'Mettre à jour les extensions maintenant'",
+    "description": "Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome://chrome/extensions/'"
   },
   "block_an_ad_on_this_page": {
     "message": "Bloquer une pub sur cette page",
@@ -929,7 +924,7 @@
     "description": "Title of the final ad report question if the ad didn't appear in FF"
   },
   "cantblockflashwarning": {
-    "message": "Est-ce que la publicité s'affiche dans ou avant une vidéo, ou dans un plugin comme par exmeple un jeu Flash ?",
+    "message": "Est-ce que la publicité s'affiche dans ou avant une vidéo, ou dans un plugin comme par exemple un jeu Flash ?",
     "description": "Text of the final ad report question"
   },
   "cantblockflash": {
@@ -990,13 +985,17 @@
     "message": "Désactiver AdBlock",
     "description": "Menu entry to pause AdBlock."
   },
+  "undo_last_block": {
+    "message": "Annuler le dernier blocage",
+    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "dont_run_on_this_page": {
     "message": "Désactiver sur cette page",
     "description": "Menu entry to whitelist a page"
   },
   "options": {
     "message": "Options",
-    "description": "The text of the link on chrome://extensions that gets you to the Options page for an extension"
+    "description": "The text of the link on chrome://chrome/extensions that gets you to the Options page for an extension"
   },
   "hide_this_button": {
     "message": "Masquer ce bouton",
@@ -1152,10 +1151,6 @@
       }
     }
   },
-  "i_came_here_looking_for_catblock": {
-    "message": "Je cherche <b>CatBlock</b> ! Remplacez les pubs par des chats !",
-    "description": "Install page checkbox letting the user indicate that they installed AdBlock because they heard about CatBlock, and they want to enable it."
-  },
   "a_note_to_you_catblock_lovers": {
     "message": "Note pour ceux qui ont aimé CatBlock :",
     "description": "Message header for a note directed to users who want to know how to get CatBlock."
@@ -1284,16 +1279,26 @@
     "placeholders": {
       "browserversion": {
         "content": "$1",
-        "example": "Opera 12.50"
+        "example": "Opera 12.10"
       }
     }
   },
   "opera_120_install": {
-    "message": "Dans les versions d'Opera antérieures à 12.50, certaines pubs peuvent ne pas être bloquées car il n'est pas possible de parser toutes les les règles dans ces versions. Ce sera corrigé lorsqu'Opera sera mis à jour à la version 12.50. À partir de ce moment, toutes les pubs seront bloquées correctement.",
-    "description": "Opera < 12.50 warning during installation"
+    "message": "Dans les versions d'Opera antérieures à 12.10, certaines pubs peuvent ne pas être bloquées car il n'est pas possible de parser toutes les les règles dans ces versions. Ce sera corrigé lorsqu'Opera sera mis à jour à la version 12.10. À partir de ce moment, toutes les pubs seront bloquées correctement.",
+    "description": "Opera < 12.10 warning during installation"
   },
   "opera_120_options": {
-    "message": "Dans les versions d'Opera antérieures à 12.50, certaines options sont grisées, car elles ne sont pas supportées dans ces versions.",
-    "description": "Opera < 12.50 warning above options page"
+    "message": "Dans les versions d'Opera antérieures à 12.10, certaines options sont grisées, car elles ne sont pas supportées dans ces versions.",
+    "description": "Opera < 12.10 warning above options page"
+  },
+  "filterorigin": {
+    "message": "Origine du filtre :\n$list$",
+    "description": "Tooltip of matching filter in resources list, telling which filter list contains the filter",
+    "placeholders": {
+      "list": {
+        "content": "$1",
+        "example": "A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
   }
 }

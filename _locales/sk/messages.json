@@ -15,6 +15,10 @@
     "message": "AdBlock je pozastavený. Pretože neboli zachytené žiadne prvky, nie je možné túto stránku použiť. Najprv spustite AdBlock a potom to znovu skúste.",
     "description": "resourceblocking page string"
   },
+  "adblock_outdated_chrome": {
+    "message": "Používate zastaranú verziu AdBlocku. Prosím choďte na <a href='#'>stránku s rozšíreniami</a>, zapnite 'Režim pre vývojárov' a kliknite na 'Aktualizovať rozšírenia'.",
+    "description": "Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome://chrome/extensions/'"
+  },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock sa nebude spúšťať na zodpovedajúcich stránkach:",
     "description": "Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
@@ -305,6 +309,10 @@
     "message": "Zavrieť",
     "description": "resourceblocking page string"
   },
+  "close_tab_begin_browsing": {
+    "message": "Teraz môžete zavrieť túto kartu a začať surfovať bez reklám!",
+    "description": "Install page string"
+  },
   "correctfilters": {
     "message": "Opraviť filtre",
     "description": "on the ad report page, label describing having the right set of filters"
@@ -321,8 +329,8 @@
     "message": "Zobrazovať chybové hlásenia v protokole konzoly (toto spomaluje AdBlock)",
     "description": "Option on first tab page"
   },
-  "description1": {
-    "message": "Najobľúbenejšie rozšírenie pre Chrome s viac ako 8 miliónmi užívateľov! Blokuje reklamy na celom webe.",
+  "description2": {
+    "message": "Najobľúbenejšie rozšírenie pre Chrome s viac ako 10 miliónmi užívateľov! Blokuje reklamy na celom webe.",
     "description": "Extension description in manifest"
   },
   "did_you_know_this_is_my_full_time_job": {
@@ -472,10 +480,6 @@
   "filterlistsrock": {
     "message": "Zoznamy filtrov blokujú väčšinu reklám na webe. Môžete tiež:",
     "description": "Header text on the Customize tab.  'Filter lists' should be the same text as the tabfilterlists message."
-  },
-  "filterpolish": {
-    "message": "Polské filtre",
-    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
   },
   "filterrussian": {
     "message": "- dodatočné ruské a ukrainské filtre",
@@ -771,9 +775,65 @@
     "message": "Tento filter sa vzťahuje na prvky týchto typov:",
     "description": "resourceblocking page string"
   },
+  "opera_120_install": {
+    "message": "Opera verzie nižšej ako 12.10 neblokuje všetky reklamy, pretože to nie je možné. Toto bude opravené, keď sa Opera aktualizuje na verziu 12.10. Od toho momentu budú blokované všetky reklamy",
+    "description": "Opera < 12.10 warning during installation"
+  },
+  "opera_120_options": {
+    "message": "V Opere verzie nižšej ako 12.10 sú niektoré možnosti obmedzené, pretože v týchto verziách nie sú niektoré funkcie podporované.",
+    "description": "Opera < 12.10 warning above options page"
+  },
+  "opera_can_also_change_setting": {
+    "message": "Môžete tiež zvýšiť hodnotu $setting$",
+    "description": "Message when the storage quota is reached, for advanced users in Opera",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "opera:config#PersistentStorage|DomainQuotaForWidgetPreferences"
+      }
+    }
+  },
+  "opera_donations_button": {
+    "message": "Máte radi toto rozšírenie? Ak áno, pomôžte nám donáciou na stránke nastavení!",
+    "description": "Opera donate request in the button"
+  },
+  "opera_donations_install": {
+    "message": "Ak milujete toto rozšírenie, prosím prispejte donáciou cez stránku nastavení.",
+    "description": "Opera donate request in the install page"
+  },
+  "opera_enabledin": {
+    "message": "Zapnuté v $browserversion$",
+    "description": "Hover text of items disabled in an older browser version",
+    "placeholders": {
+      "browserversion": {
+        "content": "$1",
+        "example": "Opera 12.10"
+      }
+    }
+  },
+  "opera_excludedomainorurl": {
+    "message": "Doména, kde AdBlock by nemal nič blokovať",
+    "description": "Opera version of the 'excludedomainorurl' string"
+  },
+  "opera_for_more_options": {
+    "message": "Pre viac možností, môžete kliknúť na tlačidlo alebo otvoriť nastavenia cez Opera ⇒ Rozšírenie ⇒ Spravovať rozšírenia ⇒ ikona kľúča ⇒ Predvoľby",
+    "description": "Install page string telling where to find the preferences in Opera. &rArr; makes a right arrow (->)"
+  },
+  "opera_linkunblock": {
+    "message": "Zobraz reklamy na doméne",
+    "description": "Opera version of the 'linkunblock' string"
+  },
+  "opera_reenable_button": {
+    "message": "Tlačidlo môžete znovu zobraziť v nastavení rozšírenia",
+    "description": "Opera browser button message when you click 'hide this button'"
+  },
+  "opera_show_toolbar_button": {
+    "message": "Zobraz tlačidlo na paneli nástrojov",
+    "description": "Opera option to show/hide the button"
+  },
   "options": {
     "message": "Nastavenia",
-    "description": "The text of the link on chrome://extensions that gets you to the Options page for an extension"
+    "description": "The text of the link on chrome://chrome/extensions that gets you to the Options page for an extension"
   },
   "optionschangelog": {
     "message": "zoznam zmien",
@@ -1029,6 +1089,10 @@
     "message": "Pokračovať",
     "description": "Install page: button text at end of setup section to proceed to the next section.  The text is reflecting what the user is thinking ('That setup was easier than I expected!')"
   },
+  "thats_it": {
+    "message": "Už to je!",
+    "description": "Install page string"
+  },
   "thirdparty": {
     "message": "Tretia strana",
     "description": "Resource list column title telling if the resource originates from a different domain"
@@ -1117,6 +1181,10 @@
     "message": "xml-http žiadosť",
     "description": "A resource type"
   },
+  "undo_last_block": {
+    "message": "Vrátiť späť poslednú blokovanú reklamu",
+    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "unpause": {
     "message": "Spustiť AdBlock",
     "description": "Link text to unpause AdBlock, displayed immediately after 'status_paused'."
@@ -1183,7 +1251,7 @@
   },
   "updatefromoldversion": {
     "message": "Používate zastaralú verziu programu AdBlock. Prosím, najprv musíte aktualizovať $updatelink$ AdBlock na najnovšiu verziu",
-    "description": "ad report page instruction",
+    "description": "Ad report page instructions to update AdBlock in Safari",
     "placeholders": {
       "updatelink": {
         "content": "$1update$2",

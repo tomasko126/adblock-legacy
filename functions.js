@@ -90,6 +90,14 @@ parseUri.parseSearch = function(search) {
     if (arguments[1]) queryKeys[arguments[1]] = unescape(arguments[2]);
   });
   return queryKeys;
+};
+// Strip third+ level domain names from the domain and return the result.
+// Inputs: domain: the domain that should be parsed
+//         keepDot: true if trailing dots should be preserved in the domain
+// Returns: the parsed domain
+parseUri.secondLevelDomainOnly = function(domain, keepDot) {
+  var match = domain.match(/([^\.]+\.(?:co\.)?[^\.]+)\.?$/) || [domain, domain];
+  return match[keepDot ? 0 : 1].toLowerCase();
 }
 
 // TODO: move back into background.js since Safari can't use this
@@ -111,9 +119,14 @@ storage_get = function(key) {
 }
 
 // Inputs: key:string, value:object.
+// If value === undefined, removes key from storage.
 // Returns undefined.
 storage_set = function(key, value) {
   var store = (window.SAFARI ? safari.extension.settings : localStorage);
+  if (value === undefined) {
+    store.removeItem(key);
+    return;
+  }
   try {
     store.setItem(key, JSON.stringify(value));
   } catch (ex) {

@@ -15,6 +15,10 @@
     "message": "AdBlock приостановлен. В связи с тем, что ресурсы не перехватываются, эта страница не может использоваться. Возобновите работу AdBlock и повторите попытку.",
     "description": "resourceblocking page string"
   },
+  "adblock_outdated_chrome": {
+    "message": "Вы используете старую версию AdBlock. Пожалуйста, перейдите на <a href='#'>страницу Расширения</a>, включите 'Режим разработчика' и нажмите кнопку 'Обновить расширения'",
+    "description": "Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome://chrome/extensions/'"
+  },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock не будет работать на соответствующих страницах:",
     "description": "Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
@@ -269,8 +273,8 @@
       }
     }
   },
-  "chromebutton_how_to_hide": {
-    "message": "Чтобы скрыть кнопку щелкните её правой кнопкой мыши и выберите Hide Button.  Вы можете показать ее вновь, нажав Ключ | Инструменты | Расширения.",
+  "chromebutton_how_to_hide2": {
+    "message": "Чтобы скрыть кнопку, нажмите правую кнопку мыши и выберите Скрыть. Вы можете показать её снова в chrome://chrome/extensions.",
     "description": "Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "cleanuplist": {
@@ -305,6 +309,10 @@
     "message": "Закрыть",
     "description": "resourceblocking page string"
   },
+  "close_tab_begin_browsing": {
+    "message": "Вы можете закрыть эту вкладку и начать просмотр без рекламы. Удачи!",
+    "description": "Install page string"
+  },
   "correctfilters": {
     "message": "Правильные фильтры",
     "description": "on the ad report page, label describing having the right set of filters"
@@ -321,8 +329,8 @@
     "message": "Показывать сообщения отладки в Журнале Консоли (замедляет AdBlock)",
     "description": "Option on first tab page"
   },
-  "description1": {
-    "message": "Наиболее популярное расширение Chrome с более чем 8 миллионами пользователей! Блокирует рекламу по всему Интернету.",
+  "description2": {
+    "message": "Наиболее популярное расширение Chrome с более чем 10 миллионами пользователей! Блокирует рекламу по всему Интернету.",
     "description": "Extension description in manifest"
   },
   "did_you_know_this_is_my_full_time_job": {
@@ -473,9 +481,15 @@
     "message": "Списки фильтров блокируют большинство рекламы в Интернете. Вы также можете:",
     "description": "Header text on the Customize tab.  'Filter lists' should be the same text as the tabfilterlists message."
   },
-  "filterpolish": {
-    "message": "Польские фильтры",
-    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
+  "filterorigin": {
+    "message": "Происхождение фильтра:\n$list$",
+    "description": "Tooltip of matching filter in resources list, telling which filter list contains the filter",
+    "placeholders": {
+      "list": {
+        "content": "$1",
+        "example": "A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
   },
   "filterrussian": {
     "message": "- дополнительные русские и украинские фильтры",
@@ -550,10 +564,6 @@
   "how_to_use_adblock": {
     "message": "Как использовать AdBlock:",
     "description": "Install page section title"
-  },
-  "i_came_here_looking_for_catblock": {
-    "message": "Я пришел сюда в поисках <b>CatBlock</b>! Заменить рекламу фотографиями кошек!",
-    "description": "Install page checkbox letting the user indicate that they installed AdBlock because they heard about CatBlock, and they want to enable it."
   },
   "i_like_googles_text_ads_dont_block_those": {
     "message": "Мне нравится текстовая реклама Google; не блокировать её.",
@@ -771,9 +781,65 @@
     "message": "Этот фильтр применяется к ресурсам этих типов:",
     "description": "resourceblocking page string"
   },
+  "opera_120_install": {
+    "message": "В Opera до версии 12.10, некоторый вид рекламы может оказаться не заблокированным, поскольку не возможно разобрать все правила в этих версиях. Это будет исправлено, как только Opera обновится до версии 12.10. С этого момента, вся реклама будет заблокирована.",
+    "description": "Opera < 12.10 warning during installation"
+  },
+  "opera_120_options": {
+    "message": "В Opera до версии 12.10, некоторые опции неактивны, так как они не поддерживаются в этих версиях.",
+    "description": "Opera < 12.10 warning above options page"
+  },
+  "opera_can_also_change_setting": {
+    "message": "Вы также можете увеличить значение\n$setting$",
+    "description": "Message when the storage quota is reached, for advanced users in Opera",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "opera:config#PersistentStorage|DomainQuotaForWidgetPreferences"
+      }
+    }
+  },
+  "opera_donations_button": {
+    "message": "Вам нравится это расширение? Если это так, пожалуйста, отправьте пожертвования на странице параметров!",
+    "description": "Opera donate request in the button"
+  },
+  "opera_donations_install": {
+    "message": "Если Вам действительно нравится это расширение, пожалуйста, отправьте пожертвования через страницу параметров.",
+    "description": "Opera donate request in the install page"
+  },
+  "opera_enabledin": {
+    "message": "Вкл. в $browserversion$",
+    "description": "Hover text of items disabled in an older browser version",
+    "placeholders": {
+      "browserversion": {
+        "content": "$1",
+        "example": "Opera 12.10"
+      }
+    }
+  },
+  "opera_excludedomainorurl": {
+    "message": "Домены, где AdBlock не должен блокировать все",
+    "description": "Opera version of the 'excludedomainorurl' string"
+  },
+  "opera_for_more_options": {
+    "message": "Для настройки дополнительных параметров, Вы можете нажать кнопку на панели инструментов или открыть предпочтения через Opera &rArr; Расширения &rArr; Управление расширениями &rArr; Значок гаечного ключа &rArr; Предпочтения",
+    "description": "Install page string telling where to find the preferences in Opera. &rArr; makes a right arrow (->)"
+  },
+  "opera_linkunblock": {
+    "message": "Показать рекламу на домене",
+    "description": "Opera version of the 'linkunblock' string"
+  },
+  "opera_reenable_button": {
+    "message": "Вы можете снова включить кнопку в настройках этого расширения",
+    "description": "Opera browser button message when you click 'hide this button'"
+  },
+  "opera_show_toolbar_button": {
+    "message": "Показать кнопку на панели инструментов",
+    "description": "Opera option to show/hide the button"
+  },
   "options": {
     "message": "Параметры",
-    "description": "The text of the link on chrome://extensions that gets you to the Options page for an extension"
+    "description": "The text of the link on chrome://chrome/extensions that gets you to the Options page for an extension"
   },
   "optionschangelog": {
     "message": "журнал изменений",
@@ -1029,6 +1095,10 @@
     "message": "Это было легко",
     "description": "Install page: button text at end of setup section to proceed to the next section.  The text is reflecting what the user is thinking ('That setup was easier than I expected!')"
   },
+  "thats_it": {
+    "message": "Вот и все!",
+    "description": "Install page string"
+  },
   "thirdparty": {
     "message": "Сторонние",
     "description": "Resource list column title telling if the resource originates from a different domain"
@@ -1117,6 +1187,10 @@
     "message": "xmlhttprequest",
     "description": "A resource type"
   },
+  "undo_last_block": {
+    "message": "Отмена последней блокировки",
+    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "unpause": {
     "message": "возобновить",
     "description": "Link text to unpause AdBlock, displayed immediately after 'status_paused'."
@@ -1183,7 +1257,7 @@
   },
   "updatefromoldversion": {
     "message": "Вы используете старую версию AdBlock. Сначала $updatelink$ AdBlock до последней версии",
-    "description": "ad report page instruction",
+    "description": "Ad report page instructions to update AdBlock in Safari",
     "placeholders": {
       "updatelink": {
         "content": "$1обновите$2",

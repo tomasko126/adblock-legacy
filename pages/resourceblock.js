@@ -2,7 +2,7 @@ var resources = {};
 var debug_enabled = false;
 var custom_filters = {};
 var chosenResource = {};
-var local_filterset = {};
+var local_filtersets = {};
 
 // Creates the table that shows all blockable items
 function generateTable() {
@@ -24,9 +24,65 @@ function generateTable() {
   var rows = [];
   for (var i in resources) {
     var matchingfilter = resources[i].filter;
+    var matchingListID = "", matchingListName = "";
     var typeName = getTypeName(resources[i].type);
-    if (!matchingfilter && !SAFARI)
-      matchingfilter = local_filterset.matches(i, resources[i].type, resources[i].domain, true);
+
+    if (matchingfilter) {
+      // If matchingfilter is already set, it's a hiding rule or a bug.
+      // However, we only know the selector part (e.g. ##.ad) not the full
+      // selector (e.g., domain.com##.ad). Neither do we know the filter list
+      for (var fset in local_filtersets) {
+        // Slow? Yeah, for sure! But usually you have very few hiding rule
+        // matches, not necessary for the same domain. And we can be slow in
+        // resourceblock, so there is no need to cache this.
+        var hidingset = local_filtersets[fset].hiding;
+        var hidingrules = hidingset.filtersFor(resources[i].domain, true);
+        if (hidingrules.indexOf(matchingfilter.substr(2)) !== -1) {
+          var subdomain = resources[i].domain;
+          var k = 0;
+          while (subdomain) {
+            k++; if (k>100) break;
+            if (hidingset.items[subdomain]) {
+              for (var j=0; j<hidingset.items[subdomain].length; j++) {
+                if (hidingset.items[subdomain][j].selector === matchingfilter.substr(2)) {
+                  // Ignore the case that a list contains both
+                  // ##filter
+                  // ~this.domain.com,domain.com##filter
+                  matchingfilter = hidingset.items[subdomain][j]._text;
+                }
+              }
+            }
+            if (subdomain === "global") {break;}
+            subdomain = subdomain.replace(/^.+?(\.|$)/, '') || "global";
+          }
+          matchingListID = fset;
+          break;
+        }
+      }
+    } else {
+      for (var fset in local_filtersets) {
+        matchingfilter = local_filtersets[fset].blocking.
+              matches(i, resources[i].type, resources[i].domain, true);
+        if (matchingfilter) {
+          matchingListID = fset;
+          break;
+        }
+      }
+    }
+
+    if (matchingListID) {
+      if (matchingListID === "user_custom_filters") {
+        matchingListName = translate("tabcustomize");
+      } else if (matchingListID === "build_in_filters") {
+        matchingListName = "AdBlock";
+      } else {
+        matchingListName = translate("filter" + matchingListID);
+        if (!matchingListName) {
+          matchingListName = matchingListID.substr(4);
+          validateUrl(matchingListName);
+        }
+      }
+    }
 
     var type = {sort:3, name:undefined};
     if (matchingfilter) {
@@ -50,7 +106,8 @@ function generateTable() {
       continue;
 
     var row = $("<tr>");
-    if (type.name) row.addClass(type.name);
+    if (type.name)
+      row.addClass(type.name);
 
     // Cell 1: Checkbox
     var cell = $("<td><input type='checkbox'/></td>");
@@ -59,41 +116,45 @@ function generateTable() {
     row.append(cell);
 
     // Cell 2: URL
-    $("<td>", {
-      title: i,
-      text: truncateI(i),
-      "data-column": "url"
-    }).appendTo(row);
+    $("<td>").
+      attr("title", i).
+      attr("data-column", "url").
+      text(truncateI(i)).
+      appendTo(row);
 
     // Cell 3: Type
-    $("<td>", {
-      text: translate('type' + typeName),
-      "data-column": "type"
-    }).appendTo(row);
+    $("<td>").
+      attr("data-column", "type").
+      text(translate('type' + typeName)).
+      appendTo(row);
 
     // Cell 4: hidden sorting field and matching filter
-    cell = $("<td>", {
-      "data-column": "filter"
-    });
-    $("<span>", {
-      "class": "sorter",
-      text: type.name ? type.sort : 3
-    }).appendTo(cell);
+    cell = $("<td>").
+      attr("data-column", "filter");
+    $("<span>").
+      addClass("sorter").
+      text(type.name ? type.sort : 3).
+      appendTo(cell);
     if (type.name)
-      $("<span>", { text: matchingfilter }).appendTo(cell);
+      $("<span>").
+        text(custom_filters[matchingfilter] || matchingfilter).
+        attr('title', translate("filterorigin", matchingListName)).
+        appendTo(cell);
     row.append(cell);
     resources[i].filter = matchingfilter;
+    resources[i].filterlist = matchingListName;
 
     // Cell 5: third-party or not
     var resourceDomain = parseUri(i).hostname;
     var isThirdParty = (type.name === 'hiding' ? false :
-                          checkThirdParty(resources[i].domain, resourceDomain));
-    cell = $("<td>", {
-        text: isThirdParty ? translate('yes') : translate('no'),
-        title: translate("resourcedomain", resources[i].domain || resourceDomain),
-        "data-column": "thirdparty"});
+        BlockingFilterSet.checkThirdParty(resources[i].domain, resourceDomain));
+    cell = $("<td>").
+        text(isThirdParty ? translate('yes') : translate('no')).
+        attr("title", translate("resourcedomain", resources[i].domain || resourceDomain)).
+        attr("data-column", "thirdparty");
     row.append(cell);
     resources[i].isThirdParty = isThirdParty;
+    resources[i].resourceDomain = resourceDomain;
 
     // Cells 2-5 may get class=clickableRow
     if (!disabled)
@@ -101,7 +162,10 @@ function generateTable() {
 
     // Cell 6: delete a custom filter
     if (custom_filters[matchingfilter])
-      $("<td>", { "class": "deleterule", title: translate("removelabel") }).appendTo(row);
+      $("<td>").
+        addClass("deleterule").
+        attr("title", translate("removelabel")).
+        appendTo(row);
     else
       $("<td>").appendTo(row);
 
@@ -126,6 +190,8 @@ function generateTable() {
   $(".deleterule").click(function() {
     var resource = resources[$(this).prevAll('td[data-column="url"]')[0].title];
     BGcall('remove_custom_filter', custom_filters[resource.filter], function() {
+      // If the filter was a hiding rule, it'll still show up since it's still in
+      // frameData in the background. However, I consider that acceptable.
       if (getTypeName(resource.type) === "page") {
         alert(translate("excludefilterremoved"));
         window.close();
@@ -180,25 +246,22 @@ function generateFilterSuggestions() {
     strippedUrl = strippedUrl.substr(0, strippedUrl.indexOf('/'));
     blocksuggestions.push(strippedUrl);
   }
-  if (strippedUrl.indexOf('.') !== strippedUrl.lastIndexOf('.')) {
-    if (strippedUrl.replace('.co.', '').indexOf('.') !== -1) {
-      strippedUrl = strippedUrl.match(/[^.]+\.(co\.)?[^.]+$/i)[0];
-      blocksuggestions.push(strippedUrl);
-    }
+
+  var minimumdomain = parseUri.secondLevelDomainOnly(strippedUrl, true);
+  if (minimumdomain !== strippedUrl) {
+    blocksuggestions.push(minimumdomain);
   }
 
   var suggestions = [];
   for (var i in blocksuggestions) {
-    var inputBox = $("<input>", {
-      type: "radio",
-      name: "urloption",
-      id: "suggest_" + i,
-      value: (isBlocked ? "@@||" : "||") + blocksuggestions[i]
-    });
-    var label = $("<label>", {
-      "for": "suggest_" + i,
-      text: blocksuggestions[i]
-    });
+    var inputBox = $("<input>").
+      attr("type", "radio").
+      attr("name", "urloption").
+      attr("id", "suggest_" + i).
+      val((isBlocked ? "@@||" : "||") + blocksuggestions[i]);
+    var label = $("<label>").
+      attr("for", "suggest_" + i).
+      text(blocksuggestions[i]);
     suggestions.push(inputBox);
     suggestions.push(label);
     suggestions.push("<br/>");
@@ -215,16 +278,46 @@ function generateFilterSuggestions() {
     $("#selectblockableurl b").text(translate("blockeverycontaining"));
   else
     $("#selectblockableurl b").text(translate("whitelisteverycontaining"));
-  var inputBox = $('<input>', {
-    type: "text",
-    id: "customurl",
-    size: "99",
-    value: url,
-    title: translate("wildcardhint")
-  }).bind("input", function() {
-    $("#custom").click()
-  });
+  var inputBox = $('<input>').
+    attr("type", "text").
+    attr("id", "customurl").
+    attr("size", "99").
+    attr("title", translate("wildcardhint")).
+    val(url).
+    bind("input", function() {
+      $("#custom").click()
+    });
   $("#custom + label").append(inputBox);
+}
+
+// Create filtersets for resourceblock and put them in the local_filtersets
+// object. Similar to MyFilters.prototype.rebuild(), but keeps every list
+// separate. Inputs
+//   id: identifier of the list
+//   text: array containing all filters in the list
+function createResourceblockFilterset(id, text) {
+  local_filtersets[id] = {};
+  var w = [], b = [], h = [];
+
+  for (var i=0; i<text.length; i++) {
+    if (Filter.isSelectorFilter(text[i]))
+      h.push(text[i]);
+    else if (Filter.isWhitelistFilter(text[i]))
+      w.push(text[i]);
+    else
+      b.push(text[i]);
+  }
+  local_filtersets[id].hiding = FilterSet.fromTexts(h);
+  local_filtersets[id].blocking =
+    new BlockingFilterSet(FilterSet.fromTexts(b), FilterSet.fromTexts(w));
+}
+
+// Check an URL for it's validity
+function validateUrl(url) {
+  if (!/^https?:\/\//.test(url)) {
+    window.close();
+    return;
+  }
 }
 
 // Create the filter that will be applied from the chosen options
@@ -252,23 +345,6 @@ function createfilter() {
   return urlfilter + (options.length ? '$' + options.join(',') : '');
 }
 
-// Get the third-party domain
-// Inputs: the domain of which the third-party-check part is requested
-// Returns the third-party-check domain
-function getThirdPartyDomain(domain) {
-  var match = domain.match(/[^.]+\.(co\.)?[^.]+$/) || [ domain ];
-  return match[0].toLowerCase();
-}
-
-// Checks if it is a third-party resource or not
-// Inputs: the two domains to check
-// Returns true if third-party, false otherwise
-function checkThirdParty(domain1, domain2) {
-  var match1 = getThirdPartyDomain(domain1);
-  var match2 = getThirdPartyDomain(domain2);
-  return (match1 !== match2);
-}
-
 // Checks if the text in the domain list textbox is valid or not
 // Inputs: the text from the text box
 // Returns true if the domain list was valid, false otherwise
@@ -276,7 +352,8 @@ function isValidDomainList(text) {
   if (!text)
     return false;
   try {
-    FilterNormalizer.normalizeLine('*$domain=' + text);
+    var parsedDomains = Filter._domainInfo(text, "|");
+    FilterNormalizer.verifyDomains(parsedDomains);
     return true;
   } catch(ex) {
     return false;
@@ -343,8 +420,13 @@ function finally_it_has_loaded_its_stuff() {
       var res = resources[$("[data-column='url']", el).attr('title')];
       keywords.push(res.domain);
       keywords.push(res.resource);
-      if (res.filter)
+      if (res.filter) {
         keywords.push(res.filter);
+        if (custom_filters[res.filter] !== res.filter)
+          keywords.push(custom_filters[res.filter]);
+      }
+      if (res.filterlist)
+        keywords.push(res.filterlist);
       var typeName = getTypeName(res.type);
       keywords.push(typeName);
       if (/_/.test(typeName))
@@ -420,9 +502,9 @@ function finally_it_has_loaded_its_stuff() {
       }
 
       // Hide unused stuff
-      $("#selectblockableurl input:radio:not(:checked)").
+      $("#selectblockableurl input[type='radio']:not(:checked)").
           nextUntil('input').remove();
-      $("#selectblockableurl input:radio:not(:checked)").remove();
+      $("#selectblockableurl input[type='radio']:not(:checked)").remove();
       $("#confirmUrl").next().remove();
       $("#confirmUrl").remove();
       $("#selectblockableurl *:not(br):not(b)").prop("disabled", true);
@@ -432,11 +514,13 @@ function finally_it_has_loaded_its_stuff() {
       var isThirdParty = chosenResource.isThirdParty;
       if (!isThirdParty) {
         $("#thirdparty + * + *, #thirdparty + *, #thirdparty").remove();
-      } else
+      } else {
         // Use .find().text() so data from query string isn't injected as HTML
         $("#thirdparty + label").
           html(translate("thirdpartycheckbox", "<i></i>")).
-          find("i").text(getThirdPartyDomain(chosenResource.domain));
+          find("i").
+          text(parseUri.secondLevelDomainOnly(chosenResource.resourceDomain, true));
+      }
 
       $("#domainlist").
         val(chosenResource.domain.replace(/^www\./, '')).
@@ -449,10 +533,9 @@ function finally_it_has_loaded_its_stuff() {
           $(this).trigger("keyup");
         }).
         keyup(function() {
-          if (isValidDomainList($(this).val().trim().
-              replace(/[a-z](\ |\,\ ?|\;\ ?)\~?[a-z0-9]/gi,'a|a'))){
+          if (isValidDomainList($(this).val().trim().replace(/(\s|\,|\;)+/g, '|'))){
             $("#domainis").
-              val('domain=' + $(this).val().trim().replace(/(\ |\,|\;)+/g,'|'));
+              val('domain=' + $(this).val().trim().replace(/(\s|\,|\;)+/g, '|'));
             $("#domainlist").css('color', 'black');
           } else {
             $("#domainis").val('');
@@ -485,11 +568,11 @@ function finally_it_has_loaded_its_stuff() {
                                     chosenResource.type, chosenResource.domain))
           return;
         BGcall('add_custom_filter', generated_filter, function(ex) {
-          if (!ex)
+          if (!ex) {
             alert(translate("filterhasbeenadded"));
-          else
+            window.close();
+          } else
             alert(translate("blacklistereditinvalid1", ex));
-          window.close();
         });
       });
     });
@@ -505,12 +588,6 @@ $(function() {
     //  ?url=(page url)&itemType=(someElementType)&itemUrl=(item url)
     //  ?tabId=(tab ID)
     var qps = parseUri.parseSearch(window.location.search);
-    function validateUrl(url) {
-      if (!/^https?:\/\//.test(url)) {
-        window.close();
-        return;
-      }
-    }
     function validateItemType(itemType) {
       if (!ElementTypes[itemType]) {
         window.close();
@@ -542,13 +619,18 @@ $(function() {
   var opts = {
     domain: parseUri(url || "x://y/").hostname
   };
-  BGcall('resourceblock_get_filter_text', function(filtertexts) {
+  BGcall('storage_get', 'filter_lists', function(filter_lists) {
 
-    local_filterset = new BlockingFilterSet(
-        FilterSet.fromTexts(filtertexts.blocking),
-        FilterSet.fromTexts(filtertexts.whitelist));
+    for (var id in filter_lists) {
+      if (filter_lists[id].subscribed) {
+        createResourceblockFilterset(id, filter_lists[id].text.split('\n'));
+      }
+    }
 
     BGcall('get_content_script_data', opts, function(data) {
+      createResourceblockFilterset("build_in_filters",
+            MyFilters.prototype.getExtensionFilters(data.settings));
+
       debug_enabled = data.settings.debug_logging;
       if (data.adblock_is_paused) {
         alert(translate("adblock_is_paused"));
@@ -605,15 +687,14 @@ $(function() {
 
       function continue_after_another_async_call() {
         BGcall('get_custom_filters_text', function(filters) {
-          if (!SAFARI) {
-            filters = filters.split('\n');
-            for (var i=0; i<filters.length; i++)
-              try {
-                var normalized = FilterNormalizer.normalizeLine(filters[i]);
-                if (normalized !== "")
-                  custom_filters[normalized] = filters[i];
-              } catch(ex) {} //Broken filter
-          }
+          filters = filters.split('\n');
+          for (var i=0; i<filters.length; i++)
+            try {
+              var normalized = FilterNormalizer.normalizeLine(filters[i]);
+              if (normalized !== "")
+                custom_filters[normalized] = filters[i];
+            } catch(ex) {} //Broken filter
+          createResourceblockFilterset("user_custom_filters", Object.keys(custom_filters));
           finally_it_has_loaded_its_stuff();
           // If opened by the context menu, this variable exists
           if (qps.itemUrl) {

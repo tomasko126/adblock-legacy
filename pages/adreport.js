@@ -37,7 +37,7 @@ BGcall("get_settings", function(settings) {
 
 //generate the URL to the issue tracker
 function generateReportURL() {
-  var result = "http://code.google.com/p/adblockforchrome/issues/entry" +
+  var result = "https://code.google.com/p/adblockforchrome/issues/entry" +
                "?template=Ad%20report%20from%20user&summary=";
 
   var domain = "<enter URL of webpage here>";
@@ -127,7 +127,7 @@ $("#step_language_lang").change(function() {
   $("#step_language").html("<span class='answer'>"+ selected.text() +"</span>");
   if (selected.text() == translate("other")) {
     $("#whattodo").html(translate("nodefaultfilter1",
-                                  ["<a href='http://adblockplus.org/en/subscriptions'>", "</a>"]));
+                                  ["<a href='https://adblockplus.org/en/subscriptions'>", "</a>"]));
     return;
   } else {
     var required_lists = selected.attr('value').split(';');
@@ -221,45 +221,44 @@ $("#step_flash_no").click(function() {
 
 //check for updates
 var AdBlockVersion;
-try {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", chrome.extension.getURL('manifest.json'), false);
-  xhr.onreadystatechange = function() {
-    if(this.readyState == 4) {
-      //get the current version
-      AdBlockVersion = JSON.parse(this.responseText).version;
-      //check for newer versions
-      var checkURL = "http://clients2.google.com/service/update2/crx?" +
+$.ajax({
+  url: chrome.extension.getURL('manifest.json'),
+  dataType: "json",
+  success: function(json) {
+    AdBlockVersion = json.version;
+    var checkURL = (SAFARI ? "https://safariadblock.com/update.plist" :
+          "https://clients2.google.com/service/update2/crx?" +
           "x=id%3Dgighmmpiobklfepjocnamgkkbiglidom%26v%3D" +
-          AdBlockVersion + "%26uc";
-      if (SAFARI)
-        checkURL = "http://safariadblock.com/update.plist";
-      //fetch the version check file
-      $.ajax({
-        cache: false,
-        datatype: (SAFARI ? "text" : "xml"),
-        url: checkURL,
-        success: function(response) {
-          var updateURL;
-          if (!SAFARI) {
-            updateURL = $("updatecheck[status='ok'][codebase]", response).attr('codebase');
-          } else {
-            var version = response.match(/\<string\>(\d+\.\d+\.\d+)\<\/string\>/)[1];
-            if (isNewerVersion(version)) {
-              updateURL = response.match(/http\:\/\/.*\.safariextz/)[0];
-            }
+          AdBlockVersion + "%26uc");
+
+    //fetch the version check file
+    $.ajax({
+      cache: false,
+      dataType: "xml",
+      url: checkURL,
+      success: function(response) {
+        if (!SAFARI) {
+          if ($("updatecheck[status='ok'][codebase]", response).length) {
+            $("#whattodo").html(translate("adblock_outdated_chrome")).
+              find("a").click(function() {
+                chrome.tabs.create({url: 'chrome://chrome/extensions/'});
+              });
+            $("div[id^='step'][id$='DIV']").css('display', 'none');
           }
-          //new version available
-          if (updateURL) {
+        } else {
+          var version = $("key:contains(CFBundleShortVersionString) + string",
+                        response).text();
+          if (isNewerVersion(version)) {
+            var updateURL = $("key:contains(URL) + string", response).text();
             $("#whattodo").html(translate("updatefromoldversion", ["<a href='" + updateURL + "'>", "</a>"]));
             $("div[id^='step'][id$='DIV']").css('display', 'none');
           }
         }
-      });
-    }
-  };
-  xhr.send();
-} catch (ex) {}
+      }
+    });
+  }
+});
+
 // Check if newVersion is newer than AdBlockVersion
 function isNewerVersion(newVersion) {
   var versionRegex = /^(\d+)\.(\d+)\.(\d+)$/;

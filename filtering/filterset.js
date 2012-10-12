@@ -69,7 +69,7 @@ FilterSet.prototype = {
   // Get a list of all Filter objects that should be tested on the given
   // domain, and return it with the given map function applied. This function
   // is for hiding rules only
-  filtersFor: function(domain, isWhitelistSelector) {
+  filtersFor: function(domain, skipWhitelistCheck) {
     var limited = this._viewFor(domain);
     var data = {};
     // data = set(limited.items)
@@ -87,7 +87,7 @@ FilterSet.prototype = {
       }
     }
     var selectorsToExclude = {};
-    if (!isWhitelistSelector) {
+    if (!skipWhitelistCheck) {
       // selectorsToExclude = set(relevant elemhide exception selectors)
       var excludedFilters = _myfilters.hidingWhitelist.filtersFor(domain, true);
       for (k=0; k<excludedFilters.length; k++) {
@@ -141,10 +141,13 @@ BlockingFilterSet = function(patternFilterSet, whitelistFilterSet) {
   this._matchCache = {};
 }
 
-// Strip third+ level domain names from the domain and return the result.
-BlockingFilterSet._secondLevelDomainOnly = function(domain) {
-  var match = domain.match(/[^.]+\.(co\.)?[^.]+$/) || [ domain ];
-  return match[0].toLowerCase();
+// Checks if the two domains have the same origin
+// Inputs: the two domains
+// Returns: true if third-party, false otherwise
+BlockingFilterSet.checkThirdParty = function(domain1, domain2) {
+  var match1 = parseUri.secondLevelDomainOnly(domain1, false);
+  var match2 = parseUri.secondLevelDomainOnly(domain2, false);
+  return (match1 !== match2);
 }
 
 BlockingFilterSet.prototype = {
@@ -162,9 +165,7 @@ BlockingFilterSet.prototype = {
   //       true if the resource should be blocked, false otherwise
   matches: function(url, elementType, frameDomain, returnFilter) {
     var urlDomain = parseUri(url).hostname;
-    var urlOrigin = BlockingFilterSet._secondLevelDomainOnly(urlDomain);
-    var docOrigin = BlockingFilterSet._secondLevelDomainOnly(frameDomain);
-    var isThirdParty = (urlOrigin != docOrigin);
+    var isThirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
 
     // matchCache approach taken from ABP
     var key = url + " " + elementType + " " + isThirdParty;

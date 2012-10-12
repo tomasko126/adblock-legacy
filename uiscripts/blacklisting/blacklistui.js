@@ -133,12 +133,12 @@ BlacklistUi.prototype.show = function() {
 BlacklistUi.prototype._build_page1 = function() {
   var that = this;
 
-  var link_to_block = $("<a>", {
-    id: "block_by_url_link",
-    href: "#",
-    tabIndex: -1,
-    text: translate("block_by_url_instead"),
-    click: function(e) {
+  var link_to_block = $("<a>").
+    attr("id", "block_by_url_link").
+    attr("href", "#").
+    attr("tabIndex", "-1").
+    text(translate("block_by_url_instead")).
+    click(function(e) {
       var el = that._chain.current();
       var elType = typeForElement(el[0]);
       var type = ElementTypes.NONE;
@@ -158,8 +158,7 @@ BlacklistUi.prototype._build_page1 = function() {
       e.preventDefault();
       that._ui_page1.dialog('close');
       return false;
-    }
-  });
+    });
 
   var page = $("<div>").
     append(translate("sliderexplanation")).
@@ -326,7 +325,7 @@ BlacklistUi.prototype._makeFilter = function() {
   var el = this._chain.current();
   var detailsDiv = $("#adblock-details", this._ui_page2);
 
-  if ($("input:checkbox#cknodeName", detailsDiv).is(':checked')) {
+  if ($("input[type='checkbox']#cknodeName", detailsDiv).is(':checked')) {
     result.push(el.prop('nodeName'));
     // Some iframed ads are in a bland iframe.  If so, at least try to
     // be more specific by walking the chain from the body to the iframe
@@ -341,14 +340,14 @@ BlacklistUi.prototype._makeFilter = function() {
   }
   var attrs = ['id', 'class', 'name', 'src', 'href', 'data'];
   for (var i in attrs) {
-    if ($("input:checkbox#ck" + attrs[i], detailsDiv).is(':checked'))
+    if ($("input[type='checkbox']#ck" + attrs[i], detailsDiv).is(':checked'))
       result.push('[' + attrs[i] + '=' + JSON.stringify(el.attr(attrs[i])) + ']');
   }
 
   var warningMessage;
   if (result.length == 0)
     warningMessage = translate("blacklisterwarningnofilter");
-  else if (result.length == 1 && $("input:checkbox#cknodeName", detailsDiv).is(':checked'))
+  else if (result.length == 1 && $("input[type='checkbox']#cknodeName", detailsDiv).is(':checked'))
     warningMessage = translate("blacklisterblocksalloftype", [result[0]]);
   $("#filter_warning", this._ui_page2).
     css("display", (warningMessage ? "block" : "none")).

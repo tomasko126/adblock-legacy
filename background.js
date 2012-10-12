@@ -6,7 +6,7 @@
              ":" + (e.lineno||"anywhere");
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
-  })
+  });
   
   // OPTIONAL SETTINGS
 
@@ -80,7 +80,7 @@
   // Implement blocking via the Chrome webRequest API.
   if (!SAFARI) {
     // Stores url, whitelisting, and blocking info for a tabid+frameid
-    // TODO: can we avoid making this a global once 'old' style dies?
+    // TODO: can we avoid making this a global?
     frameData = {
       // Returns the data object for the frame with ID frameId on the tab with
       // ID tabId. If frameId is not specified, it'll return the data for all
@@ -203,7 +203,8 @@
       log("[DEBUG]", "Block result", blocked, details.type, frameDomain, details.url.substring(0, 100));
       if (blocked && elType === ElementTypes.image) {
         // 1x1 px transparant image.
-        return {redirectUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAAnAAAAJwEqCZFPAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="};
+        // Same URL as ABP and Ghostery to prevent conflict warnings (issue 7042)
+        return {redirectUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="};
       }
       if (blocked && elType === ElementTypes.subdocument) {
         return { redirectUrl: "about:blank" };
@@ -247,7 +248,11 @@
       var text = custom_filters[i];
       if (!Filter.isWhitelistFilter(text))
         continue;
-      var filter = PatternFilter.fromText(text);
+      try {
+        var filter = PatternFilter.fromText(text);
+      } catch (ex) { 
+        continue; 
+      }
       if (!filter.matches(url, ElementTypes.document, false))
         continue;
 
@@ -296,6 +301,24 @@
     set_custom_filters_text(text.trim());
   }
 
+  // Returns true if there's a recently created custom selector filter.  If
+  // |url| is truthy, the filter must have been created on |url|'s domain.
+  has_last_custom_filter = function(url) {
+    var filter = sessionStorage.getItem('last_custom_filter');
+    if (!filter)
+      return false;
+    if (!url)
+      return true;
+    return filter.split("##")[0] === parseUri(url).hostname;
+  }
+
+  remove_last_custom_filter = function() {
+    if (sessionStorage.getItem('last_custom_filter')) {
+      remove_custom_filter(sessionStorage.getItem('last_custom_filter'));
+      sessionStorage.removeItem('last_custom_filter');
+    }
+  }
+
   get_settings = function() {
     return _settings.get_all();
   }
@@ -313,6 +336,22 @@
         log = function() { };
     }
   }
+
+  // If |when| is specified, show the user a payment request at that time, or
+  // in one minute if |when| is in the past.
+  show_delayed_payment_request_at = function(when) {
+    if (!when) 
+      return;
+    var key = "show_delayed_payment_request_at";
+    storage_set(key, when);
+    var delayMillis = Math.max(when - Date.now(), 60E3);
+    window.setTimeout(function() {
+      if (storage_get(key)) {
+        storage_set(key, undefined);
+        openTab("pages/install/index.html?delayed&u=" + STATS.userId);
+      }
+    }, delayMillis);
+  };
 
   // MYFILTERS PASSTHROUGHS
 
@@ -477,6 +516,14 @@
             {tab: tab}
           );
         });
+
+        if (has_last_custom_filter(info.tab.url)) {
+          addMenu(translate("undo_last_block"), function(tab) {
+            remove_last_custom_filter();
+            chrome.tabs.reload();
+          });
+        }
+
       }
 
       function setBrowserButton(info) {
@@ -512,6 +559,11 @@
     var custom_filters = get_custom_filters_text();
     try {
       if (FilterNormalizer.normalizeLine(filter)) {
+        if (Filter.isSelectorFilter(filter)) {
+          sessionStorage.setItem('last_custom_filter', filter);
+          if (!SAFARI)
+            updateButtonUIAndContextMenus();
+        }
         custom_filters = custom_filters + '\n' + filter;
         set_custom_filters_text(custom_filters);
         return null;
@@ -648,27 +700,6 @@
     return frameData.get(tabId);
   }
 
-  // Get the filter texts for resourceblock
-  resourceblock_get_filter_text = function() {
-    var filterTextsFromFilterSet = function(filterset) {
-      // Safari doesn't store the filter texts, so don't try to find them.
-      if (SAFARI) return [];
-      
-      var c = [];
-      for (var a in filterset.items) {
-        for (var b=0; b<filterset.items[a].length; b++) {
-          c.push(filterset.items[a][b]._text);
-        }
-      }
-      return c;
-    }
-
-    return {
-      blocking: filterTextsFromFilterSet(_myfilters.blocking.pattern),
-      whitelist: filterTextsFromFilterSet(_myfilters.blocking.whitelist)
-    };
-  }
-
   // Return chrome.i18n._getL10nData() for content scripts who cannot
   // call that function (since it loads extension files from disk.)
   // Only defined in Safari.
@@ -764,6 +795,9 @@
     // index.html, so pass it in explicitly.
     openTab("pages/install/index.html?u=" + STATS.userId);
   }
+  else {
+    show_delayed_payment_request_at(storage_get("show_delayed_payment_request_at"));
+  }
 
   if (!SAFARI) {
     // Chrome blocking code.  Near the end so synchronous request handler
@@ -787,11 +821,4 @@
     chrome.tabs.query({url: "https://*/*"}, handleEarlyOpenedTabs);
   }
   
-  // Temp (4-20-12):
-  localStorage.removeItem('saw_prune_note');
-  localStorage.removeItem('pruned_oversubscription');
-  // Temp (5-7-12):
-  localStorage.removeItem('sawChrome16WarningOn');
-  // End temp
-
   log("\n===FINISHED LOADING===\n\n");

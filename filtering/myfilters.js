@@ -112,6 +112,21 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
   chrome.extension.sendRequest({command: "filters_updated"});
 }
 
+// get filters that are defined in the extension
+MyFilters.prototype.getExtensionFilters = function(settings) {
+  //Exclude google search results ads if the user has checked that option
+  var texts = [];
+  if (settings.show_google_search_text_ads) {
+    // Standard search
+    texts.push("@@||google.*/search?$elemhide");
+    // Google Instant: go to google.com, type 'hotel' and don't press Enter
+    texts.push("@@||www.google.*/|$elemhide");
+    // Google Instant: open a Chrome tab, type 'hotel' and don't press Enter
+    texts.push("@@||google.*/webhp?*sourceid=*instant&$elemhide");
+  }
+  return texts;
+};
+
 // Rebuild filters based on the current settings and subscriptions.
 MyFilters.prototype.rebuild = function() {
   var texts = [];
@@ -124,15 +139,7 @@ MyFilters.prototype.rebuild = function() {
   if (customfilters)
     texts.push(FilterNormalizer.normalizeList(customfilters));
 
-  //Exclude google search results ads if the user has checked that option
-  if (get_settings().show_google_search_text_ads) {
-    // Standard search
-    texts.push("@@||google.*/search?$elemhide");
-    // Google Instant: go to google.com, type 'hotel' and don't press Enter
-    texts.push("@@||www.google.*/|$elemhide");
-    // Google Instant: open a Chrome tab, type 'hotel' and don't press Enter
-    texts.push("@@||google.*/webhp?*sourceid=*instant&$elemhide");
-  }
+  texts = texts.concat(this.getExtensionFilters(get_settings()));
 
   texts = texts.join('\n').split('\n');
 
@@ -163,6 +170,13 @@ MyFilters.prototype.rebuild = function() {
     FilterSet.fromTexts(patternText), FilterSet.fromTexts(whitelistText)
   );
   handlerBehaviorChanged(); // defined in background
+  
+  // After 90 seconds, delete the cache. That way the cache is available when
+  // rebuilding multiple times in a row (when multiple lists have to update at
+  // the same time), but we save memory during all other times.
+  window.setTimeout(function() {
+    Filter._cache = {};
+  }, 90000);
 }
 
 // Change a property of a subscription or check if it has to be updated
@@ -386,7 +400,7 @@ MyFilters.prototype._load_default_subscriptions = function() {
       case 'ja': return 'japanese';
       case 'ko': return 'easylist_plun_korean';
       case 'nl': return 'dutch';
-      case 'pl': return 'easylist_plus_polish';//sorry for the other Polish list
+      case 'pl': return 'easylist_plus_polish';
       case 'ro': return 'easylist_plus_romanian';
       case 'ru': return 'russian';
       case 'uk': return 'russian';
@@ -413,7 +427,7 @@ MyFilters.prototype._make_subscription_options = function() {
   // When modifying a list, IDs mustn't change!
   return {
     "adblock_custom": { // AdBlock custom filters
-      url: "http://chromeadblock.com/filters/adblock_custom.txt",
+      url: "https://chromeadblock.com/filters/adblock_custom.txt",
     },
     "easylist": { // EasyList
       url: "http://adblockplus.mozdev.org/easylist/easylist.txt"
@@ -455,7 +469,7 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "chinese": { // Additional Chinese filters
-      url: "http://adblock-chinalist.googlecode.com/svn/trunk/adblock.txt",
+      url: "https://adblock-chinalist.googlecode.com/svn/trunk/adblock.txt",
       requiresList: "easylist",
     },
     "czech": { // Czech filters
@@ -478,9 +492,6 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "easylist_plun_korean": {  // Korean filters
       url: "https://secure.fanboy.co.nz/fanboy-korean.txt",
-    },
-    "polish": { // Polish filters
-      url: "http://www.niecko.pl/adblock/adblock.txt",
     },
     "easylist_plus_spanish": {  // Spanish filters
       url: "http://abp.mozilla-hispano.org/nauscopio/filtros.txt",

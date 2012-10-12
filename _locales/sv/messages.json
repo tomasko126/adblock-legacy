@@ -15,6 +15,10 @@
     "message": "AdBlock är pausad. Därför visas inga resurser, så den här sidan kan inte användas. Starta AdBlock och försök igen.",
     "description": "resourceblocking page string"
   },
+  "adblock_outdated_chrome": {
+    "message": "Du använder en gammal version av AdBlock. Gå till <a href='#'>the extensions page</a>, bocka i 'Programerarläge' och klicka på 'Uppdatera tillägg nu'",
+    "description": "Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome://chrome/extensions/'"
+  },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock avaktiveras på alla sidor som matchar:",
     "description": "Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
@@ -269,8 +273,8 @@
       }
     }
   },
-  "chromebutton_how_to_hide": {
-    "message": "För att dölja knappen, högerklicka på den och välj 'Dölj knapp'.  Du kan återställa under Verktygsknappen | Verktyg | Tillägg.",
+  "chromebutton_how_to_hide2": {
+    "message": "Du kan dölja knappen genom att högerklicka på den och välja 'Dölj knapp'. Visa den igen under chrome://chrome/extensions.",
     "description": "Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "cleanuplist": {
@@ -325,8 +329,8 @@
     "message": "Visa felsökningsinformation i loggen (vilket gör AdBlock långsammare)",
     "description": "Option on first tab page"
   },
-  "description1": {
-    "message": "Det mest populära Chrome-tillägget, med över 8 miljoner användare!  Blockerar reklamtillägg över hela webben.",
+  "description2": {
+    "message": "Det mest populära Chrome-tillägget, med över 10 miljoner användare!  Blockerar reklamtillägg över hela webben.",
     "description": "Extension description in manifest"
   },
   "did_you_know_this_is_my_full_time_job": {
@@ -477,9 +481,15 @@
     "message": "Filterlistorna blockerar de flesta reklamtillägg på webben.  Du kan också:",
     "description": "Header text on the Customize tab.  'Filter lists' should be the same text as the tabfilterlists message."
   },
-  "filterpolish": {
-    "message": "Polska filter",
-    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
+  "filterorigin": {
+    "message": "Filterlista:\n$list$",
+    "description": "Tooltip of matching filter in resources list, telling which filter list contains the filter",
+    "placeholders": {
+      "list": {
+        "content": "$1",
+        "example": "A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
   },
   "filterrussian": {
     "message": "- Rysk och Ukrainsk tilläggslista",
@@ -776,12 +786,12 @@
     "description": "resourceblocking page string"
   },
   "opera_120_install": {
-    "message": "Vissa reklamtillägg kanske inte blockeras i Opera-versioner före v12.50, eftersom det inte är möjligt att tolka alla regler i dessa versioner. Detta kommer att justeras med uppdatering till Opera v12.50. Efter det kommer alla reklamtillägg att blockeras korrekt.",
-    "description": "Opera < 12.50 warning during installation"
+    "message": "Vissa reklamtillägg kanske inte blockeras i Opera-versioner före v12.10, eftersom det inte är möjligt att tolka alla regler i dessa versioner. Detta kommer att justeras med uppdatering till Opera v12.10. Efter det kommer alla reklamtillägg att blockeras korrekt.",
+    "description": "Opera < 12.10 warning during installation"
   },
   "opera_120_options": {
-    "message": "I Opera-versioner före v12.50 är vissa alternativ inaktiverade, eftersom de inte stöds i dessa versioner.",
-    "description": "Opera < 12.50 warning above options page"
+    "message": "I Opera-versioner före v12.10 är vissa alternativ inaktiverade, eftersom de inte stöds i dessa versioner.",
+    "description": "Opera < 12.10 warning above options page"
   },
   "opera_can_also_change_setting": {
     "message": "Du kan också utöka värdet för \n$setting$",
@@ -807,7 +817,7 @@
     "placeholders": {
       "browserversion": {
         "content": "$1",
-        "example": "Opera 12.50"
+        "example": "Opera 12.10"
       }
     }
   },
@@ -833,7 +843,7 @@
   },
   "options": {
     "message": "Alternativ",
-    "description": "The text of the link on chrome://extensions that gets you to the Options page for an extension"
+    "description": "The text of the link on chrome://chrome/extensions that gets you to the Options page for an extension"
   },
   "optionschangelog": {
     "message": "Changelog",
@@ -1181,6 +1191,10 @@
     "message": "xmlhttprequest",
     "description": "A resource type"
   },
+  "undo_last_block": {
+    "message": "Ångra senaste blockeringen",
+    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "unpause": {
     "message": "Aktivera",
     "description": "Link text to unpause AdBlock, displayed immediately after 'status_paused'."
@@ -1247,7 +1261,7 @@
   },
   "updatefromoldversion": {
     "message": "Du använder en gammal version av AdBlock. Uppdatera först $updatelink$ till senaste versionen av AdBlock",
-    "description": "ad report page instruction",
+    "description": "Ad report page instructions to update AdBlock in Safari",
     "placeholders": {
       "updatelink": {
         "content": "$1update$2",

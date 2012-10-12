@@ -15,6 +15,10 @@
     "message": "AdBlock está em pausa. Portanto, não há recursos a serem capturadas, por isso esta página não pode ser usada. Retome o AdBlock primeiro e tente novamente.",
     "description": "resourceblocking page string"
   },
+  "adblock_outdated_chrome": {
+    "message": "Está a usar uma versão antiga do AdBlock. Por favor vá à <a href='#'>página das extensões</a>, active o 'Modo de programador' e clique 'Atualizar extensões agora'",
+    "description": "Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome://chrome/extensions/'"
+  },
   "adblock_wont_run_on_pages_matching": {
     "message": "AdBlock não corre nas seguintes páginas:",
     "description": "Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com/reader/*'.  The URL will appear on the next line."
@@ -269,8 +273,8 @@
       }
     }
   },
-  "chromebutton_how_to_hide": {
-    "message": "Para esconder o botão, clica com o botão direito do rato sobre o ícone da AdBlock e escolhe ocultar botão. Pode visualizá-lo novamente a partir de Chave Inglesa | Ferramentas | Extensões.",
+  "chromebutton_how_to_hide2": {
+    "message": "Para ocultar o botão, faça clique direito sobre ele e seleccione Ocultar botão. Pode visualizá-lo novamente em chrome://chrome/extensions.",
     "description": "Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "cleanuplist": {
@@ -325,8 +329,8 @@
     "message": "Mostar as operações na Consola de Logs (torna o AdBlock lento)",
     "description": "Option on first tab page"
   },
-  "description1": {
-    "message": "A extensão mais popular para o Chrome, com mais de 8 milhões de utilizadores! Bloqueia anúncios por todo o lado na Web.",
+  "description2": {
+    "message": "A extensão mais popular para o Chrome, com mais de 10 milhões de utilizadores! Bloqueia anúncios por todo o lado na Web.",
     "description": "Extension description in manifest"
   },
   "did_you_know_this_is_my_full_time_job": {
@@ -477,9 +481,15 @@
     "message": "A lista de filtros bloqueia maior parte dos anúncios. Também pode:",
     "description": "Header text on the Customize tab.  'Filter lists' should be the same text as the tabfilterlists message."
   },
-  "filterpolish": {
-    "message": "Filtros Polacos",
-    "description": "A filter list. If it's the filter list for your language, please add '(recommended)'"
+  "filterorigin": {
+    "message": "Origem do filtro:\n$list$",
+    "description": "Tooltip of matching filter in resources list, telling which filter list contains the filter",
+    "placeholders": {
+      "list": {
+        "content": "$1",
+        "example": "A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
   },
   "filterrussian": {
     "message": "- filtros Russos e Ucranianos adicionais",
@@ -554,10 +564,6 @@
   "how_to_use_adblock": {
     "message": "Como usar o AdBlock:",
     "description": "Install page section title"
-  },
-  "i_came_here_looking_for_catblock": {
-    "message": "Eu vim aqui à procura de <b>CatBlock</b>!  Substitui anunúncios por imagens de gatos!",
-    "description": "Install page checkbox letting the user indicate that they installed AdBlock because they heard about CatBlock, and they want to enable it."
   },
   "i_like_googles_text_ads_dont_block_those": {
     "message": "Eu gosto dos anúncios de texto da Google; não bloquear esses.",
@@ -776,12 +782,12 @@
     "description": "resourceblocking page string"
   },
   "opera_120_install": {
-    "message": "Nas versões anteriores à do Opera 12.50, alguns anúncios não podem ser bloqueados pois não é possível analisar todas as regras nessas versões. Isto vai ser corrigido quando o Opera actualizar para a versão 12.50. A partir desse momento, todos os anúncios vão ser correctamente bloqueados.",
-    "description": "Opera < 12.50 warning during installation"
+    "message": "Nas versões anteriores à do Opera 12.10, alguns anúncios não podem ser bloqueados pois não é possível analisar todas as regras nessas versões. Isto vai ser corrigido quando o Opera actualizar para a versão 12.10. A partir desse momento, todos os anúncios vão ser correctamente bloqueados.",
+    "description": "Opera < 12.10 warning during installation"
   },
   "opera_120_options": {
-    "message": "Versões anteriores à do Opera 12.50, algumas opções estão bloqueadas, porque não são suportadas nessas versões.",
-    "description": "Opera < 12.50 warning above options page"
+    "message": "Versões anteriores à do Opera 12.10, algumas opções estão bloqueadas, porque não são suportadas nessas versões.",
+    "description": "Opera < 12.10 warning above options page"
   },
   "opera_can_also_change_setting": {
     "message": "Também pode aumentar o valor da\n$setting$",
@@ -807,7 +813,7 @@
     "placeholders": {
       "browserversion": {
         "content": "$1",
-        "example": "Opera 12.50"
+        "example": "Opera 12.10"
       }
     }
   },
@@ -833,7 +839,7 @@
   },
   "options": {
     "message": "Opções",
-    "description": "The text of the link on chrome://extensions that gets you to the Options page for an extension"
+    "description": "The text of the link on chrome://chrome/extensions that gets you to the Options page for an extension"
   },
   "optionschangelog": {
     "message": "lista de alterações",
@@ -1181,6 +1187,10 @@
     "message": "xmlhttprequest",
     "description": "A resource type"
   },
+  "undo_last_block": {
+    "message": "Anular último bloqueio",
+    "description": "Menu entry to let the user cancel the result of running the blacklist wizard."
+  },
   "unpause": {
     "message": "continuar",
     "description": "Link text to unpause AdBlock, displayed immediately after 'status_paused'."
@@ -1247,7 +1257,7 @@
   },
   "updatefromoldversion": {
     "message": "Está a utilizar uma versão antiga do AdBlock. Visite $updatelink$ para actualizar para a versão mais recente da AdBlock",
-    "description": "ad report page instruction",
+    "description": "Ad report page instructions to update AdBlock in Safari",
     "placeholders": {
       "updatelink": {
         "content": "$1actualizar$2",
