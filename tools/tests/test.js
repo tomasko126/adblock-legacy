@@ -328,7 +328,10 @@ if (/Chrome/.test(navigator.userAgent)) {
       setup: function() {
         stop();
         dwr.onRequest.removeRules(null, function() {
-          start();
+          dwr.onRequest.getRules(null, function(rules) {
+            equal(rules.length, 0, "No rules at test start");
+            start();
+          });
         });
       },
       teardown: function() {
@@ -339,52 +342,11 @@ if (/Chrome/.test(navigator.userAgent)) {
       }
     });
 
-    /*
-    asyncTest("cache doesn't bypass DWR", function() {
-      $("<img>").
-        attr("src", "https://chromeadblock.com/test/adblock_unittests/img.png").
-        error(function() {
-          ok(false, "Failed to load first image");
-          start();
-        }).
-        load(function() {
-          ok(true, "First image loaded");
-          dwr.onRequest.addRules(
-            [{
-              conditions: [new dwr.RequestMatcher({url: { urlSuffix: "img.png" } })],
-              actions: [new dwr.CancelRequest()],
-            }],
-            function() {
-              $("<img>").
-                attr("src", "https://chromeadblock.com/test/adblock_unittests/img.png").
-                error(function() {
-                  ok(true, "Second image blocked");
-                  start();
-                }).
-                load(function() {
-                  ok(false, "Second image loaded");
-                  start();
-                }).
-                appendTo("#qunit-fixture");
-            }
-          );
-        }).
-        appendTo("#qunit-fixture");
-    });
-    */
-
-    asyncTest("No rules at first", function() {
-      dwr.onRequest.getRules(null, function(rules) {
-        equal(rules.length, 0, "No rules");
-        start();
-      });
-    });
-
     function endToEndTest(title, filterText, nodeName, src, expectedBlock) {
       src = "https://chromeadblock.com/test/adblock_unittests/" + src;
-      // If randomizeSource is false, the "Single image filter" tests toggle
-      // between failure and success.
-      var randomizeSource = false;
+      // Randomization required, because addRules does not clear the page-level
+      // cache, so once a resource is loaded, it can't be blocked.
+      var randomizeSource = true;
       if (randomizeSource)
         src += "?" + Math.random();
       asyncTest(title, function() {
@@ -409,16 +371,9 @@ if (/Chrome/.test(navigator.userAgent)) {
     // The CSP entry you need in manifest.json is:
     // "content_security_policy": "default-src https://chromeadblock.com 'self'; script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://chromeadblock.com",
 
-    // Load img2.png, to prepare to trip up the next test
-    endToEndTest("img2 loaded without question (prep for next tests)", "dummy", "img", "img2.png", false);
-    // Loading img2.png in previous test causes the next tests to toggle b/w
-    // fail and success, unlesss randomizeSource = true above (so that we never
-    // load the image twice.) Sounds like a caching issue, but Chrome team
-    // says DWR.addRules clears the cache under the covers.
-    endToEndTest("Single image filter ", "img2$image", "img", 'img2.png', true);
-    endToEndTest("Single image filter ", "img2$image", "img", 'img2.png', true);
-
-    endToEndTest("Single image filter then destroyed", "dummy_filter", "img", "img.png", false);
+    endToEndTest("Single image filter", "img.png", "img", 'img.png', true);
+    endToEndTest("Complex image filter", "img$image,third-party,domain=~yahoo.com|~msn.com", "img", "img.png", true);
+    endToEndTest("Complex image filter #2", "img$~third-party,domain=yahoo.com", "img", "img.png", false);
 
     test("_getPriority", function() {
       function check(filterText, expected) {
