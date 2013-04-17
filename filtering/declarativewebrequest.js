@@ -81,7 +81,6 @@ DeclarativeWebRequest.prototype = {
     rules.push(
       {
         priority: priority + 1,
-        tags: [ tagId ],
         conditions: this._getConditions(filter, domains.excluded),
         actions: [ new dwr.IgnoreRules({ hasTag: tagId }) ],
       }

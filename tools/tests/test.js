@@ -381,7 +381,10 @@ if (/Chrome/.test(navigator.userAgent)) {
     });
 
     function endToEndTest(title, filterText, nodeName, src, expectedBlock) {
-      src = "https://chromeadblock.com/test/adblock_unittests/" + src + "?" + Math.random();
+      src = "https://chromeadblock.com/test/adblock_unittests/" + src;
+      // Without the next line, the "Single image filter" tests toggle between
+      // failure and success.
+      src += "?" + Math.random();
       asyncTest(title, function() {
         var filter = Filter.fromText(filterText);
         var rules = myDWR._getRules(filter, "tag1");
@@ -406,7 +409,8 @@ if (/Chrome/.test(navigator.userAgent)) {
 
     // The next test keeps toggling b/w fail and succeed, as long as the prev. test loads
     // the same URL.  Sounds like a caching issue; I've asked Chrome team whether addRules
-    // will do handlerBehaviorChanged under the covers.
+    // will do handlerBehaviorChanged under the covers; they say that is handled.  Adding
+    // a random queryparam in endToEndTest() makes the test reliably pass but hides the problem.
     endToEndTest("Single image filter ", "img$image", "img", 'img.png', true);
     endToEndTest("Single image filter then destroyed", "dummy_filter", "img", "img.png", false);
 
@@ -448,13 +452,14 @@ if (/Chrome/.test(navigator.userAgent)) {
         deepEqual(rules, expectedRules, "Rule from filter: " + text);
       }
 
-      function condModified(modify) {
+      function condWithDomain(hostSuffix) {
         var template = new dwr.RequestMatcher({
           "resourceType": JSON.parse(JSON.stringify(allResourceTypes)),
           "stages": [ "onBeforeRequest" ],
           "url": { "urlMatches": "a" }
         });
-        modify(template);
+        if (hostSuffix)
+          template.firstPartyForCookiesUrl = { hostSuffix: hostSuffix };
         return template;
       }
 
@@ -462,9 +467,19 @@ if (/Chrome/.test(navigator.userAgent)) {
         var template = {
           "actions": [ new dwr.CancelRequest(), 
                        new dwr.SendMessageToExtension({message: "block"}) ],
-          "conditions": [ condModified(function() {}) ],
+          "conditions": [ condWithDomain(undefined) ],
           "priority": 100,
           "tags": [ "tag1" ]
+        };
+        modify(template);
+        return template;
+      }
+
+      function tagBlockRuleModified(modify) {
+        var template = {
+          "actions": [ new dwr.IgnoreRules({ hasTag: "tag1" }) ],
+          "conditions": [ condWithDomain(undefined) ],
+          "priority": 101,
         };
         modify(template);
         return template;
@@ -481,6 +496,21 @@ if (/Chrome/.test(navigator.userAgent)) {
         t.splice(t.indexOf("image"), 1);
       }) ]);
 
+      wasBuiltRight("a$image,script,object_subrequest", [ ruleModified(function(rule) {
+        rule.conditions[0].resourceType = [ "script", "image", "object" ]; 
+      }) ]);
+
+      wasBuiltRight("a$~image,~script,~object_subrequest", [ ruleModified(function(rule) {
+        var t = rule.conditions[0].resourceType;
+        t.splice(t.indexOf("script"), 1);
+        t.splice(t.indexOf("image"), 1);
+        t.splice(t.indexOf("object"), 1);
+      }) ]);
+
+      wasBuiltRight("a$image,~image", [ ruleModified(function(rule) {
+        rule.conditions[0].resourceType = [];
+      }) ]);
+
       wasBuiltRight("a$third-party", [ ruleModified(function(rule) {
         rule.conditions[0].thirdPartyForCookies = true;
       }) ]);
@@ -490,15 +520,58 @@ if (/Chrome/.test(navigator.userAgent)) {
       }) ]);
 
       wasBuiltRight("a$domain=b.com", [ ruleModified(function(rule) {
-        rule.conditions[0].firstPartyForCookiesUrl = { hostSuffix: "b.com" };
+        rule.conditions[0] = condWithDomain("b.com");
       }) ]);
 
       wasBuiltRight("a$domain=b1.com|b2.com", [ ruleModified(function(rule) {
-        rule.conditions[0].firstPartyForCookiesUrl = { hostSuffix: "b1.com" };
-        rule.conditions.push(condModified(function(cond) {
-          cond.firstPartyForCookiesUrl = { hostSuffix: "b2.com" };
-        }));
+        rule.conditions = [];
+        for (var suffix in { 'b1.com': 1, 'b2.com': 1 }) {
+          rule.conditions.push(condWithDomain(suffix));
+        }
       }) ]);
+
+      wasBuiltRight("a$domain=b1.com|~s.b1.com", [ 
+        ruleModified(function(rule) {
+          rule.conditions[0] = condWithDomain("b1.com");
+        }),
+        tagBlockRuleModified(function(rule) {
+          rule.conditions[0] = condWithDomain("s.b1.com");
+        })
+      ]);
+
+      wasBuiltRight("a$domain=b1.com|~s.b1.com|b2.com|~s.b2.com|b3.com", [ 
+        ruleModified(function(rule) {
+          rule.conditions = [1, 2, 3].map(function(i) {
+            return condWithDomain("b" + i + ".com");
+          });
+        }),
+        tagBlockRuleModified(function(rule) {
+          rule.conditions = [1, 2].map(function(i) { 
+            return condWithDomain("s.b" + i + ".com");
+          });
+        })
+      ]);
+
+      wasBuiltRight("@@a", [ ruleModified(function(rule) {
+        rule.priority = 200;
+        rule.actions = [ new dwr.IgnoreRules( { lowerPriorityThan: 200 } ) ];
+      }) ]);
+
+      wasBuiltRight("@@a$~third-party,script,image,domain=b1.com|~s.b1.com", [
+        ruleModified(function(rule) {
+          rule.conditions[0].thirdPartyForCookies = false;
+          rule.conditions[0].resourceType = [ "script", "image" ];
+          rule.conditions[0].firstPartyForCookiesUrl = { hostSuffix: "b1.com" };
+          rule.priority = 200;
+          rule.actions = [ new dwr.IgnoreRules( { lowerPriorityThan: 200 } ) ];
+        }),
+        tagBlockRuleModified(function(rule) {
+          rule.conditions[0].thirdPartyForCookies = false;
+          rule.conditions[0].resourceType = [ "script", "image" ];
+          rule.conditions[0].firstPartyForCookiesUrl = { hostSuffix: "s.b1.com" };
+          rule.priority = 201;
+        }),
+      ]);
 
       wasBuiltRight("@@a$document", [ ruleModified(function(rule) {
         var c = rule.conditions[0];
@@ -508,6 +581,16 @@ if (/Chrome/.test(navigator.userAgent)) {
         rule.actions = [ new dwr.IgnoreRules( { lowerPriorityThan: 300 } ),
                          new dwr.SendMessageToExtension({message: "document" }) ];
       }) ]);
+
+      wasBuiltRight("@@a$elemhide", [ ruleModified(function(rule) {
+        var c = rule.conditions[0];
+        c.firstPartyForCookiesUrl = c.url;
+        delete c.url;
+        rule.priority = 300;
+        rule.actions = [ new dwr.SendMessageToExtension({message: "elemhide" }) ];
+      }) ]);
+
+      wasBuiltRight("@@a$popup", [ ]);
 
     });
 
