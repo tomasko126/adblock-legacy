@@ -107,7 +107,7 @@ DeclarativeWebRequest.prototype = {
       var condition = {};
       if (resourceType)
         condition.resourceType = resourceType;
-      if (tpfc)
+      if (tpfc !== undefined)
         condition.thirdPartyForCookies = tpfc;
       if (!isPageLevel && domain)
         condition.firstPartyForCookiesUrl = { hostSuffix: domain };
