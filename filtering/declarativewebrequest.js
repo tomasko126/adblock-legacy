@@ -34,8 +34,8 @@ DeclarativeWebRequest = function() {
 
 DeclarativeWebRequest.prototype = {
   // Registers declarative blocking rules for the given list of PatternFilters,
-  // clearing any existing rules.  Calls the optional |callback|.
-  register: function(filters, callback) {
+  // clearing any existing rules.
+  register: function(filters) {
     var rules = [];
 
     var tagId = 1;
@@ -55,9 +55,6 @@ DeclarativeWebRequest.prototype = {
         console.groupEnd();
       });
       */
-
-      if (callback)
-        callback();
     });
 
   },
