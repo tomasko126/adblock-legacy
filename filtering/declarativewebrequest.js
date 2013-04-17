@@ -33,9 +33,9 @@ DeclarativeWebRequest = function() {
 };
 
 DeclarativeWebRequest.prototype = {
-  // Registers declarative blocking rules for the given PatternFilters,
-  // clearing any existing rules.
-  register: function(filters) {
+  // Registers declarative blocking rules for the given list of PatternFilters,
+  // clearing any existing rules.  Calls the optional |callback|.
+  register: function(filters, callback) {
     var rules = [];
 
     var tagId = 1;
@@ -46,16 +46,20 @@ DeclarativeWebRequest.prototype = {
 
     dwr.onRequest.removeRules();
     rules.splice(4000);
-    dwr.onRequest.addRules(rules);
-
-    console.groupCollapsed("Added", rules.length, "rules");
-    console.groupEnd();
-    /*
-    dwr.onRequest.getRules(null, function(rules) {
-      rules.forEach(function(r) { console.log(r); });
+    dwr.onRequest.addRules(rules, function() {
+      console.groupCollapsed("Added", rules.length, "rules");
       console.groupEnd();
+      /*
+      dwr.onRequest.getRules(null, function(rules) {
+        rules.forEach(function(r) { console.log(r); });
+        console.groupEnd();
+      });
+      */
+
+      if (callback)
+        callback();
     });
-    */
+
   },
 
   // Return the rules required to represent this filter in DWR syntax.

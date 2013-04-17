@@ -555,6 +555,11 @@ if (/Chrome/.test(navigator.userAgent)) {
 
     });
 
+    test("iframe dropin", function() {
+      ok(false, "cab.com/test/.../pages/document gives different answer when loaded in a tab vs in a frame.");
+
+      window.open("https://chromeadblock.com/test/adblock_unittests/pages/");
+    });
   })();
   
   // END CHROME ONLY
