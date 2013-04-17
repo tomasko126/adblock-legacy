@@ -382,9 +382,11 @@ if (/Chrome/.test(navigator.userAgent)) {
 
     function endToEndTest(title, filterText, nodeName, src, expectedBlock) {
       src = "https://chromeadblock.com/test/adblock_unittests/" + src;
-      // Without the next line, the "Single image filter" tests toggle between
-      // failure and success.
-      src += "?" + Math.random();
+      // If randomizeSource is false, the "Single image filter" tests toggle
+      // between failure and success.
+      var randomizeSource = false;
+      if (randomizeSource)
+        src += "?" + Math.random();
       asyncTest(title, function() {
         var filter = Filter.fromText(filterText);
         var rules = myDWR._getRules(filter, "tag1");
@@ -407,11 +409,15 @@ if (/Chrome/.test(navigator.userAgent)) {
     // The CSP entry you need in manifest.json is:
     // "content_security_policy": "default-src https://chromeadblock.com 'self'; script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://chromeadblock.com",
 
-    // The next test keeps toggling b/w fail and succeed, as long as the prev. test loads
-    // the same URL.  Sounds like a caching issue; I've asked Chrome team whether addRules
-    // will do handlerBehaviorChanged under the covers; they say that is handled.  Adding
-    // a random queryparam in endToEndTest() makes the test reliably pass but hides the problem.
-    endToEndTest("Single image filter ", "img$image", "img", 'img.png', true);
+    // Load img2.png, to prepare to trip up the next test
+    endToEndTest("img2 loaded without question (prep for next tests)", "dummy", "img", "img2.png", false);
+    // Loading img2.png in previous test causes the next tests to toggle b/w
+    // fail and success, unlesss randomizeSource = true above (so that we never
+    // load the image twice.) Sounds like a caching issue, but Chrome team
+    // says DWR.addRules clears the cache under the covers.
+    endToEndTest("Single image filter ", "img2$image", "img", 'img2.png', true);
+    endToEndTest("Single image filter ", "img2$image", "img", 'img2.png', true);
+
     endToEndTest("Single image filter then destroyed", "dummy_filter", "img", "img.png", false);
 
     test("_getPriority", function() {
