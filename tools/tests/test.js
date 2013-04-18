@@ -351,7 +351,7 @@ if (/Chrome/.test(navigator.userAgent)) {
         src += "?" + Math.random();
       asyncTest(title, function() {
         var filter = Filter.fromText(filterText);
-        var rules = myDWR._getRules(filter, "tag1");
+        var rules = myDWR._getRules(filter);
         dwr.onRequest.addRules(rules, function() {
           var node = $("<" + nodeName + ">", { src: src}).
             error(function() {
@@ -395,8 +395,8 @@ if (/Chrome/.test(navigator.userAgent)) {
       function without(list, item) { return list.filter(function(i) { return i !== item; }); }
 
       check("a", allResourceTypes);
-      check("@@a$document", allResourceTypes);
-      check("@@a$elemhide", allResourceTypes);
+      check("@@a$document", ["main_frame"]);
+      check("@@a$elemhide", ["main_frame"]);
       check("a$image", ["image"]);
       check("a$image,script", ["image", "script"]);
       check("a$image,background,script,media", ["image", "script", "other"]);
@@ -406,10 +406,25 @@ if (/Chrome/.test(navigator.userAgent)) {
       check("a$~image,~subdocument", without(without(allResourceTypes, "image"), "sub_frame"));
     });
 
+    test("tags", function() {
+      myDWR._nextTagNumber = 1;
+      var rules = myDWR._getRules(Filter.fromText("a"));
+      ok(rules[0].tags === undefined, "No tags on normal rules");
+      rules = myDWR._getRules(Filter.fromText("a$domain=b.com|c.com"));
+      ok(rules[0].tags === undefined, "No tags on domain=a|b rules");
+      rules = myDWR._getRules(Filter.fromText("a$domain=b.com|~s.b.com"));
+      deepEqual(rules[0].tags, [ "tag1" ], "Tags on domain=a|~s.a rules");
+      rules = myDWR._getRules(Filter.fromText("c$domain=b.com|~s.b.com"));
+      rules = myDWR._getRules(Filter.fromText("d$domain=b.com|~s.b.com"));
+      rules = myDWR._getRules(Filter.fromText("e$domain=b.com|~s.b.com"));
+      deepEqual(rules[0].tags, [ "tag4" ], "Tag numbers increase");
+    });
+
     test("_getRules", function() {
       function wasBuiltRight(text, expectedRules) {
         var filter = Filter.fromText(text);
-        var rules = myDWR._getRules(filter, "tag1");
+        myDWR._nextTagNumber = 1;
+        var rules = myDWR._getRules(filter);
         deepEqual(rules, expectedRules, "Rule from filter: " + text);
       }
 
@@ -430,7 +445,6 @@ if (/Chrome/.test(navigator.userAgent)) {
                        new dwr.SendMessageToExtension({message: "block"}) ],
           "conditions": [ condWithDomain(undefined) ],
           "priority": 100,
-          "tags": [ "tag1" ]
         };
         modify(template);
         return template;
@@ -494,6 +508,7 @@ if (/Chrome/.test(navigator.userAgent)) {
       wasBuiltRight("a$domain=b1.com|~s.b1.com", [ 
         ruleModified(function(rule) {
           rule.conditions[0] = condWithDomain("b1.com");
+          rule.tags = [ "tag1" ];
         }),
         tagBlockRuleModified(function(rule) {
           rule.conditions[0] = condWithDomain("s.b1.com");
@@ -505,6 +520,7 @@ if (/Chrome/.test(navigator.userAgent)) {
           rule.conditions = [1, 2, 3].map(function(i) {
             return condWithDomain("b" + i + ".com");
           });
+          rule.tags = [ "tag1" ];
         }),
         tagBlockRuleModified(function(rule) {
           rule.conditions = [1, 2].map(function(i) { 
@@ -524,6 +540,7 @@ if (/Chrome/.test(navigator.userAgent)) {
           rule.conditions[0].resourceType = [ "script", "image" ];
           rule.conditions[0].firstPartyForCookiesUrl = { hostSuffix: "b1.com" };
           rule.priority = 200;
+          rule.tags = [ "tag1" ];
           rule.actions = [ new dwr.IgnoreRules( { lowerPriorityThan: 200 } ) ];
         }),
         tagBlockRuleModified(function(rule) {
@@ -534,30 +551,39 @@ if (/Chrome/.test(navigator.userAgent)) {
         }),
       ]);
 
-      wasBuiltRight("@@a$document", [ ruleModified(function(rule) {
-        var c = rule.conditions[0];
-        c.firstPartyForCookiesUrl = c.url;
-        delete c.url;
-        rule.priority = 300;
-        rule.actions = [ new dwr.IgnoreRules( { lowerPriorityThan: 300 } ),
-                         new dwr.SendMessageToExtension({message: "document" }) ];
-      }) ]);
+      var documentRules = [
+        ruleModified(function(rule) {
+          rule.conditions[0].resourceType = [ "main_frame" ];
+          rule.priority = 300;
+          rule.actions = [ new dwr.SendMessageToExtension({message: "document" }) ];
+        }),
+        ruleModified(function(rule) {
+          var c = rule.conditions[0];
+          c.firstPartyForCookiesUrl = c.url;
+          delete c.url;
+          rule.priority = 300;
+          rule.actions = [ new dwr.IgnoreRules( { lowerPriorityThan: 300 } ) ];
+        })
+      ];
+      wasBuiltRight("@@a$document", documentRules);
+      wasBuiltRight("@@a$document,domain=b.com|~s.b.com", documentRules);
 
-      wasBuiltRight("@@a$elemhide", [ ruleModified(function(rule) {
-        var c = rule.conditions[0];
-        c.firstPartyForCookiesUrl = c.url;
-        delete c.url;
-        rule.priority = 300;
-        rule.actions = [ new dwr.SendMessageToExtension({message: "elemhide" }) ];
-      }) ]);
+      var elemhideRules = [
+        ruleModified(function(rule) {
+          rule.conditions[0].resourceType = [ "main_frame" ];
+          rule.priority = 300;
+          rule.actions = [ new dwr.SendMessageToExtension({message: "elemhide" }) ];
+        })
+      ];
+      wasBuiltRight("@@a$elemhide", elemhideRules);
+      wasBuiltRight("@@a$elemhide,domain=b.com|~s.b.com", elemhideRules);
 
       wasBuiltRight("@@a$popup", [ ]);
 
     });
 
-    test("iframe dropin", function() {
-      ok(false, "cab.com/test/.../pages/document gives different answer when loaded in a tab vs in a frame.");
-
+    test("<see new tab to manually run this test>", function() {
+      ok(true);
       window.open("https://chromeadblock.com/test/adblock_unittests/pages/");
     });
   })();

@@ -862,7 +862,7 @@
         }
       }
 
-      else if (details.message === "document" || details.mesage === "elemhide") {
+      else if (details.message === "document" || details.message === "elemhide") {
         // TODO main_frame must smte("normal") to delete ex-whitelisted pages
         // TODO don't let this grow unbounded; when it's over N elements,
         // purge closed tabs.

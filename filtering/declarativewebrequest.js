@@ -30,6 +30,7 @@ DeclarativeWebRequest = function() {
     // 'elemhide': special cased
     // 'popup': not supported
   };
+  this._nextTagNumber = 1;
 };
 
 DeclarativeWebRequest.prototype = {
@@ -38,10 +39,9 @@ DeclarativeWebRequest.prototype = {
   register: function(filters) {
     var rules = [];
 
-    var tagId = 1;
     var that = this;
     filters.forEach(function(filter) {
-      rules.push.apply(rules, that._getRules(filter, "tag" + tagId++));
+      rules.push.apply(rules, that._getRules(filter));
     });
 
     dwr.onRequest.removeRules();
@@ -59,9 +59,8 @@ DeclarativeWebRequest.prototype = {
 
   },
 
-  // Return the rules required to represent this filter in DWR syntax.
-  // tagId: the tag ID to assign to each rule for this filter.
-  _getRules: function(filter, tagId) {
+  // Return the rules required to represent this PatternFilter in DWR syntax.
+  _getRules: function(filter) {
     if (!this._isSupported(filter))
       return [];
 
@@ -69,23 +68,32 @@ DeclarativeWebRequest.prototype = {
     var domains = this._getDomains(filter);
 
     var rules = [];
-    rules.push(
-      {
+    rules.push({
+      priority: priority,
+      conditions: this._getConditions(filter, domains.included),
+      actions: this._getActions(filter)
+    });
+
+    // Two special cases:
+    // 1. $document requires a second rule to cancel all lower-level rules.
+    // 2. $domain=~x requires special rules cancelling the normal domain rules.
+
+    if (filter._allowedElementTypes & ElementTypes.document) {
+      rules.push({
         priority: priority,
-        tags: [ tagId ],
-        conditions: this._getConditions(filter, domains.included),
-        actions: this._getActions(filter),
-      }
-    );
-    if (domains.excluded.length === 0)
-      return rules;
-    rules.push(
-      {
+        conditions: this._getDocumentOverrideConditions(filter),
+        actions: [ new dwr.IgnoreRules({ lowerPriorityThan: priority }) ]
+      });
+    }
+    else if (domains.excluded.length > 0) {
+      var tag = "tag" + this._nextTagNumber++;
+      rules[0].tags = [ tag ];
+      rules.push({
         priority: priority + 1,
         conditions: this._getConditions(filter, domains.excluded),
-        actions: [ new dwr.IgnoreRules({ hasTag: tagId }) ],
-      }
-    );
+        actions: [ new dwr.IgnoreRules({ hasTag: tag }) ]
+      });
+    }
     return rules;
   },
 
@@ -94,6 +102,22 @@ DeclarativeWebRequest.prototype = {
     if (filter._allowedElementTypes & ElementTypes.popup)
       return false;
     return true;
+  },
+
+  // Return an array of conditions specifically for cancelling all lower-priority
+  // rules than the rule created for the given $document filter.
+  _getDocumentOverrideConditions: function(filter) {
+    // The normal conditions for a $document filter are
+    // - when a main_frame request is made
+    // - having a url matching the filter expression
+    var result = this._getConditions(filter, [ undefined ])[0];
+    // This override instead matches all page-level request types...
+    var types = ElementTypes.DEFAULTTYPES;
+    result.resourceType = this._getResourceTypesByElementType(types);
+    // ...when the page URL matches the filter expression.
+    result.firstPartyForCookiesUrl = result.url;
+    delete result.url;
+    return [ result ];
   },
 
   // Return an array of conditions matching the given Filter, where each
@@ -111,10 +135,8 @@ DeclarativeWebRequest.prototype = {
         condition.thirdPartyForCookies = tpfc;
       if (!isPageLevel && domain)
         condition.firstPartyForCookiesUrl = { hostSuffix: domain };
-      // Page level filters examine the page URL, not the request URL.
-      var target = isPageLevel ? 'firstPartyForCookiesUrl' : 'url';
       // TODO: use more efficient urlFilter if possible (and if needed)
-      condition[target] = { urlMatches: filter._rule.source };
+      condition.url = { urlMatches: filter._rule.source };
       condition.stages = [ "onBeforeRequest" ];
       return new dwr.RequestMatcher(condition);
 
@@ -130,6 +152,16 @@ DeclarativeWebRequest.prototype = {
       included: [],
       excluded: []
     };
+
+    // DWR strips domain=* from document (and elemhide) rules of the form
+    // @@A$document,domain=B
+    // because it has no way of saying "Match if the URL looks like A and also
+    // looks like B."
+    if (this._isPageLevel(filter)) {
+      result.included.push(undefined);
+      return result;
+    }
+
     var has = filter._domains.has;
     if (has[DomainSet.ALL])
       result.included.push(undefined);
@@ -171,26 +203,28 @@ DeclarativeWebRequest.prototype = {
     if (filter._allowedElementTypes & ElementTypes.elemhide)
       return [ smte("elemhide") ];
 
-    var priority = this._getPriority(filter);
-    var ignore = new dwr.IgnoreRules({ lowerPriorityThan: priority });
-
     // $document
     if (filter._allowedElementTypes & ElementTypes.document)
-      return [ ignore, smte("document") ];
+      return [ smte("document") ];
 
     // whitelist
-    return [ ignore ];
+    var priority = this._getPriority(filter);
+    return [ new dwr.IgnoreRules({ lowerPriorityThan: priority }) ];
   },
 
   // Returns an array of resource types that should be checked by rules for
   // this filter.
   _getResourceTypes: function(filter) {
-    var t = filter._allowedElementTypes;
-    // $document and $elemhide, though applying to the page, need to create
-    // DWR conditions that are matched on every resource request (so that they
-    // can Ignore blacklisting rules that also match the request.)
     if (this._isPageLevel(filter))
-      t = ElementTypes.DEFAULTTYPES;
+      return [ "main_frame" ];
+    else
+      return this._getResourceTypesByElementType(filter._allowedElementTypes);
+  },
+
+  // Returns an array of resource types that should be checked by rules for
+  // filters with the given allowedElementTypes.
+  _getResourceTypesByElementType: function(elementTypes) {
+    var t = elementTypes;
     var map = {};
     for (var name in this._toResourceType) {
       if (t & ElementTypes[name])
