@@ -56,7 +56,9 @@ function MyFilters() {
   }
 
   // Build the filter list
+  this._constructing = true;
   this._onSubscriptionChange(true);
+  this._constructing = false;
 
   // On startup and then every hour, check if a list is out of date and has to
   // be updated
@@ -120,7 +122,7 @@ MyFilters.prototype.getExtensionFilters = function(settings) {
 };
 
 // Rebuild filters based on the current settings and subscriptions.
-MyFilters.prototype.rebuild = function() {
+MyFilters.prototype.rebuild = function(atStartup) {
   var texts = [];
   for (var id in this._subscriptions)
     if (this._subscriptions[id].subscribed)
@@ -181,11 +183,26 @@ MyFilters.prototype.rebuild = function() {
     this.hiding = FilterSet.fromFilters(filters.hiding);
 
   if (chrome.declarativeWebRequest) {
-    var allFilters = [];
-    for (var name in {pattern:1, whitelist:1})
-      for (var id in filters[name])
-        allFilters.push(filters[name][id]);
-    DeclarativeWebRequest.singleton.register(allFilters);
+    // If Chrome has just started, don't re-register filters unless none are
+    // registered (implying it was just installed).
+    // TODO: use chrome.runtime.onInstalled to register these filters.
+    var registerTheRules = function() {
+      var allFilters = [];
+      for (var name in {pattern:1, whitelist:1})
+        for (var id in filters[name])
+          allFilters.push(filters[name][id]);
+      DeclarativeWebRequest.singleton.register(allFilters);
+    }
+    var adBlockJustStarted = this._constructing;
+    if (adBlockJustStarted) {
+      chrome.declarativeWebRequest.onRequest.getRules(null, function(r) {
+        if (r.length === 0)
+          registerTheRules();
+      });
+    }
+    else {
+      registerTheRules();
+    }
   }
   else {
     this.blocking = new BlockingFilterSet(

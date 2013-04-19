@@ -116,7 +116,7 @@
   };
 
   // Implement blocking via the Chrome webRequest API.
-  if (!SAFARI) {
+  if (!SAFARI && !chrome.declarativeWebRequest) {
     // Stores url, whitelisting, and blocking info for a tabid+frameid
     // TODO: can we avoid making this a global?
     frameData = {
@@ -321,6 +321,8 @@
   // No-op for Safari.
   handlerBehaviorChanged = function() {
     if (SAFARI)
+      return;
+    if (chrome.declarativeWebRequest)
       return;
     try {
       chrome.webRequest.handlerBehaviorChanged();
@@ -858,7 +860,7 @@
         if (canPurge) {
           // TODO: don't know frameUrl in DWR, so code runs in every frame :(
           var data = { command: "purge-elements", url:details.url, elType: elType };
-          chrome.tabs.sendRequest(details.tabId, data); 
+          chrome.tabs.sendMessage(details.tabId, data); 
         }
       }
 
