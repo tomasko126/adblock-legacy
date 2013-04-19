@@ -432,7 +432,10 @@ if (/Chrome/.test(navigator.userAgent)) {
         var template = new dwr.RequestMatcher({
           "resourceType": JSON.parse(JSON.stringify(allResourceTypes)),
           "stages": [ "onBeforeRequest" ],
-          "url": { "urlMatches": "a" }
+          "url": { 
+            "schemes": [ "http", "https" ],
+            "urlMatches": "a" 
+          }
         });
         if (hostSuffix)
           template.firstPartyForCookiesUrl = { hostSuffix: hostSuffix };

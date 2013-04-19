@@ -135,8 +135,11 @@ DeclarativeWebRequest.prototype = {
         condition.thirdPartyForCookies = tpfc;
       if (!isPageLevel && domain)
         condition.firstPartyForCookiesUrl = { hostSuffix: domain };
-      // TODO: use more efficient urlFilter if possible (and if needed)
-      condition.url = { urlMatches: filter._rule.source };
+      condition.url = { 
+        schemes: [ "http", "https" ],
+        // TODO: use more efficient urlFilter if possible (and if needed)
+        urlMatches: filter._rule.source 
+      };
       condition.stages = [ "onBeforeRequest" ];
       return new dwr.RequestMatcher(condition);
 

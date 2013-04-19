@@ -857,7 +857,7 @@
       if (details.message === "block") {
         var elType = ElementTypes.fromOnBeforeRequestType(details.type);
         var canPurge = (elType & (ElementTypes.image | ElementTypes.subdocument | ElementTypes.object));
-        if (canPurge) {
+        if (canPurge && details.tabId !== -1) {
           // TODO: don't know frameUrl in DWR, so code runs in every frame :(
           var data = { command: "purge-elements", url:details.url, elType: elType };
           chrome.tabs.sendMessage(details.tabId, data); 
