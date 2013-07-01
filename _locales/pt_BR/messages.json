@@ -176,12 +176,12 @@
     "description": "Title for popup menu section showing number of ads blocked."
   },
   "blocked_n_in_total": {
-    "message": "$count$ desde a instalação",
+    "message": "$count$ no total",
     "description": "Shown below the 'blocked_ads' message.  Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
     "placeholders": {
       "count": {
         "content": "<a>123,456</a>",
-        "example": "The number of ads blocked.  Do not translate."
+        "example": "The number of ads blocked.  Do not make any changes to this string when translating."
       }
     }
   },
@@ -191,7 +191,7 @@
     "placeholders": {
       "count": {
         "content": "<a>123</a>",
-        "example": "The number of ads blocked.  Do not translate."
+        "example": "The number of ads blocked.  Do not make any changes to this string when translating."
       }
     }
   },
@@ -204,7 +204,7 @@
     "description": "Section header on third tab"
   },
   "blockurlwithtext": {
-    "message": "Bloqueie URLs contente este texto",
+    "message": "Bloqueie URLs contendo este texto",
     "description": "Message of the url-blocking area"
   },
   "buttonback": {
@@ -346,7 +346,7 @@
     "description": "Text of a payment request link"
   },
   "disableallextensions": {
-    "message": "Desativar todas as extensões, exceto AdBlock.",
+    "message": "Desative todas as extensões, exceto AdBlock.",
     "description": "instruction on ad report page"
   },
   "disabled_by_filter_lists": {
@@ -362,7 +362,7 @@
     "description": "Step 2 for disabling chrome and safari extensions"
   },
   "disableforchromestepone": {
-    "message": "Abrir <a href='#'>a página de extensões</a>",
+    "message": "Abra <a href='#'>a página de extensões</a>",
     "description": "Step 1 for disabling chrome extensions"
   },
   "disableforopera": {
@@ -906,7 +906,7 @@
     "description": "user is telling us they don't wish to investigate something for us"
   },
   "reloadadpage": {
-    "message": "Recarregar a página com a propaganda.",
+    "message": "Recarregue a página com a propaganda.",
     "description": "instruction on ad report page"
   },
   "removefromlist": {
@@ -1020,7 +1020,7 @@
     "description": "Section title for blacklisting section of Customize tab"
   },
   "show_on_adblock_button": {
-    "message": "Exibir botão do AdBlock",
+    "message": "Exibir no botão do AdBlock",
     "description": "Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
   },
   "show_resourcelist": {
