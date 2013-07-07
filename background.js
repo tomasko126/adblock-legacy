@@ -825,7 +825,7 @@
     logging(true);
 
   _myfilters = new MyFilters();
-
+  _myfilters.init();
   // Record that we exist.
   STATS.startPinging();
 
