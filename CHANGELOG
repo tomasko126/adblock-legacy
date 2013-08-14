@@ -6,6 +6,8 @@ Latest Opera version: Same as Chrome, in Opera 15.  For older Opera versions, se
 
 == Versions ==
 
+UNRELEASED:
+
 2.6.4: Undo one of the minor bugfixes in 2.6.3 because it itself had a bug breaking AdBlock if you reloaded a page too quickly
 
 2.6.3: Minor bugfixes
