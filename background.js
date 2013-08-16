@@ -551,6 +551,7 @@
           badge_text = ""; // Only show the user when we've done something useful
       }
       chrome.browserAction.setBadgeText({text: badge_text, tabId: tabId});
+      chrome.browserAction.setBadgeBackgroundColor({ color: "#555" });
     }
     
     // Set the button image and context menus according to the URL
