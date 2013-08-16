@@ -1,0 +1,10 @@
+TODO:
+
+-- MVP for Dominic:
+Rules re-inserted on every startup
+
+-- To launch:
+$document,$elemhide not cleared on undo
+Support adding rules (e.g. custom filters)?
+popup support
+resourceblock support or kill resourceblock
