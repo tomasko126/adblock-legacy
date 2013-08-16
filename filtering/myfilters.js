@@ -180,11 +180,20 @@ MyFilters.prototype.rebuild = function() {
   else
     this.hiding = FilterSet.fromFilters(filters.hiding);
 
-  this.blocking = new BlockingFilterSet(
-    FilterSet.fromFilters(filters.pattern), 
-    FilterSet.fromFilters(filters.whitelist)
-  );
-  handlerBehaviorChanged(); // defined in background
+  if (chrome.declarativeWebRequest) {
+    var allFilters = [];
+    for (var name in {pattern:1, whitelist:1})
+      for (var id in filters[name])
+        allFilters.push(filters[name][id]);
+    DeclarativeWebRequest.singleton.register(allFilters);
+  }
+  else {
+    this.blocking = new BlockingFilterSet(
+      FilterSet.fromFilters(filters.pattern), 
+      FilterSet.fromFilters(filters.whitelist)
+    );
+    handlerBehaviorChanged(); // defined in background
+  }
   
   // After 90 seconds, delete the cache. That way the cache is available when
   // rebuilding multiple times in a row (when multiple lists have to update at

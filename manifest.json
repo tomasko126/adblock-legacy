@@ -12,6 +12,7 @@
       "filtering/fifocache.js",
       "filtering/filtertypes.js",
       "filtering/filterset.js",
+      "filtering/declarativewebrequest.js",
       "filtering/myfilters.js",
       "filtering/filternormalizer.js",
       "idlehandler.js",
@@ -59,7 +60,7 @@
       "all_frames": false
     }
   ],
-  "content_security_policy": "default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://chromeadblock.com",
+  "content_security_policy": "default-src https://chromeadblock.com 'self'; script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://chromeadblock.com",
   "default_locale": "en",
   "description": "__MSG_description2__",
   "icons": {
@@ -72,7 +73,7 @@
   "minimum_chrome_version": "23",
   "options_page": "options/index.html",
   "permissions": [
-    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation"
+    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation", "declarativeWebRequest"
   ],
   "web_accessible_resources": [
     "img/icon24.png",

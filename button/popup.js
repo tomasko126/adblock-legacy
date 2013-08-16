@@ -1,3 +1,6 @@
+// TODO DWR: whitelisting should just add a rule, rather than re-registering all of them?
+// will that be faster?
+
 var BG = chrome.extension.getBackgroundPage();
 
 // Set menu entries appropriately for the selected tab.

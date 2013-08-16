@@ -129,6 +129,7 @@ PatternFilter.fromText = function(text) {
   var data = PatternFilter._parseRule(text);
 
   var result = new PatternFilter();
+  result._isWhitelist = data.isWhitelist;
   result._domains = Filter._toDomainSet(data.domainText, '|');
   result._allowedElementTypes = data.allowedElementTypes;
   result._options = data.options;
@@ -176,8 +177,7 @@ PatternFilter._parseRule = function(text) {
     option = option.replace(/\-/, '_');
 
     // See crbug.com/93542 -- object-subrequest is reported as 'object',
-    // so we treat them as synonyms.  TODO issue 5935: we must address
-    // false positives/negatives due to this.
+    // so we treat them as synonyms.
     if (option == 'object_subrequest')
       option = 'object';
 
@@ -222,7 +222,8 @@ PatternFilter._parseRule = function(text) {
 
   // We parse whitelist rules too, in which case we already know it's a
   // whitelist rule so can ignore the @@s.
-  if (Filter.isWhitelistFilter(rule))
+  result.isWhitelist = Filter.isWhitelistFilter(rule);
+  if (result.isWhitelist)
     rule = rule.substring(2);
 
   // Convert regexy stuff.

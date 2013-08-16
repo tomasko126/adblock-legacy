@@ -1,5 +1,5 @@
 // Set to true to get noisier console.log statements
-VERBOSE_DEBUG = false;
+VERBOSE_DEBUG = true;
 
 // Issue 6614: Don't run in a frame, to avoid manipulation by websites.
 if (window.location.origin + "/" === chrome.extension.getURL("")) {

@@ -318,6 +318,199 @@ if (/Chrome/.test(navigator.userAgent)) {
                 {"op": "=", "text": "/b/c"},
                 {"op": "$=", "text": "../c"}]);
     });
+
+    var dwr = chrome.declarativeWebRequest;
+    var myDWR = DeclarativeWebRequest.singleton;
+    var allResourceTypes = [ "script", "image", "stylesheet", "object", 
+                             "sub_frame", "other", "xmlhttprequest" ];
+
+    module("DeclarativeWebRequest", {
+      setup: function() {
+        stop();
+        dwr.onRequest.removeRules(null, function() {
+          start();
+        });
+      },
+      teardown: function() {
+        stop();
+        dwr.onRequest.removeRules(null, function() {
+          start();
+        });
+      }
+    });
+
+    /*
+    asyncTest("cache doesn't bypass DWR", function() {
+      $("<img>").
+        attr("src", "https://chromeadblock.com/test/adblock_unittests/img.png").
+        error(function() {
+          ok(false, "Failed to load first image");
+          start();
+        }).
+        load(function() {
+          ok(true, "First image loaded");
+          dwr.onRequest.addRules(
+            [{
+              conditions: [new dwr.RequestMatcher({url: { urlSuffix: "img.png" } })],
+              actions: [new dwr.CancelRequest()],
+            }],
+            function() {
+              $("<img>").
+                attr("src", "https://chromeadblock.com/test/adblock_unittests/img.png").
+                error(function() {
+                  ok(true, "Second image blocked");
+                  start();
+                }).
+                load(function() {
+                  ok(false, "Second image loaded");
+                  start();
+                }).
+                appendTo("#qunit-fixture");
+            }
+          );
+        }).
+        appendTo("#qunit-fixture");
+    });
+    */
+
+    asyncTest("No rules at first", function() {
+      dwr.onRequest.getRules(null, function(rules) {
+        equal(rules.length, 0, "No rules");
+        start();
+      });
+    });
+
+    function endToEndTest(title, filterText, nodeName, src, expectedBlock) {
+      src = "https://chromeadblock.com/test/adblock_unittests/" + src + "?" + Math.random();
+      asyncTest(title, function() {
+        var filter = Filter.fromText(filterText);
+        var rules = myDWR._getRules(filter, "tag1");
+        dwr.onRequest.addRules(rules, function() {
+          var node = $("<" + nodeName + ">", { src: src}).
+            error(function() {
+              ok(expectedBlock, "filter " + filterText + " blocked " + nodeName + " " + src);
+              start();
+            }).
+            load(function() {
+              ok(!expectedBlock, "filter " + filterText + " did not block " + nodeName + " " + src);
+              start();
+            });
+          node.appendTo("#qunit-fixture");
+        });
+      });
+    }
+
+    endToEndTest("CSP has been updated to run tests (if this fails, see test source for how to modify CSP)", "csp_blocked_this_not_me", "img", "img.png", false);
+    // The CSP entry you need in manifest.json is:
+    // "content_security_policy": "default-src https://chromeadblock.com 'self'; script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; connect-src *; frame-src 'self' https://chromeadblock.com",
+
+    // The next test keeps toggling b/w fail and succeed, as long as the prev. test loads
+    // the same URL.  Sounds like a caching issue; I've asked Chrome team whether addRules
+    // will do handlerBehaviorChanged under the covers.
+    endToEndTest("Single image filter ", "img$image", "img", 'img.png', true);
+    endToEndTest("Single image filter then destroyed", "dummy_filter", "img", "img.png", false);
+
+    test("_getPriority", function() {
+      function check(filterText, expected) {
+        var priority = myDWR._getPriority(Filter.fromText(filterText));
+        equal(priority, expected, "Priority for filter " + filterText);
+      }
+
+      check("a", 100);
+      check("@@a$document", 300);
+      check("@@a", 200);
+    });
+
+    test("_getResourceTypes", function() {
+      function check(filterText, expected) {
+        var types = myDWR._getResourceTypes(Filter.fromText(filterText)).sort();
+        var expected = JSON.parse(JSON.stringify(expected)).sort();
+        deepEqual(types, expected, "ResourceTypes for filter " + filterText);
+      }
+      function without(list, item) { return list.filter(function(i) { return i !== item; }); }
+
+      check("a", allResourceTypes);
+      check("@@a$document", allResourceTypes);
+      check("@@a$elemhide", allResourceTypes);
+      check("a$image", ["image"]);
+      check("a$image,script", ["image", "script"]);
+      check("a$image,background,script,media", ["image", "script", "other"]);
+      check("a$subdocument,object_subrequest", ["sub_frame", "object"]);
+      check("a$~script", without(allResourceTypes, "script"));
+      check("a$~image", without(allResourceTypes, "image")); // make sure "background" doesn't clobber it
+      check("a$~image,~subdocument", without(without(allResourceTypes, "image"), "sub_frame"));
+    });
+
+    test("_getRules", function() {
+      function wasBuiltRight(text, expectedRules) {
+        var filter = Filter.fromText(text);
+        var rules = myDWR._getRules(filter, "tag1");
+        deepEqual(rules, expectedRules, "Rule from filter: " + text);
+      }
+
+      function condModified(modify) {
+        var template = new dwr.RequestMatcher({
+          "resourceType": JSON.parse(JSON.stringify(allResourceTypes)),
+          "stages": [ "onBeforeRequest" ],
+          "url": { "urlMatches": "a" }
+        });
+        modify(template);
+        return template;
+      }
+
+      function ruleModified(modify) {
+        var template = {
+          "actions": [ new dwr.CancelRequest(), 
+                       new dwr.SendMessageToExtension({message: "block"}) ],
+          "conditions": [ condModified(function() {}) ],
+          "priority": 100,
+          "tags": [ "tag1" ]
+        };
+        modify(template);
+        return template;
+      }
+
+      wasBuiltRight("a", [ ruleModified(function() {}) ]);
+
+      wasBuiltRight("a$script", [ ruleModified(function(rule) { 
+        rule.conditions[0].resourceType = [ "script" ]; 
+      }) ]);
+
+      wasBuiltRight("a$~image", [ ruleModified(function(rule) {
+        var t = rule.conditions[0].resourceType;
+        t.splice(t.indexOf("image"), 1);
+      }) ]);
+
+      wasBuiltRight("a$third-party", [ ruleModified(function(rule) {
+        rule.conditions[0].thirdPartyForCookies = true;
+      }) ]);
+
+      wasBuiltRight("a$~third-party", [ ruleModified(function(rule) {
+        rule.conditions[0].thirdPartyForCookies = false;
+      }) ]);
+
+      wasBuiltRight("a$domain=b.com", [ ruleModified(function(rule) {
+        rule.conditions[0].firstPartyForCookiesUrl = { hostSuffix: "b.com" };
+      }) ]);
+
+      wasBuiltRight("a$domain=b1.com|b2.com", [ ruleModified(function(rule) {
+        rule.conditions[0].firstPartyForCookiesUrl = { hostSuffix: "b1.com" };
+        rule.conditions.push(condModified(function(cond) {
+          cond.firstPartyForCookiesUrl = { hostSuffix: "b2.com" };
+        }));
+      }) ]);
+
+      wasBuiltRight("@@a$document", [ ruleModified(function(rule) {
+        var c = rule.conditions[0];
+        c.firstPartyForCookiesUrl = c.url;
+        delete c.url;
+        rule.priority = 300;
+        rule.actions = [ new dwr.IgnoreRules( { lowerPriorityThan: 300 } ),
+                         new dwr.SendMessageToExtension({message: "document" }) ];
+      }) ]);
+
+    });
+
   })();
   
   // END CHROME ONLY

@@ -1,7 +1,9 @@
 var elementPurger = {
   onPurgeRequest: function(request, sender, sendResponse) {
     if (request.command === 'purge-elements' &&
+        (!request.frameUrl ||  // declarativeWebRequest can't send this
         request.frameUrl === document.location.href.replace(/#.*$/, ""))
+      )
       elementPurger._purgeElements(request);
 
     sendResponse({});

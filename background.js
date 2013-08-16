@@ -529,6 +529,23 @@
     url = url.replace(/\#.*$/, ''); // Remove anchors
     if (!type)
       type = ElementTypes.document;
+
+    // TODO: handle whitelisted/elemhidden.  Here's how:
+    // "main_frame" load, priority P, sends "new page url not whitelisted"
+    // message to extension.
+    // "main_frame" load, priority P+1, matching $document or $elemhide rules,
+    // disables rules of lower priority, and sends "new page url whitelisted/elemhidden"
+    // message to extension.
+    // message handler does this:
+    //  sets whitelistInfo[url] = normal|whitelisted|elemhidden
+    //  if there are over N entries, deletes those not currently in open tabs.
+    //  calls UpdateContextMenusAndButtonUI which reads that info.
+    // browser action popup will reference whitelistInfo.
+    //
+    // No need for tabs.onUpdated.
+    if (chrome.declarativeWebRequest)
+      return (storage_get("whitelisted_pages") ||{})[url] === type;
+ 
     var whitelist = _myfilters.blocking.whitelist;
     return whitelist.matches(url, type, parseUri(url).hostname, false);
   }
@@ -812,7 +829,7 @@
     show_delayed_payment_request_at(storage_get("show_delayed_payment_request_at"));
   }
 
-  if (!SAFARI) {
+  if (!SAFARI && !chrome.declarativeWebRequest) {
     // Chrome blocking code.  Near the end so synchronous request handler
     // doesn't hang Chrome while AdBlock initializes.
     chrome.webRequest.onBeforeRequest.addListener(onBeforeRequestHandler, {urls: ["http://*/*", "https://*/*"]}, ["blocking"]);
@@ -832,6 +849,28 @@
     }
     chrome.tabs.query({url: "http://*/*"}, handleEarlyOpenedTabs);
     chrome.tabs.query({url: "https://*/*"}, handleEarlyOpenedTabs);
+  }
+  else if (!SAFARI && chrome.declarativeWebRequest) {
+    chrome.declarativeWebRequest.onMessage.addListener(function(details) {
+      if (details.message === "block") {
+        var elType = ElementTypes.fromOnBeforeRequestType(details.type);
+        var canPurge = (elType & (ElementTypes.image | ElementTypes.subdocument | ElementTypes.object));
+        if (canPurge) {
+          // TODO: don't know frameUrl in DWR, so code runs in every frame :(
+          var data = { command: "purge-elements", url:details.url, elType: elType };
+          chrome.tabs.sendRequest(details.tabId, data); 
+        }
+      }
+
+      else if (details.message === "document" || details.mesage === "elemhide") {
+        // TODO main_frame must smte("normal") to delete ex-whitelisted pages
+        // TODO don't let this grow unbounded; when it's over N elements,
+        // purge closed tabs.
+        var pages = storage_get("whitelisted_pages") || {};
+        pages[details.url] = ElementTypes[details.message];
+        storage_set("whitelisted_pages", pages);
+      }
+    });
   }
   
   log("\n===FINISHED LOADING===\n\n");
