@@ -48,8 +48,8 @@ BGcall("get_settings", function(settings) {
 
 //generate the URL to the issue tracker
 function generateReportURL() {
-  var result = "https://code.google.com/p/adblockforchrome/issues/entry" +
-               "?template=Ad%20report%20from%20user&summary=";
+  var result = "https://help.tenderapp.com/discussion/new" +
+               "?category_id=ad-report&discussion[title]=";
 
   var domain = "<enter URL of webpage here>";
   if (options.url)
@@ -100,7 +100,7 @@ function generateReportURL() {
   body.push("=== Enabled settings ===");
   body.push(enabled_settings.join('\n'));
 
-  result = result + "&comment=" + encodeURIComponent(body.join('\n'));
+  result = result + "&discussion[body]=" + encodeURIComponent(body.join('\n'));
 
   return result;
 }
