@@ -48,7 +48,7 @@ BGcall("get_settings", function(settings) {
 
 //generate the URL to the issue tracker
 function generateReportURL() {
-  var result = "https://help.tenderapp.com/discussion/new" +
+  var result = "https://adblock.tenderapp.com/discussion/new" +
                "?category_id=ad-report&discussion[title]=";
 
   var domain = "<enter URL of webpage here>";
