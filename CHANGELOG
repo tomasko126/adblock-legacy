@@ -1,12 +1,10 @@
-﻿= Changelog =
+**Latest Chrome version:** 2.6.4<br/>
+**Latest Safari version:** 2.6.4<br/>
+**Latest Opera version:** Same as Chrome, in Opera 15.  For older Opera versions, see  [here](#changelog-for-the-opera-version-of-adblock)<br/>
 
-Latest Chrome version: 2.6.4<br/>
-Latest Safari version: 2.6.4<br/>
-Latest Opera version: Same as Chrome, in Opera 15.  For older Opera versions, see [#Changelog_for_the_Opera_version_of_AdBlock here]<br/>
+## Versions ##
 
-== Versions ==
-
-UNRELEASED:
+UNRELEASED: 
 
 2.6.4: Undo one of the minor bugfixes in 2.6.3 because it itself had a bug breaking AdBlock if you reloaded a page too quickly
 
@@ -458,11 +456,11 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 1.4.28: Fix high CPU usage on sites that insert lots of DOM nodes after loading.
 
 1.4.27: Lots of changes:
-  * Edit support in blacklist UI (by Famlam)
-  * 'Remove' labels by custom filter lists (by Famlam)
-  * New filter subscriptions available (by Drewish)
-  * You can press enter in textboxes on the Options pages to submit data (by Famlam)
-  * Make blacklist and whitelist more robust against page CSS (by Famlam)
+* Edit support in blacklist UI (by Famlam)
+* 'Remove' labels by custom filter lists (by Famlam)
+* New filter subscriptions available (by Drewish)
+* You can press enter in textboxes on the Options pages to submit data (by Famlam)
+* Make blacklist and whitelist more robust against page CSS (by Famlam)
 
 1.4.26: 5 filter list additions and corrections (by Drewish).  A slider on the whitelister, an edit button on the whitelist options page, support for IP whitelisting (by Famlam).
 
@@ -606,7 +604,7 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 1.3.0: Initial import.
 
-== Changelog for the Opera version of AdBlock ==
+## Changelog for the Opera version of AdBlock ##
 
 1.0.8: Include changes from AdBlock for Chrome 2.5.60.
 
