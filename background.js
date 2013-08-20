@@ -545,7 +545,10 @@
       var display = get_settings().display_stats;
       var badge_text = "";
       var main_frame = frameData.get(tabId, 0);
-      if(display && (main_frame && (!page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url))) && !adblock_is_paused()){
+      
+      var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url);
+      
+      if(display && (main_frame && isBlockable) && !adblock_is_paused()){
         badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
         if (badge_text === "0")
           badge_text = ""; // Only show the user when we've done something useful
@@ -598,25 +601,28 @@
       }
 
       function setBrowserButton(info) {
+        var tabId = info.tab.id;
+        chrome.browserAction.setBadgeText({text: "", tabId: tabId});
         if (adblock_is_paused()) {
-          chrome.browserAction.setIcon({path:{'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"}, tabId: info.tab.id});
+          chrome.browserAction.setIcon({path:{'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"}, tabId: tabId});
         } else if (info.disabled_site &&
             !/^chrome-extension:.*pages\/install\//.test(info.tab.url)) {
           // Show non-disabled icon on the installation-success page so it
           // users see how it will normally look. All other disabled pages
           // will have the gray one
-          chrome.browserAction.setIcon({path:{'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"}, tabId: info.tab.id});
+          chrome.browserAction.setIcon({path:{'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"}, tabId: tabId});
         } else if (info.whitelisted) {
-          chrome.browserAction.setIcon({path:{'19': "img/icon19-whitelisted.png", '38': "img/icon38-whitelisted.png"}, tabId: info.tab.id});
+          chrome.browserAction.setIcon({path:{'19': "img/icon19-whitelisted.png", '38': "img/icon38-whitelisted.png"}, tabId: tabId});
         } else {
-          chrome.browserAction.setIcon({path:{'19': "img/icon19.png", '38': "img/icon38.png"}, tabId: info.tab.id});
+          chrome.browserAction.setIcon({path:{'19': "img/icon19.png", '38': "img/icon38.png"}, tabId: tabId});
+          updateBadge(tabId);
         }
       }
 
       getCurrentTabInfo(function(info) {
         setContextMenus(info);
         setBrowserButton(info);
-        updateBadge(info.tab.id);
+        //updateBadge(info.tab.id);
       });
     }
   }
