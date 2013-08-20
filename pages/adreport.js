@@ -62,6 +62,12 @@ function generateReportURL() {
       "Don't leave anything out or I'll probably " +
       "have to ignore your report. Thanks!");
   body.push("");
+  body.push("Also, if you can put your name (or a screen name) " +
+      "and a contact email access in the boxes above, that would be great!");
+  body.push("");
+  body.push("We need the email so that we can contact you if we need more information " +
+      "than what you give us in your report. Otherwise, we might not be able to fix it.");
+  body.push("");
   if (!options.url) {
     body.push(count + ". Paste the URL of the webpage showing an ad: ");
     body.push("");
