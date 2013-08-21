@@ -1236,5 +1236,17 @@
 	"selectlanguage":{
 		"message":" -- Sélectionnez une langue -- ",
 		"description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
+	},
+	"crowdfund_text":{
+		"message":"Venez voir notre campagne folle",
+		"description":"text for link to crowdfunding site"
+	},
+	"crowdfund_new":{
+		"message":"Nouveau",
+		"description":"text that says new; visual cue with New badge"
+	},
+	"crowdfund_intro":{
+		"message":"AdBlock achète des pubs … pour AdBlock !",
+		"description":"intro to crowdfund"
 	}
 }
