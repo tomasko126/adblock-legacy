@@ -1,86 +1,86 @@
 {
 	"description2":{
-		"message":"Nejoblíbenější rozšíření pro Chrome s více než 15 miliony uživatelů! Blokuje reklamy na celém webu.",
+		"message":"Najbolj priljubljena razširitev za brskalnik Google Chrome z več kot 15 milijonov uporabnikov!  Blokira oglase po vsem spletu.",
 		"description":"Extension description in manifest"
 	},
 	"adblock_click_for_details":{
-		"message":"AdBlock - click for details",
+		"message":"AdBlock - kliknite za podrobnosti",
 		"description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button.  Do not translate the beginning 'AdBlock - ' part."
 	},
 	"buttoncancel":{
-		"message":"Storno",
+		"message":"Prekliči",
 		"description":"Cancel button"
 	},
 	"buttonok":{
-		"message":"OK!",
+		"message":"V redu!",
 		"description":"OK button"
 	},
 	"reportpubliclyavailable":{
-		"message":"Poznámka: vaše hlášení může být veřejně dostupné. Mějte to na paměti předtím, než vložíte cokoli soukromého.",
+		"message":"Opomba: poročilo lahko postane javno dostopno. To imejte v mislih, preden vključite karkoli zasebnega.",
 		"description":"Ad report page string, when you're about to submit a report"
 	},
 	"buttonblockit":{
-		"message":"Blokovat!",
+		"message":"Blokiraj!",
 		"description":"Block button"
 	},
 	"buttonedit":{
-		"message":"Upravit",
+		"message":"Uredi",
 		"description":"Edit filter manually button"
 	},
 	"optionstitle":{
-		"message":"AdBlock Nastavení",
+		"message":"AdBlock možnosti",
 		"description":"Title for the options page"
 	},
 	"thirdparty":{
-		"message":"Od jinud",
+		"message":"S strani tretjih oseb",
 		"description":"Resource list column title telling if the resource originates from a different domain"
 	},
 	"installedtitle":{
-		"message":"AdBlock je nyní nainstalován!",
+		"message":"AdBlock je zdaj nameščen!",
 		"description":"Title for the installation success page"
 	},
 	"chromebutton_how_to_hide2":{
-		"message":"Chcete-li skrýt tlačítko, klikněte na něj pravým tlačítkem myši a vyberte příkaz Skrýt tlačítko. Můžete jej opět zobrazit zde chrome:\/\/chrome\/extensions.",
+		"message":"Če želite skriti gumb, kliknite nanj z desno miškino tipko in izberite Skrij gumb. Ponovno ga lahko prikažete v razširitvahi: chrome:\/\/chrome\/extensions.",
 		"description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
 	},
 	"sliderexplanation":{
-		"message":"Nastavte posuvník tak, aby reklama na stránce byla blokována a zbytek stránky stále vypadal uspokojivě.",
+		"message":"Premikajte drsnik dokler oglas ni pravilno blokiran in blokirani elementi izgledajo uporabno.",
 		"description":"Blacklister slider page message"
 	},
 	"block_by_url_instead":{
-		"message":"Pro zkušené: Blokovat podle URL místo tohoto",
+		"message":"Napredno: blokiraj po URL-ju",
 		"description":"Link on blacklister slider page"
 	},
 	"slidertitle":{
-		"message":"Krok 1: Určete, co se bude blokovat",
+		"message":"1. korak: Kaj želite blokirati?",
 		"description":"Blacklister slider page title"
 	},
 	"blacklisteroptions1":{
-		"message":"Co si myslíte, že bude platit pro tuto reklamu pokaždé, když navštívíte tuto stránku?",
+		"message":"Kaj menite, da bo veljalo za ta oglas pri vsakem obisku te spletne strani?",
 		"description":"Blacklister attribute choosing page message"
 	},
 	"blacklisternotsure":{
-		"message":"<b>Nejste si jisti?<\/b> Tak pouze stiskněte tlačítko 'Blokovat!' níže.",
+		"message":"<b>Niste prepričani?<\/b> preprosto izberite 'Blokiraj!' spodaj.",
 		"description":"Blacklister attribute choosing page message.  'Block it!' must be the same as the text of the 'buttonblockit' message."
 	},
 	"blacklisterthefilter":{
-		"message":"Filtr, který lze později změnit v Nastavení na záložce Vlastní filtr:",
+		"message":"Filter, ki se ga lahko spremeni na strani 'Možnosti':",
 		"description":"Blacklister attribute choosing page message"
 	},
 	"blacklisteroptionstitle":{
-		"message":"Poslední krok: Dle čeho rozpoznat reklamu?",
+		"message":"Zadnji korak: kaj velja za ta oglas?",
 		"description":"Blacklister options page title"
 	},
 	"blacklisternofilter":{
-		"message":"Není vybrán žádný filtr!",
+		"message":"Filter ni določen!",
 		"description":"Warning if the user hasn't specified a filter"
 	},
 	"blacklistereditfilter":{
-		"message":"Prosím, zadejte správný filtr a stiskněte OK",
+		"message":"Prosimo vnesite pravilen filter v spodnje polje in izberite 'V redu'",
 		"description":"Text if the user wants to manually edit a filter.  'OK' is the standard javascript popup button text."
 	},
 	"blacklistereditinvalid1":{
-		"message":"Tento filtr je neplatný: $exception$",
+		"message":"Filter ni veljaven: $exception$",
 		"description":"Messagebox if the manually edited filter is invalid. Error messages are not translated.",
 		"placeholders":{
 			"exception":{
@@ -90,15 +90,15 @@
 		}
 	},
 	"blacklisterblockedelement":{
-		"message":"Blokovaný element:",
+		"message":"Blokirani element:",
 		"description":"Tells the user what the blocked element is on the slider page"
 	},
 	"blacklisterwarningnofilter":{
-		"message":"Upozornění: Není vybrán žádný filtr!",
+		"message":"Opozorilo: filter ni določen!",
 		"description":"Warns the user that no filter was specified"
 	},
 	"blacklisterblocksalloftype":{
-		"message":"Buďte opatrní: tento filtr blokuje všechny $elementtype$ elementy na stránce!",
+		"message":"Bodite previdni: filter blokira vse $elementtype$ elemente na strani!",
 		"description":"Warns the user that all elements of type X will be blocked",
 		"placeholders":{
 			"elementtype":{
@@ -108,11 +108,11 @@
 		}
 	},
 	"blacklistersinglematch":{
-		"message":"Toto odpovídá <b>1<\/b> položce na této stránce.",
+		"message":"To ustreza <b>1<\/b> elementu na tej strani.",
 		"description":"Tells the user only one match was found"
 	},
 	"blacklistermatches":{
-		"message":"Toto odpovídá $matchcount$ položkám na této stránce.",
+		"message":"To ustreza $matchcount$ elementom na tej strani.",
 		"description":"Tells the user multiple matches were found",
 		"placeholders":{
 			"matchcount":{
@@ -122,7 +122,7 @@
 		}
 	},
 	"blacklisterattrwillbe":{
-		"message":"$attribute$ bude $value$",
+		"message":"$attribute$ bo $value$",
 		"description":"Checkbox label",
 		"placeholders":{
 			"attribute":{
@@ -136,59 +136,59 @@
 		}
 	},
 	"blacklistertype":{
-		"message":"Typ",
+		"message":"Vrsta",
 		"description":"node name is called 'Type'"
 	},
 	"buttonlooksgood":{
-		"message":"Pokračovat",
+		"message":"Izgleda dobro",
 		"description":"Looks good button"
 	},
 	"buttonback":{
-		"message":"Zpět",
+		"message":"Nazaj",
 		"description":"Back to previous wizard page button"
 	},
 	"findingads":{
-		"message":"Hledání reklam...<br\/><br\/><i>Bude to trvat pouze chvilku.<\/i>",
+		"message":"Iskanje oglasov...<br\/><br\/><i>To bo trajalo le trenutek.<\/i>",
 		"description":"When you press ctrl-shift-K the blacklister searches for ads"
 	},
 	"blockanadtitle":{
-		"message":"Blokování reklamy",
+		"message":"Blokiraj oglas",
 		"description":"Title of the first two dialogs of the blacklister"
 	},
 	"clickthead":{
-		"message":"Klikněte na reklamu, a jám vám ji pomohu zablokovat.",
+		"message":"Kliknite na oglas in vodili vas bomo skozi postopek blokiranja.",
 		"description":"When you have to click the ad to continue"
 	},
 	"adblock_wont_run_on_pages_matching":{
-		"message":"AdBlock se nebude spouštět na žádné stránce odpovídající:",
+		"message":"AdBlock ne bo deloval na straneh, ki ustrezajo:",
 		"description":"Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
 	},
 	"you_can_slide_to_change":{
-		"message":"Nastavením posuvníku níže vyberte přesně ty stránky, kde se AdBlock nebude spouštět.",
+		"message":"Če želite spremeniti strani, na katerih se AdBlock ne bo izvajal, premaknite spodnji drsnik.",
 		"description":"Instructions for how to use the whitelister slider controls.  Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
 	},
 	"whitelistertitle2":{
-		"message":"Nespouštět AdBlock na...",
+		"message":"Ne izvajaj AdBlocka na...",
 		"description":"The title of the whitelister dialog"
 	},
 	"buttonexclude":{
-		"message":"Uložit",
+		"message":"Izvzemi",
 		"description":"Button for excluding a domain in the whitelister dialog"
 	},
 	"subscribingtitle":{
-		"message":"Přihlašování k odběru seznamu filtrů...",
+		"message":"Poteka naročanje na seznam filtrov...",
 		"description":"abp: link subscriber title"
 	},
 	"subscribingfinished":{
-		"message":"Dokončeno!",
+		"message":"Končano!",
 		"description":"abp: link subscriber result"
 	},
 	"subscribingfailed":{
-		"message":"Neúspěšné!",
+		"message":"Ni uspelo!",
 		"description":"abp: link subscriber result"
 	},
 	"optionsversion":{
-		"message":"Verze $version$",
+		"message":"Različica $version$",
 		"description":"Version number",
 		"placeholders":{
 			"version":{
@@ -198,23 +198,23 @@
 		}
 	},
 	"optionschangelog":{
-		"message":"seznam změn",
+		"message":"Dnevnik sprememb",
 		"description":"changelog link"
 	},
 	"tabgeneral":{
-		"message":"Obecné",
+		"message":"Splošno",
 		"description":"A tab on the options page"
 	},
 	"tabfilterlists":{
-		"message":"Seznamy filtrů",
+		"message":"Seznami filtrov",
 		"description":"A tab on the options page"
 	},
 	"tabcustomize":{
-		"message":"Přizpůsobení",
+		"message":"Prilagodi",
 		"description":"A tab on the options page"
 	},
 	"generaloptions":{
-		"message":"Obecné nastavení",
+		"message":"Splošne možnosti",
 		"description":"Title of first tab page"
 	},
 	"betalabel":{
@@ -222,31 +222,31 @@
 		"description":"Option on first tab page"
 	},
 	"use_experimental_feature_to_speed_up_adblock":{
-		"message":"Zrychlit Adblock pomocí experimentální funkce v prohlížeči Safari.",
+		"message":"Pospešite AdBlock z vklopom testne funkcije v brskalniku Safari.",
 		"description":"Option on first tab page"
 	},
 	"let_me_know_how_it_is_working":{
-		"message":"Prokážete mi laskavost? Zkuste na chvíli tuto experimentální funkci, a pak mi <a>dejte vědět<\/a>, jak dobře to funguje.",
+		"message":"Do me a favor?  Try this experimental feature for a while, then <a>let me know<\/a> how well it works for you.",
 		"description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
 	},
 	"googletextads":{
-		"message":"Líbí se mi textové reklamy ve výsledcích vyhledávání Google, zobrazuj je.",
+		"message":"Všeč so mi besedilni oglasi na rezultatih iskanja Google; želim, da so prikazani.",
 		"description":"Option on first tab page"
 	},
 	"showcontextmenus":{
-		"message":"Přidat položky do nabídky po kliknutí pravým tlačítkem myši.",
+		"message":"Dodaj elemente na meni desnega miškinega klika.",
 		"description":"Option on first tab page"
 	},
 	"debuginlogoption":{
-		"message":"Zobrazovat debug zprávy v Console Log (tohle zpomaluje AdBlock)",
+		"message":"Pokaži debug izjave v dnevniku konzole (upočasni AdBlock)",
 		"description":"Option on first tab page"
 	},
 	"updatedrightnow":{
-		"message":"aktualizováno právě teď",
+		"message":"ravnokar posodobljeno",
 		"description":"Label for subscription"
 	},
 	"updatedsecondsago":{
-		"message":"aktualizováno před $seconds$ sekundami",
+		"message":"posodobljeno pred naslednjim številom sekund: $seconds$",
 		"description":"Label for subscription",
 		"placeholders":{
 			"seconds":{
@@ -256,7 +256,7 @@
 		}
 	},
 	"updatedminutesago":{
-		"message":"aktualizováno před $minutes$ minutami",
+		"message":"posodobljeno pred naslednjim številom minut $minutes$",
 		"description":"Label for subscription",
 		"placeholders":{
 			"minutes":{
@@ -266,7 +266,7 @@
 		}
 	},
 	"updatedhoursago":{
-		"message":"aktualizováno před $hours$ hodinami",
+		"message":"posodobljeno pred naslednjim številom ur: $hours$",
 		"description":"Label for subscription",
 		"placeholders":{
 			"hours":{
@@ -276,7 +276,7 @@
 		}
 	},
 	"updateddaysago":{
-		"message":"aktualizováno před $days$ dny",
+		"message":"posodobljeno pred naslednjim številom dni: $days$",
 		"description":"Label for subscription",
 		"placeholders":{
 			"days":{
@@ -286,175 +286,175 @@
 		}
 	},
 	"updatedminuteago":{
-		"message":"aktualizováno před 1 minutou",
+		"message":"posodobljeno pred 1 minuto",
 		"description":"Label for subscription"
 	},
 	"updatedhourago":{
-		"message":"aktualizováno před 1 hodinou",
+		"message":"posodobljeno pred 1 uro",
 		"description":"Label for subscription"
 	},
 	"updateddayago":{
-		"message":"aktualizováno před 1 dnem",
+		"message":"posodobljeno pred 1 dnevom",
 		"description":"Label for subscription"
 	},
 	"unsubscribedlabel":{
-		"message":"Odhlášeno.",
+		"message":"Odjavljeno.",
 		"description":"Status label"
 	},
 	"fetchinglabel":{
-		"message":"Načítám... Prosím, čekejte.",
+		"message":"Pridobivam... prosimo počakajte.",
 		"description":"Status label"
 	},
 	"invalidListUrl":{
-		"message":"Neplatný seznam URL. Bude smazán.",
+		"message":"Neveljaven seznam URL-jev. Bil bo izbrisan.",
 		"description":"Message when you subscribe to a non-list URL"
 	},
 	"failedtofetchfilter":{
-		"message":"Nepodařilo se načíst tento filtr!",
+		"message":"Filter ni bil uspešno pridobljen!",
 		"description":"Error messagebox"
 	},
 	"removefromlist":{
-		"message":"Odstranit ze seznamu",
+		"message":"Odstrani s seznama",
 		"description":"Label to remove a custom filter"
 	},
 	"you_know_thats_a_bad_idea_right":{
-		"message":"Čím více seznamů filtrů si přihlásíte, tím pomaleji AdBlock poběží. Použití příliš mnoha seznamů dokonce může mít za následek pád prohlížeče na některých webových stránkách. Pro potvrzení přihlášení stiskněte tlačítko OK.",
+		"message":"Tem več seznamov filtrov uporabljate, tem počasneje deluje AdBlock. Uporaba prevelike količine seznamov lahko celo zaustavi vaš brskalnik. Izberite 'V redu', da se vseeno naročite na ta seznam.",
 		"description":"Confirmation message shown to user if they try to subscribe to too many lists. The user will have two options: OK and Cancel."
 	},
 	"filterstabtitle":{
-		"message":"Seznamy filtrů",
+		"message":"Naročite se na sezname filtrov",
 		"description":"Title of the filter list tab"
 	},
 	"filterlistlink":{
-		"message":"Nepřihlašujte k odběru více než potřebujete -- každý filtr navíc způsobí drobné zpomalení! Poděkování a další seznamy lze nalézt <a>zde<\/a>.",
+		"message":"Don't subscribe to more than you need -- every one slows you down a tiny bit! Credits and more lists can be found <a>here<\/a>.",
 		"description":"Explanation of the filter lists"
 	},
 	"updatenowmessage":{
-		"message":"Aktualizace jsou prováděny automaticky; nicméně můžete seznamy <a>Aktualizovat nyní<\/a>.",
+		"message":"Posodobitve se bodo izvajale samodejno; vseeno pa lahko <a>posodobite zdaj<\/a>.",
 		"description":"update filters text + button"
 	},
 	"orenteraurl":{
-		"message":"Nebo zadejte URL:",
+		"message":"Ali vnesite URL:",
 		"description":"link for custom subscription"
 	},
 	"subscribebutton":{
-		"message":"Přidat",
+		"message":"Naroči se",
 		"description":"subscribe to a list button"
 	},
 	"showlinkstolists":{
-		"message":"Odkazy pro zobrazení seznamu filtrů:",
+		"message":"Pokaži povezave do seznamov filtrov:",
 		"description":"Option on second tab page"
 	},
 	"filteradblock_custom":{
-		"message":"AdBlock filtry (doporučeno)",
+		"message":"AdBlock filtri po meri (priporočeno)",
 		"description":"A filter list. Don't translate 'AdBlock'"
 	},
 	"filtereasylist":{
-		"message":"EasyList (doporučeno)",
+		"message":"EasyList (priporočeno)",
 		"description":"A filter list. Don't translate 'EasyList'"
 	},
 	"filterrussian":{
-		"message":"Russian and Ukrainian",
+		"message":"ruski in ukrajinski",
 		"description":"Language names for a filter list"
 	},
 	"filterczech":{
-		"message":"Czech and Slovak",
+		"message":"češki in slovaški",
 		"description":"Language names for a filter list"
 	},
 	"filtereasyprivacy":{
-		"message":"EasyPrivacy (ochrana soukromí)",
+		"message":"EasyPrivacy (zaščita zasebnosti)",
 		"description":"A filter list. Don't translate the name 'EasyPrivacy'."
 	},
 	"blacklistclickmessage":{
-		"message":"Klikněte pravým tlačítkem myši na reklamu pro její zablokování -- nebo ji zablokujte ručně zde.",
+		"message":"Če želite blokirati oglas, kliknite nanj z desno miškino tipko -- to pa lahko tudi ročno storite tukaj.",
 		"description":"Message at the top of the blacklist options tab"
 	},
 	"tabcustomizetitle":{
-		"message":"Přizpůsobte si AdBlock",
+		"message":"Prilagodite AdBlock",
 		"description":"Title of the third tab"
 	},
 	"filterlistsrock":{
-		"message":"Seznamy filtrů blokují většinu reklam na webu. Můžete také:",
+		"message":"Seznami filtrov blokirajo večino oglasov na spletu. Lahko pa tudi:",
 		"description":"Header text on the Customize tab.  'Filter lists' should be the same text as the tabfilterlists message."
 	},
 	"blockmoreads":{
-		"message":"Blokovat více reklam:",
+		"message":"Blokiraj več oglasov:",
 		"description":"Section header on third tab"
 	},
 	"stop_blocking_ads":{
-		"message":"Zrušit blokování reklam:",
+		"message":"Ustavi blokiranje oglasov:",
 		"description":"Section header on third tab"
 	},
 	"linkblockadbyurl":{
-		"message":"Blokovat reklamu dle její URL",
+		"message":"Blokiraj oglas z URL naslovom",
 		"description":"Link on the third tab"
 	},
 	"linkhidesection":{
-		"message":"Skrývat část webové stránky",
+		"message":"Skrij odsek spletne strani",
 		"description":"Link on the third tab"
 	},
 	"linkunblock":{
-		"message":"Zobrazovat reklamy na webové stránce nebo doméně",
+		"message":"Prikaži oglase na spletni strani ali domeni",
 		"description":"Link on the third tab"
 	},
 	"blockurlwithtext":{
-		"message":"Blokovat URL obsahující tento text",
+		"message":"Blokiraj URL naslove, ki vsebujejo to besedilo",
 		"description":"Message of the url-blocking area"
 	},
 	"csstomatch":{
-		"message":"CSS obsahuje",
+		"message":"CSS, ki mu mora ustrezati",
 		"description":"Message of the css-hiding area"
 	},
 	"excludedomainorurl":{
-		"message":"Doména nebo url, kde AdBlock nesmí nic blokovat",
+		"message":"Domena ali spletni naslov, kjer AdBlock naj ne blokira ničesar",
 		"description":"Message of the exclude area"
 	},
 	"blockdomain":{
-		"message":"Používat na stránkách domény",
+		"message":"Domena strani na kateri želite to uveljaviti",
 		"description":"Message of the url and css -blocking area"
 	},
 	"manualfilteredit":{
-		"message":"Ručně upravit vlastní filtry:",
+		"message":"Ročen uredite vaše filtre:",
 		"description":"Subtitle on the third tab"
 	},
 	"filtersavewarning":{
-		"message":"Buďte opatrní: Pokud zde uděláte chybu, spousta jiných filtrů, včetně těch oficiálních, může být také poškozena!<br\/>Přečtěte si <a>filter syntax tutorial (anglicky)<\/a>, kde se dozvíte, jak přidávat pokročilé vlastní filtry a výjimky.",
+		"message":"Be careful: if you make a mistake here a lot of other filters, including the official filters, could get broken too!<br\/>Read the <a>filter syntax tutorial<\/a> to learn how to add advanced blacklist and whitelist filters.",
 		"description":"Warning when blacklisting manually"
 	},
 	"savebutton":{
-		"message":"Uložit",
+		"message":"Shrani",
 		"description":"Save button"
 	},
 	"savereminder":{
-		"message":"Nezapomeňte uložit!",
+		"message":"Ne pozabite shraniti!",
 		"description":"Reminder to press save"
 	},
 	"adblockreportinganad":{
-		"message":"AdBlock - Nahlášení reklamy",
+		"message":"AdBlock - Prijava oglasa",
 		"description":"title of ad report page"
 	},
 	"adreport2":{
-		"message":"Našli jste reklamu na webové stránce? Dobrá, pomohu vám najít správné místo, kde ji nahlásit!<br\/> Pamatujte: Nahlášení reklamy je dobrovolné. Pokud si ji nepřejete nahlásit, můžete zavřít toto okno a zablokovat ji pouze pro sebe tím, že přidáte její filtr na záložce 'Prizpůsobení' na stránce s nastavením!",
+		"message":"So you just found an ad on a web page? Well, I'll help you to find the correct place to report it!<br\/> Remember: reporting ads is voluntary. If you don't wish to do this you can just close this window and block it only for yourself by adding its filter in the 'Customize' tab of the options page!",
 		"description":"Instructions on ad reporting page. 'Customize' should be the same text as the 'tabcustomize' message."
 	},
 	"updateyourlists":{
-		"message":"Ujistěte se, že seznamy filtrů jsou aktuální",
+		"message":"Make sure your filter lists are up to date",
 		"description":"instruction on ad report page"
 	},
 	"clickupdatefilters":{
-		"message":"Klikněte zde: <a>Aktualizovat filtry!<\/a>",
+		"message":"Kliknite to: <a>Posodobi moje filtre!<\/a>",
 		"description":"instruction on ad report page"
 	},
 	"reloadadpage":{
-		"message":"Načtěte znovu stránku s reklamou.",
+		"message":"Ponovno naložite stran z oglasom.",
 		"description":"instruction on ad report page"
 	},
 	"adstillappear":{
-		"message":"Zobrazuje se stále tato reklama?",
+		"message":"Ali se oglas še vedno prikazuje?",
 		"description":"question on ad reporting page"
 	},
 	"yes":{
-		"message":"Ano",
+		"message":"Da",
 		"description":"A positive response to a question"
 	},
 	"no":{
@@ -462,7 +462,7 @@
 		"description":"A negative response to a question"
 	},
 	"adalreadyblocked":{
-		"message":"Nemusíte dělat nic, protože reklama je již blokována",
+		"message":"You don't have to do anything as the ad is already blocked",
 		"description":"on the ad report page, telling a user there is nothing to do"
 	},
 	"disableallextensions":{
@@ -482,7 +482,7 @@
 		"description":"Step 1 for disabling safari extensions"
 	},
 	"disableforopera":{
-		"message":"For Opera",
+		"message":"Za Opero",
 		"description":"Opera instructions"
 	},
 	"disableforoperainstructions":{
@@ -494,113 +494,113 @@
 		"description":"tells the user to reenable the extensions one by one."
 	},
 	"correctfilters":{
-		"message":"Opravit filtry",
+		"message":"Pravilni filtri",
 		"description":"on the ad report page, label describing having the right set of filters"
 	},
 	"pagelanguagecheck":{
-		"message":"V jakém jazyce je stránka napsána?",
+		"message":"V katerem jeziku je napisana stran?",
 		"description":"question on ad report page"
 	},
 	"lang_english":{
-		"message":"Angličtina",
+		"message":"angleščina",
 		"description":"language"
 	},
 	"filtereasylist_plus_bulgarian":{
-		"message":"Bulharština",
+		"message":"bolgarščina",
 		"description":"language"
 	},
 	"filterchinese":{
-		"message":"Čínština",
+		"message":"kitajščina",
 		"description":"language"
 	},
 	"lang_czech":{
-		"message":"Čeština",
+		"message":"češčina",
 		"description":"language"
 	},
 	"filterdanish":{
-		"message":"Dánština",
+		"message":"danščina",
 		"description":"language"
 	},
 	"filterdutch":{
-		"message":"Holandština",
+		"message":"nizozemščina",
 		"description":"language"
 	},
 	"filtereasylist_plus_finnish":{
-		"message":"Finština",
+		"message":"finščina",
 		"description":"language"
 	},
 	"filtereasylist_plus_french":{
-		"message":"Francouzština",
+		"message":"francoščina",
 		"description":"language"
 	},
 	"filtereasylist_plus_german":{
-		"message":"Němčina",
+		"message":"nemščina",
 		"description":"language"
 	},
 	"filtereasylist_plus_greek":{
-		"message":"Řečtina",
+		"message":"grščina",
 		"description":"language"
 	},
 	"filterhungarian":{
-		"message":"Maďarština",
+		"message":"madžarščina",
 		"description":"language"
 	},
 	"filterisraeli":{
-		"message":"Hebrew",
+		"message":"hebrejščina",
 		"description":"language"
 	},
 	"filteritalian":{
-		"message":"Italština",
+		"message":"italijanščina",
 		"description":"language"
 	},
 	"filterjapanese":{
-		"message":"Japonština",
+		"message":"japonščina",
 		"description":"language"
 	},
 	"filtereasylist_plun_korean":{
-		"message":"Korejština",
+		"message":"korejščina",
 		"description":"language"
 	},
 	"filtereasylist_plus_polish":{
-		"message":"Polština",
+		"message":"poljščina",
 		"description":"language"
 	},
 	"filtereasylist_plus_romanian":{
-		"message":"Rumunština",
+		"message":"romunščina",
 		"description":"language"
 	},
 	"lang_russian":{
-		"message":"Ruština",
+		"message":"ruščina",
 		"description":"language"
 	},
 	"lang_slovak":{
-		"message":"Slovenština",
+		"message":"slovaščina",
 		"description":"language"
 	},
 	"filtereasylist_plus_spanish":{
-		"message":"Španělština",
+		"message":"španščina",
 		"description":"language"
 	},
 	"lang_ukranian":{
-		"message":"Ukrajinština",
+		"message":"ukrajinščina",
 		"description":"language"
 	},
 	"other":{
-		"message":"Jiný",
+		"message":"drugo",
 		"description":"multiple choice option"
 	},
 	"nodefaultfilter1":{
-		"message":"Nemáme výchozí seznam filtrů pro daný jazyk.<br\/>Prosím, zkuste najít vhodný seznam pro tento jazyk $link$ nebo si tuto reklamu zablokujte pouze pro sebe na záložce 'Přizpůsobení'.",
+		"message":"We don't have a default filter list for that language.<br\/>Please try to find a suitable list that supports this language $link$ or block this ad for yourself on the 'Customize' tab.",
 		"description":"instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same message as 'tabcustomize'.",
 		"placeholders":{
 			"link":{
-				"content":"$1zde$2",
+				"content":"$1tu$2",
 				"example":"<a href='http:\/\/abp.org'>here<\/a>"
 			}
 		}
 	},
 	"retryaftersubscribe":{
-		"message":"Přihlaste se k odběru tohoto seznamu filtrů a zkuste to znovu: $list_title$",
+		"message":"Subscribe to this filter list, then try again: $list_title$",
 		"description":"instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
 		"placeholders":{
 			"list_title":{
@@ -610,53 +610,53 @@
 		}
 	},
 	"checkinfirefoxtitle":{
-		"message":"Kontrola v prohlížeči Firefox $chrome$",
+		"message":"Preverite v brskalniku Firefox $chrome$",
 		"description":"tell a user to see if a reported ad also appears in Firefox\/Chrome",
 		"placeholders":{
 			"chrome":{
-				"content":"$1nebo Chrome$2",
+				"content":"$1ali Chrome$2",
 				"example":"This will only be shown in Safari. Chrome users will not see this."
 			}
 		}
 	},
 	"checkinfirefox_1":{
-		"message":"Nainstalujte prohlížeč Firefox $chrome$, pokud jej nemáte.",
+		"message":"Če ga nimate, namestite Firefox $chrome$.",
 		"description":"instruction for how to check Firefox\/Chrome for a reported ad",
 		"placeholders":{
 			"chrome":{
-				"content":"$1nebo Chrome$2",
+				"content":"$1ali Chrome$2",
 				"example":"This will only be shown in Safari. Chrome users will not see this."
 			}
 		}
 	},
 	"checkinfirefox_2":{
-		"message":"Nainstalujte Adblock Plus pro Firefox $chrome$, pokud jej nemáte.",
+		"message":"Namestite Adblock Plus za Firefox $chrome$, v kolikor ga še nimate.",
 		"description":"instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'AdBlock Plus'.",
 		"placeholders":{
 			"chrome":{
-				"content":"$1nebo AdBlockforChrome pro Chrome$2",
+				"content":"$1ali AdBlockforChrome za Chrome$2",
 				"example":"This will only be shown in Safari. Chrome users will not see this."
 			}
 		}
 	},
 	"checkinfirefox_3":{
-		"message":"V uvedeném prohlížeči se přihlaste k odběru stejných seznamů filtrů, jako máte zde (mimo AdBlock vlastní filtry v prohlížeči Firefox).",
+		"message":"V tistem brskalniku se naročite na iste sezname filtrov kot tukaj (razen AdBlock prilagojenih filtrov v brskalniku Firefox).",
 		"description":"instruction for how to check Firefox\/Chrome for a reported ad"
 	},
 	"checkinfirefox_4":{
-		"message":"V uvedeném prohlížeči načtěte stránku s reklamou.",
+		"message":"V tistem brskalniku pojdite na stran z oglasom.",
 		"description":"instruction for how to check Firefox\/Chrome for a reported ad"
 	},
 	"checkinfirefox_5":{
-		"message":"Zobrazuje se reklama také v uvedeném prohlížeči?",
+		"message":"Ali se oglas prikaže tudi v tistem v brskalniku?",
 		"description":"instruction for how to check Firefox\/Chrome for a reported ad"
 	},
 	"refusetocheck":{
-		"message":"Nechci to takhle kontrolovat",
+		"message":"Tega ne želim preveriti",
 		"description":"user is telling us they don't wish to investigate something for us"
 	},
 	"reportfilterlistproblem":{
-		"message":"Toto je chyba seznamu filtrů. Nahlašte ji zde: $link$",
+		"message":"To je problem seznama filtrov. Tu lahko prijavite napako: $link$",
 		"description":"telling the user to report an ad to a filter list maintainer",
 		"placeholders":{
 			"link":{
@@ -666,61 +666,61 @@
 		}
 	},
 	"reporttous2":{
-		"message":"Pokud umíte anglicky, můžete nám reklamu nahlásit <a>na seznam problémů<\/a>.",
+		"message":"Oglas nam lahko sporočite preko <a>sledilnika težav<\/a> (težavo je treba opisati v angleščini).",
 		"description":"NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us <a>in the issue tracker<\/a>.'"
 	},
 	"fixityourself":{
-		"message":"OK, můžete si zablokovat tuto reklamu pouze pro sebe v Nastavení na záložce Vlastní filtr. Díky!",
+		"message":"V redu, še vedno lahko ta oglas blokirate le zase na strani 'Možnosti'. Hvala!",
 		"description":"telling a user who won't report an ad to us how to handle it for herself"
 	},
 	"updatefromoldversion":{
-		"message":"Používáte zastaralou verzi AdBlock. Prosím, nejprve $updatelink$ AdBlock na nejnovější verzi",
+		"message":"Uporabljate staro različico AdBlocka. Prosimo, najprej $updatelink$ na najnovejšo različico AdBlocka",
 		"description":"Ad report page instructions to update AdBlock in Safari",
 		"placeholders":{
 			"updatelink":{
-				"content":"$1aktualizujte$2",
+				"content":"$1posodobi$2",
 				"example":"<a href='http:\/\/chrome.com\/update_here.ctx'>update<\/a>"
 			}
 		}
 	},
 	"adblock_outdated_chrome":{
-		"message":"Používáte starou verzi AdBlock. Prosím, jděte na stránku <a href='#'>Rozšíření<\/a>, povolte 'Režim pro vývojáře' a klikněte na 'Aktualizovat rozšíření'",
+		"message":"Uporabljate staro različico AdBlocka. Prosimo, pojdite na <a href='#'>stran z razširitvami<\/a>, omogočite 'Način za razvijalce' in kliknite 'Posodobi razširitve'.",
 		"description":"Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome:\/\/chrome\/extensions\/'"
 	},
 	"block_an_ad_on_this_page":{
-		"message":"Blokovat reklamu na této stránce",
+		"message":"Blokiraj oglas na tej strani",
 		"description":"Toolbar button menu entry and context menu entry"
 	},
 	"block_this_ad":{
-		"message":"Blokovat tuto reklamu",
+		"message":"Blokiraj ta oglas",
 		"description":"Context and popup menu entry"
 	},
 	"filecleanerwarning":{
-		"message":"Pokud vidíte tuto zprávu při každém spuštění AdBlock, ujistěte se, že nepoužíváte souborový čistič, který také čistí 'LocalStorage' soubory.",
+		"message":"If you see this message every time you start AdBlock, please make sure you are not using a file cleaner that also cleans 'localStorage' files.",
 		"description":"Help for users who use hyperactive file cleaners"
 	},
 	"typehiding":{
-		"message":"skrytý",
+		"message":"skrivanje",
 		"description":"A resource type"
 	},
 	"typescript":{
-		"message":"skript",
+		"message":"skripta",
 		"description":"A resource type"
 	},
 	"typeimage":{
-		"message":"obrázek",
+		"message":"slika",
 		"description":"A resource type"
 	},
 	"typestylesheet":{
-		"message":"definice stylu",
+		"message":"definicija stila",
 		"description":"A resource type"
 	},
 	"typeobject":{
-		"message":"interaktivní objekt",
+		"message":"Interaktivni objekt",
 		"description":"A resource type"
 	},
 	"typesubdocument":{
-		"message":"rámec",
+		"message":"okvir",
 		"description":"A resource type"
 	},
 	"typeobject_subrequest":{
@@ -732,47 +732,47 @@
 		"description":"A resource type"
 	},
 	"typeother":{
-		"message":"jiný",
+		"message":"drugo",
 		"description":"A resource type"
 	},
 	"typepopup":{
-		"message":"popup",
+		"message":"pojavno okno",
 		"description":"A resource type"
 	},
 	"typemedia":{
-		"message":"audio\/video",
+		"message":"avdio\/video",
 		"description":"A resource type"
 	},
 	"typepage":{
-		"message":"stránka",
+		"message":"stran",
 		"description":"A resource type"
 	},
 	"typeunknown":{
-		"message":"neznámý",
+		"message":"neznano",
 		"description":"A resource type"
 	},
 	"blockeverycontaining":{
-		"message":"Blokovat každý prvek obsahující:",
+		"message":"Blokiraj vsak vir, ki vsebuje:",
 		"description":"resourceblocking page string"
 	},
 	"whitelisteverycontaining":{
-		"message":"Povolit každý prvek obsahující:",
+		"message":"Dovoli vsak vir, ki vsebuje:",
 		"description":"resourceblocking page string"
 	},
 	"wildcardhint":{
-		"message":"Pozn.: zde můžete použít * jako zástupný znak",
+		"message":"Note: you can use * as wildcard here",
 		"description":"resourceblocking page string"
 	},
 	"novalidurlpattern":{
-		"message":"Prosím zadejte platnou vzorovou adresu URL!",
+		"message":"Please enter a valid URL pattern to match!",
 		"description":"resourceblocking page string"
 	},
 	"doesntmatchoriginal":{
-		"message":"Vzor, který jste zadali, neodpovídá prvku, který se pokoušíte zablokovat! Chcete přesto pokračovat?",
+		"message":"The pattern you entered doesn't match the resource you tried to block! Continue anyway?",
 		"description":"resourceblocking page string"
 	},
 	"thirdpartycheckbox":{
-		"message":"Jakékoliv webové stránky, s výjimkou stránek na doméně $domain$",
+		"message":"Any website EXCEPT websites on domain $domain$",
 		"description":"resourceblocking page string",
 		"placeholders":{
 			"domain":{
@@ -782,23 +782,23 @@
 		}
 	},
 	"filterhasbeenadded":{
-		"message":"Filtr byl úspěšně přidán!\nNačtěte znovu stránku pro zobrazení výsledku!",
+		"message":"The filter was succesfully added!\nReload the page to see the result!",
 		"description":"resourceblocking page string (the 'slash n' is a line break)"
 	},
 	"adblock_is_paused":{
-		"message":"AdBlock je pozastaven. Protože nebyly zachyceny žádné prvky, není možné tuto stránku použít. Nejprve spusťte AdBlock a pak to zkuste znovu.",
+		"message":"AdBlock is paused. Therefore no resources are caught, so this page cannot be used. Unpause AdBlock first and try again.",
 		"description":"resourceblocking page string"
 	},
 	"excludefilterremoved":{
-		"message":"Filtr byl odstraněn. Prosím, obnovte původní stránku pro vytvoření seznamu prvků.",
+		"message":"The filter was removed. Please reload the original page to generate the list with resources.",
 		"description":"Warning when a page exclusion rule was removed in resourceblock.html"
 	},
 	"noresourcessend2":{
-		"message":"Něco se pokazilo. Žádné prvky nebyly přeposlány. Tato stránka se nyní zavře. Zkuste webovou stránku načíst znovu.",
+		"message":"Something went wrong. No resources have been sent through. This page will now close. Try reloading the website.",
 		"description":"resourceblocking page string"
 	},
 	"resourcedomain":{
-		"message":"Načteno na stránce s doménou:\n$domain$",
+		"message":"Loaded on page with domain:\n$domain$",
 		"description":"Text shown when hovering over an item in the third-party column",
 		"placeholders":{
 			"domain":{
@@ -808,31 +808,31 @@
 		}
 	},
 	"resourceiswhitelisted":{
-		"message":"Vybraný prvek je na seznamu povolených. Proto ho nemůžete blokovat.",
+		"message":"The selected resource has been whitelisted. Therefore you cannot block it.",
 		"description":"resourceblocking page string"
 	},
 	"selectresources":{
-		"message":"Vyberte prvek, který chcete blokovat nebo povolit",
+		"message":"Select the resource you would like to block or unblock",
 		"description":"resourceblocking page string"
 	},
 	"resourceblocktitle":{
-		"message":"Blokovat prvek",
+		"message":"Blokiraj vir",
 		"description":"resourceblocking page string"
 	},
 	"headerresource":{
-		"message":"Prvek",
+		"message":"Vir",
 		"description":"resourceblocking page string"
 	},
 	"headertype":{
-		"message":"Typ",
+		"message":"Tip",
 		"description":"resourceblocking page string"
 	},
 	"headerfilter":{
-		"message":"Odpovídající filtr",
+		"message":"Ujemajoči se filter",
 		"description":"resourceblocking page string"
 	},
 	"close":{
-		"message":"Zavřít",
+		"message":"Zapri",
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend1":{
@@ -840,205 +840,205 @@
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend2":{
-		"message":"blokované prvky",
+		"message":"blocked resources",
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend3":{
-		"message":"povolené prvky",
+		"message":"whitelisted resources",
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend4":{
-		"message":"prvky, které je možné blokovat",
+		"message":"blockable resources",
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend5":{
-		"message":"uplatňovaná pravidla",
+		"message":"hiding rules applied",
 		"description":"resourceblocking page string"
 	},
 	"loading":{
-		"message":"NAČÍTÁM...",
+		"message":"NALAGANJE...",
 		"description":"resourceblocking page string"
 	},
 	"nextstep":{
-		"message":"Další krok",
+		"message":"Naslednji korak",
 		"description":"resourceblocking page string"
 	},
 	"appliedwhenbrowsing":{
-		"message":"Tento filtr se použije při prohlížení:",
+		"message":"This filter will be applied when you are browsing:",
 		"description":"resourceblocking page string"
 	},
 	"anysite":{
-		"message":"Jakákoliv webová stránka",
+		"message":"Katerakoli stran",
 		"description":"resourceblocking page string"
 	},
 	"onlyondomains":{
-		"message":"POUZE stránky na těchto doménách: ",
+		"message":"IZKLJUČNO strani na teh domenah: ",
 		"description":"resourceblocking page string"
 	},
 	"multipledomainshint":{
-		"message":"Oddělte více domén čárkami nebo mezerami",
+		"message":"Seperate multiple domains with commas or spaces",
 		"description":"resourceblocking page string"
 	},
 	"casesensitive":{
-		"message":"Tento filtr rozlišuje malá a velká písmena:",
+		"message":"Ta filter razlikuje med velikostjo črk:",
 		"description":"resourceblocking page string"
 	},
 	"onlyresourcetypes":{
-		"message":"Tento filtr se vztahuje na prvky těchto typů:",
+		"message":"Ta filter se uporablja za vire teh vrst:",
 		"description":"resourceblocking page string"
 	},
 	"addthisfilter":{
-		"message":"Přidat tento filtr",
+		"message":"Dodaj ta filter",
 		"description":"resourceblocking page string"
 	},
 	"flashads":{
-		"message":"Videa a Flash",
+		"message":"Video posnetki in Flash",
 		"description":"Title of the final ad report question if the ad didn't appear in FF"
 	},
 	"cantblockflashwarning":{
-		"message":"Objevuje se reklama ve filmu nebo před ním nebo v jakémkoli jiném doplňku, např. ve Flashové hře?",
+		"message":"Does the ad appear in or before a film or any other plugin like a Flash game?",
 		"description":"Text of the final ad report question"
 	},
 	"cantblockflash":{
-		"message":"Nemůžeme zatím blokovat reklamy uvnitř objektů Flash nebo v jiných doplňcích. Čekáme na podporu od prohlížeče a WebKitu.",
+		"message":"We can't block ads inside Flash and other plugins yet. We are awaiting support from the browser and WebKit.",
 		"description":"Result of the final ad report question"
 	},
 	"cleanuplist":{
-		"message":"Optimalizovat filtry v tomto seznamu:",
+		"message":"Počisti ta seznam:",
 		"description":"Option at the bottom of the third options tab"
 	},
 	"disabled_by_filter_lists":{
-		"message":"Promiňte, ale AdBlock je na této stránce zakázán jedním z vašich seznamů filtrů.",
+		"message":"Sorry, AdBlock is disabled on this page by one of your filter lists.",
 		"description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
 	},
 	"status_disabled":{
-		"message":"AdBlock nelze spustit na této doméně.",
+		"message":"AdBlock can not run on this domain.",
 		"description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank."
 	},
 	"dont_run_on_pages_on_domain":{
-		"message":"Nespouštět na stránkách na této doméně",
+		"message":"Don't run on pages on this domain",
 		"description":"Menu entry to open the whitelist wizard."
 	},
 	"disabled_on_this_page":{
-		"message":"AdBlock je zakázán na této stránce.",
+		"message":"AdBlock je onemogočen na tej strani.",
 		"description":"Message shown in toolbar button on web pages that have been whitelisted."
 	},
 	"enable":{
-		"message":"povolit",
+		"message":"omogoči",
 		"description":"Link text to un-whitelist a page, displayed immediately after 'disabled_on_this_page'."
 	},
 	"status_paused":{
-		"message":"AdBlock je pozastaven.",
+		"message":"AdBlock je začasno ustavljen.",
 		"description":"Message shown in toolbar button when AdBlock is paused."
 	},
 	"unpause":{
-		"message":"spustit",
+		"message":"ponovno zaženi",
 		"description":"Link text to unpause AdBlock, displayed immediately after 'status_paused'."
 	},
 	"pause_adblock":{
-		"message":"Pozastavit AdBlock",
+		"message":"Začasno ustavi AdBlock",
 		"description":"Menu entry to pause AdBlock."
 	},
 	"undo_last_block":{
-		"message":"Vrátit zpět poslední blok",
+		"message":"Razveljavi zadnjo blokado",
 		"description":"Menu entry to let the user cancel the result of running the blacklist wizard."
 	},
 	"dont_run_on_this_page":{
-		"message":"Nepoužívat na této stránce",
+		"message":"Ne izvajaj se na tej strani",
 		"description":"Menu entry to whitelist a page"
 	},
 	"options":{
-		"message":"Nastavení",
+		"message":"Možnosti",
 		"description":"The text of the link on chrome:\/\/chrome\/extensions that gets you to the Options page for an extension"
 	},
 	"hide_this_button":{
-		"message":"Skrýt toto tlačítko",
+		"message":"Skrij ta gumb",
 		"description":"Toolbar button menu entry to hide the AdBlock button"
 	},
 	"spread_the_word":{
-		"message":"Please, help me spread the word!",
+		"message":"Prosimo, pomagajte nam širiti besedo!",
 		"description":"Text of a share link"
 	},
 	"did_you_know_this_is_my_full_time_job":{
-		"message":"Věděli jste, že toto je moje zaměstnání?",
+		"message":"Did you know this is my full-time job?",
 		"description":"Text of a payment request link"
 	},
 	"removelabel":{
-		"message":"Odstranit",
+		"message":"Odstrani",
 		"description":"link to remove a filter"
 	},
 	"changelabel":{
-		"message":"změnit",
+		"message":"spremeni",
 		"description":"link to change resources on the resourceblock page"
 	},
 	"translator_credit":{
-		"message":"Autorem překladu je: $translator_names$",
+		"message":"Prevedel: $translator_names$",
 		"description":"Credit for your translation with $translator_names$ being your own name below. Multiple names should be separated by a comma.",
 		"placeholders":{
 			"translator_names":{
-				"content":"Petr Cízl",
+				"content":"Gregory_K",
 				"example":"Michael G, Drew R"
 			}
 		}
 	},
 	"project_home":{
-		"message":"Hlavní stránka projektu",
+		"message":"Stran projekta",
 		"description":"Text of link to the AdBlock open source project homepage (not the install page)"
 	},
 	"help":{
-		"message":"Nápověda a pomoc",
+		"message":"Pomoč",
 		"description":"Text of link to a page with fixes to common problems and a list of known issues"
 	},
 	"faq":{
-		"message":"Časté dotazy",
+		"message":"Pogosto zastavljena vprašanja",
 		"description":"Text of link to a page with answers to frequently asked questions.  The capitalization should be the same as for the 'help' and 'project_home' messages"
 	},
 	"report_ad_on_page":{
-		"message":"Nahlásit reklamu na této stránce",
+		"message":"Prijavi oglas na tej strani",
 		"description":"Link in the button"
 	},
 	"show_resourcelist":{
-		"message":"Zobrazit seznam prvků",
+		"message":"Prikaži seznam virov",
 		"description":"Link in the button"
 	},
 	"advanced_options":{
-		"message":"Jsem zkušený uživatel, ukaž mi pokročilé možnosti.",
+		"message":"Sem izkušen uporabnik; pokaži mi dodatne možnosti.",
 		"description":"Options page checkbox"
 	},
 	"work_around_hulu_problems":{
-		"message":"Zástupné řešení pro nefunkční video na Hulu.com (vyžaduje restartování prohlížeče)",
+		"message":"Obidi težavo z nedelovanjem videov na Hulu.com (zahteva ponovni zagon brskalnika)",
 		"description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
 	},
 	"now_you_have_adblock_hooray":{
-		"message":"Nyní máte AdBlock! Hurááá!",
+		"message":"Zdaj imate AdBlock! Hura!",
 		"description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
 	},
 	"any_new_tabs_you_open_Will_be_automatically_ad_free":{
-		"message":"Jakékoliv nově otevřené záložky budou automaticky bez reklam.",
+		"message":"Vsi novi zavihki, ki jih odprete, bodo samodejno brez oglasov.",
 		"description":"Install page subtitle"
 	},
 	"installing_adblock":{
-		"message":"Instaluji AdBlock...",
+		"message":"Nameščanje AdBlocka...",
 		"description":"Install page: shown while progress bar loads"
 	},
 	"done":{
-		"message":"hotovo.",
+		"message":"končano.",
 		"description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
 	},
 	"seeing_this_every_time_you_start_your_browser":{
-		"message":"Vidíte tohle při každém spuštění prohlížeče?",
+		"message":"Ali se to prikaže pri vsakem zagonu brskalnika?",
 		"description":"Install page: link to click for help"
 	},
 	"how_to_use_adblock":{
-		"message":"Jak používat AdBlock:",
+		"message":"Kako uporabljati AdBlock:",
 		"description":"Install page section title"
 	},
 	"adblock_auto_removes_ads_thats_all":{
-		"message":"AdBlock automaticky odstraňuje reklamy. To je vše, k čemu slouží.",
+		"message":" AdBlock samodejno odstrani oglase. To je vse.",
 		"description":"Install page: explaining how to use adblock."
 	},
 	"for_more_options_right_click":{
-		"message":"Pro více možností, klikněte pravým tlačítkem na webové stránce nebo klikněte na $img$ tlačítko na panelu nástrojů.",
+		"message":"Za več možnosti lahko z desno miškino tipko kliknete na spletne strani ali pa na $img$ gumb v orodni vrstici.",
 		"description":"Install page: explaining how to use adblock in more detail.",
 		"placeholders":{
 			"img":{
@@ -1048,71 +1048,71 @@
 		}
 	},
 	"modifydomain":{
-		"message":"Doména:",
+		"message":"Domena:",
 		"description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"
 	},
 	"modifypath":{
-		"message":"Stránka:",
+		"message":"Stran:",
 		"description":"Caption for the whitelist wizard slider that modifies the path part of a URL"
 	},
 	"show_ads_except_for":{
-		"message":"Zobrazovat reklamy <i>všude<\/i> kromě těchto domén...",
+		"message":"Prikaži oglase <i>povsod<\/i>, razen na teh domenah...",
 		"description":"Section title for blacklisting section of Customize tab"
 	},
 	"only_block_ads_on_these_sites":{
-		"message":"Blokovat reklamy pouze na těchto stránkách:",
+		"message":"Blokiraj oglase samo na teh straneh:",
 		"description":"Label for textbox where user enters a list of sites on Customize tab"
 	},
 	"format_site1_site2_site3":{
-		"message":"Formát: ~stranka1.cz|~stranka2.cz|~zpravy.stranka3.cz",
+		"message":"Oblika: ~stran1.com|~stran2.com|~novice.stran3.org",
 		"description":"Example showing users how to input a list of sites on the Customize tab. You can translate the 'news' and 'siteN' but leave the '|'s and '~'s in place."
 	},
 	"warning_overrules_filters":{
-		"message":"Upozornění: Na všech ostatních stránkách uvidíte reklamy!<br>Toto má přednost před všemi ostatními filtry pro tyto stránky.",
+		"message":"Opozorilo: na vseh drugih spletnih mestih boste videli oglase!<br>To povozi vse druge filtre za tista mesta.",
 		"description":"Message on the third tab of the options page, explaining the danger of adding a blacklisting filter"
 	},
 	"storage_quota_exceeded":{
-		"message":"Překročili jste ukládací prostor, který AdBlock může použít. Prosím, odhlaste odběr některých seznamů filtrů!",
+		"message":"Presegli ste količino prostora, ki jo AdBlock lahko uporabi za shranjevanje. Prosimo, odjavite se od nekaterih seznamov filtriranja!",
 		"description":"Message shown when the user uses more storage than allowed by the browser"
 	},
 	"safari50_updatenotice":{
-		"message":"Používáte starou verzi Safari. Získejte nejnovější verzi, abyste mohli používat tlačítko AdBlock na panelu nástrojů pro pozastavení AdBlock, spravovat chování na webových stránkách a nahlašovat reklamy. <a>Aktualizovat nyní<\/a>.",
+		"message":"Uporabljate staro različico brskalnika Safari. V kolikor želite uporabljati AdBlockov gumb v opravilni vrstici, ga onemogočiti na nekaterih spletnih straneh ter prijavljati oglase, <a>nadgradite zdaj<\/a>.",
 		"description":"A message shown to Safari 5.0 users urging them to upgrade"
 	},
 	"searchexplanation":{
-		"message":"Použijte * pro žádný nebo více znaků.  Například 'banner*.gif image' odpovídá obrázkům 'banner.gif', 'banner123.gif' a 'bannerxyz.gif'.",
+		"message":"Use * to match zero or more letters.  For example, 'banner*.gif image' matches the images 'banner.gif', 'banner123.gif', and 'bannerxyz.gif'.",
 		"description":"Text in resourceblock when you hover your mouse over the search textbox"
 	},
 	"searchplaceholder":{
-		"message":"Hledám prvky...",
+		"message":"Iskanje virov...",
 		"description":"Text in resourceblock shown in the search textbox before you type something"
 	},
 	"nosearchresults":{
-		"message":"Nebyly nalezeny žádné prvky",
+		"message":"Viri niso bili najdeni",
 		"description":"Text in resourceblock shown if no results are found after searching"
 	},
 	"custompattern":{
-		"message":"Vlastní:",
+		"message":"Po meri:",
 		"description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
 	},
 	"opera_reenable_button":{
-		"message":"Tlačítko můžete znovu povolit v nastavení tohoto rozšíření",
+		"message":"Gumb lahko znova omogočite v nastavitvah te razširitve",
 		"description":"Opera browser button message when you click 'hide this button'"
 	},
 	"opera_linkunblock":{
-		"message":"Zobrazit reklamy na doméně",
+		"message":"Prikaži oglase na domeni",
 		"description":"Opera version of the 'linkunblock' string"
 	},
 	"opera_excludedomainorurl":{
-		"message":"Doména, kde by AdBlock neměl nic blokovat",
+		"message":"Domena, kjer AdBlock naj ne blokira ničesar",
 		"description":"Opera version of the 'excludedomainorurl' string"
 	},
 	"opera_show_toolbar_button":{
-		"message":"Zobrazit tlačítko panelu nástrojů",
+		"message":"Show the toolbar button",
 		"description":"Opera option to show\/hide the button"
 	},
 	"opera_can_also_change_setting":{
-		"message":"Můžete také zvýšit hodnotu\n$setting$",
+		"message":"You can also increase the value of\n$setting$",
 		"description":"Message when the storage quota is reached, for advanced users in Opera",
 		"placeholders":{
 			"setting":{
@@ -1122,27 +1122,27 @@
 		}
 	},
 	"opera_for_more_options":{
-		"message":"Pro více možností, můžete kliknout na tlačítko panelu nástrojů nebo otevřete předvolby přes Opera &rArr; Rozšíření &rArr; Spravovat rozšíření &rArr; ikona klíče &rArr; Předvolby",
+		"message":"For more options, you can click the toolbar button or open the preferences via Extensions (in the menu) &rArr; Manage Extensions &rArr; wrench icon &rArr; Preferences",
 		"description":"Install page string telling where to find the preferences in Opera. &rArr; makes a right arrow (->)"
 	},
 	"thats_it":{
-		"message":"A je to!",
+		"message":"To je to!",
 		"description":"Install page string"
 	},
 	"close_tab_begin_browsing":{
-		"message":"Můžete zavřít tuto kartu a začít procházení bez reklam. Dobrou zábavu!",
+		"message":"Ta zavihek lahko zaprete in začnete brskati brez nadležnih oglasov. Uživajte!",
 		"description":"Install page string"
 	},
 	"opera_donations_install":{
-		"message":"Pokud se vám líbí toto rozšíření, prosím zvažte poslaní daru prostřednictvím nabídky na stránce v nastavení.",
+		"message":"Če vam je ta razširitev resnično všeč, prosimo razmislite o donaciji. Več o tem v možnostih razširitve.",
 		"description":"Opera donate request in the install page"
 	},
 	"opera_donations_button":{
-		"message":"Líbí se vám toto rozšíření? Pokud ano, prosím zvažte poslání daru pomocí nabídky na stránce v nastavení!",
+		"message":"Ali vam je ta razširitev všeč? V kolikor je temu tako, prosimo razmislite o donaciji. Več o tem v možnostih razširitve.",
 		"description":"Opera donate request in the button"
 	},
 	"opera_enabledin":{
-		"message":"Aktivní v $browserversion$",
+		"message":"Omogočeno v $browserversion$",
 		"description":"Hover text of items disabled in an older browser version",
 		"placeholders":{
 			"browserversion":{
@@ -1152,15 +1152,15 @@
 		}
 	},
 	"opera_120_install":{
-		"message":"V Opeře před verzí 12.10, nebudou některé reklamy blokovány, protože není možné analyzovat všechna pravidla. To lze napravit aktualizací Opery na verzi 12.10. Od tohoto okamžiku budou všechny reklamy blokovány správně.",
+		"message":"V različicah brskalnika Opera pred verzijo 12.10 nekateri oglasi ne bodo blokirani zaradi tehničnih omejitev. Ta težava bo odpravljena z posodobitvijo Opere na različico 12.10. Od takrat naprej bodo vsi oglasi pravilno blokirani.",
 		"description":"Opera < 12.10 warning during installation"
 	},
 	"opera_120_options":{
-		"message":"V Opeře před verzí 12.10, jsou některé možnosti zašedivělé, protože nejsou ve starších verzích podporovány.",
+		"message":"V različicah brskalnika Opera pred verzijo 12.10 vse možnosti niso na voljo, saj niso podprte.",
 		"description":"Opera < 12.10 warning above options page"
 	},
 	"filterorigin":{
-		"message":"Původ filtrování:\n$list$",
+		"message":"Izvor filtra: $list$",
 		"description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
 		"placeholders":{
 			"list":{
@@ -1170,27 +1170,27 @@
 		}
 	},
 	"firefox_explanation":{
-		"message":"Smyslem této otázky je určit, kdo by měl dostat vaše hlášení. Pokud odpovíte na tuto otázku chybně, může být zpráva zaslána nesprávným lidem a pak může být ignorována.",
+		"message":"Namen tega vprašanja je ugotoviti kdo naj prejme vaše poročilo. V kolikor na to vprašanje odgovorite nepravilno, bo bilo poročilo poslano napačni skupini in zaradi tega ne bo obravnavano.",
 		"description":"Explanation of the Check-in-FireFox step in the ad reporter"
 	},
 	"opera_secure_pages":{
-		"message":"Zabezpečené stránky",
+		"message":"Varne strani",
 		"description":"Title of an area in the ad report page in Opera. Only visible if the opener tab was a secure url (https)"
 	},
 	"opera_secure_pages_enabled":{
-		"message":"Klikněte na Extensions (v menu) &rArr; Manage Extensions &rArr; vyhledejte AdBlock a klikněte na ikonu klíče vedle něj &rArr; klikněte na Privacy.<br\/>Je povolena možnost přístupu k zabezpečeným stránkám?",
+		"message":"Click Extensions (in the menu) &rArr; Manage Extensions &rArr; look for AdBlock and click the spanner icon near it &rArr; click Privacy.<br\/>Is the option to allow access to secure pages enabled?",
 		"description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
 	},
 	"opera_allow_secure":{
-		"message":"Pokud chcete používat AdBlock na zabezpečených stránkách (stránky s ikonou zámku v panelu nástrojů), musíte nejprve povolit možnost pro přístupu k zabezpečeným stránkám.",
+		"message":"V kolikor želite uporabljati AdBlock na varnih straneh (strani z ikono ključavnice v orodni vrstici), morate razširitvi najprej omogočiti dostop v nastavitvah.",
 		"description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
 	},
 	"blocked_ads":{
-		"message":"Blocked ads:",
+		"message":"Blokirani oglasi:",
 		"description":"Title for popup menu section showing number of ads blocked."
 	},
 	"blocked_n_on_this_page":{
-		"message":"$count$ on this page",
+		"message":"$count$ na tej strani",
 		"description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
 		"placeholders":{
 			"count":{
@@ -1200,7 +1200,7 @@
 		}
 	},
 	"blocked_n_in_total":{
-		"message":"$count$ in total",
+		"message":"$count$ skupno",
 		"description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
 		"placeholders":{
 			"count":{
@@ -1210,31 +1210,31 @@
 		}
 	},
 	"show_on_adblock_button":{
-		"message":"Show on AdBlock button",
+		"message":"Prikaži na AdBlock gumbu",
 		"description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
 	},
 	"adblockinglist":{
-		"message":"Ad Blocking Filter Lists",
+		"message":"Seznami filtrov za blokiranje oglasov",
 		"description":"List for subscribed ad blocking fiters"
 	},
 	"otherfilters":{
-		"message":"Other Filter Lists",
+		"message":"Drugi seznami filtrov",
 		"description":"List for other filters the user subscribed to"
 	},
 	"customfilters":{
-		"message":"Custom Filter Lists",
+		"message":"Seznami filtrov po meri",
 		"description":"List for custom filters the user subscribed to"
 	},
 	"languagedropdowndescription":{
-		"message":"Add filters for another language: ",
+		"message":"Filtri za druge jezike: ",
 		"description":"Dropdown list for language specific filters"
 	},
 	"whats_this":{
-		"message":"What's this?",
+		"message":"Kaj je to?",
 		"description":"Text of a link pointing to the explanation of a new feature"
 	},
 	"selectlanguage":{
-		"message":" -- Select Language -- ",
+		"message":" -- Izberite jezik -- ",
 		"description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
 	}
 }
