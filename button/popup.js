@@ -1,5 +1,7 @@
 var BG = chrome.extension.getBackgroundPage();
 
+BG.crowdfund.done();
+
 // Set menu entries appropriately for the selected tab.
 function customize_for_this_tab() {
   $(".menu-entry, .separator").hide();
@@ -24,15 +26,13 @@ function customize_for_this_tab() {
       show(["div_pause_adblock", "div_blacklist", "div_whitelist", 
             "div_whitelist_page", "div_show_resourcelist", 
             "div_report_an_ad", "separator1", "div_options", 
-            "div_help_hide_start", "separator3","block_counts"]);
+            "div_help_hide_start", "separator3","block_counts", "div_crowdfund_text"]);
       
       var page_count = info.tab_blocked || "0";
       $("#page_blocked_count").text(page_count);
       $("#total_blocked_count").text(info.total_blocked);
       
       $("#toggle_badge_checkbox").attr("checked", info.display_stats);
-      // Don't show the checkbox when clicking it will do nothing obvious.
-      $("#block_counts_controls").toggle(page_count !== "0");
       // Show help link until it is clicked.
       $("#block_counts_help").
         toggle(BG.get_settings().show_block_counts_help_link).
@@ -82,6 +82,12 @@ $(function() {
         replaceWith(translate("disabled_by_filter_lists"));
       }
     });
+  });
+
+  //CrowdFunding 
+  var crowdfund_href = "https://campaign.getadblock.com";
+  $("#crowdfund_open").click(function(){
+    chrome.tabs.create({'url': crowdfund_href}, function(tab){}); 
   });
 
   $("#div_status_paused a").click(function() {
