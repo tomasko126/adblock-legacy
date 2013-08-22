@@ -1,3 +1,4 @@
+// TODO: cherry pick in the few "link updates" that we also want to deploy with this to point things away from Google Code
 /*
   the state machine goes from init => notifying => done
 
@@ -9,15 +10,16 @@
 */
 
 var crowdfund = {
-  blue: '#1449ef',              //blue badge color
-  red: '#cf0016',               //red badge color
-  badgeText: 'New',             //text for new badge
-  showingNew: false,            //showing new badge or not
-  timerBlink: false,            //handle to timer for blink badge
-  timerNotifying: false,        //handle to timer to begin notifying (campaign running state)
-  storageTag: "crowdFundStatus",//string for storing state machine
-  blinkDelay: (1000 * 60 * 60),  //1 hour between blinking
-  campaignDelay: (1000 * 60 * 60 * 24) //24 hours to start promoting campaign
+  blue: '#1449ef',                        //blue badge color
+  red: '#cf0016',                         //red badge color
+  badgeText: 'New',                       //text for new badge
+  showingNew: false,                      //showing new badge or not
+  timerBlink: false,                      //handle to timer for blink badge
+  timerNotifying: false,                  //handle to timer to begin notifying (campaign running state)
+  storageTag: "crowdFundStatus",          //string for storing state machine
+  globalNotificationStart: 1377504000000, //Nobody gets notified before Monday, Aug 26, 4AM EDT (Unix timestamp)
+  postInstallDelay: (1000 * 60 * 60 * 24),//This user gets 24 hours before notification
+  blinkDelay: (1000 * 60 * 60)            //1 hour between blinking
 };
 
 //determine if the campaign is running or not
@@ -49,7 +51,7 @@ crowdfund.init = function() {
     var today = new Date();
     storage_set(crowdfund.storageTag, {
       status: "init",
-      installStart: today.getTime() 
+      installedAt: today.getTime() 
     });
     crowdfund.setNotifyingTimer();
   } 
@@ -76,12 +78,16 @@ crowdfund.setNotifyingTimer = function() {
   var status = storage_get(crowdfund.storageTag);
   //if in init state, set a timer to begin the campaign
   if (status.status == "init") {
-    var installStart = status.installStart;
-    var now          = new Date().getTime();
-    // If clock weirdness shows installStart in the future, elapsedTime is 0
-    var elapsedTime  = Math.max(now - installStart, 0);
-    // If it's been longer, there's 0 time left (not negative)
-    var remainingTime = Math.max(crowdfund.campaignDelay - elapsedTime, 0);
+    var installedAt = status.installedAt;
+    var now         = new Date().getTime();
+
+    var localStart  = installedAt + crowdfund.postInstallDelay;
+    // The later of the two
+    var startTime   = Math.max(localStart, crowdfund.globalNotificationStart);
+
+    // 0 milliseconds if start time was in past
+    var remainingTime = Math.max(startTime - now, 0);
+
     crowdfund.timerNotifying = setTimeout(crowdfund.startCampaign, remainingTime);
   }
 };
