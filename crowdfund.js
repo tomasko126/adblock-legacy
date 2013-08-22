@@ -1,4 +1,3 @@
-// TODO: cherry pick in the few "link updates" that we also want to deploy with this to point things away from Google Code
 /*
   the state machine goes from init => notifying => done
 
