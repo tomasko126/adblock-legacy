@@ -1,12 +1,14 @@
-**Latest Chrome version:** 2.6.4<br/>
+**Latest Chrome version:** 2.6.5<br/>
 **Latest Safari version:** 2.6.4<br/>
 **Latest Opera version:** Same as Chrome, in Opera 15.  For older Opera versions, see  [here](#changelog-for-the-opera-version-of-adblock).
 
 ## Versions ##
 
 UNRELEASED:
+
+2.6.5:
 - Help and ad reporting links now go to new support site
-- Notification code about a crowdfunding campaign.
+- Notification about a CrowdTilt campaign
 
 2.6.4: Undo one of the minor bugfixes in 2.6.3 because it itself had a bug breaking AdBlock if you reloaded a page too quickly
 
