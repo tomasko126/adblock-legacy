@@ -576,7 +576,7 @@
             onclick: function(clickdata, tab) { callback(tab, clickdata); }
           });
         }
-
+        //This is where you check pao
         addMenu(translate("block_this_ad"), function(tab, clickdata) {
           emit_page_broadcast(
             {fn:'top_open_blacklist_ui', options:{info: clickdata}},
@@ -705,6 +705,7 @@
 
   // Bounce messages back to content scripts.
   if (!SAFARI) {
+  //Check this one paolo
     emit_page_broadcast = (function() {
       var injectMap = {
         'top_open_whitelist_ui': {
