@@ -355,31 +355,55 @@
   }
 
   // Removes a custom filter entry.
-  // Inputs: filter:string line of text to remove from custom filters.
-  remove_custom_filter = function(filter) {
-    // Make sure every filter is preceded and followed by at least one \n,
-    // then find and remove the filter.
-    var text = "\n" + get_custom_filters_text() + "\n";
-    text = text.replace("\n" + filter + "\n", "\n");
+  // Inputs: host:domain of the custom filters to be reset.
+  remove_custom_filter = function(host) {
+    var text = get_custom_filters_text();
+    var custom_filters_arr = text ? text.split("\n"):[];
+    var new_custom_filters_arr = [];
+    var identifier = host + "##"; //append delimiter to make sure it is the identifier
+    
+    for(var i = 0; i < custom_filters_arr.length; i++) {
+      var entry = custom_filters_arr[i];
+      if(entry.indexOf(identifier) === 0) { //Make sure that the identifier is at the start of the entry
+        continue;
+      }
+      new_custom_filters_arr.push(entry);
+    }
+    
+    text = new_custom_filters_arr.join("\n");
     set_custom_filters_text(text.trim());
   }
-
-  // Returns true if there's a recently created custom selector filter.  If
-  // |url| is truthy, the filter must have been created on |url|'s domain.
-  has_last_custom_filter = function(url) {
-    var filter = sessionStorage.getItem('last_custom_filter');
-    if (!filter)
-      return false;
-    if (!url)
-      return true;
-    return filter.split("##")[0] === parseUri(url).hostname;
+  
+  // Add 1 to custom filter count for the filters domain.
+  // Inputs: filter:string line of text to be added to custom filters.
+  add_custom_filter_count = function(filter) {
+    var domain = filter.split("##")[0];
+    var custom_filter_count_map = storage_get("custom_filter_count") || {};
+    var count = custom_filter_count_map[domain] || 0;
+    custom_filter_count_map[domain] = ++count;
+    storage_set("custom_filter_count", custom_filter_count_map);
+  }
+  
+  // Get current custom filter count for a particular domain
+  // Inputs: domain: domain name of the custom filters
+  get_custom_filter_count = function(domain) {
+    var custom_filter_count_map = storage_get("custom_filter_count") || {};
+    return custom_filter_count_map[domain] || 0;
+  }
+  
+  // Remove custom filter count for a particular domain
+  // Inputs: domain: domain name of the custom filters
+  remove_custom_filter_count = function(domain) {
+    var custom_filter_count_map = storage_get("custom_filter_count");
+    delete custom_filter_count_map[domain];
+    storage_set("custom_filter_count", custom_filter_count_map);
   }
 
-  remove_last_custom_filter = function() {
-    if (sessionStorage.getItem('last_custom_filter')) {
-      remove_custom_filter(sessionStorage.getItem('last_custom_filter'));
-      sessionStorage.removeItem('last_custom_filter');
-    }
+  remove_custom_filter_for_host = function(host) {
+    if(get_custom_filter_count(host)) {
+      remove_custom_filter(host);
+      remove_custom_filter_count(host);
+    } 
   }
 
   get_settings = function() {
@@ -576,7 +600,7 @@
             onclick: function(clickdata, tab) { callback(tab, clickdata); }
           });
         }
-        //This is where you check pao
+        
         addMenu(translate("block_this_ad"), function(tab, clickdata) {
           emit_page_broadcast(
             {fn:'top_open_blacklist_ui', options:{info: clickdata}},
@@ -590,10 +614,11 @@
             {tab: tab}
           );
         });
-
-        if (has_last_custom_filter(info.tab.url)) {
+        
+        var host = parseUri(info.tab.url).host;
+        if (get_custom_filter_count(host)) {
           addMenu(translate("undo_last_block"), function(tab) {
-            remove_last_custom_filter();
+            remove_custom_filter_for_host(host);
             chrome.tabs.reload();
           });
         }
@@ -622,7 +647,6 @@
       getCurrentTabInfo(function(info) {
         setContextMenus(info);
         setBrowserButton(info);
-        //updateBadge(info.tab.id);
       });
     }
   }
@@ -638,7 +662,7 @@
     try {
       if (FilterNormalizer.normalizeLine(filter)) {
         if (Filter.isSelectorFilter(filter)) {
-          sessionStorage.setItem('last_custom_filter', filter);
+          add_custom_filter_count(filter);
           if (!SAFARI)
             updateButtonUIAndContextMenus();
         }
@@ -705,7 +729,6 @@
 
   // Bounce messages back to content scripts.
   if (!SAFARI) {
-  //Check this one paolo
     emit_page_broadcast = (function() {
       var injectMap = {
         'top_open_whitelist_ui': {

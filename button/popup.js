@@ -42,8 +42,8 @@ function customize_for_this_tab() {
     }
 
     var eligible_for_undo = !paused && (info.disabled_site || !info.whitelisted);
-    var url_to_check_for_undo = info.disabled_site ? undefined : info.tab.url;
-    if (eligible_for_undo && BG.has_last_custom_filter(url_to_check_for_undo))
+    var url_to_check_for_undo = info.disabled_site ? undefined : parseUri(info.tab.url).host;
+    if (eligible_for_undo && BG.get_custom_filter_count(url_to_check_for_undo))
       show(["div_undo", "separator0"]);
 
     if (!BG.get_settings().show_advanced_options)
@@ -91,7 +91,9 @@ $(function() {
 
   $("#div_undo").click(function() {
     BG.getCurrentTabInfo(function(info) {
-      BG.remove_last_custom_filter();
+      var host = parseUri(info.tab.url).host;
+      BG.remove_custom_filter_for_host(host);
+
       if (!info.disabled_site)
         chrome.tabs.reload();
       window.close();
