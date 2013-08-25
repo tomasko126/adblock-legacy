@@ -616,8 +616,13 @@
         });
         
         var host = parseUri(info.tab.url).host;
-        if (get_custom_filter_count(host)) {
+        var custom_filter_count = get_custom_filter_count(host)
+        if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
+            if(custom_filter_count > 1 && 
+              !confirm(translate("confirm_undo_custom_filters", [custom_filter_count, host])))
+              return;
+              
             remove_custom_filter_for_host(host);
             chrome.tabs.reload();
           });

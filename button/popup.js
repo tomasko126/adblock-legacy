@@ -92,6 +92,11 @@ $(function() {
   $("#div_undo").click(function() {
     BG.getCurrentTabInfo(function(info) {
       var host = parseUri(info.tab.url).host;
+      var count = BG.get_custom_filter_count(host);
+      if(count > 1 && 
+        !confirm(translate("confirm_undo_custom_filters", [count, host])))
+        return;
+        
       BG.remove_custom_filter_for_host(host);
 
       if (!info.disabled_site)

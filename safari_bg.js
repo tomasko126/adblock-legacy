@@ -71,7 +71,14 @@ safari.application.addEventListener("command", function(event) {
     openTab(url, true, browserWindow);
   } else if (command === "undo-last-block") {
     var tab = browserWindow.activeTab;
-    remove_custom_filter_for_host(parseUri(tab.url).host);
+    var host = parseUri(tab.url).host;
+    var count = get_custom_filter_count(host);
+    
+    if(count > 1 &&
+      !confirm(translate("confirm_undo_custom_filters", [count, host])))
+      return;
+      
+    remove_custom_filter_for_host(host);
     if (!page_is_unblockable(tab.url))
       tab.url = tab.url;
   } else if (command in {"show-whitelist-wizard": 1, "show-blacklist-wizard": 1, "show-clickwatcher-ui": 1 }) {
