@@ -32,7 +32,7 @@
 		"description":"Title for the options page"
 	},
 	"thirdparty":{
-		"message":"Third-party",
+		"message":"S strani tretjih oseb",
 		"description":"Resource list column title telling if the resource originates from a different domain"
 	},
 	"installedtitle":{

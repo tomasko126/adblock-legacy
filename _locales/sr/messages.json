@@ -1190,7 +1190,7 @@
 		"description":"Title for popup menu section showing number of ads blocked."
 	},
 	"blocked_n_on_this_page":{
-		"message":"$count$ on this page",
+		"message":"$count$ na ovoj stranici",
 		"description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
 		"placeholders":{
 			"count":{
@@ -1200,7 +1200,7 @@
 		}
 	},
 	"blocked_n_in_total":{
-		"message":"$count$ in total",
+		"message":"$count$ ukupno",
 		"description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
 		"placeholders":{
 			"count":{
@@ -1210,23 +1210,23 @@
 		}
 	},
 	"show_on_adblock_button":{
-		"message":"Show on AdBlock button",
+		"message":"Prikaži na AdBlock dugmetu",
 		"description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
 	},
 	"adblockinglist":{
-		"message":"Ad Blocking Filter Lists",
+		"message":"Filter Liste za Blokiranje Reklama",
 		"description":"List for subscribed ad blocking fiters"
 	},
 	"otherfilters":{
-		"message":"Other Filter Lists",
+		"message":"Ostale Filter Liste",
 		"description":"List for other filters the user subscribed to"
 	},
 	"customfilters":{
-		"message":"Custom Filter Lists",
+		"message":"Prilagođene Filter Liste",
 		"description":"List for custom filters the user subscribed to"
 	},
 	"languagedropdowndescription":{
-		"message":"Add filters for another language: ",
+		"message":"Dodaj filtere za drugi jezik: ",
 		"description":"Dropdown list for language specific filters"
 	},
 	"whats_this":{

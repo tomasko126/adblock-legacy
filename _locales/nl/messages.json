@@ -330,7 +330,7 @@
 		"description":"Explanation of the filter lists"
 	},
 	"updatenowmessage":{
-		"message":"Ik zoek automatisch naar updates; je kunt de filters ook <a>nu bijwerken<\/a>.",
+		"message":"AdBlock zoekt automatisch naar updates maar je kan ook <a>nu bijwerken<\/a>.",
 		"description":"update filters text + button"
 	},
 	"orenteraurl":{

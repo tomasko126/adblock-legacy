@@ -4,7 +4,7 @@
 		"description":"Extension description in manifest"
 	},
 	"adblock_click_for_details":{
-		"message":"AdBlock - click for details",
+		"message":"AdBlock - వివరాలు కోసం క్లిక్ చేయండి",
 		"description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button.  Do not translate the beginning 'AdBlock - ' part."
 	},
 	"buttoncancel":{
@@ -354,11 +354,11 @@
 		"description":"A filter list. Don't translate 'EasyList'"
 	},
 	"filterrussian":{
-		"message":"Russian and Ukrainian",
+		"message":"రష్యన్ మరియు ఉక్రేనియన్",
 		"description":"Language names for a filter list"
 	},
 	"filterczech":{
-		"message":"Czech and Slovak",
+		"message":"చెక్ మరియు స్లోవాక్",
 		"description":"Language names for a filter list"
 	},
 	"filtereasyprivacy":{
@@ -466,11 +466,11 @@
 		"description":"on the ad report page, telling a user there is nothing to do"
 	},
 	"disableallextensions":{
-		"message":"Disable all extensions except for AdBlock.",
+		"message":"AdBlock తప్ప మిగిలిన ఎక్స్టెన్షన్  ను తీసివేయి.",
 		"description":"instruction on ad report page"
 	},
 	"disableforchromestepone":{
-		"message":"Open <a href='#'>the extensions page<\/a>",
+		"message":"<a href='#'> ఎక్స్టెన్షన్ పేజ్<\/a> ఓపెన్ చేయి",
 		"description":"Step 1 for disabling chrome extensions"
 	},
 	"disableforchromeandsafaristeptwo":{
@@ -478,11 +478,11 @@
 		"description":"Step 2 for disabling chrome and safari extensions"
 	},
 	"disableforsafaristepone":{
-		"message":"Click the Safari menu &rarr; Preferences &rarr; Extensions.",
+		"message":"సఫారి మేను క్లిక్ చేసి  &rarr; Preferences &rarr; Extensions.",
 		"description":"Step 1 for disabling safari extensions"
 	},
 	"disableforopera":{
-		"message":"For Opera",
+		"message":"ఒపెరా బ్రౌజర్ కోసం",
 		"description":"Opera instructions"
 	},
 	"disableforoperainstructions":{
@@ -546,7 +546,7 @@
 		"description":"language"
 	},
 	"filterisraeli":{
-		"message":"Hebrew",
+		"message":"యూదుల భాష",
 		"description":"language"
 	},
 	"filteritalian":{
@@ -956,7 +956,7 @@
 		"description":"Toolbar button menu entry to hide the AdBlock button"
 	},
 	"spread_the_word":{
-		"message":"Please, help me spread the word!",
+		"message":"దయచేసి దీని గురించి అందరికీ చెప్పండి!",
 		"description":"Text of a share link"
 	},
 	"did_you_know_this_is_my_full_time_job":{
@@ -1186,11 +1186,11 @@
 		"description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
 	},
 	"blocked_ads":{
-		"message":"Blocked ads:",
+		"message":"బ్లాక్ చేసిన  ప్రకటనలు:",
 		"description":"Title for popup menu section showing number of ads blocked."
 	},
 	"blocked_n_on_this_page":{
-		"message":"$count$ on this page",
+		"message":"ఈ పేజీలో మొత్తం $count$",
 		"description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
 		"placeholders":{
 			"count":{
@@ -1200,7 +1200,7 @@
 		}
 	},
 	"blocked_n_in_total":{
-		"message":"$count$ in total",
+		"message":"మొత్తం $count$",
 		"description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
 		"placeholders":{
 			"count":{
@@ -1210,31 +1210,31 @@
 		}
 	},
 	"show_on_adblock_button":{
-		"message":"Show on AdBlock button",
+		"message":"AdBlock బటన్ చూపించు",
 		"description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
 	},
 	"adblockinglist":{
-		"message":"Ad Blocking Filter Lists",
+		"message":"ప్రస్తుతం బ్లాక్ చేస్తున్న ప్రకటనల ఫిల్టర్ లిస్ట్",
 		"description":"List for subscribed ad blocking fiters"
 	},
 	"otherfilters":{
-		"message":"Other Filter Lists",
+		"message":"ఇతర ఫిల్టర్ లిస్ట్ లు",
 		"description":"List for other filters the user subscribed to"
 	},
 	"customfilters":{
-		"message":"Custom Filter Lists",
+		"message":"కస్టమ్ ఫిల్టర్ లిస్ట్ లు",
 		"description":"List for custom filters the user subscribed to"
 	},
 	"languagedropdowndescription":{
-		"message":"Add filters for another language: ",
+		"message":"మరొక భాష కోసం ఫిల్టర్లు జోడించండి: ",
 		"description":"Dropdown list for language specific filters"
 	},
 	"whats_this":{
-		"message":"What's this?",
+		"message":"ఇదేంటి?",
 		"description":"Text of a link pointing to the explanation of a new feature"
 	},
 	"selectlanguage":{
-		"message":" -- Select Language -- ",
+		"message":" -- భాషా ఎంచుకోండి -- ",
 		"description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
 	}
 }
