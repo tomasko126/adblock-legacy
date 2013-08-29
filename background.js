@@ -390,6 +390,11 @@
     var custom_filter_count_map = storage_get("custom_filter_count") || {};
     return custom_filter_count_map[domain] || 0;
   }
+
+  confirmRemovalOfCustomDomainFilters = function(custom_filter_count, host) {
+    var text = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
+    return confirm(text);
+  }
   
   // Remove custom filter count for a particular domain
   // Inputs: domain: domain name of the custom filters
@@ -579,8 +584,8 @@
       }
       chrome.browserAction.setBadgeText({text: badge_text, tabId: tabId});
       chrome.browserAction.setBadgeBackgroundColor({ color: "#555" });
-    }
-    
+    };
+
     // Set the button image and context menus according to the URL
     // of the current tab.
     updateButtonUIAndContextMenus = function() {
@@ -615,19 +620,18 @@
           );
         });
         
-        var host = parseUri(info.tab.url).host;
-        var custom_filter_count = get_custom_filter_count(host)
+        var host                = parseUri(info.tab.url).host;
+        var custom_filter_count = get_custom_filter_count(host);
         if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
-            if(custom_filter_count > 1 && 
-              !confirm(translate("confirm_undo_custom_filters", [custom_filter_count, host])))
-              return;
+            if (custom_filter_count > 1) {
+              if (!confirmRemovalOfCustomDomainFilters(custom_filter_count, host)) { return; }
+            }
               
             remove_custom_filter_for_host(host);
             chrome.tabs.reload();
           });
         }
-
       }
 
       function setBrowserButton(info) {
