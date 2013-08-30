@@ -390,11 +390,6 @@
     var custom_filter_count_map = storage_get("custom_filter_count") || {};
     return custom_filter_count_map[domain] || 0;
   }
-
-  confirmRemovalOfCustomDomainFilters = function(custom_filter_count, host) {
-    var text = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
-    return confirm(text);
-  }
   
   // Remove custom filter count for a particular domain
   // Inputs: domain: domain name of the custom filters
@@ -410,6 +405,14 @@
       remove_custom_filter_count(host);
     } 
   }
+
+  confirm_removal_of_custom_filters_on_host = function(host) {
+    var custom_filter_count = get_custom_filter_count(host);
+    var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
+    if (!confirm(confirmation_text)) { return; }
+    remove_custom_filter_for_host(host);
+    chrome.tabs.reload();
+  };
 
   get_settings = function() {
     return _settings.get_all();
@@ -624,12 +627,7 @@
         var custom_filter_count = get_custom_filter_count(host);
         if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
-            if (custom_filter_count > 1) {
-              if (!confirmRemovalOfCustomDomainFilters(custom_filter_count, host)) { return; }
-            }
-              
-            remove_custom_filter_for_host(host);
-            chrome.tabs.reload();
+            confirm_removal_of_custom_filters_on_host(host);
           });
         }
       }
