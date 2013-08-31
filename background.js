@@ -339,7 +339,7 @@
   }
 
   // CUSTOM FILTERS
-
+	
   // Get the custom filters text as a \n-separated text string.
   get_custom_filters_text = function() {
     return storage_get('custom_filters') || '';
@@ -390,7 +390,35 @@
     var custom_filter_count_map = storage_get("custom_filter_count") || {};
     return custom_filter_count_map[domain] || 0;
   }
-
+	
+	//Continue from here PAO
+	var count_cache = (function(count_map) {
+		var cache = count_map;
+		
+		return {
+			updateCustomFilterCount: function(new_count_map) {
+				cache = new_count_map || cache;
+				storage_set("custom_filter_count", custom_filter_count_map);
+			},
+			
+			removeCustomFilterCount: function(domain) {
+				if(domain && cache[domain]) {
+					delete cache[domain];
+					this.updateCustomFilterCount();
+				}
+			},
+			
+			getCustomFilterCount: function(domain) {
+				return cache[domain] || 0;
+			},
+			
+			addCustomFilterCount: function(domain) {
+				cache[domain] = getCustomFilterCount(domain) + 1;
+				this.updateCustomFilterCount();
+			}
+		}
+	})(storage_get("custom_filter_count") || {});
+	
   confirmRemovalOfCustomDomainFilters = function(custom_filter_count, host) {
     var text = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
     return confirm(text);
