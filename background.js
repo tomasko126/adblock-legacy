@@ -364,9 +364,8 @@
     
     for(var i = 0; i < custom_filters_arr.length; i++) {
       var entry = custom_filters_arr[i];
-      if(entry.indexOf(identifier) === 0) { //Make sure that the identifier is at the start of the entry
-        continue;
-      }
+			//Make sure that the identifier is at the start of the entry
+      if(entry.indexOf(identifier) === 0) { continue; }
       new_custom_filters_arr.push(entry);
     }
     
@@ -383,7 +382,7 @@
 		};
 		
 		return {
-			updateCustomFilterCount: function(new_count_map) {
+			updateCustomFilterCountMap: function(new_count_map) {
 				cache = new_count_map || cache;
 				_updateCustomFilterCount();
 			},
@@ -419,6 +418,14 @@
 			count_cache.removeCustomFilterCount(host);
     } 
   }
+
+  confirm_removal_of_custom_filters_on_host = function(host) {
+    var custom_filter_count = count_cache.getCustomFilterCount(host);
+    var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
+    if (!confirm(confirmation_text)) { return; }
+    remove_custom_filter_for_host(host);
+    chrome.tabs.reload();
+  };
 
   get_settings = function() {
     return _settings.get_all();
@@ -633,12 +640,7 @@
         var custom_filter_count = count_cache.getCustomFilterCount(host);
         if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
-            if (custom_filter_count > 1) {
-              if (!confirmRemovalOfCustomDomainFilters(custom_filter_count, host)) { return; }
-            }
-              
-            remove_custom_filter_for_host(host);
-            chrome.tabs.reload();
+            confirm_removal_of_custom_filters_on_host(host);
           });
         }
       }
