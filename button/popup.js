@@ -43,7 +43,7 @@ function customize_for_this_tab() {
 
     var eligible_for_undo = !paused && (info.disabled_site || !info.whitelisted);
     var url_to_check_for_undo = info.disabled_site ? undefined : parseUri(info.tab.url).host;
-    if (eligible_for_undo && BG.get_custom_filter_count(url_to_check_for_undo))
+    if (eligible_for_undo && BG.count_cache.getCustomFilterCount(url_to_check_for_undo))
       show(["div_undo", "separator0"]);
 
     if (!BG.get_settings().show_advanced_options)

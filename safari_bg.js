@@ -72,7 +72,7 @@ safari.application.addEventListener("command", function(event) {
   } else if (command === "undo-last-block") {
     var tab = browserWindow.activeTab;
     var host = parseUri(tab.url).host;
-    var count = get_custom_filter_count(host);
+    var count = count_cache.getCustomFilterCount(host);
     
     if(count > 1 &&
       !confirm(translate("confirm_undo_custom_filters", [count, host])))

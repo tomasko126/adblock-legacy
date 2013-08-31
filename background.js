@@ -400,17 +400,13 @@
 			},
 			// Add 1 to custom filter count for the filters domain.
 			// Inputs: filter:string line of text to be added to custom filters.
-			addCustomFilterCount: function(host) {
-				cache[host] = getCustomFilterCount(host) + 1;
+			addCustomFilterCount: function(filter) {
+				var host = filter.split("##")[0];
+				cache[host] = this.getCustomFilterCount(host) + 1;
 				_updateCustomFilterCount();
 			}
 		}
 	})(storage_get("custom_filter_count") || {});
-	
-  confirmRemovalOfCustomDomainFilters = function(custom_filter_count, host) {
-    var text = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
-    return confirm(text);
-  }
 
   remove_custom_filter_for_host = function(host) {
     if(count_cache.getCustomFilterCount(host)) {
@@ -422,7 +418,7 @@
   confirm_removal_of_custom_filters_on_host = function(host) {
     var custom_filter_count = count_cache.getCustomFilterCount(host);
     var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
-    if (!confirm(confirmation_text)) { return; }
+    if (custom_filter_count > 1 && !confirm(confirmation_text)) { return; }
     remove_custom_filter_for_host(host);
     chrome.tabs.reload();
   };
@@ -536,7 +532,7 @@
         return; // For example: only the background devtools or a popup are opened
       var tab = tabs[0];
 
-      if (!tab.url) {
+      if (tab && !tab.url) {
         // Issue 6877: tab URL is not set directly after you opened a window
         // using window.open()
         if (!secondTime)
