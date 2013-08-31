@@ -374,47 +374,36 @@
     set_custom_filters_text(text.trim());
   }
   
-  // Add 1 to custom filter count for the filters domain.
-  // Inputs: filter:string line of text to be added to custom filters.
-  add_custom_filter_count = function(filter) {
-    var domain = filter.split("##")[0];
-    var custom_filter_count_map = storage_get("custom_filter_count") || {};
-    var count = custom_filter_count_map[domain] || 0;
-    custom_filter_count_map[domain] = ++count;
-    storage_set("custom_filter_count", custom_filter_count_map);
-  }
-  
-  // Get current custom filter count for a particular domain
-  // Inputs: domain: domain name of the custom filters
-  get_custom_filter_count = function(domain) {
-    var custom_filter_count_map = storage_get("custom_filter_count") || {};
-    return custom_filter_count_map[domain] || 0;
-  }
-	
 	//Continue from here PAO
 	var count_cache = (function(count_map) {
 		var cache = count_map;
 		
+		var _updateCustomFilterCount = function() {
+			storage_set("custom_filter_count", count_map);
+		};
+		
 		return {
 			updateCustomFilterCount: function(new_count_map) {
 				cache = new_count_map || cache;
-				storage_set("custom_filter_count", custom_filter_count_map);
+				_updateCustomFilterCount();
 			},
 			
-			removeCustomFilterCount: function(domain) {
-				if(domain && cache[domain]) {
-					delete cache[domain];
-					this.updateCustomFilterCount();
+			removeCustomFilterCount: function(host) {
+				if(host && cache[host]) {
+					delete cache[host];
+					_updateCustomFilterCount();
 				}
 			},
-			
-			getCustomFilterCount: function(domain) {
-				return cache[domain] || 0;
+			// Get current custom filter count for a particular domain
+			// Inputs: domain: domain name of the custom filters
+			getCustomFilterCount: function(host) {
+				return cache[host] || 0;
 			},
-			
-			addCustomFilterCount: function(domain) {
-				cache[domain] = getCustomFilterCount(domain) + 1;
-				this.updateCustomFilterCount();
+			// Add 1 to custom filter count for the filters domain.
+			// Inputs: filter:string line of text to be added to custom filters.
+			addCustomFilterCount: function(host) {
+				cache[host] = getCustomFilterCount(host) + 1;
+				_updateCustomFilterCount();
 			}
 		}
 	})(storage_get("custom_filter_count") || {});
@@ -423,19 +412,11 @@
     var text = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
     return confirm(text);
   }
-  
-  // Remove custom filter count for a particular domain
-  // Inputs: domain: domain name of the custom filters
-  remove_custom_filter_count = function(domain) {
-    var custom_filter_count_map = storage_get("custom_filter_count");
-    delete custom_filter_count_map[domain];
-    storage_set("custom_filter_count", custom_filter_count_map);
-  }
 
   remove_custom_filter_for_host = function(host) {
-    if(get_custom_filter_count(host)) {
+    if(count_cache.getCustomFilterCount(host)) {
       remove_custom_filter(host);
-      remove_custom_filter_count(host);
+			count_cache.removeCustomFilterCount(host);
     } 
   }
 
@@ -649,7 +630,7 @@
         });
         
         var host                = parseUri(info.tab.url).host;
-        var custom_filter_count = get_custom_filter_count(host);
+        var custom_filter_count = count_cache.getCustomFilterCount(host);
         if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
             if (custom_filter_count > 1) {
@@ -699,7 +680,7 @@
     try {
       if (FilterNormalizer.normalizeLine(filter)) {
         if (Filter.isSelectorFilter(filter)) {
-          add_custom_filter_count(filter);
+          count_cache.addCustomFilterCount(filter);
           if (!SAFARI)
             updateButtonUIAndContextMenus();
         }
