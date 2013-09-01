@@ -177,6 +177,9 @@ $(function() {
     $("#txtFiltersAdvanced").focus();
   });
 	
+	// Update custom filter count in the background.
+	// Inputs: custom_filters_text:string - string representation of the custom filters 
+	// delimited by new line.
 	function updateCustomFiltersCount(custom_filters_text) {
 		var custom_filters_array = custom_filters_text.split("\n");
 		var new_count = {};

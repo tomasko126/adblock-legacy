@@ -373,20 +373,23 @@
     set_custom_filters_text(text.trim());
   }
   
-	//Continue from here PAO
+	// count_cache singleton.
 	var count_cache = (function(count_map) {
 		var cache = count_map;
-		
+		// Update custom filter count stored in localStorage
 		var _updateCustomFilterCount = function() {
 			storage_set("custom_filter_count", cache);
 		};
 		
 		return {
+			// Update custom filter count cache and value stored in localStorage.
+			// Inputs: new_count_map:count map - count map to replace existing count cache
 			updateCustomFilterCountMap: function(new_count_map) {
 				cache = new_count_map || cache;
 				_updateCustomFilterCount();
 			},
-			
+			// Remove custom filter count for host
+			// Inputs: host:string - url of the host
 			removeCustomFilterCount: function(host) {
 				if(host && cache[host]) {
 					delete cache[host];
@@ -394,12 +397,12 @@
 				}
 			},
 			// Get current custom filter count for a particular domain
-			// Inputs: domain: domain name of the custom filters
+			// Inputs: host:string - url of the host
 			getCustomFilterCount: function(host) {
 				return cache[host] || 0;
 			},
 			// Add 1 to custom filter count for the filters domain.
-			// Inputs: filter:string line of text to be added to custom filters.
+			// Inputs: filter:string - line of text to be added to custom filters.
 			addCustomFilterCount: function(filter) {
 				var host = filter.split("##")[0];
 				cache[host] = this.getCustomFilterCount(host) + 1;
@@ -408,6 +411,7 @@
 		}
 	})(storage_get("custom_filter_count") || {});
 	
+	// Entry point for customize.js, used to update custom filter count cache.
 	updateCustomFilterCountMap = function(new_count_map) {
 		count_cache.updateCustomFilterCountMap(new_count_map);
 	}
