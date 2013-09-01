@@ -378,7 +378,7 @@
 		var cache = count_map;
 		
 		var _updateCustomFilterCount = function() {
-			storage_set("custom_filter_count", count_map);
+			storage_set("custom_filter_count", cache);
 		};
 		
 		return {
@@ -407,7 +407,11 @@
 			}
 		}
 	})(storage_get("custom_filter_count") || {});
-
+	
+	updateCustomFilterCountMap = function(new_count_map) {
+		count_cache.updateCustomFilterCountMap(new_count_map);
+	}
+	
   remove_custom_filter_for_host = function(host) {
     if(count_cache.getCustomFilterCount(host)) {
       remove_custom_filter(host);

@@ -181,7 +181,7 @@ $(function() {
 		var custom_filters_array = custom_filters_text.split("\n");
 		var new_count = {};
 		var temp_filter_tracker = [];
-		for(var i = 0; i < custom_filers_array.length; i++) {
+		for(var i = 0; i < custom_filters_array.length; i++) {
 			var filter = custom_filters_array[i]
 			//Check if filter is a duplicate and that it is a hiding filter.
 			if(temp_filter_tracker.indexOf(filter) < 0 && filter.indexOf("##") > -1) { 
@@ -190,9 +190,9 @@ $(function() {
 				new_count[host] = (new_count[host] || 0) + 1;
 			}
 		}
-		BGCall.count_cache.updateCustomFilterCountMap(new_count);
+		BGcall("updateCustomFilterCountMap", new_count);
 	}
-	//THIS IS WHERE THE CODES GO
+
   function saveFilters() {
 		var custom_filters_text = $("#txtFiltersAdvanced").val();
     BGcall("set_custom_filters_text", custom_filters_text);
