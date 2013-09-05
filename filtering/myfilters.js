@@ -479,13 +479,18 @@ MyFilters.prototype._load_default_subscriptions = function() {
       case 'he': return 'israeli';
       case 'hu': return 'hungarian';
       case 'it': return 'italian';
+      case 'id': return 'easylist_plus_indonesian';
       case 'ja': return 'japanese';
       case 'ko': return 'easylist_plun_korean';
+      case 'lv': return 'latvian';
       case 'nl': return 'dutch';
+      case 'no': return 'norwegian';
       case 'pl': return 'easylist_plus_polish';
       case 'ro': return 'easylist_plus_romanian';
       case 'ru': return 'russian';
       case 'sk': return 'czech';
+      case 'sv': return 'swedish';
+      case 'tr': return 'turkish';
       case 'uk': return 'russian';
       case 'zh': return 'chinese';
       default: return '';
@@ -536,8 +541,12 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "easylist_plus_greek": { // Additional Greek filters
-      url: "http://www.void.gr/kargig/void-gr-filters.txt",
+      url: "https://raw.github.com/kargig/greek-adblockplus-filter/master/void-gr-filters.txt",
       requiresList: "easylist",
+    },
+    "easylist_plus_indonesian": { // Additional Indonesian filters
+      url: "https://indonesianadblockrules.googlecode.com/hg/subscriptions/abpindo.txt",
+	  requiresList: "easylist",
     },
     "easylist_plus_polish": { // Additional Polish filters
       url: "http://adblocklist.org/adblock-pxf-polish.txt",
@@ -556,7 +565,7 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "czech": { // Additional Czech and Slovak filters
-      url: "https://adblock-czechoslovaklist.googlecode.com/svn/filters.txt",
+      url: "https://raw.github.com/tomasko126/easylistczechandslovak/master/filters.txt",
       requiresList: "easylist",
     },
     "danish": { // Danish filters
@@ -566,7 +575,7 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "http://pete.teamlupus.hu/hufilter.txt",
     },
     "israeli": { // Israeli filters
-      url: "https://secure.fanboy.co.nz/israelilist/IsraelList.txt",
+      url: "https://raw.github.com/AdBlockPlusIsrael/EasyListIsrael/master/IsraelList.txt",
     },
     "italian": { // Italian filters
       url: "http://mozilla.gfsolone.com/filtri.txt",
@@ -577,11 +586,30 @@ MyFilters.prototype._make_subscription_options = function() {
     "easylist_plun_korean": {  // Korean filters
       url: "https://secure.fanboy.co.nz/fanboy-korean.txt",
     },
+    "latvian": {  // Latvian filters
+      url: "https://gitorious.org/adblock-latvian/adblock-latvian/blobs/raw/master/lists/latvian-list.txt",
+    },
+    "norwegian": {  // Additional Norwegian filters
+      url: "http://home.fredfiber.no/langsholt/adblock.txt",
+      requiresList: "easylist",
+    },
     "easylist_plus_spanish": {  // Spanish filters
       url: "http://abp.mozilla-hispano.org/nauscopio/filtros.txt",
     },
+    "swedish": {  // Swedish filters
+      url: "http://fanboy.co.nz/fanboy-swedish.txt",
+    },
+    "turkish": {  // Turkish filters
+      url: "http://fanboy.co.nz/fanboy-turkish.txt",
+    },
     "easyprivacy": { // EasyPrivacy
       url: "https://easylist-downloads.adblockplus.org/easyprivacy.txt",
+    },
+    "antisocial": { // Antisocial
+      url: "https://adversity.googlecode.com/hg/Antisocial.txt",
+    },
+    "malware": { // Malware protection
+      url: "https://easylist-downloads.adblockplus.org/malwaredomains_full.txt",
     },
   };
 }
