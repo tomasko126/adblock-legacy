@@ -99,7 +99,7 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
           
         var is_not_user_submitted = initial_url_match || url_match;
           
-        // If an entry is not user submitted, update it's fields
+        // If an entry is not user submitted, update its fields
         if(is_not_user_submitted) {
           // This will create two entries of the same url if official id and id in subscriptions do not match
           this._subscriptions[official_id] = this._subscriptions[id];
