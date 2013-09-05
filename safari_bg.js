@@ -74,9 +74,8 @@ safari.application.addEventListener("command", function(event) {
     var host = parseUri(tab.url).host;
     var count = count_cache.getCustomFilterCount(host);
     
-    if(count > 1 &&
-      !confirm(translate("confirm_undo_custom_filters", [count, host])))
-      return;
+    var confirmation_text   = translate("confirm_undo_custom_filters", [count, host]);
+    if(!confirm(confirmation_text)) { return; }
       
     remove_custom_filter_for_host(host);
     if (!page_is_unblockable(tab.url))

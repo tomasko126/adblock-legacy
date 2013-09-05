@@ -426,7 +426,7 @@
   confirm_removal_of_custom_filters_on_host = function(host) {
     var custom_filter_count = count_cache.getCustomFilterCount(host);
     var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
-    if (custom_filter_count > 1 && !confirm(confirmation_text)) { return; }
+    if (!confirm(confirmation_text)) { return; }
     remove_custom_filter_for_host(host);
     chrome.tabs.reload();
   };
