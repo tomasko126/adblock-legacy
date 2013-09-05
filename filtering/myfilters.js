@@ -235,6 +235,7 @@ MyFilters.prototype.rebuild = function() {
   window.setTimeout(function() {
     Filter._cache = {};
   }, 90000);
+  adData.initialize();
 }
 
 // Change a property of a subscription or check if it has to be updated

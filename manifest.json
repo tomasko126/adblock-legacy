@@ -15,6 +15,7 @@
       "filtering/myfilters.js",
       "filtering/filternormalizer.js",
       "idlehandler.js",
+      "ad_data/background.js",
       "background.js"
     ]
   },
@@ -46,6 +47,17 @@
       ],
       "js": [
         "bandaids.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "functions.js",
+        "ad_data/content.js"
       ],
       "run_at": "document_start",
       "all_frames": true

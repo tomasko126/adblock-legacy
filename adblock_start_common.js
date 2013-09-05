@@ -97,6 +97,8 @@ function block_list_via_css(selectors) {
   // Issue 6480: inserting a <style> tag too quickly ignored its contents.
   // Use ABP's approach: wait for .sheet to exist before injecting rules.
   var css_chunk = document.createElement("style");
+  GLOBAL_addata_style_tag = css_chunk;
+
   css_chunk.type = "text/css";
   // Documents may not have a head
   (document.head || document.documentElement).insertBefore(css_chunk, null);

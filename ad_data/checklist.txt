@@ -1,0 +1,44 @@
+Setting user groups
+  - Has "show me Google text ads" checked
+    - Put into Experiment Opt In
+      - Localstorage shows that
+      - Sent message to server saying that
+
+    - If uncheck checkbox, goes to ignored
+      - Localstorage shows that
+      - Sent message to server saying that
+
+  - Doesn't have "show me Google text ads" checked
+    - 50/50 chance of Experiment Opt Out or Control (NOTE: TEST CONTROL)
+      - Localstorage shows that
+      - Sent message to server saying that
+
+    - If in Opt Out and check checkbox, goes to Ignored
+        - Localstorage shows that
+        - Sent message to server saying that
+
+    - If in Control or Ignored and check/uncheck checkbox, nothing changes
+
+  - Google Argentina and whitelisting google.com behave same as "show me Google text ads" checkbox
+
+Making requests
+  On google.com search pages
+    when user is in opt in
+      - Sends text header 
+      - deletes style tag
+
+    when user is in opt out
+      - Sends none header
+        - If server sends back ads marked up with what type they are
+          - deletes style tag
+          - sets display: none on marked-up elements
+        - If server screws up and doesn't send any properly-identified ads
+          - we block as usual (don't delete our blocking style tag)
+
+    when user is in ignore
+      - doesn't send headers
+
+    when user is in control state
+      - doesn't send headers
+
+- On any other pages, including news.google.com, no change
