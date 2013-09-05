@@ -339,7 +339,7 @@
   }
 
   // CUSTOM FILTERS
-
+	
   // Get the custom filters text as a \n-separated text string.
   get_custom_filters_text = function() {
     return storage_get('custom_filters') || '';
@@ -355,32 +355,81 @@
   }
 
   // Removes a custom filter entry.
-  // Inputs: filter:string line of text to remove from custom filters.
-  remove_custom_filter = function(filter) {
-    // Make sure every filter is preceded and followed by at least one \n,
-    // then find and remove the filter.
-    var text = "\n" + get_custom_filters_text() + "\n";
-    text = text.replace("\n" + filter + "\n", "\n");
+  // Inputs: host:domain of the custom filters to be reset.
+  remove_custom_filter = function(host) {
+    var text = get_custom_filters_text();
+    var custom_filters_arr = text ? text.split("\n"):[];
+    var new_custom_filters_arr = [];
+    var identifier = host + "##"; //append delimiter to make sure it is the identifier
+    
+    for(var i = 0; i < custom_filters_arr.length; i++) {
+      var entry = custom_filters_arr[i];
+			//Make sure that the identifier is at the start of the entry
+      if(entry.indexOf(identifier) === 0) { continue; }
+      new_custom_filters_arr.push(entry);
+    }
+    
+    text = new_custom_filters_arr.join("\n");
     set_custom_filters_text(text.trim());
   }
-
-  // Returns true if there's a recently created custom selector filter.  If
-  // |url| is truthy, the filter must have been created on |url|'s domain.
-  has_last_custom_filter = function(url) {
-    var filter = sessionStorage.getItem('last_custom_filter');
-    if (!filter)
-      return false;
-    if (!url)
-      return true;
-    return filter.split("##")[0] === parseUri(url).hostname;
+  
+	// count_cache singleton.
+	var count_cache = (function(count_map) {
+		var cache = count_map;
+		// Update custom filter count stored in localStorage
+		var _updateCustomFilterCount = function() {
+			storage_set("custom_filter_count", cache);
+		};
+		
+		return {
+			// Update custom filter count cache and value stored in localStorage.
+			// Inputs: new_count_map:count map - count map to replace existing count cache
+			updateCustomFilterCountMap: function(new_count_map) {
+				cache = new_count_map || cache;
+				_updateCustomFilterCount();
+			},
+			// Remove custom filter count for host
+			// Inputs: host:string - url of the host
+			removeCustomFilterCount: function(host) {
+				if(host && cache[host]) {
+					delete cache[host];
+					_updateCustomFilterCount();
+				}
+			},
+			// Get current custom filter count for a particular domain
+			// Inputs: host:string - url of the host
+			getCustomFilterCount: function(host) {
+				return cache[host] || 0;
+			},
+			// Add 1 to custom filter count for the filters domain.
+			// Inputs: filter:string - line of text to be added to custom filters.
+			addCustomFilterCount: function(filter) {
+				var host = filter.split("##")[0];
+				cache[host] = this.getCustomFilterCount(host) + 1;
+				_updateCustomFilterCount();
+			}
+		}
+	})(storage_get("custom_filter_count") || {});
+	
+	// Entry point for customize.js, used to update custom filter count cache.
+	updateCustomFilterCountMap = function(new_count_map) {
+		count_cache.updateCustomFilterCountMap(new_count_map);
+	}
+	
+  remove_custom_filter_for_host = function(host) {
+    if(count_cache.getCustomFilterCount(host)) {
+      remove_custom_filter(host);
+			count_cache.removeCustomFilterCount(host);
+    } 
   }
 
-  remove_last_custom_filter = function() {
-    if (sessionStorage.getItem('last_custom_filter')) {
-      remove_custom_filter(sessionStorage.getItem('last_custom_filter'));
-      sessionStorage.removeItem('last_custom_filter');
-    }
-  }
+  confirm_removal_of_custom_filters_on_host = function(host) {
+    var custom_filter_count = count_cache.getCustomFilterCount(host);
+    var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
+    if (!confirm(confirmation_text)) { return; }
+    remove_custom_filter_for_host(host);
+    chrome.tabs.reload();
+  };
 
   get_settings = function() {
     return _settings.get_all();
@@ -491,7 +540,7 @@
         return; // For example: only the background devtools or a popup are opened
       var tab = tabs[0];
 
-      if (!tab.url) {
+      if (tab && !tab.url) {
         // Issue 6877: tab URL is not set directly after you opened a window
         // using window.open()
         if (!secondTime)
@@ -555,8 +604,8 @@
       }
       chrome.browserAction.setBadgeText({text: badge_text, tabId: tabId});
       chrome.browserAction.setBadgeBackgroundColor({ color: "#555" });
-    }
-    
+    };
+
     // Set the button image and context menus according to the URL
     // of the current tab.
     updateButtonUIAndContextMenus = function() {
@@ -576,7 +625,7 @@
             onclick: function(clickdata, tab) { callback(tab, clickdata); }
           });
         }
-
+        
         addMenu(translate("block_this_ad"), function(tab, clickdata) {
           emit_page_broadcast(
             {fn:'top_open_blacklist_ui', options:{info: clickdata}},
@@ -590,14 +639,14 @@
             {tab: tab}
           );
         });
-
-        if (has_last_custom_filter(info.tab.url)) {
+        
+        var host                = parseUri(info.tab.url).host;
+        var custom_filter_count = count_cache.getCustomFilterCount(host);
+        if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
-            remove_last_custom_filter();
-            chrome.tabs.reload();
+            confirm_removal_of_custom_filters_on_host(host);
           });
         }
-
       }
 
       function setBrowserButton(info) {
@@ -622,7 +671,6 @@
       getCurrentTabInfo(function(info) {
         setContextMenus(info);
         setBrowserButton(info);
-        //updateBadge(info.tab.id);
       });
     }
   }
@@ -638,7 +686,7 @@
     try {
       if (FilterNormalizer.normalizeLine(filter)) {
         if (Filter.isSelectorFilter(filter)) {
-          sessionStorage.setItem('last_custom_filter', filter);
+          count_cache.addCustomFilterCount(filter);
           if (!SAFARI)
             updateButtonUIAndContextMenus();
         }

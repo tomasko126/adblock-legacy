@@ -940,7 +940,7 @@
 		"description":"Menu entry to pause AdBlock."
 	},
 	"undo_last_block":{
-		"message":"Undo last block",
+		"message":"Undo my blocks on this domain",
 		"description":"Menu entry to let the user cancel the result of running the blacklist wizard."
 	},
 	"dont_run_on_this_page":{
@@ -956,7 +956,7 @@
 		"description":"Toolbar button menu entry to hide the AdBlock button"
 	},
 	"spread_the_word":{
-		"message":"Please, help me spread the word!",
+		"message":"Help spread the word!",
 		"description":"Text of a share link"
 	},
 	"did_you_know_this_is_my_full_time_job":{
@@ -1236,5 +1236,19 @@
 	"selectlanguage":{
 		"message":" -- Select Language -- ",
 		"description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
+	},
+  "confirm_undo_custom_filters":{
+		"message":"Are you sure you want to remove the $count$ blocks that you have created on $host$?",
+		"description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
+		"placeholders":{
+			"count":{
+				"content":"$1",
+				"example":"The number of custom blocks for a domain."
+			},
+      "host": {
+        "content":"$2",
+        "example":"code.google.ph, ph.msn.com, stackoverflow.com"
+      }
+		}
 	}
 }
