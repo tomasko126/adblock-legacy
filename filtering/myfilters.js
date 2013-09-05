@@ -550,7 +550,7 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "norwegian": {  // Additional Norwegian filters
       url: "http://home.fredfiber.no/langsholt/adblock.txt",
-	  requiresList: "easylist",
+      requiresList: "easylist",
     },
     "easylist_plus_spanish": {  // Spanish filters
       url: "http://abp.mozilla-hispano.org/nauscopio/filtros.txt",
