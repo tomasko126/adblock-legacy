@@ -10,26 +10,41 @@ var HOUR_IN_MS = 1000 * 60 * 60;
 function MyFilters() {
   this._subscriptions = storage_get('filter_lists');
   this._official_options = this._make_subscription_options();
+}
+
+// Update _subscriptions and _official_options in case there are changes.
+// Should be invoked right after creating a MyFilters object.
+MyFilters.prototype.init = function() {
+  this._updateDefaultSubscriptions();
+  this._updateFieldsFromOriginalOptions();
   
-  var newUser = !this._subscriptions;
-  if (newUser) {
-    // Brand new user. Install some filters for them.
-    this._subscriptions = this._load_default_subscriptions();
-  }
+  // Build the filter list
+  this._onSubscriptionChange(true); 
+  
+  // On startup and then every hour, check if a list is out of date and has to
+  // be updated
+  var that = this;
+  if (!this._subscriptions) 
+    this.checkFilterUpdates();
+  else
+    idleHandler.scheduleItemOnce(
+      function() { 
+        that.checkFilterUpdates();
+      },
+      60
+    );
 
-  for (var id in this._subscriptions) {
-    // Delete unsubscribed ex-official lists.
-    if (!this._official_options[id] && !this._subscriptions[id].user_submitted
-        && !this._subscriptions[id].subscribed) {
-      delete this._subscriptions[id];
-    }
-    // Convert subscribed ex-official lists into user-submitted lists.
-    // Convert subscribed ex-user-submitted lists into official lists.
-    else {
-      this._subscriptions[id].user_submitted = !this._official_options[id];
-    }
-  }
-
+  window.setInterval(
+    function() { 
+      idleHandler.scheduleItemOnce(function() {
+        that.checkFilterUpdates();
+      });
+    }, 
+    60 * 60 * 1000
+  );
+}
+// Update the url and requiresList for entries in _subscriptions using values from _official_options.
+MyFilters.prototype._updateFieldsFromOriginalOptions = function() {
   // Use the stored properties, and only add any new properties and/or lists
   // if they didn't exist in this._subscriptions
   for (var id in this._official_options) {
@@ -56,33 +71,59 @@ function MyFilters() {
     sub.requiresList = official.requiresList;
     sub.subscribed = sub.subscribed || false;
   }
-
-  // Build the filter list
-  this._onSubscriptionChange(true);
-
-  // On startup and then every hour, check if a list is out of date and has to
-  // be updated
-  var that = this;
-  if (newUser) 
-    this.checkFilterUpdates();
-  else
-    idleHandler.scheduleItemOnce(
-      function() { 
-        that.checkFilterUpdates();
-      },
-      60
-    );
-
-  window.setInterval(
-    function() { 
-      idleHandler.scheduleItemOnce(function() {
-        that.checkFilterUpdates();
-      });
-    }, 
-    60 * 60 * 1000
-  );
 }
+// Update default subscriptions in the browser storage.
+// Removes subscriptions that are no longer in the official list, not user submitted and no longer subscribed.
+// Also, converts user submitted subscriptions to recognized one if it is already added to the official list
+// and vice-versa.
+MyFilters.prototype._updateDefaultSubscriptions = function() {
+  if (!this._subscriptions) {
+    // Brand new user. Install some filters for them.
+    this._subscriptions = this._load_default_subscriptions();
+  }
 
+  for (var id in this._subscriptions) {
+    // Delete unsubscribed ex-official lists.
+    if (!this._official_options[id] && !this._subscriptions[id].user_submitted
+        && !this._subscriptions[id].subscribed) {
+      delete this._subscriptions[id];
+    }
+    // Convert subscribed ex-official lists into user-submitted lists.
+    // Convert subscribed ex-user-submitted lists into official lists.
+    else {
+      var sub_to_check = this._subscriptions[id];
+      for (var official_id in this._official_options) {
+        // Set conditions for official subs
+        var initial_url_match = sub_to_check.initialUrl === this._official_options[official_id].url;
+        var url_match = sub_to_check.url === this._official_options[official_id].url;
+          
+        var is_not_user_submitted = initial_url_match || url_match;
+          
+        // If an entry is not user submitted, update its fields
+        if(is_not_user_submitted) {
+          // This will create two entries of the same url if official id and id in subscriptions do not match
+          this._subscriptions[official_id] = this._subscriptions[id];
+          // So delete the entry in id if it does not match the official id
+          if(official_id !== id)
+            delete this._subscriptions[id];
+          break;
+        }
+      } 
+        
+      sub_to_check.user_submitted = !is_not_user_submitted;
+      
+      // If subscription is formerly in the official list but was removed,
+      // update id to 'url:(subscription url)
+      if (sub_to_check.user_submitted) {
+        var new_key = "url:" + sub_to_check.url;
+        if (new_key !== id){
+          this._subscriptions[new_key] = this._subscriptions[id];
+          delete this._subscriptions[id];
+        }
+      }        
+    }
+  }
+}
 // When a subscription property changes, this function stores it
 // Inputs: rebuild? boolean, true if the filterset should be rebuilt
 MyFilters.prototype._onSubscriptionChange = function(rebuild) {
