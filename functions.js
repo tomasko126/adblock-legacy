@@ -78,6 +78,12 @@ localizePage = function() {
   });
 };
 
+// Make a right-to-left translation for Arabic and Hebrew languages
+var language = navigator.language.match(/^([a-z]+).*/i)[1];
+if (language === "ar" || language === "he" ) {
+    document.documentElement.dir = "rtl"
+}
+
 // Parse a URL. Based upon http://blog.stevenlevithan.com/archives/parseuri
 // parseUri 1.2.2, (c) Steven Levithan <stevenlevithan.com>, MIT License
 // Inputs: url: the URL you want to parse
