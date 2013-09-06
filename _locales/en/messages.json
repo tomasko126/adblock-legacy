@@ -375,7 +375,7 @@
 	},
 	"filtermalware":{
 		"message":"Malware protection",
-		"description":"A filter list. Don't translate 'Malware'."
+		"description":"A filter list."
 	},
 	"filterlatvian":{
 		"message":"Latvian",
