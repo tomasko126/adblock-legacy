@@ -226,7 +226,7 @@
 		"description":"Option on first tab page"
 	},
 	"let_me_know_how_it_is_working":{
-		"message":"Do me a favor?  Try this experimental feature for a while, then <a>let me know<\/a> how well it works for you.",
+		"message":"Ali nam lahko naredite uslugo? Za nekaj časa aktivirajte to funkcijo in <a>nam sporočite<\/a>, ali deluje dobro.",
 		"description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
 	},
 	"googletextads":{
@@ -326,7 +326,7 @@
 		"description":"Title of the filter list tab"
 	},
 	"filterlistlink":{
-		"message":"Don't subscribe to more than you need -- every one slows you down a tiny bit! Credits and more lists can be found <a>here<\/a>.",
+		"message":"Ne naročite se na več kot potrebujete -- vsak filter malce upočasni brskanje. Zasluge in drugi seznami se nahajajo <a>tukaj<\/a>.",
 		"description":"Explanation of the filter lists"
 	},
 	"updatenowmessage":{
@@ -344,6 +344,10 @@
 	"showlinkstolists":{
 		"message":"Pokaži povezave do seznamov filtrov:",
 		"description":"Option on second tab page"
+	},
+	"filterantisocial":{
+		"message":"Antisocial filter list (removes social media buttons)",
+		"description":"Name of the filter list"
 	},
 	"filteradblock_custom":{
 		"message":"AdBlock filtri po meri (priporočeno)",
@@ -364,6 +368,30 @@
 	"filtereasyprivacy":{
 		"message":"EasyPrivacy (zaščita zasebnosti)",
 		"description":"A filter list. Don't translate the name 'EasyPrivacy'."
+	},
+	"filtereasylist_plus_indonesian":{
+		"message":"indonezijščina",
+		"description":"A filter list."
+	},
+	"filtermalware":{
+		"message":"Malware protection",
+		"description":"A filter list."
+	},
+	"filterlatvian":{
+		"message":"latvijščina",
+		"description":"A filter list."
+	},
+	"filternorwegian":{
+		"message":"norveščina",
+		"description":"A filter list."
+	},
+	"filterswedish":{
+		"message":"švedščina",
+		"description":"A filter list."
+	},
+	"filterturkish":{
+		"message":"turščina",
+		"description":"A filter list."
 	},
 	"blacklistclickmessage":{
 		"message":"Če želite blokirati oglas, kliknite nanj z desno miškino tipko -- to pa lahko tudi ročno storite tukaj.",
@@ -418,7 +446,7 @@
 		"description":"Subtitle on the third tab"
 	},
 	"filtersavewarning":{
-		"message":"Be careful: if you make a mistake here a lot of other filters, including the official filters, could get broken too!<br\/>Read the <a>filter syntax tutorial<\/a> to learn how to add advanced blacklist and whitelist filters.",
+		"message":"Bodite previdni: v kolikor tu storite napako, večina filtrov, vključno z uradnimi, ne bo delovala!<br\/>Preberite si <a>vodič po sintaksi filtrov<\/a> in se naučite pravilno dodajati napredne možnosti.",
 		"description":"Warning when blacklisting manually"
 	},
 	"savebutton":{
@@ -434,11 +462,11 @@
 		"description":"title of ad report page"
 	},
 	"adreport2":{
-		"message":"So you just found an ad on a web page? Well, I'll help you to find the correct place to report it!<br\/> Remember: reporting ads is voluntary. If you don't wish to do this you can just close this window and block it only for yourself by adding its filter in the 'Customize' tab of the options page!",
+		"message":"Ste ravnokar našli oglas na spletni strani? Pomagali vam bomo najti primeren kraj za prijavo!<br\/> Ne pozabite: prijavljanje oglasov je prostovoljno. V kolikor tega ne želite storiti, preprosto zaprite to okno in blokirajte oglas le zase. To storite tako, da dodate filter za oglas preko zavihka 'Prilagodi' na straneh z nastavitvami te razširitve.",
 		"description":"Instructions on ad reporting page. 'Customize' should be the same text as the 'tabcustomize' message."
 	},
 	"updateyourlists":{
-		"message":"Make sure your filter lists are up to date",
+		"message":"Poskrbite, da bodo vaši seznami filtrov posodobljeni",
 		"description":"instruction on ad report page"
 	},
 	"clickupdatefilters":{
@@ -462,23 +490,23 @@
 		"description":"A negative response to a question"
 	},
 	"adalreadyblocked":{
-		"message":"You don't have to do anything as the ad is already blocked",
+		"message":"Ničesar ne rabite storiti, saj je oglas že blokiran",
 		"description":"on the ad report page, telling a user there is nothing to do"
 	},
 	"disableallextensions":{
-		"message":"Disable all extensions except for AdBlock.",
+		"message":"Onemogočite vse razširitve razen AdBlocka.",
 		"description":"instruction on ad report page"
 	},
 	"disableforchromestepone":{
-		"message":"Open <a href='#'>the extensions page<\/a>",
+		"message":"Odprite <a href='#'>stran z razširitvami<\/a>",
 		"description":"Step 1 for disabling chrome extensions"
 	},
 	"disableforchromeandsafaristeptwo":{
-		"message":"Uncheck the 'Enabled' checkbox next to every extension <b>except<\/b> for AdBlock.  <b>Leave AdBlock enabled<\/b>.",
+		"message":"Odznačite izbirni kvadratek 'Omogočeno' pri vsaki razširitvi, <b>razen<\/b> AdBlocku. <b>AdBlock pustite omogočen<\/b>.",
 		"description":"Step 2 for disabling chrome and safari extensions"
 	},
 	"disableforsafaristepone":{
-		"message":"Click the Safari menu &rarr; Preferences &rarr; Extensions.",
+		"message":"Izberite Safari meni &rarr; Nastavitve &rarr; Razširitve.",
 		"description":"Step 1 for disabling safari extensions"
 	},
 	"disableforopera":{
@@ -760,11 +788,11 @@
 		"description":"resourceblocking page string"
 	},
 	"wildcardhint":{
-		"message":"Note: you can use * as wildcard here",
+		"message":"Opomba: tu lahko uporabite * kot nadomestni znak",
 		"description":"resourceblocking page string"
 	},
 	"novalidurlpattern":{
-		"message":"Please enter a valid URL pattern to match!",
+		"message":"Prosimo, vnesite veljaven URL vzorec za ujemanje!",
 		"description":"resourceblocking page string"
 	},
 	"doesntmatchoriginal":{
@@ -840,11 +868,11 @@
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend2":{
-		"message":"blocked resources",
+		"message":"blokirani viri",
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend3":{
-		"message":"whitelisted resources",
+		"message":"dovoljeni viri",
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend4":{
@@ -852,7 +880,7 @@
 		"description":"resourceblocking page string"
 	},
 	"resourceblocklegend5":{
-		"message":"hiding rules applied",
+		"message":"pravila za skrivanje uveljavljena",
 		"description":"resourceblocking page string"
 	},
 	"loading":{
@@ -940,7 +968,7 @@
 		"description":"Menu entry to pause AdBlock."
 	},
 	"undo_last_block":{
-		"message":"Razveljavi zadnjo blokado",
+		"message":"Undo my blocks on this domain",
 		"description":"Menu entry to let the user cancel the result of running the blacklist wizard."
 	},
 	"dont_run_on_this_page":{
@@ -956,7 +984,7 @@
 		"description":"Toolbar button menu entry to hide the AdBlock button"
 	},
 	"spread_the_word":{
-		"message":"Prosimo, pomagajte nam širiti besedo!",
+		"message":"Help spread the word!",
 		"description":"Text of a share link"
 	},
 	"did_you_know_this_is_my_full_time_job":{
@@ -988,10 +1016,6 @@
 	"help":{
 		"message":"Pomoč",
 		"description":"Text of link to a page with fixes to common problems and a list of known issues"
-	},
-	"faq":{
-		"message":"Pogosto zastavljena vprašanja",
-		"description":"Text of link to a page with answers to frequently asked questions.  The capitalization should be the same as for the 'help' and 'project_home' messages"
 	},
 	"report_ad_on_page":{
 		"message":"Prijavi oglas na tej strani",
@@ -1236,5 +1260,19 @@
 	"selectlanguage":{
 		"message":" -- Izberite jezik -- ",
 		"description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
+	},
+	"confirm_undo_custom_filters":{
+		"message":"Are you sure you want to remove the $count$ blocks that you have created on $host$?",
+		"description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
+		"placeholders":{
+			"count":{
+				"content":"$1",
+				"example":"The number of custom blocks for a domain."
+			},
+			"host":{
+				"content":"$2",
+				"example":"code.google.ph, ph.msn.com, stackoverflow.com"
+			}
+		}
 	}
 }
