@@ -1136,7 +1136,7 @@
 		"description":"Opera option to show\/hide the button"
 	},
 	"opera_can_also_change_setting":{
-		"message":"Du kan også øke verdien av\n$settings$",
+		"message":"Du kan også øke verdien av\n$setting$",
 		"description":"Message when the storage quota is reached, for advanced users in Opera",
 		"placeholders":{
 			"setting":{
