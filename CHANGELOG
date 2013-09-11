@@ -1,6 +1,6 @@
 **Latest Chrome version:** 2.6.4<br/>
 **Latest Safari version:** 2.6.4<br/>
-**Latest Opera version:** Same as Chrome, in Opera 15.  For older Opera versions, see  [here](#changelog-for-the-opera-version-of-adblock).
+**Latest Opera version:** Same as Chrome, in Opera 15+.  For older Opera versions, see  [here](#changelog-for-the-opera-version-of-adblock).
 
 ## Versions ##
 
@@ -10,6 +10,10 @@ UNRELEASED:
 - Blocked ad count is darker color to avoid looking like a notification
 - Bugfix: blocked ad count doesn't carry over into new, blank tabs
 - New language: Norwegian
+- Added RTL function for Arabic and Hebrew users
+- Bugfix: fixed bug which caused that some ads weren't blocked
+- Added and updated filter lists based on user's localization, added Malware and Antisocial filter list
+- Slightly improved share page with new buttons
 
 2.6.4: Undo one of the minor bugfixes in 2.6.3 because it itself had a bug breaking AdBlock if you reloaded a page too quickly
 
