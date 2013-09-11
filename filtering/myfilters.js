@@ -465,7 +465,7 @@ MyFilters.prototype._load_default_subscriptions = function() {
 
   // Returns the ID of the list appropriate for the user's locale, or ''
   function listIdForThisLocale() {
-    var language = navigator.language.match(/^([a-z]+).*/i)[1];
+    var language = determineUserLanguage();
     switch(language) {
       case 'bg': return 'easylist_plus_bulgarian';
       case 'cs': return 'czech';
