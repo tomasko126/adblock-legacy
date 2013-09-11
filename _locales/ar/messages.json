@@ -345,6 +345,10 @@
 		"message":"إظهار ارتباطات إلى قوائم عوامل التصفية:",
 		"description":"Option on second tab page"
 	},
+	"filterantisocial":{
+		"message":"قائمة عوامل ااتصفية المعادية للمجتمع (يزيل أزرار الوسائط الاجتماعية)",
+		"description":"Name of the filter list"
+	},
 	"filteradblock_custom":{
 		"message":"عوامل التصفية المخصص لي AdBlock (مستحسن)",
 		"description":"A filter list. Don't translate 'AdBlock'"
@@ -364,6 +368,30 @@
 	"filtereasyprivacy":{
 		"message":"EasyPrivacy (حماية الخصوصية)",
 		"description":"A filter list. Don't translate the name 'EasyPrivacy'."
+	},
+	"filtereasylist_plus_indonesian":{
+		"message":"الإندونيسية",
+		"description":"A filter list."
+	},
+	"filtermalware":{
+		"message":"الحماية من البرامج الضارة",
+		"description":"A filter list."
+	},
+	"filterlatvian":{
+		"message":"اللاتفية",
+		"description":"A filter list."
+	},
+	"filternorwegian":{
+		"message":"النرويجية",
+		"description":"A filter list."
+	},
+	"filterswedish":{
+		"message":"السويدية",
+		"description":"A filter list."
+	},
+	"filterturkish":{
+		"message":"التركية",
+		"description":"A filter list."
 	},
 	"blacklistclickmessage":{
 		"message":"الزر الأيمن على الأعلانات في الصغحة لمنعها--أو منعها من هنا يدوياً.",
@@ -940,7 +968,7 @@
 		"description":"Menu entry to pause AdBlock."
 	},
 	"undo_last_block":{
-		"message":"التراجع عن الحضر الأخير",
+		"message":"التراجع عن المنع الذي وضعته في هذا المجال",
 		"description":"Menu entry to let the user cancel the result of running the blacklist wizard."
 	},
 	"dont_run_on_this_page":{
@@ -956,7 +984,7 @@
 		"description":"Toolbar button menu entry to hide the AdBlock button"
 	},
 	"spread_the_word":{
-		"message":"من فضلك، مساعدة لي نشر الكلمة!",
+		"message":"المساعدة في نشر الكلمة!",
 		"description":"Text of a share link"
 	},
 	"did_you_know_this_is_my_full_time_job":{
@@ -1233,16 +1261,18 @@
 		"message":" --حدد اللغة -- ",
 		"description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
 	},
-	"crowdfund_text":{
-		"message":"تعال وانظر حملتنا المجنونة",
-		"description":"text for link to crowdfunding site"
-	},
-	"crowdfund_new":{
-		"message":"الجديد",
-		"description":"text that says new; visual cue with New badge"
-	},
-	"crowdfund_intro":{
-		"message":"AdBlock هو شراء الإعلانات.. ل AdBlock!",
-		"description":"intro to crowdfund"
+	"confirm_undo_custom_filters":{
+		"message":"هل أنت متأكد من أنك تريد إزالة $count$ المنع الذي قمت بإنشائه في $host$؟",
+		"description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
+		"placeholders":{
+			"count":{
+				"content":"$1",
+				"example":"The number of custom blocks for a domain."
+			},
+			"host":{
+				"content":"$2",
+				"example":"code.google.ph, ph.msn.com, stackoverflow.com"
+			}
+		}
 	}
 }

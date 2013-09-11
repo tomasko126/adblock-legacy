@@ -4,7 +4,7 @@
 		"description":"Extension description in manifest"
 	},
 	"adblock_click_for_details":{
-		"message":"AdBlock - Klik voor details",
+		"message":"AdBlock - klik voor details",
 		"description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button.  Do not translate the beginning 'AdBlock - ' part."
 	},
 	"buttoncancel":{
@@ -16,7 +16,7 @@
 		"description":"OK button"
 	},
 	"reportpubliclyavailable":{
-		"message":"Let op: dit rapport kan openbaar gemaakt worden. Dit betekent dat iedereen deze kan zien. Denk hieraan voor je persoonlijke informatie toevoegt.",
+		"message":"Let op: dit rapport kan openbaar gemaakt worden. Dit betekent dat iedereen je rapport kan zien. Denk hieraan voor je persoonlijke informatie toevoegt.",
 		"description":"Ad report page string, when you're about to submit a report"
 	},
 	"buttonblockit":{
@@ -230,11 +230,11 @@
 		"description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
 	},
 	"googletextads":{
-		"message":"Ik vind de text advertenties op Google zoekresultaten interessant, laat me deze zien.",
+		"message":"Ik vind de tekstadvertenties bij de zoekresultaten van Google interessant, laat me deze zien.",
 		"description":"Option on first tab page"
 	},
 	"showcontextmenus":{
-		"message":"Voeg items toe aan het context menu.",
+		"message":"Voeg items toe aan het rechterklik menu.",
 		"description":"Option on first tab page"
 	},
 	"debuginlogoption":{
@@ -330,7 +330,7 @@
 		"description":"Explanation of the filter lists"
 	},
 	"updatenowmessage":{
-		"message":"AdBlock zoekt automatisch naar updates maar je kan ook <a>nu bijwerken<\/a>.",
+		"message":"Ik zoek automatisch naar updates, maar je kan ook <a>nu bijwerken<\/a>.",
 		"description":"update filters text + button"
 	},
 	"orenteraurl":{
@@ -1026,7 +1026,7 @@
 		"description":"Link in the button"
 	},
 	"advanced_options":{
-		"message":"Ik ben een gevorderd gebruiker, toon me de gevorderde opties.",
+		"message":"Ik ben een gevorderd gebruiker, toon me de geavanceerde opties.",
 		"description":"Options page checkbox"
 	},
 	"work_around_hulu_problems":{
