@@ -80,6 +80,8 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
   if (!this._subscriptions) {
     // Brand new user. Install some filters for them.
     this._subscriptions = this._load_default_subscriptions();
+    console.log('the subscription object appears to be', this._subscriptions);
+    console.log('but actually, the keys are', Object.keys(this._subscriptions));
   }
 
   for (var id in this._subscriptions) {
@@ -462,7 +464,6 @@ MyFilters.prototype.customToDefaultId = function(id) {
 // Returns an object containing the subscribed lists
 MyFilters.prototype._load_default_subscriptions = function() {
   var result = {};
-  console.log(result);
   // Returns the ID of the list appropriate for the user's locale, or ''
   function listIdForThisLocale() {
     var language = navigator.language.match(/^([a-z]+).*/i)[1];
@@ -491,15 +492,12 @@ MyFilters.prototype._load_default_subscriptions = function() {
       default: return '';
     }
   }
-  console.log(result);
   //Update will be done immediately after this function returns
   result["adblock_custom"] = { subscribed: true };
   result["easylist"] = { subscribed: true };
-  console.log(result);
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
-  console.log(result);
   return result;
 }
 
