@@ -80,8 +80,6 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
   if (!this._subscriptions) {
     // Brand new user. Install some filters for them.
     this._subscriptions = this._load_default_subscriptions();
-    console.log('the subscription object appears to be', this._subscriptions);
-    console.log('but actually, the keys are', Object.keys(this._subscriptions));
   }
 
   for (var id in this._subscriptions) {
@@ -119,7 +117,6 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
       // and will remove old entry with outdated id.
       var that = this;
       var updateSubscription = function(old_id, new_id) {
-        console.log("Are we still deleting?: " + old_id + ":" + new_id);
         that._subscriptions[new_id] = that._subscriptions[id];
         delete that._subscriptions[id];
       }
