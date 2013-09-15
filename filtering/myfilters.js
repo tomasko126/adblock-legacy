@@ -93,35 +93,44 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
     // Convert subscribed ex-official lists into user-submitted lists.
     // Convert subscribed ex-user-submitted lists into official lists.
     else {
+      // Cache subscription that needs to be checked.
       var sub_to_check = this._subscriptions[id];
-      for (var official_id in this._official_options) {
-        // Set conditions for official subs
-        var initial_url_match = sub_to_check.initialUrl === this._official_options[official_id].url;
-        var url_match = sub_to_check.url === this._official_options[official_id].url;
-          
-        var is_not_user_submitted = initial_url_match || url_match;
-          
-        // If an entry is not user submitted, update it's fields
-        if(is_not_user_submitted) {
-          // This will create two entries of the same url if official id and id in subscriptions do not match
-          this._subscriptions[official_id] = this._subscriptions[id];
-          // So delete the entry in id if it does not match the official id
-          if(official_id !== id)
-            delete this._subscriptions[id];
-          break;
+      var is_user_submitted = true;
+      var update_id = id;
+      if(!this._official_options[id]) {
+        // If id is not in official options, check if there's a matching url in the
+        // official list. If there is, then the subscription is not user submitted.
+        for(var official_id in this._official_options) {
+          var official_url = this._official_options[official_id].url;
+          if(sub_to_check.initialUrl === official_url
+            || sub_to_check.url === official_url) {
+            is_user_submitted = false;
+            update_id = official_id;
+            break;
+          }
         }
-      } 
-        
-      sub_to_check.user_submitted = !is_not_user_submitted;
+      } else {
+        is_user_submitted = false;
+      }
       
-      // If subscription is formerly in the official list but was removed,
-      // update id to 'url:(subscription url)
-      if (sub_to_check.user_submitted) {
-        var new_key = "url:" + sub_to_check.url;
-        if (new_key !== id){
-          this._subscriptions[new_key] = this._subscriptions[id];
-          delete this._subscriptions[id];
-        }
+      sub_to_check.user_submitted = is_user_submitted;
+      
+      // Function that will add a new entry with updated id,
+      // and will remove old entry with outdated id.
+      var that = this;
+      var updateSubscription = function(old_id, new_id) {
+        console.log("Are we still deleting?: " + old_id + ":" + new_id);
+        that._subscriptions[new_id] = that._subscriptions[id];
+        delete that._subscriptions[id];
+      }
+      
+      // Create new id and check if new id is the same as id.
+      // If not, update entry in subscriptions.
+      var new_id = is_user_submitted ? 
+        "url:" + sub_to_check.url:update_id;
+      
+      if(new_id !== id) {
+        updateSubscription(id, new_id);
       }        
     }
   }
