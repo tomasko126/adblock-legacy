@@ -346,7 +346,7 @@
 		"description":"Option on second tab page"
 	},
 	"filterantisocial":{
-		"message":"Antisocial filter list (removes social media buttons)",
+		"message":"противосоциален филтър (премахва бутоните на социални мрежи)",
 		"description":"Name of the filter list"
 	},
 	"filteradblock_custom":{
@@ -370,27 +370,27 @@
 		"description":"A filter list. Don't translate the name 'EasyPrivacy'."
 	},
 	"filtereasylist_plus_indonesian":{
-		"message":"Indonesian",
+		"message":"индонезийски",
 		"description":"A filter list."
 	},
 	"filtermalware":{
-		"message":"Malware protection",
+		"message":"Неприкосновеност от зловреден код",
 		"description":"A filter list."
 	},
 	"filterlatvian":{
-		"message":"Latvian",
+		"message":"латвийски",
 		"description":"A filter list."
 	},
 	"filternorwegian":{
-		"message":"Norwegian",
+		"message":"норвежки",
 		"description":"A filter list."
 	},
 	"filterswedish":{
-		"message":"Swedish",
+		"message":"шведски",
 		"description":"A filter list."
 	},
 	"filterturkish":{
-		"message":"Turkish",
+		"message":"турски",
 		"description":"A filter list."
 	},
 	"blacklistclickmessage":{
@@ -968,7 +968,7 @@
 		"description":"Menu entry to pause AdBlock."
 	},
 	"undo_last_block":{
-		"message":"Undo my blocks on this domain",
+		"message":"Отмени блокираните за домейна",
 		"description":"Menu entry to let the user cancel the result of running the blacklist wizard."
 	},
 	"dont_run_on_this_page":{
@@ -984,7 +984,7 @@
 		"description":"Toolbar button menu entry to hide the AdBlock button"
 	},
 	"spread_the_word":{
-		"message":"Help spread the word!",
+		"message":"Нека и другите да чуят!",
 		"description":"Text of a share link"
 	},
 	"did_you_know_this_is_my_full_time_job":{
@@ -1262,7 +1262,7 @@
 		"description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
 	},
 	"confirm_undo_custom_filters":{
-		"message":"Are you sure you want to remove the $count$ blocks that you have created on $host$?",
+		"message":"Сигурен ли сте, че премахвате $count$ от блокираните елементи за $host$?",
 		"description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
 		"placeholders":{
 			"count":{
