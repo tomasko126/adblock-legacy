@@ -26,6 +26,8 @@ ClassName.prototype = {
 
 Equality should be `===`, not `==`. In regular expressions, put a `\` before every non-special character except `[a-zA-Z0-9_-]` so that it's obvious that all other characters are special characters. E.g. `/^\@\@\|\|ads-r-us\.com(\/ad_content)+$/`
 
+Use spaces, not tabs, to indent your code.  You can configure your editor to insert spaces when you press Tab.
+
 We didn't always have a style guide, so unfortunately the code isn't 100% adherent to the rules above. Refactoring is great -- whenever you touch some code, feel free to clean it up.
 
 ## Update the CHANGELOG

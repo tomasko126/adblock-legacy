@@ -546,7 +546,7 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "easylist_plus_indonesian": { // Additional Indonesian filters
       url: "https://indonesianadblockrules.googlecode.com/hg/subscriptions/abpindo.txt",
-	  requiresList: "easylist",
+      requiresList: "easylist",
     },
     "easylist_plus_polish": { // Additional Polish filters
       url: "http://adblocklist.org/adblock-pxf-polish.txt",

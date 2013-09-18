@@ -339,7 +339,7 @@
   }
 
   // CUSTOM FILTERS
-	
+  
   // Get the custom filters text as a \n-separated text string.
   get_custom_filters_text = function() {
     return storage_get('custom_filters') || '';
@@ -364,7 +364,7 @@
     
     for(var i = 0; i < custom_filters_arr.length; i++) {
       var entry = custom_filters_arr[i];
-			//Make sure that the identifier is at the start of the entry
+      //Make sure that the identifier is at the start of the entry
       if(entry.indexOf(identifier) === 0) { continue; }
       new_custom_filters_arr.push(entry);
     }
@@ -373,53 +373,53 @@
     set_custom_filters_text(text.trim());
   }
   
-	// count_cache singleton.
-	var count_cache = (function(count_map) {
-		var cache = count_map;
-		// Update custom filter count stored in localStorage
-		var _updateCustomFilterCount = function() {
-			storage_set("custom_filter_count", cache);
-		};
-		
-		return {
-			// Update custom filter count cache and value stored in localStorage.
-			// Inputs: new_count_map:count map - count map to replace existing count cache
-			updateCustomFilterCountMap: function(new_count_map) {
-				cache = new_count_map || cache;
-				_updateCustomFilterCount();
-			},
-			// Remove custom filter count for host
-			// Inputs: host:string - url of the host
-			removeCustomFilterCount: function(host) {
-				if(host && cache[host]) {
-					delete cache[host];
-					_updateCustomFilterCount();
-				}
-			},
-			// Get current custom filter count for a particular domain
-			// Inputs: host:string - url of the host
-			getCustomFilterCount: function(host) {
-				return cache[host] || 0;
-			},
-			// Add 1 to custom filter count for the filters domain.
-			// Inputs: filter:string - line of text to be added to custom filters.
-			addCustomFilterCount: function(filter) {
-				var host = filter.split("##")[0];
-				cache[host] = this.getCustomFilterCount(host) + 1;
-				_updateCustomFilterCount();
-			}
-		}
-	})(storage_get("custom_filter_count") || {});
-	
-	// Entry point for customize.js, used to update custom filter count cache.
-	updateCustomFilterCountMap = function(new_count_map) {
-		count_cache.updateCustomFilterCountMap(new_count_map);
-	}
-	
+  // count_cache singleton.
+  var count_cache = (function(count_map) {
+    var cache = count_map;
+    // Update custom filter count stored in localStorage
+    var _updateCustomFilterCount = function() {
+      storage_set("custom_filter_count", cache);
+    };
+    
+    return {
+      // Update custom filter count cache and value stored in localStorage.
+      // Inputs: new_count_map:count map - count map to replace existing count cache
+      updateCustomFilterCountMap: function(new_count_map) {
+        cache = new_count_map || cache;
+        _updateCustomFilterCount();
+      },
+      // Remove custom filter count for host
+      // Inputs: host:string - url of the host
+      removeCustomFilterCount: function(host) {
+        if(host && cache[host]) {
+          delete cache[host];
+          _updateCustomFilterCount();
+        }
+      },
+      // Get current custom filter count for a particular domain
+      // Inputs: host:string - url of the host
+      getCustomFilterCount: function(host) {
+        return cache[host] || 0;
+      },
+      // Add 1 to custom filter count for the filters domain.
+      // Inputs: filter:string - line of text to be added to custom filters.
+      addCustomFilterCount: function(filter) {
+        var host = filter.split("##")[0];
+        cache[host] = this.getCustomFilterCount(host) + 1;
+        _updateCustomFilterCount();
+      }
+    }
+  })(storage_get("custom_filter_count") || {});
+  
+  // Entry point for customize.js, used to update custom filter count cache.
+  updateCustomFilterCountMap = function(new_count_map) {
+    count_cache.updateCustomFilterCountMap(new_count_map);
+  }
+  
   remove_custom_filter_for_host = function(host) {
     if(count_cache.getCustomFilterCount(host)) {
       remove_custom_filter(host);
-			count_cache.removeCustomFilterCount(host);
+      count_cache.removeCustomFilterCount(host);
     } 
   }
 
