@@ -206,6 +206,22 @@ test("Should instantiate a MyFilters object correctly", 3, function() {
   ok(_myfilters._official_options, "_official_options is not null");
 });
 
+test("Should have default filters subscribed on installation", 4, function() {
+  var _myfilters = new MyFilters();
+  
+  // Reset _subscriptions to mock newly installed adblock
+  _myfilters._subscriptions = undefined;
+  _myfilters._updateDefaultSubscriptions();
+  
+  var subscriptions = _myfilters._subscriptions;
+  ok(subscriptions["adblock_custom"].subscribed, "Adblock Custom filter should be subscribed");
+  ok(subscriptions["easylist"].subscribed, "Easylist Filters should be subscribed");
+  
+  _myfilters._updateFieldsFromOriginalOptions();
+  ok(subscriptions["adblock_custom"].subscribed, "Adblock Custom filter should still be subscribed");
+  ok(subscriptions["easylist"].subscribed, "Easylist Filters should still be subscribed");
+});
+
 test("Should delete ex-official lists from subscriptions", 6, function() {
   var _myfilters = new MyFilters();
   _myfilters._subscriptions = {
