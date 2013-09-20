@@ -116,18 +116,18 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
       // Function that will add a new entry with updated id,
       // and will remove old entry with outdated id.
       var that = this;
-      var updateSubscription = function(old_id, new_id) {
-        that._subscriptions[new_id] = that._subscriptions[id];
-        delete that._subscriptions[id];
+      var renameSubscription = function(old_id, new_id) {
+        that._subscriptions[new_id] = that._subscriptions[old_id];
+        delete that._subscriptions[old_id];
       }
       
       // Create new id and check if new id is the same as id.
       // If not, update entry in subscriptions.
-      var new_id = is_user_submitted ? 
-        "url:" + sub_to_check.url:update_id;
+      var id_if_user_submitted = "url:" + sub_to_check.initial_url;
+      var new_id = is_user_submitted ? id_if_user_submitted:update_id;
       
       if(new_id !== id) {
-        updateSubscription(id, new_id);
+        renameSubscription(id, new_id);
       }        
     }
   }
