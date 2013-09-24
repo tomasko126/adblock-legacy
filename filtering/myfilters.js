@@ -525,7 +525,7 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "dutch": { // Additional Dutch filters
-      url: "https://dutchadblockfilters.googlecode.com/svn/trunk/AdBlock_Dutch_hide.txt",
+      url: "https://easylist-downloads.adblockplus.org/easylistdutch.txt",
       requiresList: "easylist",
     },
     "easylist_plus_finnish": { // Additional Finnish filters
