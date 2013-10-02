@@ -346,7 +346,7 @@ test("Should change the id of a new official subscriptions", function() {
   
   ok(subscriptions["url:http://notmatch.com/notmatch.txt"], "Entry should change id to url:url"); // With Id, subscribed, url and initial url does not match
   ok(subscriptions["url:http://notmatch.com/notmatch.txt"].user_submitted, "'Url' should be user submitted");
-  ok(!subscriptions.notmatch, "Entry should be deleted since it is no longer part of the official list")
+  ok(!subscriptions.notmatch, "Entry should be deleted since it is no longer part of the official list");
 
   ok(subscriptions["url:http://example.com/ex_official/recent.txt"], "Ex-official list is renamed using url, not initialUrl");
 });
