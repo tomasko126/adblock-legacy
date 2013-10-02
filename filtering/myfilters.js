@@ -124,8 +124,7 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
       
       // Create new id and check if new id is the same as id.
       // If not, update entry in subscriptions.
-      var id_if_user_submitted = "url:" + sub_to_check.url;
-      var new_id = is_user_submitted ? id_if_user_submitted:update_id;
+      var new_id = is_user_submitted ? ("url:" + sub_to_check.url) : update_id;
       
       if(new_id !== id) {
         renameSubscription(id, new_id);
