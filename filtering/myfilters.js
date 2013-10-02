@@ -80,6 +80,7 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
   if (!this._subscriptions) {
     // Brand new user. Install some filters for them.
     this._subscriptions = this._load_default_subscriptions();
+    return;
   }
 
   for (var id in this._subscriptions) {
@@ -91,39 +92,46 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
     // Convert subscribed ex-official lists into user-submitted lists.
     // Convert subscribed ex-user-submitted lists into official lists.
     else {
+      // Cache subscription that needs to be checked.
       var sub_to_check = this._subscriptions[id];
-      for (var official_id in this._official_options) {
-        // Set conditions for official subs
-        var initial_url_match = sub_to_check.initialUrl === this._official_options[official_id].url;
-        var url_match = sub_to_check.url === this._official_options[official_id].url;
-          
-        var is_not_user_submitted = initial_url_match || url_match;
-          
-        // If an entry is not user submitted, update its fields
-        if(is_not_user_submitted) {
-          // This will create two entries of the same url if official id and id in subscriptions do not match
-          this._subscriptions[official_id] = this._subscriptions[id];
-          // So delete the entry in id if it does not match the official id
-          if(official_id !== id)
-            delete this._subscriptions[id];
-          break;
+      var is_user_submitted = true;
+      var update_id = id;
+      if(!this._official_options[id]) {
+        // If id is not in official options, check if there's a matching url in the
+        // official list. If there is, then the subscription is not user submitted.
+        for(var official_id in this._official_options) {
+          var official_url = this._official_options[official_id].url;
+          if(sub_to_check.initialUrl === official_url
+            || sub_to_check.url === official_url) {
+            is_user_submitted = false;
+            update_id = official_id;
+            break;
+          }
         }
-      } 
-        
-      sub_to_check.user_submitted = !is_not_user_submitted;
+      } else {
+        is_user_submitted = false;
+      }
       
-      // If subscription is formerly in the official list but was removed,
-      // update id to 'url:(subscription url)
-      if (sub_to_check.user_submitted) {
-        var new_key = "url:" + sub_to_check.url;
-        if (new_key !== id){
-          this._subscriptions[new_key] = this._subscriptions[id];
-          delete this._subscriptions[id];
-        }
+      sub_to_check.user_submitted = is_user_submitted;
+      
+      // Function that will add a new entry with updated id,
+      // and will remove old entry with outdated id.
+      var that = this;
+      var renameSubscription = function(old_id, new_id) {
+        that._subscriptions[new_id] = that._subscriptions[old_id];
+        delete that._subscriptions[old_id];
+      };
+      
+      // Create new id and check if new id is the same as id.
+      // If not, update entry in subscriptions.
+      var new_id = is_user_submitted ? ("url:" + sub_to_check.url) : update_id;
+      
+      if(new_id !== id) {
+        renameSubscription(id, new_id);
       }        
     }
   }
-}
+};
 // When a subscription property changes, this function stores it
 // Inputs: rebuild? boolean, true if the filterset should be rebuilt
 MyFilters.prototype._onSubscriptionChange = function(rebuild) {
@@ -252,6 +260,7 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
       listDidntExistBefore = true;
       this._subscriptions[id] = {
         user_submitted: true,
+        initialUrl: id.substr(4),
         url: id.substr(4)
       };
     }
@@ -462,7 +471,6 @@ MyFilters.prototype.customToDefaultId = function(id) {
 // Returns an object containing the subscribed lists
 MyFilters.prototype._load_default_subscriptions = function() {
   var result = {};
-
   // Returns the ID of the list appropriate for the user's locale, or ''
   function listIdForThisLocale() {
     var language = determineUserLanguage();
@@ -496,15 +504,12 @@ MyFilters.prototype._load_default_subscriptions = function() {
       default: return '';
     }
   }
-
   //Update will be done immediately after this function returns
   result["adblock_custom"] = { subscribed: true };
   result["easylist"] = { subscribed: true };
-  
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
-
   return result;
 }
 
