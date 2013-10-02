@@ -348,9 +348,7 @@ test("Should change the id of a new official subscriptions", function() {
   ok(subscriptions["url:http://notmatch.com/notmatch.txt"].user_submitted, "'Url' should be user submitted");
   ok(!subscriptions.notmatch, "Entry should be deleted since it is no longer part of the official list")
 
-  // TODO: one of these two assertions is incorrect; delete it.
-  ok(subscriptions["url:http://example.com/ex_official/original.txt"], "Ex-official list is renamed using initialUrl");
-  ok(subscriptions["url:http://example.com/ex_official/recent.txt"], "Ex-official list is renamed using url");
+  ok(subscriptions["url:http://example.com/ex_official/recent.txt"], "Ex-official list is renamed using url, not initialUrl");
 });
 
 test("Should add official subscription in _subscriptions object if missing", function() {
