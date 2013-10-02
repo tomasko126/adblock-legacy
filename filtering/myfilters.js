@@ -261,6 +261,7 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
       listDidntExistBefore = true;
       this._subscriptions[id] = {
         user_submitted: true,
+        initialUrl: id.substr(4),
         url: id.substr(4)
       };
     }
