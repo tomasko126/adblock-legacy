@@ -80,6 +80,7 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
   if (!this._subscriptions) {
     // Brand new user. Install some filters for them.
     this._subscriptions = this._load_default_subscriptions();
+    return;
   }
 
   for (var id in this._subscriptions) {
