@@ -120,7 +120,7 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
       var renameSubscription = function(old_id, new_id) {
         that._subscriptions[new_id] = that._subscriptions[old_id];
         delete that._subscriptions[old_id];
-      }
+      };
       
       // Create new id and check if new id is the same as id.
       // If not, update entry in subscriptions.
@@ -131,7 +131,7 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
       }        
     }
   }
-}
+};
 // When a subscription property changes, this function stores it
 // Inputs: rebuild? boolean, true if the filterset should be rebuilt
 MyFilters.prototype._onSubscriptionChange = function(rebuild) {
