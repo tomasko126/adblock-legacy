@@ -1,11 +1,12 @@
-**Latest Chrome version:** 2.6.8<br/>
+**Latest Chrome version:** 2.6.9<br/>
 **Latest Safari version:** 2.6.4<br/>
 **Latest Opera version:** Same as Chrome, in Opera 15+.  For older Opera versions, see  [here](#changelog-for-the-opera-version-of-adblock).
 
 ## Versions ##
 
-UNRELEASED: 
+UNRELEASED:
 
+2.6.9: 
 - Updated Dutch filter list link
 - Bugfix: blocked ad count doesn't carry over into new, blank tabs
 - New language: Norwegian
