@@ -1,12 +1,11 @@
-**Latest Chrome version:** 2.6.9<br/>
-**Latest Safari version:** 2.6.4<br/>
-**Latest Opera version:** Same as Chrome, in Opera 15+.  For older Opera versions, see  [here](#changelog-for-the-opera-version-of-adblock).
-
 ## Versions ##
 
 UNRELEASED:
 
-2.6.9: 
+2.6.10:
+- Bugfix for slow initial filter subscription.
+
+2.6.9 (beta channel only): 
 - Added and updated filter lists based on user's localization, added Malware and Antisocial filter list
 - Added RTL function for Arabic and Hebrew users
 - Added language: Norwegian
@@ -621,7 +620,6 @@ EasyList if you subscribe to an EasyList additional list (famlam)
 
 1.3.0: Initial import.
 
-<a name="changelog-for-the-opera-version-of-adblock">
 ## Changelog for the Opera version of AdBlock ##
 
 1.0.8: Include changes from AdBlock for Chrome 2.5.60.
