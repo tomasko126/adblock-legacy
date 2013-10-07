@@ -15,6 +15,7 @@ function MyFilters() {
 // Update _subscriptions and _official_options in case there are changes.
 // Should be invoked right after creating a MyFilters object.
 MyFilters.prototype.init = function() {
+  var newUser = !this._subscriptions;
   this._updateDefaultSubscriptions();
   this._updateFieldsFromOriginalOptions();
   
@@ -24,7 +25,7 @@ MyFilters.prototype.init = function() {
   // On startup and then every hour, check if a list is out of date and has to
   // be updated
   var that = this;
-  if (!this._subscriptions) 
+  if (newUser)
     this.checkFilterUpdates();
   else
     idleHandler.scheduleItemOnce(
