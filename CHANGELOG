@@ -10,7 +10,6 @@ UNRELEASED:
 - Added and updated filter lists based on user's localization, added Malware and Antisocial filter list
 - Added RTL function for Arabic and Hebrew users
 - Added language: Norwegian
-- Bugfix: Default filter lists are checked after installation again
 - Bugfix: blocked ad count doesn't carry over into new, blank tabs
 
 2.6.8: Removed crowdfunding message from AdBlock button
