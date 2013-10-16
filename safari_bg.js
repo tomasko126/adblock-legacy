@@ -260,3 +260,24 @@ safari.application.addEventListener("contextmenu", function(event) {
   if (getCustomFilters())
     event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
 }, false);
+
+safari_get_tab_url = {
+  map: {},
+  // Get the tab URL for a frame. Assumes the main frame in a tab
+  // will be inquired before its inner frames are, so we can store
+  // the main frame's URL and use it for the inner ones.
+  // Needed b/c sender.tab.url is undefined when opening a page from the Top
+  // Sites page. See Issue #29.
+  // Inputs: tab_id:numeric id of tab
+  //         top_level_frame:boolean; main frame in tab?
+  //         frame_url:string
+  // Return: string url of this frame's tab
+  for_frame: function(tab_id, top_level_frame, frame_url) {
+    if (top_level_frame) {
+      // NOTE: If opening/closing tabs makes this eventually have a lot of
+      // stale tab info, convert to a FIFO cache
+      this.map[tab_id] = frame_url;
+    }
+    return this.map[tab_id];
+  }
+};

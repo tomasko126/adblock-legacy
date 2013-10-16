@@ -177,6 +177,7 @@ if (SAFARI) {
             var sender = {}; // Empty in onRequest in non-global contexts.
             if (isOnGlobalPage) { // But filled with sender data otherwise.
               var id = getTabId(messageEvent.target);
+              // TODO: unresolved for issue #29: messageEvent.target.url isn't set
               sender.tab = { id: id, url: messageEvent.target.url };
             }
 
@@ -184,6 +185,7 @@ if (SAFARI) {
               var responseMessage = { callbackToken: messageEvent.message.callbackToken, data: dataToSend };
               dispatchContext(messageEvent).dispatchMessage("response", responseMessage);
             };
+            // TODO: unresolved for issue #29: sender.taburl is undefined
             handler(request, sender, sendResponse);
           });
         }
