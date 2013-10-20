@@ -36,7 +36,14 @@ test("parseSearch", 11, function() {
   deepEqual(parseUri.parseSearch("?hello=world&&ext=adblock"), {"ext": "adblock", "hello": "world"});
   deepEqual(parseUri.parseSearch("?hello&&&&ext=adblock"), {"ext": "adblock", "hello": ""});
 });
+/*test("parseSecondLevelDomain", 0, function() {
+  // Keep testing different urls
+});*/
 
+// Create module for storage_set and storage_get
+// setDefault (Maybe create modules by file)
+//Create test for Pattern Filter
+//Read more about filters
 module("DomainSet");
 test("caching and immutable Filters", function() {
   var text = "safariadblock.com##div" 
