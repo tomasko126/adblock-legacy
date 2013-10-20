@@ -1,6 +1,7 @@
 ## Versions ##
 
 UNRELEASED:
+- New language: Catalan
 
 2.6.10:
 - Bugfix for slow initial filter subscription.
