@@ -43,7 +43,55 @@ test("parseSearch", 11, function() {
 // Create module for storage_set and storage_get
 // setDefault (Maybe create modules by file)
 //Create test for Pattern Filter
+
 //Read more about filters
+module("FilterTypes");
+test("selector filter", function() {
+  var isSelectorFilter = Filter.isSelectorFilter;
+  ok(isSelectorFilter("www.foo.com##IMG[src='http://randomimg.com']"), "Is a selector filter");
+  ok(isSelectorFilter("www.foo.com#@#IMG[src='http://randomimg.com']"), "Is an exclude selector filter");
+  ok(!isSelectorFilter("www.foo.com#@IMG[src='http://randomimg.com']"), "Is not a selector filter");
+});
+
+test("exclude selector filter", function() {
+  var isSelectorExcludeFilter = Filter.isSelectorExcludeFilter;
+  ok(!isSelectorExcludeFilter("www.foo.com##IMG[src='http://randomimg.com']"), "Is not an exclude selector filter");
+  ok(isSelectorExcludeFilter("www.foo.com#@#IMG[src='http://randomimg.com']"), "Is an exclude selector filter");
+  ok(!isSelectorExcludeFilter("www.foo.com#@IMG[src='http://randomimg.com']"), "Is not an exclude selector filter");
+});
+
+test("whitelist filter", function() {
+  var isWhitelistFilter = Filter.isWhitelistFilter;
+  ok(!isWhitelistFilter("www.foo.com@@IMG[src='http://randomimg.com']"), "Is not a whitelist filter");
+  ok(isWhitelistFilter("@@IMG[src='http://randomimg.com']"), "Is a whitelist filter");
+});
+
+test("comment", function() {
+  var isComment = Filter.isComment;
+  ok(isComment("! foo comment"), "comment that starts with '!'");
+  ok(isComment("[adblock foo comment"), "comment that starts with '[adblock'");
+  ok(isComment("(adblock foo comment"), "comment that starts with '(adblock'");
+  
+  ok(!isComment(" ! foo comment"), "comment that does not start with '!'");
+  ok(!isComment(" [ adblock foo comment"), "comment that does not start with '[adblock'");
+  ok(!isComment(" ( adblock foo comment"), "comment that does not start with '(adblock'");
+});
+
+test("create selector filter from text", function() {
+  var fromText = Filter.fromText;
+  ok(fromText("www.foo.com##IMG[src='http://randomimg.com']") instanceof SelectorFilter, "is a SelectorFilter object");
+  ok(fromText("www.foo.com#@#IMG[src='http://randomimg.com']") instanceof SelectorFilter, "is a SelectorFilter object");
+  ok(!(fromText("www.foo.com#@IMG[src='http://randomimg.com']") instanceof SelectorFilter), "is not a SelectorFilter object");
+  
+  // Test selector filters
+  var selectorFilter = fromText("www.foo.com##IMG[src='http://randomimg.com']");
+  deepEqual(selectorFilter, fromText("www.foo.com##IMG[src='http://randomimg.com']"));
+  strictEqual(selectorFilter, Filter._cache["www.foo.com##IMG[src='http://randomimg.com']"], "should have a cached copy");
+  ok(selectorFilter._domains.has['www.foo.com'], "should have the domain");
+  strictEqual(selectorFilter.selector, "IMG[src='http://randomimg.com']", "selector should be equal");
+  
+});
+
 module("DomainSet");
 test("caching and immutable Filters", function() {
   var text = "safariadblock.com##div" 
