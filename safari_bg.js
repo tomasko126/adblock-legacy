@@ -257,7 +257,6 @@ safari.application.addEventListener("contextmenu", function(event) {
 
   event.contextMenu.appendContextMenuItem("show-blacklist-wizard", translate("block_this_ad"));
   event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
-  console.log(get_custom_filters_text());
   if (getCustomFilters())
     event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
 }, false);
