@@ -47,8 +47,40 @@ test("parseSecondLevelDomain", 5, function() {
 });
 
 // Create module for storage_set and storage_get
+module("Global Functions");
+test("storage get and storage set", function() {
+  var testObj = {
+    foo: "bar",
+    bar: "foo",
+  };
+  storage_set("testObj", testObj);
+  var testResultObj = storage_get("testObj");
+  deepEqual(testObj.foo, testResultObj.foo);
+  deepEqual(testObj.bar, testResultObj.bar);
+  deepEqual(testObj, testResultObj);
+  
+  notEqual(testObj, testResultObj);
+  
+  storage_set("foo", testObj.foo);
+  var foo = storage_get("foo");
+  deepEqual(testObj.foo, foo);
+  strictEqual(testObj.foo, foo);
+  equal(testObj.foo, foo);
+  
+  storage_set("foo", "not foo");
+  foo = storage_get("foo");
+  notDeepEqual(testObj.foo, foo);
+  notStrictEqual(testObj.foo, foo);
+  notEqual(testObj.foo, foo);
+  
+  testObj.foo = "not foo";
+  testObj.bar = "not bar";
+  testResultObj = storage_get("testObj");
+  notDeepEqual(testObj.foo, testResultObj.foo);
+  notDeepEqual(testObj.bar, testResultObj.bar);
+  notDeepEqual(testObj, testResultObj);
+});
 // setDefault (Maybe create modules by file)
-//Create test for Pattern Filter
 
 //Read more about filters
 module("FilterTypes");
