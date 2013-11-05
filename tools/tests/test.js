@@ -36,9 +36,15 @@ test("parseSearch", 11, function() {
   deepEqual(parseUri.parseSearch("?hello=world&&ext=adblock"), {"ext": "adblock", "hello": "world"});
   deepEqual(parseUri.parseSearch("?hello&&&&ext=adblock"), {"ext": "adblock", "hello": ""});
 });
-/*test("parseSecondLevelDomain", 0, function() {
-  // Keep testing different urls
-});*/
+
+test("parseSecondLevelDomain", 5, function() {
+  var secondLevelDomainOnly = parseUri.secondLevelDomainOnly;
+  deepEqual(secondLevelDomainOnly("appspot.google.com"), "google.com");
+  deepEqual(secondLevelDomainOnly("foo.bar.com"), "bar.com");
+  deepEqual(secondLevelDomainOnly("https://www.google.com.ph"), "com.ph");
+  deepEqual(secondLevelDomainOnly("http://usr:pass@www.test.com:81/dir"), "test.com:81/dir");
+  deepEqual(secondLevelDomainOnly("http://support.godaddy.com"), "godaddy.com");
+});
 
 // Create module for storage_set and storage_get
 // setDefault (Maybe create modules by file)
