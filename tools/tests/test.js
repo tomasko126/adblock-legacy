@@ -46,7 +46,6 @@ test("parseSecondLevelDomain", 5, function() {
   deepEqual(secondLevelDomainOnly("http://support.godaddy.com"), "godaddy.com");
 });
 
-// Create module for storage_set and storage_get
 module("Global Functions");
 test("storage get and storage set", function() {
   var testObj = {
@@ -80,9 +79,41 @@ test("storage get and storage set", function() {
   notDeepEqual(testObj.bar, testResultObj.bar);
   notDeepEqual(testObj, testResultObj);
 });
-// setDefault (Maybe create modules by file)
 
-//Read more about filters
+test("setDefault", function() {
+  var testObj = {
+    foo: "bar",
+    bar: "foo",
+  };
+  
+  var testMap = {
+    first: "one",
+    second: "two",
+    third: "three",
+  };
+  
+  var first = setDefault(testMap, "first", "noOne");
+  
+  strictEqual(testMap.first, first);
+  notStrictEqual(testMap.first, "noOne");
+  
+  first = setDefault(testMap, "notHere", testObj);
+  
+  deepEqual(testMap.notHere, testObj);
+  deepEqual(first, testObj);
+  deepEqual(first, testMap.notHere);
+  ok(testMap.notHere == testObj && testMap.notHere== first, "should be the same object");
+  
+  testObj = {
+    bar: "foo",
+  }
+  
+  first = setDefault(testMap, "notHere", testObj);
+  notDeepEqual(testMap.notHere, testObj);
+  notDeepEqual(first, testObj);
+  ok(testMap.notHere != testObj && first != testObj, "should not be the same");
+});
+
 module("FilterTypes");
 test("selector filter", function() {
   var isSelectorFilter = Filter.isSelectorFilter;
