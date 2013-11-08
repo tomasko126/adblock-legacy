@@ -1,4 +1,4 @@
----// Represents the checkbox controlling subscription to a specific filter list,
+// Represents the checkbox controlling subscription to a specific filter list,
 // as well as the UI that goes along with it (e.g. status label and removal link.)
 // Inputs:
 //   filter_list:object - An entry from a filterListSections array.
