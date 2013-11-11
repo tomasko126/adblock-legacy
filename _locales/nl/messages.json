@@ -210,7 +210,7 @@
     "description":"A tab on the options page"
   },
   "tabcustomize":{
-    "message":"Eigen filters",
+    "message":"Personaliseren",
     "description":"A tab on the options page"
   },
   "generaloptions":{
@@ -398,7 +398,7 @@
     "description":"Message at the top of the blacklist options tab"
   },
   "tabcustomizetitle":{
-    "message":"AdBlock aanpassen",
+    "message":"AdBlock Personaliseren",
     "description":"Title of the third tab"
   },
   "filterlistsrock":{
