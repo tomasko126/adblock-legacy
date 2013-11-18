@@ -238,7 +238,7 @@
     "description":"Option on first tab page"
   },
   "debuginlogoption":{
-    "message":"Mostra messaggi di debug nella Console dei log (rallenta AdBlock)",
+    "message":"Mostra messaggi di debug nella Console dei Log (rallenta AdBlock).",
     "description":"Option on first tab page"
   },
   "updatedrightnow":{
@@ -349,6 +349,10 @@
     "message":"Lista filtri Antisocial (rimuove i bottoni dei social media)",
     "description":"Name of the filter list"
   },
+  "filterannoyances":{
+    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "description":"Name of the filter list"
+  },
   "filteradblock_custom":{
     "message":"Filtri personalizzati di AdBlock (raccomandato)",
     "description":"A filter list. Don't translate 'AdBlock'"
@@ -410,11 +414,11 @@
     "description":"Section header on third tab"
   },
   "stop_blocking_ads":{
-    "message":"Fermare il blocco delle pubblicità:",
+    "message":"Arrestare il blocco delle pubblicità:",
     "description":"Section header on third tab"
   },
   "linkblockadbyurl":{
-    "message":"Blocca un pubblicità inserendo la sua URL",
+    "message":"Blocca una pubblicità inserendo la sua URL",
     "description":"Link on the third tab"
   },
   "linkhidesection":{
@@ -1030,7 +1034,7 @@
     "description":"Options page checkbox"
   },
   "work_around_hulu_problems":{
-    "message":"Aggirare il problema dei video Hulu.com che non vengono riprodotti (richiede il riavvio del browser)",
+    "message":"Aggirare il problema dei video Hulu.com che non vengono riprodotti (richiede il riavvio del browser).",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
   },
   "now_you_have_adblock_hooray":{
