@@ -20,11 +20,11 @@ closedir(LOCALES);
 # rename folders for languages that don't have several variants
 # e.g. en_US becomes en, unless there are other variants like en_GB
 foreach $folder (@localefolders){
-    if ((-d $path.$folder) && ($folder =~ /^[a-z]{2}_[A-Z]{2}$/)){
-	    $language = substr($folder,0,2);
+	if ((-d $path.$folder) && ($folder =~ /^[a-z]{2}_[A-Z]{2}$/)){
+		$language = substr($folder,0,2);
 		@variants = grep(/^$language/,@localefolders);
 		if ($#variants == 0){
-		    rename($path.$folder,$path.$language);
+			rename($path.$folder,$path.$language);
 		}
 	}
 }
@@ -32,5 +32,5 @@ foreach $folder (@localefolders){
 
 # apparently Chrome absolutely wants Norwegian to be nb
 if (-d $path."no"){
-    rename($path."no",$path."nb");
+	rename($path."no",$path."nb");
 }
