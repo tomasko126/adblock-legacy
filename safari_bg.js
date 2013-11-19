@@ -6,7 +6,7 @@ emit_page_broadcast = function(request) {
 safari.application.addEventListener("message", function(messageEvent) {
   if (messageEvent.name != "canLoad")
     return;
-
+  
   if (adblock_is_paused() || page_is_unblockable(messageEvent.target.url) ||
       page_is_whitelisted(messageEvent.target.url)) {
     messageEvent.message = true;
@@ -89,13 +89,6 @@ safari.application.addEventListener("command", function(event) {
 // we can make the toolbar button display a proper menu with items from Chrome's popup.
 if (!LEGACY_SAFARI) {
   (function() {
-    // Added this function so that safari will have it's own way of retrieving custom filters.
-    // Return filters created by user in an array.
-    var getCustomFilters = function() {
-      var custom_filters = storage_get('custom_filters');
-      return custom_filters ? custom_filters.trimLeft() : '';
-    };
-
     // Unfortunately, Safari API kinda sucks. Command events sent from toolbar menu items don't include a
     // reference to the browser window that sent them, same goes for the Menu events. This unfortunately
     // means that we have to create a separate instance of menu for each browser window.
