@@ -171,7 +171,7 @@ function adblock_begin(inputs) {
 
   inputs.startPurger();
 
-  var opts = { domain: document.location.hostname, url: document.location.href, top_level_frame: (window === window.top) };
+  var opts = { domain: document.location.hostname };
   BGcall('get_content_script_data', opts, function(data) {
     if (data.settings.debug_logging)
       logging(true);

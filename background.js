@@ -725,20 +725,12 @@
 
   // Inputs: options object containing:
   //           domain:string the domain of the calling frame.
-  //           url:string the url of the calling frame.
-  //           top_level_frame:bool true if the frame is top level.
   get_content_script_data = function(options, sender) {
-    var tab_url;
-    if (SAFARI) { // See function comments
-      tab_url  = safari_get_tab_url.for_frame(sender.tab.id, options.top_level_frame, options.url);
-    } else {
-      tab_url = sender.tab.url;
-    }
     var settings = get_settings();
-    var runnable = !adblock_is_paused() && !page_is_unblockable(tab_url);
-    var running  = runnable && !page_is_whitelisted(tab_url);
-    var hiding   = running && !page_is_whitelisted(tab_url,
-                                                           ElementTypes.elemhide);
+    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.tab.url);
+    var running = runnable && !page_is_whitelisted(sender.tab.url);
+    var hiding = running && !page_is_whitelisted(sender.tab.url,
+                                                        ElementTypes.elemhide);
     var result = {
       settings: settings,
       runnable: runnable,
