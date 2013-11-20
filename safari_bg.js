@@ -2,11 +2,38 @@ emit_page_broadcast = function(request) {
   safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
+// Imitate frameData object for Safari to avoid issues when using blockCounts.
+frameData = (function() {
+  // Map that will serve as cache for the block count.
+  // key: Numeric - tab id.
+  // value: Numeric - actual block count for the tab.
+  var countMap = { };
+  
+  return {
+    // Get frameData for the tab.
+    // Input:
+    //  tabId:Numberic - id of the tab you want to get
+    get: function(tabId) {
+      if(!countMap[tabId])
+        frameData.create(tabId);
+      return countMap[tabId];
+    },
+    
+    // Create a new frameData
+    // Input:
+    //  tabId:Numeric - id of the tab you want to add in the frameData
+    create: function(tabId) {
+      delete countMap[tabId];
+      countMap[tabId] = { blockCount: 0 };
+    },
+  }
+})();
+
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
   if (messageEvent.name != "canLoad")
     return;
-
+  
   if (adblock_is_paused() || page_is_unblockable(messageEvent.target.url) ||
       page_is_whitelisted(messageEvent.target.url)) {
     messageEvent.message = true;
@@ -18,13 +45,64 @@ safari.application.addEventListener("message", function(messageEvent) {
   var frameDomain = messageEvent.message.frameDomain;
 
   var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
-  if (isMatched)
+  if (isMatched) {
+    // If matched, add one block count to the corresponding tab that owns the request,
+    // update the badge afterwards
+    var tabId = messageEvent.target.id;
+    blockCounts.recordOneAdBlocked(tabId);
+    updateBadge();
     log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
+  }
   messageEvent.message = !isMatched;
 }, false);
 
 // Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
 var windowByMenuId = {};
+
+// Listen to page request, this is triggered before firing a request.
+safari.application.addEventListener("beforeNavigate", function(event) {
+  var activeTab = event.target;
+  // At this point, block counts for the tab should be zero.
+  var count = 0;
+  if(activeTab.id) {
+    // Recreate the frameData for the tab before navigation.
+    var tabId = activeTab.id;
+    frameData.create(tabId);
+    // Just in case it is not zero.
+    count = blockCounts.getTotalAdsBlocked(tabId);
+  }
+  updateBadge(count);
+}, true);
+
+// Listen to tab activation, this is triggered when a tab is activated or on focus.
+safari.application.addEventListener("activate", function(event) {
+  var activeTab = safari.application.activeBrowserWindow.activeTab;
+  var count = 0;
+  if(activeTab.id) {
+    // If the tab is ready(sometimes, safari returns a tab without an id, I presume it
+    // is when pages are cached), get the number of block counts before updating the badge.
+    var tabId = activeTab.id;
+    count = blockCounts.getTotalAdsBlocked(tabId); 
+  }
+  updateBadge(count)
+}, true);
+
+// Update the badge for each tool bars in a window.(Note: there is no faster of updating
+// the tool bar item for the active window so I just updated all tool bar items' badge. That
+// way, I don't need to loop and compare.)
+// Inputs:
+//  count:Numberic - the number to be displayed in the badge. If there is none, the value will
+//    be taken from the active tabs block count.
+var updateBadge = function(count) {
+  if(!count) {
+    var tabId = safari.application.activeBrowserWindow.activeTab.id;
+    count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
+  }
+  var safari_toolbars = safari.extension.toolbarItems;
+  for(var i = 0; i < safari_toolbars.length; i++ ) {
+    safari_toolbars[i].badge = count;
+  }
+}
 
 safari.application.addEventListener("command", function(event) {
   // It is possible to do perform a command without activating a window
@@ -89,13 +167,6 @@ safari.application.addEventListener("command", function(event) {
 // we can make the toolbar button display a proper menu with items from Chrome's popup.
 if (!LEGACY_SAFARI) {
   (function() {
-    // Added this function so that safari will have it's own way of retrieving custom filters.
-    // Return filters created by user in an array.
-    var getCustomFilters = function() {
-      var custom_filters = storage_get('custom_filters');
-      return custom_filters ? custom_filters.trimLeft() : '';
-    };
-
     // Unfortunately, Safari API kinda sucks. Command events sent from toolbar menu items don't include a
     // reference to the browser window that sent them, same goes for the Menu events. This unfortunately
     // means that we have to create a separate instance of menu for each browser window.
@@ -207,9 +278,9 @@ if (!LEGACY_SAFARI) {
         var paused = adblock_is_paused();
         var canBlock = !page_is_unblockable(url);
         var whitelisted = page_is_whitelisted(url);
-
+        var host = parseUri(url).host;
         var eligible_for_undo = !paused && (!canBlock || !whitelisted);
-        if (eligible_for_undo && getCustomFilters()) {
+        if (eligible_for_undo && count_cache.getCustomFilterCount(host)) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
@@ -257,6 +328,8 @@ safari.application.addEventListener("contextmenu", function(event) {
 
   event.contextMenu.appendContextMenuItem("show-blacklist-wizard", translate("block_this_ad"));
   event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
-  if (getCustomFilters())
+  
+  var host = parseUri(url).host;
+  if (count_cache.getCustomFilterCount(host))
     event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
 }, false);

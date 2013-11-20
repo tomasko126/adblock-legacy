@@ -8,48 +8,46 @@
     sessionStorage.setItem("errorOccurred", true);
   });
   
-  if (!SAFARI) {
-    // Records how many ads have been blocked by AdBlock.  This is used
-    // by the AdBlock app in the Chrome Web Store to display statistics
-    // to the user.
-    var blockCounts = (function() {
-      var key = "blockage_stats";
-      var data = storage_get(key);
-      if (!data) 
-        data = {};
-      if (data.start === undefined)
-        data.start = Date.now();
-      if (data.total === undefined)
-        data.total = 0;
-      data.version = 1;
-      storage_set(key, data);
+  // Records how many ads have been blocked by AdBlock.  This is used
+  // by the AdBlock app in the Chrome Web Store to display statistics
+  // to the user.
+  var blockCounts = (function() {
+    var key = "blockage_stats";
+    var data = storage_get(key);
+    if (!data) 
+      data = {};
+    if (data.start === undefined)
+      data.start = Date.now();
+    if (data.total === undefined)
+      data.total = 0;
+    data.version = 1;
+    storage_set(key, data);
 
-      return {
-        recordOneAdBlocked: function(tabId) {
-          var data = storage_get(key);
-          data.total += 1;
-          storage_set(key, data);
-          
-          //code for incrementing ad blocks
-          currentTab = frameData.get(tabId);
-          if(currentTab){
-            currentTab.blockCount++;
-          }
-        },
-        get: function() { 
-          return storage_get(key); 
-        },
-        getTotalAdsBlocked: function(tabId){
-          if(tabId){
-            currentTab = frameData.get(tabId);
-            return currentTab ? currentTab.blockCount : 0;
-          }
-          return this.get().total;
+    return {
+      recordOneAdBlocked: function(tabId) {
+        var data = storage_get(key);
+        data.total += 1;
+        storage_set(key, data);
+         
+        //code for incrementing ad blocks
+        currentTab = frameData.get(tabId);
+        if(currentTab){
+          currentTab.blockCount++;
         }
-      };
-    })();
-  }
-
+      },
+      get: function() { 
+        return storage_get(key); 
+      },
+      getTotalAdsBlocked: function(tabId){
+        if(tabId){
+          currentTab = frameData.get(tabId);
+          return currentTab ? currentTab.blockCount : 0;
+        }
+        return this.get().total;
+      }
+    };
+  })();
+  
   // OPTIONAL SETTINGS
 
   function Settings() {
