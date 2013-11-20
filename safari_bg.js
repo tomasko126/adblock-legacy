@@ -91,7 +91,7 @@ if (!LEGACY_SAFARI) {
   (function() {
     // Added this function so that safari will have it's own way of retrieving custom filters.
     // Return filters created by user in an array.
-    function getCustomFilters() {
+    getCustomFilters = function() {
       var custom_filters = storage_get('custom_filters');
       return custom_filters ? custom_filters.trimLeft() : '';
     };
