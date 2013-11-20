@@ -94,7 +94,10 @@ safari.application.addEventListener("activate", function(event) {
 //  count:Numberic - the number to be displayed in the badge. If there is none, the value will
 //    be taken from the active tabs block count.
 var updateBadge = function(count) {
-  if(!count) {
+  var show_block_counts = get_settings().display_stats;
+  if(!show_block_counts) {
+    count = 0;
+  } else if(!count) {
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
     count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
   }
@@ -122,8 +125,11 @@ safari.application.addEventListener("command", function(event) {
     browserWindow = safari.application.activeBrowserWindow;
   }
   var command = event.command;
-
-  if (command === "AdBlockOptions") {
+  
+  if (command === "toggle-block-display") {
+    var show_block_counts = get_settings().display_stats;
+    updateDisplayStats(!show_block_counts);
+  } else if (command === "AdBlockOptions") {
     openTab("options/index.html", false, browserWindow);
   } else if (command === "toggle-pause") {
     if (adblock_is_paused()) {
@@ -273,7 +279,20 @@ if (!LEGACY_SAFARI) {
             item.checkedState = SafariExtensionMenuItem.CHECKED;
           }
         }
-
+        
+        // Block count in menu.
+        appendMenuItem("blocked-ads", translate("blocked_ads"));
+        var show_block_counts = get_settings().display_stats;
+        var total_blocked = blockCounts.getTotalAdsBlocked();
+        appendMenuItem("blocked-in-total", "      " + translate("blocked_n_in_total", [total_blocked]));
+        var tabId = safari.application.activeBrowserWindow.activeTab.id;
+        if(tabId) {
+          var blocked_in_tab = blockCounts.getTotalAdsBlocked(tabId);
+          appendMenuItem("blocked-on-page", "      " + translate("blocked_n_on_this_page", [blocked_in_tab]));
+        }
+        appendMenuItem("toggle-block-display", translate("show_on_adblock_button"), show_block_counts);
+        menu.appendSeparator(itemIdentifier("separator0"));
+        
         var url = windowByMenuId[menu.identifier].activeTab.url;
         var paused = adblock_is_paused();
         var canBlock = !page_is_unblockable(url);

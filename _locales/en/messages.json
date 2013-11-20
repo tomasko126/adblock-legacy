@@ -1222,7 +1222,7 @@
     "description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
     "placeholders":{
       "count":{
-        "content":"<a>123<\/a>",
+        "content":"$1",
         "example":"The number of ads blocked.  Do not make any changes to this string when translating."
       }
     }
@@ -1232,7 +1232,7 @@
     "description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
     "placeholders":{
       "count":{
-        "content":"<a>123,456<\/a>",
+        "content":"$1",
         "example":"The number of ads blocked.  Do not make any changes to this string when translating."
       }
     }
