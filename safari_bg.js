@@ -2,6 +2,33 @@ emit_page_broadcast = function(request) {
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
+// Imitate frameData object for Safari to avoid issues when using blockCounts.
+frameData = (function() {
+  // Map that will serve as cache for the block count.
+  // key: Numeric - tab id.
+  // value: Numeric - actual block count for the tab.
+  var countMap = { };
+  
+  return {
+    // Get frameData for the tab.
+    // Input:
+    //  tabId:Numberic - id of the tab you want to get
+    get: function(tabId) {
+      if(!countMap[tabId])
+        frameData.create(tabId);
+      return countMap[tabId];
+    },
+    
+    // Create a new frameData
+    // Input:
+    //  tabId:Numeric - id of the tab you want to add in the frameData
+    create: function(tabId) {
+      delete countMap[tabId];
+      countMap[tabId] = { blockCount: 0 };
+    },
+  }
+})();
+
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
     if (messageEvent.name != "canLoad")
@@ -139,19 +166,19 @@ safari.extension.settings.addEventListener("change", function(e) {
 
 // Add context menus
 safari.application.addEventListener("contextmenu", function(event) {
-    if (!event.userInfo)
-        return;
-    if (!get_settings().show_context_menu_items || adblock_is_paused())
-        return;
+  if (!event.userInfo)
+    return;
+  if (!get_settings().show_context_menu_items || adblock_is_paused())
+    return;
 
-    var url = event.target.url;
-    if (page_is_unblockable(url) || page_is_whitelisted(url))
-        return;
+  var url = event.target.url;
+  if (page_is_unblockable(url) || page_is_whitelisted(url))
+    return;
 
-    event.contextMenu.appendContextMenuItem("show-blacklist-wizard", translate("block_this_ad"));
-    event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
-
-    var host = parseUri(url).host;
-    if (count_cache.getCustomFilterCount(host) && !LEGACY_SAFARI)
-        event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
+  event.contextMenu.appendContextMenuItem("show-blacklist-wizard", translate("block_this_ad"));
+  event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
+  
+  var host = parseUri(url).host;
+  if (count_cache.getCustomFilterCount(host))
+    event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
 }, false);
