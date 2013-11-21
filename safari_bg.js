@@ -71,7 +71,7 @@ safari.application.addEventListener("beforeNavigate", function(event) {
     // Just in case it is not zero.
     count = blockCounts.getTotalAdsBlocked(tabId);
   }
-  updateBadge(count);
+  updateBadge();
 }, true);
 
 // Listen to tab activation, this is triggered when a tab is activated or on focus.
@@ -84,20 +84,23 @@ safari.application.addEventListener("activate", function(event) {
     var tabId = activeTab.id;
     count = blockCounts.getTotalAdsBlocked(tabId); 
   }
-  updateBadge(count)
+  updateBadge()
 }, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster of updating
 // the tool bar item for the active window so I just updated all tool bar items' badge. That
 // way, I don't need to loop and compare.)
-// Inputs:
-//  count:Numberic - the number to be displayed in the badge. If there is none, the value will
-//    be taken from the active tabs block count.
-var updateBadge = function(count) {
+var updateBadge = function() {
   var show_block_counts = get_settings().display_stats;
-  if(!show_block_counts) {
-    count = 0;
-  } else if(!count) {
+  
+  var url = safari.application.activeBrowserWindow.activeTab.url;
+  var paused = adblock_is_paused();
+  var canBlock = !page_is_unblockable(url);
+  var whitelisted = page_is_whitelisted(url);
+  
+  var count = 0;
+  console.log(paused);
+  if(show_block_counts && !paused && canBlock && !whitelisted) {  
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
     count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
   }
@@ -132,6 +135,7 @@ safari.application.addEventListener("command", function(event) {
   } else if (command === "AdBlockOptions") {
     openTab("options/index.html", false, browserWindow);
   } else if (command === "toggle-pause") {
+    console.log("toggling pause");
     if (adblock_is_paused()) {
       adblock_is_paused(false);
     } else {
@@ -167,6 +171,7 @@ safari.application.addEventListener("command", function(event) {
   } else if (command in {"show-whitelist-wizard": 1, "show-blacklist-wizard": 1, "show-clickwatcher-ui": 1 }) {
     browserWindow.activeTab.page.dispatchMessage(command);
   }
+  updateBadge();
 }, false);
 
 // Starting with 5.1, we can attach menus to toolbar items. If safari.extension.createMenu is available,
@@ -280,24 +285,27 @@ if (!LEGACY_SAFARI) {
           }
         }
         
-        // Block count in menu.
-        appendMenuItem("blocked-ads", translate("blocked_ads"));
-        var show_block_counts = get_settings().display_stats;
-        var total_blocked = blockCounts.getTotalAdsBlocked();
-        appendMenuItem("blocked-in-total", "      " + translate("blocked_n_in_total", [total_blocked]));
-        var tabId = safari.application.activeBrowserWindow.activeTab.id;
-        if(tabId) {
-          var blocked_in_tab = blockCounts.getTotalAdsBlocked(tabId);
-          appendMenuItem("blocked-on-page", "      " + translate("blocked_n_on_this_page", [blocked_in_tab]));
-        }
-        appendMenuItem("toggle-block-display", translate("show_on_adblock_button"), show_block_counts);
-        menu.appendSeparator(itemIdentifier("separator0"));
-        
         var url = windowByMenuId[menu.identifier].activeTab.url;
         var paused = adblock_is_paused();
         var canBlock = !page_is_unblockable(url);
         var whitelisted = page_is_whitelisted(url);
         var host = parseUri(url).host;
+        
+        if(canBlock && !paused && !whitelisted) {
+          // Block count in menu.
+          appendMenuItem("blocked-ads", translate("blocked_ads"));
+          var show_block_counts = get_settings().display_stats;
+          var total_blocked = blockCounts.getTotalAdsBlocked();
+          appendMenuItem("blocked-in-total", "      " + translate("blocked_n_in_total", [total_blocked]));
+          var tabId = safari.application.activeBrowserWindow.activeTab.id;
+          if(tabId) {
+            var blocked_in_tab = blockCounts.getTotalAdsBlocked(tabId);
+            appendMenuItem("blocked-on-page", "      " + translate("blocked_n_on_this_page", [blocked_in_tab]));
+          }
+          appendMenuItem("toggle-block-display", translate("show_on_adblock_button"), show_block_counts);
+          menu.appendSeparator(itemIdentifier("separator0"));
+        }
+        
         var eligible_for_undo = !paused && (!canBlock || !whitelisted);
         if (eligible_for_undo && count_cache.getCustomFilterCount(host)) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
