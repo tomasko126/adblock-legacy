@@ -350,7 +350,7 @@
     "description":"Name of the filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "message":"филтър Fanboy's Annoyances (премахва досадните неща)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
