@@ -7,8 +7,13 @@ safari.application.addEventListener("message", function(messageEvent) {
   if (messageEvent.name != "canLoad")
     return;
 
-  if (adblock_is_paused() || page_is_unblockable(messageEvent.target.url) ||
-      page_is_whitelisted(messageEvent.target.url)) {
+  var tab = messageEvent.target;
+  var frameInfo = messageEvent.message.frameInfo;
+  chrome._tabInfo.notice(tab, frameInfo);
+  var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
+
+  if (adblock_is_paused() || page_is_unblockable(sendingTab.url) ||
+      page_is_whitelisted(sendingTab.url)) {
     messageEvent.message = true;
     return;
   }
