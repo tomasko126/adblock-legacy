@@ -41,3 +41,6 @@ wrzesnia.pl##img[src*="/ads_files/"]
 74.ru##.banner
 74.ru##object[id^="ban"]
 74.ru##div[id^="sb_"]
+
+! Should bypass pirateproxy.net's popup mechanism
+||*^$popup,domain=pirateproxy.net
