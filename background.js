@@ -274,7 +274,7 @@
       }
       return { cancel: blocked };
     }
-    
+
     // Popup blocking
     function onCreatedNavigationTargetHandler(details) {
       var opener = frameData.get(details.sourceTabId, details.sourceFrameId);
