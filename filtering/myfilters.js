@@ -144,7 +144,7 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
   if (rebuild)
     this.rebuild();
 
-  chrome.extension.sendRequest({command: "filters_updated"});
+  chrome.runtime.sendMessage({command: "filters_updated"});
 }
 
 // get filters that are defined in the extension

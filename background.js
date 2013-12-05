@@ -350,7 +350,7 @@
   // Inputs: filters:string the new filters.
   set_custom_filters_text = function(filters) {
     storage_set('custom_filters', filters);
-    chrome.extension.sendRequest({command: "filters_updated"});
+    chrome.runtime.sendMessage({command: "filters_updated"});
     _myfilters.rebuild();
   }
 
@@ -836,7 +836,7 @@
 
   // BGcall DISPATCH
   (function() {
-    chrome.extension.onRequest.addListener(
+    chrome.runtime.onMessage.addListener(
       function(request, sender, sendResponse) {
         if (request.command != "call")
           return; // not for us

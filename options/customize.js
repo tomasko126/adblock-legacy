@@ -1,4 +1,4 @@
-chrome.extension.onRequest.addListener(function(request) {
+chrome.runtime.onMessage.addListener(function(request) {
   if (request.command != "filters_updated")
     return;
   if ($("#txtFiltersAdvanced").prop("disabled") === false)

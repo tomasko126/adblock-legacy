@@ -83,16 +83,8 @@ if (SAFARI) {
 
   // Replace the 'chrome' object with a Safari adapter.
   chrome = {
-    extension: {
-      getBackgroundPage: function() {
-        return safari.extension.globalPage.contentWindow;
-      },
-
-      getURL: function(path) { 
-        return safari.extension.baseURI + path;
-      },
-
-      sendRequest: (function() {
+    runtime: {
+      sendMessage: (function() {
         // Where to call .dispatchMessage() when sendRequest is called.
         var dispatchTargets = [];
         if (!isOnGlobalPage) {
@@ -143,8 +135,8 @@ if (SAFARI) {
         }
         return theFunction;
       })(),
-
-      onRequest: {
+      
+      onMessage: {
         addListener: function(handler) {
           // If listening for requests from the global page, we must call the
           // global page so it can get a messageEvent through which to send
@@ -170,6 +162,15 @@ if (SAFARI) {
             handler(request, sender, sendResponse);
           });
         }
+      },
+    },
+    extension: {
+      getBackgroundPage: function() {
+        return safari.extension.globalPage.contentWindow;
+      },
+
+      getURL: function(path) { 
+        return safari.extension.baseURI + path;
       },
 
       onRequestExternal: {
