@@ -136,4 +136,13 @@ function top_open_whitelist_ui() {
   });
 }
 
+  // Set RTL for Arabic and Hebrew users
+  determineUserLanguage = function() {
+   return navigator.language.match(/^[a-z]+/i)[0];
+  };
+
+  var language = determineUserLanguage();
+   if (language === "ar" || language === "he" ) {
+    document.documentElement.dir = "rtl";
+   }
 //@ sourceURL=/uiscripts/top_open_whitelist_ui.js
