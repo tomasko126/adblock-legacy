@@ -15,16 +15,27 @@ frameData = (function() {
     //  tabId:Numberic - id of the tab you want to get
     get: function(tabId) {
       if(!countMap[tabId])
-        frameData.create(tabId);
+        frameData.create();
       return countMap[tabId];
     },
     
     // Create a new frameData
     // Input:
     //  tabId:Numeric - id of the tab you want to add in the frameData
-    create: function(tabId) {
-      delete countMap[tabId];
-      countMap[tabId] = { blockCount: 0 };
+    create: function(activeTab, url) {
+      activeTab = activeTab || safari.application.activeBrowserWindow.activeTab;
+      if(activeTab) {
+        var tabId = activeTab.id;
+        var domain = parseUri(url || activeTab.url).hostname;
+        var tracker = countMap[tabId];
+        if(!tracker || tracker.domain !== domain) {
+          delete countMap[tabId];
+          countMap[tabId] = { 
+            blockCount: 0,
+            domain: domain,
+          };
+        }
+      }
     },
   }
 })();
@@ -59,35 +70,27 @@ safari.application.addEventListener("message", function(messageEvent) {
 // Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
 var windowByMenuId = {};
 
-// Listen to page request, this is triggered before firing a request.
-safari.application.addEventListener("beforeNavigate", function(event) {
+var _trackTab = function(event, url) {
   var activeTab = event.target;
-  // At this point, block counts for the tab should be zero.
-  var count = 0;
-  if(activeTab.id) {
-    // Recreate the frameData for the tab before navigation.
-    var tabId = activeTab.id;
-    frameData.create(tabId);
-    // Just in case it is not zero.
-    count = blockCounts.getTotalAdsBlocked(tabId);
-  }
+  frameData.create(activeTab, url);
   updateBadge();
+};
+
+// Listen to page request, this is triggered before firing a request.
+safari.application.addEventListener("navigate", function(event) {
+  _trackTab(event);
 }, true);
+
+safari.application.addEventListener("beforeNavigate", function(event) {
+  _trackTab(event, event.url);
+});
 
 // Listen to tab activation, this is triggered when a tab is activated or on focus.
 safari.application.addEventListener("activate", function(event) {
-  var activeTab = safari.application.activeBrowserWindow.activeTab;
-  var count = 0;
-  if(activeTab.id) {
-    // If the tab is ready(sometimes, safari returns a tab without an id, I presume it
-    // is when pages are cached), get the number of block counts before updating the badge.
-    var tabId = activeTab.id;
-    count = blockCounts.getTotalAdsBlocked(tabId); 
-  }
   updateBadge()
 }, true);
 
-// Update the badge for each tool bars in a window.(Note: there is no faster of updating
+// Update the badge for each tool bars in a window.(Note: there is no faster way of updating
 // the tool bar item for the active window so I just updated all tool bar items' badge. That
 // way, I don't need to loop and compare.)
 var updateBadge = function() {
@@ -99,7 +102,6 @@ var updateBadge = function() {
   var whitelisted = page_is_whitelisted(url);
   
   var count = 0;
-  console.log(paused);
   if(show_block_counts && !paused && canBlock && !whitelisted) {  
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
     count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
