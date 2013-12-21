@@ -15,16 +15,27 @@ frameData = (function() {
     //  tabId:Numberic - id of the tab you want to get
     get: function(tabId) {
       if(!countMap[tabId])
-        frameData.create(tabId);
+        frameData.create();
       return countMap[tabId];
     },
     
     // Create a new frameData
     // Input:
     //  tabId:Numeric - id of the tab you want to add in the frameData
-    create: function(tabId) {
-      delete countMap[tabId];
-      countMap[tabId] = { blockCount: 0 };
+    create: function(activeTab, url) {
+      activeTab = activeTab || safari.application.activeBrowserWindow.activeTab;
+      if(activeTab) {
+        var tabId = activeTab.id;
+        var domain = parseUri(url || activeTab.url).hostname;
+        var tracker = countMap[tabId];
+        if(!tracker || tracker.domain !== domain) {
+          delete countMap[tabId];
+          countMap[tabId] = { 
+            blockCount: 0,
+            domain: domain,
+          };
+        }
+      }
     },
   }
 })();
