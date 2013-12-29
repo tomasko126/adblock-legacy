@@ -11,6 +11,14 @@ function top_open_blacklist_ui(options) {
   // Get Flash objects out of the way of our UI
   BGcall('emit_page_broadcast', {fn:'send_content_to_back', options:{}});
   
+  // Set RTL for Arabic and Hebrew users  
+    var language = navigator.language.match(/^[a-z]+/i)[0];
+    checklanguage = function() {
+      if (language === "ar" || language === "he" ) {
+      $("body .adblock-blacklist-dialog").attr("dir", "rtl");
+      }
+   }
+  
   load_jquery_ui(function() {
     // If they chose "Block an ad on this page..." ask them to click the ad
     if (options.nothing_clicked)
@@ -45,14 +53,5 @@ function top_open_blacklist_ui(options) {
   });
 }
 
-  // Set RTL for Arabic and Hebrew users
-  determineUserLanguage = function() {
-   return navigator.language.match(/^[a-z]+/i)[0];
-  };
-
-  var language = determineUserLanguage();
-   if (language === "ar" || language === "he" ) {
-    document.documentElement.dir = "rtl";
-   }
 
 //@ sourceURL=/uiscripts/top_open_blacklist_ui.js
