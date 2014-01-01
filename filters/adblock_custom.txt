@@ -1,5 +1,5 @@
 ! Chrome AdBlock auxiliarly filters
-! Last update: Sat Nov 30 12:19:37 EST 2013
+! Last update: Wed Jan  1 18:28:28 EST 2014
 
 ! Ad providers. Filter lists don't care they are blocked
 @@||advertising.apple.com^$domain=advertising.apple.com
