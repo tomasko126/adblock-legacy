@@ -98,7 +98,7 @@ if (SAFARI) {
           // them directly, though, so .onRequest calls *us*, so we get access
           // to a messageEvent object that points to their page that we can
           // call .dispatchMessage() upon.
-          listenFor("onRequest registration", function(messageEvent) {
+          listenFor("onMessage registration", function(messageEvent) {
             var context = dispatchContext(messageEvent);
             if (dispatchTargets.indexOf(context) == -1)
               dispatchTargets.push(context);
@@ -142,7 +142,7 @@ if (SAFARI) {
           // global page so it can get a messageEvent through which to send
           // requests to us.
           if (!isOnGlobalPage)
-            dispatchContext().dispatchMessage("onRequest registration", {});
+            dispatchContext().dispatchMessage("onMessage registration", {});
 
           listenFor("request", function(messageEvent) {
             var request = messageEvent.message.data;
