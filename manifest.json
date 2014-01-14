@@ -42,7 +42,8 @@
     {
       "matches": [
         "*://*.mail.live.com/*",
-        "*://*.mastertoons.com/*"
+        "*://*.mastertoons.com/*",
+        "*://*.getadblock.com/*"
       ],
       "js": [
         "bandaids.js"
