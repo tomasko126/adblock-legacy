@@ -22,14 +22,6 @@ function top_open_whitelist_ui() {
   // Get Flash objects out of the way of our UI
   BGcall('emit_page_broadcast', {fn:'send_content_to_back', options:{}});
   
-  // Set RTL for Arabic and Hebrew users
-   var language = navigator.language.match(/^[a-z]+/i)[0];
-   checklanguage = function() {
-   if (language === "ar" || language === "he" ) {
-     $("body .adblock-whitelist-dialog").attr("dir", "rtl");
-   }
-  }
-  
   // defined in blacklister.js
   load_jquery_ui(function() {
     var adblock_default_button_text = translate("buttonexclude");
@@ -68,7 +60,7 @@ function top_open_whitelist_ui() {
           page.remove();
         }
       });
-      checklanguage();
+      changeTextDirection($("body .adblock-whitelist-dialog"));
 
     var fixedDomainPart = parseUri.secondLevelDomainOnly(domain, true);
     var domainparts = domain.substr(0, domain.lastIndexOf(fixedDomainPart)).split('.');

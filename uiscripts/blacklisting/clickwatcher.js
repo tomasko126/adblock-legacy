@@ -95,7 +95,7 @@ ClickWatcher.prototype.show = function() {
       minHeight: 120,
       title: translate("blockanadtitle")
     });
-    checklanguage();
+    changeTextDirection($("body .adblock-blacklist-dialog"));
   // setTimeout to give 'wait' a chance to display
   window.setTimeout(function() {
     that._ui = that._build_ui();
@@ -194,7 +194,7 @@ ClickWatcher.prototype._build_ui = function() {
       bind("mouseleave",function() {
         that._highlighter.enable();
       });
-    checklanguage();
+    changeTextDirection($("body .adblock-blacklist-dialog"));
   return page;
 }
 
