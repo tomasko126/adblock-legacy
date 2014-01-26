@@ -170,6 +170,10 @@
         var fd = frameData, tabId = details.tabId;
 
         if (tabId == -1) // A hosted app's background page
+          // TODO: if OPERA
+          // Check if it is a newly created tab from the map, 
+          // update details id using the one from the map,
+          // then look if there is an opener id then set to details.type to third party
           return false;
 
         if (details.type == 'main_frame') { // New tab
@@ -861,6 +865,11 @@
     );
   })();
   
+  if (OPERA) {
+    tabTracker = {};
+    urlTracker = {};
+  }
+
   // BROWSER ACTION AND CONTEXT MENU UPDATES
   (function() {
     if (SAFARI)
@@ -872,10 +881,23 @@
       chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab) {
         if (tab.active && changeInfo.status === "loading")
           updateButtonUIAndContextMenus();
+
+        if (OPERA && tabTracker[tabid]) {
+          tabTracker[tabid].url = tab.url;
+          delete urlTracker[tab.url];
+          urlTracker[tab.url] = tabId;
+        }
       });
       chrome.tabs.onActivated.addListener(function() {
         updateButtonUIAndContextMenus();
       });
+
+      if (OPERA) {
+        chrome.tabs.onCreated.addListener(function(tab) {
+          tabTracker[tab.id] = tab;
+          urlTracker[tab.url] = tab.id;
+        });
+      }
     }
   })();
 
