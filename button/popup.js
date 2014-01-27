@@ -54,20 +54,20 @@ function customize_for_this_tab() {
         $('#' + div).show();
 
     // Secure Search UI
-    var shouldShow = BG.shouldShowSearchForm();
-    if (shouldShow==true || shouldShow=="true") {
-        $('#search_control').show();
-        $('#search_page').show();
-        $('#search-separator2').show();
-        if (info.disabled_site && !paused) $('#search-separator1').show();
+    var shouldShow = false;
+    if (!BG.SAFARI) shouldShow = localStorage.search_show_form;
+    if (shouldShow=="true") {
+      $('#search_control').show();
+      $('#search_page').show();
+      $('#search-separator2').show();
+      if (info.disabled_site && !paused) $('#search-separator1').show();
+    } else {
+      $('#search_control').hide();
+      $('#search_page').hide();
+      $('#search-separator2').hide();
+      if (!info.disabled_site || paused) $('#search-separator1').hide();
     }
-    else {
-        $('#search_control').hide();
-        $('#search_page').hide();
-        $('#search-separator2').hide();
-        if (!info.disabled_site || paused) $('#search-separator1').hide();
-    }
-    
+    // End - Secure Search UI
   });
 }
 

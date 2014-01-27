@@ -3,13 +3,11 @@ window.onload = function() {
   const BG = chrome.extension.getBackgroundPage();
   const DESERIALIZE = BG.deserialize;
   const SEARCH_ENGINE_LABEL = 'search_engines';
-  const CHK_MODE_SETTINGS_LABEL = 'chk_mode_settings';
+  const CHK_MODE_SETTINGS_LABEL = 'search_chk_mode_set';
   const TXT_SEARCH = $('#txt_search');
   const TXT_DEFAULT_MESSAGE = 'Search privately';
 
   initialize();
-
-
 
   function initialize() {
     // set functions/events
@@ -47,21 +45,21 @@ window.onload = function() {
     //temporary omnibox/everywhere/secure usage analytics
     $('#omnibox-box').click(function() {
       var is_checked = $(this).is(':checked');
-      localStorage.omnibox = is_checked ? "true" : "false";
+      localStorage.search_omnibox = is_checked ? "true" : "false";
       if (is_checked) {
-        localStorage.omnibox_on = parseInt(localStorage.omnibox_on) + 1;
+        localStorage.search_omnibox_on = parseInt(localStorage.search_omnibox_on) + 1;
       } else {
-        localStorage.omnibox_off = parseInt(localStorage.omnibox_off) + 1;
+        localStorage.search_omnibox_off = parseInt(localStorage.search_omnibox_off) + 1;
       }
     });
 
     $('#everywhere-box').click(function() {
       var is_checked = $(this).is(':checked');
-      localStorage.everywhere = is_checked ? "true" : "false";
+      localStorage.search_everywhere = is_checked ? "true" : "false";
       if (is_checked) {
-        localStorage.everywhere_on = parseInt(localStorage.everywhere_on) + 1;
+        localStorage.search_everywhere_on = parseInt(localStorage.search_everywhere_on) + 1;
       } else {
-        localStorage.everywhere_off = parseInt(localStorage.everywhere_off) + 1;
+        localStorage.search_everywhere_off = parseInt(localStorage.search_everywhere_off) + 1;
       }
     });
 
@@ -76,10 +74,9 @@ window.onload = function() {
       TXT_SEARCH.attr('placeholder', TXT_DEFAULT_MESSAGE);
     }
 
-
-    var is_show_secure_search = $("#enable_show_secure_search"),
-        show_search = JSON.parse(localStorage.show_secure_search);
-        ui = $("#search_page");
+    var ui = $("#search_page");
+    var is_show_secure_search = $("#enable_show_secure_search");
+    var show_search = (localStorage.search_secure_enable == "true") ? true : false;
 
     if (show_search) {
       ui.removeClass("isHidden");
@@ -91,7 +88,10 @@ window.onload = function() {
 
     updateSearchEngineIcon(localStorage[SEARCH_ENGINE_LABEL]);
 
-    var chkbox = JSON.parse(localStorage[CHK_MODE_SETTINGS_LABEL]);
+    var chkbox = '{"ominibox":false,"everywhere":false,"secure":false}';
+    try {
+      chkbox = JSON.parse(localStorage[CHK_MODE_SETTINGS_LABEL]);
+    }catch(e){};
     $('#omnibox-box').attr('checked', chkbox['ominibox']);
     $('#everywhere-box').attr('checked', chkbox['everywhere']);
 
@@ -174,7 +174,7 @@ window.onload = function() {
     var mode = 0;
     if (everywhere.is(':checked')) mode = 2;
     else if (omnibox.is(':checked')) mode = 1;
-    localStorage['mode_settings'] = DESERIALIZE(mode);
+    localStorage['search_mode_settings'] = DESERIALIZE(mode);
 
     if (secure.is(':checked') == true) {
       if (BG.bgPlusOne.hasProxy()) {
@@ -188,7 +188,7 @@ window.onload = function() {
       });
     }
 
-    localStorage['secure_search'] = DESERIALIZE(secure.is(':checked'));
+    localStorage['search_full_secure'] = DESERIALIZE(secure.is(':checked'));
   };
 
   function showHelpImage() {
@@ -234,15 +234,16 @@ window.onload = function() {
   };
 
   function toggleSearch(){
-    var is_show_secure_search = $(this).is(':checked'),
-        ui = $("#search_page");
-    localStorage.show_secure_search = is_show_secure_search ? "true" : "false";
+    var is_show_secure_search = $(this).is(':checked');
+    var ui = $("#search_page");
+
+    localStorage.search_secure_enable = is_show_secure_search ? "true" : "false";
     if (is_show_secure_search) {
-      ui.removeClass("isHidden")
-      localStorage.secure_search_on = parseInt(localStorage.secure_search_on) + 1;
+      ui.removeClass("isHidden");
+      localStorage.search_secure_on = parseInt(localStorage.search_secure_on) + 1;
     } else {
-      ui.addClass("isHidden")
-      localStorage.secure_search_off = parseInt(localStorage.secure_search_off) + 1;
+      ui.addClass("isHidden");
+      localStorage.search_secure_off = parseInt(localStorage.search_secure_off) + 1;
     }
-  }
+  };
 };
