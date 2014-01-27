@@ -163,24 +163,41 @@
         }
       },
       
+      _updateTabDetails: function(details) {
+        if (!OPERA) return false;
+
+        var trackedTab = urlTracker[details.url];
+        if(!trackedTab) return false;
+
+        details.id = trackedTab.id;
+
+        if (trackedTab.openerTabId)
+          details.type = "popup";
+      },
+
       // Watch for requests for new tabs and frames, and track their URLs.
       // Inputs: details: object from onBeforeRequest callback
       // Returns false if this request's tab+frame are not trackable.
       track: function(details) {
         var fd = frameData, tabId = details.tabId;
 
-        if (tabId == -1) // A hosted app's background page
-          // TODO: if OPERA
-          // Check if it is a newly created tab from the map, 
-          // update details id using the one from the map,
-          // then look if there is an opener id then set to details.type to third party
+        // A hosted app's background page
+        if (tabId == -1 && !frameData._updateTabDetails(details)) {
           return false;
+        } 
 
         if (details.type == 'main_frame') { // New tab
           delete fd[tabId];
           fd.record(tabId, 0, details.url);
           fd[tabId].blockCount = 0;
           log("\n-------", fd.get(tabId, 0).domain, ": loaded in tab", tabId, "--------\n\n");
+
+          if (OPERA) {
+            var trackedTab = tabTracker[tabId];
+            trackedTab && delete urlTracker[trackedTab.url];
+            delete tabTracker[tabId];
+          }
+
           return true;
         }
 
@@ -885,7 +902,7 @@
         if (OPERA && tabTracker[tabid]) {
           tabTracker[tabid].url = tab.url;
           delete urlTracker[tab.url];
-          urlTracker[tab.url] = tabId;
+          urlTracker[tab.url] = tabid;
         }
       });
       chrome.tabs.onActivated.addListener(function() {
@@ -893,9 +910,17 @@
       });
 
       if (OPERA) {
+        //TODO: Modify to handle popups
         chrome.tabs.onCreated.addListener(function(tab) {
-          tabTracker[tab.id] = tab;
-          urlTracker[tab.url] = tab.id;
+          if(tab.openerTabId) {
+            tab.sourceTabId = tab.openerTabId;
+            onBeforeRequestHandler(tab);
+            return;
+          }
+          chrome.tabs.get(tab.id, function(tab) {
+            tabTracker[tab.id] = tab;
+            urlTracker[tab.url] = tab.id;
+          });
         });
       }
     }
