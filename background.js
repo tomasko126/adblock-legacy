@@ -900,9 +900,11 @@
           updateButtonUIAndContextMenus();
 
         if (OPERA && tabTracker[tabid]) {
-          tabTracker[tabid].url = tab.url;
-          delete urlTracker[tab.url];
-          urlTracker[tab.url] = tabid;
+          chrome.tabs.get(tabid, function(details) {
+            tabTracker[tabid].url = details.url;
+            delete urlTracker[details.url];
+            urlTracker[details.url] = tabid;
+          });
         }
       });
       chrome.tabs.onActivated.addListener(function() {
@@ -912,12 +914,20 @@
       if (OPERA) {
         //TODO: Modify to handle popups
         chrome.tabs.onCreated.addListener(function(tab) {
-          if(tab.openerTabId) {
-            tab.sourceTabId = tab.openerTabId;
-            onBeforeRequestHandler(tab);
-            return;
-          }
+          var createdTab = tab;          
           chrome.tabs.get(tab.id, function(tab) {
+            if(!tab) return;
+            if(createdTab.openerTabId) {
+              var details = {
+                sourceTabId: createdTab.openerTabId,
+                sourceFrameId: 0,
+                tabId: tab.id,
+                url: tab.url || "about:blank",
+              }
+              onCreatedNavigationTargetHandler(details);
+              return;
+            }
+
             tabTracker[tab.id] = tab;
             urlTracker[tab.url] = tab.id;
           });
