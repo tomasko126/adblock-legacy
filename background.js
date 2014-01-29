@@ -163,16 +163,23 @@
         }
       },
       
-      _updateTabDetails: function(details) {
-        if (!OPERA) return false;
+      // Forcefully reload the tab so that the details will be updated.
+      _reloadTab: function(details) {
+        if (!OPERA) return;
 
-        var trackedTab = urlTracker[details.url];
-        if(!trackedTab) return false;
+        chrome.tabs.query({url: details.url, status: 'loading', active: true}, function(tabs) {
+          var tabsLength = tabs.length;
+          lockProcess = tabsLength > 0;
+          if(!lockProcess) return;
 
-        details.id = trackedTab.id;
-
-        if (trackedTab.openerTabId)
-          details.type = "popup";
+          for(var i = 0; i < tabsLength; i++) {
+            var tab = tabs[i];
+            var newTabId = tab.id;
+            if(!frameData.get(newTabId)) {
+              chrome.tabs.reload(newTabId);
+            }
+          }
+        });
       },
 
       // Watch for requests for new tabs and frames, and track their URLs.
@@ -182,22 +189,16 @@
         var fd = frameData, tabId = details.tabId;
 
         // A hosted app's background page
-        if (tabId == -1 && !frameData._updateTabDetails(details)) {
+        if (tabId === -1) {
+          frameData._reloadTab(details);
           return false;
-        } 
+        }
 
-        if (details.type == 'main_frame') { // New tab
+        if (details.type === 'main_frame') { // New tab
           delete fd[tabId];
           fd.record(tabId, 0, details.url);
           fd[tabId].blockCount = 0;
           log("\n-------", fd.get(tabId, 0).domain, ": loaded in tab", tabId, "--------\n\n");
-
-          if (OPERA) {
-            var trackedTab = tabTracker[tabId];
-            trackedTab && delete urlTracker[trackedTab.url];
-            delete tabTracker[tabId];
-          }
-
           return true;
         }
 
@@ -211,13 +212,13 @@
         // Some times e.g. Youtube create empty iframes via JavaScript and
         // inject code into them.  So requests appear from unknown frames.
         // Treat these frames as having the same URL as the tab.
-        var potentialEmptyFrameId = (details.type == 'sub_frame' ? details.parentFrameId: details.frameId);
+        var potentialEmptyFrameId = (details.type === 'sub_frame' ? details.parentFrameId: details.frameId);
         if (undefined === fd.get(tabId, potentialEmptyFrameId)) {
           fd.record(tabId, potentialEmptyFrameId, fd.get(tabId, 0).url);
           log("[DEBUG]", "Null frame", tabId, potentialEmptyFrameId, "found; giving it the tab's URL.");
         }
 
-        if (details.type == 'sub_frame') { // New frame
+        if (details.type === 'sub_frame') { // New frame
           fd.record(tabId, details.frameId, details.url);
           log("[DEBUG]", "=========== Tracking frame", tabId, details.parentFrameId, details.frameId, details.url);
         }
@@ -260,7 +261,7 @@
       // For most requests, Chrome and we agree on who sent the request: the frame.
       // But for iframe loads, we consider the request to be sent by the outer
       // frame, while Chrome claims it's sent by the new iframe.  Adjust accordingly.
-      var requestingFrameId = (details.type == 'sub_frame' ? details.parentFrameId : details.frameId);
+      var requestingFrameId = (details.type === 'sub_frame' ? details.parentFrameId : details.frameId);
 
       frameData.storeResource(tabId, requestingFrameId, details.url, elType);
 
@@ -494,7 +495,7 @@
     for (var id in _myfilters._subscriptions) {
       result[id] = {};
       for (var attr in _myfilters._subscriptions[id]) {
-        if (attr == "text") continue;
+        if (attr === "text") continue;
         result[id][attr] = _myfilters._subscriptions[id][attr];
       }
     }
@@ -872,7 +873,7 @@
           return; // not for us
         // +1 button in browser action popup loads a frame which
         // runs content scripts.  Ignore their cries for ad blocking.
-        if (sender.tab == null)
+        if (sender.tab === null)
           return;
         var fn = window[request.fn];
         request.args.push(sender);
@@ -881,11 +882,6 @@
       }
     );
   })();
-  
-  if (OPERA) {
-    tabTracker = {};
-    urlTracker = {};
-  }
 
   // BROWSER ACTION AND CONTEXT MENU UPDATES
   (function() {
@@ -898,38 +894,33 @@
       chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab) {
         if (tab.active && changeInfo.status === "loading")
           updateButtonUIAndContextMenus();
-
-        if (OPERA && tabTracker[tabid]) {
-          chrome.tabs.get(tabid, function(details) {
-            tabTracker[tabid].url = details.url;
-            delete urlTracker[details.url];
-            urlTracker[details.url] = tabid;
-          });
-        }
       });
       chrome.tabs.onActivated.addListener(function() {
         updateButtonUIAndContextMenus();
       });
 
+      // Github Issue # 69 and 11
       if (OPERA) {
-        //TODO: Modify to handle popups
         chrome.tabs.onCreated.addListener(function(tab) {
-          var createdTab = tab;          
-          chrome.tabs.get(tab.id, function(tab) {
-            if(!tab) return;
-            if(createdTab.openerTabId) {
-              var details = {
-                sourceTabId: createdTab.openerTabId,
-                sourceFrameId: 0,
-                tabId: tab.id,
-                url: tab.url || "about:blank",
-              }
-              onCreatedNavigationTargetHandler(details);
-              return;
+          chrome.tabs.get(tab.id, function(tabDetails) {
+            // If tab is undefined (Which happens sometimes, weird),
+            // get out of the function
+            if (!tabDetails || !tabDetails.openerTabId) return;
+
+            // Should mean that tab is a popup or was
+            // opened through a link.
+
+            // Manually create the details to be passed to
+            // navigation target handler.
+            var details = {
+              sourceTabId: tabDetails.openerTabId,
+              sourceFrameId: 0,
+              tabId: tabDetails.id,
+              url: tabDetails.url || "about:blank",
             }
 
-            tabTracker[tab.id] = tab;
-            urlTracker[tab.url] = tab.id;
+            // Call pop up handler.
+            onCreatedNavigationTargetHandler(details);
           });
         });
       }
