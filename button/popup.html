@@ -3,8 +3,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="popup.css"/>
-    <link rel="stylesheet" href="search/hint.min.css">
-    <link rel="stylesheet" href="search/new_search.css">
+    <link rel="stylesheet" href="search/search.css">
     <script src="../jquery/jquery.min.js"></script>
     <script src="../functions.js"></script>
   </head>
@@ -23,56 +22,26 @@
         <!-- **************** BEGIN: Search UI ************** -->
         <div id="search_page">
           <div id="inactive_search"></div>
-          <form id="frm_search" name="frm">
-            <div id="toolbar">
-              <input type="text" id="txt_search" value="" name="q" autocomplete="off" placeholder="">
-              <span id="search_engine" class="google"></span>
-              <span id="engines_arrow"></span>
+          <div id="toolbar">
+            <input type="text" id="txt_search" value="" name="q" autocomplete="off" placeholder="">
+            <input type="submit" value="" id="btn_search">
+          </div>
 
-              <div class="checkbox searches_checkbox">
-                <ul>
-                  <li class="hint--left" data-hint="Google">
-                    <input class="search_engines" type="checkbox" value="0" name="se_google" />
-                    <span class="google"></span>
-                  </li>
-                  <li class="hint--left" data-hint="Bing">
-                    <input class="search_engines" type="checkbox" value="1" name="se_bing" />
-                    <span class="bing"></span>
-                  </li>
-                  <li class="hint--left" data-hint="Yahoo">
-                    <input class="search_engines" type="checkbox" value="2" name="se_yahoo" />
-                    <span class="yahoo"></span>
-                  </li>
-                  <li class="hint--left" data-hint="Blekko">
-                    <input class="search_engines" type="checkbox" value="3" name="se_blekko" />
-                    <span class="blekko"></span>
-                  </li>
-                  <li class="hint--left" data-hint="DuckDuckGo">
-                    <input class="search_engines" type="checkbox" value="4" name="se_duckduckgo" />
-                    <span class="duckduckgo"></span>
-                  </li>
-                </ul>
-              </div>
-              <input type="submit" value="" id="btn_search">
-            </div>
-
-            <div id="search_settings">
-              <span class="setting_title">Search Options</span>
-              <ul>
-                <li>
-                  <input id="omnibox-box" class="mode_settings" type="checkbox" value="1" name="mode_1">
-                  Search from the omnibox
-                  <span class="question_mark"></span>
-                </li>
-                <li>
-                  <input id="everywhere-box" class="mode_settings" type="checkbox" value="2" name="mode_2">
-                  Search from everywhere
-                  <span class="question_mark"></span>
-                </li>
-              </ul>
-            </div>
-          </form>
-
+          <div id="search_settings">
+            <span class="setting_title">Search Options</span>
+            <ul>
+              <li>
+                <input id="omnibox-box" class="mode_settings" type="checkbox" value="1" name="mode_1">
+                Search from the omnibox
+                <span class="question_mark"></span>
+              </li>
+              <li>
+                <input id="everywhere-box" class="mode_settings" type="checkbox" value="2" name="mode_2">
+                Search from everywhere
+                <span class="question_mark"></span>
+              </li>
+            </ul>
+          </div>
         </div>
         <!-- **************** END: Search UI ************** -->
 

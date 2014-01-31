@@ -21,25 +21,15 @@ window.onload = function() {
   };
 
   function define_events() {
-    $('#btn_search').click(btnSearchClick);
-    $('.searches_checkbox li').click(checkItemClick);
-    $('.search_engines').click(chkSearchEngineClick);
     $('.mode_settings').click(chkModeSettingsClick);
-    $('.whats_this').bind({
-      mouseenter: showHelpImage,
-      mouseleave: hideHelpImage
-    });
-    $('.beta').bind({
-      mouseenter: showBubblePopUp,
-      mouseleave: hideBubblePopUp
-    });
-    $("#enable_show_secure_search").change(toggleSearch);
-    $("#engines_arrow").click(function(){ $(".searches_checkbox").css("display","block"); })
+    $('#btn_search').click(submitSearch);
+    $('#txt_search').keyup(submitSearch);
+    $('#enable_show_secure_search').change(toggleActivateSearch);
+    $('#frm_search').submit(closePopup);
 
     TXT_SEARCH.focus(function () { $(this).css('background-position', '0px -27px'); });
     TXT_SEARCH.blur(function () { $(this).css('background-position', '0px 0px'); });
   };
-
 
   function analytics() {
     //temporary omnibox/everywhere/secure usage analytics
@@ -63,21 +53,23 @@ window.onload = function() {
       }
     });
 
-    TXT_SEARCH.focus(function () { $(this).css('background-position', '0px -27px'); });
-    TXT_SEARCH.blur(function () { $(this).css('background-position', '0px 0px'); });
+    $('#enable_show_secure_search').click(function() {
+      var is_checked = $(this).is(':checked');
+      localStorage.search_secure_enable = is_checked ? "true" : "false";
+      if (is_checked) {
+        localStorage.search_secure_on = parseInt(localStorage.search_secure_on) + 1;
+      } else {
+        localStorage.search_secure_off = parseInt(localStorage.search_secure_off) + 1;
+      }
+    });
   };
 
   function defaults_values() {
-    var o_se = $(':input[class="'+SEARCH_ENGINE_LABEL+'"][value="'+ DESERIALIZE(localStorage[SEARCH_ENGINE_LABEL]) +'"]');
-    if (o_se != undefined) {
-      o_se.attr('checked', true).parent().addClass("active");
-      TXT_SEARCH.attr('placeholder', TXT_DEFAULT_MESSAGE);
-    }
+    TXT_SEARCH.attr('placeholder', TXT_DEFAULT_MESSAGE);
 
     var ui = $("#search_page");
     var is_show_secure_search = $("#enable_show_secure_search");
     var show_search = (localStorage.search_secure_enable == "true") ? true : false;
-
     if (show_search) {
       ui.removeClass("isHidden");
       is_show_secure_search.prop("checked", true);
@@ -86,7 +78,11 @@ window.onload = function() {
       is_show_secure_search.prop("checked", false);
     }
 
-    updateSearchEngineIcon(localStorage[SEARCH_ENGINE_LABEL]);
+    var disabled = !is_show_secure_search.is(':checked');
+    TXT_SEARCH.prop('disabled', disabled);
+    $('#omnibox-box').prop('disabled', disabled);
+    $('#everywhere-box').prop('disabled', disabled);
+    $('#btn_search').prop('disabled', disabled);
 
     var chkbox = '{"ominibox":false,"everywhere":false,"secure":false}';
     try {
@@ -103,7 +99,11 @@ window.onload = function() {
     TXT_SEARCH.focus();
   };
 
-  function btnSearchClick() {
+  function submitSearch(e) {
+    e.which = e.which || e.keyCode;
+    if (e.which != 13 && e.which != 1) return;
+    if (TXT_SEARCH.val().trim() == "") return;
+    
     const PREFIX_URL = "https://";
     var searchEngineIndex = DESERIALIZE(localStorage[SEARCH_ENGINE_LABEL]);
     var uri = null;
@@ -113,49 +113,9 @@ window.onload = function() {
     else if (searchEngineIndex == 2) uri = 'search.yahoo.com/search?p=';
     else if (searchEngineIndex == 3) uri = 'blekko.com/ws?q=';
     else if (searchEngineIndex == 4) uri = 'duckduckgo.com/?q=';
-
-    chrome.tabs.create({
-      url: PREFIX_URL + uri + encodeURIComponent(TXT_SEARCH.val()) + '&search_plus_one=popup'
-    });
-  };
-
-  function toolBarInfoClick() {
-    chrome.tabs.create({url: 'http://disconnect.me/search/info'});
-  };
-
-  function emailSupportClick() {
-    var emailTo = "support@disconnect.me",
-        title = "Disconnect Search support",
-        action_url = "mailto:" + emailTo + "?Subject=" + encodeURIComponent(title);
-    chrome.tabs.getSelected(function(tab) {
-      chrome.tabs.update(tab.id, { url: action_url });
-    });
-  };
-
-  function checkItemClick(){
-    $(".searches_checkbox").hide();
-    if ($(this).hasClass("mode_settings")) {
-      $(this).trigger("click");
-    } else {
-      $(this).find("input").trigger("click");
-    }
-  };
-
-  function chkSearchEngineClick(e) {
-    var checkbox = $(this),
-        checkbox_class = "." + checkbox.attr("class");
-
-    $(checkbox_class).attr("checked",false).parent().removeClass("active").find("span").removeClass("flipInYGreen animated");
-    // save value in localstorage
-    localStorage[SEARCH_ENGINE_LABEL] = DESERIALIZE(checkbox.attr('value'));
-
-    updateSearchEngineIcon(localStorage[SEARCH_ENGINE_LABEL]);
-
-    // force checked (always true);
-    if (!checkbox.is(':checked'))
-      checkbox.prop('checked', true).parent().addClass("active").find("span").addClass("flipInYGreen animated");
-
-    e.stopPropagation();
+    
+    uri = PREFIX_URL + uri + encodeURIComponent(TXT_SEARCH.val()) + '&search_plus_one=popup';
+    BG.openTab(uri);
   };
 
   function chkModeSettingsClick() {
@@ -191,59 +151,30 @@ window.onload = function() {
     localStorage['search_full_secure'] = DESERIALIZE(secure.is(':checked'));
   };
 
-  function showHelpImage() {
-    var image = $(this).attr('id') == 'mode1_info' ? '#ominibox' : '#everywhere';
-    $(image).show().css("opacity",0).stop(true,true).animate({
-      opacity: 1,
-      marginTop: 12
-    });
-  };
-  function hideHelpImage() {
-    var image = $(this).attr('id') == 'mode1_info' ? '#ominibox' : '#everywhere';
-    $(image).stop(true,true).animate({
-      opacity: 0,
-      marginTop: 0
-    }, function(){
-      $(this).hide();
-    });
-  };
-
-  function showBubblePopUp(){
-    $('#exp-msg').show().css("opacity",0).stop(true,true).animate({
-      opacity: 1,
-      top: 35
-    });
-  };
-  function hideBubblePopUp() {
-    $('#exp-msg').stop(true,true).animate({
-      opacity: 0,
-      top: 25
-    }, function(){
-      $(this).hide();
-    });
-  };
-
-  function updateSearchEngineIcon(x) {
-    var icon;
-    if (x == 0) icon = "google";
-    else if (x == 1) icon = "bing";
-    else if (x == 2) icon = "yahoo";
-    else if (x == 3) icon = "blekko";
-    else if (x == 4) icon = "duckduckgo";
-    document.getElementById("search_engine").className = icon;
-  };
-
-  function toggleSearch(){
+  function toggleActivateSearch() {
     var is_show_secure_search = $(this).is(':checked');
     var ui = $("#search_page");
 
     localStorage.search_secure_enable = is_show_secure_search ? "true" : "false";
     if (is_show_secure_search) {
       ui.removeClass("isHidden");
-      localStorage.search_secure_on = parseInt(localStorage.search_secure_on) + 1;
     } else {
       ui.addClass("isHidden");
-      localStorage.search_secure_off = parseInt(localStorage.search_secure_off) + 1;
     }
+
+    var disabled = !is_show_secure_search;
+    TXT_SEARCH.prop('disabled', disabled);
+    $('#omnibox-box').prop('disabled', disabled);
+    $('#everywhere-box').prop('disabled', disabled);
+    $('#btn_search').prop('disabled', disabled);
+
+    // rebuild async filters
+    setTimeout(function() {
+      BG.update_filters();
+    }, 100);
+  };
+
+  function closePopup() {
+    window.close();
   };
 };

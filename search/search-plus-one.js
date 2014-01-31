@@ -1,6 +1,6 @@
 function DMSP1() {
   // background
-  this.BACKGROUND = chrome.extension.getBackgroundPage();
+  this.BG = chrome.extension.getBackgroundPage();
 
   // variables
   this.C_PROXY_INVISIBLE = "invisible.disconnect.me:3000";
@@ -139,7 +139,7 @@ DMSP1.prototype.onWebRequestBeforeRequest = function(details) {
   const T_XMLHTTPREQUEST = (TYPE == 'xmlhttprequest');
   var REQUESTED_URL = details.url;
   const CHILD_DOMAIN = this.getHostname(REQUESTED_URL);
-
+  
   var blockingResponse = {cancel: false};
   var blocking = presetting = false;
   var isGoogle = (CHILD_DOMAIN.search("google.") > -1);
@@ -157,12 +157,9 @@ DMSP1.prototype.onWebRequestBeforeRequest = function(details) {
 
   if (localStorage.search_secure_enable === "false") return blockingResponse;
   if (isDisconnectSearchPage) localStorage.search_total = parseInt(localStorage.search_total) + 1;
-
   if (isDisconnectSite) {
     var CONTROL = document.getElementById('input-type');
-    //console.log(CONTROL);
     var BUCKET = CONTROL && CONTROL.getAttribute('value');
-    //console.log("BUCKET: " + BUCKET);
     localStorage.search_pwyw = JSON.stringify({pwyw: true, bucket: BUCKET});
   }
 
@@ -173,40 +170,32 @@ DMSP1.prototype.onWebRequestBeforeRequest = function(details) {
   var isOmniboxSearch = (this.page_focus == false);
   var isSearchByPage = new RegExp("search_plus_one=form").test(REQUESTED_URL);
   var isSearchByPopUp = new RegExp("search_plus_one=popup").test(REQUESTED_URL);
-  var isSearchByHistory = new RegExp("search_plus_one=history").test(REQUESTED_URL);
   var isProxied = ( 
-    !isSearchByHistory && (
     (modeSettings == 0 && isSearchByPopUp) ||
-    (modeSettings == 1 && (isSearchByPopUp || isOmniboxSearch)) ||
-    (modeSettings == 2 && (isSearchByPopUp || isOmniboxSearch || isSearchByPage)) ||
-    (modeSettings >= 0 && (this.isProxyTab(details.tabId) && this.proxy_actived) )
-  ));
+    (modeSettings == 1 && (isSearchByPopUp || isOmniboxSearch) ) ||
+    (modeSettings == 2 && (isSearchByPopUp || isOmniboxSearch || !isOmniboxSearch || isSearchByPage ) ) ||
+    (modeSettings >= 0 && (this.isProxyTab(details.tabId) && this.proxy_actived) && !isOmniboxSearch )
+  );
 
   // blocking autocomplete by OminiBox or by Site URL
   var isChromeInstant = ( isGoogle && T_MAIN_FRAME && (REQUESTED_URL.search("chrome-instant") > -1) );
   var isGoogleOMBSearch = ( isGoogle && T_OTHER && (REQUESTED_URL.search("/complete/") > -1) );
   var hasGoogleReviewDialog = (REQUESTED_URL.search("reviewDialog") > -1);
-  var isGoogleSiteSearch = ( (isGoogle || isDisconnect) && T_XMLHTTPREQUEST && !hasGoogleImgApi && !hasGoogleReviewDialog && ((REQUESTED_URL.search("suggest=") > -1) || (REQUESTED_URL.search("output=search") > -1) || (REQUESTED_URL.indexOf("/s?") > -1) ));
+  var isGoogleSiteSearch = (!T_MAIN_FRAME && isGoogle && !hasGoogleImgApi && !hasGoogleReviewDialog && ((REQUESTED_URL.search("suggest=") > -1) || (REQUESTED_URL.indexOf("output=search") > -1) || (REQUESTED_URL.indexOf("/s?") > -1) || (REQUESTED_URL.search("/complete/search") > -1) || (REQUESTED_URL.search("/search") > -1) ));
+  var isDisconnectSearch = (!T_MAIN_FRAME && isDisconnect && (REQUESTED_URL.search("/complete/search")>-1) && (REQUESTED_URL.search("client=serp")>-1) );
 
   var isBingOMBSearch = ( isBing && T_OTHER && (REQUESTED_URL.search("osjson.aspx") > -1) );
   var isBingSiteSearch = ( (isBing || isDisconnect) && T_SCRIPT && (REQUESTED_URL.search("qsonhs.aspx") > -1) );
   var isBlekkoSearch = ( (isBlekko || isDisconnect) && (T_OTHER || T_XMLHTTPREQUEST) && (REQUESTED_URL.search("autocomplete") > -1) );
   var isYahooSearch = ( (isYahoo || isDisconnect) && T_SCRIPT && (REQUESTED_URL.search("search.yahoo") > -1) && ((REQUESTED_URL.search("jsonp") > -1) || (REQUESTED_URL.search("gossip") > -1)) );
-  if ( (isProxied || isDisconnect || modeSettings==2) && (isChromeInstant || isGoogleOMBSearch || isGoogleSiteSearch || isBingOMBSearch || isBingSiteSearch || isBlekkoSearch || isYahooSearch) ) {
+  if ( isProxied && (isChromeInstant || isGoogleOMBSearch || isGoogleSiteSearch || isBingOMBSearch || isBingSiteSearch || isBlekkoSearch || isYahooSearch || isDisconnectSearch) ) {
     blocking = true;
-    if (!isDisconnect) {
-      if ( (modeSettings==1) && !isGoogleOMBSearch ) blocking = false;
-      else if ( (modeSettings==2) && isGoogleSiteSearch && !isSearchByPage ) blocking = false;
-    }
-    
-    if (blocking) {
-      blockingResponse = { cancel: true };
-    }
+    blockingResponse = { cancel: true };
   }
-
+  
   // Redirect URL -> Proxied
   var URLToProxy = ((isGoogle && (hasSearch || hasMaps)) || (isBing && hasSearch) || (isYahoo && hasSearch) || (isBlekko && hasWsOrApi) || isDuckDuckGo);
-  if (T_MAIN_FRAME && URLToProxy && !blocking) { 
+  if (isProxied && T_MAIN_FRAME && URLToProxy && !blocking) { 
     //console.log("%c Search by OminiBox", 'background: #33ffff;');
     //console.log(details);
 
@@ -215,53 +204,47 @@ DMSP1.prototype.onWebRequestBeforeRequest = function(details) {
     if (isYahoo) match = REGEX_URL_YAHOO.exec(REQUESTED_URL);
 
     if ((match != null) && (match.length > 1)) {
-      if (isProxied) {
-        //console.log("%c Search by OminiBox Found Match Needs Redirecting", 'background: #33ffff;');
-        //console.log(details);
+      //console.log("%c Search by OminiBox Found Match Needs Redirecting", 'background: #33ffff;');
+      //console.log(details);
 
-        var searchEngineIndex = deserialize(localStorage['search_engines']);
-        var searchEngineName = null;
-        if      ( (searchEngineIndex == 0 && !isSearchByPage) || (isGoogle && isSearchByPage) )     searchEngineName = 'google';
-        else if ( (searchEngineIndex == 1 && !isSearchByPage) || (isBing && isSearchByPage) )       searchEngineName = 'bing';
-        else if ( (searchEngineIndex == 2 && !isSearchByPage) || (isYahoo && isSearchByPage) )      searchEngineName = 'yahoo';
-        else if ( (searchEngineIndex == 3 && !isSearchByPage) || (isBlekko && isSearchByPage) )     searchEngineName = 'blekko';
-        else if ( (searchEngineIndex == 4 && !isSearchByPage) || (isDuckDuckGo && isSearchByPage) ) searchEngineName = 'duckduckgo';
-        else searchEngineName = 'google';
-        
-        if (searchEngineIndex == 4){
-          if (isGoogle){
-            searchEngineName = 'google';
-          }else if (isBing){
-            searchEngineName = 'bing';
-          }else if (isYahoo){
-            searchEngineName = 'yahoo';
-          }else if (isBlekko || (REQUESTED_URL.indexOf("!blekko") != -1) ){
-            REQUESTED_URL = REQUESTED_URL.replace("!blekko","");
-            searchEngineName = 'blekko';
-          }
+      var searchEngineIndex = deserialize(localStorage['search_engines']);
+      var searchEngineName = null;
+      if      ( (searchEngineIndex == 0 && !isSearchByPage) || (isGoogle && isSearchByPage) )     searchEngineName = 'google';
+      else if ( (searchEngineIndex == 1 && !isSearchByPage) || (isBing && isSearchByPage) )       searchEngineName = 'bing';
+      else if ( (searchEngineIndex == 2 && !isSearchByPage) || (isYahoo && isSearchByPage) )      searchEngineName = 'yahoo';
+      else if ( (searchEngineIndex == 3 && !isSearchByPage) || (isBlekko && isSearchByPage) )     searchEngineName = 'blekko';
+      else if ( (searchEngineIndex == 4 && !isSearchByPage) || (isDuckDuckGo && isSearchByPage) ) searchEngineName = 'duckduckgo';
+      else searchEngineName = 'google';
+      
+      if (searchEngineIndex == 4){
+        if (isGoogle){
+          searchEngineName = 'google';
+        }else if (isBing){
+          searchEngineName = 'bing';
+        }else if (isYahoo){
+          searchEngineName = 'yahoo';
+        }else if (isBlekko || (REQUESTED_URL.indexOf("!blekko") != -1) ){
+          REQUESTED_URL = REQUESTED_URL.replace("!blekko","");
+          searchEngineName = 'blekko';
         }
-
-        var url_params = this.buildParameters(REQUESTED_URL, searchEngineName);
-        
-        var url_redirect = null;
-        if (!this.proxy_actived && !this.isProxyTabActived(details.tabId, REQUESTED_URL)) {
-          url_redirect = PROXY_REDIRECT_BY_PRESETTING + url_params;
-          presetting = true;
-        } else {
-          url_redirect = PROXY_REDIRECT + url_params;
-          presetting = false;
-        }
-        //register the tab as a proxy tab passing in the url we will use as the base search
-        this.registerProxiedTab(details.tabId, PROXY_REDIRECT + url_params, details.requestId, presetting);
-
-        blockingResponse = {
-          redirectUrl: url_redirect
-        };
-      } else {
-        blockingResponse = {
-          redirectUrl: REQUESTED_URL + "&search_plus_one=history"
-        };
       }
+
+      var url_params = this.buildParameters(REQUESTED_URL, searchEngineName);
+      
+      var url_redirect = null;
+      if (!this.proxy_actived && !this.isProxyTabActived(details.tabId, REQUESTED_URL)) {
+        url_redirect = PROXY_REDIRECT_BY_PRESETTING + url_params;
+        presetting = true;
+      } else {
+        url_redirect = PROXY_REDIRECT + url_params;
+        presetting = false;
+      }
+      //register the tab as a proxy tab passing in the url we will use as the base search
+      this.registerProxiedTab(details.tabId, PROXY_REDIRECT + url_params, details.requestId, presetting);
+
+      blockingResponse = {
+        redirectUrl: url_redirect
+      };
     }
   } else if (T_MAIN_FRAME && isDisconnect && !this.isProxyTab(details.tabId) && !blocking) {
     //console.log("%c Disconnect Search Page",'background: #33ffff;');
@@ -372,7 +355,7 @@ DMSP1.prototype.onWebRequestBeforeSendHeaders = function(details) {
     var XDST = {name: 'X-Disconnect-Stats', value: JSON.stringify({
       group_id: localStorage.search_group,
       product_id: localStorage.search_product,
-      user_id: (this.BACKGROUND.get_adblock_user_id() || '0')
+      user_id: (this.BG.get_adblock_user_id() || '0')
     })};
     details.requestHeaders.push(XDST);
   }
@@ -478,6 +461,7 @@ DMSP1.prototype.onWebCreatedNavigationTarget = function(details) {
   //console.log('%c WebNav.onCreatedNavigationTarget:', 'color: #FF07FA; background: #000000');
   //console.log(details);
   //console.log(this.proxy_tabs);
+  this.page_focus = true;
   this.cloneTabObject(details.sourceTabId, details.tabId, false);
   //console.log(this.proxy_tabs);
 };
@@ -832,28 +816,6 @@ DMSP1.prototype.removeProxy = function() {
   });
 };
 
-DMSP1.prototype.getPostStatsRequest = function() {
-  var data = {
-    conn: 'https://hits.disconnect.me',
-    password: 'dirthavepure',
-    time: new Date().toUTCString(),
-    path: '/partnership_analytics.json?',
-    ua: navigator.userAgent,
-    host: 'disconnect.me',
-    method: 'POST',
-    status: 200
-  };
-  data.path = data.path + [
-    'group_id=' + localStorage.search_group,
-    'product_id=' + localStorage.search_product,  
-    'user_id=' + (get_adblock_user_id() || '0'),
-    'build=' + localStorage.adblock_build_version,
-    'search_build=' + localStorage.search_build_version,
-    'cohort=' + (localStorage.search_cohort || 'none')
-  ].join('&');
-  return data;
-};
-
 DMSP1.prototype.reportUsage = function() {
   const oneDayAsMsec = 24 * this.HOUR_MS;
   
@@ -886,7 +848,25 @@ DMSP1.prototype.reportUsage = function() {
   else if (daily)      report_update_type = 0x01;
   else                 report_update_type = 0x00; 
 
-  var data = this.getPostStatsRequest();
+  var data = {
+    conn: 'https://hits.disconnect.me',
+    password: 'dirthavepure',
+    time: new Date().toUTCString(),
+    path: '/partnership_analytics.json?',
+    ua: navigator.userAgent,
+    host: 'disconnect.me',
+    method: 'POST',
+    status: 200
+  };
+  data.path = data.path + [
+    'group_id=' + localStorage.search_group,
+    'product_id=' + localStorage.search_product,  
+    'user_id=' + (get_adblock_user_id() || '0'),
+    'build=' + localStorage.adblock_build_version,
+    'search_build=' + localStorage.search_build_version,
+    'cohort=' + (localStorage.search_cohort || 'none')
+  ].join('&');
+
   var report_values_to_send = {
     first_update: firstUpdate || false,
     search_engine: localStorage.search_engines || 0,
@@ -982,16 +962,15 @@ DMSP1.prototype.onRuntimeMessage = function(request, sender, sendResponse) {
     }
   } else if (request.search_secure_reminder_show == false) {
       localStorage['search_secure_reminder_show'] = deserialize(request.search_secure_reminder_show);
-  }
-
-  if (request.action == undefined) return;
-  if (request.action == 'notNow') {
-    localStorage.search_secure_enable = false;
-    localStorage.search_pitch_page_no = parseInt(localStorage.search_pitch_page_no) + 1;
-  }
-  else if (request.action == 'doEnable') {
-    localStorage.search_secure_enable = true;
-    localStorage.search_pitch_page_yes = parseInt(localStorage.search_pitch_page_yes) + 1;
+  } else if (request.action != undefined) {
+    if (request.action == 'notNow') {
+      localStorage.search_secure_enable = false;
+      localStorage.search_pitch_page_no = parseInt(localStorage.search_pitch_page_no) + 1;
+    } else if (request.action == 'doEnable') {
+      localStorage.search_secure_enable = true;
+      localStorage.search_pitch_page_yes = parseInt(localStorage.search_pitch_page_yes) + 1;
+    }
+    this.BG.update_filters();
   }
 };
 
