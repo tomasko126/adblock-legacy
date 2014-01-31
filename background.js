@@ -916,7 +916,7 @@
   }
 
   /* Search Implementation */
-  if (!SAFARI && localStorage.total_pings > 1) {
+  if (!SAFARI && localStorage.total_pings > 2) {
     var bgPlusOne = null;
     var run_search = function() {
       bgPlusOne = new DMSP1();
