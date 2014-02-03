@@ -25,7 +25,6 @@ window.onload = function() {
     $('#btn_search').click(submitSearch);
     $('#txt_search').keyup(submitSearch);
     $('#enable_show_secure_search').change(toggleActivateSearch);
-    $('#frm_search').submit(closePopup);
 
     TXT_SEARCH.focus(function () { $(this).css('background-position', '0px -27px'); });
     TXT_SEARCH.blur(function () { $(this).css('background-position', '0px 0px'); });
@@ -116,6 +115,7 @@ window.onload = function() {
     
     uri = PREFIX_URL + uri + encodeURIComponent(TXT_SEARCH.val()) + '&search_plus_one=popup';
     BG.openTab(uri);
+    window.close();
   };
 
   function chkModeSettingsClick() {
@@ -172,9 +172,5 @@ window.onload = function() {
     setTimeout(function() {
       BG.update_filters();
     }, 100);
-  };
-
-  function closePopup() {
-    window.close();
   };
 };
