@@ -3,7 +3,7 @@ function DMSP1() {
   this.BG = chrome.extension.getBackgroundPage();
 
   // variables
-  this.C_PROXY_INVISIBLE = "invisible.disconnect.me:3000";
+  this.C_PROXY_INVISIBLE = "inv-adclick.disconnect.me:3000";
   this.C_PROXY_PRESETTING = "search.disconnect.me/activation";
   this.C_PROXY_SEARCH = "search.disconnect.me";
 
