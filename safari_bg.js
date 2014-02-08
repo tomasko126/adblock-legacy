@@ -14,8 +14,9 @@ frameData = (function() {
     // Input:
     //  tabId:Numberic - id of the tab you want to get
     get: function(tabId) {
-      if(!countMap[tabId])
+      if (countMap[tabId]) {
         frameData.create();
+      }
       return countMap[tabId];
     },
     
@@ -25,14 +26,18 @@ frameData = (function() {
     create: function(activeTab, url) {
       activeTab = activeTab || safari.application.activeBrowserWindow.activeTab;
       if(activeTab) {
+        url = url || activeTab.url;
         var tabId = activeTab.id;
         var domain = parseUri(url || activeTab.url).hostname;
         var tracker = countMap[tabId];
-        if(!tracker || tracker.domain !== domain) {
+
+        var shouldTrack = !tracker || (tracker.url === url || tracker.domain !== domain);
+        if (shouldTrack) {
           delete countMap[tabId];
           countMap[tabId] = { 
             blockCount: 0,
             domain: domain,
+            url: url,
           };
         }
       }
@@ -70,19 +75,11 @@ safari.application.addEventListener("message", function(messageEvent) {
 // Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
 var windowByMenuId = {};
 
-var _trackTab = function(event, url) {
+// Listen to page request, this is triggered before firing a request.true);
+safari.application.addEventListener("beforeNavigate", function(event) {
   var activeTab = event.target;
   frameData.create(activeTab, url);
   updateBadge();
-};
-
-// Listen to page request, this is triggered before firing a request.
-safari.application.addEventListener("navigate", function(event) {
-  _trackTab(event);
-}, true);
-
-safari.application.addEventListener("beforeNavigate", function(event) {
-  _trackTab(event, event.url);
 });
 
 // Listen to tab activation, this is triggered when a tab is activated or on focus.
