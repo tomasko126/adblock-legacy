@@ -14,8 +14,9 @@ frameData = (function() {
     // Input:
     //  tabId:Numberic - id of the tab you want to get
     get: function(tabId) {
-      if(!countMap[tabId])
+      if (countMap[tabId]) {
         frameData.create();
+      }
       return countMap[tabId];
     },
     
@@ -25,14 +26,18 @@ frameData = (function() {
     create: function(activeTab, url) {
       activeTab = activeTab || safari.application.activeBrowserWindow.activeTab;
       if(activeTab) {
+        url = url || activeTab.url;
         var tabId = activeTab.id;
         var domain = parseUri(url || activeTab.url).hostname;
         var tracker = countMap[tabId];
-        if(!tracker || tracker.domain !== domain) {
+
+        var shouldTrack = !tracker || (tracker.url === url || tracker.domain !== domain);
+        if (shouldTrack) {
           delete countMap[tabId];
           countMap[tabId] = { 
             blockCount: 0,
             domain: domain,
+            url: url,
           };
         }
       }
