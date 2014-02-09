@@ -2,22 +2,24 @@ emit_page_broadcast = function(request) {
   safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
+// Map that will serve as cache for the block count.
+// key: Numeric - tab id.
+// value: Numeric - actual block count for the tab.
+var countMap = { };
+
 // Imitate frameData object for Safari to avoid issues when using blockCounts.
 frameData = (function() {
-  // Map that will serve as cache for the block count.
-  // key: Numeric - tab id.
-  // value: Numeric - actual block count for the tab.
-  var countMap = { };
   
   return {
     // Get frameData for the tab.
     // Input:
     //  tabId:Numberic - id of the tab you want to get
     get: function(tabId) {
-      if (countMap[tabId]) {
-        frameData.create();
+      var trackedTab = countMap[tabId];
+      if (!trackedTab) {
+        trackedTab = frameData.create();
       }
-      return countMap[tabId];
+      return trackedTab;
     },
     
     // Create a new frameData
@@ -39,6 +41,7 @@ frameData = (function() {
             domain: domain,
             url: url,
           };
+          return tracker;
         }
       }
     },
@@ -77,8 +80,7 @@ var windowByMenuId = {};
 
 // Listen to page request, this is triggered before firing a request.true);
 safari.application.addEventListener("beforeNavigate", function(event) {
-  var activeTab = event.target;
-  frameData.create(activeTab, url);
+  frameData.create(event.target, event.url);
   updateBadge();
 });
 
