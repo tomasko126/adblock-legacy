@@ -10,13 +10,8 @@ window.onload = function() {
   initialize();
 
   function initialize() {
-    // set functions/events
     define_events();
-
-    //temporary omnibox/everywhere/secure usage analytics
     analytics();
-
-    // default values
     defaults_values();
   };
 
@@ -25,6 +20,10 @@ window.onload = function() {
     $('#btn_search').click(submitSearch);
     $('#txt_search').keyup(submitSearch);
     $('#enable_show_secure_search').change(toggleActivateSearch);
+    $(".question_mark").bind({
+      mouseenter: showHelpImage,
+      mouseleave: hideHelpImage
+    });
 
     TXT_SEARCH.focus(function () { $(this).css('background-position', '0px -27px'); });
     TXT_SEARCH.blur(function () { $(this).css('background-position', '0px 0px'); });
@@ -83,17 +82,25 @@ window.onload = function() {
     $('#everywhere-box').prop('disabled', disabled);
     $('#btn_search').prop('disabled', disabled);
 
-    var chkbox = '{"ominibox":false,"everywhere":false,"secure":false}';
+    var chkbox = '{"omnibox":false,"everywhere":false,"secure":false}';
     try {
       chkbox = JSON.parse(localStorage[CHK_MODE_SETTINGS_LABEL]);
     }catch(e){};
-    $('#omnibox-box').attr('checked', chkbox['ominibox']);
+    $('#omnibox-box').attr('checked', chkbox['omnibox']);
     $('#everywhere-box').attr('checked', chkbox['everywhere']);
 
     if (chkbox['secure'] == false)
       $('#private_mode').attr('checked', true);
     else
       $('#secure_mode').attr('checked', true);
+
+    var show = '{"omnibox":true,"everywhere":true,"secure":false}';
+    try {
+      show = JSON.parse(localStorage['search_show_mode_set']);
+    }catch(e){};
+    if (show['omnibox'] == false) $('#omnibox-box').parent().remove();
+    if (show['everywhere'] == false) $('#everywhere-box').parent().remove();
+    if ($('#search_settings ul li').length == 0) $('#search_settings').remove();
 
     TXT_SEARCH.focus();
   };
@@ -102,7 +109,7 @@ window.onload = function() {
     e.which = e.which || e.keyCode;
     if (e.which != 13 && e.which != 1) return;
     if (TXT_SEARCH.val().trim() == "") return;
-    
+
     const PREFIX_URL = "https://";
     var searchEngineIndex = DESERIALIZE(localStorage[SEARCH_ENGINE_LABEL]);
     var uri = null;
@@ -112,9 +119,10 @@ window.onload = function() {
     else if (searchEngineIndex == 2) uri = 'search.yahoo.com/search?p=';
     else if (searchEngineIndex == 3) uri = 'blekko.com/ws?q=';
     else if (searchEngineIndex == 4) uri = 'duckduckgo.com/?q=';
-    
+
     uri = PREFIX_URL + uri + encodeURIComponent(TXT_SEARCH.val()) + '&search_plus_one=popup';
     BG.openTab(uri);
+
     window.close();
   };
 
@@ -124,7 +132,7 @@ window.onload = function() {
     var secure = $('#secure_mode');
 
     var chk_box = {
-      'ominibox': omnibox.is(':checked'),
+      'omnibox': omnibox.is(':checked'),
       'everywhere': everywhere.is(':checked'),
       'secure': secure.is(':checked')
     };
@@ -132,8 +140,9 @@ window.onload = function() {
     localStorage[CHK_MODE_SETTINGS_LABEL] = JSON.stringify(chk_box);
 
     var mode = 0;
-    if (everywhere.is(':checked')) mode = 2;
-    else if (omnibox.is(':checked')) mode = 1;
+    if      (chk_box.everywhere==false && chk_box.omnibox==true) mode = 1;
+    else if (chk_box.everywhere==true && chk_box.omnibox==false) mode = 2;
+    else if (chk_box.everywhere==true && chk_box.omnibox==true)  mode = 3;
     localStorage['search_mode_settings'] = DESERIALIZE(mode);
 
     if (secure.is(':checked') == true) {
@@ -173,4 +182,22 @@ window.onload = function() {
       BG.update_filters();
     }, 100);
   };
+
+  function showHelpImage() {
+    var image = $(this).attr('id') == 'mode1_info' ? '#omnibox' : '#serp';
+    $(image).show().css("opacity",0).stop(true,true).animate({
+      opacity: 1,
+      marginTop: 0
+    });
+  };
+  function hideHelpImage() {
+    var image = $(this).attr('id') == 'mode1_info' ? '#omnibox' : '#serp';
+    $(image).stop(true,true).animate({
+      opacity: 0,
+      marginTop: 0
+    }, function(){
+      $(this).hide();
+    });
+  };
+
 };

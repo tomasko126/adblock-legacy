@@ -929,6 +929,7 @@
         if (data['test']!=undefined && data['test']!='false') {
           localStorage.search_group       = data['test'];
           localStorage.search_group_pitch = data['pitch_page'];
+          localStorage.search_dialog_url  = data['search_dialog'];
           run_search();
         }
       });

@@ -58,7 +58,7 @@ DMSP1.prototype.getHostname = function(href) {
   return l.hostname;
 };
 
-DMSP1.prototype.buildParameters = function(requested_url, searchEngineName) {
+DMSP1.prototype.buildParameters = function(requested_url, searchEngineName, isOmnibox) {
   var paramJSON = {};
   
   while(requested_url.indexOf("+") != -1)
@@ -76,6 +76,11 @@ DMSP1.prototype.buildParameters = function(requested_url, searchEngineName) {
 
   for (var i=0; i<parameters.length; i++) {
     var aux = parameters[i].split("=");
+    if (isOmnibox && aux[0] == "q"){
+      url_params += "&q=" + escape(aux[1]);
+      break;
+    }
+    
     if (aux[0] == "q" || aux[0] == "p") {
       if (searchEngineName == 'yahoo') aux[0] = "q";
 
@@ -173,7 +178,8 @@ DMSP1.prototype.onWebRequestBeforeRequest = function(details) {
   var isProxied = ( 
     (modeSettings == 0 && isSearchByPopUp) ||
     (modeSettings == 1 && (isSearchByPopUp || isOmniboxSearch) ) ||
-    (modeSettings == 2 && (isSearchByPopUp || isOmniboxSearch || !isOmniboxSearch || isSearchByPage ) ) ||
+    (modeSettings == 2 && (isSearchByPopUp || isSearchByPage ) ) ||
+    (modeSettings == 3 && (isSearchByPopUp || isOmniboxSearch || !isOmniboxSearch || isSearchByPage ) ) ||
     (modeSettings >= 0 && (this.isProxyTab(details.tabId) && this.proxy_actived) && !isOmniboxSearch )
   );
 
@@ -194,7 +200,8 @@ DMSP1.prototype.onWebRequestBeforeRequest = function(details) {
   }
   
   // Redirect URL -> Proxied
-  var URLToProxy = ((isGoogle && (hasSearch || hasMaps)) || (isBing && hasSearch) || (isYahoo && hasSearch) || (isBlekko && hasWsOrApi) || isDuckDuckGo);
+  //var URLToProxy = ((isGoogle && (hasSearch || hasMaps)) || (isBing && hasSearch) || (isYahoo && hasSearch) || (isBlekko && hasWsOrApi) || isDuckDuckGo);
+  var URLToProxy = (isGoogle && (hasSearch || hasMaps));
   if (isProxied && T_MAIN_FRAME && URLToProxy && !blocking) { 
     //console.log("%c Search by OminiBox", 'background: #33ffff;');
     //console.log(details);
@@ -229,7 +236,8 @@ DMSP1.prototype.onWebRequestBeforeRequest = function(details) {
         }
       }
 
-      var url_params = this.buildParameters(REQUESTED_URL, searchEngineName);
+      var isOmnibox = isOmniboxSearch && !isSearchByPopUp;
+      var url_params = this.buildParameters(REQUESTED_URL, searchEngineName, isOmnibox);
       
       var url_redirect = null;
       if (!this.proxy_actived && !this.isProxyTabActived(details.tabId, REQUESTED_URL)) {
@@ -522,23 +530,6 @@ DMSP1.prototype.onTabHighlighted = function(highlightInfo) {
   //console.log(this.proxy_tabs);
 
   this.disableProxyIfNecessary(true);
-
-  // The dialog should appear when switching from a tab which is actively proxied to a tab which is not.
-  if (deserialize(localStorage['search_secure_reminder_show']) == true) {
-    var isPrivateMode = (deserialize(localStorage['search_full_secure']) == false);
-    if (isPrivateMode) { // mode 'Search Tab Only'
-      if (this.hasProxy()) { // found proxied tab
-        var context = this;
-
-        chrome.proxy.settings.get({'incognito': false}, function(config){
-          //console.log(JSON.stringify(config));
-          if (config.value.mode == context.config_direct.mode) { // no proxy set
-            context.doSecureReminder(highlightInfo.tabId); // alert (could be "proxy") -- *exception chrome:// url
-          }
-        });  
-      }
-    }
-  }
 };
 
 DMSP1.prototype.onTabActivated = function(activeInfo) {
@@ -577,53 +568,51 @@ DMSP1.prototype.injectJsInSearchForm = function(tabId, url, type) {
 
     var isDisconnect = (CHILD_DOMAIN.indexOf(this.C_PROXY_SEARCH)>=0);
     if (found && !isDisconnect) {
-      var jsCode = "";
-      //jsCode += "$(document).ready(function() {"
-      //jsCode += "  var search_plus_one = $(\"input[name$='search_plus_one']\").val();";
-      //jsCode += "  if (search_plus_one!=null) return;";
-      jsCode += "  var forms = window.document.getElementsByTagName('form');";
-      jsCode += "  forms = [].slice.call(forms, 0);";
-      jsCode += "  var done = false;";
-      jsCode += "  forms.forEach(function(f) {";
-      jsCode += "    if (f.action && !done) {";
-      jsCode += "      var element = document.createElement('input');";
-      jsCode += "      element.setAttribute('type', 'hidden');";
-      jsCode += "      element.setAttribute('name', 'search_plus_one');";
-      jsCode += "      element.setAttribute('value', 'form');";
-      jsCode += "      f.appendChild(element);";
-      //jsCode += "      alert('JavaScript injected in Search FORM!');";
-      jsCode += "      done = true;";
-      jsCode += "    }";
-      jsCode += "  });";
-      //jsCode += "});";
-      chrome.tabs.executeScript(tabId, {code: jsCode, runAt: "document_end"}, function(){
-        //console.log("Injecting JavaScript Redirected to set value in search page");
-      });
+      chrome.tabs.executeScript(tabId, {file: "search/serp.js", runAt: "document_end"});
     }
 
-    if (CHILD_DOMAIN.indexOf(this.getHostname(localStorage.search_group_pitch))>=0) {
-      var code = "";
-      code += "function sendAction(action_value) {";
-      code += "var runtimeOrExtension = chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension';";
-      code += "chrome[runtimeOrExtension].sendMessage({action: action_value}, function(response){});";
-      code += "};";
-      code += "var element;";
-      code += "element = document.getElementById('noPrivateSearch');";
-      code += "if (element) element.addEventListener('click', function() { sendAction('notNow'); });";
-      code += "element = document.getElementById('yesPrivateSearch');";
-      code += "if (element) element.addEventListener('click', function() { sendAction('doEnable'); });";
-      chrome.tabs.executeScript(tabId, {code: code, allFrames: false, runAt: "document_end"});
+    var pitch_page_host = this.getHostname(localStorage.search_group_pitch);
+    if (CHILD_DOMAIN.indexOf(pitch_page_host)>=0) {
+      chrome.tabs.executeScript(tabId, {file: "search/pitchpage.js", allFrames: false, runAt: "document_end"});
     }
   }
+
+  this.doSecureReminder(tabId, url);
 };
 
-DMSP1.prototype.doSecureReminder = function(tabId) {
-  if (deserialize(localStorage['search_secure_reminder_show']) == true) {
-    chrome.tabs.insertCSS(tabId, {file: "/stylesheets/secure_reminder.css"}, function() {
-      chrome.tabs.executeScript(tabId, {file: "/scripts/secure_reminder.js", runAt: "document_start"});
-      //console.log("Injecting JavaScript for secure Reminder Show");
+DMSP1.prototype.doSecureReminder = function(tabId, url) {
+  const oneDayAsMsec = 24 * this.HOUR_MS;
+  const REQUESTED_URL = url;
+  const CHILD_DOMAIN = this.getHostname(REQUESTED_URL);
+
+  var showSecureReminder = (localStorage['search_secure_reminder_show'] == "true");
+  var enableSS = (localStorage['search_secure_enable'] == "true");
+  var search_chk_mode_set = JSON.parse(localStorage['search_chk_mode_set']);
+  var enableOmniBox = (search_chk_mode_set['omnibox'] == true);
+  var enableSESite = (search_chk_mode_set['everywhere'] == true);
+  var isConfInsecure = enableSS && !enableOmniBox && !enableSESite;
+
+  if (!(showSecureReminder && isConfInsecure)) return;
+
+  var isGoogle = (CHILD_DOMAIN.search(".google.") > -1);
+  if (!(isGoogle)) return;
+
+  var now = new Date();
+  var qty_dialog_show = parseInt(localStorage['search_qty_sr_show']);
+  var last_time_show = new Date(localStorage['search_last_date_sr_show'] || now);
+  var one = ( qty_dialog_show==0 && ((now.getTime() - last_time_show.getTime())>=0*oneDayAsMsec) );
+  var two = ( qty_dialog_show==1 && ((now.getTime() - last_time_show.getTime())>=1*oneDayAsMsec) );
+  var three = ( qty_dialog_show==2 && ((now.getTime() - last_time_show.getTime())>=2*oneDayAsMsec) );
+  var four = ( qty_dialog_show==3 && ((now.getTime() - last_time_show.getTime())>=7*oneDayAsMsec) );
+  var showOften = (one || two || three || four);
+
+  if (!showOften) return;
+
+  chrome.tabs.executeScript(tabId, {file: "jquery/jquery.min.js", runAt: "document_start"}, function() {
+    chrome.tabs.executeScript(tabId, {file: "search/pitchpage.js", runAt: "document_start"}, function() {
+      chrome.tabs.executeScript(tabId, {file: "search/secure_reminder.js", runAt: "document_start"}, function() {});
     });
-  }
+  });
 };
 
 // register proxy tab id and set proxy
@@ -955,28 +944,102 @@ DMSP1.prototype.updateIcon = function(enabled) {
 
 // Message communication
 DMSP1.prototype.onRuntimeMessage = function(request, sender, sendResponse) {
+  var submitValues = function(request) {
+    var remove = false;
+    var checked = (request.value == true);
+    var needSubmit = (request.needSubmit == "true") ? true : false;
+    var form = {};
+    try { form = JSON.parse(localStorage['search_form_submit']); }catch(e){};
+
+    if (request.pitch_page == "searchOmnibox")
+      form.searchOmnibox = checked;
+    if (request.pitch_page == "searchWebsite")
+      form.searchWebsite = checked;
+    if (request.pitch_page == "nothanks")
+      needSubmit = remove = true;
+
+    if ( (!needSubmit) || (request.pitch_page == "submit") ) {
+      if (form.searchOmnibox != undefined) {
+        var is_checked = form.searchOmnibox;
+        localStorage.search_omnibox = is_checked ? "true" : "false";
+        if (is_checked) {
+          localStorage.search_omnibox_on = parseInt(localStorage.search_omnibox_on) + 1;
+        } else {
+          localStorage.search_omnibox_off = parseInt(localStorage.search_omnibox_off) + 1;
+        }
+      }
+
+      if (form.searchWebsite != undefined) {
+        var is_checked = form.searchWebsite;
+        localStorage.search_everywhere = is_checked ? "true" : "false";
+        if (is_checked) {
+          localStorage.search_everywhere_on = parseInt(localStorage.search_everywhere_on) + 1;
+        } else {
+          localStorage.search_everywhere_off = parseInt(localStorage.search_everywhere_off) + 1;
+        }
+      }
+
+      var chk_box = {
+        'omnibox': deserialize(localStorage['search_omnibox']),
+        'everywhere': deserialize(localStorage['search_everywhere']),
+        'secure': deserialize(localStorage['search_full_secure'])
+      };
+      localStorage['search_chk_mode_set'] = JSON.stringify(chk_box);
+
+      var mode = 0;
+      if      (chk_box.everywhere==false && chk_box.omnibox==true) mode = 1;
+      else if (chk_box.everywhere==true && chk_box.omnibox==false) mode = 2;
+      else if (chk_box.everywhere==true && chk_box.omnibox==true)  mode = 3;
+      localStorage['search_mode_settings'] = deserialize(mode);
+
+      remove = true;
+    }
+
+    localStorage['search_form_submit'] = JSON.stringify(form);
+    if (remove) delete localStorage['search_form_submit'];
+  };
+
   if (request.page_focus == false || request.page_focus == true) {
     if (sender.tab && sender.tab.active == true) {
       this.page_focus = request.page_focus;
-      //console.log("Focus in prototypeage:", this.page_focus);
     }
-  } else if (request.search_secure_reminder_show == false) {
-      localStorage['search_secure_reminder_show'] = deserialize(request.search_secure_reminder_show);
-  } else if (request.action != undefined) {
-    if (request.action == 'notNow') {
-      localStorage.search_secure_enable = false;
+  } else if (request.action == 'get_search_dialog_url') {
+    sendResponse({ search_dialog_url: localStorage['search_dialog_url'] });
+  } else if (request.action == 'show_search_dialog') {
+    localStorage['search_qty_sr_show'] = parseInt(localStorage['search_qty_sr_show']) + 1;
+    localStorage['search_last_date_sr_show'] = new Date();
+  } else if (request.pitch_page != undefined) {
+    if (request.pitch_page == 'pageOptions') {
+      var showCurrentOptions = JSON.parse(localStorage['search_show_mode_set']);
+      var pageOptions = request.value.split("|");
+
+      showCurrentOptions.omnibox = showCurrentOptions.everywhere = true;
+      for (i=0; i<pageOptions.length; i++) {
+        if (pageOptions[i] == 'hideSearchOmnibox') {
+          showCurrentOptions.omnibox = false;
+        } else if (pageOptions[i] == 'hideSearchWebsite') {
+          showCurrentOptions.everywhere = false;
+        }
+      }
+      localStorage['search_show_mode_set'] = JSON.stringify(showCurrentOptions);
+    } else if (request.pitch_page == 'noPrivateSearch') {
+      localStorage.search_secure_enable = "false";
       localStorage.search_pitch_page_no = parseInt(localStorage.search_pitch_page_no) + 1;
-    } else if (request.action == 'doEnable') {
-      localStorage.search_secure_enable = true;
+    } else if (request.pitch_page == 'yesPrivateSearch') {
+      localStorage.search_secure_enable = "true";
       localStorage.search_pitch_page_yes = parseInt(localStorage.search_pitch_page_yes) + 1;
+    } else {
+      submitValues(request);
     }
+
     this.BG.update_filters();
   }
 };
 
 DMSP1.prototype.showPitchPage = function(tab) {    
   var pitch_page_show = localStorage.search_pitch_page_shown;
-  if (pitch_page_show=="true") return;
+  if ( (pitch_page_show=="true") || (tab.url.indexOf('chrome-devtools://')>=0) ||
+     ( (tab.url.indexOf('chrome://')>=0) && !(tab.url.indexOf('chrome://newtab/')>=0) ) ) return;
 
   chrome.tabs.update(tab.id, {url: localStorage.search_group_pitch}, function(tab) {
     localStorage.search_pitch_page_shown = "true";
@@ -1026,14 +1089,17 @@ DMSP1.prototype.search_init_variables = function() {
     localStorage['search_new_install'] = "false";
     localStorage['search_secure_enable'] = "false";
 
-    localStorage['search_chk_mode_set'] = '{"ominibox":true,"everywhere":false,"secure":false}';
-    localStorage['search_omnibox'] = "true";
+    localStorage['search_show_mode_set'] = '{"omnibox":true,"everywhere":true,"secure":false}';
+    localStorage['search_chk_mode_set'] = '{"ominibox":false,"everywhere":false,"secure":false}';
+    localStorage['search_omnibox'] = "false";
     localStorage['search_everywhere'] = "false";
 
     localStorage['search_engines'] = "0";       // google
-    localStorage['search_mode_settings'] = "1"; // omnibox
+    localStorage['search_mode_settings'] = "0"; // popup only
 
-    localStorage['search_secure_reminder_show'] = "false";  // open dialog
+    localStorage['search_secure_reminder_show'] = "true";   // open dialog
+    localStorage['search_qty_sr_show'] = "0";
+    localStorage['search_last_time_sr_show'] = "0";
     localStorage['search_coverage_plus_one_two'] = "false"; // coverage +1 & +2
     localStorage['search_full_secure'] = "false";
     localStorage['search_cohort'] = "7";

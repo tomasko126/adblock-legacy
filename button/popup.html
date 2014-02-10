@@ -28,19 +28,27 @@
           </div>
 
           <div id="search_settings">
-            <span class="setting_title">Search Options</span>
+            <span class="setting_title">Search privately from:</span>
             <ul>
               <li>
                 <input id="omnibox-box" class="mode_settings" type="checkbox" value="1" name="mode_1">
-                Search from the omnibox
-                <span class="question_mark"></span>
+                The omnibox
+                <span class="question_mark" id="mode1_info">?</span>
               </li>
               <li>
                 <input id="everywhere-box" class="mode_settings" type="checkbox" value="2" name="mode_2">
-                Search from everywhere
-                <span class="question_mark"></span>
+                Search engine websites
+                <span class="question_mark" id="mode2_info">?</span>
               </li>
             </ul>
+          </div>
+
+          <!-- Help Popups -->
+          <div id="omnibox" actived="false" class="hide">
+            <img src="../img/search/search-omnibox-card_no-shadow.png" class="center_image"></img>
+          </div>
+          <div id="serp" actived="false" class="hide">
+            <img src="../img/search/search-engine-card_no-shadow.png" class="center_image"></img>
           </div>
         </div>
         <!-- **************** END: Search UI ************** -->
