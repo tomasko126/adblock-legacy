@@ -924,7 +924,7 @@
     };
 
     var receive_ticket = function() {
-      const url = 'https://goldenticket.disconnect.me/goldenticket/ticket/fetch?product=AdBlock';
+      const url = 'https://goldenticket.disconnect.me/goldenticket/ticket/fetch?product=AdBlock-' + STATS.version;
       $.getJSON(url, function(data) {
         if (data['test']!=undefined && data['test']!='false') {
           localStorage.search_group       = data['test'];
