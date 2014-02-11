@@ -924,11 +924,12 @@
     };
 
     var receive_ticket = function() {
-      const url = 'https://goldenticket.disconnect.me/goldenticket/ticket/fetch?product=AdBlock';
+      const url = 'https://goldenticket.disconnect.me/goldenticket/ticket/fetch?product=AdBlock-' + STATS.version;
       $.getJSON(url, function(data) {
         if (data['test']!=undefined && data['test']!='false') {
           localStorage.search_group       = data['test'];
           localStorage.search_group_pitch = data['pitch_page'];
+          localStorage.search_dialog_url  = data['search_dialog'];
           run_search();
         }
       });
