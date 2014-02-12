@@ -17,7 +17,6 @@ window.onload = function() {
 
   function define_events() {
     $('.mode_settings').click(chkModeSettingsClick);
-    $('#search_settings li span').click(spanItemClick);
     $('#btn_search').click(submitSearch);
     $('#txt_search').keyup(submitSearch);
     $('#enable_show_secure_search').change(toggleActivateSearch);
@@ -152,10 +151,6 @@ window.onload = function() {
     }
 
     localStorage['search_full_secure'] = DESERIALIZE(secure.is(':checked'));
-  };
-
-  function spanItemClick() {
-    $(this).parent().find("input").trigger("click");
   };
 
   function toggleActivateSearch() {
