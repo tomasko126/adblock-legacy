@@ -78,11 +78,16 @@ safari.application.addEventListener("message", function(messageEvent) {
 // Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
 var windowByMenuId = {};
 
-// Listen to page request, this is triggered before firing a request.true);
+safari.application.addEventListener("navigate", function(event){
+  console.log("navigate");
+  console.log(event);
+})
+// Listen to page request, this is triggered before firing a request.true;
 safari.application.addEventListener("beforeNavigate", function(event) {
+  console.log("beforeNavigate");
   frameData.create(event.target, event.url);
   updateBadge();
-});
+}, true);
 
 // Listen to tab activation, this is triggered when a tab is activated or on focus.
 safari.application.addEventListener("activate", function(event) {
