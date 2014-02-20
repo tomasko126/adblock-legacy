@@ -83,6 +83,15 @@ var run_bandaids = function() {
           this.removeEventListener('DOMNodeInserted', arguments.callee, false);
         }, false);
       }
+      
+      // Check if URL was changed, if yes then reload page
+      var oldLocation = document.location.href;
+        setInterval(function() {
+          if(document.location.href != oldLocation) {
+            var location = document.location.href;
+            document.location.href = location;
+          }
+        },500);
     },
     getadblock: function() {
       BGcall('get_adblock_user_id', function(adblock_user_id) {
