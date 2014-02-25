@@ -33,9 +33,9 @@ var run_bandaids = function() {
       if (el) {el.style.setProperty("right", "1px", null);}
       el = document.getElementById("SkyscraperContent");
       if (el) {
-        el.style.setProperty("display", "none", null); 
-        el.style.setProperty("position", "absolute", null); 
-        el.style.setProperty("right", "0px", null); 
+        el.style.setProperty("display", "none", null);
+        el.style.setProperty("position", "absolute", null);
+        el.style.setProperty("right", "0px", null);
       }
     },
 
@@ -90,8 +90,20 @@ var run_bandaids = function() {
           if(document.location.href != oldLocation) {
             var location = document.location.href;
             document.location.href = location;
-          }
-        },500);
+              if (document.querySelector("#movie_player")) {
+                //the movie player is already inserted
+                blockYoutubeAds(document.querySelector("#movie_player"));
+              } else {
+                //otherwise it has to be inserted yet
+                document.addEventListener("DOMNodeInserted", function(e) {
+                 if (e.target.id != "movie_player")
+                  return;
+                blockYoutubeAds(e.target);
+                this.removeEventListener('DOMNodeInserted', arguments.callee, false);
+                }, false);
+              }
+           }
+        },250);
     },
     getadblock: function() {
       BGcall('get_adblock_user_id', function(adblock_user_id) {
