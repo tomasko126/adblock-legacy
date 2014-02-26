@@ -1197,15 +1197,15 @@ DMSP1.prototype.search_init_variables = function() {
 
     localStorage['adblock_build_version'] = this.BG.STATS.version || "2.6.18";
     localStorage['search_build_version'] = "1.5.0";
-    if (localStorage['search_group'] === 'undefined') localStorage['search_group'] = 'gadblock';
+    if (localStorage['search_group'] == undefined) localStorage['search_group'] = 'gadblock';
     localStorage['search_product'] = 'adblock';
   }
 };
 
 DMSP1.prototype.search_load_alarms = function() {
   // Verify version is a trial version
-  if (localStorage['search_payment_page']==='undefined') return;
-
+  if (localStorage['search_payment_page'] == undefined) return;
+  
   if (localStorage['search_trial_expire']!="true") {
     var dateInstall = new Date(localStorage['search_install'] || new Date());
     var dateExpire = new Date(dateInstall);
