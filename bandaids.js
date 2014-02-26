@@ -84,14 +84,8 @@ var run_bandaids = function() {
         }, false);
       }
       
-      // Check if URL was changed, if yes then reload page
-      var oldLocation = document.location.href;
-        setInterval(function() {
-          if(document.location.href != oldLocation) {
-            var location = document.location.href;
-            document.location.href = location;
-           }
-        },250);
+      // Disable history.pushState() to prevent overwriting our flashvars by Flash
+      document.location.href = "javascript:void(window.history.pushState = undefined);";
     },
     getadblock: function() {
       BGcall('get_adblock_user_id', function(adblock_user_id) {
