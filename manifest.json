@@ -1,6 +1,6 @@
 {
   "name": "AdBlock",
-  "version": "2.6.23",
+  "version": "2.6.25",
   "background": {
     "scripts": [
       "jquery/jquery.min.js",
@@ -86,7 +86,7 @@
   "minimum_chrome_version": "23",
   "options_page": "options/index.html",
   "permissions": [
-    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation", "proxy", "notifications", "history"
+    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation", "proxy", "notifications", "alarms"
   ],
   "web_accessible_resources": [
     "img/icon24.png",
