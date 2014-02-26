@@ -56,7 +56,7 @@
     },
       {
       "matches": [
-      "*://*.youtube.com/watch*"
+      "*://*.youtube.com/*"
       ],
       "js": [
       "unblockyoutube.js"
