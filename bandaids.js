@@ -71,7 +71,6 @@ var run_bandaids = function() {
         videoplayer.parentNode.replaceChild(replacement, videoplayer);
       }
       
-      function checkplayer() {
       if (document.querySelector("#movie_player")) {
         //the movie player is already inserted
         blockYoutubeAds(document.querySelector("#movie_player"));
@@ -84,8 +83,6 @@ var run_bandaids = function() {
           this.removeEventListener('DOMNodeInserted', arguments.callee, false);
         }, false);
       }
-      }
-      checkplayer();
       
       // Check if URL was changed, if yes then reload page
       var oldLocation = document.location.href;
