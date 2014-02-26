@@ -1,14 +1,14 @@
-
 // Disable HTML5 History API on YouTube
 document.location.href = "javascript:void(history.pushState = undefined);";
 
 // Initialize YouTube whitelist function
- var init = setInterval(function() {
+document.addEventListener("DOMNodeInserted", function() {
   var url = window.location.search;
   if (url.search("channel=") == -1) {
    YouTube();
   }
- },50);
+},true);
+ 
 
 function YouTube() {
  var getytname = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
