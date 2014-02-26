@@ -732,6 +732,17 @@
     return add_custom_filter(filter);
   }
 
+  // Creates a custom filter entry that whitelists YouTube channel
+  // Inputs: url:string url of the page
+  // Returns: null if successful, otherwise an exception
+  create_whitelist_filter_for_channel = function(url) {
+    var parts = url.match(/^([^\?]+)(\??)/); // Detect querystring
+    var channel = url.match(/channel=([^&]*)/)[1];
+    var filter = '@@|' + parts[1] + '*' + channel + '$document';
+    return add_custom_filter(filter);
+  }
+
+
   // Inputs: options object containing:
   //           domain:string the domain of the calling frame.
   get_content_script_data = function(options, sender) {

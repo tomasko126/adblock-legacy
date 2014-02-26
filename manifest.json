@@ -16,7 +16,8 @@
       "filtering/filternormalizer.js",
       "idlehandler.js",
       "search/search-plus-one.js",
-      "background.js"
+      "background.js",
+      "unblockyoutube.js"
     ]
   },
   "browser_action": {
@@ -53,6 +54,16 @@
       "run_at": "document_start",
       "all_frames": true
     },
+      {
+      "matches": [
+      "*://*.youtube.com/watch*"
+      ],
+      "js": [
+      "unblockyoutube.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": [
@@ -75,7 +86,7 @@
   "minimum_chrome_version": "23",
   "options_page": "options/index.html",
   "permissions": [
-    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation", "proxy", "notifications"
+    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation", "proxy", "notifications", "history"
   ],
   "web_accessible_resources": [
     "img/icon24.png",

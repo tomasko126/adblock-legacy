@@ -14,17 +14,17 @@ function customize_for_this_tab() {
     if (paused) {
       show(["div_status_paused", "separator0", "div_options"]);
     } else if (info.disabled_site) {
-      show(["div_status_disabled", "separator0", "div_pause_adblock", 
+      show(["div_status_disabled", "separator0", "div_pause_adblock",
             "div_options", "div_help_hide_start"]);
     } else if (info.whitelisted) {
-      show(["div_status_whitelisted", "div_show_resourcelist", 
-            "separator0", "div_pause_adblock", "separator1", 
+      show(["div_status_whitelisted", "div_show_resourcelist",
+            "separator0", "div_pause_adblock", "separator1",
             "div_options", "div_help_hide_start"]);
     } else {
-      show(["div_pause_adblock", "div_blacklist", "div_whitelist", 
-            "div_whitelist_page", "div_show_resourcelist", 
-            "div_report_an_ad", "separator1", "div_options", 
-            "div_help_hide_start", "separator3","block_counts"]);
+      show(["div_pause_adblock", "div_blacklist", "div_whitelist",
+            "div_whitelist_page", "div_show_resourcelist",
+            "div_report_an_ad", "separator1", "div_options",
+            "div_help_hide_start", "separator3","block_counts", "div_whitelist_channel"]);
       
       var page_count = info.tab_blocked || "0";
       $("#page_blocked_count").text(page_count);
@@ -48,9 +48,9 @@ function customize_for_this_tab() {
 
     if (!BG.get_settings().show_advanced_options)
       hide(["div_show_resourcelist"]);
-    
+
     for (var div in shown)
-      if (shown[div]) 
+      if (shown[div])
         $('#' + div).show();
 
     // Secure Search UI
@@ -109,6 +109,14 @@ $(function() {
     BG.getCurrentTabInfo(function(info) {
       var host          = parseUri(info.tab.url).host;
       BG.confirm_removal_of_custom_filters_on_host(host);
+      window.close();
+    });
+  });
+
+  $("#div_whitelist_channel").click(function() {
+    BG.getCurrentTabInfo(function(info) {
+      BG.create_whitelist_filter_for_channel(info.tab.url);
+      chrome.tabs.reload();
       window.close();
     });
   });
