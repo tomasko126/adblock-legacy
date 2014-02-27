@@ -10,10 +10,16 @@ if (document.location.href != unsecure && document.location.href != secure && do
   YouTube();
 }
 
+var putintoit;
+
 function YouTube() {
  var getytname = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
- var url = window.location.search;
- var putintoit = url+"&channel="+getytname;
+ var url = window.location.href;
+  if (url.search("user") > 0) {
+   putintoit = url+"?&channel="+getytname;
+  } else {
+   putintoit = url+"&channel="+getytname;
+  }
   if (url.search("channel=") < 0) {
    window.history.replaceState(null,null,putintoit);
    // Page must be reloaded, so AdBlock can properly whitelist a video
