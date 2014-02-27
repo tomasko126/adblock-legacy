@@ -58,6 +58,10 @@ safari.application.addEventListener("command", function(event) {
     } else {
       adblock_is_paused(true);
     }
+  } else if (command === "whitelist-youtubechannel") {
+    var tab = browserWindow.activeTab;
+    create_whitelist_filter_for_channel(tab.url);
+    tab.url = tab.url;
   } else if (command === "whitelist-currentpage") {
     var tab = browserWindow.activeTab;
     create_page_whitelist_filter(tab.url);
@@ -220,6 +224,7 @@ if (!LEGACY_SAFARI) {
             // require changing anything in translations and works nice anyway.
             appendMenuItem("unwhitelist-currentpage", translate("dont_run_on_this_page"), true);
           } else {
+            appendMenuItem("whitelist-youtubechannel", translate("whitelist_youtube_channel"));
             appendMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
             appendMenuItem("whitelist-currentpage", translate("dont_run_on_this_page"));
             appendMenuItem("show-whitelist-wizard", translate("dont_run_on_pages_on_domain"));
