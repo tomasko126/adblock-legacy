@@ -49,8 +49,8 @@ function customize_for_this_tab() {
     if (!BG.get_settings().show_advanced_options)
       hide(["div_show_resourcelist"]);
 
-    var currenttab = parseUri(info.tab.url).host;
-    if (currenttab === "www.youtube.com")
+    var current_tab = parseUri(info.tab.url).host;
+    if (current_tab === "www.youtube.com")
       show(["div_whitelist_channel"]);
     if (paused || info.disabled_site || info.whitelisted)
       hide(["div_whitelist_channel"]);
