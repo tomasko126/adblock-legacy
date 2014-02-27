@@ -17,7 +17,7 @@ if (document.location.href != unsecure && document.location.href != secure && do
 var putintoit;
 
 function YouTube() {
- var getytname = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
+ var getytname = document.getElementsByClassName("epic-nav-item-heading")[0].innerText || document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
  var url = window.location.href;
   if (url.search("user") > 0 || url.search("/channel/") > 0) {
    putintoit = url+"?&channel="+getytname;
