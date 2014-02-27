@@ -1,5 +1,7 @@
 // Disable HTML5 History API on YouTube
+window.onload = function() {
 document.location.href = "javascript:void(history.pushState = undefined);";
+}
 
 // Don't run on main page and search page
 var unsecure = "http://www.youtube.com/";
