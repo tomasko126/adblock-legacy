@@ -736,7 +736,6 @@
   // Inputs: url:string url of the page
   // Returns: null if successful, otherwise an exception
   create_whitelist_filter_for_channel = function(url) {
-    var parts = url.match(/^([^\?]+)(\??)/); // Detect querystring
     var channel = url.match(/channel=([^&]*)/)[1];
     var filter = '@@||youtube.com/*' + channel + '$document';
     return add_custom_filter(filter);
