@@ -1,9 +1,9 @@
 // Disable HTML5 History API on YouTube
 document.location.href = "javascript:void(history.pushState = undefined);";
 
-// It is unnecessary to run it on main page
-var oldLocation = "http://www.youtube.com/";
-if (document.location.href != oldLocation) {
+// Don't run on main page
+var mainpage = "http://www.youtube.com/" || "https://www.youtube.com/";
+if (document.location.href != mainpage) {
  window.onload = function() {
   YouTube();
  }
@@ -13,10 +13,9 @@ function YouTube() {
  var getytname = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
  var url = window.location.search;
  var putintoit = url+"&channel="+getytname;
-  if (url.search("channel=") > 0) {
-   return;
-  } else {
+  if (url.search("channel=") < 0) {
    window.history.replaceState(null,null,putintoit);
+   // Page must be reloaded, so AdBlock can properly whitelist a video
    document.location.reload();
   }
 };

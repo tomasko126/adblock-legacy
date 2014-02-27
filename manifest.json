@@ -16,8 +16,7 @@
       "filtering/filternormalizer.js",
       "idlehandler.js",
       "search/search-plus-one.js",
-      "background.js",
-      "unblockyoutube.js"
+      "background.js"
     ]
   },
   "browser_action": {
