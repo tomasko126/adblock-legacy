@@ -215,6 +215,10 @@ if (!LEGACY_SAFARI) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
+        if (!paused && !whitelisted && canBlock && host === "www.youtube.com") {
+        appendMenuItem("whitelist-youtubechannel", translate("whitelist_youtube_channel"));
+        menu.appendSeparator(itemIdentifier("separator0"));
+        }
         appendMenuItem("toggle-pause", translate("pause_adblock"), paused);
         if (!paused && canBlock) {
           if (whitelisted) {
@@ -224,7 +228,6 @@ if (!LEGACY_SAFARI) {
             // require changing anything in translations and works nice anyway.
             appendMenuItem("unwhitelist-currentpage", translate("dont_run_on_this_page"), true);
           } else {
-            appendMenuItem("whitelist-youtubechannel", translate("whitelist_youtube_channel"));
             appendMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
             appendMenuItem("whitelist-currentpage", translate("dont_run_on_this_page"));
             appendMenuItem("show-whitelist-wizard", translate("dont_run_on_pages_on_domain"));
