@@ -18,7 +18,7 @@ var new_url, get_yt_name;
 
 function YouTube() {
  var url = window.location.href;
-  if (url.search("user") > 0) {
+  if (url.search("user") > 0 || url.search("channel") > 0) {
    get_yt_name = document.getElementsByClassName("epic-nav-item-heading")[0].innerText;
   } else {
    get_yt_name = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
