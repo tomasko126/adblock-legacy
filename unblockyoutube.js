@@ -6,7 +6,7 @@ window.onload = function() {
 // Don't run on main page and search page
 var unsecure = "http://www.youtube.com/";
 var secure = "https://www.youtube.com/";
-if (document.location.href != unsecure && document.location.href != secure && document.location.href.search("feed") <  0  && document.location.href.search("search") == -1) {
+if (document.location.href != unsecure && document.location.href != secure && document.location.href.search("feed") < 0 && document.location.href.search("search") == -1) {
  YouTube();
 }
 
@@ -20,12 +20,9 @@ function YouTube() {
  var url = window.location.href;
   if (url.search("user") > 0 || url.search("channel") > 0) {
    get_yt_name = document.getElementsByClassName("epic-nav-item-heading")[0].innerText;
-  } else {
-   get_yt_name = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
-  }
-  if (url.search("user") > 0 || url.search("/channel/") > 0) {
    new_url = url+"?&channel="+get_yt_name;
   } else {
+   get_yt_name = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
    new_url = url+"&channel="+get_yt_name;
   }
   if (url.search("channel=") < 0) {
