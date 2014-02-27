@@ -4,9 +4,7 @@ document.location.href = "javascript:void(history.pushState = undefined);";
 // Don't run on main page
 var mainpage = "http://www.youtube.com/" || "https://www.youtube.com/";
 if (document.location.href != mainpage) {
- window.onload = function() {
   YouTube();
- }
 }
 
 function YouTube() {
