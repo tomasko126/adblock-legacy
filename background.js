@@ -741,7 +741,6 @@
     return add_custom_filter(filter);
   }
 
-
   // Inputs: options object containing:
   //           domain:string the domain of the calling frame.
   get_content_script_data = function(options, sender) {

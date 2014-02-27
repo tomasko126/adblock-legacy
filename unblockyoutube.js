@@ -10,6 +10,10 @@ if (document.location.href != unsecure && document.location.href != secure && do
   YouTube();
 }
 
+// Main function, which finds name of the channel and
+// put it at the end of URL like &channel=xyz where xyz
+// is name of the channel, so we are able to whitelist
+// channel easily
 var putintoit;
 
 function YouTube() {
