@@ -6,7 +6,7 @@ document.location.href = "javascript:void(history.pushState = undefined);";
 // Don't run on main page and search page
 var unsecure = "http://www.youtube.com/";
 var secure = "https://www.youtube.com/";
-if (document.location.href != unsecure && document.location.href != secure && document.location.href.search("search") == -1) {
+if (document.location.href != unsecure && document.location.href != secure && document.location.href.search("feed") <  0  && document.location.href.search("search") == -1) {
   YouTube();
 }
 
@@ -19,7 +19,7 @@ var putintoit;
 function YouTube() {
  var getytname = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
  var url = window.location.href;
-  if (url.search("user") > 0) {
+  if (url.search("user") > 0 || url.search("/channel/") > 0) {
    putintoit = url+"?&channel="+getytname;
   } else {
    putintoit = url+"&channel="+getytname;
