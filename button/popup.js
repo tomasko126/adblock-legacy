@@ -24,7 +24,7 @@ function customize_for_this_tab() {
       show(["div_pause_adblock", "div_blacklist", "div_whitelist",
             "div_whitelist_page", "div_show_resourcelist",
             "div_report_an_ad", "separator1", "div_options",
-            "div_help_hide_start", "separator3","block_counts", "div_whitelist_channel"]);
+            "div_help_hide_start", "separator3","block_counts"]);
       
       var page_count = info.tab_blocked || "0";
       $("#page_blocked_count").text(page_count);
@@ -48,6 +48,12 @@ function customize_for_this_tab() {
 
     if (!BG.get_settings().show_advanced_options)
       hide(["div_show_resourcelist"]);
+
+    var currenttab = parseUri(info.tab.url).host;
+    if (currenttab === "www.youtube.com")
+      show(["div_whitelist_channel"]);
+    if (paused || info.disabled_site || info.whitelisted)
+      hide(["div_whitelist_channel"]);
 
     for (var div in shown)
       if (shown[div])
