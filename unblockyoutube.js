@@ -1,6 +1,8 @@
 // Disable HTML5 History API on YouTube
+if (!SAFARI) {
 window.onload = function() {
- document.location.href = "javascript:void(history.pushState = undefined);";
+  document.location.href = "javascript:void(history.pushState = undefined);";
+ }
 }
 
 // Don't run on main page and search page
@@ -19,7 +21,7 @@ var new_url, get_yt_name;
 
 function YouTube() {
  var url = window.location.href;
-  if (url.search("user") > 0 || url.search("channel") > 0) {
+  if (url.search("user") > 0 || url.search("/channel") > 0) {
    get_yt_name = document.getElementsByClassName("epic-nav-item-heading")[0].innerText;
    new_url = url+"?&channel="+get_yt_name;
   } else {
@@ -31,4 +33,4 @@ function YouTube() {
    // Page must be reloaded, so AdBlock can properly whitelist a video
    document.location.reload();
   }
-};
+}
