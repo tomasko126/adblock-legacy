@@ -6,7 +6,8 @@ window.onload = function() {
 // Don't run on main page and search page
 var unsecure = "http://www.youtube.com/";
 var secure = "https://www.youtube.com/";
-if (document.location.href != unsecure && document.location.href != secure && document.location.href.search("feed") < 0 && document.location.href.search("search") == -1) {
+var address = document.location.href;
+if (address != unsecure && address != secure && address.search("feed") < 0 && address.search("search") == -1) {
  YouTube();
 }
 
