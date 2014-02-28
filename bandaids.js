@@ -40,6 +40,8 @@ var run_bandaids = function() {
     },
 
     youtube_safari_only: function() {
+     // Disable HTML5 History API on YouTube
+     document.location.href = "javascript:void(history.pushState = undefined);";
       function blockYoutubeAds(videoplayer) {
         var flashVars = videoplayer.getAttribute('flashvars');
         var inParam = false;
