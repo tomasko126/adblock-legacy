@@ -2,67 +2,69 @@ emit_page_broadcast = function(request) {
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
-// Map that will serve as cache for the block count.
-// key: Numeric - tab id.
-// value: Numeric - actual block count for the tab.
-var countMap = { };
-
 // Imitate frameData object for Safari to avoid issues when using blockCounts.
 frameData = (function() {
-  
+  // Map that will serve as cache for the block count.
+  // key: Numeric - tab id.
+  // value: Numeric - actual block count for the tab.
+  var countMap = { };
+
   return {
+    getCountMap: function() {
+      return countMap;
+    },
+
     // Get frameData for the tab.
     // Input:
     //  tabId:Numberic - id of the tab you want to get
     get: function(tabId) {
-      var trackedTab = countMap[tabId];
-      if (!trackedTab) {
-        trackedTab = frameData.create();
-      }
-      return trackedTab;
+      return countMap[tabId] || {};
     },
     
     // Create a new frameData
     // Input:
     //  tabId:Numeric - id of the tab you want to add in the frameData
-    create: function(activeTab, url) {
-      activeTab = activeTab || safari.application.activeBrowserWindow.activeTab;
-      if(activeTab) {
+    create: function(tabId, url, domain) {
+        var activeTab = safari.application.activeBrowserWindow.activeTab;
+        if(!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
+
         url = url || activeTab.url;
-        var tabId = activeTab.id;
-        var domain = parseUri(url || activeTab.url).hostname;
+        domain = domain || parseUri(url).hostname;
         var tracker = countMap[tabId];
 
-        var shouldTrack = !tracker || (tracker.url === url || tracker.domain !== domain);
+        var shouldTrack = !tracker || tracker.domain !== domain;
         if (shouldTrack) {
-          delete countMap[tabId];
           countMap[tabId] = { 
             blockCount: 0,
             domain: domain,
             url: url,
           };
-          return tracker;
         }
-      }
+        return tracker;
     },
   }
 })();
 
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
-    if (messageEvent.name != "canLoad")
-        return;
+  console.log(messageEvent);
+  if (messageEvent.name === "request") {
+    console.log(messageEvent);
+    var args = messageEvent.message.data.args;
+    if(messageEvent.target.url === args[1].tab.url)
+      frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
+    updateBadge();
+    return;
+  }
 
-    var tab = messageEvent.target;
-    var frameInfo = messageEvent.message.frameInfo;
-    chrome._tabInfo.notice(tab, frameInfo);
-    var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
-
-    if (adblock_is_paused() || page_is_unblockable(sendingTab.url) ||
-        page_is_whitelisted(sendingTab.url)) {
-        messageEvent.message = true;
-        return;
-    }
+  if (messageEvent.name !== "canLoad")
+    return;
+  
+  if (adblock_is_paused() || page_is_unblockable(messageEvent.target.url) ||
+      page_is_whitelisted(messageEvent.target.url)) {
+    messageEvent.message = true;
+    return;
+  }
 
     var url = messageEvent.message.url;
     var elType = messageEvent.message.elType;
