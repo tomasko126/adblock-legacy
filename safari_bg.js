@@ -2,55 +2,62 @@ emit_page_broadcast = function(request) {
   safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
-// Map that will serve as cache for the block count.
-// key: Numeric - tab id.
-// value: Numeric - actual block count for the tab.
-var countMap = { };
-
 // Imitate frameData object for Safari to avoid issues when using blockCounts.
 frameData = (function() {
-  
+  // Map that will serve as cache for the block count.
+  // key: Numeric - tab id.
+  // value: Numeric - actual block count for the tab.
+  var countMap = { };
+
   return {
+    getCountMap: function() {
+      return countMap;
+    },
+
     // Get frameData for the tab.
     // Input:
     //  tabId:Numberic - id of the tab you want to get
     get: function(tabId) {
-      var trackedTab = countMap[tabId];
-      if (!trackedTab) {
-        trackedTab = frameData.create();
-      }
-      return trackedTab;
+      return countMap[tabId] || {};
     },
     
     // Create a new frameData
     // Input:
     //  tabId:Numeric - id of the tab you want to add in the frameData
-    create: function(activeTab, url) {
-      activeTab = activeTab || safari.application.activeBrowserWindow.activeTab;
-      if(activeTab) {
+    create: function(tabId, url, domain) {
+        var activeTab = safari.application.activeBrowserWindow.activeTab;
+        if(!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
+
         url = url || activeTab.url;
-        var tabId = activeTab.id;
-        var domain = parseUri(url || activeTab.url).hostname;
+        domain = domain || parseUri(url).hostname;
         var tracker = countMap[tabId];
 
-        var shouldTrack = !tracker || (tracker.url === url || tracker.domain !== domain);
+        var shouldTrack = !tracker || tracker.domain !== domain;
         if (shouldTrack) {
-          delete countMap[tabId];
           countMap[tabId] = { 
             blockCount: 0,
             domain: domain,
             url: url,
           };
-          return tracker;
         }
-      }
+        return tracker;
     },
   }
 })();
 
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
-  if (messageEvent.name != "canLoad")
+  console.log(messageEvent);
+  if (messageEvent.name === "request") {
+    console.log(messageEvent);
+    var args = messageEvent.message.data.args;
+    if(messageEvent.target.url === args[1].tab.url)
+      frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
+    updateBadge();
+    return;
+  }
+
+  if (messageEvent.name !== "canLoad")
     return;
   
   if (adblock_is_paused() || page_is_unblockable(messageEvent.target.url) ||
@@ -77,17 +84,6 @@ safari.application.addEventListener("message", function(messageEvent) {
 
 // Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
 var windowByMenuId = {};
-
-safari.application.addEventListener("navigate", function(event){
-  console.log("navigate");
-  console.log(event);
-})
-// Listen to page request, this is triggered before firing a request.true;
-safari.application.addEventListener("beforeNavigate", function(event) {
-  console.log("beforeNavigate");
-  frameData.create(event.target, event.url);
-  updateBadge();
-}, true);
 
 // Listen to tab activation, this is triggered when a tab is activated or on focus.
 safari.application.addEventListener("activate", function(event) {
