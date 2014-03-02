@@ -58,9 +58,9 @@ safari.application.addEventListener("command", function(event) {
     } else {
       adblock_is_paused(true);
     }
-  } else if (command === "whitelist-youtubechannel") {
+  } else if (command === "whitelist-youtube-channel") {
     var tab = browserWindow.activeTab;
-    create_whitelist_filter_for_channel(tab.url);
+    create_whitelist_filter_for_youtube_channel(tab.url);
     tab.url = tab.url;
   } else if (command === "whitelist-currentpage") {
     var tab = browserWindow.activeTab;
@@ -217,11 +217,11 @@ if (!LEGACY_SAFARI) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
-        if ((path.search("watch") > 0 || path.search("user") > 0 || path.search("channel") > 0) && host === "www.youtube.com") {
+        if ((path.search("watch" || "user" || "channel") > 0) && host === "www.youtube.com" && !paused && !whitelisted && canBlock) {
           should_show = true;
         }
         if (should_show) {
-        appendMenuItem("whitelist-youtubechannel", translate("whitelist_youtube_channel"));
+        appendMenuItem("whitelist-youtube-channel", translate("whitelist_youtube_channel"));
         menu.appendSeparator(itemIdentifier("separator0"));
         }
         appendMenuItem("toggle-pause", translate("pause_adblock"), paused);

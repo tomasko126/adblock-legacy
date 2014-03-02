@@ -58,7 +58,7 @@
       "*://*.youtube.com/*"
       ],
       "js": [
-      "unblockyoutube.js"
+      "ytchannel.js"
       ],
       "run_at": "document_end",
       "all_frames": true

@@ -41,25 +41,22 @@ function customize_for_this_tab() {
         });
     }
 
+    var host = parseUri(info.tab.url).host;
     var eligible_for_undo = !paused && (info.disabled_site || !info.whitelisted);
-    var url_to_check_for_undo = info.disabled_site ? undefined : parseUri(info.tab.url).host;
+    var url_to_check_for_undo = info.disabled_site ? undefined : host;
     if (eligible_for_undo && BG.count_cache.getCustomFilterCount(url_to_check_for_undo))
       show(["div_undo", "separator0"]);
 
     if (!BG.get_settings().show_advanced_options)
       hide(["div_show_resourcelist"]);
 
-    var host = parseUri(info.tab.url).host;
     var path = parseUri(info.tab.url).pathname;
     var should_show;
-    if ((path.search("watch") > 0 || path.search("user") > 0 || path.search("channel") > 0) && host === "www.youtube.com") {
+    if ((path.search("watch" || "user" || "channel") > 0) && host === "www.youtube.com" && !paused && !info.whitelisted && !info.disabled) {
       should_show = true;
     }
-
     if (should_show)
       show(["div_whitelist_channel"]);
-    if (paused || info.disabled_site || info.whitelisted)
-      hide(["div_whitelist_channel"]);
 
     for (var div in shown)
       if (shown[div])
@@ -127,7 +124,7 @@ $(function() {
 
   $("#div_whitelist_channel").click(function() {
     BG.getCurrentTabInfo(function(info) {
-      BG.create_whitelist_filter_for_channel(info.tab.url);
+      BG.create_whitelist_filter_for_youtube_channel(info.tab.url);
       chrome.tabs.reload();
       window.close();
     });
