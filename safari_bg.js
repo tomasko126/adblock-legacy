@@ -210,14 +210,13 @@ if (!LEGACY_SAFARI) {
         var canBlock = !page_is_unblockable(url);
         var whitelisted = page_is_whitelisted(url);
         var host = parseUri(url).host;
-        var path = parseUri(url).pathname;
         var should_show;
         var eligible_for_undo = !paused && (!canBlock || !whitelisted);
         if (eligible_for_undo && count_cache.getCustomFilterCount(host)) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
-        if (path.search("channel") > 0 && host === "www.youtube.com" && !paused && !whitelisted && canBlock) {
+        if ((url.search("channel") > 0) && host === "www.youtube.com" && !paused && !whitelisted && canBlock) {
           should_show = true;
         }
         if (should_show) {

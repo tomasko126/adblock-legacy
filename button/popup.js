@@ -50,7 +50,7 @@ function customize_for_this_tab() {
     if (!BG.get_settings().show_advanced_options)
       hide(["div_show_resourcelist"]);
 
-    var path = parseUri(info.tab.url).pathname;
+    var path = info.tab.url;
     var should_show;
     if (path.search("channel") > 0 && host === "www.youtube.com" && !paused && !info.whitelisted && !info.disabled) {
       should_show = true;
