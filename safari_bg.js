@@ -217,7 +217,7 @@ if (!LEGACY_SAFARI) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
-        if ((path.search("channel") > 0) && host === "www.youtube.com" && !paused && !whitelisted && canBlock) {
+        if (path.search("channel") > 0 && host === "www.youtube.com" && !paused && !whitelisted && canBlock) {
           should_show = true;
         }
         if (should_show) {

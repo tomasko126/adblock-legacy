@@ -52,7 +52,7 @@ function customize_for_this_tab() {
 
     var path = parseUri(info.tab.url).pathname;
     var should_show;
-    if ((path.search("channel") > 0) && host === "www.youtube.com" && !paused && !info.whitelisted && !info.disabled) {
+    if (path.search("channel") > 0 && host === "www.youtube.com" && !paused && !info.whitelisted && !info.disabled) {
       should_show = true;
     }
     if (should_show)
