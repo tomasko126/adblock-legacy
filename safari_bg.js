@@ -216,12 +216,9 @@ if (!LEGACY_SAFARI) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
-        if ((url.search("channel") > 0) && host === "www.youtube.com" && !paused && !whitelisted && canBlock) {
-          should_show = true;
-        }
-        if (should_show) {
-        appendMenuItem("whitelist-youtube-channel", translate("whitelist_youtube_channel"));
-        menu.appendSeparator(itemIdentifier("separator0"));
+        if (host === "www.youtube.com" && url.search("channel") > 0 && !paused && !whitelisted && canBlock) {
+          appendMenuItem("whitelist-youtube-channel", translate("whitelist_youtube_channel"));
+          menu.appendSeparator(itemIdentifier("separator0"));
         }
         appendMenuItem("toggle-pause", translate("pause_adblock"), paused);
         if (!paused && canBlock) {

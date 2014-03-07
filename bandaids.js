@@ -40,8 +40,6 @@ var run_bandaids = function() {
     },
 
     youtube_safari_only: function() {
-     // Disable HTML5 History API on YouTube
-     document.location.href = "javascript:void(history.pushState = undefined);";
       function blockYoutubeAds(videoplayer) {
         var flashVars = videoplayer.getAttribute('flashvars');
         var inParam = false;
@@ -85,6 +83,8 @@ var run_bandaids = function() {
           this.removeEventListener('DOMNodeInserted', arguments.callee, false);
         }, false);
       }
+      // Disable history.pushState() for whitelisting YouTube channels
+      document.location.href = "javascript:void(history.pushState = undefined);";
     },
     getadblock: function() {
       BGcall('get_adblock_user_id', function(adblock_user_id) {

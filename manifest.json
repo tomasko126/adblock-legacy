@@ -53,12 +53,12 @@
       "run_at": "document_start",
       "all_frames": true
     },
-      {
+    {
       "matches": [
-      "*://*.youtube.com/*"
+        "*://*.youtube.com/*"
       ],
       "js": [
-      "ytchannel.js"
+        "ytchannel.js"
       ],
       "run_at": "document_end",
       "all_frames": true
