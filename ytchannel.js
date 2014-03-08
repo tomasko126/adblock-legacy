@@ -1,14 +1,12 @@
 // Run just on YouTube
 if (/youtube/.test(document.location.hostname)) {
-  // Disable history.pushState() in Chrome and Opera,
+  // Disable history.pushState() on YouTube,
   // so we won't have problems with navigation and running this code.
-  // For Safari see bandaids.js
-  if (!SAFARI) {
-    window.onload = function() {
-      document.location.href = "javascript:void(history.pushState = undefined);";
-    }
-  }
-
+  // TODO: Handle this code more efficiently, after the page has been loaded
+  setTimeout(function() {
+    document.location.href = "javascript:void(history.pushState = undefined);";
+  },250);
+  
   // Don't run on main, search and feed page
   var unsecure = "http://www.youtube.com/";
   var secure = "https://www.youtube.com/";
@@ -36,7 +34,7 @@ if (/youtube/.test(document.location.hostname)) {
       // Add the name of the channel to the end of URL
       window.history.replaceState(null,null,new_url);
       // Page must be reloaded, so AdBlock can properly whitelist the page
-      location.reload();
+      document.location.reload();
     }
   }
 }

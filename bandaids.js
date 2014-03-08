@@ -83,8 +83,6 @@ var run_bandaids = function() {
           this.removeEventListener('DOMNodeInserted', arguments.callee, false);
         }, false);
       }
-      // Disable history.pushState() for whitelisting YouTube channels
-      document.location.href = "javascript:void(history.pushState = undefined);";
     },
     getadblock: function() {
       BGcall('get_adblock_user_id', function(adblock_user_id) {
