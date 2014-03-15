@@ -18,13 +18,14 @@ if (/youtube/.test(document.location.hostname)) {
         clearInterval(_timer);
         document.location.href = "javascript:void(history.pushState = undefined);";
       }
-    }, 250)
+    }, 50)
   }
 
-  // Remove body when YouTube is loading another video,
-  // so we don't see the same page twice in some cases
+  // Remove body when YouTube is loading another video in Safari,
+  // so the same page won't be displayed twice in some cases
   window.onbeforeunload = function() {
-    document.body.parentNode.removeChild(document.body);
+    if (SAFARI)
+      document.body.parentNode.removeChild(document.body);
   }
 
   // Don't run on main, search and feed page
