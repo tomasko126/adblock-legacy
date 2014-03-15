@@ -21,11 +21,10 @@ if (/youtube/.test(document.location.hostname)) {
     }, 50)
   }
 
-  // Remove body when YouTube is loading another video in Safari,
-  // so the same page won't be displayed twice in some cases
+  // Hide body when YouTube is loading another video,
+  // so the next page won't be displayed twice in some cases
   window.onbeforeunload = function() {
-    if (SAFARI)
-      document.body.parentNode.removeChild(document.body);
+    document.body.style.display = "none";
   }
 
   // Don't run on main, search and feed page
@@ -34,6 +33,9 @@ if (/youtube/.test(document.location.hostname)) {
   var address = document.location.href;
   if (address !== unsecure && address !== secure && address.search("feed") < 0 && address.search("search") < 0) {
     changeURL();
+    if (address.search("channel") < 1) {
+      document.body.style.display = "none";
+    }
   }
 
   // Main function, which finds name of the channel and puts it at the end of the URL.
@@ -44,14 +46,18 @@ if (/youtube/.test(document.location.hostname)) {
     // Grab name of the channel
     if (url.search("user") > 0 || url.search("/channel") > 0) {
       var get_yt_name = document.getElementsByClassName("epic-nav-item-heading")[0].innerText;
-      var new_url = url+"?&channel="+get_yt_name;
+      var extracted_name = get_yt_name.replace(/\s/g, '');
+      var new_url = url+"?&channel="+extracted_name;
     } else {
-      var get_yt_name = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
-      var new_url = url+"&channel="+get_yt_name;
+      try {
+        var get_yt_name = document.getElementsByClassName("yt-user-name")[0].innerText || document.getElementsByClassName("yt-user-name")[1].innerText;
+        var extracted_name = get_yt_name.replace(/\s/g, '');
+        var new_url = url+"&channel="+extracted_name;
+      } catch (e) {} // Silently fail
     }
     if (url.search("channel=") < 0) {
-      // We remove the body of the page, so user won't see reloading of the page
-      document.body.parentNode.removeChild(document.body);
+      // We hide body of the page, so user won't see reloading of the page
+      document.body.style.display = "none";
       // Add the name of the channel to the end of URL
       window.history.replaceState(null,null,new_url);
       // Page must be reloaded, so AdBlock can properly whitelist the page

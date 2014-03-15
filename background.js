@@ -7,7 +7,7 @@
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
   });
-  
+
   if (!SAFARI) {
     // Records how many ads have been blocked by AdBlock.  This is used
     // by the AdBlock app in the Chrome Web Store to display statistics
@@ -15,7 +15,7 @@
     var blockCounts = (function() {
       var key = "blockage_stats";
       var data = storage_get(key);
-      if (!data) 
+      if (!data)
         data = {};
       if (data.start === undefined)
         data.start = Date.now();
@@ -29,15 +29,15 @@
           var data = storage_get(key);
           data.total += 1;
           storage_set(key, data);
-          
+
           //code for incrementing ad blocks
           currentTab = frameData.get(tabId);
           if(currentTab){
             currentTab.blockCount++;
           }
         },
-        get: function() { 
-          return storage_get(key); 
+        get: function() {
+          return storage_get(key);
         },
         getTotalAdsBlocked: function(tabId){
           if(tabId){
@@ -162,7 +162,7 @@
           fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
         }
       },
-      
+
       // Watch for requests for new tabs and frames, and track their URLs.
       // Inputs: details: object from onBeforeRequest callback
       // Returns false if this request's tab+frame are not trackable.
@@ -261,7 +261,7 @@
         // the frame, ignore the anchor when matching.
         var frameUrl = frameData.get(tabId, requestingFrameId).url.replace(/#.*$/, "");
         var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url:details.url, elType: elType };
-        chrome.tabs.sendRequest(tabId, data); 
+        chrome.tabs.sendRequest(tabId, data);
       }
 
       if (blocked){
@@ -322,8 +322,8 @@
         continue;
       try {
         var filter = PatternFilter.fromText(text);
-      } catch (ex) { 
-        continue; 
+      } catch (ex) {
+        continue;
       }
       if (!filter.matches(url, ElementTypes.document, false))
         continue;
@@ -348,7 +348,7 @@
   }
 
   // CUSTOM FILTERS
-  
+
   // Get the custom filters text as a \n-separated text string.
   get_custom_filters_text = function() {
     return storage_get('custom_filters') || '';
@@ -370,18 +370,18 @@
     var custom_filters_arr = text ? text.split("\n"):[];
     var new_custom_filters_arr = [];
     var identifier = host + "##"; //append delimiter to make sure it is the identifier
-    
+
     for(var i = 0; i < custom_filters_arr.length; i++) {
       var entry = custom_filters_arr[i];
       //Make sure that the identifier is at the start of the entry
       if(entry.indexOf(identifier) === 0) { continue; }
       new_custom_filters_arr.push(entry);
     }
-    
+
     text = new_custom_filters_arr.join("\n");
     set_custom_filters_text(text.trim());
   }
-  
+
   // count_cache singleton.
   var count_cache = (function(count_map) {
     var cache = count_map;
@@ -389,7 +389,7 @@
     var _updateCustomFilterCount = function() {
       storage_set("custom_filter_count", cache);
     };
-    
+
     return {
       // Update custom filter count cache and value stored in localStorage.
       // Inputs: new_count_map:count map - count map to replace existing count cache
@@ -419,17 +419,17 @@
       }
     }
   })(storage_get("custom_filter_count") || {});
-  
+
   // Entry point for customize.js, used to update custom filter count cache.
   updateCustomFilterCountMap = function(new_count_map) {
     count_cache.updateCustomFilterCountMap(new_count_map);
   }
-  
+
   remove_custom_filter_for_host = function(host) {
     if(count_cache.getCustomFilterCount(host)) {
       remove_custom_filter(host);
       count_cache.removeCustomFilterCount(host);
-    } 
+    }
   }
 
   confirm_removal_of_custom_filters_on_host = function(host) {
@@ -479,7 +479,7 @@
     }
     return result;
   }
-  
+
   // Subscribes to a filter subscription.
   // Inputs: id: id to which to subscribe.  Either a well-known
   //             id, or "url:xyz" pointing to a user-specified list.
@@ -513,7 +513,7 @@
       return (scheme !== 'http:' && scheme !== 'https:' && scheme !== 'feed:');
     }
   }
-  
+
   // Get or set if AdBlock is paused
   // Inputs: newValue (optional boolean): if true, AdBlock will be paused, if
   //                  false, AdBlock will not be paused.
@@ -563,7 +563,7 @@
       var total_blocked = blockCounts.getTotalAdsBlocked();
       var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
       var display_stats = get_settings().display_stats;
-      
+
       var result = {
         tab: tab,
         disabled_site: disabled_site,
@@ -577,7 +577,7 @@
       callback(result);
     });
   }
-  
+
   // Returns true if anything in whitelist matches the_domain.
   //   url: the url of the page
   //   type: one out of ElementTypes, default ElementTypes.document,
@@ -597,7 +597,7 @@
     set_setting("display_stats", isChecked);
     updateBadge(tabId);
   }
-  
+
   if (!SAFARI) {
     updateBadge = function(tabId) {
       var display = get_settings().display_stats;
@@ -605,9 +605,9 @@
       var main_frame = frameData.get(tabId, 0);
       // main_frame is undefined if the tab is a new one, so no use updating badge.
       if (!main_frame) return;
-      
+
       var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url);
-      
+
       if(display && (main_frame && isBlockable) && !adblock_is_paused()){
         badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
         if (badge_text === "0")
@@ -636,7 +636,7 @@
             onclick: function(clickdata, tab) { callback(tab, clickdata); }
           });
         }
-        
+
         addMenu(translate("block_this_ad"), function(tab, clickdata) {
           emit_page_broadcast(
             {fn:'top_open_blacklist_ui', options:{info: clickdata}},
@@ -650,7 +650,7 @@
             {tab: tab}
           );
         });
-        
+
         var host                = parseUri(info.tab.url).host;
         var custom_filter_count = count_cache.getCustomFilterCount(host);
         if (custom_filter_count) {
@@ -736,7 +736,8 @@
   // Inputs: url:string url of the page
   // Returns: null if successful, otherwise an exception
   create_whitelist_filter_for_youtube_channel = function(url) {
-    var channel = url.match(/channel=([^&]*)/)[1];
+    var get_channel = url.match(/channel=([^&]*)/)[1];
+    var channel = get_channel.replace(/\s/g, '');
     var filter = '@@||youtube.com/*' + channel + '$document';
     return add_custom_filter(filter);
   }
@@ -869,12 +870,12 @@
       }
     );
   })();
-  
+
   // BROWSER ACTION AND CONTEXT MENU UPDATES
   (function() {
     if (SAFARI)
       return;
-    
+
     //TEMP: until crbug.com/60435 is fixed, check if chrome.tabs exists.
     //Otherwise the extension doesn't work (e.g. doesn't block ads)
     if (chrome.tabs) {
