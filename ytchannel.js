@@ -41,7 +41,7 @@ BGcall("get_settings", function(settings) {
         var url = document.location.href;
         // Grab name of the channel
         if (/user|channel/.test(document.location.href)) {
-          var get_yt_name = document.getElementsByClassName("epic-nav-item-heading")[0].innerText;
+          var get_yt_name = document.getElementsByClassName("qualified-channel-title")[0].innerText;
           var extracted_name = get_yt_name.replace(/\s/g, '');
           var new_url = url+"?&channel="+extracted_name;
         } else {
