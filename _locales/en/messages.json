@@ -1282,5 +1282,9 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Allow whitelisting of specific YouTube channels",
+    "description":"Option on first tab"
   }
 }

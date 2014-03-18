@@ -25,11 +25,11 @@ function customize_for_this_tab() {
             "div_whitelist_page", "div_show_resourcelist",
             "div_report_an_ad", "separator1", "div_options",
             "div_help_hide_start", "separator3","block_counts"]);
-      
+
       var page_count = info.tab_blocked || "0";
       $("#page_blocked_count").text(page_count);
       $("#total_blocked_count").text(info.total_blocked);
-      
+
       $("#toggle_badge_checkbox").attr("checked", info.display_stats);
       // Show help link until it is clicked.
       $("#block_counts_help").
@@ -52,7 +52,7 @@ function customize_for_this_tab() {
 
     var path = info.tab.url;
     var should_show;
-    if (path.search("channel") > 0 && host === "www.youtube.com" && !paused && !info.whitelisted && !info.disabled) {
+    if (host === "www.youtube.com" && path.search("channel") > 0 && !paused && !info.whitelisted && !info.disabled && BG.get_settings().youtube_channel_whitelist) {
       should_show = true;
     }
     if (should_show)
@@ -89,7 +89,7 @@ $(function() {
       BG.updateDisplayStats(checked, info.tab.id);
     });
   });
-  
+
   $("#titletext span").click(function() {
     var url = "https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom";
     BG.openTab(url);
@@ -214,7 +214,7 @@ $(function() {
     $("#menu-items").slideUp();
     $("#slideout_wrapper").
       width(0).height(0).show().
-      animate({width: slideoutWidth-50, height: slideoutHeight-40}, 
+      animate({width: slideoutWidth-50, height: slideoutHeight-40},
               {queue:false});
   });
   $("#link_close").click(function() {

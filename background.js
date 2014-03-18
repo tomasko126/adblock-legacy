@@ -60,6 +60,7 @@
   function Settings() {
     var defaults = {
       debug_logging: false,
+      youtube_channel_whitelist: false,
       show_google_search_text_ads: false,
       whitelist_hulu_ads: false, // Issue 7178
       show_context_menu_items: true,

@@ -82,10 +82,10 @@ safari.application.addEventListener("command", function(event) {
     var tab = browserWindow.activeTab;
     var host = parseUri(tab.url).host;
     var count = count_cache.getCustomFilterCount(host);
-    
+
     var confirmation_text   = translate("confirm_undo_custom_filters", [count, host]);
     if(!confirm(confirmation_text)) { return; }
-      
+
     remove_custom_filter_for_host(host);
     if (!page_is_unblockable(tab.url))
       tab.url = tab.url;
@@ -216,7 +216,7 @@ if (!LEGACY_SAFARI) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
-        if (host === "www.youtube.com" && url.search("channel") > 0 && !paused && !whitelisted && canBlock) {
+        if (host === "www.youtube.com" && get_settings().youtube_channel_whitelist && !paused && !whitelisted && canBlock) {
           appendMenuItem("whitelist-youtube-channel", translate("whitelist_youtube_channel"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
@@ -235,7 +235,7 @@ if (!LEGACY_SAFARI) {
           }
         }
         menu.appendSeparator(itemIdentifier("separator"));
-        if (!paused && canBlock && !whitelisted && get_settings().show_advanced_options) {
+        if (!paused && canBlock && !whitelisted && get_settings().show_advanced_options && url.search("channel") > 0) {
           appendMenuItem("report-ad", translate("report_ad_on_page"));
         }
         appendMenuItem("AdBlockOptions", translate("options"));
