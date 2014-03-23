@@ -10,7 +10,7 @@ if (/youtube/.test(document.location.hostname)) {
     }
   // Onload event is fired differently in Safari,
   // so we have to check whether the page has been completely loaded
-  // or not by using readyState event
+  // or not by using readyState event.
   } else {
     var disable_history_api = setInterval(function() {
       if (/loaded|complete/.test(document.readyState)) {
@@ -20,6 +20,15 @@ if (/youtube/.test(document.location.hostname)) {
     }, 50);
   }
 };
+
+// In Safari when clicking from one video to another,
+// users can see loading of the next page and 
+// then the reload of the already chosen page.
+// This prevents users to see this behaviour.
+window.onbeforeunload = function() {
+  if (SAFARI)
+  document.body.style.display = "none";
+}
 
 // Get enabled settings
 var enabled_settings = [];
@@ -51,10 +60,12 @@ BGcall("get_settings", function(settings) {
             var new_url = url+"&channel="+extracted_name;
           } catch (e) {} // Silently fail
         }
+        if (url.search("channel=") < 0) {
         // Add the name of the channel to the end of URL
         window.history.replaceState(null,null,new_url);
         // Page must be reloaded, so AdBlock can properly whitelist the page
         document.location.reload();
+        }
       }
     }
   }
