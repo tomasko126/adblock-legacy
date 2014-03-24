@@ -514,8 +514,6 @@
       return sessionStorage.getItem('adblock_is_paused') === "true";
     }
     sessionStorage.setItem('adblock_is_paused', newValue);
-    if (_myfilters.styleSheetRegistrar)
-      _myfilters.styleSheetRegistrar.pause(newValue);
   }
 
   // INFO ABOUT CURRENT PAGE
@@ -736,16 +734,8 @@
       running: running,
       hiding: hiding
     };
-    if (_myfilters.styleSheetRegistrar) {
-      _myfilters.styleSheetRegistrar.prepareFor(options.domain);
-      result.avoidHidingClass = StyleSheetRegistrar.avoidHidingClass;
-      if (settings.debug_logging && hiding) {
-        var filters = _myfilters.styleSheetRegistrar._filters;
-        var filterset = FilterSet.fromFilters(filters);
-        result.selectors = filterset.filtersFor(options.domain);
-      }
-    }
-    if (!_myfilters.styleSheetRegistrar && hiding) {
+
+    if (hiding) {
       result.selectors = _myfilters.hiding.filtersFor(options.domain);
     }
     return result;
