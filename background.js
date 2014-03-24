@@ -64,19 +64,12 @@
       whitelist_hulu_ads: false, // Issue 7178
       show_context_menu_items: true,
       show_advanced_options: false,
-      new_safari_hiding: false,
       display_stats: true,
       show_block_counts_help_link: true,
     };
     var settings = storage_get('settings') || {};
     this._data = $.extend(defaults, settings);
 
-    // new_safari_hiding should NEVER be set to true outside Safari 6.  Leaving
-    // this code here to remember this when we switch new_safari_hiding from
-    // opt-in to opt-out in Safari 6: even if somehow a non-Safari-6 user gets
-    // this set to true, it will be reset when they restart their browser.
-    if (!SAFARI6)
-      this._data.new_safari_hiding = false;
   };
   Settings.prototype = {
     set: function(name, is_enabled) {
@@ -449,9 +442,6 @@
 
     if (name === "debug_logging")
       logging(is_enabled);
-
-    if (name === "new_safari_hiding")
-      update_filters();
   }
 
   // MYFILTERS PASSTHROUGHS
