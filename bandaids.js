@@ -87,13 +87,12 @@ var run_bandaids = function() {
         }, false);
       }
       
-      // Disable history.pushState() to prevent overwriting our flashvars by Flash
-      // if history.pushState is available, YouTube uses the history API
-      // when navigation from one video to another, and tells the flash
-      // player via JavaScript which ads to show next,
-      // bypassing the flashvars rewrite code. Disabling
-      // history.pushState on pages with YouTube's flash player will force
-      // youtube to not use history.pushState
+      // If history.pushState is available,
+      // YouTube uses it when navigating from one video
+      // to another and tells the flash player via JavaScript,
+      // which ads to show next bypassing the flashvars rewrite code.
+      // Disabling history.pushState on pages with YouTube's flash player
+      // will force YouTube to not use history.pushState
       document.location.href = "javascript:void(window.history.pushState = undefined);";
     },
     getadblock: function() {
