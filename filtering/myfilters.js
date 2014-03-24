@@ -216,21 +216,6 @@ MyFilters.prototype.rebuild = function() {
     filters.hiding[hider.id] = hider;
   }
 
-  if (SAFARI6) {
-    var new_hiding = get_settings().new_safari_hiding;
-    if (new_hiding && !this.styleSheetRegistrar) {
-      logGroup("Creating StyleSheetRegistrar");
-      this.styleSheetRegistrar = new StyleSheetRegistrar();
-      logGroupEnd();
-    }
-    else if (!new_hiding && this.styleSheetRegistrar) {
-      logGroup("Deleting StyleSheetRegistrar");
-      this.styleSheetRegistrar.pause(true);
-      delete this.styleSheetRegistrar;
-      logGroupEnd();
-    }
-  }
-
   if (this.styleSheetRegistrar)
     this.styleSheetRegistrar.register(filters.hiding);
   else
