@@ -56,10 +56,13 @@ var run_bandaids = function() {
             return;
 
         log("Removing YouTube ads");
-        var adReplaceRegex = /\&((ad_\w+?|prerolls|interstitial|watermark|infringe)\=[^\&]*)+/gi;
-        flashVars = flashVars.replace(adReplaceRegex, '');
-        flashVars = flashVars.replace(/\&invideo\=True/i, '&invideo=False');
-        flashVars = flashVars.replace(/\&ad3_module\=[^\&]*/i, '&ad3_module=about:blank');
+        var pairs = flashVars.split("&");
+        for (var i = 0; i < pairs.length; i++) {
+            if (/^((ad|afv|adsense|iv)(_.*)?|(ad3|iv3|st)_module|prerolls|interstitial|infringe|invideo)=/.test(pairs[i])) {
+                pairs.splice(i--, 1);
+            }
+        }
+        flashVars = pairs.join("&");
         var replacement = videoplayer.cloneNode(true);
         if (inParam) {
             // Grab new <param> and set its flashvars
@@ -85,6 +88,12 @@ var run_bandaids = function() {
       }
       
       // Disable history.pushState() to prevent overwriting our flashvars by Flash
+      // if history.pushState is available, YouTube uses the history API
+      // when navigation from one video to another, and tells the flash
+      // player via JavaScript which ads to show next,
+      // bypassing the flashvars rewrite code. Disabling
+      // history.pushState on pages with YouTube's flash player will force
+      // youtube to not use history.pushState
       document.location.href = "javascript:void(window.history.pushState = undefined);";
     },
     getadblock: function() {
