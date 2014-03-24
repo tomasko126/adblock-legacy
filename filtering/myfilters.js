@@ -216,10 +216,7 @@ MyFilters.prototype.rebuild = function() {
     filters.hiding[hider.id] = hider;
   }
 
-  if (this.styleSheetRegistrar)
-    this.styleSheetRegistrar.register(filters.hiding);
-  else
-    this.hiding = FilterSet.fromFilters(filters.hiding);
+  this.hiding = FilterSet.fromFilters(filters.hiding);
 
   this.blocking = new BlockingFilterSet(
     FilterSet.fromFilters(filters.pattern), 
