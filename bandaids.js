@@ -86,14 +86,6 @@ var run_bandaids = function() {
           this.removeEventListener('DOMNodeInserted', arguments.callee, false);
         }, false);
       }
-      
-      // If history.pushState is available,
-      // YouTube uses it when navigating from one video
-      // to another and tells the flash player via JavaScript,
-      // which ads to show next bypassing the flashvars rewrite code.
-      // Disabling history.pushState on pages with YouTube's flash player
-      // will force YouTube to not use history.pushState
-      document.location.href = "javascript:void(window.history.pushState = undefined);";
     },
     getadblock: function() {
       BGcall('get_adblock_user_id', function(adblock_user_id) {
