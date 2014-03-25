@@ -1,6 +1,6 @@
 $(function() {
   localizePage();
-  
+
   //Shows the instructions for how to enable all extensions according to the browser of the user
   if(SAFARI) {
     $(".chrome_only").hide();
@@ -8,10 +8,14 @@ $(function() {
     $(".safari_only").hide();
     var messageElement = $("li[i18n='disableforchromestepone']");
     messageElement.find("a").click(function() {
-      chrome.tabs.create({url: 'chrome://chrome/extensions/'});
+    if (OPERA) {
+      chrome.tabs.create({url: 'opera://extensions/'});
+    } else {
+      chrome.tabs.create({url: 'chrome://extensions/'});
+    }
     });
   }
-  
+
   // Sort the languages list
   var languageOptions = $("#step_language_lang option");
   languageOptions.sort(function(a,b) {
@@ -111,6 +115,11 @@ function generateReportURL() {
   return result;
 }
 
+// Auto-scroll to bottom of the page
+$("input, select").change(function(event) {
+  event.preventDefault();
+  $("html, body").animate({ scrollTop: 15000 }, 50);
+});
 
 
 // STEP 1: update filters
@@ -126,11 +135,11 @@ $("#UpdateFilters").click(function() {
 //if the user clicks a radio button
 $("#step_update_filters_no").click(function() {
   $("#step_update_filters").html("<span class='answer'>" + translate("no") + "</span>");
-  $("#whattodo").text(translate("adalreadyblocked"));
+  $("#checkupdate").text(translate("adalreadyblocked"));
 });
 $("#step_update_filters_yes").click(function() {
   $("#step_update_filters").html("<span class='answer'>" + translate("yes") + "</span>");
-  $("#step_disable_extensions_DIV").css("display", "block");
+  $("#step_disable_extensions_DIV").fadeIn().css("display", "block");
 });
 
 // STEP 2: disable all extensions
@@ -141,11 +150,11 @@ $("#step_update_filters_yes").click(function() {
 //if the user clicks a radio button
 $("#step_disable_extensions_no").click(function() {
   $("#step_disable_extensions").html("<span class='answer'>" + translate("no") + "</span>");
-  $("#whattodo").text(translate("reenableadsonebyone"));
+  $("#checkupdate").text(translate("reenableadsonebyone"));
 });
 $("#step_disable_extensions_yes").click(function() {
   $("#step_disable_extensions").html("<span class='answer'>" + translate("yes") + "</span>");
-  $("#step_language_DIV").css("display", "block");
+  $("#step_language_DIV").fadeIn().css("display", "block");
 });
 
 
@@ -157,21 +166,21 @@ $("#step_language_lang").change(function() {
   var selected = $("#step_language_lang option:selected");
   $("#step_language").html("<span class='answer'>"+ selected.text() +"</span>");
   if (selected.text() == translate("other")) {
-    $("#whattodo").html(translate("nodefaultfilter1",
+    $("#checkupdate").html(translate("nodefaultfilter1",
                                   ["<a href='https://adblockplus.org/en/subscriptions'>", "</a>"]));
     return;
   } else {
     var required_lists = selected.attr('value').split(';');
     for (var i=0; i < required_lists.length - 1; i++) {
       if (unsubscribed_default_filters[required_lists[i]]) {
-        $("#whattodo").text(translate("retryaftersubscribe", [translate("filter" + required_lists[i])]));
+        $("#checkupdate").text(translate("retryaftersubscribe", [translate("filter" + required_lists[i])]));
         return;
       }
     }
   }
   contact = required_lists[required_lists.length-1];
 
-  $("#step_firefox_DIV").css("display", "block");
+  $("#step_firefox_DIV").fadeIn().css("display", "block");
 
   var hideChromeInChrome = (SAFARI?['','']:['<span style="display:none;">', '</span>']);
   $("#checkinfirefox1").html(translate("checkinfirefox_1", hideChromeInChrome));
@@ -187,16 +196,16 @@ $("#step_firefox_yes").click(function() {
   if (/^mailto\:/.test(contact))
     contact = contact.replace(" at ", "@");
   var reportLink = "<a href='" + contact + "'>" + contact.replace(/^mailto\:/, '') + "</a>";
-  $("#whattodo").html(translate("reportfilterlistproblem", [reportLink]));
+  $("#checkupdate").html(translate("reportfilterlistproblem", [reportLink]));
   $("#privacy").show();
 });
 $("#step_firefox_no").click(function() {
   if (SAFARI) {
     // Safari can't block video ads
-    $("#step_flash_DIV").css("display", "block");
+    $("#step_flash_DIV").fadeIn().css("display", "block");
   } else {
-    $("#whattodo").html(translate("reporttous2"));
-    $("a", "#whattodo").attr("href", generateReportURL());
+    $("#checkupdate").html(translate("reporttous2"));
+    $("a", "#checkupdate").attr("href", generateReportURL());
     $("#privacy").show();
   }
   $("#step_firefox").html("<span class='answer'>" + translate("no") + "</span>");
@@ -207,7 +216,7 @@ $("#step_firefox_wontcheck").click(function() {
     $("#step_firefox_yes").click();
   } else {
     // Safari can't do this.
-    $("#whattodo").text(translate("fixityourself"));
+    $("#checkupdate").text(translate("fixityourself"));
   }
   $("#step_firefox").html("<span class='answer'>" + translate("refusetocheck") + "</span>");
 });
@@ -219,71 +228,13 @@ $("#step_firefox_wontcheck").click(function() {
 //If the user clicks a radio button
 $("#step_flash_yes").click(function() {
   $("#step_flash").html("<span class='answer'>" + translate("yes") + "</span>");
-  $("#whattodo").text(translate("cantblockflash"));
+  $("#checkupdate").text(translate("cantblockflash"));
 });
 $("#step_flash_no").click(function() {
   $("#step_flash").html("<span class='answer'>" + translate("no") + "</span>");
-  $("#whattodo").html(translate("reporttous2"));
-  $("a", "#whattodo").attr("href", generateReportURL());
+  $("#checkupdate").html(translate("reporttous2"));
+  $("a", "#checkupdate").attr("href", generateReportURL());
   $("#privacy").show();
 });
 
-
-
-// GENERAL STUFF
-
-//check for updates
-var AdBlockVersion;
-$.ajax({
-  url: chrome.extension.getURL('manifest.json'),
-  dataType: "json",
-  success: function(json) {
-    AdBlockVersion = json.version;
-    var checkURL = (SAFARI ? "https://safariadblock.com/update.plist" :
-          "https://clients2.google.com/service/update2/crx?" +
-          "x=id%3Dgighmmpiobklfepjocnamgkkbiglidom%26v%3D" +
-          AdBlockVersion + "%26uc");
-
-    //fetch the version check file
-    $.ajax({
-      cache: false,
-      dataType: "xml",
-      url: checkURL,
-      success: function(response) {
-        if (!SAFARI) {
-          if ($("updatecheck[status='ok'][codebase]", response).length) {
-            $("#whattodo").html(translate("adblock_outdated_chrome")).
-              find("a").click(function() {
-                chrome.tabs.create({url: 'chrome://chrome/extensions/'});
-              });
-            $("div[id^='step'][id$='DIV']").css('display', 'none');
-          }
-        } else {
-          var version = $("key:contains(CFBundleShortVersionString) + string",
-                        response).text();
-          if (isNewerVersion(version)) {
-            var updateURL = $("key:contains(URL) + string", response).text();
-            $("#whattodo").html(translate("updatefromoldversion", ["<a href='" + updateURL + "'>", "</a>"]));
-            $("div[id^='step'][id$='DIV']").css('display', 'none');
-          }
-        }
-      }
-    });
-  }
-});
-
-// Check if newVersion is newer than AdBlockVersion
-function isNewerVersion(newVersion) {
-  var versionRegex = /^(\d+)\.(\d+)\.(\d+)$/;
-  var current = AdBlockVersion.match(versionRegex);
-  var notCurrent = newVersion.match(versionRegex);
-  if (!current || !notCurrent)
-    return false;
-  for (var i=1; i<4; i++) {
-    if (current[i] < notCurrent[i])
-      return true;
-    if (current[i] > notCurrent[i])
-      return false;
-  }
-  return false;
-}
+checkupdates("adreport");
