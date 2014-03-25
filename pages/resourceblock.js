@@ -112,7 +112,7 @@ function generateTable() {
       row.addClass(type.name);
 
     // Cell 1: Checkbox
-    var cell = $("<td><input type='checkbox'/></td>");
+    var cell = $("<td><input type='checkbox'/></td>").css("padding-left", "5px");
     if (disabled)
       cell.find("input").prop("disabled", true);
     row.append(cell);
@@ -132,7 +132,8 @@ function generateTable() {
 
     // Cell 4: hidden sorting field and matching filter
     cell = $("<td>").
-      attr("data-column", "filter");
+      attr("data-column", "filter").
+      css("text-align", "center");
     $("<span>").
       addClass("sorter").
       text(type.name ? type.sort : 3).
@@ -153,7 +154,8 @@ function generateTable() {
     cell = $("<td>").
         text(isThirdParty ? translate('yes') : translate('no')).
         attr("title", translate("resourcedomain", resources[i].domain || resourceDomain)).
-        attr("data-column", "thirdparty");
+        attr("data-column", "thirdparty").
+        css("text-align", "center");
     row.append(cell);
     resources[i].isThirdParty = isThirdParty;
     resources[i].resourceDomain = resourceDomain;
@@ -175,7 +177,7 @@ function generateTable() {
   }
   if (!rows.length) {
     alert(translate('noresourcessend2'));
-    window.close();
+    self.close();
     return;
   }
   $("#loading").remove();
@@ -202,6 +204,11 @@ function generateTable() {
     });
   });
 }
+
+// Hide "change" button, when no item has been selected
+$(document).ready(function() {
+ $("#choosedifferentresource").css("opacity", "0");
+});
 
 // Converts the ElementTypes number back into an readable string
 // or hiding or 'unknown' if it wasn't in ElementTypes.
@@ -277,9 +284,9 @@ function generateFilterSuggestions() {
     $("#suggestions").find('input:first-child').prop('checked', true);
 
   if (!isBlocked)
-    $("#selectblockableurl b").text(translate("blockeverycontaining"));
+    $("#selectblockableurl p").text(translate("blockeverycontaining"));
   else
-    $("#selectblockableurl b").text(translate("whitelisteverycontaining"));
+    $("#selectblockableurl p").text(translate("whitelisteverycontaining"));
   var inputBox = $('<input>').
     attr("type", "text").
     attr("id", "customurl").
@@ -387,23 +394,28 @@ function finally_it_has_loaded_its_stuff() {
     $(".onlyifdebug").show();
   // Create the table of resources
   generateTable();
-  // Add the dotted borders when hovering
+    
+  // Add another background color when hovering
   $("#resourceslist tbody tr").mouseenter(function() {
     if ($(this).hasClass('selected'))
       return;
     $(this).children(":not(:first-child)").
-      css("border-top", "black 1px dotted").
-      css("border-bottom", "black 1px dotted");
+      css("-webkit-transition", "all 0.3s ease-out").
+      css("background-color", "rgba(242, 242, 242, 0.56)");
   });
   $("#resourceslist tr").mouseleave(function() {
     $(this).children().
-      css("border", "none");
+      css("-webkit-transition", "all 0.3s ease-out").
+      css("background-color", "white");
+  });
+
+  // Make legend draggable
+  $(function() {
+    $("#legend").draggable();
   });
 
   // Close the legend
-  $("#legend a").click(function(event) {
-    event.preventDefault();
-    $("#search").val("").trigger('search');
+  $(".closelegend").click(function() {
     $("#legend").remove();
   });
 
@@ -462,11 +474,17 @@ function finally_it_has_loaded_its_stuff() {
     }
   });
 
+  // Auto-scroll to the bottom of the page
+  $("#confirmUrl").click(function(event) {
+    event.preventDefault();
+    $("html, body").animate({ scrollTop: 15000 }, 50);
+  });
+
   // An item has been selected
   $('.clickableRow, input:enabled', '#resourceslist').click(function() {
     if ($('.selected','#resourceslist').length > 0)
       return; //already selected a resource
-    $("#choosedifferentresource").show();
+    $("#choosedifferentresource").css("opacity", "1");
     $("#choosedifferentresource").click(function() {
       document.location.reload();
     });
@@ -476,14 +494,13 @@ function finally_it_has_loaded_its_stuff() {
       prop('checked', true).
       prop('disabled', true);
     $('.clickableRow').removeClass('clickableRow');
-    $('#resourceslist tr').css('border', 'black 1px dotted');
     $('#legend').remove();
     chosenResource = resources[$(".selected td[data-column='url']").prop('title')];
     $(".selected td[data-column='thirdparty']").text(
                     chosenResource.isThirdParty ? translate('thirdparty') : '');
 
     // Show the 'choose url' area
-    $("#selectblockableurl").show();
+    $("#selectblockableurl").fadeIn();
     generateFilterSuggestions();
     // If the user clicks the 'next' button
     $("#confirmUrl").click(function() {
@@ -514,7 +531,7 @@ function finally_it_has_loaded_its_stuff() {
       $("#selectblockableurl *:not(br):not(b)").prop("disabled", true);
 
       // Show the options
-      $("#chooseoptions").show();
+      $("#chooseoptions").fadeIn();
       var isThirdParty = chosenResource.isThirdParty;
       if (!isThirdParty) {
         $("#thirdparty + * + *, #thirdparty + *, #thirdparty").remove();
