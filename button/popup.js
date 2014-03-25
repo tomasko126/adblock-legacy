@@ -2,7 +2,7 @@ var BG = chrome.extension.getBackgroundPage();
 
 // Set menu entries appropriately for the selected tab.
 function customize_for_this_tab() {
-  $(".menu-entry, .separator").hide();
+  $(".menu-entry, .menu-status, .separator").hide();
 
   BG.getCurrentTabInfo(function(info) {
     var shown = {};
@@ -12,24 +12,24 @@ function customize_for_this_tab() {
     show(["div_options", "separator2"]);
     var paused = BG.adblock_is_paused();
     if (paused) {
-      show(["div_status_paused", "separator0", "div_options"]);
+      show(["div_status_paused", "separator0","div_paused_adblock", "div_options"]);
     } else if (info.disabled_site) {
-      show(["div_status_disabled", "separator0", "div_pause_adblock", 
+      show(["div_status_disabled", "separator0", "div_pause_adblock",
             "div_options", "div_help_hide_start"]);
     } else if (info.whitelisted) {
-      show(["div_status_whitelisted", "div_show_resourcelist", 
-            "separator0", "div_pause_adblock", "separator1", 
+      show(["div_status_whitelisted","div_enable_adblock_on_this_page", "div_show_resourcelist",
+            "separator0", "div_pause_adblock", "separator1",
             "div_options", "div_help_hide_start"]);
     } else {
-      show(["div_pause_adblock", "div_blacklist", "div_whitelist", 
-            "div_whitelist_page", "div_show_resourcelist", 
-            "div_report_an_ad", "separator1", "div_options", 
+      show(["div_pause_adblock", "div_blacklist", "div_whitelist",
+            "div_whitelist_page", "div_show_resourcelist",
+            "div_report_an_ad", "separator1", "div_options",
             "div_help_hide_start", "separator3","block_counts"]);
-      
+
       var page_count = info.tab_blocked || "0";
       $("#page_blocked_count").text(page_count);
       $("#total_blocked_count").text(info.total_blocked);
-      
+
       $("#toggle_badge_checkbox").attr("checked", info.display_stats);
       // Show help link until it is clicked.
       $("#block_counts_help").
@@ -48,9 +48,9 @@ function customize_for_this_tab() {
 
     if (!BG.get_settings().show_advanced_options)
       hide(["div_show_resourcelist"]);
-    
+
     for (var div in shown)
-      if (shown[div]) 
+      if (shown[div])
         $('#' + div).show();
 
     // Secure Search UI
@@ -71,7 +71,6 @@ function customize_for_this_tab() {
   });
 }
 
-
 // Click handlers
 $(function() {
   $("#toggle_badge_checkbox").click(function(){
@@ -80,13 +79,18 @@ $(function() {
       BG.updateDisplayStats(checked, info.tab.id);
     });
   });
-  
-  $("#titletext span").click(function() {
-    var url = "https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom";
-    BG.openTab(url);
-  });
 
-  $("#div_status_whitelisted a").click(function() {
+  $("#titletext").click(function() {
+    var url = "https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom";
+    var opera_url = "https://addons.opera.com/extensions/details/adblockforopera/";
+    if (OPERA) {
+    BG.openTab(opera_url);
+    } else {
+    BG.openTab(url);
+   }
+   });
+
+  $("#div_enable_adblock_on_this_page").click(function() {
     BG.getCurrentTabInfo(function(info) {
       if (BG.try_to_unwhitelist(info.tab.url)) {
         chrome.tabs.reload();
@@ -98,7 +102,7 @@ $(function() {
     });
   });
 
-  $("#div_status_paused a").click(function() {
+  $("#div_paused_adblock").click(function() {
     BG.adblock_is_paused(false);
     BG.handlerBehaviorChanged();
     BG.updateButtonUIAndContextMenus();
@@ -168,7 +172,11 @@ $(function() {
 
 
   $("#div_help_hide").click(function() {
-    $("#help_hide_explanation").slideDown();
+    if (OPERA) {
+      $("#help_hide_explanation").text(translate("operabutton_how_to_hide2")).slideToggle();
+    } else {
+      $("#help_hide_explanation").slideToggle();
+    }
   });
 });
 
@@ -197,7 +205,7 @@ $(function() {
     $("#menu-items").slideUp();
     $("#slideout_wrapper").
       width(0).height(0).show().
-      animate({width: slideoutWidth-50, height: slideoutHeight-40}, 
+      animate({width: slideoutWidth-50, height: slideoutHeight-40},
               {queue:false});
   });
   $("#link_close").click(function() {
