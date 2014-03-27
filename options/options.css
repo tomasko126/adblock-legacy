@@ -30,6 +30,7 @@
       }
       ul {
         display: inline;
+        -webkit-margin-before: 0em;
       }
       #header {
         background: #F1F1F1;
@@ -43,17 +44,13 @@
         -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .15);
         box-shadow: 0px 0px 8px rgba(0, 0, 0, .15);
       }
-      #main_nav {
-        padding-right: 12px;
-      }
       #main_nav li {
         float: left;
         height: 64px;
-        line-height: 64px;
         padding: 0px 24px;
       }
       #main_nav li.social {
-        text-indent: -9999px; overflow: hidden;
+        text-indent: -9999px;
       }
       #small_nav {
         display: none;
@@ -87,21 +84,18 @@
         background: transparent url(../img/facebook-sprite.png) no-repeat left top;
         height: 23px;
         width: 11px;
-        margin-top: 18px;
         display: -webkit-box;
       }
       .social .gplus {
         background: transparent url(../img/gplus-sprite.png) no-repeat left top;
         height: 22px;
         width: 26px;
-        margin-top: 19px;
         display: -webkit-box;
       }
       .social .twitter {
         background: transparent url(../img/twitter-sprite.png) no-repeat left top;
         height: 22px;
         width: 26px;
-        margin-top: 19px;
         display: -webkit-box;
       }
       .social .facebook:hover, .social .twitter:hover {
@@ -160,8 +154,7 @@
       #paymentlink {
         font-size: 16;
         margin: 0px 50%;
-        min-width: 350px;
-        padding-left: 125px;
+        min-width: 475px;
         position: absolute;
         color: #4D7BD6;
         text-decoration: none;
