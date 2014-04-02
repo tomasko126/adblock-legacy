@@ -70,11 +70,10 @@ var run_bandaids = function() {
 
         log("Removing YouTube ads");
         var pairs = flashVars.split("&");
-        for (var i = 0; i < pairs.length; i++) {
-            if (/^((ad|afv|adsense|iv)(_.*)?|(ad3|iv3|st)_module|prerolls|interstitial|infringe|invideo)=/.test(pairs[i])) {
-                pairs.splice(i--, 1);
-            }
-        }
+        log("# of pairs " + pairs.length);
+        pairs.filter(removeAdFlashVars);
+				log("# of pairs  (after) :" + pairs.length);
+				
         flashVars = pairs.join("&");
         var replacement = videoplayer.cloneNode(true);
         if (inParam) {
@@ -116,5 +115,12 @@ var run_bandaids = function() {
   if (apply_bandaid_for) {
     log("Running bandaid for " + apply_bandaid_for);
     bandaids[apply_bandaid_for]();
+  }
+  
+  function removeAdFlashVars(element) {
+		log("element " + element);
+    var isAdFlashVar = (/^((ad|afv|adsense|iv)(_.*)?|(ad3|iv3|st)_module|prerolls|interstitial|infringe|invideo)=/.test(element));
+    log(" isAdFlashVar : " + isAdFlashVar);
+    return isAdFlashVar;
   }
 }
