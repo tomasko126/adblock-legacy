@@ -70,9 +70,7 @@ var run_bandaids = function() {
 
         log("Removing YouTube ads");
         var pairs = flashVars.split("&");
-        log("# of pairs " + pairs.length);
-        pairs.filter(removeAdFlashVars);
-				log("# of pairs  (after) :" + pairs.length);
+        pairs = pairs.filter(removeAdFlashVars);
 				
         flashVars = pairs.join("&");
         var replacement = videoplayer.cloneNode(true);
