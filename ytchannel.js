@@ -4,22 +4,12 @@
 // So we disable history.pushState on pages with YouTube's flash player,
 // this will for the site to use to a page reload.
 if (/youtube/.test(document.location.hostname)) {
-  if (!SAFARI) {
-    window.onload = function() {
-      document.location.href = "javascript:void(history.pushState = undefined);";
-    }
-  // Onload event is fired differently in Safari,
-  // so we have to check whether the page has been completely loaded
-  // or not by using readyState event.
-  } else {
-    var disable_history_api = setInterval(function() {
-      if (/loaded|complete/.test(document.readyState)) {
-        clearInterval(disable_history_api);
-        document.location.href = "javascript:void(history.pushState = undefined);";
-      }
-    }, 50);
-  }
-};
+  var s = document.createElement("script");
+  s.type = "application/javascript";
+  s.async = false;
+  s.textContent = "history.pushState = undefined;";
+  document.documentElement.appendChild(s);
+  document.documentElement.removeChild(s);
 
 // In Safari when clicking from one video to another,
 // users can see loading of the next page and 
@@ -70,3 +60,4 @@ BGcall("get_settings", function(settings) {
     }
   }
 });
+}
