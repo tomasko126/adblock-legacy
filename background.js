@@ -163,26 +163,7 @@
         }
       },
       
-      // Forcefully reload the tab so that the details will be updated.
-      _reloadTab: function(details) {
-        if (!OPERA) return;
-
-        chrome.tabs.query({url: details.url, status: 'loading', active: true}, function(tabs) {
-          var tabsLength = tabs.length;
-          lockProcess = tabsLength > 0;
-          if(!lockProcess) return;
-
-          for(var i = 0; i < tabsLength; i++) {
-            var tab = tabs[i];
-            var newTabId = tab.id;
-            if(!frameData.get(newTabId)) {
-              chrome.tabs.reload(newTabId);
-            }
-          }
-        });
-      },
-
-      // Watch for requests for new tabs and frames, and track their URLs.
+       // Watch for requests for new tabs and frames, and track their URLs.
       // Inputs: details: object from onBeforeRequest callback
       // Returns false if this request's tab+frame are not trackable.
       track: function(details) {
@@ -190,8 +171,7 @@
 
         // A hosted app's background page
         if (tabId === -1) {
-          frameData._reloadTab(details);
-          return false;
+           return false;
         }
 
         if (details.type === 'main_frame') { // New tab
