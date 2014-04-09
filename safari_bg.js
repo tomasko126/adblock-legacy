@@ -216,7 +216,7 @@ if (!LEGACY_SAFARI) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
-        if (host === "www.youtube.com" && get_settings().youtube_channel_whitelist && !paused && !whitelisted && canBlock) {
+        if (host === "www.youtube.com" && get_settings().youtube_channel_whitelist && eligible_for_undo) {
           appendMenuItem("whitelist-youtube-channel", translate("whitelist_youtube_channel"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
