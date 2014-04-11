@@ -7,8 +7,6 @@ var run_bandaids = function() {
     apply_bandaid_for = "youtube_safari_only";
   else if(/getadblock\.com/.test(document.location.hostname))
     apply_bandaid_for = "getadblock";
-  else if (/thepiratebay/.test(document.location.hostname))
-    apply_bandaid_for = "the_pirate_bay_safari_only";
   else {
     var hosts = [ /mastertoons\.com$/ ];
     hosts = hosts.filter(function(host) { return host.test(document.location.hostname); });
@@ -39,10 +37,6 @@ var run_bandaids = function() {
         el.style.setProperty("position", "absolute", null);
         el.style.setProperty("right", "0px", null);
       }
-    },
-    the_pirate_bay_safari_only: function() {
-      // Set cookie to prevent pop-ups from The Pirate Bay
-      document.cookie="tpbpop=1%7CSun%2C%2030%20Aug%202024%2006%3A21%3A49%20GMT; expires=Thu, 30 Aug 2024 12:00:00 GMT; path=/;";
     },
     youtube_safari_only: function() {
       // If history.pushState is available,
@@ -122,9 +116,5 @@ var run_bandaids = function() {
     log("Running bandaid for " + apply_bandaid_for);
     bandaids[apply_bandaid_for]();
   }
-  
-  function filterAdFlashVars(element) {
-    var isAdFlashVar = !(/^((ad|afv|adsense|iv)(_.*)?|(ad3|iv3|st)_module|prerolls|interstitial|infringe|invideo)=/.test(element));
-    return isAdFlashVar;
-  }
+
 }
