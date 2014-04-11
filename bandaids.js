@@ -49,8 +49,8 @@ var run_bandaids = function() {
       s.type = "application/javascript";
       s.async = false;
       s.textContent = "history.pushState = undefined;";
-      document.documentElement.appendChild(s);
-      document.documentElement.removeChild(s);
+      document.body.appendChild(s);
+      document.body.removeChild(s);
       
       function blockYoutubeAds(videoplayer) {
         var flashVars = videoplayer.getAttribute('flashvars');
@@ -67,11 +67,10 @@ var run_bandaids = function() {
         if(!adRegex.test(flashVars))
             return;
 
-        log("Removing YouTube ads");
+        console.log("Removing YouTube ads");
         var pairs = flashVars.split("&");
-        //the following loop & regex was obtained from AdBlockPlus
-        // https://hg.adblockplus.org/adblockpluschrome/file/4db6db04271c/safari/include.youtube.js
-        //
+        // The following loop & regex was obtained from Adblock Plus™
+        // See https://hg.adblockplus.org/adblockpluschrome/file/4db6db04271c/safari/include.youtube.js
         for (var i = 0; i < pairs.length; i++) {
             if (/^((ad|afv|adsense|iv)(_.*)?|(ad3|iv3|st)_module|prerolls|interstitial|infringe|invideo)=/.test(pairs[i])) {
                 pairs.splice(i--, 1);
@@ -116,7 +115,7 @@ var run_bandaids = function() {
   }; // end bandaids
 
   if (apply_bandaid_for) {
-    log("Running bandaid for " + apply_bandaid_for);
+    console.log("Running bandaid for " + apply_bandaid_for);
     bandaids[apply_bandaid_for]();
   }
 
