@@ -917,7 +917,7 @@
   },
   "ordisablefilter":{
     "message":"... or disable filter:",
-      "description":"On the resourceblocking page, choice to disable a filter instead of allowing a specific resource"
+      "description":"On the resourceblocking page, choice to disable a filter instead of allowing or blocking a specific resource"
   },
   "thisfilterwillbedisabled":{
     "message":"This filter will be disabled:",
