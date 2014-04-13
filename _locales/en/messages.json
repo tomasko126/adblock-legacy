@@ -915,6 +915,22 @@
     "message":"Add this filter",
     "description":"resourceblocking page string"
   },
+  "ordisablefilter":{
+    "message":"... or disable filter:",
+      "description":"On the resourceblocking page, choice to disable a filter instead of allowing a specific resource"
+  },
+  "thisfilterwillbedisabled":{
+    "message":"This filter will be disabled:",
+      "description":"On the resourceblocking page, followed by the filter the user chose to disable"
+  },
+  "disabledwhenbrowsing":{
+    "message":"This filter will be disabled when you are browsing:",
+      "description":"On the resourceblocking page, choose on which sites the filter should be disabled"
+  },
+  "onlypagesonthisdomain":{
+    "message":"ONLY pages on this domain:",
+      "description":"On the resourceblocking page, option to disable a filter only on a specific domain"
+  },
   "flashads":{
     "message":"Videos and Flash",
     "description":"Title of the final ad report question if the ad didn't appear in FF"
@@ -1240,22 +1256,6 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
-  },
-  "ordisablefilter":{
-    "message":"... or disable filter:",
-      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
-  },
-  "thisfilterwillbedisabled":{
-    "message":"This filter will be disabled:",
-      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
-  },
-  "disabledwhenbrowsing":{
-    "message":"This filter will be disabled when you are browsing:",
-      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
-  },
-  "onlypagesonthisdomain":{
-    "message":"ONLY pages on this domain:",
-      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
   "activate_private_search":{
     "message":"Activate private search",
