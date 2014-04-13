@@ -1256,5 +1256,25 @@
   "onlypagesonthisdomain":{
     "message":"ONLY pages on this domain:",
       "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "activate_private_search":{
+    "message":"Activate private search",
+    "description":"Checkbox to activate or deactivate private search"
+  },
+  "search_privately_from":{
+    "message":"Search privately from:",
+    "description":"Set where private search should be activated, followed by several options"
+  },
+  "omnibox":{
+    "message":"The omnibox",
+    "description":"Option, where private search should be activated"
+  },
+  "search_engine_websites":{
+    "message":"Search engine websites",
+    "description":"Option, where private search should be activated"
+  },
+  "search_privately":{
+    "message":"Search privately",
+    "description":"Placeholder in private search text box"
   }
 }
