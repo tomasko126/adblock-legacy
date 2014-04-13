@@ -231,6 +231,7 @@ function generateFilterSuggestions() {
   var url = chosenResource.resource;
   url = url.replace(/\s{5}\(.*\)$/, '').replace(/\#.*$/, '');
   var isBlocked = ($(".selected").hasClass("blocked"));
+  var isHidden = ($(".selected").hasClass("hiding"));
   var blocksuggestions = [];
   var strippedUrl = url.replace(/^[a-z\-]+\:\/\/(www\.)?/, '');
   blocksuggestions.push(strippedUrl);
@@ -254,7 +255,6 @@ function generateFilterSuggestions() {
   }
 
   var suggestions = [];
-  var isHidden = ($(".selected").hasClass("hiding"));
   for (var i in blocksuggestions) {
     var inputBox = $("<input>").
       attr("type", "radio").
@@ -268,7 +268,7 @@ function generateFilterSuggestions() {
     suggestions.push(label);
     suggestions.push("<br/>");
   }
-  $("label[for='disablefilter']").text(chosenResource.filter);
+  
   $("#suggestions").empty();
   for (var i = 0; i < suggestions.length; i++)
     $("#suggestions").append(suggestions[i]);
@@ -283,6 +283,9 @@ function generateFilterSuggestions() {
     $("#selectblockableurl b").text(translate("thisfilterwillbedisabled"));
   else
     $("#selectblockableurl b").text(translate("whitelisteverycontaining"));
+  
+    $("label[for='disablefilter']").text(chosenResource.filter);
+  
   var inputBox = $('<input>').
     attr("type", "text").
     attr("id", "customurl").
@@ -329,17 +332,17 @@ function validateUrl(url) {
 // Create the filter that will be applied from the chosen options
 // Returns the filter
 function createfilter() {
-  var origfilter = $("label[for='disablefilter']").text();
+  var matchedfilter = $("label[for='disablefilter']").text();
   var isBlocked = ($(".selected").hasClass("blocked"));
   var isHidden = ($(".selected").hasClass("hiding"));
-  var filterwithoutdomain;
+  var filterwithoutdomain = '';
   var urlfilter = '';
   
   if ($('#selectblockableurl #customurl').length) {
     urlfilter = (isBlocked ? '@@' : '') + $('#customurl').val();
   } else if ($('#selectblockableurl label[for="disablefilter"]').length) {
     if (isBlocked) {
-      urlfilter = '@@' + origfilter;
+      urlfilter = '@@' + matchedfilter;
     } else if (isHidden) {
       var chosenfilter = chosenResource.filter.replace('##', '#@#');
       var domain = chosenfilter.substr(0, chosenfilter.lastIndexOf("#@"));
@@ -350,7 +353,7 @@ function createfilter() {
         urlfilter = filterwithoutdomain;
       }
     } else {
-      urlfilter = origfilter.replace('@@', '');
+      urlfilter = matchedfilter.replace('@@', '');
     }
   } else {
     urlfilter = $('#selectblockableurl input').val();
@@ -369,7 +372,7 @@ function createfilter() {
       options.push($(this).val());
   });
   
-  var option;
+  var option = '';
   if (options.length && !($("#disablefilter").is(":disabled"))) { 
     option = '$' + options.join(',');
   } else if (options.length && $("#disablefilter").is(":disabled")) {
@@ -524,24 +527,24 @@ function finally_it_has_loaded_its_stuff() {
     $(".selected td[data-column='thirdparty']").text(
                     chosenResource.isThirdParty ? translate('thirdparty') : '');
     
+    // Show the 'choose url' area
+    $("#selectblockableurl").show();
+    
     var isBlocked = ($(".selected").hasClass("blocked"));
     var isHidden = ($(".selected").hasClass("hiding"));
     var isWhitelisted = ($(".selected").hasClass("whitelisted"));
-    if (isHidden) {
-      $("div[i18n='ordisablefilter'], #suggestions, #custom, label[for='custom']").remove();
-      $("div[i18n='blockeverycontaining']").attr("i18n","thisfilterwillbedisabled");
-    }
-
-    // Show the 'choose url' area
-    $("#selectblockableurl").show();
     if (isBlocked || isWhitelisted) {
       $("#disable").css("display","block");
     } else if (isHidden) {
       $("#disable").css("display","block");
       $("#selectblockableurl br").remove();
+      $("[i18n='ordisablefilter'], #suggestions, #custom, label[for='custom']").remove();
+      $("[i18n='blockeverycontaining']").attr("i18n","thisfilterwillbedisabled");
+      $("#confirmUrl").before("<br>");
     } else {
       $("#disable").css("display","none");
     }
+    
     generateFilterSuggestions();
     // If the user clicks the 'next' button
     $("#confirmUrl").click(function() {
@@ -566,25 +569,19 @@ function finally_it_has_loaded_its_stuff() {
       // Hide unused stuff
       $("#selectblockableurl input[type='radio']:not(:checked) + label").remove();
       $("#selectblockableurl input[type='radio']:not(:checked)").remove();
-      $("#confirmUrl").before("<br>");
       $("#confirmUrl").next().remove();
       $("#confirmUrl").remove();
+      $("#selectblockableurl br").remove();
       $("#selectblockableurl *:not(br):not(b)").prop("disabled", true);
       if ($("#disablefilter").is(":disabled")) {
         $("#selectblockableurl b").text(translate("thisfilterwillbedisabled"));
-        $("br").remove();
-        $("p[i18n='blockeverycontaining']").text(translate("thisfilterwillbedisabled"));
         $("label[for='domainis']").text(translate("onlypagesonthisdomain"));
-        $("div[i18n='appliedwhenbrowsing']").text(translate("disabledwhenbrowsing"));
-        $("label[for='onEverySite'], #addthefilter").append("<br>");
+        $("[i18n='appliedwhenbrowsing']").text(translate("disabledwhenbrowsing"));
+        $("[i18n='ordisablefilter'], [i18n='casesensitive'], [i18n='onlyresourcetypes'], [id^='matchcase'], [for^='matchcase'], #chooseoptions br, #suggestions, #thirdparty, #types").remove();
+        $("#onEverySite, #domainis").before("<br>");
         $("#addthefilter").before("<br><br>");
-        $("#onEverySite").before("<br>");
-        $("#suggestions, [i18n='ordisablefilter'], #thirdparty, [i18n='casesensitive'], [i18n='onlyresourcetypes'], input[id^='matchcase'], label[for^='matchcase'], #types")
-        .remove();
       } else {
-        $("div[i18n='ordisablefilter']").remove();
-        $("#suggestions br").remove();
-        $("#selectblockableurl").find("br").replaceWith("");
+        $("[i18n='ordisablefilter'], #suggestions br").remove();
       }
 
       // Show the options
