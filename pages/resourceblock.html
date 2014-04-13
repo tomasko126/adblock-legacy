@@ -158,7 +158,13 @@
       <div id="suggestions"></div>
       <input type='radio' name='urloption' id='custom' />
       <label for='custom' i18n="custompattern"></label><br/>
-      <input type='button' style='margin-left:22px;' i18n_value='nextstep' id='confirmUrl' />
+      <div id="disable"> 
+      <div style="font-size: 14px; margin-top: 10px; font-weight: bold;" i18n="ordisablefilter"></div>
+      <input type='radio' name='urloption' id='disablefilter'/>
+      <label for="disablefilter"></label>
+      </div>
+      <br>
+      <input type='button' i18n_value='nextstep' id='confirmUrl' />
     </form>
 
     <form id="chooseoptions" style="display:none;">

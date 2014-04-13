@@ -1240,5 +1240,21 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
+  },
+  "ordisablefilter":{
+    "message":"... or disable filter:",
+      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "thisfilterwillbedisabled":{
+    "message":"This filter will be disabled:",
+      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "disabledwhenbrowsing":{
+    "message":"This filter will be disabled when you are browsing:",
+      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "onlypagesonthisdomain":{
+    "message":"ONLY pages on this domain:",
+      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   }
 }
