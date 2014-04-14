@@ -34,7 +34,7 @@ window.onload = function() {
     $('#btn_search').click(submitSearch);
     $('#txt_search').keyup(submitSearch);
     $('#enable_show_secure_search').change(toggleActivateSearch);
-    $('#incognito').on("change", chkIncognitoClick);
+    $('#incognito').change(chkIncognitoClick);
     
     $(".question_mark").bind({
       mouseenter: showHelpImage,
@@ -90,7 +90,8 @@ window.onload = function() {
     $('#omnibox-box').prop('disabled', disabled);
     $('#everywhere-box').prop('disabled', disabled);
     $('#btn_search').prop('disabled', disabled);
-    
+    $('#incognito').prop('disabled', disabled);
+
     var incognito = deserialize(localStorage[INCOGNITO_LABEL]);
     if(incognito == undefined) {
       localStorage[INCOGNITO_LABEL] = "false";
@@ -178,7 +179,7 @@ window.onload = function() {
     $('#omnibox-box').prop('disabled', disabled);
     $('#everywhere-box').prop('disabled', disabled);
     $('#btn_search').prop('disabled', disabled);
-
+    $('#incognito').prop('disabled', disabled);
     // rebuild async filters
     setTimeout(function() { BG.update_filters(); }, 100);
   };

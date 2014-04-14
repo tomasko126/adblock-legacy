@@ -250,7 +250,3 @@ input#txt_search {
 .incognito input {
   outline: none;
 }
-
-.incognito label {
-  cursor: pointer;
-}
