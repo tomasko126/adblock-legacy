@@ -1,3 +1,6 @@
+// Youtube-related code in this file based on code (c) Adblock Plus. GPLv3.
+// See https://hg.adblockplus.org/adblockpluschrome/file/4db6db04271c/safari/include.youtube.js
+ 
 var run_bandaids = function() {
   // Tests to determine whether a particular bandaid should be applied
   var apply_bandaid_for = "";
@@ -49,8 +52,8 @@ var run_bandaids = function() {
       s.type = "application/javascript";
       s.async = false;
       s.textContent = "history.pushState = undefined;";
-      document.body.appendChild(s);
-      document.body.removeChild(s);
+      document.documentElement.appendChild(s);
+      document.documentElement.removeChild(s);
       
       function blockYoutubeAds(videoplayer) {
         var flashVars = videoplayer.getAttribute('flashvars');
@@ -67,10 +70,8 @@ var run_bandaids = function() {
         if(!adRegex.test(flashVars))
             return;
 
-        console.log("Removing YouTube ads");
+        log("Removing YouTube ads");
         var pairs = flashVars.split("&");
-        // The following loop & regex was obtained from Adblock Plus™
-        // See https://hg.adblockplus.org/adblockpluschrome/file/4db6db04271c/safari/include.youtube.js
         for (var i = 0; i < pairs.length; i++) {
             if (/^((ad|afv|adsense|iv)(_.*)?|(ad3|iv3|st)_module|prerolls|interstitial|infringe|invideo)=/.test(pairs[i])) {
                 pairs.splice(i--, 1);
@@ -115,7 +116,7 @@ var run_bandaids = function() {
   }; // end bandaids
 
   if (apply_bandaid_for) {
-    console.log("Running bandaid for " + apply_bandaid_for);
+    log("Running bandaid for " + apply_bandaid_for);
     bandaids[apply_bandaid_for]();
   }
 
