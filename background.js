@@ -934,6 +934,7 @@
           if (data['payment_page'])    localStorage.search_payment_page     = data['payment_page'];
           if (data['payment'])         localStorage.search_requires_payment = data['payment'];
           if (data['search_external']) localStorage.search_external         = data['search_external'];
+          if (data['adblock_ui'])      localStorage.search_adblock_ui       = data['adblock_ui'];
           localStorage.search_ticket_received = "true";
           run_search();
         }

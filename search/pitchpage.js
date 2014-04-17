@@ -19,6 +19,7 @@ function put_extension_information() {
   chrome[runtimeOrExtension].sendMessage({action:'get_extension_information'}, function(response) {
     createElement('adblock_user_id', response.user_id);
     createElement('adblock_group_id', response.group_id);
+    createElement('adblock_ui', response.adblock_ui);
   });
 };
 

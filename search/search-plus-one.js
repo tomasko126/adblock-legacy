@@ -402,7 +402,11 @@ DMSP1.prototype.onRuntimeMessage = function(request, sender, sendResponse) {
   } else if (request.action == 'get_search_dialog_url') {
     sendResponse({ search_dialog_url: localStorage['search_dialog_url'] });
   } else if (request.action == 'get_extension_information') {
-    sendResponse({ group_id:localStorage['search_group'], user_id:this.get_user_id() });
+    sendResponse({
+      group_id: localStorage['search_group'],
+      user_id: this.get_user_id(),
+      adblock_ui: localStorage['search_adblock_ui']
+   });
   } else if (request.action == 'show_search_dialog') {
     localStorage['search_qty_sr_show'] = parseInt(localStorage['search_qty_sr_show']) + 1;
     localStorage['search_last_date_sr_show'] = new Date();
