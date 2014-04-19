@@ -831,6 +831,13 @@
   launch_resourceblocker = function(query) {
     openTab("pages/resourceblock.html" + query, true);
   }
+  
+  // Open subscribe popup when new filter list was subscribed from site
+  launch_subscribe_popup = function(loc) {
+    window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
+    "_blank",
+    'scrollbars=0,location=0,resizable=0,width=450,height=140');
+  }
 
   // Get the framedata for resourceblock
   resourceblock_get_frameData = function(tabId) {
