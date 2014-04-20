@@ -35,10 +35,6 @@
     "message":"Tercers",
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
-  "installedtitle":{
-    "message":"Ja s'ha instal·lat l'AdBlock!",
-    "description":"Title for the installation success page"
-  },
   "chromebutton_how_to_hide2":{
     "message":"Per amagar aquest botó, feu clic amb el botó dret i escolliu Amaga el botó. El podeu fer reaparèixer a: chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -160,11 +156,11 @@
     "description":"When you have to click the ad to continue"
   },
   "adblock_wont_run_on_pages_matching":{
-    "message":"L'AdBlock no s'executarà a cap pàgina del següent domini:",
+    "message":"L'AdBlock no s'executarà en cap pàgina del següent domini:",
     "description":"Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change":{
-    "message":"Feu lliscar el regulador per determinar a quines pàgines del domini l'AdBlock no s'executarà.",
+    "message":"Feu lliscar el regulador per determinar en quines pàgines del domini l'AdBlock no s'executarà.",
     "description":"Instructions for how to use the whitelister slider controls.  Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2":{
@@ -727,10 +723,6 @@
     "message":"Bloquegeu aquest anunci",
     "description":"Context and popup menu entry"
   },
-  "filecleanerwarning":{
-    "message":"Si veieu aquest missatge cada cop que inicieu l'AdBlock, assegureu-vos que no esteu fent servir un netejador de fitxers que netegi els fitxers 'localStorage'.",
-    "description":"Help for users who use hyperactive file cleaners"
-  },
   "typehiding":{
     "message":"amagant",
     "description":"A resource type"
@@ -948,7 +940,7 @@
     "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank."
   },
   "dont_run_on_pages_on_domain":{
-    "message":"No actuar a les pàgines d'aquest domini",
+    "message":"No actuar en les pàgines d'aquest domini",
     "description":"Menu entry to open the whitelist wizard."
   },
   "disabled_on_this_page":{
@@ -992,7 +984,7 @@
     "description":"Text of a share link"
   },
   "did_you_know_this_is_my_full_time_job":{
-    "message":"Sabieu que això és la meva feina a temps complet?",
+    "message":"Sabíeu que això és la meva feina a temps complet?",
     "description":"Text of a payment request link"
   },
   "removelabel":{
@@ -1037,26 +1029,6 @@
     "message":"Treballar amb els vídeos de Hulu.com que no es reprodueixin (requereix el reinici del navegador)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
   },
-  "now_you_have_adblock_hooray":{
-    "message":"Ara teniu l'AdBlock! Visca!",
-    "description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
-  },
-  "any_new_tabs_you_open_Will_be_automatically_ad_free":{
-    "message":"Ara totes les pestanyes que obriu apareixeran sense anuncis automàticament.",
-    "description":"Install page subtitle"
-  },
-  "installing_adblock":{
-    "message":"Instal·lant l'AdBlock...",
-    "description":"Install page: shown while progress bar loads"
-  },
-  "done":{
-    "message":"fet.",
-    "description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
-  },
-  "seeing_this_every_time_you_start_your_browser":{
-    "message":"Veieu això cada cop que inicieu el navegador?",
-    "description":"Install page: link to click for help"
-  },
   "how_to_use_adblock":{
     "message":"Com utilitzar l'AdBlock:",
     "description":"Install page section title"
@@ -1064,16 +1036,6 @@
   "adblock_auto_removes_ads_thats_all":{
     "message":" L'AdBlock elimina de forma automàtica els anuncis. Aquesta és la seva raó de ser.",
     "description":"Install page: explaining how to use adblock."
-  },
-  "for_more_options_right_click":{
-    "message":"Per a més opcions, podeu fer clic amb el botó dret a les pàgines web o bé clicar el botó $img$ de la barra d'eines.",
-    "description":"Install page: explaining how to use adblock in more detail.",
-    "placeholders":{
-      "img":{
-        "content":"<img src=\"..\/..\/img\/icon19.png\"\/>",
-        "example":"A small picture of the toolbar button.  Do not translate."
-      }
-    }
   },
   "modifydomain":{
     "message":"Lloc:",
@@ -1278,5 +1240,25 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
+  },
+  "activate_private_search":{
+    "message":"Activar la cerca privada",
+    "description":"Checkbox to activate or deactivate private search"
+  },
+  "search_privately_from":{
+    "message":"Cercar de forma privada des de:",
+    "description":"Set where private search should be activated, followed by several options"
+  },
+  "omnibox":{
+    "message":"L'omnibox",
+    "description":"Option, where private search should be activated"
+  },
+  "search_engine_websites":{
+    "message":"Els llocs web de motors de cerca",
+    "description":"Option, where private search should be activated"
+  },
+  "search_privately":{
+    "message":"Cercar de forma privada",
+    "description":"Placeholder in private search text box"
   }
 }
