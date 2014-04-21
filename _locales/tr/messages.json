@@ -1242,23 +1242,23 @@
     }
   },
   "activate_private_search":{
-    "message":"Activate private search",
+    "message":"Gizli aramayı etkinleştir",
     "description":"Checkbox to activate or deactivate private search"
   },
   "search_privately_from":{
-    "message":"Search privately from:",
+    "message":"Şuradan gizli arayın:",
     "description":"Set where private search should be activated, followed by several options"
   },
   "omnibox":{
-    "message":"The omnibox",
+    "message":"Adres çubuğu",
     "description":"Option, where private search should be activated"
   },
   "search_engine_websites":{
-    "message":"Search engine websites",
+    "message":"Arama motoru siteleri",
     "description":"Option, where private search should be activated"
   },
   "search_privately":{
-    "message":"Search privately",
+    "message":"Gizli arama",
     "description":"Placeholder in private search text box"
   }
 }
