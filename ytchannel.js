@@ -10,13 +10,10 @@ if (/youtube/.test(document.location.hostname)) {
   s.textContent = "history.pushState = undefined;";
   document.documentElement.appendChild(s);
   document.documentElement.removeChild(s);
-
-  // In Safari, when clicking from one video to another,
-  // user can see loading of the next page and 
-  // then the reload of the already chosen page.
-  // This prevents users to see this behaviour.
+  
+  var url = document.location.href;    
   window.onbeforeunload = function() {
-    if (SAFARI)
+    if (url.search("channel=") > 0)
       document.body.style.display = "none";
   }
 
@@ -31,7 +28,6 @@ if (/youtube/.test(document.location.hostname)) {
     // If YouTube whitelist is enabled in Options, add name of the channel on the end of URL
     if (enabled_settings.indexOf("youtube_channel_whitelist") >= 0) {
       // Don't run on main, search and feed page
-      var url = document.location.href;
       if (url.search("channel=") < 0 && /user|watch|channel/.test(url) && url.search("feed") < 0) {
         if (/user|channel/.test(url)) {
           var get_yt_name = document.getElementsByClassName("qualified-channel-title-text")[0].innerText;
@@ -48,7 +44,7 @@ if (/youtube/.test(document.location.hostname)) {
         // Add the name of the channel to the end of URL
         window.history.replaceState(null,null,new_url);
         // Page must be reloaded, so AdBlock can properly whitelist the page
-        document.location.reload();
+        document.location.reload(false);
       }
     }
   });

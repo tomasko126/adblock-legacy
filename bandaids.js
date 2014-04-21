@@ -42,19 +42,6 @@ var run_bandaids = function() {
       }
     },
     youtube_safari_only: function() {
-      // If history.pushState is available,
-      // YouTube uses it when navigating from one video
-      // to another and tells the flash player via JavaScript,
-      // which ads to show next bypassing the flashvars rewrite code.
-      // Disabling history.pushState on pages with YouTube's flash player
-      // will force YouTube to not use history.pushState
-      var s = document.createElement("script");
-      s.type = "application/javascript";
-      s.async = false;
-      s.textContent = "history.pushState = undefined;";
-      document.documentElement.appendChild(s);
-      document.documentElement.removeChild(s);
-      
       function blockYoutubeAds(videoplayer) {
         var flashVars = videoplayer.getAttribute('flashvars');
         var inParam = false;
