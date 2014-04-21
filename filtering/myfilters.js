@@ -170,7 +170,7 @@ MyFilters.prototype.getExtensionFilters = function(settings) {
   }
   // Exclude private search results ads
   if (localStorage.search_secure_enable === "true")
-    texts.push("@@||adblock.disconnect.me/$document");
+    texts.push("@@||search.disconnect.me/$document");
 
   return texts;
 };
@@ -571,7 +571,7 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "chinese": { // Additional Chinese filters
-      url: "https://adblock-chinalist.googlecode.com/svn/trunk/adblock.txt",
+      url: "https://easylist-downloads.adblockplus.org/easylistchina.txt",
       requiresList: "easylist",
     },
     "czech": { // Additional Czech and Slovak filters
