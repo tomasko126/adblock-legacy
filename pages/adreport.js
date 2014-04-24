@@ -80,7 +80,7 @@ function generateReportURL() {
   body.push("");
   body.push("");
   count++;
-  body.push(count + ". Paste a working filter, if you have one: ");
+  body.push(count + ". If you have created the filter which removes reported ad, please paste it here: ");
   body.push("");
   body.push("");
   count++;
