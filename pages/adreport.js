@@ -134,9 +134,8 @@ $("#step_update_filters_yes").click(function() {
 });
 
 // STEP 2: disable all extensions
+
 //Code for displaying the div is in the $function() that contains localizePage()
-
-
 //after user disables all extensions except for AdBlock
 //if the user clicks a radio button
 $("#step_disable_extensions_no").click(function() {
@@ -145,11 +144,24 @@ $("#step_disable_extensions_no").click(function() {
 });
 $("#step_disable_extensions_yes").click(function() {
   $("#step_disable_extensions").html("<span class='answer'>" + translate("yes") + "</span>");
-  $("#step_language_DIV").css("display", "block");
+  $("#step_malware_DIV").css("display", "block");
 });
 
 
-// STEP 3: language
+// STEP 3: scan for malware
+
+//If the user clicks a radio button
+$("#step_malware_yes").click(function() {
+  $("#step_malware").html("<span class='answer'>" + translate("yes") + "</span>");
+  $("#step_language_DIV").css("display", "block");
+});
+$("#step_malware_no").click(function() {
+  $("#step_malware").html("<span class='answer'>" + translate("no") + "</span>");
+  $("#whattodo").text(translate("adalreadyblocked"));
+});
+
+
+// STEP 4: language
 
 //if the user clicks an item
 var contact = "";
@@ -179,7 +191,7 @@ $("#step_language_lang").change(function() {
   $("#checkinfirefox").html(translate("checkinfirefoxtitle", hideChromeInChrome));
 });
 
-// STEP 4: also in Firefox
+// STEP 5: also in Firefox
 
 //If the user clicks a radio button
 $("#step_firefox_yes").click(function() {
@@ -214,7 +226,7 @@ $("#step_firefox_wontcheck").click(function() {
 
 
 
-// STEP 5: video/flash ad (Safari-only)
+// STEP 6: video/flash ad (Safari-only)
 
 //If the user clicks a radio button
 $("#step_flash_yes").click(function() {
