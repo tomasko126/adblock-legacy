@@ -543,7 +543,7 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "easylist_plus_french": { // Additional French filters
-      url: "https://easylist-downloads.adblockplus.org/liste_fr+easylist.txt",
+      url: "https://easylist-downloads.adblockplus.org/liste_fr.txt",
       requiresList: "easylist",
     },
     "easylist_plus_german": { // Additional German filters
