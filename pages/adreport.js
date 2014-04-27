@@ -153,11 +153,11 @@ $("#step_disable_extensions_yes").click(function() {
 //If the user clicks a radio button
 $("#step_everywhere_yes").click(function() {
     $("#step_everywhere").html("<span class='answer'>" + translate("yes") + "</span>");
-    $("#step_malware").css("display", "block");
+    $("#step_malware_DIV").css("display", "block");
   });
   $("#step_everywhere_no").click(function() {
     $("#step_everywhere").html("<span class='answer'>" + translate("no") + "</span>");
-    $("#step_language_DIV").text(translate("adalreadyblocked"));
+    $("#step_language_DIV").css("display", "block");
   });
 
 
