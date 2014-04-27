@@ -105,6 +105,16 @@ function generateReportURL() {
   body.push("");
   body.push("=== Enabled settings ===");
   body.push(enabled_settings.join('\n'));
+  body.push("");
+  body.push("=== Question Responses ===");
+  var answers = $(".answer");
+  var text = $('div[id^="step"][class="section"]');
+  for (var i=0, n=1; i<answers.length, i<text.length; i++, n++) {
+    try {
+      body.push(n+"."+text[i].id+": "+answers[i].innerText);
+    } catch(e){}
+  }
+  body.push("");
 
   result = result + "&discussion[body]=" + encodeURIComponent(body.join('  \n')); // Two spaces for Markdown newlines
 
@@ -203,6 +213,7 @@ $("#step_firefox_yes").click(function() {
   $("#privacy").show();
 });
 $("#step_firefox_no").click(function() {
+  $("#step_firefox").html("<span class='answer'>" + translate("no") + "</span>");
   if (SAFARI) {
     // Safari can't block video ads
     $("#step_flash_DIV").css("display", "block");
@@ -211,7 +222,6 @@ $("#step_firefox_no").click(function() {
     $("a", "#whattodo").attr("href", generateReportURL());
     $("#privacy").show();
   }
-  $("#step_firefox").html("<span class='answer'>" + translate("no") + "</span>");
 });
 $("#step_firefox_wontcheck").click(function() {
   if (!SAFARI) {
