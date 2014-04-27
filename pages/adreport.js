@@ -148,7 +148,20 @@ $("#step_disable_extensions_yes").click(function() {
 });
 
 
-// STEP 3: scan for malware
+// STEP 3a: Ads on most pages 
+
+//If the user clicks a radio button
+$("#step_everywhere_yes").click(function() {
+    $("#step_everywhere").html("<span class='answer'>" + translate("yes") + "</span>");
+    $("#step_malware").css("display", "block");
+  });
+  $("#step_everywhere_no").click(function() {
+    $("#step_everywhere").html("<span class='answer'>" + translate("no") + "</span>");
+    $("#step_language_DIV").text(translate("adalreadyblocked"));
+  });
+
+
+// STEP 3b: scan for malware
 
 //If the user clicks a radio button
 $("#step_malware_yes").click(function() {
