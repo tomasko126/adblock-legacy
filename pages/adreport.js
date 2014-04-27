@@ -144,7 +144,7 @@ $("#step_disable_extensions_no").click(function() {
 });
 $("#step_disable_extensions_yes").click(function() {
   $("#step_disable_extensions").html("<span class='answer'>" + translate("yes") + "</span>");
-  $("#step_malware_DIV").css("display", "block");
+  $("#step_everywhere_DIV").css("display", "block");
 });
 
 
