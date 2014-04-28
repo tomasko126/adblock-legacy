@@ -71,9 +71,7 @@ adblock_begin({
     document.removeEventListener("beforeload", beforeLoadHandler, true);
   },
   handleHiding: function(data) {
-    if (data.runnable && !data.hiding)
-      document.documentElement.classList.add(data.avoidHidingClass);
-    else if (data.hiding)
+    if (data.hiding)
       block_list_via_css(data.selectors);
   },
   success: function() {

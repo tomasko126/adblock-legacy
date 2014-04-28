@@ -594,7 +594,7 @@
       // main_frame is undefined if the tab is a new one, so no use updating badge.
       if (!main_frame) return;
       
-      var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url);
+      var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url) && !/chrome\/newtab/.test(main_frame.url);
       
       if(display && (main_frame && isBlockable) && !adblock_is_paused()){
         badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
