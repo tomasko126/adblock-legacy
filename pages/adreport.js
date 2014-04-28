@@ -144,7 +144,11 @@ $("#step_disable_extensions_no").click(function() {
 });
 $("#step_disable_extensions_yes").click(function() {
   $("#step_disable_extensions").html("<span class='answer'>" + translate("yes") + "</span>");
-  $("#step_everywhere_DIV").css("display", "block");
+  // Show malware steps just for Windows users
+  if (navigator.appVersion.indexOf("Win")!=-1)
+    $("#step_everywhere_DIV").css("display", "block");
+  else
+    $("#step_language_DIV").css("display", "block");
 });
 
 
