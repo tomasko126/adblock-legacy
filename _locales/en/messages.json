@@ -498,8 +498,8 @@
     "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
   },
   "similarAds":{
-    "message":"Same/similar ads on every page",
-    "description":"On the ad report page, see 'Do you see the same or similar...' / 'sameAdsOnDifferentPages'"
+    "message":"Same\/similar ads on every page",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
   },
   "disableallextensions":{
     "message":"Disable all extensions except for AdBlock.",
@@ -534,7 +534,7 @@
     "description":"instruction on ad report page"
   },
   "performscan":{
-    "message":"Perform a full scan of your computer using your antivirus/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
+    "message":"Perform a full scan of your computer using your antivirus\/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
     "description":"instruction on ad report page"
   },
   "correctfilters":{
