@@ -28,18 +28,20 @@ if (/youtube/.test(document.location.hostname)) {
     // If YouTube whitelist is enabled in Options, add name of the channel on the end of URL
     if (enabled_settings.indexOf("youtube_channel_whitelist") >= 0) {
       // Don't run on main, search and feed page
-      if (url.search("channel=") < 0 && /user|watch|channel/.test(url) && url.search("feed") < 0) {
-        if (/user|channel/.test(url)) {
-          var get_yt_name = document.getElementsByClassName("qualified-channel-title-text")[0].innerText;
-          var extracted_name = get_yt_name.replace(/\s/g, '');
+      if (url.search("channel=") < 0 && /channel|watch/.test(url) && url.search("feed") < 0) {
+        if (/channel/.test(url)) {
+          var get_yt_name = document.querySelector(".qualified-channel-title-text a[href*='/channel/']");
+          if (!get_yt_name) {
+            get_yt_name = document.querySelector(".epic-nav-item-heading").innerText;
+            var extracted_name = get_yt_name.split('/').pop();
+          } else {
+            var extracted_name = get_yt_name.getAttribute("href").split('/').pop();
+          }
           var new_url = url+"?&channel="+extracted_name;
         } else {
-          try {
-            var get_yt_name = document.getElementsByClassName("yt-user-name")[0].innerText || 
-                              document.getElementsByClassName("yt-user-name")[1].innerText;
-            var extracted_name = get_yt_name.replace(/\s/g, '');
-            var new_url = url+"&channel="+extracted_name;
-          } catch (e) {} // Silently fail
+          var get_yt_name = document.querySelector("#watch7-channel-header a[href*='/channel/']").getAttribute("href");
+          var extracted_name = get_yt_name.split('/').pop();
+          var new_url = url+"&channel="+extracted_name;
         }
         // Add the name of the channel to the end of URL
         window.history.replaceState(null,null,new_url);
