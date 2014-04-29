@@ -235,7 +235,7 @@ if (!LEGACY_SAFARI) {
           }
         }
         menu.appendSeparator(itemIdentifier("separator"));
-        if (!paused && canBlock && !whitelisted && get_settings().show_advanced_options && url.search("channel") > 0) {
+        if (!paused && canBlock && !whitelisted && get_settings().show_advanced_options) {
           appendMenuItem("report-ad", translate("report_ad_on_page"));
         }
         appendMenuItem("AdBlockOptions", translate("options"));
