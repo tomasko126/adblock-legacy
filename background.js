@@ -725,7 +725,12 @@
   // Inputs: url:string url of the page
   // Returns: null if successful, otherwise an exception
   create_whitelist_filter_for_youtube_channel = function(url) {
-    var get_channel = url.match(/channel=([^]*)/)[1];
+    var get_channel = url.split('/').pop();
+    if (/channel/.test(url)) {
+      var get_channel = url.match(/channel=([^]*)/)[1];
+    } else {
+      var get_channel = url.split('/').pop(); 
+    }
     var filter = '@@||youtube.com/*' + get_channel + '$document';
     return add_custom_filter(filter);
   }

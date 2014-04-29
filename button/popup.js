@@ -52,7 +52,7 @@ function customize_for_this_tab() {
 
     var path = info.tab.url;
     var should_show;
-    if (host === "www.youtube.com" && path.search("channel") > 0 && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
+    if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
       show(["div_whitelist_channel"]);
     }
  
