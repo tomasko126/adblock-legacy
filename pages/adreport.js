@@ -154,11 +154,28 @@ $("#step_disable_extensions_no").click(function() {
 });
 $("#step_disable_extensions_yes").click(function() {
   $("#step_disable_extensions").html("<span class='answer'>" + translate("yes") + "</span>");
-  $("#step_malware_DIV").css("display", "block");
+  // Show malware steps just for Windows users
+  if (navigator.appVersion.indexOf("Win")!=-1)
+    $("#step_everywhere_DIV").css("display", "block");
+  else
+    $("#step_language_DIV").css("display", "block");
 });
 
 
-// STEP 3: scan for malware
+// STEP 3a: Ads on most pages 
+
+//If the user clicks a radio button
+$("#step_everywhere_yes").click(function() {
+    $("#step_everywhere").html("<span class='answer'>" + translate("yes") + "</span>");
+    $("#step_malware_DIV").css("display", "block");
+  });
+  $("#step_everywhere_no").click(function() {
+    $("#step_everywhere").html("<span class='answer'>" + translate("no") + "</span>");
+    $("#step_language_DIV").css("display", "block");
+  });
+
+
+// STEP 3b: scan for malware
 
 //If the user clicks a radio button
 $("#step_malware_yes").click(function() {
