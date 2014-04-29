@@ -362,7 +362,7 @@
     var text = get_custom_filters_text();
     var custom_filters_arr = text ? text.split("\n"):[];
     var new_custom_filters_arr = [];
-    var identifier = host + "##"; //append delimiter to make sure it is the identifier
+    var identifier = host;
     
     for(var i = 0; i < custom_filters_arr.length; i++) {
       var entry = custom_filters_arr[i];
