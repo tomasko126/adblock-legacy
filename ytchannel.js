@@ -30,7 +30,7 @@ if (/youtube/.test(document.location.hostname)) {
       // Don't run on main, search and feed page
       if (url.search("channel=") < 0 && /channel|watch/.test(url) && url.search("feed") < 0) {
         if (/channel/.test(url)) {
-          var get_yt_name = document.querySelector(".qualified-channel-title-text a[href*='/channel/']");
+          var get_yt_name = document.querySelector(".qualified-channel-title-text a[href*='/user/']");
           if (!get_yt_name) {
             get_yt_name = document.querySelector(".epic-nav-item-heading").innerText;
             var extracted_name = get_yt_name.split('/').pop();
@@ -39,7 +39,7 @@ if (/youtube/.test(document.location.hostname)) {
           }
           var new_url = url+"?&channel="+extracted_name;
         } else {
-          var get_yt_name = document.querySelector("#watch7-channel-header a[href*='/channel/']").getAttribute("href");
+          var get_yt_name = document.querySelector("#watch7-user-header a[href*='/user/']").getAttribute("href");
           var extracted_name = get_yt_name.split('/').pop();
           var new_url = url+"&channel="+extracted_name;
         }
