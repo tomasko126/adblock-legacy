@@ -54,6 +54,12 @@ test("storage get and storage set", function() {
     foo: "bar",
     bar: "foo",
   };
+   // the following will allow the the storage functions.js to execute correctly 
+   // tests failling because the Safari extension API safari.extension.settings is only 
+   // available to the 'global' page.  We'll set it correctly here.
+  if (/Safari/.test(navigator.userAgent)) {
+    safari.extension.settings = localStorage;
+  }
   storage_set("testObj", testObj);
   var testResultObj = storage_get("testObj");
   deepEqual(testObj.foo, testResultObj.foo);

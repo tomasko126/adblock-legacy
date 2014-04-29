@@ -38,8 +38,6 @@
       Clicking on the 'View Source' link will display the JavaScript source code, with highlighting.  
       Highlighted lines are not executed by the unit tests.
       
-      Note:  the blanket.js file has been modified to run within a Chrome Extension adhering to CSP 1.1 requirements.
-      
       see http://blanketjs.org/ for more information.       
    -->
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -55,40 +53,7 @@
   <script src="../../filtering/filternormalizer.js" type="text/javascript"  data-cover></script>
   <script src="../../adblock_start_common.js" type="text/javascript"  data-cover></script>
   <script src="../../adblock_start_safari.js" type="text/javascript"  data-cover></script>
-  <script>
-   // the following Mock funtions will clobber (override) the ones in functions.js to avoid 
-   // tests failling because the Safari extension API safari.extension.settings is only 
-   // available to the 'global' page.
-    storage_get = function(key) {
-      var store = localStorage;
-      var json = store.getItem(key);
-      if (json == null)
-        return undefined;
-      try {
-        return JSON.parse(json);
-      } catch (e) {
-        log("Couldn't parse json for " + key);
-        return undefined;
-      }
-    };
-    storage_set = function(key, value) {
-      var store = localStorage;
-      if (value === undefined) {
-        store.removeItem(key);
-        return;
-      }
-      try {
-        store.setItem(key, JSON.stringify(value));
-      } catch (ex) {
-        // Safari throws this error for all writes in Private Browsing mode.
-        // TODO: deal with the Safari case more gracefully.
-        if (ex.name == "QUOTA_EXCEEDED_ERR" && !SAFARI) {
-          alert(translate("storage_quota_exceeded"));
-          openTab("options/index.html#ui-tabs-2");
-        }
-      }
-    };    
-    </script>  
+  
   
   <script src="qunit.js" type="text/javascript"></script>
   <script src="blanket.js" type="text/javascript"></script>
