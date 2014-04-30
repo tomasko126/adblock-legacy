@@ -1,5 +1,4 @@
 var resources = {};
-var debug_enabled = false;
 var custom_filters = {};
 var chosenResource = {};
 var local_filtersets = {};
@@ -428,8 +427,6 @@ function filterMatchesResource(filter, url, type, domain) {
 // finally start generating some content for the user, and allowing him to
 // do some things, instead of looking at 'LOADING'
 function finally_it_has_loaded_its_stuff() {
-  if (debug_enabled)
-    $(".onlyifdebug").show();
   // Create the table of resources
   generateTable();
   // Add the dotted borders when hovering
@@ -706,7 +703,6 @@ $(function() {
       createResourceblockFilterset("build_in_filters",
             MyFilters.prototype.getExtensionFilters(data.settings));
 
-      debug_enabled = data.settings.debug_logging;
       if (data.adblock_is_paused) {
         alert(translate("adblock_is_paused"));
         window.close();
