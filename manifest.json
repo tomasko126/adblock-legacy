@@ -44,7 +44,13 @@
       "matches": [
         "*://*.mail.live.com/*",
         "*://*.mastertoons.com/*",
-        "*://*.getadblock.com/*"
+        "*://*.getadblock.com/*",
+        "*://*.mobilmania.cz/*",
+        "*://*.zive.cz/*",
+        "*://*.doupe.cz/*",
+        "*://*.e15.cz/*",
+        "*://*.sportrevue.cz/*",
+        "*://*.autorevue.cz/*"
       ],
       "js": [
         "bandaids.js"

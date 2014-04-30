@@ -10,6 +10,8 @@ var run_bandaids = function() {
     apply_bandaid_for = "youtube_safari_only";
   else if(/getadblock\.com/.test(document.location.hostname))
     apply_bandaid_for = "getadblock";
+  else if(/mobilmania\.cz|zive\.cz|doupe\.cz|e15\.cz|sportrevue\.cz|autorevue\.cz/.test(document.location.hostname))
+    apply_bandaid_for = "czech_sites";
   else {
     var hosts = [ /mastertoons\.com$/ ];
     hosts = hosts.filter(function(host) { return host.test(document.location.hostname); });
@@ -112,6 +114,14 @@ var run_bandaids = function() {
         elemDiv.style.display = "none";
         document.body.appendChild(elemDiv);
       });
+    },
+    czech_sites: function() {
+      var player = document.getElementsByClassName("flowplayer");
+      // Remove data-ad attribute from videoplayer
+      if (player) {
+        for (i=0; i<player.length; i++)  
+          player[i].removeAttribute("data-ad");
+      }
     },
   }; // end bandaids
 
