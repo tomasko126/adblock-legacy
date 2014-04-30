@@ -51,7 +51,6 @@ function customize_for_this_tab() {
       hide(["div_show_resourcelist"]);
 
     var path = info.tab.url;
-    var should_show;
     if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
       show(["div_whitelist_channel"]);
     }
