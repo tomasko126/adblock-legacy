@@ -53,7 +53,6 @@ safari.application.addEventListener("message", function(messageEvent) {
     var args = messageEvent.message.data.args;
     if(messageEvent.target.url === args[1].tab.url)
       frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-    updateBadge();
     return;
   }
 
