@@ -271,7 +271,9 @@ function generateFilterSuggestions() {
   $("#suggestions").empty();
   for (var i = 0; i < suggestions.length; i++)
     $("#suggestions").append(suggestions[i]);
-  if (!isHidden && $("#suggestions").find('input:first-child').val().indexOf('?') > 0)
+  if (isHidden)
+    $("#disable").find('input').prop('checked', true);
+  else if ($("#suggestions").find('input:first-child').val().indexOf('?') > 0)
     $($("#suggestions").children('input')[1]).prop('checked', true);
   else
     $("#suggestions").find('input:first-child').prop('checked', true);
@@ -532,6 +534,7 @@ function finally_it_has_loaded_its_stuff() {
     var isWhitelisted = ($(".selected").hasClass("whitelisted"));
     if (isBlocked || isWhitelisted) {
       $("#disable").css("display","block");
+      $("#confirmUrl").before("<br>");
     } else if (isHidden) {
       $("#disable").css("display","block");
       $("#selectblockableurl br").remove();
