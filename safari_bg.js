@@ -53,7 +53,6 @@ safari.application.addEventListener("message", function(messageEvent) {
     var args = messageEvent.message.data.args;
     if(messageEvent.target.url === args[1].tab.url)
       frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-    updateBadge();
     return;
   }
 
@@ -93,6 +92,7 @@ safari.application.addEventListener("activate", function(event) {
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
 // the tool bar item for the active window so I just updated all tool bar items' badge. That
 // way, I don't need to loop and compare.)
+var count;
 var updateBadge = function() {
   var show_block_counts = get_settings().display_stats;
   
@@ -101,7 +101,7 @@ var updateBadge = function() {
   var canBlock = !page_is_unblockable(url);
   var whitelisted = page_is_whitelisted(url);
   
-  var count = 0;
+  count = 0;
   if(show_block_counts && !paused && canBlock && !whitelisted) {  
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
     count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
@@ -299,11 +299,8 @@ if (!LEGACY_SAFARI) {
           var show_block_counts = get_settings().display_stats;
           var total_blocked = blockCounts.getTotalAdsBlocked();
           appendMenuItem("blocked-in-total", "      " + translate("blocked_n_in_total", [total_blocked]));
-          var tabId = safari.application.activeBrowserWindow.activeTab.id;
-          if(tabId) {
-            var blocked_in_tab = blockCounts.getTotalAdsBlocked(tabId);
-            appendMenuItem("blocked-on-page", "      " + translate("blocked_n_on_this_page", [blocked_in_tab]));
-          }
+          var blocked_in_tab = count;
+          appendMenuItem("blocked-on-page", "      " + translate("blocked_n_on_this_page", [blocked_in_tab]));
           appendMenuItem("toggle-block-display", translate("show_on_adblock_button"), show_block_counts);
           menu.appendSeparator(itemIdentifier("separator0"));
         }
