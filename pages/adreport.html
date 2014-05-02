@@ -178,10 +178,39 @@
         <label for="step_disable_extensions_no" i18n="no"></label>
       </div>
     </div>
+
+    
+  <!--STEP 3a: Similar ads in different places-->
+    <div class="section" id="step_everywhere_DIV">
+      <h2 i18n="similarAds"></h2>
+      <span i18n="sameAdsOnDifferentPages"></span>
+      <div class="form" id="step_everywhere">
+        <input type="radio" id="step_everywhere_yes" name="step_everywhere"/>
+        <label for="step_everywhere_yes" i18n="yes"></label>
+        <input type="radio" id="step_everywhere_no" name="step_everywhere" />
+        <label for="step_everywhere_no" i18n="no"></label>
+      </div>
+    </div>
+    
+  <!--STEP 3b: scan for malware-->
+    <div class="section" id="step_malware_DIV">
+      <h2 i18n="scancomputer"></h2>
+      <ol>
+        <li i18n="performscan"></li>
+        <li i18n="reloadadpage"></li>
+      </ol>
+      
+      <span i18n="adstillappear"></span>
+      <div class="form" id="step_malware">
+        <input type="radio" id="step_malware_yes" name="step_malware"/>
+        <label for="step_malware_yes" i18n="yes"></label>
+        <input type="radio" id="step_malware_no" name="step_malware" />
+        <label for="step_malware_no" i18n="no"></label>
+      </div>
     </div>
 
-    <!--STEP 3: language-->
-    <div id="step">
+
+    <!--STEP 4: language-->
     <div class="section" id="step_language_DIV">
       <h2 i18n="correctfilters"></h2>
       <span i18n="pagelanguagecheck" style="margin-left: 20px;"></span>
@@ -190,7 +219,7 @@
           <option disabled="disabled" selected="selected"></option>
           <option value="easylist;http://forums.lanik.us/" i18n="lang_english"></option>
           <option value="easylist;easylist_plus_bulgarian;mailto:alex at stanev.org" i18n="filtereasylist_plus_bulgarian"></option>
-          <option value="chinese;https://code.google.com/p/adblock-chinalist/issues/list" i18n="filterchinese"></option>
+          <option value="chinese;http://abpchina.org/forum" i18n="filterchinese"></option>
           <option value="czech;http://adblock.sk/forum" i18n="lang_czech"></option>
           <option value="danish;mailto:henrik at schack.dk" i18n="filterdanish"></option>
           <option value="easylist;dutch;http://forums.lanik.us/viewforum.php?f=100" i18n="filterdutch"></option>
@@ -218,11 +247,9 @@
         </select>
       </div>
     </div>
-    </div>
-
-    <!--STEP 4: also in Firefox-->
-    <div id="step" style="background-color: white;">
-    <div class="section white" id="step_firefox_DIV">
+  
+    <!--STEP 5: also in Firefox-->
+    <div class="section" id="step_firefox_DIV">
       <h2 id="checkinfirefox"></h2>
       <abbr id="whyFireFox" i18n_title="firefox_explanation">?</abbr>
       <ol>
@@ -243,8 +270,7 @@
     </div>
     </div>
 
-    <!--STEP 5: video/flash ads-->
-    <div id="step">
+    <!--STEP 6: video/flash ads-->
     <div class="section" id="step_flash_DIV">
       <h2 i18n="flashads"></h2>
       <span i18n="cantblockflashwarning" style="margin-left: 19px;"></span>
