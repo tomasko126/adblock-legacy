@@ -17,7 +17,6 @@
       }
       .section {
         padding: 10px;
-        background-color: #f8f8f8;
         padding-left: 162px;
         margin: 0px -8px 0px -8px;
       }
@@ -33,9 +32,6 @@
       }
       div.form {
         margin-left: 15px;
-      }
-      #step {
-        background: #f8f8f8;
       }
       #info {
         position: relative;
@@ -93,7 +89,7 @@
         padding: 20px 20px 20px 0px;
         background-color: white;
       }
-      #step_language_DIV, #step_update_filters_DIV, #step_firefox_DIV, #step_flash_DIV  {
+      #step_language_DIV, #step_update_filters_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_DIV  {
         position: relative;
         margin: 0px auto;
         max-width: 1000px;
@@ -103,7 +99,7 @@
         .social {
           display: none;
         }
-        #step_update_filters_DIV, #step_disable_extensions_DIV, #step_language_DIV, #step_firefox_DIV, #step_flash_DIV   {
+        #step_update_filters_DIV, #step_disable_extensions_DIV, #step_language_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_div   {
           padding: 20px 20px 20px 0px;
         }
         #info {
@@ -131,7 +127,7 @@
     <div id="info" i18n="adreport2"></div>
 
     <!--STEP 1: update filters-->
-    <div id="step">
+    <div id="step" style="background-color: #f8f8f8;">
     <div class="section" id="step_update_filters_DIV" style="display:block;">
       <h2 i18n="updateyourlists"></h2>
       <ol>
@@ -150,9 +146,9 @@
     </div>
 
   <!--STEP 2: disable all extension except AdBlock-->
-    <div id="step" style="background-color: white;" >
+    <div id="step">
     <div class="section" id="step_disable_extensions_DIV">
-      <h2 i18n="disableallextensions"></h2><br />
+      <h2 i18n="disableallextensions"></h2>
       <div class="chrome_only">
       <ol>
         <li i18n="disableforchromestepone"></li>
@@ -168,7 +164,6 @@
       </ol>
       </div>
 
-      <br />
 
       <span i18n="adstillappear" class="afterDisableExtensions" style="margin-left: 19px;"></span><br/>
       <div class="form" id="step_disable_extensions">
@@ -178,12 +173,14 @@
         <label for="step_disable_extensions_no" i18n="no"></label>
       </div>
     </div>
+    </div>
 
-    
+   
   <!--STEP 3a: Similar ads in different places-->
+    <div id="step" style="background-color: #f8f8f8;">
     <div class="section" id="step_everywhere_DIV">
-      <h2 i18n="similarAds"></h2>
-      <span i18n="sameAdsOnDifferentPages"></span>
+      <h2 i18n="similarAds" style="margin-bottom: 15px;"></h2>
+      <span i18n="sameAdsOnDifferentPages" style="margin-left: 20px;"></span>
       <div class="form" id="step_everywhere">
         <input type="radio" id="step_everywhere_yes" name="step_everywhere"/>
         <label for="step_everywhere_yes" i18n="yes"></label>
@@ -191,8 +188,10 @@
         <label for="step_everywhere_no" i18n="no"></label>
       </div>
     </div>
+    </div>
     
   <!--STEP 3b: scan for malware-->
+    <div id="step">
     <div class="section" id="step_malware_DIV">
       <h2 i18n="scancomputer"></h2>
       <ol>
@@ -200,7 +199,7 @@
         <li i18n="reloadadpage"></li>
       </ol>
       
-      <span i18n="adstillappear"></span>
+      <span i18n="adstillappear" style="margin-left: 19px;"></span>
       <div class="form" id="step_malware">
         <input type="radio" id="step_malware_yes" name="step_malware"/>
         <label for="step_malware_yes" i18n="yes"></label>
@@ -208,11 +207,13 @@
         <label for="step_malware_no" i18n="no"></label>
       </div>
     </div>
+    </div>
 
 
     <!--STEP 4: language-->
+    <div id="step" style="background-color: #f8f8f8;">
     <div class="section" id="step_language_DIV">
-      <h2 i18n="correctfilters"></h2>
+      <h2 i18n="correctfilters" style="margin-bottom: 15px;"></h2>
       <span i18n="pagelanguagecheck" style="margin-left: 20px;"></span>
       <div id="step_language" class="form">
         <select id="step_language_lang" style="margin-left: 6px;">
@@ -247,8 +248,11 @@
         </select>
       </div>
     </div>
+    </div>
+
   
     <!--STEP 5: also in Firefox-->
+    <div id="step">
     <div class="section" id="step_firefox_DIV">
       <h2 id="checkinfirefox"></h2>
       <abbr id="whyFireFox" i18n_title="firefox_explanation">?</abbr>
@@ -270,7 +274,9 @@
     </div>
     </div>
 
+
     <!--STEP 6: video/flash ads-->
+    <div id="step" style="background-color: #f8f8f8;">
     <div class="section" id="step_flash_DIV">
       <h2 i18n="flashads"></h2>
       <span i18n="cantblockflashwarning" style="margin-left: 19px;"></span>

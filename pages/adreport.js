@@ -52,6 +52,7 @@ BGcall("get_settings", function(settings) {
 
 //generate the URL to the issue tracker
 function generateReportURL() {
+  var AdBlockVersion = chrome.extension.getURL('manifest.json').version;
   var result = "https://adblock.tenderapp.com/discussion/new" +
                "?category_id=ad-report&discussion[title]=";
 
@@ -166,11 +167,11 @@ $("#step_disable_extensions_yes").click(function() {
 //If the user clicks a radio button
 $("#step_everywhere_yes").click(function() {
     $("#step_everywhere").html("<span class='answer'>" + translate("yes") + "</span>");
-    $("#step_malware_DIV").fadeIn().css("display", "block");
+    $("#step_malware_DIV").css("display", "block");
   });
   $("#step_everywhere_no").click(function() {
     $("#step_everywhere").html("<span class='answer'>" + translate("no") + "</span>");
-    $("#step_language_DIV").fadeIn().css("display", "block");
+    $("#step_language_DIV").css("display", "block");
   });
 
 
