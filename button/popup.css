@@ -5,7 +5,7 @@ body {
 #wrapper {
   margin: 0px 0px;
   width: 275px;
-  font-family: "Avenir Book", Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
   font-size: 12px;
 }
 .separator {
@@ -72,12 +72,17 @@ a {
   color: #4D7BD6;
   text-decoration: none;
 }
+a:focus {
+  outline: none;
+}
 a:hover {
   -webkit-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
   color: red;
 }
 @font-face {
-  font-family:'Avenir Book';
-  src: url('chrome-extension:/font/font.woff') format('woff');
+  font-family: "Open Sans";
+  font-weight: 300;
+  src: url('../../font/OpenSans.woff') format('woff');
+  -webkit-font-smoothing: antialiased;
 }
