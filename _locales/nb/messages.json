@@ -56,7 +56,7 @@
     "description":"Blacklister attribute choosing page message"
   },
   "blacklisternotsure":{
-    "message":"<b>Ikke sikker?<\/b> bare press 'Blokker!' nedenfor.",
+    "message":"<b>Ikke sikker?<\/b> bare klikk 'Blokker!' nedenfor.",
     "description":"Blacklister attribute choosing page message.  'Block it!' must be the same as the text of the 'buttonblockit' message."
   },
   "blacklisterthefilter":{
@@ -322,7 +322,7 @@
     "description":"Title of the filter list tab"
   },
   "filterlistlink":{
-    "message":"Ikke abboner på flere enn du trenger -- hver liste bremser deg ned bittelitt! Bidragsytere og flere lister finner du <a>her<\/a>.",
+    "message":"Ikke abonner på flere enn du trenger -- hver liste bremser deg ned bittelitt! Bidragsytere og flere lister finner du <a>her<\/a>.",
     "description":"Explanation of the filter lists"
   },
   "updatenowmessage":{
@@ -346,7 +346,7 @@
     "description":"Name of the filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "message":"Fanboy's Annoyances (fjerner irritasjonsmomenter på nettet)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
@@ -493,6 +493,14 @@
     "message":"Du trenger ikke gjøre noe, reklamen er allerede blokkert",
     "description":"on the ad report page, telling a user there is nothing to do"
   },
+  "sameAdsOnDifferentPages":{
+    "message":"Do you see the same or similar ads on many different pages, e.g. your homepage, your workplace's website, etc.?",
+    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
+  },
+  "similarAds":{
+    "message":"Same\/similar ads on every page",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
+  },
   "disableallextensions":{
     "message":"Slå av alle utvidelser, utenom AdBlock.",
     "description":"instruction on ad report page"
@@ -520,6 +528,14 @@
   "reenableadsonebyone":{
     "message":"Nå som annonsene er borte, må du finne ut hvilken utvidelse som er årsaken. Gå gjennom og aktiver hver utvidelse, en etter en. Den utvidelsen som får annonsene til å komme tilbake, er den som må slettes for å bli kvitt annonsene.",
     "description":"tells the user to reenable the extensions one by one."
+  },
+  "scancomputer":{
+    "message":"Scan your computer for malware",
+    "description":"instruction on ad report page"
+  },
+  "performscan":{
+    "message":"Perform a full scan of your computer using your antivirus\/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
+    "description":"instruction on ad report page"
   },
   "correctfilters":{
     "message":"Riktige filtere",
@@ -628,7 +644,7 @@
     }
   },
   "retryaftersubscribe":{
-    "message":"Abboner på denne filterlisten, og prøv igjen: $list_title$",
+    "message":"Abonner på denne filterlisten, og prøv igjen: $list_title$",
     "description":"instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
     "placeholders":{
       "list_title":{
@@ -1000,7 +1016,7 @@
     "description":"Credit for your translation with $translator_names$ being your own name below. Multiple names should be separated by a comma.",
     "placeholders":{
       "translator_names":{
-        "content":"Emil Broll, Martin Hoftun, ersta",
+        "content":"Emil Broll, Martin Hoftun, Erling Stangnes",
         "example":"Michael G, Drew R"
       }
     }
@@ -1240,5 +1256,25 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
+  },
+  "activate_private_search":{
+    "message":"Aktiver privat søk",
+    "description":"Checkbox to activate or deactivate private search"
+  },
+  "search_privately_from":{
+    "message":"Søk privat fra:",
+    "description":"Set where private search should be activated, followed by several options"
+  },
+  "omnibox":{
+    "message":"Adresselinjen",
+    "description":"Option, where private search should be activated"
+  },
+  "search_engine_websites":{
+    "message":"Søkemotorsider",
+    "description":"Option, where private search should be activated"
+  },
+  "search_privately":{
+    "message":"Søk privat",
+    "description":"Placeholder in private search text box"
   }
 }
