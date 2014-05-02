@@ -112,7 +112,7 @@ function generateTable() {
       row.addClass(type.name);
 
     // Cell 1: Checkbox
-    var cell = $("<td><input type='checkbox'/></td>").css("padding-left", "5px");
+    var cell = $("<td><input type='checkbox'/></td>").css("padding-left", "4px");
     if (disabled)
       cell.find("input").prop("disabled", true);
     row.append(cell);
@@ -127,6 +127,7 @@ function generateTable() {
     // Cell 3: Type
     $("<td>").
       attr("data-column", "type").
+      css("text-align", "center").
       text(translate('type' + typeName)).
       appendTo(row);
 
@@ -401,7 +402,7 @@ function finally_it_has_loaded_its_stuff() {
       return;
     $(this).children(":not(:first-child)").
       css("-webkit-transition", "all 0.3s ease-out").
-      css("background-color", "rgba(242, 242, 242, 0.56)");
+      css("background-color", "rgba(242, 242, 242, 0.3)");
   });
   $("#resourceslist tr").mouseleave(function() {
     $(this).children().
@@ -501,6 +502,7 @@ function finally_it_has_loaded_its_stuff() {
 
     // Show the 'choose url' area
     $("#selectblockableurl").fadeIn();
+    $("#resourceslist tbody tr td").css("background-color", "white");
     generateFilterSuggestions();
     // If the user clicks the 'next' button
     $("#confirmUrl").click(function() {
@@ -753,7 +755,7 @@ sortTable = function() {
   var cellList = [];
   var rowList = [];
   $("td:nth-of-type(" + columnNumber + ")", table).each(function(index, element) {
-    cellList.push(element.innerHTML.toLowerCase() + 'ÿÿÿÿÿ' + (index+10000));
+    cellList.push(element.innerHTML.toLowerCase() + 'Ë‡Ë‡Ë‡Ë‡Ë‡' + (index+10000));
     rowList.push($(element).parent('tr').clone(true));
   });
   cellList.sort();

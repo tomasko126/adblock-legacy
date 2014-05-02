@@ -29,8 +29,9 @@
         cursor: default;
         position: relative;
         margin: 0px auto;
-        padding: 0px 10px 25px;
-        min-width: 1050px;
+        padding: 0px 15px 25px;
+        min-width: 1020px;
+        border-spacing: 0px;
       }
       .gifloader {
         background-image: url(../img/gifloader.gif);
@@ -45,7 +46,8 @@
         position: relative;
         margin: 0px auto;
         max-width: 0px;
-        top: -90px;
+        top: -70px;
+        right: 10px;
         text-decoration: none;
         color: #4D7BD6;
       }
@@ -79,10 +81,11 @@
         font-size: 12px;
         position: relative;
         border: 1px solid #EEE;
-        width: 450px;
+        width: 460px;
         cursor: move;
         margin: -20px 52% 0px;
         padding: 5px;
+        border-radius: 2px;
       }
       .hiding {
         color: blue;
@@ -103,7 +106,9 @@
         width: 9px;
       }
       #selectblockableurl #suggestions label {
-        margin-left: 4px;
+        margin-left: 6px;
+        display: inline-flex;
+        max-width: 850px;
       }
       #filterpreview {
         font-size: 12px;
@@ -127,18 +132,19 @@
       }
       #types label {
         margin-left: 20px;
+        margin-top: -4px;
       }
       #types input:nth-of-type(4n+1), #types label:nth-of-type(4n+1) {
-        left: 16px;
+        left: 29px;
       }
       #types input:nth-of-type(4n+2), #types label:nth-of-type(4n+2) {
-        left: 180px;
+        left: 190px;
       }
       #types input:nth-of-type(4n+3), #types label:nth-of-type(4n+3) {
-        left: 350px;
+        left: 360px;
       }
       #types input:nth-of-type(4n+4), #types label:nth-of-type(4n+4) {
-        left: 550px;
+        left: 560px;
       }
       #search {
         width: 100%;
@@ -155,8 +161,8 @@
       #selectresources {
         position: relative;
         margin: 0px auto;
-        max-width: 1025px;
-        padding: 120px 10px 20px 25px;
+        max-width: 990px;
+        padding: 120px 22px 20px 20px;
         font-size: 20px;
       }
       #selectblockableurl {
@@ -164,14 +170,14 @@
         background: #f8f8f8;
         position: relative;
         margin: 0px auto;
-        max-width: 1025px;
-        padding: 0px 100px 40px 100px;
+        max-width: 915px;
+        padding: 0px 100px 40px 22px;
       }
       #chooseoptions {
         position: relative;
         margin: 0px auto;
-        max-width: 1025px;
-        padding: 35px 10px;
+        max-width: 990px;
+        padding: 35px 23px;
       }
       th {
         cursor: pointer;
@@ -181,19 +187,6 @@
         cursor: pointer;
         margin-top: -4px;
       }
-      @media screen and (max-width: 1200px) {
-        #selectblockableurl {
-          padding: 0px 10px 20px 80px;
-        }
-      }
-      @media screen and (max-width: 1100px) {
-        #selectblockableurl {
-          padding: 0px 10px 20px 9px;
-        }
-        #selectresources {
-          padding: 120px 10px 20px 8px;
-        }
-}
     </style>
     <script src="resourceblock.js"></script>
   </head>
