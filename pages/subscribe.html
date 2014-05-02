@@ -7,7 +7,7 @@
     <script src="../functions.js"></script>
     <style type="text/css">
       body {
-        font: 14px "Avenir Book", Arial, Helvetica, sans-serif;
+        font: 14px "Open Sans", Arial, Helvetica, sans-serif;
       }
       div {
         padding: 10px;
@@ -15,17 +15,15 @@
         box-shadow: 3px 1px 9px 1px rgba(0, 0, 0, 0.25)
       }
       #listUrl {
-        display:block;
+        display: block;
         font-size: small;
         font-style: italic;
-        color:#222;
+        color: #222;
       }
       .logo {
         margin: 0px;
-        background: url(../img/logo.png);
         background-repeat: no-repeat;
-        padding-left:33px;
-        background-size: 70;
+        max-height: 20%;
         box-shadow: none;
       }
       h3 {
@@ -36,14 +34,16 @@
         margin-left:5px;
       }
       @font-face{
-        font-family:'Avenir Book';
-        src: url('chrome-extension:/font/font.woff') format('woff');
+        font-family: "Open Sans";
+        font-weight: 300;
+        src: url('../../font/OpenSans.woff') format('woff');
+        -webkit-font-smoothing: antialiased;
       }
     </style>
   </head>
   <body>
     <div>
-      <div class="logo"></div>
+      <img src="../img/logo.png" class="logo" />
       <h3><span i18n="subscribingtitle"></span><span id="result"></span></h3>
       <span id="listUrl"></span>
     </div>
