@@ -1,3 +1,5 @@
+
+
 module("General");
 test("Using extension domain", 1, function() {
   ok(window.chrome && chrome.extension, "This test suite should be running on an extension URL");
@@ -52,6 +54,13 @@ test("storage get and storage set", function() {
     foo: "bar",
     bar: "foo",
   };
+   // the following will allow the the storage functions.js to execute correctly 
+   // tests failling because the Safari extension API safari.extension.settings is only 
+   // available to the 'global' page.  We'll set it correctly here.
+  if (/Safari/.test(navigator.userAgent) &&
+     !/Chrome/.test(navigator.userAgent)) {
+    safari.extension.settings = localStorage;
+  }
   storage_set("testObj", testObj);
   var testResultObj = storage_get("testObj");
   deepEqual(testObj.foo, testResultObj.foo);
@@ -184,14 +193,6 @@ test("clone", function() {
   deepEqual(d, d2);
 });
 
-test("full", function() {
-  ok(new DomainSet({"": true}).full());
-  ok(new DomainSet({"": true, "a.com": true}).full());
-  ok(!new DomainSet({"": true, "a.com": false, "b.a.com": true}).full());
-  ok(!new DomainSet({"": false}).full());
-  ok(!new DomainSet({"": false, "a.com": true}).full());
-});
-
 test("subtract", function() {
 
   var _normalize = function(data) {
@@ -322,13 +323,7 @@ test("merge", function() {
 
 module("MyFilters");
 
-test("Should instantiate a MyFilters object correctly", 3, function() {
-  //Tests if instance of MyFilters was instantiated successfully
-  var _myfilters = new MyFilters();
-  ok(_myfilters, "MyFilters created successfully");
-  ok(_myfilters._subscriptions, "_subscriptions is not null");
-  ok(_myfilters._official_options, "_official_options is not null");
-});
+
 
 test("Should have default filters subscribed on installation", 4, function() {
   var _myfilters = new MyFilters();
@@ -625,6 +620,16 @@ test("Should update url and initial url if initial url does not match official u
 
 if (/Chrome/.test(navigator.userAgent)) {
   // CHROME ONLY
+  
+  test("Should instantiate a MyFilters object correctly", 3, function() {
+      //Tests if instance of MyFilters was instantiated successfully
+      //Since get / set storage on Safari is mocked up, this shouldn't run on Safari, only Chrome
+      var _myfilters = new MyFilters();
+      ok(_myfilters, "MyFilters created successfully");
+      ok(_myfilters._subscriptions, "_subscriptions is not null");
+      ok(_myfilters._official_options, "_official_options is not null");
+    });
+  
   (function() {
     module("Purging the remainders of ads using CSS selectors");
     
