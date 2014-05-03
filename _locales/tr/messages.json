@@ -35,10 +35,6 @@
     "message":"Üçüncü şahıs",
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
-  "installedtitle":{
-    "message":"AdBlock kuruldu!",
-    "description":"Title for the installation success page"
-  },
   "chromebutton_how_to_hide2":{
     "message":"Düğmeyi gizlemek için, sağ tıklayıp 'Düğmeyi gizle'yi seçin. Tekrar görünmesi için adres çubuğundan; chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -497,6 +493,14 @@
     "message":"Reklam zaten engellendiği için bir şey yapmanıza gerek yok",
     "description":"on the ad report page, telling a user there is nothing to do"
   },
+  "sameAdsOnDifferentPages":{
+    "message":"Do you see the same or similar ads on many different pages, e.g. your homepage, your workplace's website, etc.?",
+    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
+  },
+  "similarAds":{
+    "message":"Same\/similar ads on every page",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
+  },
   "disableallextensions":{
     "message":"AdBlock hariç, tüm eklentileri devre dışı bırakın.",
     "description":"instruction on ad report page"
@@ -524,6 +528,14 @@
   "reenableadsonebyone":{
     "message":"Reklamlar kaybolduğuna göre, hangi eklentinin sorun çıkardığını bulmanız gerekir. Şimdi her seferinde bir eklentiyi aktif hale getirin. Reklamları geri getiren eklenti, silmeniz gereken eklentidir.",
     "description":"tells the user to reenable the extensions one by one."
+  },
+  "scancomputer":{
+    "message":"Scan your computer for malware",
+    "description":"instruction on ad report page"
+  },
+  "performscan":{
+    "message":"Perform a full scan of your computer using your antivirus\/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
+    "description":"instruction on ad report page"
   },
   "correctfilters":{
     "message":"Filtreleri düzelt",
@@ -726,10 +738,6 @@
   "block_this_ad":{
     "message":"Bu reklamı engelle",
     "description":"Context and popup menu entry"
-  },
-  "filecleanerwarning":{
-    "message":"Eğer her AdBlock'u başlattığınızda bu mesajı görüyorsanız, kullandığınız dosya temizleyicinin 'localStorage' dosyalarını da temizlediğinden emin olun.",
-    "description":"Help for users who use hyperactive file cleaners"
   },
   "typehiding":{
     "message":"gizlenen",
@@ -1037,26 +1045,6 @@
     "message":"Hulu.com videolarının oynatılmaması sorununu çöz (tarayıcınızı tekrar başlatmayı gerektirir)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
   },
-  "now_you_have_adblock_hooray":{
-    "message":"Artık AdBlock kullanıyorsunuz! Yaşasın!",
-    "description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
-  },
-  "any_new_tabs_you_open_Will_be_automatically_ad_free":{
-    "message":"Açtığınız tüm yeni sekmeler otomatik olarak reklamsız görünecek.",
-    "description":"Install page subtitle"
-  },
-  "installing_adblock":{
-    "message":"AdBlock Kuruluyor...",
-    "description":"Install page: shown while progress bar loads"
-  },
-  "done":{
-    "message":"bitti.",
-    "description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
-  },
-  "seeing_this_every_time_you_start_your_browser":{
-    "message":"Tarayıcı her açıldığında bunu mu görüyorsunuz?",
-    "description":"Install page: link to click for help"
-  },
   "how_to_use_adblock":{
     "message":"AdBlock nasıl kullanılır:",
     "description":"Install page section title"
@@ -1064,16 +1052,6 @@
   "adblock_auto_removes_ads_thats_all":{
     "message":"AdBlock otomatik olarak tüm reklamları engeller. Hepsi bu.",
     "description":"Install page: explaining how to use adblock."
-  },
-  "for_more_options_right_click":{
-    "message":"Daha fazla seçenek için, web sayfalarına sağ tıklayabilir ya da $img$ araç çubuğu butonunu kullanabilirsiniz.",
-    "description":"Install page: explaining how to use adblock in more detail.",
-    "placeholders":{
-      "img":{
-        "content":"<img src=\"..\/..\/img\/icon19.png\"\/>",
-        "example":"A small picture of the toolbar button.  Do not translate."
-      }
-    }
   },
   "modifydomain":{
     "message":"Site:",
@@ -1278,5 +1256,25 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
+  },
+  "activate_private_search":{
+    "message":"Gizli aramayı etkinleştir",
+    "description":"Checkbox to activate or deactivate private search"
+  },
+  "search_privately_from":{
+    "message":"Şuradan gizli arayın:",
+    "description":"Set where private search should be activated, followed by several options"
+  },
+  "omnibox":{
+    "message":"Adres çubuğu",
+    "description":"Option, where private search should be activated"
+  },
+  "search_engine_websites":{
+    "message":"Arama motoru siteleri",
+    "description":"Option, where private search should be activated"
+  },
+  "search_privately":{
+    "message":"Gizli arama",
+    "description":"Placeholder in private search text box"
   }
 }

@@ -35,10 +35,6 @@
     "message":"Third-party",
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
-  "installedtitle":{
-    "message":"AdBlock 安裝成功！",
-    "description":"Title for the installation success page"
-  },
   "chromebutton_how_to_hide2":{
     "message":"To hide the button, right click it and choose Hide Button.  You can show it again under chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -497,6 +493,14 @@
     "message":"您不用做任何事，因為廣告已被阻擋",
     "description":"on the ad report page, telling a user there is nothing to do"
   },
+  "sameAdsOnDifferentPages":{
+    "message":"Do you see the same or similar ads on many different pages, e.g. your homepage, your workplace's website, etc.?",
+    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
+  },
+  "similarAds":{
+    "message":"Same\/similar ads on every page",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
+  },
   "disableallextensions":{
     "message":"Disable all extensions except for AdBlock.",
     "description":"instruction on ad report page"
@@ -524,6 +528,14 @@
   "reenableadsonebyone":{
     "message":"Now that the ads are gone, you must find out which extension is the cause. Go through and enable each extension one by one. The extension that brings back the ad(s) is the one that you must delete to get rid of the ads.",
     "description":"tells the user to reenable the extensions one by one."
+  },
+  "scancomputer":{
+    "message":"Scan your computer for malware",
+    "description":"instruction on ad report page"
+  },
+  "performscan":{
+    "message":"Perform a full scan of your computer using your antivirus\/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
+    "description":"instruction on ad report page"
   },
   "correctfilters":{
     "message":"正確的過濾清單",
@@ -726,10 +738,6 @@
   "block_this_ad":{
     "message":"阻擋這個廣告",
     "description":"Context and popup menu entry"
-  },
-  "filecleanerwarning":{
-    "message":"如果您每次開啟 AdBlock 都看到此訊息，請確認您使用的檔案清理程式不會清除 「localStorage」 檔案。",
-    "description":"Help for users who use hyperactive file cleaners"
   },
   "typehiding":{
     "message":"hiding",
@@ -1037,26 +1045,6 @@
     "message":"Work around Hulu.com videos not playing (requires restarting your browser)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
   },
-  "now_you_have_adblock_hooray":{
-    "message":"現在你已經有 AdBlock! 太好了!",
-    "description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
-  },
-  "any_new_tabs_you_open_Will_be_automatically_ad_free":{
-    "message":"任何你開啟的新分頁將沒有廣告。",
-    "description":"Install page subtitle"
-  },
-  "installing_adblock":{
-    "message":"安裝 AdBlock...",
-    "description":"Install page: shown while progress bar loads"
-  },
-  "done":{
-    "message":"已完成。",
-    "description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
-  },
-  "seeing_this_every_time_you_start_your_browser":{
-    "message":"每次你啟動瀏覽器都會看見這個嗎?",
-    "description":"Install page: link to click for help"
-  },
   "how_to_use_adblock":{
     "message":"如何使用 AdBlock:",
     "description":"Install page section title"
@@ -1064,16 +1052,6 @@
   "adblock_auto_removes_ads_thats_all":{
     "message":" AdBlock 會自動移除廣告。這就是它的功能。",
     "description":"Install page: explaining how to use adblock."
-  },
-  "for_more_options_right_click":{
-    "message":"如果需要更多選項,你可以在頁面點擊右鍵 或 點擊 $img$ 工具列按鈕。",
-    "description":"Install page: explaining how to use adblock in more detail.",
-    "placeholders":{
-      "img":{
-        "content":"<img src=\"..\/..\/img\/icon19.png\"\/>",
-        "example":"A small picture of the toolbar button.  Do not translate."
-      }
-    }
   },
   "modifydomain":{
     "message":"網站:",
@@ -1278,5 +1256,25 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
+  },
+  "activate_private_search":{
+    "message":"Activate private search",
+    "description":"Checkbox to activate or deactivate private search"
+  },
+  "search_privately_from":{
+    "message":"Search privately from:",
+    "description":"Set where private search should be activated, followed by several options"
+  },
+  "omnibox":{
+    "message":"The omnibox",
+    "description":"Option, where private search should be activated"
+  },
+  "search_engine_websites":{
+    "message":"Search engine websites",
+    "description":"Option, where private search should be activated"
+  },
+  "search_privately":{
+    "message":"Search privately",
+    "description":"Placeholder in private search text box"
   }
 }
