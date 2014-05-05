@@ -494,11 +494,11 @@
     "description":"on the ad report page, telling a user there is nothing to do"
   },
   "sameAdsOnDifferentPages":{
-    "message":"Do you see the same or similar ads on many different pages, e.g. your homepage, your workplace's website, etc.?",
+    "message":"Birçok farklı sayfada, -örneğin ana sayfanız, işyerinizin Web sitesi, vb.- aynı veya benzer reklamlar mı görüyorsunuz?",
     "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
   },
   "similarAds":{
-    "message":"Same\/similar ads on every page",
+    "message":"Her sayfada aynı\/benzer reklamlar",
     "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
   },
   "disableallextensions":{
@@ -530,11 +530,11 @@
     "description":"tells the user to reenable the extensions one by one."
   },
   "scancomputer":{
-    "message":"Scan your computer for malware",
+    "message":"Bilgisayarınızı zararlı yazılımlara karşı tarayın",
     "description":"instruction on ad report page"
   },
   "performscan":{
-    "message":"Perform a full scan of your computer using your antivirus\/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
+    "message":"Antivirüs\/zararlı yazılım engelleme programlarınızı kullanarak tam bir tarama yapın. Bazı zararlı yazılımlar Adblock'u etkisiz hale getirerek, gezindiğiniz sayfalara reklam yerleştirebilir.",
     "description":"instruction on ad report page"
   },
   "correctfilters":{
