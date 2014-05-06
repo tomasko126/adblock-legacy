@@ -193,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"списък с изменения",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Общи",
     "description":"A tab on the options page"
@@ -216,14 +212,6 @@
   "betalabel":{
     "message":"(бета)",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Ускори AdBlock с експериментална настройка за Safari",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Искате ли да помогнете? Пробвайте експерименталната настройка и <a>пишете<\/a> дали работи добре при вас.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Показвай текстови реклами към резултатите от Google (харесват ми)",
@@ -1256,25 +1244,5 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
-  },
-  "activate_private_search":{
-    "message":"Разреши поверително търсене",
-    "description":"Checkbox to activate or deactivate private search"
-  },
-  "search_privately_from":{
-    "message":"Търси поверително през:",
-    "description":"Set where private search should be activated, followed by several options"
-  },
-  "omnibox":{
-    "message":"всеобщата търсачка",
-    "description":"Option, where private search should be activated"
-  },
-  "search_engine_websites":{
-    "message":"търсачката на сайта",
-    "description":"Option, where private search should be activated"
-  },
-  "search_privately":{
-    "message":"Поверително търсене",
-    "description":"Placeholder in private search text box"
   }
 }
