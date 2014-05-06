@@ -222,7 +222,7 @@
     "description":"Option on first tab page"
   },
   "debuginlogoption":{
-    "message":"Prikaži izjave uklanjanja pogreške u zapisu konzole (usporava Adblock)",
+    "message":"Prikaži izjave uklanjanja pogreške u zapisu konzole (usporava AdBlock)",
     "description":"Option on first tab page"
   },
   "updatedrightnow":{
@@ -310,7 +310,7 @@
     "description":"Title of the filter list tab"
   },
   "filterlistlink":{
-    "message":"Nemojte se prijavljivati na više nego Vam je potrebno -- svaka stavka dodatno usporava Adblock! Impresum i ostale liste možete pronaći <a>ovdje<\/a>.",
+    "message":"Nemojte se prijavljivati na više nego Vam je potrebno -- svaka stavka dodatno usporava AdBlock! Impresum i ostale liste možete pronaći <a>ovdje<\/a>.",
     "description":"Explanation of the filter lists"
   },
   "updatenowmessage":{
@@ -422,7 +422,7 @@
     "description":"Message of the css-hiding area"
   },
   "excludedomainorurl":{
-    "message":"Domena ili URL gdje Adblock ne bi trebao blokirati ništa",
+    "message":"Domena ili URL gdje AdBlock ne bi trebao blokirati ništa",
     "description":"Message of the exclude area"
   },
   "blockdomain":{
@@ -706,7 +706,7 @@
     "description":"telling a user who won't report an ad to us how to handle it for herself"
   },
   "updatefromoldversion":{
-    "message":"Koristite stariju verziju Adblock-a. Molimo prvo $updatelink$ na najnoviju verziju Adblock-a",
+    "message":"Koristite stariju verziju AdBlock-a. Molimo prvo $updatelink$ na najnoviju verziju AdBlock-a",
     "description":"Ad report page instructions to update AdBlock in Safari",
     "placeholders":{
       "updatelink":{
@@ -814,7 +814,7 @@
     "description":"resourceblocking page string (the 'slash n' is a line break)"
   },
   "adblock_is_paused":{
-    "message":"AdBlock je pauziran. Zbog toga nijedan resurs nije uhvaćen pa se ova stranica ne može koristiti. Prvo odpauzirajte Adblock pa probajte ponovno.",
+    "message":"AdBlock je pauziran. Zbog toga nijedan resurs nije uhvaćen pa se ova stranica ne može koristiti. Prvo odpauzirajte AdBlock pa probajte ponovno.",
     "description":"resourceblocking page string"
   },
   "excludefilterremoved":{
@@ -936,7 +936,7 @@
     "description":"Option at the bottom of the third options tab"
   },
   "disabled_by_filter_lists":{
-    "message":"Isprika, Adblock je onemogućen na ovoj stranici zbog neke od vaših lista filtera.",
+    "message":"Isprika, AdBlock je onemogućen na ovoj stranici zbog neke od vaših lista filtera.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
   },
   "status_disabled":{
@@ -1070,7 +1070,7 @@
     "description":"Message shown when the user uses more storage than allowed by the browser"
   },
   "safari50_updatenotice":{
-    "message":"Koristite staru verziju preglednika Safari. Nabavite zadnju verziju da biste mogi koristiti AdBlock dugme alatne trake za pauziranje Ablock-a, da onemogućite Adblock-a na nekim web stranicama ili prijavite reklame. <a>Ažurirajte sad<\/a>.",
+    "message":"Koristite staru verziju preglednika Safari. Nabavite zadnju verziju da biste mogi koristiti AdBlock dugme alatne trake za pauziranje AdBlock-a, da onemogućite AdBlock-a na nekim web stranicama ili prijavite reklame. <a>Ažurirajte sad<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
   },
   "searchexplanation":{

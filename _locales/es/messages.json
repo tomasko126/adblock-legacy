@@ -28,7 +28,7 @@
     "description":"Edit filter manually button"
   },
   "optionstitle":{
-    "message":"Opciones de Adblock",
+    "message":"Opciones de AdBlock",
     "description":"Title for the options page"
   },
   "thirdparty":{
@@ -222,7 +222,7 @@
     "description":"Option on first tab page"
   },
   "debuginlogoption":{
-    "message":"Mostrar datos debug en la consola (lo que ralentiza Adblock)",
+    "message":"Mostrar datos debug en la consola (lo que ralentiza AdBlock)",
     "description":"Option on first tab page"
   },
   "updatedrightnow":{
@@ -338,7 +338,7 @@
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
-    "message":"Filtros personalizados de Adblock (recomendado)",
+    "message":"Filtros personalizados de AdBlock (recomendado)",
     "description":"A filter list. Don't translate 'AdBlock'"
   },
   "filtereasylist":{

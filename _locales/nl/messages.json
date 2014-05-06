@@ -498,7 +498,7 @@
     "description":"Step 1 for disabling chrome extensions"
   },
   "disableforchromeandsafaristeptwo":{
-    "message":"Vink bij elke extensie het vakje uit dat ervoor zorgt dat de extensie geactiveerd is <b>behalve<\/b> bij Adblock. <b>Houd AdBlock geactiveerd<\/b>.",
+    "message":"Vink bij elke extensie het vakje uit dat ervoor zorgt dat de extensie geactiveerd is <b>behalve<\/b> bij AdBlock. <b>Houd AdBlock geactiveerd<\/b>.",
     "description":"Step 2 for disabling chrome and safari extensions"
   },
   "disableforsafaristepone":{
@@ -706,7 +706,7 @@
     "description":"telling a user who won't report an ad to us how to handle it for herself"
   },
   "updatefromoldversion":{
-    "message":"Je gebruikt een oude versie van AdBlock. $updatelink$ eerst naar de nieuwste versie van Adblock",
+    "message":"Je gebruikt een oude versie van AdBlock. $updatelink$ eerst naar de nieuwste versie van AdBlock",
     "description":"Ad report page instructions to update AdBlock in Safari",
     "placeholders":{
       "updatelink":{

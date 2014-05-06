@@ -490,7 +490,7 @@
     "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
   },
   "disableallextensions":{
-    "message":"השבת את כל ההרחבות חוץ מ Adblock",
+    "message":"השבת את כל ההרחבות חוץ מ AdBlock",
     "description":"instruction on ad report page"
   },
   "disableforchromestepone":{
@@ -498,7 +498,7 @@
     "description":"Step 1 for disabling chrome extensions"
   },
   "disableforchromeandsafaristeptwo":{
-    "message":"השבת את כל ההרחבות חוץ מ Adblock",
+    "message":"השבת את כל ההרחבות חוץ מ AdBlock",
     "description":"Step 2 for disabling chrome and safari extensions"
   },
   "disableforsafaristepone":{
@@ -510,7 +510,7 @@
     "description":"Opera instructions"
   },
   "disableforoperainstructions":{
-    "message":"לחץ על כפתור התפריט לאחר מכן לך להרחבות והשבת של את ההרחבות חוץ מ Adblock",
+    "message":"לחץ על כפתור התפריט לאחר מכן לך להרחבות והשבת של את ההרחבות חוץ מ AdBlock",
     "description":"shows user how to disable all their extensions in Opera."
   },
   "reenableadsonebyone":{
@@ -716,7 +716,7 @@
     }
   },
   "adblock_outdated_chrome":{
-    "message":"אתה משתמש בגרסה ישנה של Adblock. עבור בבקשה לפה <a href='#'>the extensions page<\/a>, אפשר'מצב מפתח' ולחץ על 'עדכן הרחבה כעת'",
+    "message":"אתה משתמש בגרסה ישנה של AdBlock. עבור בבקשה לפה <a href='#'>the extensions page<\/a>, אפשר'מצב מפתח' ולחץ על 'עדכן הרחבה כעת'",
     "description":"Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome:\/\/chrome\/extensions\/'"
   },
   "block_an_ad_on_this_page":{
@@ -1176,7 +1176,7 @@
     "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
   },
   "opera_allow_secure":{
-    "message":"אם אתה רוצה להשתמש ב Adblock בעמודים מאובטחים אתה צריך קודם לאשר את האפשרות על ידי לחיצה על האיקון בסרגל הכתובות",
+    "message":"אם אתה רוצה להשתמש ב AdBlock בעמודים מאובטחים אתה צריך קודם לאשר את האפשרות על ידי לחיצה על האיקון בסרגל הכתובות",
     "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
   },
   "blocked_ads":{
@@ -1204,11 +1204,11 @@
     }
   },
   "show_on_adblock_button":{
-    "message":"הראה את כפתור Adblock",
+    "message":"הראה את כפתור AdBlock",
     "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
   },
   "adblockinglist":{
-    "message":"רשימות חסימה של Adblock",
+    "message":"רשימות חסימה של AdBlock",
     "description":"List for subscribed ad blocking fiters"
   },
   "otherfilters":{

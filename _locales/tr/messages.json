@@ -522,7 +522,7 @@
     "description":"instruction on ad report page"
   },
   "performscan":{
-    "message":"Antivirüs\/zararlı yazılım engelleme programlarınızı kullanarak tam bir tarama yapın. Bazı zararlı yazılımlar Adblock'u etkisiz hale getirerek, gezindiğiniz sayfalara reklam yerleştirebilir.",
+    "message":"Antivirüs\/zararlı yazılım engelleme programlarınızı kullanarak tam bir tarama yapın. Bazı zararlı yazılımlar AdBlock'u etkisiz hale getirerek, gezindiğiniz sayfalara reklam yerleştirebilir.",
     "description":"instruction on ad report page"
   },
   "correctfilters":{

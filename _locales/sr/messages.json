@@ -222,7 +222,7 @@
     "description":"Option on first tab page"
   },
   "debuginlogoption":{
-    "message":"Prikaži izjave uklanjanja greške u zapisu konzole (usporava Adblock)",
+    "message":"Prikaži izjave uklanjanja greške u zapisu konzole (usporava AdBlock)",
     "description":"Option on first tab page"
   },
   "updatedrightnow":{
@@ -310,7 +310,7 @@
     "description":"Title of the filter list tab"
   },
   "filterlistlink":{
-    "message":"Nemojte se prijavljivati na više nego vam je potrebno -- svaki filter dodatno usporava Adblock! Zasluge i druge liste možete pronaći <a>ovde<\/a>.",
+    "message":"Nemojte se prijavljivati na više nego vam je potrebno -- svaki filter dodatno usporava AdBlock! Zasluge i druge liste možete pronaći <a>ovde<\/a>.",
     "description":"Explanation of the filter lists"
   },
   "updatenowmessage":{

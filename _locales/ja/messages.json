@@ -684,7 +684,7 @@
     "description":"instruction for how to check Firefox\/Chrome for a reported ad"
   },
   "refusetocheck":{
-    "message":"Firefox(Adblock Plus)をインストールしたくありません。",
+    "message":"I don't want to check this",
     "description":"user is telling us they don't wish to investigate something for us"
   },
   "reportfilterlistproblem":{

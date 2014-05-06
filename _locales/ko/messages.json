@@ -706,7 +706,7 @@
     "description":"telling a user who won't report an ad to us how to handle it for herself"
   },
   "updatefromoldversion":{
-    "message":"구버전 AdBlock을 사용하고 있습니다. 먼저 Adblock을 최신 버전으로 $updatelink$하십시오.",
+    "message":"구버전 AdBlock을 사용하고 있습니다. 먼저 AdBlock을 최신 버전으로 $updatelink$하십시오.",
     "description":"Ad report page instructions to update AdBlock in Safari",
     "placeholders":{
       "updatelink":{

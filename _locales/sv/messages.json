@@ -1172,7 +1172,7 @@
     "description":"Title of an area in the ad report page in Opera. Only visible if the opener tab was a secure url (https)"
   },
   "opera_secure_pages_enabled":{
-    "message":"Öppna på Operas meny &rArr; Tillägg &rArr; Hantera tillägg &rArr; Leta reda på Adblock och klicka på verktygsikonen &rArr; klicka på 'Personlig integritet'.<br\/>Är alternativet för att tillåta interaktion med säkra sidor, aktiverat?",
+    "message":"Öppna på Operas meny &rArr; Tillägg &rArr; Hantera tillägg &rArr; Leta reda på AdBlock och klicka på verktygsikonen &rArr; klicka på 'Personlig integritet'.<br\/>Är alternativet för att tillåta interaktion med säkra sidor, aktiverat?",
     "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
   },
   "opera_allow_secure":{
