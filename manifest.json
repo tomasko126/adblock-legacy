@@ -29,18 +29,6 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": [
-        "port.js",
-        "functions.js", 
-        "filtering/filteroptions.js",
-        "adblock_start_common.js",
-        "adblock_start_chrome.js"
-      ],
-      "run_at": "document_start",
-      "all_frames": true
-    },
-    {
       "matches": [
         "*://*.mail.live.com/*",
         "*://*.mastertoons.com/*",
@@ -55,6 +43,18 @@
       ],
       "js": [
         "bandaids.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": [
+        "port.js",
+        "functions.js", 
+        "filtering/filteroptions.js",
+        "adblock_start_common.js",
+        "adblock_start_chrome.js"
       ],
       "run_at": "document_start",
       "all_frames": true
