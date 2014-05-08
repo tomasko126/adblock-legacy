@@ -129,8 +129,7 @@ var before_ready_bandaids = function() {
   
 
   var bandaids = {
-    youtube_safari_only: function() {
-        console
+    youtube_safari_only: function() {        
         // If history.pushState is available,
         // YouTube uses it when navigating from one video
         // to another and tells the flash player via JavaScript,
