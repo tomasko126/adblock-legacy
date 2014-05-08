@@ -50,7 +50,8 @@
         "*://*.doupe.cz/*",
         "*://*.e15.cz/*",
         "*://*.sportrevue.cz/*",
-        "*://*.autorevue.cz/*"
+        "*://*.autorevue.cz/*",
+        "*://*.youtube.com/*"
       ],
       "js": [
         "bandaids.js"
