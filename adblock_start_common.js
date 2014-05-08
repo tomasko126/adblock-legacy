@@ -156,6 +156,20 @@ function handleABPLinkClicks() {
   }
 }
 
+// If history.pushState is available, YouTube uses the history API
+// when navigation from one video to another, and tells the flash player with JavaScript
+// which video and which ads to show next, bypassing our flashvars rewrite code.
+// So we disable history.pushState on pages with YouTube's flash player,
+// this will for the site to use to a page reload.
+function disablePushstateYouTube() {
+    var script = document.createElement("script");
+    script.type = "application/javascript";
+    script.async = false;
+    script.textContent = "history.pushState = undefined;";
+    document.documentElement.appendChild(script);
+    document.documentElement.removeChild(script);
+}
+
 // Called at document load.
 // inputs:
 //   startPurger: function to start watching for elements to remove.
@@ -167,6 +181,8 @@ function adblock_begin(inputs) {
     return;
   if (!(document.documentElement instanceof HTMLElement))
     return; // Only run on HTML pages
+  if (document.location.hostname === "www.youtube.com")
+    disablePushstateYouTube();
 
   inputs.startPurger();
 

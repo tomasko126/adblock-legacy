@@ -19,17 +19,6 @@ function blockBackgroundImageAd() {
   }, 1);
 }
 
-function disablePushstateYouTube() {
-  if (document.location.hostname === "www.youtube.com") {
-    var script = document.createElement("script");
-    script.type = "application/javascript";
-    script.async = false;
-    script.textContent = "history.pushState = undefined;";
-    document.documentElement.appendChild(script);
-    document.documentElement.removeChild(script);
-  }
-}
-
 // Remove background images and purged elements.
 // Return true if the element has been handled.
 function weakDestroyElement(el, elType) {
@@ -77,12 +66,6 @@ beforeLoadHandler.blockCount = 0;
 adblock_begin({
   startPurger: function() { 
     document.addEventListener("beforeload", beforeLoadHandler, true);
-    // If history.pushState is available, YouTube uses the history API
-    // when navigation from one video to another, and tells the flash player with JavaScript
-    // which video and which ads to show next, bypassing our flashvars rewrite code.
-    // So we disable history.pushState on pages with YouTube's flash player,
-    // this will for the site to use to a page reload.
-    document.addEventListener("beforeload", disablePushstateYouTube, true);
   },
   stopPurger: function() { 
     document.removeEventListener("beforeload", beforeLoadHandler, true);
