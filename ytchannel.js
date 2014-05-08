@@ -17,7 +17,7 @@ if (/youtube/.test(document.location.hostname)) {
     // If YouTube whitelist is enabled in Options, add name of the channel on the end of URL
     if (enabled_settings.indexOf("youtube_channel_whitelist") >= 0) {
       // Don't run on main, search and feed page
-      if (url.search("channel=") < 0 && /channel|watch/.test(url) && url.search("feed") < 0) {
+      if ((url.search("channel=") < 0) && (/channel|watch/.test(url)) && (url.search("feed") < 0)) {           
         if (/channel/.test(url)) {
           var get_yt_name = document.querySelector(".qualified-channel-title-text a[href*='/user/']");
           if (!get_yt_name) {
@@ -28,8 +28,15 @@ if (/youtube/.test(document.location.hostname)) {
           }
           var new_url = url+"?&channel="+extracted_name;
         } else {
-          var get_yt_name = document.querySelector("#watch7-user-header a[href*='/user/']").getAttribute("href");
-          var extracted_name = get_yt_name.split('/').pop();
+          var anchorElem = document.querySelector("#watch7-user-header a[href*='/user/']");
+          if (anchorElem === null) { 
+              //in Safari 5, the anchor has a different parent tag
+              anchorElem = document.querySelector("#ud a[href*='/user/']");
+          }
+          if (anchorElem === null) {
+            return;
+          }
+          var extracted_name = anchorElem.getAttribute("href").split('/').pop();
           var new_url = url+"&channel="+extracted_name;
         }
         // Add the name of the channel to the end of URL
