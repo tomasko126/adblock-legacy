@@ -1,17 +1,6 @@
-// If history.pushState is available, YouTube uses the history API
-// when navigation from one video to another, and tells the flash player with JavaScript
-// which video and which ads to show next, bypassing our flashvars rewrite code.
-// So we disable history.pushState on pages with YouTube's flash player,
-// this will for the site to use to a page reload.
-if (/youtube/.test(document.location.hostname)) {
-  var s = document.createElement("script");
-  s.type = "application/javascript";
-  s.async = false;
-  s.textContent = "history.pushState = undefined;";
-  document.documentElement.appendChild(s);
-  document.documentElement.removeChild(s);
+if (/youtube/.test(document.location.hostname)) {  
+  var url = document.location.href;
   
-  var url = document.location.href;    
   window.onbeforeunload = function() {
     if (url.search("channel=") > 0)
       document.body.style.display = "none";
