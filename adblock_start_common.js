@@ -162,12 +162,12 @@ function handleABPLinkClicks() {
 // So we disable history.pushState on pages with YouTube's flash player,
 // this will for the site to use to a page reload.
 function disablePushstateYouTube() {
-    var script = document.createElement("script");
-    script.type = "application/javascript";
-    script.async = false;
-    script.textContent = "history.pushState = undefined;";
-    document.documentElement.appendChild(script);
-    document.documentElement.removeChild(script);
+  var s = document.createElement("script");
+  s.type = "application/javascript";
+  s.async = false;
+  s.textContent = "history.pushState = undefined;";
+  document.documentElement.appendChild(s);
+  document.documentElement.removeChild(s);
 }
 
 // Called at document load.
