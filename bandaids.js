@@ -6,6 +6,8 @@ var run_bandaids = function() {
   var apply_bandaid_for = "";
   if (/mail\.live\.com/.test(document.location.hostname))
     apply_bandaid_for = "hotmail";
+  else if (/youtube/.test(document.location.hostname))
+    apply_bandaid_for = "youtube_safari_only";        
   else if(/getadblock\.com/.test(document.location.hostname))
     apply_bandaid_for = "getadblock";
   else if(/mobilmania\.cz|zive\.cz|doupe\.cz|e15\.cz|sportrevue\.cz|autorevue\.cz/.test(document.location.hostname))
@@ -52,41 +54,8 @@ var run_bandaids = function() {
         document.body.appendChild(elemDiv);
       });
     },
-    czech_sites: function() {
-      var player = document.getElementsByClassName("flowplayer");
-      // Remove data-ad attribute from videoplayer
-      if (player) {
-        for (i=0; i<player.length; i++)  
-          player[i].removeAttribute("data-ad");
-      }
-    },
-  }; // end bandaids
-
-  if (apply_bandaid_for) {
-    log("Running bandaid for " + apply_bandaid_for);
-    bandaids[apply_bandaid_for]();
-  }
-
-};
-
- 
-var before_ready_bandaids = function() {
-  // Tests to determine whether a particular bandaid should be applied
-  var apply_bandaid_for = "";
-  if (/youtube/.test(document.location.hostname))
-    apply_bandaid_for = "youtube_safari_only";
-  
-
-  var bandaids = {
-    youtube_safari_only: function() {
-
-        var s = document.createElement("script");
-        s.type = "application/javascript";
-        s.async = false;
-        s.textContent = "history.pushState = undefined;";
-        document.documentElement.appendChild(s);
-        document.documentElement.removeChild(s);
-    
+   youtube_safari_only: function() {
+     
       function blockYoutubeAds(videoplayer) {
         var flashVars = videoplayer.getAttribute('flashvars');
         var inParam = false;
@@ -133,6 +102,46 @@ var before_ready_bandaids = function() {
           this.removeEventListener('DOMNodeInserted', arguments.callee, false);
         }, false);
       }
+    },    
+    czech_sites: function() {
+      var player = document.getElementsByClassName("flowplayer");
+      // Remove data-ad attribute from videoplayer
+      if (player) {
+        for (i=0; i<player.length; i++)  
+          player[i].removeAttribute("data-ad");
+      }
+    },
+  }; // end bandaids
+
+  if (apply_bandaid_for) {
+    log("Running bandaid for " + apply_bandaid_for);
+    bandaids[apply_bandaid_for]();
+  }
+
+};
+
+ 
+var before_ready_bandaids = function() {
+  // Tests to determine whether a particular bandaid should be applied
+  var apply_bandaid_for = "";
+  if (/youtube/.test(document.location.hostname))
+    apply_bandaid_for = "youtube_safari_only";
+  
+
+  var bandaids = {
+    youtube_safari_only: function() {
+        // If history.pushState is available,
+        // YouTube uses it when navigating from one video
+        // to another and tells the flash player via JavaScript,
+        // which ads to show next bypassing the flashvars rewrite code.
+        // Disabling history.pushState on pages with YouTube's flash player
+        // will force YouTube to not use history.pushState
+        var s = document.createElement("script");
+        s.type = "application/javascript";
+        s.async = false;
+        s.textContent = "history.pushState = undefined;";
+        document.documentElement.appendChild(s);
+        document.documentElement.removeChild(s);
     }
   }; // end bandaids
 
