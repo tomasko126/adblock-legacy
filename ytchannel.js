@@ -28,15 +28,15 @@ if (/youtube/.test(document.location.hostname)) {
           }
           var new_url = url+"?&channel="+extracted_name;
         } else {
-          var anchorElem = document.querySelector("#watch7-user-header a[href*='/user/']");
-          if (anchorElem === null) { 
+          var get_yt_name = document.querySelector("#watch7-user-header a[href*='/user/']");
+          if (get_yt_name === null) { 
               //in Safari 5, the anchor has a different parent tag
-              anchorElem = document.querySelector("#ud a[href*='/user/']");
+              get_yt_name = document.querySelector("#ud a[href*='/user/']");
           }
-          if (anchorElem === null) {
+          if (get_yt_name === null) {
             return;
           }
-          var extracted_name = anchorElem.getAttribute("href").split('/').pop();
+          var extracted_name = get_yt_name.getAttribute("href").split('/').pop();
           var new_url = url+"&channel="+extracted_name;
         }
         // Add the name of the channel to the end of URL
