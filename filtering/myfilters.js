@@ -541,7 +541,7 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "easylist_plus_polish": { // Additional Polish filters
-      url: "http://adblocklist.org/adblock-pxf-polish.txt",
+      url: "https://raw.githubusercontent.com/adblockpolska/Adblock_PL_List/master/adblock_polska.txt",
       requiresList: "easylist",
     },
     "easylist_plus_romanian": { // Additional Romanian filters
