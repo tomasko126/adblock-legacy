@@ -2,12 +2,6 @@ if (/youtube/.test(document.location.hostname)) {
   // Get actual URL
   var url = document.location.href;
   
-  // Don't display the page when reloading
-  window.onbeforeunload = function() {
-    if (url.search("channel=") > 0)
-      document.body.style.display = "none";
-  }
-  
   // Get enabled settings everytime in Safari
   if (SAFARI) {
     var enabled_settings = [];
