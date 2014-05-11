@@ -2,9 +2,9 @@ if (/youtube/.test(document.location.hostname)) {
   // Get actual URL
   var url = document.location.href;
   
-  // Don't display the page when reloading in Safari
+  // Don't display the page when reloading
   window.onbeforeunload = function() {
-    if (SAFARI && url.search("channel=") > 0)
+    if (url.search("channel=") > 0)
       document.body.style.display = "none";
   }
   
@@ -30,12 +30,12 @@ if (/youtube/.test(document.location.hostname)) {
   function channel() {
     if ((url.search("channel=") < 0) && (/channel\/|watch/.test(url)) && (url.search("feed") < 0)) {           
       if (/channel/.test(url)) {
-        var get_yt_name = document.querySelector(".qualified-channel-title-text a[href*='/user/']");
+        var get_yt_name = document.querySelector(".epic-nav-item-heading").innerText;
         if (!get_yt_name) {
-          get_yt_name = document.querySelector(".epic-nav-item-heading").innerText;
-          var extracted_name = get_yt_name.split('/').pop();
-        } else {
+          get_yt_name = document.querySelector(".qualified-channel-title-text a[href*='/user/']");
           var extracted_name = get_yt_name.getAttribute("href").split('/').pop();
+        } else {
+          var extracted_name = get_yt_name.replace(/\s/g, '');
         }
         var new_url = url+"?&channel="+extracted_name;
       } else {
