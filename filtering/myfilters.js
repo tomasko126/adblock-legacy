@@ -598,7 +598,7 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "https://easylist-downloads.adblockplus.org/easyprivacy.txt",
     },
     "antisocial": { // Antisocial
-      url: "https://adversity.googlecode.com/hg/Antisocial.txt",
+      url: "https://easylist-downloads.adblockplus.org/fanboy-social.txt",
     },
     "malware": { // Malware protection
       url: "https://easylist-downloads.adblockplus.org/malwaredomains_full.txt",
