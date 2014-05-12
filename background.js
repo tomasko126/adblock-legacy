@@ -978,21 +978,23 @@
   }
 
   /* YouTube Channel Whitelist implementation */
-  function run_yt_channel_whitelist(url) {
-      if (/youtube.com/.test(url) && get_settings().youtube_channel_whitelist)
-          chrome.tabs.executeScript({file:"ytchannel.js"});
+  if (!SAFARI) {
+      function run_yt_channel_whitelist(url) {
+          if (/youtube.com/.test(url) && get_settings().youtube_channel_whitelist)
+              chrome.tabs.executeScript({file:"ytchannel.js"});
+      }
+
+      chrome.tabs.onCreated.addListener(function() {
+          chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+              run_yt_channel_whitelist(tabs[0].url);
+          });
+      });
+
+      chrome.tabs.onUpdated.addListener(function() {
+          chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+              run_yt_channel_whitelist(tabs[0].url);
+          });
+      });
   }
-
-  chrome.tabs.onCreated.addListener(function() {
-      chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-          run_yt_channel_whitelist(tabs[0].url);
-      });
-    });
-
-  chrome.tabs.onUpdated.addListener(function() {
-      chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-          run_yt_channel_whitelist(tabs[0].url);
-      });
-  });
 
   log("\n===FINISHED LOADING===\n\n");

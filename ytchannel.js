@@ -25,7 +25,7 @@ if (/youtube/.test(document.location.hostname)) {
     if ((url.search("channel=") < 0) && (/channel\/|watch/.test(url)) && (url.search("feed") < 0)) {           
       if (/channel/.test(url)) {
         var get_yt_name = document.querySelector(".epic-nav-item-heading").innerText;
-        if (!get_yt_name) {
+        if (get_yt_name === null) {
           get_yt_name = document.querySelector(".qualified-channel-title-text a[href*='/user/']");
           var extracted_name = get_yt_name.getAttribute("href").split('/').pop();
         } else {
