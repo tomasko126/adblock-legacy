@@ -217,17 +217,6 @@
     "message":"Beta",
     "description":"Option on first tab page"
   },
-<<<<<<< HEAD
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Speed up AdBlock using an experimental feature in Safari",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Do me a favor?  Try this experimental feature for a while, then <a>let me know<\/a> how well it works for you.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
-  },
-=======
->>>>>>> master
   "googletextads":{
     "message":"I like the text ads on Google search results; show me those",
     "description":"Option on first tab page"
