@@ -41,14 +41,23 @@ function customize_for_this_tab() {
         });
     }
 
+    var host = parseUri(info.tab.url).host;
     var eligible_for_undo = !paused && (info.disabled_site || !info.whitelisted);
-    var url_to_check_for_undo = info.disabled_site ? undefined : parseUri(info.tab.url).host;
+    var url_to_check_for_undo = info.disabled_site ? undefined : host;
     if (eligible_for_undo && BG.count_cache.getCustomFilterCount(url_to_check_for_undo))
       show(["div_undo", "separator0"]);
 
     if (!BG.get_settings().show_advanced_options)
       hide(["div_show_resourcelist"]);
 
+<<<<<<< HEAD
+=======
+    var path = info.tab.url;
+    if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
+      show(["div_whitelist_channel"]);
+    }
+ 
+>>>>>>> master
     for (var div in shown)
       if (shown[div])
         $('#' + div).show();
@@ -80,7 +89,11 @@ $(function() {
     });
   });
 
+<<<<<<< HEAD
   $("#titletext").click(function() {
+=======
+  $("#titletext span").click(function() {
+>>>>>>> master
     var url = "https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom";
     var opera_url = "https://addons.opera.com/extensions/details/adblockforopera/";
     if (OPERA) {
@@ -113,6 +126,14 @@ $(function() {
     BG.getCurrentTabInfo(function(info) {
       var host          = parseUri(info.tab.url).host;
       BG.confirm_removal_of_custom_filters_on_host(host);
+      window.close();
+    });
+  });
+
+  $("#div_whitelist_channel").click(function() {
+    BG.getCurrentTabInfo(function(info) {
+      BG.create_whitelist_filter_for_youtube_channel(info.tab.url);
+      chrome.tabs.reload();
       window.close();
     });
   });

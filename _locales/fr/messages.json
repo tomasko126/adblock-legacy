@@ -193,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"Liste des changements",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Général",
     "description":"A tab on the options page"
@@ -216,14 +212,6 @@
   "betalabel":{
     "message":"(expérimental)",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Accélérer AdBlock en utilisant une fonctionnalité expérimentale de Safari",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Rendez-moi un service ? Essayez cette fonctionnalité expérimentale pendant un moment, puis <a>faites-moi savoir<\/a> si cela fonctionne bien pour vous.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Afficher les annonces textuelles des résultats Google",
@@ -1243,6 +1231,14 @@
     "message":" -- Sélectionnez une langue -- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Permettre l'ajout en liste blanche de canaux YouTube spécifiques",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Autoriser la pub sur ce canal YouTube",
+    "description":"Text which is displayed on YouTube in popup menu"
+  },
   "confirm_undo_custom_filters":{
     "message":"Êtes-vous sûr de vouloir supprimer les $count$ blocages que vous avez créé sur $host$ ?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
@@ -1256,25 +1252,5 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
-  },
-  "activate_private_search":{
-    "message":"Activer la recherche privée",
-    "description":"Checkbox to activate or deactivate private search"
-  },
-  "search_privately_from":{
-    "message":"Rechercher en mode privé depuis :",
-    "description":"Set where private search should be activated, followed by several options"
-  },
-  "omnibox":{
-    "message":"La barre d'adresse (omnibox)",
-    "description":"Option, where private search should be activated"
-  },
-  "search_engine_websites":{
-    "message":"Les sites des moteurs de recherche",
-    "description":"Option, where private search should be activated"
-  },
-  "search_privately":{
-    "message":"Rechercher en mode privé",
-    "description":"Placeholder in private search text box"
   }
 }
