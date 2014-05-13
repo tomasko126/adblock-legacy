@@ -1256,7 +1256,6 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
-<<<<<<< HEAD
   },
   "latest_version":{
     "message":"AdBlock is up-to-date!",
@@ -1334,7 +1333,5 @@
   "search_privately":{
     "message":"Search privately",
     "description":"Placeholder in private search text box"
-=======
->>>>>>> master
   }
 }

@@ -244,7 +244,7 @@ if ($('#checkupdate').is(':visible')) {
 
 // Check if newVersion is newer than AdBlockVersion
 function isNewerVersion(newVersion) {
-  var versionRegex = /^(\d+)\.(\d+)\.(\d+)$/;
+  var versionRegex = /^(\*|\d+(\.\d+){0,2}(\.\*)?)$/;
   var current = AdBlockVersion.match(versionRegex);
   var notCurrent = newVersion.match(versionRegex);
   if (!current || !notCurrent)
