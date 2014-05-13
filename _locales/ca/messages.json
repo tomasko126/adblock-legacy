@@ -193,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"llistat de canvis",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"General",
     "description":"A tab on the options page"
@@ -216,14 +212,6 @@
   "betalabel":{
     "message":"Beta",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Accelereu l'AdBlock utilitzant una característica experimental a Safari.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Em feu un favor? Proveu aquesta característica experimental una estona, llavors <a>feu-me saber<\/a> com de bé funciona per a vostè.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"M'agraden els anuncis de text als resultats de cerca de Google; mostra'm aquests.",
@@ -494,11 +482,11 @@
     "description":"on the ad report page, telling a user there is nothing to do"
   },
   "sameAdsOnDifferentPages":{
-    "message":"Do you see the same or similar ads on many different pages, e.g. your homepage, your workplace's website, etc.?",
+    "message":"Veieu els mateixos anuncis o similars en diverses pàgines diferents, ex: la vostra pàgina d'inici, el lloc web de la vostra feina, etc.?",
     "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
   },
   "similarAds":{
-    "message":"Same\/similar ads on every page",
+    "message":"Mateixos anuncis \/ anuncis similars a cada pàgina",
     "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
   },
   "disableallextensions":{
@@ -530,11 +518,11 @@
     "description":"tells the user to reenable the extensions one by one."
   },
   "scancomputer":{
-    "message":"Scan your computer for malware",
+    "message":"Escanejeu el vostre ordinador per comprovar l'existència de programari maliciós",
     "description":"instruction on ad report page"
   },
   "performscan":{
-    "message":"Perform a full scan of your computer using your antivirus\/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
+    "message":"Realitzeu un escanejat complet del vostre ordinador utilitzant el vostre antivirus\/antimalware. Algunes tipologies de programari maliciós poden inserir anuncis en pàgines web, i per tant esquivar l'AdBlock.",
     "description":"instruction on ad report page"
   },
   "correctfilters":{
@@ -1243,6 +1231,14 @@
     "message":" - Seleccionar idioma - ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Permeteu la permissió d'anuncis en canals específics de YouTube",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Permeteu anuncis en aquest canal de YouTube",
+    "description":"Text which is displayed on YouTube in popup menu"
+  },
   "confirm_undo_custom_filters":{
     "message":"Esteu segur que voleu eliminar els $count$ blocatges que heu creat a $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
@@ -1256,25 +1252,5 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
-  },
-  "activate_private_search":{
-    "message":"Activar la cerca privada",
-    "description":"Checkbox to activate or deactivate private search"
-  },
-  "search_privately_from":{
-    "message":"Cercar de forma privada des de:",
-    "description":"Set where private search should be activated, followed by several options"
-  },
-  "omnibox":{
-    "message":"L'omnibox",
-    "description":"Option, where private search should be activated"
-  },
-  "search_engine_websites":{
-    "message":"Els llocs web de motors de cerca",
-    "description":"Option, where private search should be activated"
-  },
-  "search_privately":{
-    "message":"Cercar de forma privada",
-    "description":"Placeholder in private search text box"
   }
 }
