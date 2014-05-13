@@ -193,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"változások listája",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Általános",
     "description":"A tab on the options page"
@@ -216,14 +212,6 @@
   "betalabel":{
     "message":"Béta",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Speed up AdBlock using an experimental feature in Safari.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Do me a favor?  Try this experimental feature for a while, then <a>let me know<\/a> how well it works for you.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Szeretem a szöveges hirdetéseket a Google-ön, mutassa ezeket.",
@@ -1243,6 +1231,14 @@
     "message":" -- Select Language -- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Allow whitelisting of specific YouTube channels",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Whitelist this YouTube channel",
+    "description":"Text which is displayed on YouTube in popup menu"
+  },
   "confirm_undo_custom_filters":{
     "message":"Are you sure you want to remove the $count$ blocks that you have created on $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
@@ -1256,25 +1252,5 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
-  },
-  "activate_private_search":{
-    "message":"Activate private search",
-    "description":"Checkbox to activate or deactivate private search"
-  },
-  "search_privately_from":{
-    "message":"Search privately from:",
-    "description":"Set where private search should be activated, followed by several options"
-  },
-  "omnibox":{
-    "message":"The omnibox",
-    "description":"Option, where private search should be activated"
-  },
-  "search_engine_websites":{
-    "message":"Search engine websites",
-    "description":"Option, where private search should be activated"
-  },
-  "search_privately":{
-    "message":"Search privately",
-    "description":"Placeholder in private search text box"
   }
 }

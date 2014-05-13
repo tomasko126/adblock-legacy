@@ -4,7 +4,7 @@
     "description":"Extension description in manifest"
   },
   "adblock_click_for_details":{
-    "message":"Adblock - click pentru detalii",
+    "message":"AdBlock - click pentru detalii",
     "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button.  Do not translate the beginning 'AdBlock - ' part."
   },
   "buttoncancel":{
@@ -164,7 +164,7 @@
     "description":"Instructions for how to use the whitelister slider controls.  Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2":{
-    "message":"Nu rula Adblock pe...",
+    "message":"Nu rula AdBlock pe...",
     "description":"The title of the whitelister dialog"
   },
   "buttonexclude":{
@@ -193,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"Istoria modificărilor",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"General",
     "description":"A tab on the options page"
@@ -216,14 +212,6 @@
   "betalabel":{
     "message":"Beta",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Accelerează Adblock folosind o funcție experimentală în Safari.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Îmi faci o favoare? Încearcă această funcție experimentală pentru un timp și <a>spune-mi<\/a> cât de bine a mers pentru tine.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Îmi plac reclamele text în căutarea Google; arată-mi-le.",
@@ -434,7 +422,7 @@
     "description":"Message of the css-hiding area"
   },
   "excludedomainorurl":{
-    "message":"Domeniul sau link-ul unde Adblock nu va bloca reclame",
+    "message":"Domeniul sau link-ul unde AdBlock nu va bloca reclame",
     "description":"Message of the exclude area"
   },
   "blockdomain":{
@@ -510,7 +498,7 @@
     "description":"Step 1 for disabling chrome extensions"
   },
   "disableforchromeandsafaristeptwo":{
-    "message":"Debizează caseta de selectare 'Activată' de lângă fiecare extensie, <b>cu excepția<\/b> Adblock. <b>Lasă AdBlock activat<\/b>.",
+    "message":"Debizează caseta de selectare 'Activată' de lângă fiecare extensie, <b>cu excepția<\/b> AdBlock. <b>Lasă AdBlock activat<\/b>.",
     "description":"Step 2 for disabling chrome and safari extensions"
   },
   "disableforsafaristepone":{
@@ -1243,6 +1231,14 @@
     "message":"-- Alege Limba --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Allow whitelisting of specific YouTube channels",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Whitelist this YouTube channel",
+    "description":"Text which is displayed on YouTube in popup menu"
+  },
   "confirm_undo_custom_filters":{
     "message":"Sigur doriţi să eliminaţi $count$ blocaje pe care le-aţi creat pe $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
@@ -1256,25 +1252,5 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
-  },
-  "activate_private_search":{
-    "message":"Activate private search",
-    "description":"Checkbox to activate or deactivate private search"
-  },
-  "search_privately_from":{
-    "message":"Search privately from:",
-    "description":"Set where private search should be activated, followed by several options"
-  },
-  "omnibox":{
-    "message":"The omnibox",
-    "description":"Option, where private search should be activated"
-  },
-  "search_engine_websites":{
-    "message":"Search engine websites",
-    "description":"Option, where private search should be activated"
-  },
-  "search_privately":{
-    "message":"Search privately",
-    "description":"Placeholder in private search text box"
   }
 }

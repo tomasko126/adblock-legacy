@@ -197,10 +197,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"changelog",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"General",
     "description":"A tab on the options page"
@@ -221,6 +217,7 @@
     "message":"Beta",
     "description":"Option on first tab page"
   },
+<<<<<<< HEAD
   "use_experimental_feature_to_speed_up_adblock":{
     "message":"Speed up AdBlock using an experimental feature in Safari",
     "description":"Option on first tab page"
@@ -229,6 +226,8 @@
     "message":"Do me a favor?  Try this experimental feature for a while, then <a>let me know<\/a> how well it works for you.",
     "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
+=======
+>>>>>>> master
   "googletextads":{
     "message":"I like the text ads on Google search results; show me those",
     "description":"Option on first tab page"
@@ -1247,6 +1246,14 @@
     "message":" -- Select Language -- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Allow whitelisting of specific YouTube channels",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Whitelist this YouTube channel",
+    "description":"Text which is displayed on YouTube in popup menu"
+  },
   "confirm_undo_custom_filters":{
     "message":"Are you sure you want to remove the $count$ blocks that you have created on $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
@@ -1260,6 +1267,7 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
+<<<<<<< HEAD
   },
   "latest_version":{
     "message":"AdBlock is up-to-date!",
@@ -1337,5 +1345,7 @@
   "search_privately":{
     "message":"Search privately",
     "description":"Placeholder in private search text box"
+=======
+>>>>>>> master
   }
 }
