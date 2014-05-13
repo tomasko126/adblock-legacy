@@ -193,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"changelog",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Algemeen",
     "description":"A tab on the options page"
@@ -216,14 +212,6 @@
   "betalabel":{
     "message":"Beta",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Versnel AdBlock door een experimentele functie te gebruiken in Safari.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Doe je me een plezier? Test deze experimentele functie voor een tijdje en <a>laat me dan weten<\/a> hoe goed het voor je werkt (in het Engels)!",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Ik vind de tekstadvertenties op de zoekresultaten van Google interessant, laat me deze zien.",
@@ -510,7 +498,7 @@
     "description":"Step 1 for disabling chrome extensions"
   },
   "disableforchromeandsafaristeptwo":{
-    "message":"Vink bij elke extensie het vakje uit dat ervoor zorgt dat de extensie geactiveerd is <b>behalve<\/b> bij Adblock. <b>Houd AdBlock geactiveerd<\/b>.",
+    "message":"Vink bij elke extensie het vakje uit dat ervoor zorgt dat de extensie geactiveerd is <b>behalve<\/b> bij AdBlock. <b>Houd AdBlock geactiveerd<\/b>.",
     "description":"Step 2 for disabling chrome and safari extensions"
   },
   "disableforsafaristepone":{
@@ -718,7 +706,7 @@
     "description":"telling a user who won't report an ad to us how to handle it for herself"
   },
   "updatefromoldversion":{
-    "message":"Je gebruikt een oude versie van AdBlock. $updatelink$ eerst naar de nieuwste versie van Adblock",
+    "message":"Je gebruikt een oude versie van AdBlock. $updatelink$ eerst naar de nieuwste versie van AdBlock",
     "description":"Ad report page instructions to update AdBlock in Safari",
     "placeholders":{
       "updatelink":{
@@ -1243,6 +1231,14 @@
     "message":"-- Selecteer Taal --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Allow whitelisting of specific YouTube channels",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Whitelist this YouTube channel",
+    "description":"Text which is displayed on YouTube in popup menu"
+  },
   "confirm_undo_custom_filters":{
     "message":"Weet je zeker dat je $count$ blokkeringen op $host$ wilt verwijderen?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
@@ -1256,25 +1252,5 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
-  },
-  "activate_private_search":{
-    "message":"Activeer privé zoeken",
-    "description":"Checkbox to activate or deactivate private search"
-  },
-  "search_privately_from":{
-    "message":"Zoek privé vanuit:",
-    "description":"Set where private search should be activated, followed by several options"
-  },
-  "omnibox":{
-    "message":"De adresbalk",
-    "description":"Option, where private search should be activated"
-  },
-  "search_engine_websites":{
-    "message":"Zoekmachine websites",
-    "description":"Option, where private search should be activated"
-  },
-  "search_privately":{
-    "message":"Privé zoeken",
-    "description":"Placeholder in private search text box"
   }
 }
