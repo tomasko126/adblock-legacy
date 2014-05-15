@@ -279,12 +279,15 @@
       .margin {
         margin-left: 5px;
       }
+<<<<<<< HEAD
       .marginh2 {
         margin-bottom: 10px;
       }
       .marginh3 {
         margin: 10px 0px;
       }
+=======
+>>>>>>> resourceblock-design
       .overrules-filters {
         font-weight: bold;
         color: red
@@ -347,7 +350,11 @@
         .ui-tabs-nav {
           display: none;
           opacity: 0.85;
+<<<<<<< HEAD
           margin-top: 23px;
+=======
+          margin-top: 28px;
+>>>>>>> resourceblock-design
           right: 40px;
           -webkit-padding-start: 0px;
           z-index: 2;
@@ -363,7 +370,11 @@
       input[type="button"], select {
         -webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
         box-shadow: inset 0px 1px 0px 0px #ffffff;
+<<<<<<< HEAD
         background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #c7c7c7) );
+=======
+        background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+>>>>>>> resourceblock-design
         background-color: #ededed;
         text-indent: -1px;
         border: 1px solid #dcdcdc;
@@ -378,7 +389,11 @@
         border-radius: 2px;
       }
       input[type="button"]:hover, select:hover {
+<<<<<<< HEAD
         background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #c7c7c7), color-stop(1, #ededed) );
+=======
+        background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+>>>>>>> resourceblock-design
         background-color: #dfdfdf;
       }
       input[type="button"]:active {
