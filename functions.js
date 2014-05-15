@@ -86,7 +86,6 @@ localizePage = function() {
     $("#main_nav").removeClass("right").addClass("left");
     $(".adblock-logo").removeClass("left").addClass("right");
     $(".closelegend").css("float","left");
-    $(".ui-tabs-nav").css({right:"auto",left:"40px"});
     document.documentElement.dir = "rtl";
   }
 };
