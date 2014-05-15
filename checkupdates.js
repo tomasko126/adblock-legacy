@@ -60,7 +60,7 @@ function checkupdates(page) {
   });
 
   // Hide ad-reporting wizard, when user is offline
-  if ($('#checkupdate').is(':visible')) {
+  if (page === "adreport" && $('#checkupdate').is(':visible')) {
     $('.section').hide();
   }
 
