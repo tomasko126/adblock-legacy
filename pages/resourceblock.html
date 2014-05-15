@@ -83,6 +83,7 @@
         border: 1px solid #EEE;
         width: 460px;
         cursor: move;
+        top: -5px;
         margin: -20px 52% 0px;
         padding: 5px;
         border-radius: 2px;
@@ -113,9 +114,6 @@
       #filterpreview {
         font-size: 12px;
         font-style: italic;
-      }
-      .onlyifdebug {
-        display: none;
       }
       #addthefilter {
         font-weight: bold;
@@ -207,8 +205,8 @@
       <div id="legend" class="ui-widget-content"><b i18n="resourceblocklegend1"></b>
       <i style='color:red' i18n="resourceblocklegend2"></i>,
       <i style='color:green' i18n="resourceblocklegend3"></i> &amp;
-      <i i18n="resourceblocklegend4"></i><span class='onlyifdebug'>;
-      <i style='color:blue' i18n="resourceblocklegend5"></i></span>.<a class="closelegend">x</a>
+      <i i18n="resourceblocklegend4"></i>;<a class="closelegend">x</a></br>
+      <i style='color:blue' i18n="resourceblocklegend5"></i>.
       <input type="search" id="search" i18n_placeholder="searchplaceholder" i18n_title="searchexplanation" incremental="incremental"/>
     </div>
 
@@ -230,8 +228,13 @@
       <p i18n="blockeverycontaining" style="font-size: 20px;"></p>
       <div id="suggestions"></div>
       <input type='radio' name='urloption' id='custom' />
-      <label for='custom' i18n="custompattern" style="margin-left: 1px;"></label><br/>
-      <input type='button' style='margin-top: 10px;' i18n_value='nextstep' id='confirmUrl' />
+      <label for='custom' i18n="custompattern"></label><br/>
+      <div id="disable"> 
+      <p style="font-size: 20px;" i18n="ordisablefilter"></p>
+      <input type='radio' name='urloption' id='disablefilter'/>
+      <label for="disablefilter"></label>
+      </div>
+      <input type='button' i18n_value='nextstep' id='confirmUrl' />
     </form>
     </div>
 
