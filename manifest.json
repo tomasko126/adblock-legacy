@@ -1,6 +1,6 @@
 {
   "name": "AdBlock",
-  "version": "2.6.30",
+  "version": "2.6.34",
   "background": {
     "scripts": [
       "jquery/jquery.min.js",
@@ -29,6 +29,25 @@
   },
   "content_scripts": [
     {
+      "matches": [
+        "*://*.mail.live.com/*",
+        "*://*.mastertoons.com/*",
+        "*://*.getadblock.com/*",
+        "*://*.mobilmania.cz/*",
+        "*://*.zive.cz/*",
+        "*://*.doupe.cz/*",
+        "*://*.e15.cz/*",
+        "*://*.sportrevue.cz/*",
+        "*://*.autorevue.cz/*",
+        "*://*.youtube.com/*"
+      ],
+      "js": [
+        "bandaids.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
       "matches": ["http://*/*", "https://*/*"],
       "js": [
         "port.js",
@@ -36,18 +55,6 @@
         "filtering/filteroptions.js",
         "adblock_start_common.js",
         "adblock_start_chrome.js"
-      ],
-      "run_at": "document_start",
-      "all_frames": true
-    },
-    {
-      "matches": [
-        "*://*.mail.live.com/*",
-        "*://*.mastertoons.com/*",
-        "*://*.getadblock.com/*"
-      ],
-      "js": [
-        "bandaids.js"
       ],
       "run_at": "document_start",
       "all_frames": true
