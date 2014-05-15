@@ -50,14 +50,11 @@ function customize_for_this_tab() {
     if (!BG.get_settings().show_advanced_options)
       hide(["div_show_resourcelist"]);
 
-<<<<<<< HEAD
-=======
     var path = info.tab.url;
     if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
       show(["div_whitelist_channel"]);
     }
  
->>>>>>> master
     for (var div in shown)
       if (shown[div])
         $('#' + div).show();
@@ -89,11 +86,7 @@ $(function() {
     });
   });
 
-<<<<<<< HEAD
   $("#titletext").click(function() {
-=======
-  $("#titletext span").click(function() {
->>>>>>> master
     var url = "https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom";
     var opera_url = "https://addons.opera.com/extensions/details/adblockforopera/";
     if (OPERA) {
