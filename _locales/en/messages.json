@@ -39,6 +39,10 @@
     "message":"To hide the button, right click it and choose Hide Button.  You can show it again under chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
+  "operabutton_how_to_hide2":{
+    "message":"To hide the button, go to opera:\/\/extensions and check 'Hide from toolbar' option. You can show it again under opera:\/\/extensions by unchecking 'Hide from toolbar' option.",
+    "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Opera displays when you right click a toolbar button."
+  },
   "sliderexplanation":{
     "message":"Slide the slider until the ad is blocked correctly on the page, and the blocked element looks useful.",
     "description":"Blacklister slider page message"
@@ -214,11 +218,11 @@
     "description":"Option on first tab page"
   },
   "googletextads":{
-    "message":"I like the text ads on Google search results; show me those.",
+    "message":"I like the text ads on Google search results; show me those",
     "description":"Option on first tab page"
   },
   "showcontextmenus":{
-    "message":"Add items to the right click menu.",
+    "message":"Add items to the right click menu",
     "description":"Option on first tab page"
   },
   "debuginlogoption":{
@@ -314,7 +318,7 @@
     "description":"Explanation of the filter lists"
   },
   "updatenowmessage":{
-    "message":"I will fetch updates automatically; you can also <a>update now<\/a>.",
+    "message":"I will fetch updates automatically; you can also <a>update now<\/a>",
     "description":"update filters text + button"
   },
   "orenteraurl":{
@@ -326,7 +330,7 @@
     "description":"subscribe to a list button"
   },
   "showlinkstolists":{
-    "message":"Show links to the filter lists:",
+    "message":"Show links to the filter lists",
     "description":"Option on second tab page"
   },
   "filterantisocial":{
@@ -932,7 +936,7 @@
     "description":"Result of the final ad report question"
   },
   "cleanuplist":{
-    "message":"Clean up this list:",
+    "message":"Clean up this list",
     "description":"Option at the bottom of the third options tab"
   },
   "disabled_by_filter_lists":{
@@ -952,7 +956,7 @@
     "description":"Message shown in toolbar button on web pages that have been whitelisted."
   },
   "enable":{
-    "message":"enable",
+    "message":"Enable AdBlock on this page",
     "description":"Link text to un-whitelist a page, displayed immediately after 'disabled_on_this_page'."
   },
   "status_paused":{
@@ -960,7 +964,7 @@
     "description":"Message shown in toolbar button when AdBlock is paused."
   },
   "unpause":{
-    "message":"unpause",
+    "message":"Unpause AdBlock",
     "description":"Link text to unpause AdBlock, displayed immediately after 'status_paused'."
   },
   "pause_adblock":{
@@ -988,7 +992,7 @@
     "description":"Text of a share link"
   },
   "did_you_know_this_is_my_full_time_job":{
-    "message":"Did you know this is my full-time job?",
+    "message":"Pay what you want!",
     "description":"Text of a payment request link"
   },
   "removelabel":{
@@ -1013,9 +1017,9 @@
     "message":"Project home",
     "description":"Text of link to the AdBlock open source project homepage (not the install page)"
   },
-  "help":{
-    "message":"Help",
-    "description":"Text of link to a page with fixes to common problems and a list of known issues"
+  "tabsupport":{
+    "message":"Support",
+    "description":"Link to forum in options page"
   },
   "report_ad_on_page":{
     "message":"Report an ad on this page",
@@ -1026,7 +1030,7 @@
     "description":"Link in the button"
   },
   "advanced_options":{
-    "message":"I'm an advanced user, show me advanced options.",
+    "message":"I'm an advanced user, show me advanced options",
     "description":"Options page checkbox"
   },
   "work_around_hulu_problems":{
@@ -1252,5 +1256,82 @@
         "example":"code.google.ph, ph.msn.com, stackoverflow.com"
       }
     }
+  },
+  "latest_version":{
+    "message":"AdBlock is up-to-date!",
+    "description":"On the Options > Help page, shows when there are no updates available for AdBlock"
+  },
+  "update_available":{
+    "message":"There's an update for AdBlock! Go $updatelink$ to update. <br> Note: If you want to receive updates automatically, just click on Safari > Preferences > Extensions > Updates <br> and check option 'Install updates automatically'.",
+    "description":"On the Options > Support page, shows when there are updates available for AdBlock. This needs to be short, unlike updatefromoldversion (on the Ad Report page, Safari Only)",
+    "placeholders":{
+      "updatelink":{
+        "content":"$1here$2",
+        "example":"<a href='http:\/\/chrome.com\/update_here.ctx'>update<\/a>"
+      }
+    }
+  },
+  "adblocksupport":{
+    "message":"AdBlock Support",
+    "description":"Header of fourth tab page"
+  },
+  "support":{
+    "message":"Found a bug? Got a question? Got a new idea for the extension? Go to $updatelink2$",
+    "description":"Instructions for help",
+    "placeholders":{
+      "updatelink2":{
+        "content":"<a href='http:\\//support.getadblock.com' target='_blank'>our support site!<\/a>"
+      }
+    }
+  },
+  "seethecode":{
+    "message":"Want to see the code behind AdBlock? Check it out $codelink$.",
+    "description":"Link to code behind AdBlock",
+    "placeholders":{
+      "codelink":{
+        "content":"<a href='http:\\//code.getadblock.com' target='_blank'>here</a>"
+      }
+    }
+  },
+  "adblockcontributors":{
+    "message":"Do you want to see who are the people behind AdBlock? Check it now at our $contributorspage$",
+    "description":"Text for link to contributors page",
+    "placeholders":{
+      "contributorspage":{
+        "content":"<a href='http:\\//getadblock.com\/contributors' target='_blank'>contributors page!<\/a>"
+      }
+    }
+  },
+  "checkforupdates":{
+    "message":"Checking for updates (should only take a second or two)...",
+    "description":"Translate, when AdBlock is checking the newest available version"
+  },
+  "somethingwentwrong":{
+    "message":"Something went wrong while checking updates.",
+    "description":"Translate, when AdBlock is checking the newest available version and an error occurs"
+  },
+  "checkinternetconnection":{
+    "message":"You must be connected to the internet, if you want to report an ad.",
+      "description":"Translate, when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "activate_private_search":{
+    "message":"Activate private search",
+    "description":"Checkbox to activate or deactivate private search"
+  },
+  "search_privately_from":{
+    "message":"Search privately from:",
+    "description":"Set where private search should be activated, followed by several options"
+  },
+  "omnibox":{
+    "message":"The omnibox",
+    "description":"Option, where private search should be activated"
+  },
+  "search_engine_websites":{
+    "message":"Search engine websites",
+    "description":"Option, where private search should be activated"
+  },
+  "search_privately":{
+    "message":"Search privately",
+    "description":"Placeholder in private search text box"
   }
 }
