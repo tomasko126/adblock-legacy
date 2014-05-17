@@ -7,7 +7,6 @@ function load_options() {
         spinner: "",
         cache: true,
         cookie: {},
-        selected: 0,
         load: function(event, ui) {
           //translation
           localizePage();
