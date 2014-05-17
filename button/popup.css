@@ -19,7 +19,7 @@ body {
   width: 45%;
 }
 .menu-entry {
-  padding: 4px 4px 4px 8px;
+  padding: 3px 4px 3px 8px;
   cursor: pointer;
 }
 .menu-entry:hover {
