@@ -1,6 +1,7 @@
 body {
   background-color: #f8f8f8;
   margin: 0px;
+  -webkit-font-smoothing: auto;
 }
 #wrapper {
   margin: 0px 0px;
@@ -121,5 +122,4 @@ input[type="checkbox"]:checked:before {
   font-family: "Open Sans";
   font-weight: 300;
   src: url('../font/OpenSans.woff') format('woff');
-  -webkit-font-smoothing: antialiased;
 }
