@@ -80,9 +80,46 @@ a:hover {
   transition: all 0.2s ease-out;
   color: red;
 }
+input[type="checkbox"] {
+  height: 1.2em;
+  width: 1.2em;
+  vertical-align: middle;
+  margin: 0 0.4em 0.4em 0;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: -webkit-linear-gradient(#FCFCFC, #DADADA);
+  -webkit-appearance: none;
+  -webkit-transition: box-shadow 200ms;
+  box-shadow:inset 1px 1px 0 #fff, 0 1px 1px rgba(0,0,0,0.1);
+}
+input[type="checkbox"] {
+  -webkit-border-radius:2px;
+  border-radius:2px;
+}
+input[type="checkbox"]:not(:disabled):hover {
+  border-color:rgba(0,0,0,0.5);
+  box-shadow:inset 1px 1px 0 #fff, 0 0 4px rgba(0,0,0,0.3);
+}
+input[type="checkbox"]:active:not(:disabled) {
+  background-image: -webkit-linear-gradient(#C2C2C2, #EFEFEF);
+  box-shadow:inset 1px 1px 0 rgba(0,0,0,0.2), inset -1px -1px 0 rgba(255,255,255,0.6);
+  border-color:rgba(0,0,0,0.5);
+}
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+input[type="checkbox"]:checked {
+  border-color: rgba(0,0,0,0.5);
+  box-shadow: inset 1px 1px 0 #fff, 0 0 4px rgba(0,0,0,0.3);
+}
+input[type="checkbox"]:checked:before {
+  color: rgba(0, 0, 0, 0.7);
+  content: '\2713';
+  margin-left: 20%;
+}
 @font-face {
   font-family: "Open Sans";
   font-weight: 300;
-  src: url('../../font/OpenSans.woff') format('woff');
+  src: url('../font/OpenSans.woff') format('woff');
   -webkit-font-smoothing: antialiased;
 }
