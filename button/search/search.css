@@ -2,6 +2,7 @@
     display: none;
     position: absolute;
     top: 45px;
+    left: 5px;
 }
 
 #inactive_search {
