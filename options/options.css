@@ -445,7 +445,7 @@
       input[type="checkbox"]:checked:before {
         color: rgba(0, 0, 0, 0.7);
         content: '\2713';
-        margin-left: 25%;
+        margin-left: 20%;
       }
       input:disabled {
         opacity: .6;
