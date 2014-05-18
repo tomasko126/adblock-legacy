@@ -28,7 +28,7 @@ frameData = (function() {
         var activeTab = safari.application.activeBrowserWindow.activeTab;
         if(!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
 
-        url = url || activeTab.url;
+        url = activeTab.url;
         domain = parseUri(url).hostname;
         var tracker = countMap[tabId];
 
