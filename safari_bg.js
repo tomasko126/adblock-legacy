@@ -96,16 +96,21 @@ safari.application.addEventListener("activate", function(event) {
 
 safari.application.addEventListener("open", function(event) {
   var safari_toolbars = safari.extension.toolbarItems;
+  
   for(var i = 0; i < safari_toolbars.length; i++ ) {
     safari_toolbars[i].badge = "0";
   }
 }, true);
 
 safari.application.addEventListener("beforeNavigate", function(event) {
+  var tabId = safari.application.activeBrowserWindow.activeTab.id;
   var safari_toolbars = safari.extension.toolbarItems;
+  
   for(var i = 0; i < safari_toolbars.length; i++ ) {
     safari_toolbars[i].badge = "0";
   }
+  
+  frameData.get(tabId).blockCount = 0;
 }, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
