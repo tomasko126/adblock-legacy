@@ -29,7 +29,7 @@ frameData = (function() {
         if(!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
 
         url = url || activeTab.url;
-        domain = domain || parseUri(url).hostname;
+        domain = parseUri(url).hostname;
         var tracker = countMap[tabId];
 
         var shouldTrack = !tracker || tracker.domain !== domain;
@@ -47,12 +47,11 @@ frameData = (function() {
 
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
-  console.log(messageEvent);
   if (messageEvent.name === "request") {
-    console.log(messageEvent);
     var args = messageEvent.message.data.args;
-    if(messageEvent.target.url === args[1].tab.url)
+    if (messageEvent.target.url === args[1].tab.url) {
       frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
+    }
     return;
   }
 
@@ -69,23 +68,67 @@ safari.application.addEventListener("message", function(messageEvent) {
     var elType = messageEvent.message.elType;
     var frameDomain = messageEvent.message.frameDomain;
 
-    var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
-    if (isMatched)
-        log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
-    messageEvent.message = !isMatched;
+  var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
+  if (isMatched) {
+    // If matched, add one block count to the corresponding tab that owns the request,
+    // update the badge afterwards
+    var tabId = messageEvent.target.id;
+    blockCounts.recordOneAdBlocked(tabId);
+    updateBadge(tabId);
+    log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
+  }
+  messageEvent.message = !isMatched;
 }, false);
 
-// Code for creating popover, not available on Safari 5.0
-var ABPopover = safari.extension.createPopover("AdBlock", safari.extension.baseURI + "button/popup.html");
+// Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
+var windowByMenuId = {};
 
-function setPopover(popover) {
-    for (var i = 0; i < safari.extension.toolbarItems.length; i++) {
-        safari.extension.toolbarItems[i].popover = popover;
-        var toolbarItem = safari.extension.toolbarItems[i];
-        toolbarItem.popover = popover;
-        toolbarItem.toolTip = "AdBlock"; // change the tooltip on Safari 5.1+
-        toolbarItem.command = null;
-    }
+// Listen to tab activation, this is triggered when a tab is activated or on focus.
+safari.application.addEventListener("activate", function(event) {
+  var tabId = safari.application.activeBrowserWindow.activeTab.id;
+  var get_blocked_ads = frameData.get(tabId).blockCount;
+  var safari_toolbars = safari.extension.toolbarItems;
+  
+  for(var i = 0; i < safari_toolbars.length; i++ ) {
+    safari_toolbars[i].badge = get_blocked_ads;
+  }
+}, true);
+
+safari.application.addEventListener("open", function(event) {
+  var safari_toolbars = safari.extension.toolbarItems;
+  for(var i = 0; i < safari_toolbars.length; i++ ) {
+    safari_toolbars[i].badge = "0";
+  }
+}, true);
+
+safari.application.addEventListener("beforeNavigate", function(event) {
+  var safari_toolbars = safari.extension.toolbarItems;
+  for(var i = 0; i < safari_toolbars.length; i++ ) {
+    safari_toolbars[i].badge = "0";
+  }
+}, true);
+
+// Update the badge for each tool bars in a window.(Note: there is no faster way of updating
+// the tool bar item for the active window so I just updated all tool bar items' badge. That
+// way, I don't need to loop and compare.)
+var updateBadge = function() {
+  var show_block_counts = get_settings().display_stats;
+  
+  var url = safari.application.activeBrowserWindow.activeTab.url;
+  var paused = adblock_is_paused();
+  var canBlock = !page_is_unblockable(url);
+  var whitelisted = page_is_whitelisted(url);
+  
+  var count = 0;
+  if(show_block_counts && !paused && canBlock && !whitelisted) {  
+    var tabId = safari.application.activeBrowserWindow.activeTab.id;
+    count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
+  }
+  var safari_toolbars = safari.extension.toolbarItems;
+  for(var i = 0; i < safari_toolbars.length; i++ ) {
+    safari_toolbars[i].badge = count;
+  }
+  frameData.get(tabId).blockCount = count;
 }
 
 // Code for removing popover
