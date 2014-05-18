@@ -29,7 +29,7 @@ frameData = (function() {
         if(!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
 
         url = url || activeTab.url;
-        domain = domain || parseUri(url).hostname;
+        domain = parseUri(url).hostname;
         var tracker = countMap[tabId];
 
         var shouldTrack = !tracker || tracker.domain !== domain;
@@ -47,12 +47,11 @@ frameData = (function() {
 
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
-  console.log(messageEvent);
   if (messageEvent.name === "request") {
-    console.log(messageEvent);
     var args = messageEvent.message.data.args;
-    if(messageEvent.target.url === args[1].tab.url)
+    if (messageEvent.target.url === args[1].tab.url) {
       frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
+    }
     return;
   }
 
@@ -75,7 +74,7 @@ safari.application.addEventListener("message", function(messageEvent) {
     // update the badge afterwards
     var tabId = messageEvent.target.id;
     blockCounts.recordOneAdBlocked(tabId);
-    updateBadge();
+    updateBadge(tabId);
     log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
   }
   messageEvent.message = !isMatched;
@@ -86,13 +85,32 @@ var windowByMenuId = {};
 
 // Listen to tab activation, this is triggered when a tab is activated or on focus.
 safari.application.addEventListener("activate", function(event) {
-  updateBadge()
+  var tabId = safari.application.activeBrowserWindow.activeTab.id;
+  var get_blocked_ads = frameData.get(tabId).blockCount;
+  var safari_toolbars = safari.extension.toolbarItems;
+  
+  for(var i = 0; i < safari_toolbars.length; i++ ) {
+    safari_toolbars[i].badge = get_blocked_ads;
+  }
+}, true);
+
+safari.application.addEventListener("open", function(event) {
+  var safari_toolbars = safari.extension.toolbarItems;
+  for(var i = 0; i < safari_toolbars.length; i++ ) {
+    safari_toolbars[i].badge = "0";
+  }
+}, true);
+
+safari.application.addEventListener("beforeNavigate", function(event) {
+  var safari_toolbars = safari.extension.toolbarItems;
+  for(var i = 0; i < safari_toolbars.length; i++ ) {
+    safari_toolbars[i].badge = "0";
+  }
 }, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
 // the tool bar item for the active window so I just updated all tool bar items' badge. That
 // way, I don't need to loop and compare.)
-var count;
 var updateBadge = function() {
   var show_block_counts = get_settings().display_stats;
   
@@ -101,7 +119,7 @@ var updateBadge = function() {
   var canBlock = !page_is_unblockable(url);
   var whitelisted = page_is_whitelisted(url);
   
-  count = 0;
+  var count = 0;
   if(show_block_counts && !paused && canBlock && !whitelisted) {  
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
     count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
@@ -110,6 +128,7 @@ var updateBadge = function() {
   for(var i = 0; i < safari_toolbars.length; i++ ) {
     safari_toolbars[i].badge = count;
   }
+  frameData.get(tabId).blockCount = count;
 }
 
 safari.application.addEventListener("command", function(event) {
@@ -137,7 +156,6 @@ safari.application.addEventListener("command", function(event) {
   } else if (command === "AdBlockOptions") {
     openTab("options/index.html", false, browserWindow);
   } else if (command === "toggle-pause") {
-    console.log("toggling pause");
     if (adblock_is_paused()) {
       adblock_is_paused(false);
     } else {
@@ -173,7 +191,6 @@ safari.application.addEventListener("command", function(event) {
   } else if (command in {"show-whitelist-wizard": 1, "show-blacklist-wizard": 1, "show-clickwatcher-ui": 1 }) {
     browserWindow.activeTab.page.dispatchMessage(command);
   }
-  updateBadge();
 }, false);
 
 // Starting with 5.1, we can attach menus to toolbar items. If safari.extension.createMenu is available,
@@ -292,6 +309,7 @@ if (!LEGACY_SAFARI) {
         var canBlock = !page_is_unblockable(url);
         var whitelisted = page_is_whitelisted(url);
         var host = parseUri(url).host;
+        var tabId = safari.application.activeBrowserWindow.activeTab.id;
         
         if(canBlock && !paused && !whitelisted) {
           // Block count in menu.
@@ -299,7 +317,7 @@ if (!LEGACY_SAFARI) {
           var show_block_counts = get_settings().display_stats;
           var total_blocked = blockCounts.getTotalAdsBlocked();
           appendMenuItem("blocked-in-total", "      " + translate("blocked_n_in_total", [total_blocked]));
-          var blocked_in_tab = count;
+          var blocked_in_tab = blockCounts.getTotalAdsBlocked(tabId);
           appendMenuItem("blocked-on-page", "      " + translate("blocked_n_on_this_page", [blocked_in_tab]));
           appendMenuItem("toggle-block-display", translate("show_on_adblock_button"), show_block_counts);
           menu.appendSeparator(itemIdentifier("separator0"));
