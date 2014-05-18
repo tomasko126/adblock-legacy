@@ -35,10 +35,6 @@
     "message":"Üçüncü şahıs",
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
-  "installedtitle":{
-    "message":"AdBlock kuruldu!",
-    "description":"Title for the installation success page"
-  },
   "chromebutton_how_to_hide2":{
     "message":"Düğmeyi gizlemek için, sağ tıklayıp 'Düğmeyi gizle'yi seçin. Tekrar görünmesi için adres çubuğundan; chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -197,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"değişiklikler listesi",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Genel",
     "description":"A tab on the options page"
@@ -220,14 +212,6 @@
   "betalabel":{
     "message":"Beta",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Safari'deki deneysel özelliği kullanarak AdBlock'u hızlandırın.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Bir iyilik yapar mısınız? Bu deneysel yeni özelliği bir süre deneyin ve sizin için nasıl çalıştığını <a>bana bildirin<\/a>.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Google arama sonuçlarında çıkan reklamları seviyorum; onları engelleme.",
@@ -350,7 +334,7 @@
     "description":"Name of the filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "message":"Fanboy's Annoyances (web'deki can sıkıcı şeyleri kaldırır)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
@@ -497,6 +481,14 @@
     "message":"Reklam zaten engellendiği için bir şey yapmanıza gerek yok",
     "description":"on the ad report page, telling a user there is nothing to do"
   },
+  "sameAdsOnDifferentPages":{
+    "message":"Birçok farklı sayfada, -örneğin ana sayfanız, işyerinizin Web sitesi, vb.- aynı veya benzer reklamlar mı görüyorsunuz?",
+    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
+  },
+  "similarAds":{
+    "message":"Her sayfada aynı\/benzer reklamlar",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
+  },
   "disableallextensions":{
     "message":"AdBlock hariç, tüm eklentileri devre dışı bırakın.",
     "description":"instruction on ad report page"
@@ -524,6 +516,14 @@
   "reenableadsonebyone":{
     "message":"Reklamlar kaybolduğuna göre, hangi eklentinin sorun çıkardığını bulmanız gerekir. Şimdi her seferinde bir eklentiyi aktif hale getirin. Reklamları geri getiren eklenti, silmeniz gereken eklentidir.",
     "description":"tells the user to reenable the extensions one by one."
+  },
+  "scancomputer":{
+    "message":"Bilgisayarınızı zararlı yazılımlara karşı tarayın",
+    "description":"instruction on ad report page"
+  },
+  "performscan":{
+    "message":"Antivirüs\/zararlı yazılım engelleme programlarınızı kullanarak tam bir tarama yapın. Bazı zararlı yazılımlar AdBlock'u etkisiz hale getirerek, gezindiğiniz sayfalara reklam yerleştirebilir.",
+    "description":"instruction on ad report page"
   },
   "correctfilters":{
     "message":"Filtreleri düzelt",
@@ -726,10 +726,6 @@
   "block_this_ad":{
     "message":"Bu reklamı engelle",
     "description":"Context and popup menu entry"
-  },
-  "filecleanerwarning":{
-    "message":"Eğer her AdBlock'u başlattığınızda bu mesajı görüyorsanız, kullandığınız dosya temizleyicinin 'localStorage' dosyalarını da temizlediğinden emin olun.",
-    "description":"Help for users who use hyperactive file cleaners"
   },
   "typehiding":{
     "message":"gizlenen",
@@ -1037,26 +1033,6 @@
     "message":"Hulu.com videolarının oynatılmaması sorununu çöz (tarayıcınızı tekrar başlatmayı gerektirir)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
   },
-  "now_you_have_adblock_hooray":{
-    "message":"Artık AdBlock kullanıyorsunuz! Yaşasın!",
-    "description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
-  },
-  "any_new_tabs_you_open_Will_be_automatically_ad_free":{
-    "message":"Açtığınız tüm yeni sekmeler otomatik olarak reklamsız görünecek.",
-    "description":"Install page subtitle"
-  },
-  "installing_adblock":{
-    "message":"AdBlock Kuruluyor...",
-    "description":"Install page: shown while progress bar loads"
-  },
-  "done":{
-    "message":"bitti.",
-    "description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
-  },
-  "seeing_this_every_time_you_start_your_browser":{
-    "message":"Tarayıcı her açıldığında bunu mu görüyorsunuz?",
-    "description":"Install page: link to click for help"
-  },
   "how_to_use_adblock":{
     "message":"AdBlock nasıl kullanılır:",
     "description":"Install page section title"
@@ -1064,16 +1040,6 @@
   "adblock_auto_removes_ads_thats_all":{
     "message":"AdBlock otomatik olarak tüm reklamları engeller. Hepsi bu.",
     "description":"Install page: explaining how to use adblock."
-  },
-  "for_more_options_right_click":{
-    "message":"Daha fazla seçenek için, web sayfalarına sağ tıklayabilir ya da $img$ araç çubuğu butonunu kullanabilirsiniz.",
-    "description":"Install page: explaining how to use adblock in more detail.",
-    "placeholders":{
-      "img":{
-        "content":"<img src=\"..\/..\/img\/icon19.png\"\/>",
-        "example":"A small picture of the toolbar button.  Do not translate."
-      }
-    }
   },
   "modifydomain":{
     "message":"Site:",
@@ -1264,6 +1230,14 @@
   "selectlanguage":{
     "message":"-- Dilinizi Seçin --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Belirli Youtube kanallarını beyaz listeye eklemeye izin ver",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Bu Youtube kanalını beyaz listeye ekle",
+    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"$host$ alan adında yaptığınız $count$ engellemeyi kaldırmak istediğinize emin misiniz?",

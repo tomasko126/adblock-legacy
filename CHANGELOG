@@ -1,7 +1,32 @@
 ## Versions ##
 
 UNRELEASED:
-Add Fanboy's annoyances list to the Filter Lists page.
+
+2.6.34: Bug fix 
+
+2.6.33: Bug fix
+
+2.6.32: Bug fixes, and URL updates
+
+2.6.31: Bug fixes, and YouTube Channel Whitelisting
+
+2.6.30: removed unneccessary files
+
+2.6.29: Bug fixes, remove Safari experimental feature, updated French filter URL
+
+2.6.28: Small bugfixes (Safari YT Bug) and updated Chinese filter URL
+
+2.6.19-27: Beta tests for survey
+
+2.6.18: Minor fixes
+
+2.6.17: Version bump.
+
+2.6.16: Migrate from chromeadblock.com to getadblock.com
+
+2.6.15:
+- Add Fanboy's annoyances list to the Filter Lists page.
+- Fix Safari bug showing ads on Top Sites websites.
 
 2.6.14: Settings measurement
 

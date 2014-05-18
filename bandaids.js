@@ -1,10 +1,17 @@
+// Youtube-related code in this file based on code (c) Adblock Plus. GPLv3.
+// See https://hg.adblockplus.org/adblockpluschrome/file/4db6db04271c/safari/include.youtube.js
+ 
 var run_bandaids = function() {
   // Tests to determine whether a particular bandaid should be applied
   var apply_bandaid_for = "";
   if (/mail\.live\.com/.test(document.location.hostname))
     apply_bandaid_for = "hotmail";
-  else if (/youtube/.test(document.location.hostname))
-    apply_bandaid_for = "youtube_safari_only";
+  else if (SAFARI && /youtube/.test(document.location.hostname))
+    apply_bandaid_for = "youtube_safari_only";        
+  else if(/getadblock\.com/.test(document.location.hostname))
+    apply_bandaid_for = "getadblock";
+  else if(/mobilmania\.cz|zive\.cz|doupe\.cz|e15\.cz|sportrevue\.cz|autorevue\.cz/.test(document.location.hostname))
+    apply_bandaid_for = "czech_sites";
   else {
     var hosts = [ /mastertoons\.com$/ ];
     hosts = hosts.filter(function(host) { return host.test(document.location.hostname); });
@@ -31,13 +38,24 @@ var run_bandaids = function() {
       if (el) {el.style.setProperty("right", "1px", null);}
       el = document.getElementById("SkyscraperContent");
       if (el) {
-        el.style.setProperty("display", "none", null); 
-        el.style.setProperty("position", "absolute", null); 
-        el.style.setProperty("right", "0px", null); 
+        el.style.setProperty("display", "none", null);
+        el.style.setProperty("position", "absolute", null);
+        el.style.setProperty("right", "0px", null);
       }
     },
-
-    youtube_safari_only: function() {
+    getadblock: function() {
+      BGcall('get_adblock_user_id', function(adblock_user_id) {
+        var user_id = adblock_user_id;
+        var div_id = "adblock_user_id";
+        var elemDiv = document.createElement("div");
+        elemDiv.id = div_id;
+        elemDiv.innerText = user_id;
+        elemDiv.style.display = "none";
+        document.body.appendChild(elemDiv);
+      });
+    },
+   youtube_safari_only: function() {
+     
       function blockYoutubeAds(videoplayer) {
         var flashVars = videoplayer.getAttribute('flashvars');
         var inParam = false;
@@ -54,10 +72,13 @@ var run_bandaids = function() {
             return;
 
         log("Removing YouTube ads");
-        var adReplaceRegex = /\&((ad_\w+?|prerolls|interstitial|watermark|infringe)\=[^\&]*)+/gi;
-        flashVars = flashVars.replace(adReplaceRegex, '');
-        flashVars = flashVars.replace(/\&invideo\=True/i, '&invideo=False');
-        flashVars = flashVars.replace(/\&ad3_module\=[^\&]*/i, '&ad3_module=about:blank');
+        var pairs = flashVars.split("&");
+        for (var i = 0; i < pairs.length; i++) {
+            if (/^((ad|afv|adsense)(_.*)?|(ad3|st)_module|prerolls|interstitial|infringe|invideo)=/.test(pairs[i])) {
+                pairs.splice(i--, 1);
+            }
+        }
+        flashVars = pairs.join("&");
         var replacement = videoplayer.cloneNode(true);
         if (inParam) {
             // Grab new <param> and set its flashvars
@@ -81,11 +102,52 @@ var run_bandaids = function() {
           this.removeEventListener('DOMNodeInserted', arguments.callee, false);
         }, false);
       }
-    }
+    },    
+    czech_sites: function() {
+      var player = document.getElementsByClassName("flowplayer");
+      // Remove data-ad attribute from videoplayer
+      if (player) {
+        for (i=0; i<player.length; i++)  
+          player[i].removeAttribute("data-ad");
+      }
+    },
   }; // end bandaids
 
   if (apply_bandaid_for) {
     log("Running bandaid for " + apply_bandaid_for);
     bandaids[apply_bandaid_for]();
   }
-}
+
+};
+
+ 
+var before_ready_bandaids = function() {
+  // Tests to determine whether a particular bandaid should be applied
+  var apply_bandaid_for = "";
+  if (/youtube/.test(document.location.hostname))
+    apply_bandaid_for = "youtube_only";
+  
+
+  var bandaids = {
+    youtube_only: function() {        
+        // If history.pushState is available,
+        // YouTube uses it when navigating from one video
+        // to another and tells the flash player via JavaScript,
+        // which ads to show next bypassing the flashvars rewrite code.
+        // Disabling history.pushState on pages with YouTube's flash player
+        // will force YouTube to not use history.pushState
+        var s = document.createElement("script");
+        s.type = "application/javascript";
+        s.async = false;
+        s.textContent = "History.prototype.pushState = undefined;";
+        document.documentElement.appendChild(s);
+        document.documentElement.removeChild(s);
+    }
+  }; // end bandaids
+
+  if (apply_bandaid_for) {
+    log("Running early bandaid for " + apply_bandaid_for);
+    bandaids[apply_bandaid_for]();
+  }
+
+};       

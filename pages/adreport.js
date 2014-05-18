@@ -80,7 +80,7 @@ function generateReportURL() {
   body.push("");
   body.push("");
   count++;
-  body.push(count + ". Paste a working filter, if you have one: ");
+  body.push(count + ". If you have created the filter which removes reported ad, please paste it here: ");
   body.push("");
   body.push("");
   count++;
@@ -105,8 +105,16 @@ function generateReportURL() {
   body.push("");
   body.push("=== Enabled settings ===");
   body.push(enabled_settings.join('\n'));
+  body.push("");
+  body.push("=== Question Responses ===");
+  var answers = $('[class="answer"]["chosen"]');
+  var text = $('div[id^="step"][class="section"]:visible');
+  for (var i=0, n=1; i<answers.length, i<text.length; i++, n++) {
+      body.push(n+"."+text[i].id+": "+answers[i].getAttribute("chosen"));
+  }
+  body.push("");
 
-  result = result + "&discussion[body]=" + encodeURIComponent(body.join('\n'));
+  result = result + "&discussion[body]=" + encodeURIComponent(body.join('  \n')); // Two spaces for Markdown newlines
 
   return result;
 }
@@ -125,37 +133,67 @@ $("#UpdateFilters").click(function() {
 });
 //if the user clicks a radio button
 $("#step_update_filters_no").click(function() {
-  $("#step_update_filters").html("<span class='answer'>" + translate("no") + "</span>");
+  $("#step_update_filters").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
   $("#whattodo").text(translate("adalreadyblocked"));
 });
 $("#step_update_filters_yes").click(function() {
-  $("#step_update_filters").html("<span class='answer'>" + translate("yes") + "</span>");
+  $("#step_update_filters").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
   $("#step_disable_extensions_DIV").css("display", "block");
 });
 
 // STEP 2: disable all extensions
+
 //Code for displaying the div is in the $function() that contains localizePage()
-
-
 //after user disables all extensions except for AdBlock
 //if the user clicks a radio button
 $("#step_disable_extensions_no").click(function() {
-  $("#step_disable_extensions").html("<span class='answer'>" + translate("no") + "</span>");
+  $("#step_disable_extensions").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
   $("#whattodo").text(translate("reenableadsonebyone"));
 });
 $("#step_disable_extensions_yes").click(function() {
-  $("#step_disable_extensions").html("<span class='answer'>" + translate("yes") + "</span>");
-  $("#step_language_DIV").css("display", "block");
+  $("#step_disable_extensions").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
+  // Show malware steps just for Windows users
+  if (navigator.appVersion.indexOf("Win")!=-1)
+    $("#step_everywhere_DIV").css("display", "block");
+  else
+    $("#step_language_DIV").css("display", "block");
 });
 
 
-// STEP 3: language
+// STEP 3a: Ads on most pages 
+
+//If the user clicks a radio button
+$("#step_everywhere_yes").click(function() {
+    $("#step_everywhere").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
+    $("#step_malware_DIV").css("display", "block");
+  });
+  $("#step_everywhere_no").click(function() {
+    $("#step_everywhere").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
+    $("#step_language_DIV").css("display", "block");
+  });
+
+
+// STEP 3b: scan for malware
+
+//If the user clicks a radio button
+$("#step_malware_yes").click(function() {
+  $("#step_malware").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
+  $("#step_language_DIV").css("display", "block");
+});
+$("#step_malware_no").click(function() {
+  $("#step_malware").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
+  $("#whattodo").text(translate("adalreadyblocked"));
+});
+
+
+// STEP 4: language
 
 //if the user clicks an item
 var contact = "";
 $("#step_language_lang").change(function() {
   var selected = $("#step_language_lang option:selected");
   $("#step_language").html("<span class='answer'>"+ selected.text() +"</span>");
+  $("#step_language span").attr("chosen",selected.attr("i18n"));
   if (selected.text() == translate("other")) {
     $("#whattodo").html(translate("nodefaultfilter1",
                                   ["<a href='https://adblockplus.org/en/subscriptions'>", "</a>"]));
@@ -179,11 +217,11 @@ $("#step_language_lang").change(function() {
   $("#checkinfirefox").html(translate("checkinfirefoxtitle", hideChromeInChrome));
 });
 
-// STEP 4: also in Firefox
+// STEP 5: also in Firefox
 
 //If the user clicks a radio button
 $("#step_firefox_yes").click(function() {
-  $("#step_firefox").html("<span class='answer'>" + translate("yes") + "</span>");
+  $("#step_firefox").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
   if (/^mailto\:/.test(contact))
     contact = contact.replace(" at ", "@");
   var reportLink = "<a href='" + contact + "'>" + contact.replace(/^mailto\:/, '') + "</a>";
@@ -191,6 +229,7 @@ $("#step_firefox_yes").click(function() {
   $("#privacy").show();
 });
 $("#step_firefox_no").click(function() {
+  $("#step_firefox").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
   if (SAFARI) {
     // Safari can't block video ads
     $("#step_flash_DIV").css("display", "block");
@@ -199,7 +238,6 @@ $("#step_firefox_no").click(function() {
     $("a", "#whattodo").attr("href", generateReportURL());
     $("#privacy").show();
   }
-  $("#step_firefox").html("<span class='answer'>" + translate("no") + "</span>");
 });
 $("#step_firefox_wontcheck").click(function() {
   if (!SAFARI) {
@@ -209,20 +247,20 @@ $("#step_firefox_wontcheck").click(function() {
     // Safari can't do this.
     $("#whattodo").text(translate("fixityourself"));
   }
-  $("#step_firefox").html("<span class='answer'>" + translate("refusetocheck") + "</span>");
+  $("#step_firefox").html("<span class='answer' chosen='wont_check'>" + translate("refusetocheck") + "</span>");
 });
 
 
 
-// STEP 5: video/flash ad (Safari-only)
+// STEP 6: video/flash ad (Safari-only)
 
 //If the user clicks a radio button
 $("#step_flash_yes").click(function() {
-  $("#step_flash").html("<span class='answer'>" + translate("yes") + "</span>");
+  $("#step_flash").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
   $("#whattodo").text(translate("cantblockflash"));
 });
 $("#step_flash_no").click(function() {
-  $("#step_flash").html("<span class='answer'>" + translate("no") + "</span>");
+  $("#step_flash").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
   $("#whattodo").html(translate("reporttous2"));
   $("a", "#whattodo").attr("href", generateReportURL());
   $("#privacy").show();

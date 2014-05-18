@@ -35,10 +35,6 @@
     "message":"Сторонние",
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
-  "installedtitle":{
-    "message":"AdBlock установлен!",
-    "description":"Title for the installation success page"
-  },
   "chromebutton_how_to_hide2":{
     "message":"Чтобы скрыть кнопку, нажмите правую кнопку мыши и выберите Скрыть. Вы можете показать её снова в chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -52,15 +48,15 @@
     "description":"Link on blacklister slider page"
   },
   "slidertitle":{
-    "message":"Шаг 1: Выяснить, что нужно заблокировать",
+    "message":"Шаг 1: Определить, что нужно заблокировать",
     "description":"Blacklister slider page title"
   },
   "blacklisteroptions1":{
-    "message":"Как вы думаете, будет правильно видеть эту рекламу каждый раз при посещении этой страницы?",
+    "message":"Как Вы думаете, будет правильно видеть эту рекламу каждый раз при посещении этой страницы?",
     "description":"Blacklister attribute choosing page message"
   },
   "blacklisternotsure":{
-    "message":"<b>Не уверены?<\/b> Тогда нажмите кнопку 'Блокировать!'.",
+    "message":"<b>Не уверены?<\/b> Просто нажмите кнопку 'Блокировать!'.",
     "description":"Blacklister attribute choosing page message.  'Block it!' must be the same as the text of the 'buttonblockit' message."
   },
   "blacklisterthefilter":{
@@ -148,11 +144,11 @@
     "description":"Back to previous wizard page button"
   },
   "findingads":{
-    "message":"Поиск рекламы...<br\/><br\/><i>Подождите.<\/i>",
+    "message":"Поиск рекламы...<br\/><br\/><i>Это займет секунды<\/i>",
     "description":"When you press ctrl-shift-K the blacklister searches for ads"
   },
   "blockanadtitle":{
-    "message":"Блокировка рекламы",
+    "message":"Заблокировать рекламу",
     "description":"Title of the first two dialogs of the blacklister"
   },
   "clickthead":{
@@ -164,7 +160,7 @@
     "description":"Message displayed when the whitelister dialog will whitelist part of an entire website, for example '*.google.com\/reader\/*'.  The URL will appear on the next line."
   },
   "you_can_slide_to_change":{
-    "message":"Вы можете сдвинуться ниже, чтобы изменить именно те страницы, на которых AdBlock не будет работать.",
+    "message":"Вы можете переместиться ниже, чтобы изменить именно те страницы, на которых AdBlock не будет работать.",
     "description":"Instructions for how to use the whitelister slider controls.  Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2":{
@@ -197,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"журнал изменений",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Общая",
     "description":"A tab on the options page"
@@ -220,14 +212,6 @@
   "betalabel":{
     "message":"Бета",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Ускорить AdBlock, используя экспериментальные функции в Safari.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Сделаете мне одолжение? Попробуйте эту экспериментальную функцию некоторое время, а затем <a>дайте мне знать<\/a>, насколько хорошо она работает у Вас.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Мне нравится текстовая реклама в результатах поиска Google; показывать мне её.",
@@ -350,7 +334,7 @@
     "description":"Name of the filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "message":"Fanboy's Annoyances (удаляет отвлекающее содержимое в интернете)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
@@ -466,7 +450,7 @@
     "description":"title of ad report page"
   },
   "adreport2":{
-    "message":"Итак, Вы только что нашли рекламу на веб-странице? Хорошо, я помогу Вам найти подходящее место, куда сообщить об этом!<br\/> Помните: объявления отчет о рекламе является добровольным. Если Вы не хотите делать это, Вы можете просто закрыть это окно и блокировать её только для себя, добавив её фильтр на вкладке 'Настройка' на странице Параметры!",
+    "message":"Итак, Вы только что нашли рекламу на веб-странице? Хорошо, я помогу Вам найти подходящее место, куда сообщить об этом!<br\/> Помните: отчет о рекламе является добровольным. Если Вы не хотите делать его, Вы можете просто закрыть это окно и блокировать рекламу только для себя, добавив её фильтр на вкладке 'Настройка' на странице Параметры!",
     "description":"Instructions on ad reporting page. 'Customize' should be the same text as the 'tabcustomize' message."
   },
   "updateyourlists":{
@@ -482,7 +466,7 @@
     "description":"instruction on ad report page"
   },
   "adstillappear":{
-    "message":"Реклама появляется по-прежнему?",
+    "message":"Реклама все еще появляется?",
     "description":"question on ad reporting page"
   },
   "yes":{
@@ -497,6 +481,14 @@
     "message":"Вам не нужно ничего делать, так как реклама уже заблокирована",
     "description":"on the ad report page, telling a user there is nothing to do"
   },
+  "sameAdsOnDifferentPages":{
+    "message":"Вы видите такую же или аналогичную рекламу на разных страницах, например на Вашей домашней странице, веб-сайте Вашей организации и т.д.?",
+    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
+  },
+  "similarAds":{
+    "message":"Такая же\/аналогичная реклама на каждой странице",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
+  },
   "disableallextensions":{
     "message":"Отключить все расширения, кроме AdBlock.",
     "description":"instruction on ad report page"
@@ -506,7 +498,7 @@
     "description":"Step 1 for disabling chrome extensions"
   },
   "disableforchromeandsafaristeptwo":{
-    "message":"Снимите 'Включен' флажок рядом с каждым расширением <b>кроме<\/b> AdBlock. <b>Оставьте AdBlock включенным<\/b>.",
+    "message":"Снимите флажок 'Включен' рядом с каждым расширением <b>кроме<\/b> AdBlock. <b>Оставьте AdBlock включенным<\/b>.",
     "description":"Step 2 for disabling chrome and safari extensions"
   },
   "disableforsafaristepone":{
@@ -518,12 +510,20 @@
     "description":"Opera instructions"
   },
   "disableforoperainstructions":{
-    "message":"Нажмите кнопку меню в верхнем левом углу. Затем перейдите на Расширения->Управление расширениями. Отключить все расширения, нажав соответствующие кнопки отключить. Помните, не отключайте AdBlock!",
+    "message":"Нажмите кнопку меню в верхнем левом углу. Затем перейдите на Расширения->Управление расширениями. Отключить все расширения, нажав соответствующие кнопки отключить. Помните, НЕ отключайте AdBlock!",
     "description":"shows user how to disable all their extensions in Opera."
   },
   "reenableadsonebyone":{
     "message":"Теперь, когда реклама исчезла, Вы должны выяснить, какое расширение является причиной. Последовательно включите каждое расширение по одному. Расширение, которое возвращает рекламу является тем, которое необходимо удалить, чтобы избавиться от рекламы.",
     "description":"tells the user to reenable the extensions one by one."
+  },
+  "scancomputer":{
+    "message":"Проверьте Ваш компьютер на наличие вредоносных программ",
+    "description":"instruction on ad report page"
+  },
+  "performscan":{
+    "message":"Выполните полную проверку Вашего компьютера с помощью антивируса\/защиты от вредоносных программ. Некоторые типы вредоносных программ могут вставлять рекламу на веб-страницы и таким образом обойти AdBlock.",
+    "description":"instruction on ad report page"
   },
   "correctfilters":{
     "message":"Правильные фильтры",
@@ -578,7 +578,7 @@
     "description":"language"
   },
   "filterisraeli":{
-    "message":"иврит",
+    "message":"Иврит",
     "description":"language"
   },
   "filteritalian":{
@@ -726,10 +726,6 @@
   "block_this_ad":{
     "message":"Блокировать эту рекламу",
     "description":"Context and popup menu entry"
-  },
-  "filecleanerwarning":{
-    "message":"Если вы видите это сообщение, каждый раз при запуске AdBlock, пожалуйста, убедитесь, что Вы не используете уборщик файлов, который также удаляет файлы 'localStorage'.",
-    "description":"Help for users who use hyperactive file cleaners"
   },
   "typehiding":{
     "message":"скрытие",
@@ -948,7 +944,7 @@
     "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank."
   },
   "dont_run_on_pages_on_domain":{
-    "message":"Не запускайте на страницах этого домена",
+    "message":"Не запускать на страницах этого домена",
     "description":"Menu entry to open the whitelist wizard."
   },
   "disabled_on_this_page":{
@@ -1008,7 +1004,7 @@
     "description":"Credit for your translation with $translator_names$ being your own name below. Multiple names should be separated by a comma.",
     "placeholders":{
       "translator_names":{
-        "content":"Вадим Богайсков",
+        "content":"Вадим Богайсков, Даниил Санкин",
         "example":"Michael G, Drew R"
       }
     }
@@ -1034,28 +1030,8 @@
     "description":"Options page checkbox"
   },
   "work_around_hulu_problems":{
-    "message":"Решение проблемы Видео на Hulu.com не воспроизводится(требуется перезапуск браузера)",
+    "message":"Решение проблемы Видео на Hulu.com не воспроизводится (требуется перезапуск браузера)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
-  },
-  "now_you_have_adblock_hooray":{
-    "message":"Теперь у вас есть AdBlock! Ура!",
-    "description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
-  },
-  "any_new_tabs_you_open_Will_be_automatically_ad_free":{
-    "message":"Любые новые вкладки будут открываться автоматически без рекламы.",
-    "description":"Install page subtitle"
-  },
-  "installing_adblock":{
-    "message":"Установка AdBlock...",
-    "description":"Install page: shown while progress bar loads"
-  },
-  "done":{
-    "message":"готово.",
-    "description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
-  },
-  "seeing_this_every_time_you_start_your_browser":{
-    "message":"Видеть это каждый раз при запуске браузера?",
-    "description":"Install page: link to click for help"
   },
   "how_to_use_adblock":{
     "message":"Как использовать AdBlock:",
@@ -1064,16 +1040,6 @@
   "adblock_auto_removes_ads_thats_all":{
     "message":"AdBlock автоматически удаляет рекламу.  Вот и все, что нужно сделать.",
     "description":"Install page: explaining how to use adblock."
-  },
-  "for_more_options_right_click":{
-    "message":"Чтобы настроить дополнительные опции, нажмите правой кнопкой мыши на веб-странице или нажмите кнопку $img$ на панели инструментов.",
-    "description":"Install page: explaining how to use adblock in more detail.",
-    "placeholders":{
-      "img":{
-        "content":"<img src=\"..\/..\/img\/icon19.png\"\/>",
-        "example":"A small picture of the toolbar button.  Do not translate."
-      }
-    }
   },
   "modifydomain":{
     "message":"Сайт:",
@@ -1214,7 +1180,7 @@
     "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
   },
   "blocked_ads":{
-    "message":"Заблокирована реклама:",
+    "message":"Заблокированная реклама:",
     "description":"Title for popup menu section showing number of ads blocked."
   },
   "blocked_n_on_this_page":{
@@ -1265,8 +1231,16 @@
     "message":"-- Выберите язык --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
   },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Allow whitelisting of specific YouTube channels",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Whitelist this YouTube channel",
+    "description":"Text which is displayed on YouTube in popup menu"
+  },
   "confirm_undo_custom_filters":{
-    "message":"Вы уверены, что Вы хотите удалить $count$ блокировок, которые Вы создали на $host$?",
+    "message":"Вы уверены, что хотите удалить $count$ блокировок, которые Вы создали на $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
     "placeholders":{
       "count":{

@@ -50,6 +50,7 @@ function top_open_whitelist_ui() {
              "<input id='pathslider' type='range' min='0' value='0'/></span>").
       dialog({
         title: translate("whitelistertitle2"),
+        dialogClass: "adblock-whitelist-dialog",
         width: 600,
         minHeight: 130,
         buttons: btns,
@@ -59,6 +60,7 @@ function top_open_whitelist_ui() {
           page.remove();
         }
       });
+      changeTextDirection($("body .adblock-whitelist-dialog"));
 
     var fixedDomainPart = parseUri.secondLevelDomainOnly(domain, true);
     var domainparts = domain.substr(0, domain.lastIndexOf(fixedDomainPart)).split('.');
@@ -84,7 +86,7 @@ function top_open_whitelist_ui() {
     $("#pathslider", page).
       attr("max", Math.max(pathparts.length - 1, 1));
     $("#pathslider, #domainslider", page).
-      change(onSliderChange);
+      on("input change", function() { onSliderChange(); }); 
 
     function onSliderChange() {
       generateUrl(true);

@@ -169,6 +169,7 @@ BlacklistUi.prototype._build_page1 = function() {
       }
     });
   page.dialog("widget").css("position", "fixed");
+  changeTextDirection($("body .adblock-blacklist-dialog"));
 
   var depth = 0;
   var guy = this._chain.current();
@@ -178,7 +179,7 @@ BlacklistUi.prototype._build_page1 = function() {
   }
   $("#slider", page).
     attr("max", Math.max(depth - 1, 1)).
-    change(function() {
+    on("input change", function() { 
       that._chain.moveTo(this.valueAsNumber);
     });
 
@@ -272,6 +273,7 @@ BlacklistUi.prototype._build_page2 = function() {
       }
     });
   page.dialog("widget").css("position", "fixed");
+  changeTextDirection($("body .adblock-blacklist-dialog"));
 
   return page;
 }

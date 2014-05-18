@@ -35,10 +35,6 @@
     "message":"Di terze parti",
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
-  "installedtitle":{
-    "message":"AdBlock è installato!",
-    "description":"Title for the installation success page"
-  },
   "chromebutton_how_to_hide2":{
     "message":"Per nascondere il bottone, cliccaci sopra col destro e scegli Nascondi Bottone. Puoi farlo apparire di nuovo andando in chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -197,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"Changelog",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Generale",
     "description":"A tab on the options page"
@@ -220,14 +212,6 @@
   "betalabel":{
     "message":"Beta",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Velocizza AdBlock utilizzando una caratteristica sperimentale in Safari.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Vuoi farmi un favore? Prova questa funzione sperimentale per un po', poi <a>fammi sapere<\/> secondo te come funziona.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Desidero le pubblicità testuali nella ricerca Google.",
@@ -330,7 +314,7 @@
     "description":"Explanation of the filter lists"
   },
   "updatenowmessage":{
-    "message":"Mi occuperò automaticamente di scaricare gli aggiornamenti, però se vuoi puoi <a>aggiornare ora<\/a>.",
+    "message":"Gli aggiornamenti saranno scaricati automaticamente; puoi anche <a>aggiornare ora<\/a>.",
     "description":"update filters text + button"
   },
   "orenteraurl":{
@@ -350,7 +334,7 @@
     "description":"Name of the filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "message":"Fanboy's Annoyances (rimuove i fastidi sul Web)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
@@ -497,6 +481,14 @@
     "message":"Non devi fare nulla se la pubblicità è già bloccata",
     "description":"on the ad report page, telling a user there is nothing to do"
   },
+  "sameAdsOnDifferentPages":{
+    "message":"Vedi pubblicità simili o uguali su molte altre pagine, es. la tua homepage, il tuo sito web aziendale, ecc.?",
+    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
+  },
+  "similarAds":{
+    "message":"Pubblicità uguali\/simili su ogni pagina",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
+  },
   "disableallextensions":{
     "message":"Disabilita tutte le estensioni tranne AdBlock.",
     "description":"instruction on ad report page"
@@ -524,6 +516,14 @@
   "reenableadsonebyone":{
     "message":"Ora che le pubblicità sono sparite, dovresti cercare quale estensione ne è la causa. Per farlo abilita un estensione alla volta. L'estensione che fa ritornare la\/le pubblicità e una di quelle che dovresti eliminare per sbarazzarti delle pubblicità.",
     "description":"tells the user to reenable the extensions one by one."
+  },
+  "scancomputer":{
+    "message":"Scansiona il tuo computer per malware",
+    "description":"instruction on ad report page"
+  },
+  "performscan":{
+    "message":"Esegui una scansione completa del tuo computer utilizzando il tuo programma antivirus\/antimalware. Alcuni tipi di malware possono iniettare gli annunci nelle pagine Web e quindi ignorare AdBlock.",
+    "description":"instruction on ad report page"
   },
   "correctfilters":{
     "message":"Filtri corretti",
@@ -726,10 +726,6 @@
   "block_this_ad":{
     "message":"Blocca questa pubblicità",
     "description":"Context and popup menu entry"
-  },
-  "filecleanerwarning":{
-    "message":"Se vedi questo messaggio tutte le volte che avvii AdBlock, per favore assicurati che non stai usando un file cleaner che elimina i file 'localStorage'.",
-    "description":"Help for users who use hyperactive file cleaners"
   },
   "typehiding":{
     "message":"nascondi",
@@ -1008,7 +1004,7 @@
     "description":"Credit for your translation with $translator_names$ being your own name below. Multiple names should be separated by a comma.",
     "placeholders":{
       "translator_names":{
-        "content":"Giordano, Fabio B.",
+        "content":"Fabio B.",
         "example":"Michael G, Drew R"
       }
     }
@@ -1037,26 +1033,6 @@
     "message":"Aggirare il problema dei video Hulu.com che non vengono riprodotti (richiede il riavvio del browser).",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
   },
-  "now_you_have_adblock_hooray":{
-    "message":"Ora hai AdBlock!  Evviva!",
-    "description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
-  },
-  "any_new_tabs_you_open_Will_be_automatically_ad_free":{
-    "message":"Qualsiasi nuova scheda che apri sarà libera da pubblicità automaticamente.",
-    "description":"Install page subtitle"
-  },
-  "installing_adblock":{
-    "message":"Installazione AdBlock...",
-    "description":"Install page: shown while progress bar loads"
-  },
-  "done":{
-    "message":"fatto.",
-    "description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
-  },
-  "seeing_this_every_time_you_start_your_browser":{
-    "message":"Vedi questo tutte le volte che avvii il tuo browser?",
-    "description":"Install page: link to click for help"
-  },
   "how_to_use_adblock":{
     "message":"Come usare AdBlock:",
     "description":"Install page section title"
@@ -1064,16 +1040,6 @@
   "adblock_auto_removes_ads_thats_all":{
     "message":"AdBlock automaticamente rimuove le pubblicità.  Questo è tutto quello che fa.",
     "description":"Install page: explaining how to use adblock."
-  },
-  "for_more_options_right_click":{
-    "message":"Per avere più opzioni, puoi cliccare col tasto destro sulle pagine web o clicca il bottone sulla barra $img$.",
-    "description":"Install page: explaining how to use adblock in more detail.",
-    "placeholders":{
-      "img":{
-        "content":"<img src=\"..\/..\/img\/icon19.png\"\/>",
-        "example":"A small picture of the toolbar button.  Do not translate."
-      }
-    }
   },
   "modifydomain":{
     "message":"Sito:",
@@ -1264,6 +1230,14 @@
   "selectlanguage":{
     "message":"-- Scegli una lingua --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Consenti la whitelist di specifici canali YouTube",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Metti in whitelist questo canale YouTube",
+    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"Sei sicuro di voler rimuovere i $count$ blocchi che hai creato su $host$?",

@@ -35,10 +35,6 @@
     "message":"Tredjeparts",
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
-  "installedtitle":{
-    "message":"AdBlock er nu installeret!",
-    "description":"Title for the installation success page"
-  },
   "chromebutton_how_to_hide2":{
     "message":"For at skjule knappen skal du højreklikke på den og vælge Skjul-knappen. Du kan få den frem igen ved at gå til chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -197,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"ændringslog",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Generelt",
     "description":"A tab on the options page"
@@ -220,14 +212,6 @@
   "betalabel":{
     "message":"Beta",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Sæt ekstra fart på AdBlock ved at bruge denne nye funtion der er under test i Safari.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Kunne du tænke dig at gøre mig en tjeneste? Prøv denne funktion der er under test i et stykke tid, og <a>lad mig gerne vide<\/a> hvordan du oplever den virker.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Jeg kan godt lide tekstreklamerne på Google; bare vis mig dem.",
@@ -350,7 +334,7 @@
     "description":"Name of the filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "message":"Fanboy's Annoyances (fjerner irritationer på nettet)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
@@ -497,6 +481,14 @@
     "message":"Du behøver ikke gøre noget, da reklamen allerede er blokeret",
     "description":"on the ad report page, telling a user there is nothing to do"
   },
+  "sameAdsOnDifferentPages":{
+    "message":"Do you see the same or similar ads on many different pages, e.g. your homepage, your workplace's website, etc.?",
+    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
+  },
+  "similarAds":{
+    "message":"Same\/similar ads on every page",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
+  },
   "disableallextensions":{
     "message":"Slå alle udvidelser fra, udover AdBlock.",
     "description":"instruction on ad report page"
@@ -524,6 +516,14 @@
   "reenableadsonebyone":{
     "message":"Nu hvor reklamerne er væk, skal du finde ud af hvilken udvidelse der er årsagen. Gå igennem dem alle, og aktiver dem en efter en. Den udvidelse der får reklamerne til at komme frem igen, er den du skal have fjernet for at slippe for reklamer.",
     "description":"tells the user to reenable the extensions one by one."
+  },
+  "scancomputer":{
+    "message":"Scan your computer for malware",
+    "description":"instruction on ad report page"
+  },
+  "performscan":{
+    "message":"Perform a full scan of your computer using your antivirus\/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
+    "description":"instruction on ad report page"
   },
   "correctfilters":{
     "message":"Ret filtre",
@@ -726,10 +726,6 @@
   "block_this_ad":{
     "message":"Blokér denne reklame",
     "description":"Context and popup menu entry"
-  },
-  "filecleanerwarning":{
-    "message":"Hvis du ser denne besked hver gang du starter AdBlock bør du søger for, at du ikke bruger en filrenser der også renser 'localStorage' filer.",
-    "description":"Help for users who use hyperactive file cleaners"
   },
   "typehiding":{
     "message":"skjuler",
@@ -1008,7 +1004,7 @@
     "description":"Credit for your translation with $translator_names$ being your own name below. Multiple names should be separated by a comma.",
     "placeholders":{
       "translator_names":{
-        "content":"stallemanden, rasmussch",
+        "content":"stallemanden",
         "example":"Michael G, Drew R"
       }
     }
@@ -1037,26 +1033,6 @@
     "message":"Lad os rette, at Hulu.com videoer ikke bliver afspillet (kræver genstart af browseren)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
   },
-  "now_you_have_adblock_hooray":{
-    "message":"Nu har du AdBlock!  Wehee!",
-    "description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
-  },
-  "any_new_tabs_you_open_Will_be_automatically_ad_free":{
-    "message":"Alle nye faner du åbner vil automatisk være reklamefri.",
-    "description":"Install page subtitle"
-  },
-  "installing_adblock":{
-    "message":"Installerer AdBlock...",
-    "description":"Install page: shown while progress bar loads"
-  },
-  "done":{
-    "message":"færdig.",
-    "description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
-  },
-  "seeing_this_every_time_you_start_your_browser":{
-    "message":"Ser du dette hver gang du starter din browser?",
-    "description":"Install page: link to click for help"
-  },
   "how_to_use_adblock":{
     "message":"Hvordan bruges AdBlock:",
     "description":"Install page section title"
@@ -1064,16 +1040,6 @@
   "adblock_auto_removes_ads_thats_all":{
     "message":"AdBlock fjerner automatisk reklamer. Mere er der som sådan ikke til det.",
     "description":"Install page: explaining how to use adblock."
-  },
-  "for_more_options_right_click":{
-    "message":"For flere muligheder kan du højreklikke på hjemmesider, eller klikke på $img$-toolbarknappen.",
-    "description":"Install page: explaining how to use adblock in more detail.",
-    "placeholders":{
-      "img":{
-        "content":"<img src=\"..\/..\/img\/icon19.png\"\/>",
-        "example":"A small picture of the toolbar button.  Do not translate."
-      }
-    }
   },
   "modifydomain":{
     "message":"Domæne:",
@@ -1264,6 +1230,14 @@
   "selectlanguage":{
     "message":" --Vælg sprog-- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Allow whitelisting of specific YouTube channels",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Whitelist this YouTube channel",
+    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"Er du sikker på du vil fjerne $count$ blokeringer, som du har oprettet på $host$?",

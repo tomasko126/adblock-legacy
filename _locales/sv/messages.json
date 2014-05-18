@@ -35,10 +35,6 @@
     "message":"Tredje-part",
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
-  "installedtitle":{
-    "message":"AdBlock är nu installerad!",
-    "description":"Title for the installation success page"
-  },
   "chromebutton_how_to_hide2":{
     "message":"Du kan dölja knappen genom att högerklicka på den och välja 'Dölj knapp'. Visa den igen under chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -197,10 +193,6 @@
       }
     }
   },
-  "optionschangelog":{
-    "message":"Changelog",
-    "description":"changelog link"
-  },
   "tabgeneral":{
     "message":"Allmänt",
     "description":"A tab on the options page"
@@ -220,14 +212,6 @@
   "betalabel":{
     "message":"Beta",
     "description":"Option on first tab page"
-  },
-  "use_experimental_feature_to_speed_up_adblock":{
-    "message":"Gör AdBlock snabbare med en experimentell funktion i Safari.",
-    "description":"Option on first tab page"
-  },
-  "let_me_know_how_it_is_working":{
-    "message":"Vill du göra mig en tjänst? Testa den här experimentella funktionen ett tag, <a>låt mig sedan få veta<\/a> hur bra eller dåligt den fungerar för dig.",
-    "description":"Shown to users who use_experimental_feature_to_speed_up_adblock, politely encouraging them to click the link, taking them to a survey about their experience with the feature."
   },
   "googletextads":{
     "message":"Jag gillar texttilläggen i Googles sökresultat... tillåt dom!",
@@ -350,7 +334,7 @@
     "description":"Name of the filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "message":"Fanboy's Annoyances (tar bort störande innehåll från webben)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
@@ -497,6 +481,14 @@
     "message":"Du behöver inte göra något, eftersom reklamen redan är blockerad",
     "description":"on the ad report page, telling a user there is nothing to do"
   },
+  "sameAdsOnDifferentPages":{
+    "message":"Ser du samma eller liknande reklamtillägg på många olika sidor, exempelvis din hemsida eller din arbetsplats hemsida, etc?",
+    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
+  },
+  "similarAds":{
+    "message":"Samma\/Liknande tillägg på alla sidor",
+    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
+  },
   "disableallextensions":{
     "message":"Inaktivera alla tillägg utom AdBlock",
     "description":"instruction on ad report page"
@@ -524,6 +516,14 @@
   "reenableadsonebyone":{
     "message":"Nu när alla tillägg är avaktiverade, måste du undersöka vilket tillägg som är orsakar felet. Aktivera nu tilläggen ett och ett. Det tillägg som får reklamen att visas igen, är det tillägg som du måste avinstallera för att bli av med reklamen.",
     "description":"tells the user to reenable the extensions one by one."
+  },
+  "scancomputer":{
+    "message":"Genomsök din dator efter skadlig kod",
+    "description":"instruction on ad report page"
+  },
+  "performscan":{
+    "message":"Utför en fullständig genomsökning med ditt antivirus-\/antimalware-program.Vissa typer av skadlig kod kan injicera tillägg i webbsidor, och dessa tar sig förbi AdBlock.",
+    "description":"instruction on ad report page"
   },
   "correctfilters":{
     "message":"Korrekt filter",
@@ -726,10 +726,6 @@
   "block_this_ad":{
     "message":"Blockera det här reklamtillägget",
     "description":"Context and popup menu entry"
-  },
-  "filecleanerwarning":{
-    "message":"Om du ser det här meddelandet varje gång du startar AdBlock, kontrollera så att du inte använder ett filrensningsprogram som rensar bort 'localStorage'-filer.",
-    "description":"Help for users who use hyperactive file cleaners"
   },
   "typehiding":{
     "message":"dold",
@@ -1037,26 +1033,6 @@
     "message":"Fixa felet som gör att video inte spelas upp på Hulu.com (kräver omstart av webbläsaren).",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
   },
-  "now_you_have_adblock_hooray":{
-    "message":"Nu har du AdBlock!",
-    "description":"Install page title.  'Hooray' is a silly word shouted when you are excited, for example if your team just won a game."
-  },
-  "any_new_tabs_you_open_Will_be_automatically_ad_free":{
-    "message":"Alla nya flikar kommer automatiskt att vara reklamfria.",
-    "description":"Install page subtitle"
-  },
-  "installing_adblock":{
-    "message":"Installerar AdBlock...",
-    "description":"Install page: shown while progress bar loads"
-  },
-  "done":{
-    "message":"klar.",
-    "description":"Install page: appended to the 'installing_adblock' message once the progress bar reaches 100%"
-  },
-  "seeing_this_every_time_you_start_your_browser":{
-    "message":"Ser du detta varje gång du startar webbläsaren?",
-    "description":"Install page: link to click for help"
-  },
   "how_to_use_adblock":{
     "message":"Att använda AdBlock:",
     "description":"Install page section title"
@@ -1064,16 +1040,6 @@
   "adblock_auto_removes_ads_thats_all":{
     "message":"AdBlock tar automatiskt bort webbsidetillägg.  Så är det bara.",
     "description":"Install page: explaining how to use adblock."
-  },
-  "for_more_options_right_click":{
-    "message":"För fler alternativ, högerklicka på webbsidorna eller klicka på $img$ knappen i verktygsfältet.",
-    "description":"Install page: explaining how to use adblock in more detail.",
-    "placeholders":{
-      "img":{
-        "content":"<img src=\"..\/..\/img\/icon19.png\"\/>",
-        "example":"A small picture of the toolbar button.  Do not translate."
-      }
-    }
   },
   "modifydomain":{
     "message":"Domän:",
@@ -1206,7 +1172,7 @@
     "description":"Title of an area in the ad report page in Opera. Only visible if the opener tab was a secure url (https)"
   },
   "opera_secure_pages_enabled":{
-    "message":"Öppna på Operas meny &rArr; Tillägg &rArr; Hantera tillägg &rArr; Leta reda på Adblock och klicka på verktygsikonen &rArr; klicka på 'Personlig integritet'.<br\/>Är alternativet för att tillåta interaktion med säkra sidor, aktiverat?",
+    "message":"Öppna på Operas meny &rArr; Tillägg &rArr; Hantera tillägg &rArr; Leta reda på AdBlock och klicka på verktygsikonen &rArr; klicka på 'Personlig integritet'.<br\/>Är alternativet för att tillåta interaktion med säkra sidor, aktiverat?",
     "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
   },
   "opera_allow_secure":{
@@ -1264,6 +1230,14 @@
   "selectlanguage":{
     "message":"-- Välj språk --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
+  },
+  "allow_whitelisting_youtube_channels":{
+    "message":"Tillåt vitlistning av specifika YouTube-kanaler",
+    "description":"Option on first tab"
+  },
+  "whitelist_youtube_channel":{
+    "message":"Vitlista den här YouTube-kanalen",
+    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"Vill du verkligen ta bort $count$ blockering(ar) som du har skapat för $host$?",

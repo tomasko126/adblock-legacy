@@ -58,8 +58,13 @@ safari.application.addEventListener("message", function(messageEvent) {
   if (messageEvent.name !== "canLoad")
     return;
   
-  if (adblock_is_paused() || page_is_unblockable(messageEvent.target.url) ||
-      page_is_whitelisted(messageEvent.target.url)) {
+  var tab = messageEvent.target;
+  var frameInfo = messageEvent.message.frameInfo;
+  chrome._tabInfo.notice(tab, frameInfo);
+  var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
+
+  if (adblock_is_paused() || page_is_unblockable(sendingTab.url) ||
+      page_is_whitelisted(sendingTab.url)) {
     messageEvent.message = true;
     return;
   }
@@ -166,6 +171,10 @@ safari.application.addEventListener("command", function(event) {
     } else {
       adblock_is_paused(true);
     }
+  } else if (command === "whitelist-youtube-channel") {
+    var tab = browserWindow.activeTab;
+    create_whitelist_filter_for_youtube_channel(tab.url);
+    tab.url = tab.url;
   } else if (command === "whitelist-currentpage") {
     var tab = browserWindow.activeTab;
     create_page_whitelist_filter(tab.url);
@@ -186,10 +195,10 @@ safari.application.addEventListener("command", function(event) {
     var tab = browserWindow.activeTab;
     var host = parseUri(tab.url).host;
     var count = count_cache.getCustomFilterCount(host);
-    
+
     var confirmation_text   = translate("confirm_undo_custom_filters", [count, host]);
     if(!confirm(confirmation_text)) { return; }
-      
+
     remove_custom_filter_for_host(host);
     if (!page_is_unblockable(tab.url))
       tab.url = tab.url;
@@ -328,9 +337,14 @@ if (!LEGACY_SAFARI) {
           menu.appendSeparator(itemIdentifier("separator0"));
         }
         
+        var should_show;
         var eligible_for_undo = !paused && (!canBlock || !whitelisted);
         if (eligible_for_undo && count_cache.getCustomFilterCount(host)) {
           appendMenuItem("undo-last-block", translate("undo_last_block"));
+          menu.appendSeparator(itemIdentifier("separator0"));
+        }
+        if (host === "www.youtube.com" && /channel|user/.test(url) && get_settings().youtube_channel_whitelist && eligible_for_undo) {
+          appendMenuItem("whitelist-youtube-channel", translate("whitelist_youtube_channel"));
           menu.appendSeparator(itemIdentifier("separator0"));
         }
         appendMenuItem("toggle-pause", translate("pause_adblock"), paused);

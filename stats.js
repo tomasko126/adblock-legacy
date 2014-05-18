@@ -1,7 +1,7 @@
 // Allows interaction with the server to track install rate
 // and log messages.
 STATS = (function() {
-  var stats_url = "https://chromeadblock.com/api/stats2.php";
+  var stats_url = "https://ping.getadblock.com/stats/";
 
   //Get some information about the version, os, and browser
   var version = (function() {
@@ -186,7 +186,7 @@ STATS = (function() {
         }, delay );
       };
       // Try to detect corrupt storage and thus avoid ping floods.
-      if (millisTillNextPing() == 0) {
+      if (! (millisTillNextPing() > 0) ) {
         storage_set("next_ping_time", 1);
         if (storage_get("next_ping_time") != 1)
           return;
@@ -217,7 +217,7 @@ STATS = (function() {
         type: "POST",
         data: data, 
         complete: function(xhr) {
-          var mph = parseInt(xhr.getResponseHeader("X-RateLimit-MPH"));
+          var mph = parseInt(xhr.getResponseHeader("X-RateLimit-MPH"), 10);
           if (isNaN(mph) || mph < -1) // Server is sick
             mph = 1;
           if (mph === -1)

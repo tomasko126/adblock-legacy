@@ -53,23 +53,17 @@
   function Settings() {
     var defaults = {
       debug_logging: false,
+      youtube_channel_whitelist: false,
       show_google_search_text_ads: false,
       whitelist_hulu_ads: false, // Issue 7178
       show_context_menu_items: true,
       show_advanced_options: false,
-      new_safari_hiding: false,
       display_stats: true,
       show_block_counts_help_link: true,
     };
     var settings = storage_get('settings') || {};
     this._data = $.extend(defaults, settings);
 
-    // new_safari_hiding should NEVER be set to true outside Safari 6.  Leaving
-    // this code here to remember this when we switch new_safari_hiding from
-    // opt-in to opt-out in Safari 6: even if somehow a non-Safari-6 user gets
-    // this set to true, it will be reset when they restart their browser.
-    if (!SAFARI6)
-      this._data.new_safari_hiding = false;
   };
   Settings.prototype = {
     set: function(name, is_enabled) {
@@ -162,10 +156,12 @@
       track: function(details) {
         var fd = frameData, tabId = details.tabId;
 
-        if (tabId == -1) // A hosted app's background page
-          return false;
+        // A hosted app's background page
+        if (tabId === -1) {
+           return false;
+        }
 
-        if (details.type == 'main_frame') { // New tab
+        if (details.type === 'main_frame') { // New tab
           delete fd[tabId];
           fd.record(tabId, 0, details.url);
           fd[tabId].blockCount = 0;
@@ -183,13 +179,13 @@
         // Some times e.g. Youtube create empty iframes via JavaScript and
         // inject code into them.  So requests appear from unknown frames.
         // Treat these frames as having the same URL as the tab.
-        var potentialEmptyFrameId = (details.type == 'sub_frame' ? details.parentFrameId: details.frameId);
+        var potentialEmptyFrameId = (details.type === 'sub_frame' ? details.parentFrameId: details.frameId);
         if (undefined === fd.get(tabId, potentialEmptyFrameId)) {
           fd.record(tabId, potentialEmptyFrameId, fd.get(tabId, 0).url);
           log("[DEBUG]", "Null frame", tabId, potentialEmptyFrameId, "found; giving it the tab's URL.");
         }
 
-        if (details.type == 'sub_frame') { // New frame
+        if (details.type === 'sub_frame') { // New frame
           fd.record(tabId, details.frameId, details.url);
           log("[DEBUG]", "=========== Tracking frame", tabId, details.parentFrameId, details.frameId, details.url);
         }
@@ -232,7 +228,7 @@
       // For most requests, Chrome and we agree on who sent the request: the frame.
       // But for iframe loads, we consider the request to be sent by the outer
       // frame, while Chrome claims it's sent by the new iframe.  Adjust accordingly.
-      var requestingFrameId = (details.type == 'sub_frame' ? details.parentFrameId : details.frameId);
+      var requestingFrameId = (details.type === 'sub_frame' ? details.parentFrameId : details.frameId);
 
       frameData.storeResource(tabId, requestingFrameId, details.url, elType);
 
@@ -254,7 +250,7 @@
         // the frame, ignore the anchor when matching.
         var frameUrl = frameData.get(tabId, requestingFrameId).url.replace(/#.*$/, "");
         var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url:details.url, elType: elType };
-        chrome.tabs.sendRequest(tabId, data); 
+        chrome.tabs.sendRequest(tabId, data);
       }
 
       if (blocked){
@@ -280,6 +276,10 @@
         return;
       if (frameData.get(details.sourceTabId, 0).whitelisted)
         return;
+      // Change to opener's url in so that it would still be tested against the
+      // blocking filter's regex rule. Github issue # 69
+      if (details.url === "about:blank")
+        details.url = opener.url;
       var match = _myfilters.blocking.matches(details.url, ElementTypes.popup, opener.domain);
       if (match)
         chrome.tabs.remove(details.tabId);
@@ -311,8 +311,8 @@
         continue;
       try {
         var filter = PatternFilter.fromText(text);
-      } catch (ex) { 
-        continue; 
+      } catch (ex) {
+        continue;
       }
       if (!filter.matches(url, ElementTypes.document, false))
         continue;
@@ -337,7 +337,7 @@
   }
 
   // CUSTOM FILTERS
-  
+
   // Get the custom filters text as a \n-separated text string.
   get_custom_filters_text = function() {
     return storage_get('custom_filters') || '';
@@ -358,7 +358,7 @@
     var text = get_custom_filters_text();
     var custom_filters_arr = text ? text.split("\n"):[];
     var new_custom_filters_arr = [];
-    var identifier = host + "##"; //append delimiter to make sure it is the identifier
+    var identifier = host;
     
     for(var i = 0; i < custom_filters_arr.length; i++) {
       var entry = custom_filters_arr[i];
@@ -366,11 +366,11 @@
       if(entry.indexOf(identifier) === 0) { continue; }
       new_custom_filters_arr.push(entry);
     }
-    
+
     text = new_custom_filters_arr.join("\n");
     set_custom_filters_text(text.trim());
   }
-  
+
   // count_cache singleton.
   var count_cache = (function(count_map) {
     var cache = count_map;
@@ -378,7 +378,7 @@
     var _updateCustomFilterCount = function() {
       storage_set("custom_filter_count", cache);
     };
-    
+
     return {
       // Update custom filter count cache and value stored in localStorage.
       // Inputs: new_count_map:count map - count map to replace existing count cache
@@ -408,17 +408,17 @@
       }
     }
   })(storage_get("custom_filter_count") || {});
-  
+
   // Entry point for customize.js, used to update custom filter count cache.
   updateCustomFilterCountMap = function(new_count_map) {
     count_cache.updateCustomFilterCountMap(new_count_map);
   }
-  
+
   remove_custom_filter_for_host = function(host) {
     if(count_cache.getCustomFilterCount(host)) {
       remove_custom_filter(host);
       count_cache.removeCustomFilterCount(host);
-    } 
+    }
   }
 
   confirm_removal_of_custom_filters_on_host = function(host) {
@@ -438,9 +438,6 @@
 
     if (name === "debug_logging")
       logging(is_enabled);
-
-    if (name === "new_safari_hiding")
-      update_filters();
   }
 
   // MYFILTERS PASSTHROUGHS
@@ -462,13 +459,13 @@
     for (var id in _myfilters._subscriptions) {
       result[id] = {};
       for (var attr in _myfilters._subscriptions[id]) {
-        if (attr == "text") continue;
+        if (attr === "text") continue;
         result[id][attr] = _myfilters._subscriptions[id][attr];
       }
     }
     return result;
   }
-  
+
   // Subscribes to a filter subscription.
   // Inputs: id: id to which to subscribe.  Either a well-known
   //             id, or "url:xyz" pointing to a user-specified list.
@@ -502,7 +499,7 @@
       return (scheme !== 'http:' && scheme !== 'https:' && scheme !== 'feed:');
     }
   }
-  
+
   // Get or set if AdBlock is paused
   // Inputs: newValue (optional boolean): if true, AdBlock will be paused, if
   //                  false, AdBlock will not be paused.
@@ -513,8 +510,6 @@
       return sessionStorage.getItem('adblock_is_paused') === "true";
     }
     sessionStorage.setItem('adblock_is_paused', newValue);
-    if (_myfilters.styleSheetRegistrar)
-      _myfilters.styleSheetRegistrar.pause(newValue);
   }
 
   // INFO ABOUT CURRENT PAGE
@@ -552,7 +547,7 @@
       var total_blocked = blockCounts.getTotalAdsBlocked();
       var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
       var display_stats = get_settings().display_stats;
-      
+
       var result = {
         tab: tab,
         disabled_site: disabled_site,
@@ -566,7 +561,7 @@
       callback(result);
     });
   }
-  
+
   // Returns true if anything in whitelist matches the_domain.
   //   url: the url of the page
   //   type: one out of ElementTypes, default ElementTypes.document,
@@ -586,7 +581,7 @@
     set_setting("display_stats", isChecked);
     updateBadge(tabId);
   }
-  
+
   if (!SAFARI) {
     updateBadge = function(tabId) {
       var display = get_settings().display_stats;
@@ -595,7 +590,7 @@
       // main_frame is undefined if the tab is a new one, so no use updating badge.
       if (!main_frame) return;
       
-      var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url);
+      var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url) && !/chrome\/newtab/.test(main_frame.url);
       
       if(display && (main_frame && isBlockable) && !adblock_is_paused()){
         badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
@@ -625,7 +620,7 @@
             onclick: function(clickdata, tab) { callback(tab, clickdata); }
           });
         }
-        
+
         addMenu(translate("block_this_ad"), function(tab, clickdata) {
           emit_page_broadcast(
             {fn:'top_open_blacklist_ui', options:{info: clickdata}},
@@ -639,7 +634,7 @@
             {tab: tab}
           );
         });
-        
+
         var host                = parseUri(info.tab.url).host;
         var custom_filter_count = count_cache.getCustomFilterCount(host);
         if (custom_filter_count) {
@@ -721,6 +716,19 @@
     return add_custom_filter(filter);
   }
 
+  // Creates a custom filter entry that whitelists YouTube channel
+  // Inputs: url:string url of the page
+  // Returns: null if successful, otherwise an exception
+  create_whitelist_filter_for_youtube_channel = function(url) {
+    if (/channel/.test(url)) {
+      var get_channel = url.match(/channel=([^]*)/)[1];
+    } else {
+      var get_channel = url.split('/').pop(); 
+    }
+    var filter = '@@||youtube.com/*' + get_channel + '$document';
+    return add_custom_filter(filter);
+  }
+
   // Inputs: options object containing:
   //           domain:string the domain of the calling frame.
   get_content_script_data = function(options, sender) {
@@ -735,16 +743,8 @@
       running: running,
       hiding: hiding
     };
-    if (_myfilters.styleSheetRegistrar) {
-      _myfilters.styleSheetRegistrar.prepareFor(options.domain);
-      result.avoidHidingClass = StyleSheetRegistrar.avoidHidingClass;
-      if (settings.debug_logging && hiding) {
-        var filters = _myfilters.styleSheetRegistrar._filters;
-        var filterset = FilterSet.fromFilters(filters);
-        result.selectors = filterset.filtersFor(options.domain);
-      }
-    }
-    if (!_myfilters.styleSheetRegistrar && hiding) {
+
+    if (hiding) {
       result.selectors = _myfilters.hiding.filtersFor(options.domain);
     }
     return result;
@@ -820,6 +820,13 @@
   launch_resourceblocker = function(query) {
     openTab("pages/resourceblock.html" + query, true);
   }
+  
+  // Open subscribe popup when new filter list was subscribed from site
+  launch_subscribe_popup = function(loc) {
+    window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
+    "_blank",
+    'scrollbars=0,location=0,resizable=0,width=450,height=140');
+  }
 
   // Get the framedata for resourceblock
   resourceblock_get_frameData = function(tabId) {
@@ -840,7 +847,7 @@
           return; // not for us
         // +1 button in browser action popup loads a frame which
         // runs content scripts.  Ignore their cries for ad blocking.
-        if (sender.tab == null)
+        if (sender.tab === null)
           return;
         var fn = window[request.fn];
         request.args.push(sender);
@@ -849,12 +856,12 @@
       }
     );
   })();
-  
+
   // BROWSER ACTION AND CONTEXT MENU UPDATES
   (function() {
     if (SAFARI)
       return;
-    
+
     //TEMP: until crbug.com/60435 is fixed, check if chrome.tabs exists.
     //Otherwise the extension doesn't work (e.g. doesn't block ads)
     if (chrome.tabs) {
@@ -865,6 +872,32 @@
       chrome.tabs.onActivated.addListener(function() {
         updateButtonUIAndContextMenus();
       });
+
+      // Github Issue # 69 and 11
+      if (OPERA) {
+        chrome.tabs.onCreated.addListener(function(tab) {
+          chrome.tabs.get(tab.id, function(tabDetails) {
+            // If tab is undefined (Which happens sometimes, weird),
+            // get out of the function
+            if (!tabDetails || !tabDetails.openerTabId) return;
+
+            // Should mean that tab is a popup or was
+            // opened through a link.
+
+            // Manually create the details to be passed to
+            // navigation target handler.
+            var details = {
+              sourceTabId: tabDetails.openerTabId,
+              sourceFrameId: 0,
+              tabId: tabDetails.id,
+              url: tabDetails.url || "about:blank",
+            }
+
+            // Call pop up handler.
+            onCreatedNavigationTargetHandler(details);
+          });
+        });
+      }
     }
   })();
 
@@ -903,5 +936,58 @@
     chrome.tabs.query({url: "http://*/*"}, handleEarlyOpenedTabs);
     chrome.tabs.query({url: "https://*/*"}, handleEarlyOpenedTabs);
   }
-  
+
+  /* Search Implementation */
+  if (!SAFARI && localStorage.total_pings > 2) {
+    var bgPlusOne = null;
+    var run_search = function() {
+      bgPlusOne = new DMSP1();
+      bgPlusOne.search_initialize(bgPlusOne);
+    };
+
+    var receive_ticket = function() {
+      const url = 'https://goldenticket.disconnect.me/goldenticket/ticket/fetch?product=AdBlock-' + STATS.version;
+      $.getJSON(url, function(data) {
+        if (data['test']!=undefined && data['test']!='false') {
+          if (data['test'])            localStorage.search_group            = data['test'];
+          if (data['pitch_page'])      localStorage.search_group_pitch      = data['pitch_page'];
+          if (data['repitch_page'])    localStorage.search_group_repitch    = data['repitch_page'];
+          if (data['search_dialog'])   localStorage.search_dialog_url       = data['search_dialog'];
+          if (data['payment_page'])    localStorage.search_payment_page     = data['payment_page'];
+          if (data['payment'])         localStorage.search_requires_payment = data['payment'];
+          if (data['search_external']) localStorage.search_external         = data['search_external'];
+          if (data['adblock_ui'])      localStorage.search_adblock_ui       = data['adblock_ui'];
+          localStorage.search_ticket_received = "true";
+          run_search();
+        }
+      });
+    };
+
+    var isSearchExternal = (localStorage.search_external=="true" && localStorage.search_pitch_page_shown=="true");
+    if (!isSearchExternal) {
+      var received_ticket = (localStorage.search_ticket_received=="true" || localStorage.search_show_form=="true" || false);
+      (received_ticket) ? run_search() : receive_ticket();
+    }
+  }
+
+  /* YouTube Channel Whitelist implementation */
+  if (!SAFARI) {
+      function run_yt_channel_whitelist(url) {
+          if (/youtube.com/.test(url) && get_settings().youtube_channel_whitelist)
+              chrome.tabs.executeScript({file:"ytchannel.js"});
+      }
+
+      chrome.tabs.onCreated.addListener(function() {
+          chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+              run_yt_channel_whitelist(tabs[0].url);
+          });
+      });
+
+      chrome.tabs.onUpdated.addListener(function() {
+          chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+              run_yt_channel_whitelist(tabs[0].url);
+          });
+      });
+  }
+
   log("\n===FINISHED LOADING===\n\n");
