@@ -32,7 +32,7 @@ frameData = (function() {
         domain = parseUri(url).hostname;
         var tracker = countMap[tabId];
 
-        var shouldTrack = !tracker || tracker.domain !== domain;
+        var shouldTrack = !tracker || tracker.url !== url;
         if (shouldTrack) {
           countMap[tabId] = { 
             blockCount: 0,
@@ -84,22 +84,23 @@ var windowByMenuId = {};
 
 // Listen to tab activation, this is triggered when a tab is activated or on focus.
 safari.application.addEventListener("activate", function(event) {
-  var tabId = safari.application.activeBrowserWindow.activeTab.id;
-  var get_blocked_ads = frameData.get(tabId).blockCount;
-  var safari_toolbars = safari.extension.toolbarItems;
-  
-  for(var i = 0; i < safari_toolbars.length; i++ ) {
-    safari_toolbars[i].badge = get_blocked_ads;
+  if (get_settings().display_stats) {
+    var tabId = safari.application.activeBrowserWindow.activeTab.id;
+    var get_blocked_ads = frameData.get(tabId).blockCount;
+    var safari_toolbars = safari.extension.toolbarItems;
+
+    for (var i = 0; i < safari_toolbars.length; i++ ) {
+      safari_toolbars[i].badge = get_blocked_ads;
+    }
   }
 }, true);
 
 safari.application.addEventListener("open", function(event) {
-   updateBadge();
+  updateBadge();
 }, true);
 
 safari.application.addEventListener("beforeNavigate", function(event) {
   var tabId = safari.application.activeBrowserWindow.activeTab.id;
-  
   frameData.get(tabId).blockCount = 0;
   updateBadge();
 }, true);
