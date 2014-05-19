@@ -579,7 +579,23 @@
 
   updateDisplayStats = function(isChecked, tabId) {
     set_setting("display_stats", isChecked);
-    updateBadge(tabId);
+    if (!SAFARI) {
+      updateBadge(tabId);
+    } else {
+      if (isChecked) {
+        var tabId = safari.application.activeBrowserWindow.activeTab.id;
+        var get_blocked_ads = frameData.get(tabId).blockCount;
+        var safari_toolbars = safari.extension.toolbarItems;
+        for (var i = 0; i < safari_toolbars.length; i++ ) {
+          safari_toolbars[i].badge = get_blocked_ads;
+        }
+      } else {
+        var safari_toolbars = safari.extension.toolbarItems;
+        for (var i = 0; i < safari_toolbars.length; i++ ) {
+          safari_toolbars[i].badge = "0";
+        }
+      }
+    }
   }
 
   if (!SAFARI) {
