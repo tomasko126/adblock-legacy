@@ -49,9 +49,8 @@ frameData = (function() {
 safari.application.addEventListener("message", function(messageEvent) {
   if (messageEvent.name === "request") {
     var args = messageEvent.message.data.args;
-    if (messageEvent.target.url === args[1].tab.url) {
+    if (messageEvent.target.url === args[1].tab.url)
       frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-    }
     return;
   }
 
@@ -79,7 +78,7 @@ safari.application.addEventListener("message", function(messageEvent) {
     // update the badge afterwards
     var tabId = messageEvent.target.id;
     blockCounts.recordOneAdBlocked(tabId);
-    updateBadge(tabId);
+    updateBadge();
     log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
   }
   messageEvent.message = !isMatched;
@@ -100,22 +99,14 @@ safari.application.addEventListener("activate", function(event) {
 }, true);
 
 safari.application.addEventListener("open", function(event) {
-  var safari_toolbars = safari.extension.toolbarItems;
-  
-  for(var i = 0; i < safari_toolbars.length; i++ ) {
-    safari_toolbars[i].badge = "0";
-  }
+   updateBadge();
 }, true);
 
 safari.application.addEventListener("beforeNavigate", function(event) {
   var tabId = safari.application.activeBrowserWindow.activeTab.id;
-  var safari_toolbars = safari.extension.toolbarItems;
-  
-  for(var i = 0; i < safari_toolbars.length; i++ ) {
-    safari_toolbars[i].badge = "0";
-  }
   
   frameData.get(tabId).blockCount = 0;
+  updateBadge();
 }, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
