@@ -26,10 +26,10 @@ frameData = (function() {
     //  tabId:Numeric - id of the tab you want to add in the frameData
     create: function(tabId, url, domain) {
         var activeTab = safari.application.activeBrowserWindow.activeTab;
-        if(!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
+        if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
 
-        url = activeTab.url;
-        domain = parseUri(url).hostname;
+        var url = activeTab.url;
+        var domain = parseUri(url).hostname;
         var tracker = countMap[tabId];
 
         var shouldTrack = !tracker || tracker.url !== url;
@@ -100,14 +100,15 @@ safari.application.addEventListener("activate", function(event) {
   }
 }, true);
 
-safari.application.addEventListener("open", function(event) {
-  updateBadge();
-}, true);
-
 safari.application.addEventListener("beforeNavigate", function(event) {
   var tabId = safari.application.activeBrowserWindow.activeTab.id;
   frameData.get(tabId).blockCount = 0;
   updateBadge();
+}, true);
+
+safari.application.addEventListener("navigate", function(event) {
+  var tabId = safari.application.activeBrowserWindow.activeTab.id;
+  frameData.create(tabId);
 }, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
