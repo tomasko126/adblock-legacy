@@ -7,7 +7,7 @@ frameData = (function() {
   // Map that will serve as cache for the block count.
   // key: Numeric - tab id.
   // value: Numeric - actual block count for the tab.
-  var countMap = { };
+  var countMap = { 1:{ blockCount: 0} };
 
   return {
     getCountMap: function() {
@@ -129,9 +129,11 @@ safari.application.addEventListener("beforeNavigate", function(event) {
   updateBadge();
 }, true);
 
-safari.application.addEventListener("navigate", function(event) {
-  var tabId = safari.application.activeBrowserWindow.activeTab.id;
-  frameData.create(tabId);
+safari.application.addEventListener("open", function(event) {
+  setTimeout(function() {
+    var tabId = safari.application.activeBrowserWindow.activeTab.id;
+    frameData.create(tabId);
+  }, 200);
 }, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
