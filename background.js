@@ -43,7 +43,7 @@
          
         //code for incrementing ad blocks
         currentTab = frameData.get(tabId);
-        if(currentTab){
+        if (currentTab){
           currentTab.blockCount++;
         }
       },
