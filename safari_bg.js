@@ -20,43 +20,66 @@ frameData = (function() {
     get: function(tabId) {
       return countMap[tabId] || {};
     },
-    
+
     // Create a new frameData
     // Input:
     //  tabId:Numeric - id of the tab you want to add in the frameData
+    //  why are URL and domain passed in?  they are obtained from the activeTab.
     create: function(tabId, url, domain) {
         var activeTab = safari.application.activeBrowserWindow.activeTab;
         if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
 
         var url = activeTab.url;
         var domain = parseUri(url).hostname;
+        return frameData._initializeMap(tabId, url, domain);
+    },
+    //
+    // Input:
+    //  tabId:Numeric - id of the tab you want to add in the frameData
+    //  url: new URL for the tab
+    reset: function(tabId, url) {
+        var activeTab = safari.application.activeBrowserWindow.activeTab;
+        if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
+        var domain = parseUri(url).hostname;
+        return frameData._initializeMap(tabId, url, domain);
+    },
+    //
+    //  tabId:Numeric - id of the tab you want to add in the frameData
+    //  url: new URL for the tab
+    //  domain: domain of the request
+    _initializeMap: function(tabId, url, domain) {
         var tracker = countMap[tabId];
 
         var shouldTrack = !tracker || tracker.url !== url;
         if (shouldTrack) {
-          countMap[tabId] = { 
+          countMap[tabId] = {
             blockCount: 0,
             domain: domain,
             url: url,
           };
         }
         return tracker;
-    },
+    }
   }
 })();
 
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
+
   if (messageEvent.name === "request") {
     var args = messageEvent.message.data.args;
     if (messageEvent.target.url === args[1].tab.url)
       frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
+    else {
+        frameData.reset(messageEvent.target.id, args[1].tab.url);
+        updateBadge();
+    }
     return;
   }
 
   if (messageEvent.name !== "canLoad")
     return;
-  
+
   var tab = messageEvent.target;
   var frameInfo = messageEvent.message.frameInfo;
   chrome._tabInfo.notice(tab, frameInfo);
@@ -116,14 +139,14 @@ safari.application.addEventListener("navigate", function(event) {
 // way, I don't need to loop and compare.)
 var updateBadge = function() {
   var show_block_counts = get_settings().display_stats;
-  
+
   var url = safari.application.activeBrowserWindow.activeTab.url;
   var paused = adblock_is_paused();
   var canBlock = !page_is_unblockable(url);
   var whitelisted = page_is_whitelisted(url);
-  
+
   var count = 0;
-  if(show_block_counts && !paused && canBlock && !whitelisted) {  
+  if(show_block_counts && !paused && canBlock && !whitelisted) {
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
     count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
   }
@@ -152,7 +175,7 @@ safari.application.addEventListener("command", function(event) {
     browserWindow = safari.application.activeBrowserWindow;
   }
   var command = event.command;
-  
+
   if (command === "toggle-block-display") {
     var show_block_counts = get_settings().display_stats;
     updateDisplayStats(!show_block_counts);
@@ -310,14 +333,14 @@ if (!LEGACY_SAFARI) {
             item.checkedState = SafariExtensionMenuItem.CHECKED;
           }
         }
-        
+
         var url = windowByMenuId[menu.identifier].activeTab.url;
         var paused = adblock_is_paused();
         var canBlock = !page_is_unblockable(url);
         var whitelisted = page_is_whitelisted(url);
         var host = parseUri(url).host;
         var tabId = safari.application.activeBrowserWindow.activeTab.id;
-        
+
         if(canBlock && !paused && !whitelisted) {
           // Block count in menu.
           appendMenuItem("blocked-ads", translate("blocked_ads"));
@@ -329,7 +352,7 @@ if (!LEGACY_SAFARI) {
           appendMenuItem("toggle-block-display", translate("show_on_adblock_button"), show_block_counts);
           menu.appendSeparator(itemIdentifier("separator0"));
         }
-        
+
         var should_show;
         var eligible_for_undo = !paused && (!canBlock || !whitelisted);
         if (eligible_for_undo && count_cache.getCustomFilterCount(host)) {
@@ -384,7 +407,7 @@ safari.application.addEventListener("contextmenu", function(event) {
 
   event.contextMenu.appendContextMenuItem("show-blacklist-wizard", translate("block_this_ad"));
   event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
-  
+
   var host = parseUri(url).host;
   if (count_cache.getCustomFilterCount(host))
     event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
