@@ -16,14 +16,14 @@ frameData = (function() {
 
     // Get frameData for the tab.
     // Input:
-    //  tabId:Numberic - id of the tab you want to get
+    //  tabId: Numberic - id of the tab you want to get
     get: function(tabId) {
       return countMap[tabId] || {};
     },
 
     // Create a new frameData
     // Input:
-    //  tabId:Numeric - id of the tab you want to add in the frameData
+    //  tabId: Numeric - id of the tab you want to add in the frameData
     //  why are URL and domain passed in?  they are obtained from the activeTab.
     create: function(tabId, url, domain) {
         var activeTab = safari.application.activeBrowserWindow.activeTab;
@@ -33,9 +33,9 @@ frameData = (function() {
         var domain = parseUri(url).hostname;
         return frameData._initializeMap(tabId, url, domain);
     },
-    //
+    // Reset a frameData
     // Input:
-    //  tabId:Numeric - id of the tab you want to add in the frameData
+    //  tabId: Numeric - id of the tab you want to add in the frameData
     //  url: new URL for the tab
     reset: function(tabId, url) {
         var activeTab = safari.application.activeBrowserWindow.activeTab;
@@ -43,8 +43,9 @@ frameData = (function() {
         var domain = parseUri(url).hostname;
         return frameData._initializeMap(tabId, url, domain);
     },
-    //
-    //  tabId:Numeric - id of the tab you want to add in the frameData
+    // Initialize map
+    // Input:
+    //  tabId: Numeric - id of the tab you want to add in the frameData
     //  url: new URL for the tab
     //  domain: domain of the request
     _initializeMap: function(tabId, url, domain) {
@@ -110,7 +111,7 @@ safari.application.addEventListener("message", function(messageEvent) {
 // Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
 var windowByMenuId = {};
 
-// Listen to tab activation, this is triggered when a tab is activated or on focus.
+// Show number of blocked ads in badge for each tab
 safari.application.addEventListener("activate", function(event) {
   if (get_settings().display_stats) {
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
@@ -123,12 +124,7 @@ safari.application.addEventListener("activate", function(event) {
   }
 }, true);
 
-safari.application.addEventListener("beforeNavigate", function(event) {
-  var tabId = safari.application.activeBrowserWindow.activeTab.id;
-  frameData.get(tabId).blockCount = 0;
-  updateBadge();
-}, true);
-
+// Tab id is not set right after opening a new tab
 safari.application.addEventListener("open", function(event) {
   setTimeout(function() {
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
