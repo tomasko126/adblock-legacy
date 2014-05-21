@@ -7,7 +7,7 @@ frameData = (function() {
   // Map that will serve as cache for the block count.
   // key: Numeric - tab id.
   // value: Numeric - actual block count for the tab.
-  var countMap = { 1:{ blockCount: 0} };
+  var countMap = {};
 
   return {
     getCountMap: function() {
@@ -24,13 +24,9 @@ frameData = (function() {
     // Create a new frameData
     // Input:
     //  tabId: Numeric - id of the tab you want to add in the frameData
-    //  why are URL and domain passed in?  they are obtained from the activeTab.
     create: function(tabId, url, domain) {
         var activeTab = safari.application.activeBrowserWindow.activeTab;
         if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
-
-        var url = activeTab.url;
-        var domain = parseUri(url).hostname;
         return frameData._initializeMap(tabId, url, domain);
     },
     // Reset a frameData
@@ -119,7 +115,7 @@ safari.application.addEventListener("activate", function(event) {
   }
 }, true);
 
-// Clear badge, when going to Top Sites
+// Clear badge on Top Sites
 safari.application.addEventListener("navigate", function() {
   if (safari.application.activeBrowserWindow.activeTab.url === undefined) {
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
@@ -130,14 +126,6 @@ safari.application.addEventListener("navigate", function() {
     frameData.reset(tabId);
   }
 });
-
-// Tab id is not set right after opening a new tab
-safari.application.addEventListener("open", function(event) {
-  setTimeout(function() {
-    var tabId = safari.application.activeBrowserWindow.activeTab.id;
-    frameData.create(tabId);
-  }, 200);
-}, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
 // the tool bar item for the active window so I just updated all tool bar items' badge. That
@@ -151,12 +139,12 @@ var updateBadge = function() {
   var whitelisted = page_is_whitelisted(url);
 
   var count = 0;
-  if(show_block_counts && !paused && canBlock && !whitelisted) {
+  if (show_block_counts && !paused && canBlock && !whitelisted) {
     var tabId = safari.application.activeBrowserWindow.activeTab.id;
     count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
   }
   var safari_toolbars = safari.extension.toolbarItems;
-  for(var i = 0; i < safari_toolbars.length; i++ ) {
+  for (var i = 0; i < safari_toolbars.length; i++ ) {
     safari_toolbars[i].badge = count;
   }
   frameData.get(tabId).blockCount = count;
