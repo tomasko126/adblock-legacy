@@ -124,6 +124,18 @@ safari.application.addEventListener("activate", function(event) {
   }
 }, true);
 
+// Clear badge, when going to Top Sites
+safari.application.addEventListener("navigate", function() {
+  if (safari.application.activeBrowserWindow.activeTab.url === undefined) {
+    var tabId = safari.application.activeBrowserWindow.activeTab.id;
+    var safari_toolbars = safari.extension.toolbarItems;
+    for (var i = 0; i < safari_toolbars.length; i++ ) {
+      safari_toolbars[i].badge = "0";
+    }
+    frameData.reset(tabId);
+  }
+});
+
 // Tab id is not set right after opening a new tab
 safari.application.addEventListener("open", function(event) {
   setTimeout(function() {
