@@ -33,7 +33,7 @@ if (/youtube/.test(document.location.hostname)) {
         }
         var new_url = url+"?&channel="+extracted_name;
       } else {
-        var get_yt_name = document.querySelector("#watch7-user-header a[href*='/user/']");
+        var get_yt_name = document.querySelector("#watch7-user-header a[href*='/channel/']");
         if (get_yt_name === null) { 
           //in Safari 5, the anchor has a different parent tag
           get_yt_name = document.querySelector("#ud a[href*='/user/']");
