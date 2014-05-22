@@ -127,6 +127,24 @@ safari.application.addEventListener("navigate", function() {
   }
 });
 
+safari.application.addEventListener("beforeNavigate", function(event) {
+  var tabId = safari.application.activeBrowserWindow.activeTab.id;
+  frameData.get(tabId).blockCount = 0;
+  updateBadge();
+}, true);
+
+safari.application.addEventListener("open", function(event) {
+  var tabId = safari.application.activeBrowserWindow.activeTab.id;
+  if (!tabId) {
+    setTimeout(function() {
+      var tabId = safari.application.activeBrowserWindow.activeTab.id;
+    }, 200);
+  }
+  if (!safari.application.activeBrowserWindow.activeTab.id)
+    alert("tab id is not set on empty pages!");
+  frameData.create(tabId);
+}, true);
+
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
 // the tool bar item for the active window so I just updated all tool bar items' badge. That
 // way, I don't need to loop and compare.)
