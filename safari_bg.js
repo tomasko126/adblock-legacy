@@ -65,7 +65,7 @@ safari.application.addEventListener("message", function(messageEvent) {
 
   if (messageEvent.name === "request") {
     var args = messageEvent.message.data.args;
-    if (messageEvent.target.url === args[1].tab.url)
+    if (!messageEvent.target.url || messageEvent.target.url === args[1].tab.url)
       frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
     else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
         frameData.reset(messageEvent.target.id, args[1].tab.url);
@@ -133,21 +133,25 @@ safari.application.addEventListener("navigate", function() {
 });
 
 safari.application.addEventListener("beforeNavigate", function(event) {
-  var tabId = safari.application.activeBrowserWindow.activeTab.id;
-  frameData.get(tabId).blockCount = 0;
-  updateBadge();
+  var tab = safari.application.activeBrowserWindow.activeTab;
+  if (tab.url === event.url) {
+    frameData.get(tab.id).blockCount = 0;
+    updateBadge();
+  }
 }, true);
 
 safari.application.addEventListener("open", function(event) {
-  var tabId = safari.application.activeBrowserWindow.activeTab.id;
-  if (!tabId) {
-    setTimeout(function() {
-      var tabId = safari.application.activeBrowserWindow.activeTab.id;
-    }, 200);
+  var tab = safari.application.activeBrowserWindow.activeTab;
+  if (!tab.url) {
+    if (!tab.id) {
+      setTimeout(function() {
+        var tab = safari.application.activeBrowserWindow.activeTab;
+      }, 200);
+    }
+    if (!tab.id)
+      return;
+    frameData.create(tab.id);
   }
-  if (!safari.application.activeBrowserWindow.activeTab.id)
-    alert("tab id is not set on empty pages!");
-  frameData.create(tabId);
 }, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
