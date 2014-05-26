@@ -1296,7 +1296,7 @@
     "description":"Instructions for help",
     "placeholders":{
       "updatelink2":{
-        "content":"<a href='http:\\//support.getadblock.com' target='_blank'>our support site!<\/a>"
+        "content":"<a href='http:\/\/support.getadblock.com' target='_blank'>our support site!<\/a>"
       }
     }
   },
@@ -1305,7 +1305,7 @@
     "description":"Link to code behind AdBlock",
     "placeholders":{
       "codelink":{
-        "content":"<a href='http:\\//code.getadblock.com' target='_blank'>here</a>"
+        "content":"<a href='http:\/\/code.getadblock.com' target='_blank'>here</a>"
       }
     }
   },
@@ -1314,7 +1314,7 @@
     "description":"Text for link to contributors page",
     "placeholders":{
       "contributorspage":{
-        "content":"<a href='http:\\//getadblock.com\/contributors' target='_blank'>contributors page!<\/a>"
+        "content":"<a href='http:\/\/getadblock.com\/contributors' target='_blank'>contributors page!<\/a>"
       }
     }
   },
