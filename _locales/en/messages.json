@@ -1292,7 +1292,7 @@
     "description":"Header of fourth tab page"
   },
   "support":{
-    "message":"Found a bug? Got a question? Got a new idea for the extension? Go to $updatelink2$",
+    "message":"Found a bug? Got a question? Got a new idea for AdBlock? Go to $updatelink2$",
     "description":"Instructions for help",
     "placeholders":{
       "updatelink2":{
@@ -1310,7 +1310,7 @@
     }
   },
   "adblockcontributors":{
-    "message":"Do you want to see who are the people behind AdBlock? Check it now at our $contributorspage$",
+    "message":"Do you want to find out who the people behind AdBlock are? Take a look at our $contributorspage$",
     "description":"Text for link to contributors page",
     "placeholders":{
       "contributorspage":{
