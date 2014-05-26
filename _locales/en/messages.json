@@ -1301,7 +1301,7 @@
     }
   },
   "seethecode":{
-    "message":"Want to see the code behind AdBlock? Check it out $codelink$.",
+    "message":"Want to see AdBlock's code? Check it out $codelink$.",
     "description":"Link to code behind AdBlock",
     "placeholders":{
       "codelink":{
@@ -1310,7 +1310,7 @@
     }
   },
   "adblockcontributors":{
-    "message":"Do you want to find out who the people behind AdBlock are? Take a look at our $contributorspage$",
+    "message":"Do you want to find out who help make AdBlock? Take a look at our $contributorspage$",
     "description":"Text for link to contributors page",
     "placeholders":{
       "contributorspage":{
