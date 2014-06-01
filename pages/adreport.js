@@ -205,8 +205,8 @@ $("#step_language_lang").change(function() {
   $("#step_language").html("<span class='answer'>"+ selected.text() +"</span>");
   $("#step_language span").attr("chosen",selected.attr("i18n"));
   if (selected.text() == translate("other")) {
-    $("#checkupdate").html(translate("nodefaultfilter1",
-                                  ["<a href='https://adblockplus.org/en/subscriptions'>", "</a>"]));
+    $("#checkupdate").html(translate("nodefaultfilter1"));
+    $("#link").html(translate("here")).attr("href", "https://adblockplus.org/en/subscriptions");
     return;
   } else {
     var required_lists = selected.attr('value').split(';');
@@ -220,11 +220,13 @@ $("#step_language_lang").change(function() {
   contact = required_lists[required_lists.length-1];
 
   $("#step_firefox_DIV").fadeIn().css("display", "block");
-
-  var hideChromeInChrome = (SAFARI?['','']:['<span style="display:none;">', '</span>']);
-  $("#checkinfirefox1").html(translate("checkinfirefox_1", hideChromeInChrome));
-  $("#checkinfirefox2").html(translate("checkinfirefox_2", hideChromeInChrome));
-  $("#checkinfirefox").html(translate("checkinfirefoxtitle", hideChromeInChrome));
+  $("#checkinfirefox1").html(translate("checkinfirefox_1"));
+  $("#checkinfirefox2").html(translate("checkinfirefox_2"));
+  $("#checkinfirefox").html(translate("checkinfirefoxtitle"));
+  if (SAFARI) {
+      $("#chrome1, #chrome2").html(translate("orchrome"));
+      $("#adblockforchrome").html(translate("oradblockforchrome"));
+  }
 });
 
 // STEP 5: also in Firefox

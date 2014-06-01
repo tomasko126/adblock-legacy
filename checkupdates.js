@@ -44,8 +44,9 @@ function checkupdates(page) {
           } else {
             var version = $("key:contains(CFBundleShortVersionString) + string",response).text();
             if (isNewerVersion(version)) {
+              $("#checkupdate").html(translate("update_available"));
               var updateURL = $("key:contains(URL) + string", response).text();
-              $("#checkupdate").html(translate("update_available", ["<a href='" + updateURL + "'>", "</a>"]));
+              $("#here").html(translate("here")).attr("href", updateURL);
             } else {
               if (page === "help") {
                 $("#checkupdate").html(translate("latest_version")).show();

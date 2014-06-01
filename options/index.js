@@ -101,9 +101,11 @@ $("#paymentlink").click(function() {
 });
 
 function displayTranslationCredit() {
-if (navigator.language.substring(0, 2) != "en")
-  $("#translation_credits").text(translate("translator_credit"));
+if (navigator.language.substring(0, 2) != "en") {
+    $("#translator_credit").text(translate("translator_credit"));
+    $("#translator_names").text(translate("translator_names"));
   }
+}
 
 if (SAFARI && LEGACY_SAFARI) {
   if (navigator.appVersion.indexOf("Mac OS X 10_5_") !== -1) {
