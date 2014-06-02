@@ -241,10 +241,9 @@ PatternFilter._parseRule = function(text) {
     return result;
   }
 
-  var key = rule.match(/[a-zA-Z\&=]{5,}/);
+  var key = rule.match(/[\w&=]{5,}/);
   if (key)
     result.key = new RegExp(key, matchcase);
-
 
   // ***** -> *
   //replace, excessive wildcard sequences with a single one
