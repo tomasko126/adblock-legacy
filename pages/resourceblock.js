@@ -139,7 +139,7 @@ function generateTable() {
       appendTo(cell);
     if (type.name)
       $("<span>").
-        text(custom_filters[matchingfilter] || matchingfilter).
+        text(truncateI(custom_filters[matchingfilter] || matchingfilter)).
         attr('title', translate("filterorigin", matchingListName)).
         appendTo(cell);
     row.append(cell);
