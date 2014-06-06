@@ -189,9 +189,10 @@ $(function() {
 // Share open/close click handlers
 $(function() {
   var state = "initial";
-  var bodysize = { width: $("body").width(), height: $("body").height() };
   var linkHref = "https://getadblock.com/share/";
+  var bodysize;
   $("#link_open").click(function() {
+    bodysize = { width: $("#wrapper").width(), height: $("#wrapper").height() };
     if (state === "initial") {
       $("<iframe>").
         attr("frameBorder", 0).
@@ -218,7 +219,7 @@ $(function() {
     if (state != "open")
       return;
     state = "closed";
-    $("body").animate(bodysize, {queue:false});
+    $("body").animate({width: bodysize.width, height: bodysize.height}, {queue:false});
     $("#menu-items").slideDown();
     $("#slideout_wrapper").animate({width: 0, height: 0}, {queue:false});
     $("#link_close").hide();
