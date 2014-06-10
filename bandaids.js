@@ -58,7 +58,7 @@ var run_bandaids = function() {
         elemDiv.style.display = "none";
         document.body.appendChild(elemDiv);
       });
-
+      BGcall('set_first_run_to_false', null);
     },
    youtube_safari_only: function() {
 
