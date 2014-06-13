@@ -865,7 +865,7 @@
           return; // not for us
         // +1 button in browser action popup loads a frame which
         // runs content scripts.  Ignore their cries for ad blocking.
-        if (sender.tab === null)
+        if ((sender.tab === undefined) || (sender.tab === null))
           return;
         var fn = window[request.fn];
         request.args.push(sender);
