@@ -1003,7 +1003,10 @@
 
       chrome.tabs.onUpdated.addListener(function() {
           chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-              run_yt_channel_whitelist(tabs[0].url);
+            if (tabs.length === 0)
+                return; // For example: only the background devtools or a popup are opened
+            
+            run_yt_channel_whitelist(tabs[0].url);
           });
       });
   }
