@@ -51,12 +51,19 @@
 
   }
 
+  //called from bandaids, for use on our getadblock.com site
   var get_adblock_user_id = function() {
     return storage_get("userid");
   };
   
+  //called from bandaids, for use on our getadblock.com site
   var get_first_run = function() {
     return STATS.firstRun;
+  };  
+  
+  //called from bandaids, for use on our getadblock.com site
+  var set_first_run_to_false = function() {
+    STATS.firstRun = false;
   };  
 
   // OPTIONAL SETTINGS
