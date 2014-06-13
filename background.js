@@ -4,8 +4,15 @@
     var str = "Error: " +
              (e.filename||"anywhere").replace(chrome.extension.getURL(""), "") +
              ":" + (e.lineno||"anywhere");
+    if (chrome && chrome.runtime && (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
+        var stack = "-" + ((e.error && e.error.message)||"") +
+                    "-" + ((e.error && e.error.stack)||"");
+        stack = stack.replace(/:/gi, ";").replace(/\n/gi, "");
+        str += stack;
+    }
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
+    log(str);
   });
 
   if (!SAFARI) {
@@ -55,16 +62,16 @@
   var get_adblock_user_id = function() {
     return storage_get("userid");
   };
-  
+
   //called from bandaids, for use on our getadblock.com site
   var get_first_run = function() {
     return STATS.firstRun;
-  };  
-  
+  };
+
   //called from bandaids, for use on our getadblock.com site
   var set_first_run_to_false = function() {
     STATS.firstRun = false;
-  };  
+  };
 
   // OPTIONAL SETTINGS
 
@@ -167,7 +174,7 @@
           fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
         }
       },
-      
+
       // Watch for requests for new tabs and frames, and track their URLs.
       // Inputs: details: object from onBeforeRequest callback
       // Returns false if this request's tab+frame are not trackable.
@@ -377,7 +384,7 @@
     var custom_filters_arr = text ? text.split("\n"):[];
     var new_custom_filters_arr = [];
     var identifier = host;
-    
+
     for(var i = 0; i < custom_filters_arr.length; i++) {
       var entry = custom_filters_arr[i];
       //Make sure that the identifier is at the start of the entry
@@ -607,9 +614,9 @@
       var main_frame = frameData.get(tabId, 0);
       // main_frame is undefined if the tab is a new one, so no use updating badge.
       if (!main_frame) return;
-      
+
       var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url) && !/chrome\/newtab/.test(main_frame.url);
-      
+
       if(display && (main_frame && isBlockable) && !adblock_is_paused()){
         badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
         if (badge_text === "0")
@@ -741,7 +748,7 @@
     if (/channel/.test(url)) {
       var get_channel = url.match(/channel=([^]*)/)[1];
     } else {
-      var get_channel = url.split('/').pop(); 
+      var get_channel = url.split('/').pop();
     }
     var filter = '@@||youtube.com/*' + get_channel + '$document';
     return add_custom_filter(filter);
@@ -838,7 +845,7 @@
   launch_resourceblocker = function(query) {
     openTab("pages/resourceblock.html" + query, true);
   }
-  
+
   // Open subscribe popup when new filter list was subscribed from site
   launch_subscribe_popup = function(loc) {
     window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
@@ -1005,7 +1012,7 @@
           chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
             if (tabs.length === 0)
                 return; // For example: only the background devtools or a popup are opened
-            
+
             run_yt_channel_whitelist(tabs[0].url);
           });
       });
