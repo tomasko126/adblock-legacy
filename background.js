@@ -329,8 +329,7 @@
           // Blacklist site, which is whitelisted by global @@*&document,domain=~ filter
           if (whitelist > -1) {
               // Remove protocols
-              url = url.replace(/((http|https):\/\/)?(www.)?/, "");
-              url = url.replace(/\//,"");
+              url = url.replace(/((http|https):\/\/)?(www.)?/, "").split(/[/?#]/)[0];
 
               text = text + "|~" + url;
               set_custom_filters_text(text);
