@@ -321,26 +321,38 @@
   // Inputs: url:string - a URL that may be whitelisted by a custom filter
   // Returns: true if a filter was found and removed; false otherwise.
   try_to_unwhitelist = function(url) {
-    url = url.replace(/#.*$/, ''); // Whitelist ignores anchors
-    var custom_filters = get_custom_filters_text().split('\n');
-    for (var i = 0; i < custom_filters.length; i++) {
-      var text = custom_filters[i];
-      if (!Filter.isWhitelistFilter(text))
-        continue;
-      try {
-        var filter = PatternFilter.fromText(text);
-      } catch (ex) {
-        continue;
-      }
-      if (!filter.matches(url, ElementTypes.document, false))
-        continue;
+      url = url.replace(/#.*$/, ''); // Whitelist ignores anchors
+      var custom_filters = get_custom_filters_text().split('\n');
+      for (var i = 0; i < custom_filters.length; i++) {
+          var text = custom_filters[i];
+          var whitelist = text.search(/@@\*\$document,domain=\~/);
+          // Blacklist site, which is whitelisted by global @@*&document,domain=~ filter
+          if (whitelist > -1) {
+              // Remove protocols
+              url = url.replace(/((http|https):\/\/)?(www.)?/, "");
+              url = url.replace(/\//,"");
 
-      custom_filters.splice(i, 1); // Remove this whitelist filter text
-      var new_text = custom_filters.join('\n');
-      set_custom_filters_text(new_text);
-      return true;
-    }
-    return false;
+              text = text + "|~" + url;
+              set_custom_filters_text(text);
+              return true;
+          } else {
+              if (!Filter.isWhitelistFilter(text))
+                  continue;
+              try {
+                  var filter = PatternFilter.fromText(text);
+              } catch (ex) {
+                  continue;
+              }
+              if (!filter.matches(url, ElementTypes.document, false))
+                  continue;
+
+              custom_filters.splice(i, 1); // Remove this whitelist filter text
+              var new_text = custom_filters.join('\n');
+              set_custom_filters_text(new_text);
+              return true;
+          }
+      }
+      return false;
   }
 
   // Called when Chrome blocking needs to clear the in-memory cache.
