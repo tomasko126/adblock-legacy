@@ -111,8 +111,18 @@ DMSP1.prototype.reportUsage = function() {
     'cohort=' + localStorage.search_cohort
   ].join('&');
 
-  var search_chkbox_counter = JSON.parse(localStorage['search_chkbox_counter']);
-  var search_pitch_page_counter = JSON.parse(localStorage['search_pitch_page_counter']);
+
+  try {
+    var search_chkbox_counter = JSON.parse(localStorage['search_chkbox_counter']);
+  } catch(e) {
+    return;// simply return if there's an exception when parsing the string from local storage 
+  }
+  
+  try {
+    var search_pitch_page_counter = JSON.parse(localStorage['search_pitch_page_counter']);
+  } catch(e) {
+    return;// simply return if there's an exception when parsing the string from local storage 
+  }  
   var report_values_to_send = {
     first_update: firstUpdate || false,
     search_engine: localStorage.search_engines || 0,
