@@ -1320,7 +1320,7 @@
     "description":"Text for link to changelog",
     "placeholders":{
       "changelog":{
-        "content":"<a id='changelog' target='_blank'>changelog<\/a>"
+        "content":"<a id='changelog' style='cursor:pointer;'>changelog<\/a>"
       }
     }
   }
