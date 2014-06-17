@@ -9,6 +9,6 @@ $(document).ready(function() {
         xhr.open("GET", chrome.extension.getURL("CHANGELOG"), false);
         xhr.send();
         var object = xhr.responseText;
-        $("textarea").html(object).css({width: "670px", height: "200px"}).fadeIn();
+        $("#changes").text(object).css({width: "670px", height: "200px"}).fadeIn();
     });
 });
