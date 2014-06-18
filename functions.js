@@ -174,3 +174,32 @@ setDefault = function(obj, value, defaultValue) {
     obj[value] = defaultValue;
   return obj[value];
 };
+
+// Get the list of subscribed filters and
+// All unsubscribed default filters
+var getUserLists = function(){
+	var unsubscribed_default_filters = [];
+	var subscribed_filter_names = [];
+	BGcall("get_subscriptions_minus_text", function(subs) {
+	  for (var id in subs)
+	    if (!subs[id].subscribed && !subs[id].user_submitted)
+	      unsubscribed_default_filters[id] = subs[id];
+	    else if (subs[id].subscribed)
+	      subscribed_filter_names.push(id);
+	  return {
+		  unsubscribed: unsubscribed_default_filters,
+		  subscribed: subscribed_filter_names
+	  };
+	});
+};
+
+// Get the user's settings for use in ad reports & bug reports
+var getUserSettings = function() {
+	var enabled_settings = [];
+	BGcall("get_settings", function(settings) {
+	  for (setting in settings)
+	    if (settings[setting])
+	      enabled_settings.push(setting);
+	});
+	return enabled_settings;
+};
