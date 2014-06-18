@@ -31,24 +31,9 @@ $(function() {
 //fetching the options...
 var options = parseUri.parseSearch(document.location.search);
 
-//get the list of subscribed filters and
-//all unsubscribed default filters
-var unsubscribed_default_filters = [];
-var subscribed_filter_names = [];
-BGcall("get_subscriptions_minus_text", function(subs) {
-  for (var id in subs)
-    if (!subs[id].subscribed && !subs[id].user_submitted)
-      unsubscribed_default_filters[id] = subs[id];
-    else if (subs[id].subscribed)
-      subscribed_filter_names.push(id);
-});
+var lists = getUserLists();
 
-var enabled_settings = [];
-BGcall("get_settings", function(settings) {
-  for (setting in settings)
-    if (settings[setting])
-      enabled_settings.push(setting);
-});
+var enabled_settings = getUserSettings();
 
 //generate the URL to the issue tracker
 function generateReportURL() {
@@ -100,7 +85,7 @@ function generateReportURL() {
     body.push("");
   }
   body.push("=== Subscribed filters ===");
-  body.push(subscribed_filter_names.join('\n'));
+  body.push(lists.subscribed.join('\n'));
   body.push("");
   body.push("=== Browser" + (AdBlockVersion ? ' & AdBlock' : '') + ": ===");
   body.push(SAFARI ? "Safari " + navigator.userAgent.match(/Version\/([0-9.]+)/)[1] :
@@ -211,7 +196,7 @@ $("#step_language_lang").change(function() {
   } else {
     var required_lists = selected.attr('value').split(';');
     for (var i=0; i < required_lists.length - 1; i++) {
-      if (unsubscribed_default_filters[required_lists[i]]) {
+      if (lists.unsubscribed[required_lists[i]]) {
         $("#checkupdate").text(translate("retryaftersubscribe", [translate("filter" + required_lists[i])]));
         return;
       }
