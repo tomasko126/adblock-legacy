@@ -48,19 +48,27 @@ var makeReport = function(){
     body.push("2. ");
     body.push("3. ");
     body.push("");
-    body.push("**What should happen when you do the above steps");
+    body.push("**What should happen when you do the above steps**");
     body.push("");
     body.push("");
     body.push("**What actually happened?**");
     body.push("");
     body.push("");
-    body.push("**Do you have any other comments? If you can, can you please attach a screenshot of the bug?");
+    body.push("**Do you have any other comments? If you can, can you please attach a screenshot of the bug?**");
     body.push("");
+    body.push("");
+    body.push("--- The questions below are optional but VERY helpful. ---");
+    body.push("");
+    body.push("If unchecking all filter lists fixes the problem, which one filter" + 
+              "list must you check to cause the problem again after another restart?");
+    body.push("");
+    body.push("Technical Chrome users: Go to chrome://extensions ->" +
+              "Developer Mode -> Inspect views: background page -> Console. " +
+              "Paste the contents here:");
     body.push("");
     body.push("====== Do not touch below this line ======");
     body.push("");
-    body.push("==== Settings ====");
-    body.push(enabled_settings.toString());
+    body.push(getDebugInfo());
   
     var out = encodeURIComponent(body.join('  \n'))
     return out;
@@ -73,7 +81,7 @@ $(document).ready(function() {
 
     // Enable the debug info button
     $("#debug input").click(function(){
-        var settings = enabled_settings.toString();
+        var settings = getDebugInfo();
         $("#debugInfo").css({display: "block", width: "450px", height: "100px"});
         $("#debugInfo").html(settings);
     });
