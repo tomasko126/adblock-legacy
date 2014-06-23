@@ -28,7 +28,6 @@ var getDebugInfo = function () {
     info.push("");
     info.push("==== Settings ====");
     info.push(enabled_settings.join('  \n'));
-  
     return info.join('  \n');
 };
 
@@ -37,7 +36,7 @@ var makeReport = function(){
     var body = [];
     if (AdBlockVersion)
         body.push("AdBlock version number: " + AdBlockVersion);
-    body.push("UserAgent: " + navigator.userAgent);
+    body.push("UserAgent: " + navigator.userAgent.replace(/;/,""));
     body.push("");
     body.push("Please answer the following questions so that we can process your bug report, otherwise, we may have to ignore it.");
     body.push("Also, please put your name, or a screen name, and your email above so that we can contact you if needed.");
@@ -63,8 +62,7 @@ var makeReport = function(){
     body.push("==== Settings ====");
     body.push(enabled_settings.toString());
   
-    var out = body.join("  \n");
-    console.log(out);
+    var out = encodeURIComponent(body.join('  \n'))
     return out;
 };
 
@@ -83,9 +81,9 @@ $(document).ready(function() {
     // Enable the bug report button
     $("#reports input").click(function(){
         var out = makeReport();
-        //var result = "https://support.getadblock.com/discussion/new" +
-        //"?category_id=problems&discussion[body]=" + out;
+        var result = "https://getadblock.com/support/discussion/new" +
+        "?category_id=problems&discussion[body]=" + out;
 
-       // document.location.href = result; 
+        document.location.href = result; 
     });
 });
