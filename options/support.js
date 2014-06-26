@@ -29,7 +29,8 @@ var getDebugInfo = function () {
     info.push("==== Settings ====");
     info.push(enabled_settings.join('  \n'));
     info.push("==== Other info: ====");
-    info.push("AdBlock version number: " + AdBlockVersion);
+    if (AdBlockVersion)
+        info.push("AdBlock version number: " + AdBlockVersion);
     info.push("UserAgent: " + navigator.userAgent.replace(/;/,""));
     return info.join('  \n');
 };
@@ -37,8 +38,6 @@ var getDebugInfo = function () {
 // Create a bug report
 var makeReport = function(){
     var body = [];
-    if (AdBlockVersion)
-    body.push("");
     body.push("Please answer the following questions so that we can process your bug report, otherwise, we may have to ignore it.");
     body.push("Also, please put your name, or a screen name, and your email above so that we can contact you if needed.");
     body.push("If you don't want your report to be made public, check that box, too.");
