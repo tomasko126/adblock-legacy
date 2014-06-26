@@ -82,14 +82,14 @@ $(document).ready(function() {
     checkupdates("help");
 
     // Enable the debug info button
-    $("#debug input").click(function(){
+    $("#debug").click(function(){
         var settings = getDebugInfo();
         $("#debugInfo").css({display: "block", width: "450px", height: "100px"});
         $("#debugInfo").html(settings);
     });
 
     // Enable the bug report button
-    $("#reports input").click(function(){
+    $("#report").click(function(){
         var out = makeReport();
         var result = "https://getadblock.com/support/discussion/new" +
         "?category_id=problems&discussion[body]=" + out;
