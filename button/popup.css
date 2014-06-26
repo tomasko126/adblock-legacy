@@ -120,8 +120,8 @@ input[type="checkbox"]:checked:before {
 }
 @font-face {
   font-family: 'Open Sans';
-  src: url('../font/OpenSans.woff') format('woff');
+  src: url('../font/OpenSans.ttf') format('truetype');
   font-weight: normal;
-  font-weight: 400;
+  font-weight: 300;
   font-style: normal;
 }

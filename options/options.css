@@ -22,8 +22,7 @@
       @font-face {
         font-family: "Open Sans";
         font-weight: 300;
-        src: url('../font/OpenSans.woff') format('woff');
-        -webkit-font-smoothing: antialiased;
+        src: url('../font/OpenSans.ttf') format('truetype');
       }
 
       /* Menu */
