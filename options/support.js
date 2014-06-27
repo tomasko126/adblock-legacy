@@ -76,6 +76,9 @@ var makeReport = function(){
 };
 
 $(document).ready(function() {
+	// Hide the (English only) translation for English
+	$("span[i18n=englishOnly").css("display", "none");
+	
     // Check for updates
     $("#checkupdate").html(translate("checkforupdates"));
     checkupdates("help");

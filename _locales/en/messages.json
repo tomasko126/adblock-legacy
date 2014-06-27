@@ -1293,7 +1293,7 @@
   },
   "support":{
     "message":"Found a bug? Got a question? Got a new idea for AdBlock? Go to <a>our support site<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
+    "description":"Instructions for help."
   },
   "seethecode":{
     "message":"Want to see AdBlock's code? Check it out <a>here<\/a>.",
@@ -1315,8 +1315,7 @@
     "message":"To report an ad, you must be connected to the internet.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
-  "whatsnew":{
-    "message":"What's new in the latest release? See the <a style='cursor:pointer;'>changelog<\/a>!",
-    "description":"Text for link to changelog"
-  }
+  "englishOnly":{
+    "message":"(in English Only)",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
 }
