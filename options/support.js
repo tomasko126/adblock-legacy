@@ -28,6 +28,7 @@ var getDebugInfo = function () {
     info.push("");
     info.push("==== Settings ====");
     info.push(enabled_settings.join('  \n'));
+    info.push("");
     info.push("==== Other info: ====");
     if (AdBlockVersion)
         info.push("AdBlock version number: " + AdBlockVersion);
