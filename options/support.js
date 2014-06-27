@@ -90,7 +90,7 @@ $(document).ready(function() {
     // Enable the bug report button
     $("#report").click(function(){
         var out = makeReport();
-        var result = "https://getadblock.com/support/discussion/new" +
+        var result = "http://support.getadblock.com/discussion/new" +
         "?category_id=problems&discussion[body]=" + out;
 
         document.location.href = result; 
