@@ -1318,5 +1318,9 @@
   "whatsnew":{
     "message":"What's new in the latest release? See the <a style='cursor:pointer;'>changelog<\/a>!",
     "description":"Text for link to changelog"
+  },
+  "englishOnly":{
+    "message":"(in English Only)",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
   }
 }
