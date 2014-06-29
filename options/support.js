@@ -78,27 +78,24 @@ var makeReport = function(){
     return out;
 };
 
-$(document).ready(function() {
-	// Hide the (English only) translation for English
-	$("span[i18n=englishOnly").css("display", "none");
-	
+$(document).ready(function() {	
     // Check for updates
     $("#checkupdate").html(translate("checkforupdates"));
     checkupdates("help");
 
-    // Enable the debug info button
+    // Show debug info
     $("#debug").click(function(){
         var settings = getDebugInfo();
-        $("#debugInfo").css({display: "block", width: "450px", height: "100px"});
+        $("#debugInfo").css({ width: "450px", height: "100px"});
         $("#debugInfo").html(settings);
+        $("#debugInfo").fadeIn();
     });
 
-    // Enable the bug report button
+    // Report us the bug
     $("#report").click(function(){
         var out = makeReport();
         var result = "http://support.getadblock.com/discussion/new" +
         "?category_id=problems&discussion[body]=" + out;
-
         document.location.href = result; 
     });
 });
