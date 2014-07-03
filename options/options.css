@@ -295,6 +295,10 @@
       #ui-tabs-4 p {
         margin-top: 0;
       }
+      .english-only {
+        display: none;
+        color: #606060;
+      }
 
       /* Misc */
       label {

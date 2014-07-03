@@ -82,6 +82,10 @@ $(document).ready(function() {
     // Check for updates
     $("#checkupdate").html(translate("checkforupdates"));
     checkupdates("help");
+    
+    if (navigator.language.substring(0, 2) != "en") {
+        $(".english-only").css("display", "inline");
+    }
 
     // Show debug info
     $("#debug").click(function(){

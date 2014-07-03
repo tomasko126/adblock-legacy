@@ -1320,7 +1320,7 @@
     "description":"Text for link to changelog"
   },
   "englishOnly":{
-    "message":"(in English Only)",
+    "message":"English only",
     "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
   }
 }
