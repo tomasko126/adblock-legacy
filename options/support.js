@@ -1,16 +1,6 @@
 // Set up variables
 var AdBlockVersion = chrome.runtime.getManifest().version;
 
-// Get enabled settings
-var enabled_settings = [];
-BGcall("get_settings", function(settings) {
-    for (setting in settings) {
-        if (settings[setting]) {
-            enabled_settings.push(setting);
-        }
-    }
-});
-
 // Get subscribed filter lists
 var subscribed_filter_names = [];
 BGcall("get_subscriptions_minus_text", function(subs) {
@@ -20,18 +10,26 @@ BGcall("get_subscriptions_minus_text", function(subs) {
     }
 });
 
+var adblock_settings;
+BGcall("get_settings", function(settings) {
+    adblock_settings = JSON.stringify(settings);
+});
+    
 // Create the debug info for the textbox or the bug report
-var getDebugInfo = function () {
+var getDebugInfo = function() {
     var info = [];
     info.push("==== Filter Lists ====");
     info.push(subscribed_filter_names.join('  \n'));
     info.push("");
     info.push("==== Settings ====");
-    info.push(enabled_settings.join('  \n'));
+    info.push(adblock_settings);
     info.push("");
     info.push("==== Other info: ====");
     if (AdBlockVersion)
         info.push("AdBlock version number: " + AdBlockVersion);
+    if (storage_get("error"))
+        info.push("Last known error: " + storage_get("error"));
+    info.push("Total pings: " + storage_get("total_pings"));
     info.push("UserAgent: " + navigator.userAgent.replace(/;/,""));
     return info.join('  \n');
 };
