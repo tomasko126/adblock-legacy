@@ -1314,5 +1314,9 @@
   "checkinternetconnection":{
     "message":"Bir reklam bildirmek için internete bağlı olmanız gerekir.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "whatsnew":{
+    "message":"En son sürümde ne yenilikler var? <a style='cursor:pointer;'>Sürüm Notları<\/a>'nı inceleyin!",
+    "description":"Text for link to changelog"
   }
 }

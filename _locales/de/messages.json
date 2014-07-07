@@ -1314,5 +1314,9 @@
   "checkinternetconnection":{
     "message":"Um Werbung zu melden muss eine Internetverbindung bestehen.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "whatsnew":{
+    "message":"Die Änderungen der aktuellen Version von AdBlock können im <a style='cursor:pointer;'>Changelog<\/a> eingesehen werden.",
+    "description":"Text for link to changelog"
   }
 }

@@ -39,6 +39,10 @@
     "message":"For at skjule knappen skal du højreklikke på den og vælge Skjul-knappen. Du kan få den frem igen ved at gå til chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
+  "operabutton_how_to_hide2":{
+    "message":"For at skjule knappen, gå til opera:\/\/extensions og markér 'Skjul i værktøjslinjen'. Du kan vise det igen ved at afmarkére denne mulighed.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
   "sliderexplanation":{
     "message":"Skyd glideren indtil reklamen er skjult korrekt på siden, og det blokerede element ser brugbart ud.",
     "description":"Blacklister slider page message"
@@ -917,6 +921,22 @@
     "message":"Tilføj dette filter",
     "description":"resourceblocking page string"
   },
+  "ordisablefilter":{
+    "message":"... eller deaktivér filter:",
+    "description":"On the resourceblocking page, choice to disable a filter instead of allowing or blocking a specific resource"
+  },
+  "thisfilterwillbedisabled":{
+    "message":"Dette filter vil blive deaktiveret:",
+    "description":"On the resourceblocking page, followed by the filter the user chose to disable"
+  },
+  "disabledwhenbrowsing":{
+    "message":"Dette filter vil blive deaktiveret, når du browser:",
+    "description":"On the resourceblocking page, choose on which sites the filter should be disabled"
+  },
+  "onlypagesonthisdomain":{
+    "message":"KUN sider på dette domæne:",
+    "description":"On the resourceblocking page, option to disable a filter only on a specific domain"
+  },
   "flashads":{
     "message":"Videoer og Flash",
     "description":"Title of the final ad report question if the ad didn't appear in Firefox"
@@ -1257,8 +1277,46 @@
     "message":"her",
     "description":"This message is injected in other strings as a link\/button"
   },
+  "update_available":{
+    "message":"Der er en ny opdatering til AdBlock! Tjek det ud $here$.<br>OBS: Hvis du vil installere opdateringer automatisk, skal du klikke på Safari > Indstillinger > Udvidelser > Opdateringer og markere 'Installér automatisk nye opdateringer'.",
+    "description":"On the Options > Support page, shows when there are updates available for AdBlock",
+    "placeholders":{
+      "here":{
+        "content":"<a id='here'><\/a>",
+        "example":"<a>here<\/a>"
+      }
+    }
+  },
   "adblocksupport":{
     "message":"AdBlock-support",
     "description":"Title of the support tab"
+  },
+  "support":{
+    "message":"Har du fundet en fejl, eller har du et spørgsmål? Eller har du en ny idé til AdBlock? Tjek vores <a>supportside<\/a> ud (kun på engelsk).",
+    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
+  },
+  "seethecode":{
+    "message":"Vil du tjekke AdBlocks kildekode? Tjek det ud <a>her<\/a>.",
+    "description":"Link to AdBlock's source code"
+  },
+  "adblockcontributors":{
+    "message":"Vil du gerne læse mere om, hvem der har hjulpet med at lave AdBlock? Tag et kig på vores <a>bidragsydere<\/a>.",
+    "description":"Text for link to contributors page"
+  },
+  "checkforupdates":{
+    "message":"Tjekke om der er nye opdateringer (dette bør ikke tage lang tid)...",
+    "description":"Displayed when AdBlock is checking the newest available version"
+  },
+  "somethingwentwrong":{
+    "message":"Noget gik galt, da vi forsøgte at tjekke for nye opdateringer.",
+    "description":"Displayed when AdBlock is checking the newest available version and an error occurs"
+  },
+  "checkinternetconnection":{
+    "message":"For at rapportere annoncer, skal du have internetforbindelse.",
+    "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "whatsnew":{
+    "message":"Hvad er der af nye ting i den seneste udgivelse? Tjek <a style='cursor:pointer;'>ændringsloggen<\/a> ud.",
+    "description":"Text for link to changelog"
   }
 }

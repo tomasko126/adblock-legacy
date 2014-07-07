@@ -1314,5 +1314,9 @@
   "checkinternetconnection":{
     "message":"Za prijavo oglasa morate biti povezani na internet.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "whatsnew":{
+    "message":"Kaj je novega v zadnji izdaji? Oglejte si <a style='cursor:pointer;'>dnevnik sprememb<\/a>!",
+    "description":"Text for link to changelog"
   }
 }

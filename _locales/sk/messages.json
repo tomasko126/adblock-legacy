@@ -39,6 +39,10 @@
     "message":"Ak chcete skryť tlačidlo, kliknite naň pravým tlačidlom myši a vyberte Skryť tlačidlo. Tlačidlo môžete zobraziť znovu v chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
+  "operabutton_how_to_hide2":{
+    "message":"Ak chcete skryť tlačidlo, navštívte stránku opera:\/\/extensions a začiarknite voľbu \"Skryť z panela s nástrojmi\". Tlačidlo môžete zobraziť neskôr zrušením začiarknutia tejto možnosti.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
   "sliderexplanation":{
     "message":"Nastavte posuvník tak, aby reklama na stránke bola blokovaná a zbytok stránky stále vyzeral uspokojivo.",
     "description":"Blacklister slider page message"
@@ -973,6 +977,10 @@
     "message":"AdBlock je pozastavený.",
     "description":"Message shown in toolbar button when AdBlock is paused"
   },
+  "unpause_adblock":{
+    "message":"Spustiť AdBlock",
+    "description":"Link text to unpause AdBlock, displayed immediately after 'AdBlock is paused'"
+  },
   "pause_adblock":{
     "message":"Pozastaviť AdBlock",
     "description":"Menu entry to pause AdBlock"
@@ -997,6 +1005,10 @@
     "message":"Zdieľajte nás!",
     "description":"Text of a share link"
   },
+  "pwyw":{
+    "message":"Zaplaťte, koľko chcete!",
+    "description":"Text of a payment request link"
+  },
   "removelabel":{
     "message":"Odstrániť",
     "description":"Link to remove a filter on the resourceblock page"
@@ -1016,6 +1028,10 @@
   "project_home":{
     "message":"Hlavná stránka projektu",
     "description":"Text of link to the AdBlock open source project homepage (not the install page)"
+  },
+  "tabsupport":{
+    "message":"Podpora",
+    "description":"A tab on the options page"
   },
   "report_ad_on_page":{
     "message":"Nahlásiť reklamu na tejto stránke",
@@ -1260,5 +1276,47 @@
   "here":{
     "message":"tu",
     "description":"This message is injected in other strings as a link\/button"
+  },
+  "update_available":{
+    "message":"K dispozícii je aktualizácia pre AdBlock! Choďte $here$ pre aktualizáciu AdBlocku. <br>Poznámka: Ak chcete dostávať aktualizácie automaticky, stačí ísť do Safari > Nastavenia... > Rozšírenia > Aktualizácie <br>a začiarknite možnosť \"Automaticky inštalovať aktualizácie\".",
+    "description":"On the Options > Support page, shows when there are updates available for AdBlock",
+    "placeholders":{
+      "here":{
+        "content":"<a id='here'><\/a>",
+        "example":"<a>here<\/a>"
+      }
+    }
+  },
+  "adblocksupport":{
+    "message":"Podpora",
+    "description":"Title of the support tab"
+  },
+  "support":{
+    "message":"Našli ste chybu? Máte otázku? Dostali ste nový nápad pre AdBlock? Prejdite na <a>našu stránku pre podporu<\/a>!",
+    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
+  },
+  "seethecode":{
+    "message":"Chcete vidieť kód AdBlocku? Pozrite sa <a>sem<\/a>.",
+    "description":"Link to AdBlock's source code"
+  },
+  "adblockcontributors":{
+    "message":"Chcete zistiť, kto pracuje na AdBlocku? Pozrite sa na našu <a>stránku prispievateľov<\/a>!",
+    "description":"Text for link to contributors page"
+  },
+  "checkforupdates":{
+    "message":"Kontrola aktualizácií (mala by trvať iba pár sekúnd)...",
+    "description":"Displayed when AdBlock is checking the newest available version"
+  },
+  "somethingwentwrong":{
+    "message":"Niečo sa pokazilo pri kontrole aktualizácií.",
+    "description":"Displayed when AdBlock is checking the newest available version and an error occurs"
+  },
+  "checkinternetconnection":{
+    "message":"Ak chcete nahlásiť reklamu, musíte byť pripojený na internet.",
+    "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "whatsnew":{
+    "message":"Čo je nové v najnovšej verzii? Pozri <a style='cursor:pointer;'> zoznam zmien<\/a>!",
+    "description":"Text for link to changelog"
   }
 }
