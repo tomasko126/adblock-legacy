@@ -1328,7 +1328,7 @@
     "description":"Subtitle on the Support tab of the options"
   },
   "sourcecode":{
-    "message":"The source code is freely available <a>here<\/a>!",
+    "message":"The source code is <a>freely available<\/a>!",
     "description":"Link to the source code of AdBlock on the Support tab of the options"
   },
   "contributors":{
