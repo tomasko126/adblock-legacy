@@ -104,12 +104,12 @@ function generateReportURL() {
   body.push("");
   body.push("=== Browser" + (AdBlockVersion ? ' & AdBlock' : '') + ": ===");
   var browser;
-      if (SAFARI)
-          browser = "Safari " + navigator.userAgent.match(/Version\/([0-9.]+)/)[1]
-      else if (OPERA)
-          browser = "Opera " + navigator.userAgent.match(/OPR\/([0-9.]+)/)[1]
-      else
-          browser = "Google Chrome " + navigator.userAgent.match(/Chrome\/([0-9.]+)/)[1];
+  if (SAFARI)
+      browser = "Safari " + navigator.userAgent.match(/Version\/([0-9.]+)/)[1]
+  else if (OPERA)
+      browser = "Opera " + navigator.userAgent.match(/OPR\/([0-9.]+)/)[1]
+  else
+      browser = "Google Chrome " + navigator.userAgent.match(/Chrome\/([0-9.]+)/)[1];
   body.push(browser);
   if (AdBlockVersion)
     body.push("AdBlock " + AdBlockVersion);
