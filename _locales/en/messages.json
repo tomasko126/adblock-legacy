@@ -1291,18 +1291,6 @@
     "message":"AdBlock Support",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Found a bug? Got a question? Got a new idea for AdBlock? Go to <a>our support site<\/a>!",
-    "description":"Instructions for help."
-  },
-  "seethecode":{
-    "message":"Want to see AdBlock's code? Check it out <a>here<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Do you want to find out who help make AdBlock? Take a look at our <a>contributors page<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Checking for updates (should only take a few seconds)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1315,12 +1303,44 @@
     "message":"To report an ad, you must be connected to the internet.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
-  "whatsnew":{
-    "message":"What's new in the latest release? See the <a style='cursor:pointer;'>changelog<\/a>!",
-    "description":"Text for link to changelog"
-  },
-  "englishOnly":{
+  "englishonly":{
     "message":"English only",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "foundbug":{
+    "message":"Found a bug?",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "updates":{
+    "message":"AdBlock updates",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "info":{
+    "message":"Want to see what makes AdBlock tick?",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "questionoridea":{
+    "message":"Got a question or new idea?",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "sourcecode":{
+    "message":"The source code is freely available <a href='http:\/\/code.getadblock.com'>here<\/a>!",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "contributors":{
+    "message":"We've got a <a href='https:\/\/getadblock.com/contributors'>page<\/a> to help you find out the people behind Adblock, as well!",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "debuginfo":{
+    "message":"Have our team requested some debug info? Click <a href='#' id='debug'>here</a> for that!",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "bugreport":{
+    "message":"Why don't you send us a <a id='report' href='#'>bug report</a>? <span class='english-only'>(<span i18n='englishonly'></span>)</span>",
+    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+  },
+  "supportsite":{
+    "message":"Let us know on our <a href='http://support.getadblock.com'>support site</a>! <span class='english-only'>(<span i18n='englishonly'></span>)</span>",
     "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
   }
 }
