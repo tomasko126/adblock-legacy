@@ -1303,6 +1303,10 @@
     "message":"To report an ad, you must be connected to the internet.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
+  "whatsnew":{
+    "message":"What's new in the latest release? See the <a style='cursor:pointer;'>changelog<\/a>!",
+    "description":"Link to display the changelog on the Support tab of the options"
+  },
   "englishonly":{
     "message":"English only",
     "description":"Lets the user know that a link/page is available in English only"
