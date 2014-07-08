@@ -1305,42 +1305,42 @@
   },
   "englishonly":{
     "message":"English only",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "description":"Lets the user know that a link/page is available in English only"
   },
   "foundbug":{
     "message":"Found a bug?",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "description":"Subtitle on the Support tab of the options"
   },
-  "updates":{
+  "adblockupdates":{
     "message":"AdBlock updates",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "description":"Subtitle on the Support tab of the options"
   },
-  "info":{
+  "whatmakesadblocktick":{
     "message":"Want to see what makes AdBlock tick?",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "description":"Subtitle on the Support tab of the options"
   },
   "questionoridea":{
     "message":"Got a question or new idea?",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "description":"Subtitle on the Support tab of the options"
   },
   "sourcecode":{
-    "message":"The source code is freely available <a href='http:\/\/code.getadblock.com'>here<\/a>!",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "message":"The source code is freely available <a>here<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
   },
   "contributors":{
-    "message":"We've got a <a href='https:\/\/getadblock.com/contributors'>page<\/a> to help you find out the people behind Adblock, as well!",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "message":"We've got a <a>page<\/a> to help you find out the people behind Adblock, as well!",
+    "description":"Link to the contributors page on the Support tab of the options"
   },
   "debuginfo":{
-    "message":"Have our team requested some debug info? Click <a href='#' id='debug'>here</a> for that!",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "message":"Have our team requested some debug info? Click <a href='#' id='debug'>here<\/a> for that!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
-    "message":"Why don't you send us a <a id='report' href='#'>bug report</a>? <span class='english-only'>(<span i18n='englishonly'></span>)</span>",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "message":"Why don't you send us a <a href='#' id='report'>bug report<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
   },
   "supportsite":{
-    "message":"Let us know on our <a href='http://support.getadblock.com'>support site</a>! <span class='english-only'>(<span i18n='englishonly'></span>)</span>",
-    "description":"Displayed on the support tab in the Options, letting users know that they must use English when writing on that site."
+    "message":"Let us know on our <a>support site<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

@@ -37,7 +37,7 @@ var getDebugInfo = function() {
 // Create a bug report
 var makeReport = function(){
     var body = [];
-    body.push(chrome.i18n.getMessage("englishonly"));
+    body.push(chrome.i18n.getMessage("englishonly") + "!");
     body.push("");
     body.push("Please answer the following questions so that we can process your bug report, otherwise, we may have to ignore it.");
     body.push("Also, please put your name, or a screen name, and your email above so that we can contact you if needed.");
