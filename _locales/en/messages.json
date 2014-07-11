@@ -1291,18 +1291,6 @@
     "message":"AdBlock Support",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Found a bug? Got a question? Got a new idea for AdBlock? Go to <a>our support site<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Want to see AdBlock's code? Check it out <a>here<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Do you want to find out who help make AdBlock? Take a look at our <a>contributors page<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Checking for updates (should only take a few seconds)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1317,6 +1305,46 @@
   },
   "whatsnew":{
     "message":"What's new in the latest release? See the <a style='cursor:pointer;'>changelog<\/a>!",
-    "description":"Text for link to changelog"
+    "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"English only",
+    "description":"Lets the user know that a link/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Found a bug?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"AdBlock updates",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Want to see what makes AdBlock tick?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Got a question or new idea?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"The source code is <a>freely available<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"We've got a <a>page<\/a> to help you find out the people behind Adblock, as well!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"Have our team requested some debug info? Click <a href='#' id='debug'>here<\/a> for that!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Why don't you send us a <a href='#' id='report'>bug report<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Let us know on our <a>support site<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }
