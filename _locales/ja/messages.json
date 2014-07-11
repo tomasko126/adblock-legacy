@@ -1,12 +1,4 @@
 {
-  "description2":{
-    "message":"The most popular Chrome extension, with over 15 million users!  Blocks ads all over the web.",
-    "description":"Extension description in manifest"
-  },
-  "adblock_click_for_details":{
-    "message":"AdBlock - click for details",
-    "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button.  Do not translate the beginning 'AdBlock - ' part."
-  },
   "buttoncancel":{
     "message":"キャンセル",
     "description":"Cancel button"
@@ -14,10 +6,6 @@
   "buttonok":{
     "message":"OK！",
     "description":"OK button"
-  },
-  "reportpubliclyavailable":{
-    "message":"Note: your report may become publicly available. Keep that in mind before including anything private.",
-    "description":"Ad report page string, when you're about to submit a report"
   },
   "buttonblockit":{
     "message":"ブロック！",
@@ -30,18 +18,6 @@
   "optionstitle":{
     "message":"AdBlock設定",
     "description":"Title for the options page"
-  },
-  "thirdparty":{
-    "message":"Third-party",
-    "description":"Resource list column title telling if the resource originates from a different domain"
-  },
-  "chromebutton_how_to_hide2":{
-    "message":"To hide the button, right click it and choose Hide Button.  You can show it again under chrome:\/\/chrome\/extensions.",
-    "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
-  },
-  "operabutton_how_to_hide2":{
-    "message":"To hide the button, go to opera:\/\/extensions and check the 'Hide from toolbar' option. You can show it again by unchecking that option.",
-    "description":"Message explaining how to hide the AdBlock toolbar button.  'Hide Button' should match the text that Opera displays on the Extensions page."
   },
   "sliderexplanation":{
     "message":"スライダーを広告が見えなくなるまでスライドをしてください。",
@@ -61,7 +37,7 @@
   },
   "blacklisternotsure":{
     "message":"<b>よく分かりませんか？<\/b>とりあえず、「ブロック！」を押してください。",
-    "description":"Blacklister attribute choosing page message.  'Block it!' must be the same as the text of the 'buttonblockit' message."
+    "description":"Blacklister attribute choosing page message"
   },
   "blacklisterthefilter":{
     "message":"フィルターは設定ページで変更可能：",
@@ -77,7 +53,7 @@
   },
   "blacklistereditfilter":{
     "message":"手動でフィルターを入力して、OKを押してください。",
-    "description":"Text if the user wants to manually edit a filter.  'OK' is the standard javascript popup button text."
+    "description":"Text if the user wants to manually edit a filter. 'OK' is the standard javascript popup button text."
   },
   "blacklistereditinvalid1":{
     "message":"フィルターが無効： $exception$",
@@ -165,7 +141,7 @@
   },
   "you_can_slide_to_change":{
     "message":"You can slide below to change exactly what pages AdBlock won't run on.",
-    "description":"Instructions for how to use the whitelister slider controls.  Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
+    "description":"Instructions for how to use the whitelister slider controls. Sometimes only one slider will show, and sometimes two will show, and if possible the text should handle both cases."
   },
   "whitelistertitle2":{
     "message":"Don't run AdBlock on...",
@@ -215,19 +191,11 @@
   },
   "betalabel":{
     "message":"ベータ",
-    "description":"Option on first tab page"
-  },
-  "googletextads2":{
-    "message":"I like the text ads on Google search results; show me those",
-    "description":"Option on first tab page"
-  },
-  "showcontextmenus2":{
-    "message":"Add items to the right click menu",
-    "description":"Option on first tab page"
+    "description":"Label for beta features in AdBlock Options"
   },
   "debuginlogoption":{
     "message":"デバック情報を更新履歴に表示(AdBlockの動作が重くなります)",
-    "description":"Option on first tab page"
+    "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
     "message":"アップデートされました",
@@ -317,73 +285,25 @@
     "message":"必要以上に登録をしないでください。追加する度に重くなりますので！リストの作成者、その他のリストは<a>こちら<\/a>。",
     "description":"Explanation of the filter lists"
   },
-  "updatenowmessage2":{
-    "message":"I will fetch updates automatically; you can also <a>update now<\/a>",
-    "description":"update filters text + button"
-  },
   "orenteraurl":{
     "message":"URL直接指定：",
-    "description":"link for custom subscription"
+    "description":"Link for custom subscription"
   },
   "subscribebutton":{
     "message":"登録",
-    "description":"subscribe to a list button"
-  },
-  "showlinkstolists2":{
-    "message":"Show links to the filter lists",
-    "description":"Option on second tab page"
-  },
-  "filterantisocial":{
-    "message":"Antisocial filter list (removes social media buttons)",
-    "description":"Name of the filter list"
-  },
-  "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
-    "description":"Name of the filter list"
+    "description":"Subscribe to a list button"
   },
   "filteradblock_custom":{
     "message":"AdBlockカスタムフィルター (推奨)",
-    "description":"A filter list. Don't translate 'AdBlock'"
+    "description":"A filter list"
   },
   "filtereasylist":{
     "message":"EasyList (推奨)",
-    "description":"A filter list. Don't translate 'EasyList'"
-  },
-  "filterrussian":{
-    "message":"Russian and Ukrainian",
-    "description":"Language names for a filter list"
-  },
-  "filterczech":{
-    "message":"Czech and Slovak",
-    "description":"Language names for a filter list"
+    "description":"A filter list"
   },
   "filtereasyprivacy":{
     "message":"EasyPrivacy (プライバシー保護)",
-    "description":"A filter list. Don't translate the name 'EasyPrivacy'."
-  },
-  "filtereasylist_plus_indonesian":{
-    "message":"Indonesian",
-    "description":"A filter list."
-  },
-  "filtermalware":{
-    "message":"Malware protection",
-    "description":"A filter list."
-  },
-  "filterlatvian":{
-    "message":"Latvian",
-    "description":"A filter list."
-  },
-  "filternorwegian":{
-    "message":"Norwegian",
-    "description":"A filter list."
-  },
-  "filterswedish":{
-    "message":"Swedish",
-    "description":"A filter list."
-  },
-  "filterturkish":{
-    "message":"Turkish",
-    "description":"A filter list."
+    "description":"A filter list"
   },
   "blacklistclickmessage":{
     "message":"ページ内にある広告を右クリックし、ブロックをしてください。または、こちらでマニュアルでブロック。",
@@ -391,31 +311,31 @@
   },
   "tabcustomizetitle":{
     "message":"AdBlockをカスタマイズ",
-    "description":"Title of the third tab"
+    "description":"Title of the customize tab"
   },
   "filterlistsrock":{
     "message":"ほとんどの広告はフィルターリストでブロックされます。オプションとして更に：",
-    "description":"Header text on the Customize tab.  'Filter lists' should be the same text as the tabfilterlists message."
+    "description":"Header text on the Customize tab. 'Filter lists' should be the same text as the name of the 'Filter lists' tab."
   },
   "blockmoreads":{
     "message":"もっと広告をブロック：",
-    "description":"Section header on third tab"
+    "description":"Section header on the 'Customize' tab"
   },
   "stop_blocking_ads":{
     "message":"広告ブロックをやめる：",
-    "description":"Section header on third tab"
+    "description":"Section header on the 'Customize' tab"
   },
   "linkblockadbyurl":{
     "message":"URLで広告をブロック",
-    "description":"Link on the third tab"
+    "description":"Link on the 'Customize' tab"
   },
   "linkhidesection":{
     "message":"ウェブページの一部を隠す",
-    "description":"Link on the third tab"
+    "description":"Link on the 'Customize' tab"
   },
   "linkunblock":{
     "message":"ウェブページとドメインにある広告を表示",
-    "description":"Link on the third tab"
+    "description":"Link on the 'Customize' tab"
   },
   "blockurlwithtext":{
     "message":"入力されたテキストを含むURLをブロック",
@@ -435,7 +355,7 @@
   },
   "manualfilteredit":{
     "message":"手動でフィルターを編集：",
-    "description":"Subtitle on the third tab"
+    "description":"Subtitle on the 'Customize' tab"
   },
   "filtersavewarning":{
     "message":"警告： ここで作成したフィルターに問題がある場合、公式フィルターを含む他のフィルターが破損する場合があります。<br\/>ブラックリスト、ホワイトリストの詳細な記法は<a>こちら（英語）<\/a>です。",
@@ -451,27 +371,27 @@
   },
   "adblockreportinganad":{
     "message":"AdBlock - 広告を報告",
-    "description":"title of ad report page"
+    "description":"Title of the ad report page"
   },
   "adreport2":{
     "message":"ウェブページ内で広告を見つけましたか？広告の報告方法を教えします。<br\/>広告の報告はボランティアです。ボランティアに興味がない場合はこのウィンドウをこのまま閉じ、ご自分で設定ページにある「カスタマイズ」でフィルターに追加ができます！",
-    "description":"Instructions on ad reporting page. 'Customize' should be the same text as the 'tabcustomize' message."
+    "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
   },
   "updateyourlists":{
     "message":"フィルターのリストが最新かどうかをご確認ください",
-    "description":"instruction on ad report page"
+    "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
     "message":"こちらをクリック： <a>フィルターをアップデート！<\/a>",
-    "description":"instruction on ad report page"
+    "description":"Instruction on ad report page"
   },
   "reloadadpage":{
     "message":"広告のあるページを更新してください。",
-    "description":"instruction on ad report page"
+    "description":"Instruction on ad report page"
   },
   "adstillappear":{
     "message":"広告はまだ表示されますか？",
-    "description":"question on ad reporting page"
+    "description":"Question on ad report page"
   },
   "yes":{
     "message":"はい",
@@ -483,59 +403,15 @@
   },
   "adalreadyblocked":{
     "message":"広告を既にブロックしているため、何もする必要はありません。",
-    "description":"on the ad report page, telling a user there is nothing to do"
-  },
-  "sameAdsOnDifferentPages":{
-    "message":"Do you see the same or similar ads on many different pages, e.g. your homepage, your workplace's website, etc.?",
-    "description":"A question on the ad report page, asking if the user sees similar ads on different websites."
-  },
-  "similarAds":{
-    "message":"Same\/similar ads on every page",
-    "description":"On the ad report page, see 'Do you see the same or similar...' \/ 'sameAdsOnDifferentPages'"
-  },
-  "disableallextensions":{
-    "message":"Disable all extensions except for AdBlock.",
-    "description":"instruction on ad report page"
-  },
-  "disableforchromestepone":{
-    "message":"Open <a href='#'>the extensions page<\/a>",
-    "description":"Step 1 for disabling chrome extensions"
-  },
-  "disableforchromeandsafaristeptwo":{
-    "message":"Uncheck the 'Enabled' checkbox next to every extension <b>except<\/b> for AdBlock.  <b>Leave AdBlock enabled<\/b>.",
-    "description":"Step 2 for disabling chrome and safari extensions"
-  },
-  "disableforsafaristepone":{
-    "message":"Click the Safari menu &rarr; Preferences &rarr; Extensions.",
-    "description":"Step 1 for disabling safari extensions"
-  },
-  "disableforopera":{
-    "message":"For Opera",
-    "description":"Opera instructions"
-  },
-  "disableforoperainstructions":{
-    "message":"Click the menu button in the top left hand corner. Then go to Extensions->Manage Extensions. Disable all extensions by clicking their respective disable buttons. Remember, DO NOT disable AdBlock!",
-    "description":"shows user how to disable all their extensions in Opera."
-  },
-  "reenableadsonebyone":{
-    "message":"Now that the ads are gone, you must find out which extension is the cause. Go through and enable each extension one by one. The extension that brings back the ad(s) is the one that you must delete to get rid of the ads.",
-    "description":"tells the user to reenable the extensions one by one."
-  },
-  "scancomputer":{
-    "message":"Scan your computer for malware",
-    "description":"instruction on ad report page"
-  },
-  "performscan":{
-    "message":"Perform a full scan of your computer using your antivirus\/antimalware program. Some types of malware can inject ads into webpages, and thus bypass AdBlock.",
-    "description":"instruction on ad report page"
+    "description":"On the ad report page, telling a user there is nothing to do"
   },
   "correctfilters":{
     "message":"正しいフィルター",
-    "description":"on the ad report page, label describing having the right set of filters"
+    "description":"On the ad report page, label describing having the right set of filters"
   },
   "pagelanguagecheck":{
     "message":"どの言語でページは書かれていますか？",
-    "description":"question on ad report page"
+    "description":"Question on ad report page"
   },
   "lang_english":{
     "message":"英語",
@@ -581,10 +457,6 @@
     "message":"ハンガリー語",
     "description":"language"
   },
-  "filterisraeli":{
-    "message":"Hebrew",
-    "description":"language"
-  },
   "filteritalian":{
     "message":"イタリア語",
     "description":"language"
@@ -609,10 +481,6 @@
     "message":"ロシア語",
     "description":"language"
   },
-  "lang_slovak":{
-    "message":"Slovak",
-    "description":"language"
-  },
   "filtereasylist_plus_spanish":{
     "message":"スペイン語",
     "description":"language"
@@ -623,19 +491,11 @@
   },
   "other":{
     "message":"その他",
-    "description":"multiple choice option"
-  },
-  "orchrome":{
-    "message":"or Chrome",
-    "description":"used for placeholder in checkinfirefoxtitle and checkinfirefox_1 string"
-  },
-  "oradblockforchrome":{
-    "message":"or AdBlock for Chrome",
-    "description":"used for placeholder in checkinfirefox_2 string"
+    "description":"Multiple choice option"
   },
   "nodefaultfilter1":{
     "message":"指定された言語のフィルターリストがありません。<br\/>この言語をサポートする適切なリストを。$link$ もしくはこの要素をブロックするようにブラックリストを編集してください。",
-    "description":"instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same message as 'tabcustomize'.",
+    "description":"Instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same text as the name of the 'Customize' tab.",
     "placeholders":{
       "link":{
         "content":"<a id='link'><\/a>",
@@ -645,7 +505,7 @@
   },
   "retryaftersubscribe":{
     "message":"このフィルターリストを適用し、ページを更新して要素が消去できたか確認してください。 $list_title$",
-    "description":"instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
+    "description":"Instructions on ad report page telling users to subscribe to a filter list and then check again to see whether the ad exists",
     "placeholders":{
       "list_title":{
         "content":"$1",
@@ -655,7 +515,7 @@
   },
   "checkinfirefoxtitle":{
     "message":"Firefoxでも表示されるかどうかをチェックしてください $chrome$",
-    "description":"tell a user to see if a reported ad also appears in Firefox\/Chrome",
+    "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome",
     "placeholders":{
       "chrome":{
         "content":"<span id='chrome1'><\/span>",
@@ -675,7 +535,7 @@
   },
   "checkinfirefox_2":{
     "message":"Firefox用 Adblock Plusをお持ちでない場合は $chrome$ インストールしてください。",
-    "description":"instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'AdBlock Plus'.",
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad.",
     "placeholders":{
       "chrome":{
         "content":"<span id='adblockforchrome'><\/span>",
@@ -685,23 +545,19 @@
   },
   "checkinfirefox_3":{
     "message":"FirefoxにChromeのAdBlockと同じフィルターリストを登録してください。( AdBlockカスタムフィルターは除きます)",
-    "description":"instruction for how to check Firefox\/Chrome for a reported ad"
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
   "checkinfirefox_4":{
     "message":"Ｆｉｒｅｆｏｘdで広告のあるページを読み込みください。",
-    "description":"instruction for how to check Firefox\/Chrome for a reported ad"
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
   "checkinfirefox_5":{
     "message":"Firefoxでも広告は表示されますか？",
-    "description":"instruction for how to check Firefox\/Chrome for a reported ad"
-  },
-  "refusetocheck":{
-    "message":"I don't want to check this",
-    "description":"user is telling us they don't wish to investigate something for us"
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
   "reportfilterlistproblem":{
     "message":"フィルターリストの問題です。報告はこちら： $link$",
-    "description":"telling the user to report an ad to a filter list maintainer",
+    "description":"Telling the user to report an ad to a filter list maintainer",
     "placeholders":{
       "link":{
         "content":"$1",
@@ -715,11 +571,7 @@
   },
   "fixityourself":{
     "message":"設定ページを使って自分で広告をブロックします！",
-    "description":"telling a user who won't report an ad to us how to handle it for herself"
-  },
-  "adblock_outdated_chrome":{
-    "message":"You are using an old version of AdBlock. Please go to <a href='#'>the extensions page<\/a>, enable 'Developer mode' and click 'Update extensions now'",
-    "description":"Ad report page instructions to update AdBlock in Chrome. The link will point to 'chrome:\/\/chrome\/extensions\/'"
+    "description":"Telling users who won't report an ad to us how to handle it for themselves"
   },
   "block_an_ad_on_this_page":{
     "message":"このページにある広告をブロック",
@@ -797,10 +649,6 @@
     "message":"正しいURLを入力してください！",
     "description":"resourceblocking page string"
   },
-  "doesntmatchoriginal":{
-    "message":"The pattern you entered doesn't match the resource you tried to block! Continue anyway?",
-    "description":"resourceblocking page string"
-  },
   "thirdpartycheckbox":{
     "message":"Any website EXCEPT websites on domain $domain$",
     "description":"resourceblocking page string",
@@ -813,7 +661,7 @@
   },
   "filterhasbeenadded":{
     "message":"フィルターが無事に追加されました！\n結果を見る場合は更新してください！",
-    "description":"resourceblocking page string (the 'slash n' is a line break)"
+    "description":"resourceblocking page string"
   },
   "adblock_is_paused":{
     "message":"AdBlockは一時停止しています。このページ内の要素を捕まえることができませんでした。一時停止を解除し、もう一度お試しください。",
@@ -822,20 +670,6 @@
   "excludefilterremoved":{
     "message":"フィルターは削除されました。要素がある状態で生成するためには元のページをリロードしてください。",
     "description":"Warning when a page exclusion rule was removed in resourceblock.html"
-  },
-  "noresourcessend2":{
-    "message":"Something went wrong. No resources have been sent through. This page will now close. Try reloading the website.",
-    "description":"resourceblocking page string"
-  },
-  "resourcedomain":{
-    "message":"Loaded on page with domain:\n$domain$",
-    "description":"Text shown when hovering over an item in the third-party column",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
   },
   "resourceiswhitelisted":{
     "message":"選択された要素はホワイトリスト化しました。そのため、ブロックは出来ません。",
@@ -921,25 +755,9 @@
     "message":"フィルターを追加",
     "description":"resourceblocking page string"
   },
-  "ordisablefilter":{
-    "message":"... or disable filter:",
-    "description":"On the resourceblocking page, choice to disable a filter instead of allowing or blocking a specific resource"
-  },
-  "thisfilterwillbedisabled":{
-    "message":"This filter will be disabled:",
-    "description":"On the resourceblocking page, followed by the filter the user chose to disable"
-  },
-  "disabledwhenbrowsing":{
-    "message":"This filter will be disabled when you are browsing:",
-    "description":"On the resourceblocking page, choose on which sites the filter should be disabled"
-  },
-  "onlypagesonthisdomain":{
-    "message":"ONLY pages on this domain:",
-    "description":"On the resourceblocking page, option to disable a filter only on a specific domain"
-  },
   "flashads":{
     "message":"動画とフラッシュ",
-    "description":"Title of the final ad report question if the ad didn't appear in FF"
+    "description":"Title of the final ad report question if the ad didn't appear in Firefox"
   },
   "cantblockflashwarning":{
     "message":"Does the ad appear in or before a film or any other plugin like a Flash game?",
@@ -949,45 +767,29 @@
     "message":"まだ、フラッシュ内とプラグインにより出てくる広告はブロックができません。これらの広告の対処ついてはブラウザのサポートとWebKitの対応待ちです。",
     "description":"Result of the final ad report question"
   },
-  "cleanuplist2":{
-    "message":"Clean up this list",
-    "description":"Option at the bottom of the third options tab"
-  },
   "disabled_by_filter_lists":{
     "message":"申し訳ありませんが、あなたが設定したフィルターリストによってAdBlockがこのページで無効となっています。",
-    "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list."
+    "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
   },
   "status_disabled":{
     "message":"AdBlockはこのドメイン上では稼動できません。",
-    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank."
+    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank"
   },
   "dont_run_on_pages_on_domain":{
     "message":"このドメイン上のページで稼動させない",
-    "description":"Menu entry to open the whitelist wizard."
+    "description":"Menu entry to open the whitelist wizard"
   },
   "disabled_on_this_page":{
     "message":"AdBlockはこのページでは無効になっています。",
-    "description":"Message shown in toolbar button on web pages that have been whitelisted."
-  },
-  "enable_adblock":{
-    "message":"Enable AdBlock on this page",
-    "description":"Link text to un-whitelist a page, displayed immediately after 'disabled_on_this_page'."
+    "description":"Message shown in toolbar button on web pages that have been whitelisted"
   },
   "status_paused":{
     "message":"AdBlockは一時停止しています。",
-    "description":"Message shown in toolbar button when AdBlock is paused."
-  },
-  "unpause_adblock":{
-    "message":"Unpause AdBlock",
-    "description":"Link text to unpause AdBlock, displayed immediately after 'status_paused'."
+    "description":"Message shown in toolbar button when AdBlock is paused"
   },
   "pause_adblock":{
     "message":"AdBlockを一時停止",
-    "description":"Menu entry to pause AdBlock."
-  },
-  "undo_last_block":{
-    "message":"Undo my blocks on this domain",
-    "description":"Menu entry to let the user cancel the result of running the blacklist wizard."
+    "description":"Menu entry to pause AdBlock"
   },
   "dont_run_on_this_page":{
     "message":"このページでは実行しない",
@@ -1001,21 +803,13 @@
     "message":"ボタンを隠す",
     "description":"Toolbar button menu entry to hide the AdBlock button"
   },
-  "spread_the_word":{
-    "message":"Help spread the word!",
-    "description":"Text of a share link"
-  },
-  "pwyw":{
-    "message":"Pay what you want!",
-    "description":"Text of a payment request link"
-  },
   "removelabel":{
     "message":"削除",
-    "description":"link to remove a filter"
+    "description":"Link to remove a filter on the resourceblock page"
   },
   "changelabel":{
     "message":"変更",
-    "description":"link to change resources on the resourceblock page"
+    "description":"Link to change resources on the resourceblock page"
   },
   "translator_credit":{
     "message":"翻訳者：",
@@ -1029,25 +823,13 @@
     "message":"プロジェクトホーム",
     "description":"Text of link to the AdBlock open source project homepage (not the install page)"
   },
-  "tabsupport":{
-    "message":"Support",
-    "description":"Link to forum in options page"
-  },
   "report_ad_on_page":{
     "message":"このページにある広告をレポート",
-    "description":"Link in the button"
+    "description":"Entry in the AdBlock button menu"
   },
   "show_resourcelist":{
     "message":"要素リストを表示",
-    "description":"Link in the button"
-  },
-  "advanced_options2":{
-    "message":"I'm an advanced user, show me advanced options",
-    "description":"Options page checkbox"
-  },
-  "work_around_hulu_problems":{
-    "message":"Work around Hulu.com videos not playing (requires restarting your browser)",
-    "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break.  It directs the user to restart their browser in order for changes to the checkbox to take effect"
+    "description":"Entry in the AdBlock button menu"
   },
   "how_to_use_adblock":{
     "message":"AdBlockの使い方：",
@@ -1055,7 +837,7 @@
   },
   "adblock_auto_removes_ads_thats_all":{
     "message":" AdBlockは自動的に広告を排除してくれます。",
-    "description":"Install page: explaining how to use adblock."
+    "description":"Install page: explaining how to use AdBlock"
   },
   "modifydomain":{
     "message":"サイト：",
@@ -1079,7 +861,7 @@
   },
   "warning_overrules_filters":{
     "message":"注意： on all other sites you will see ads!<br>This overrules all other filters for those sites.",
-    "description":"Message on the third tab of the options page, explaining the danger of adding a blacklisting filter"
+    "description":"Message on the 'Customize' tab of the options page, explaining the danger of adding a blacklisting filter"
   },
   "storage_quota_exceeded":{
     "message":"AdBlockで使用できる容量を超えました。フィルターリストにあるフィルターを幾つか除外してください！",
@@ -1088,231 +870,5 @@
   "safari50_updatenotice":{
     "message":"あなたは古いバージョンのSafariを使用しています。AdBlockの全機能を利用していただくには最新バージョンが必要です。<a>今すぐアップデート<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
-  },
-  "searchexplanation":{
-    "message":"Use * to match zero or more letters.  For example, 'banner*.gif image' matches the images 'banner.gif', 'banner123.gif', and 'bannerxyz.gif'.",
-    "description":"Text in resourceblock when you hover your mouse over the search textbox"
-  },
-  "searchplaceholder":{
-    "message":"Search resources...",
-    "description":"Text in resourceblock shown in the search textbox before you type something"
-  },
-  "nosearchresults":{
-    "message":"No resources found",
-    "description":"Text in resourceblock shown if no results are found after searching"
-  },
-  "custompattern":{
-    "message":"Custom:",
-    "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
-  },
-  "opera_reenable_button":{
-    "message":"You can re-enable the button in the preferences of this extension",
-    "description":"Opera browser button message when you click 'hide this button'"
-  },
-  "opera_linkunblock":{
-    "message":"Show ads on a domain",
-    "description":"Opera version of the 'linkunblock' string"
-  },
-  "opera_excludedomainorurl":{
-    "message":"The domain where AdBlock shouldn't block anything",
-    "description":"Opera version of the 'excludedomainorurl' string"
-  },
-  "opera_show_toolbar_button":{
-    "message":"Show the toolbar button",
-    "description":"Opera option to show\/hide the button"
-  },
-  "opera_can_also_change_setting":{
-    "message":"You can also increase the value of\n$setting$",
-    "description":"Message when the storage quota is reached, for advanced users in Opera",
-    "placeholders":{
-      "setting":{
-        "content":"$1",
-        "example":"opera:config#PersistentStorage|DomainQuotaForWidgetPreferences"
-      }
-    }
-  },
-  "opera_for_more_options":{
-    "message":"For more options, you can click the toolbar button or open the preferences via Extensions (in the menu) &rArr; Manage Extensions &rArr; wrench icon &rArr; Preferences",
-    "description":"Install page string telling where to find the preferences in Opera. &rArr; makes a right arrow (->)"
-  },
-  "thats_it":{
-    "message":"That's it!",
-    "description":"Install page string"
-  },
-  "close_tab_begin_browsing":{
-    "message":"You can close this tab and begin browsing ad-free. Have fun!",
-    "description":"Install page string"
-  },
-  "opera_donations_install":{
-    "message":"If you really like this extension, please consider donating via the options page.",
-    "description":"Opera donate request in the install page"
-  },
-  "opera_donations_button":{
-    "message":"Like this extension? If so, please consider donating in the options page!",
-    "description":"Opera donate request in the button"
-  },
-  "opera_enabledin":{
-    "message":"Enabled in $browserversion$",
-    "description":"Hover text of items disabled in an older browser version",
-    "placeholders":{
-      "browserversion":{
-        "content":"$1",
-        "example":"Opera 12.10"
-      }
-    }
-  },
-  "opera_120_install":{
-    "message":"In Opera versions before Opera 12.10, some ads may not be blocked as it is not possible to parse all rules in those versions. This will be fixed when Opera updates to version 12.10. From that moment, all ads will be correctly blocked.",
-    "description":"Opera < 12.10 warning during installation"
-  },
-  "opera_120_options":{
-    "message":"In Opera versions before Opera 12.10, some options are greyed out, because they can't be supported in those versions.",
-    "description":"Opera < 12.10 warning above options page"
-  },
-  "filterorigin":{
-    "message":"Filter origin:\n$list$",
-    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
-    "placeholders":{
-      "list":{
-        "content":"$1",
-        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
-      }
-    }
-  },
-  "firefox_explanation":{
-    "message":"The purpose of this question is to determine who should receive your report. If you answer this question incorrectly, the report will be sent to the wrong people, so it may get ignored.",
-    "description":"Explanation of the Check-in-Firefox step in the ad reporter"
-  },
-  "opera_secure_pages":{
-    "message":"Secure pages",
-    "description":"Title of an area in the ad report page in Opera. Only visible if the opener tab was a secure url (https)"
-  },
-  "opera_secure_pages_enabled":{
-    "message":"Click Extensions (in the menu) &rArr; Manage Extensions &rArr; look for AdBlock and click the spanner icon near it &rArr; click Privacy.<br\/>Is the option to allow access to secure pages enabled?",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
-  },
-  "opera_allow_secure":{
-    "message":"If you want to use AdBlock on secure pages (pages with a lock icon in the toolbar), you first have to enable the option to allow access to secure pages.",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow"
-  },
-  "blocked_ads":{
-    "message":"Blocked ads:",
-    "description":"Title for popup menu section showing number of ads blocked."
-  },
-  "blocked_n_on_this_page":{
-    "message":"$count$ on this page",
-    "description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked on this page. $count$ will be a number between 1 and 999.",
-    "placeholders":{
-      "count":{
-        "content":"<a>123<\/a>",
-        "example":"The number of ads blocked.  Do not make any changes to this string when translating."
-      }
-    }
-  },
-  "blocked_n_in_total":{
-    "message":"$count$ in total",
-    "description":"Shown below the 'blocked_ads' message.  Shows the number of ads blocked since AdBlock was installed. $count$ will be a number between 1 and 999,999,999.",
-    "placeholders":{
-      "count":{
-        "content":"<a>123,456<\/a>",
-        "example":"The number of ads blocked.  Do not make any changes to this string when translating."
-      }
-    }
-  },
-  "show_on_adblock_button":{
-    "message":"Show on AdBlock button",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
-  },
-  "adblockinglist":{
-    "message":"Ad Blocking Filter Lists",
-    "description":"List for subscribed ad blocking fiters"
-  },
-  "otherfilters":{
-    "message":"Other Filter Lists",
-    "description":"List for other filters the user subscribed to"
-  },
-  "customfilters":{
-    "message":"Custom Filter Lists",
-    "description":"List for custom filters the user subscribed to"
-  },
-  "languagedropdowndescription":{
-    "message":"Add filters for another language: ",
-    "description":"Dropdown list for language specific filters"
-  },
-  "whats_this":{
-    "message":"What's this?",
-    "description":"Text of a link pointing to the explanation of a new feature"
-  },
-  "selectlanguage":{
-    "message":" -- Select Language -- ",
-    "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options.  Include the ' -- ' on either side of your translation."
-  },
-  "allow_whitelisting_youtube_channels":{
-    "message":"Allow whitelisting of specific YouTube channels",
-    "description":"Option on first tab"
-  },
-  "whitelist_youtube_channel":{
-    "message":"Whitelist this YouTube channel",
-    "description":"Text which is displayed on YouTube in popup menu"
-  },
-  "confirm_undo_custom_filters":{
-    "message":"Are you sure you want to remove the $count$ blocks that you have created on $host$?",
-    "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset",
-    "placeholders":{
-      "count":{
-        "content":"$1",
-        "example":"The number of custom blocks for a domain."
-      },
-      "host":{
-        "content":"$2",
-        "example":"code.google.ph, ph.msn.com, stackoverflow.com"
-      }
-    }
-  },
-  "latest_version":{
-    "message":"AdBlock is up-to-date!",
-    "description":"On the Options > Help page, shows when there are no updates available for AdBlock"
-  },
-  "here":{
-    "message":"here",
-    "description":"This message is injected in other strings as a link\/button"
-  },
-  "update_available":{
-    "message":"There's an update for AdBlock! Go $here$ to update. <br> Note: If you want to receive updates automatically, just click on Safari > Preferences > Extensions > Updates <br> and check option 'Install updates automatically'.",
-    "description":"On the Options > Support page, shows when there are updates available for AdBlock.",
-    "placeholders":{
-      "here":{
-        "content":"<a id='here'><\/a>",
-        "example":"<a>here<\/a>"
-      }
-    }
-  },
-  "adblocksupport":{
-    "message":"AdBlock Support",
-    "description":"A tab on the options page"
-  },
-  "support":{
-    "message":"Found a bug? Got a question? Got a new idea for AdBlock? Go to <a>our support site<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Want to see AdBlock's code? Check it out <a>here<\/a>.",
-    "description":"Link to code behind AdBlock"
-  },
-  "adblockcontributors":{
-    "message":"Do you want to find out who help make AdBlock? Take a look at our <a>contributors page<\/a>!",
-    "description":"Text for link to contributors page"
-  },
-  "checkforupdates":{
-    "message":"Checking for updates (should only take a few seconds)...",
-    "description":"Displayed when AdBlock is checking the newest available version"
-  },
-  "somethingwentwrong":{
-    "message":"Something went wrong while checking updates.",
-    "description":"Displayed when AdBlock is checking the newest available version and an error occurs"
-  },
-  "checkinternetconnection":{
-    "message":"To report an ad, you must be connected to the internet.",
-    "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   }
 }
