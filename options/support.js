@@ -10,11 +10,24 @@ BGcall("get_subscriptions_minus_text", function(subs) {
     }
 });
 
+// Get settings
 var adblock_settings;
 BGcall("get_settings", function(settings) {
     adblock_settings = JSON.stringify(settings);
 });
-    
+
+// Get last known error
+var adblock_error;
+BGcall("storage_get", "error", function(error) {
+    adblock_error = error;
+});
+
+// Get number of total pings
+var adblock_pings;
+BGcall("storage_get", "total_pings", function(total_pings) {
+    adblock_pings = total_pings;
+});
+
 // Create the debug info for the textbox or the bug report
 var getDebugInfo = function() {
     var info = [];
@@ -27,9 +40,9 @@ var getDebugInfo = function() {
     info.push("==== Other info: ====");
     if (AdBlockVersion)
         info.push("AdBlock version number: " + AdBlockVersion);
-    if (storage_get("error"))
-        info.push("Last known error: " + storage_get("error"));
-    info.push("Total pings: " + storage_get("total_pings"));
+    if (adblock_error)
+        info.push("Last known error: " + adblock_error);
+    info.push("Total pings: " + adblock_pings);
     info.push("UserAgent: " + navigator.userAgent.replace(/;/,""));
     return info.join('  \n');
 };
