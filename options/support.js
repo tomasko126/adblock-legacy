@@ -10,10 +10,20 @@ BGcall("get_subscriptions_minus_text", function(subs) {
     }
 });
 
+// Get custom filters
+var adblock_custom_filters;
+BGcall("storage_get", "custom_filters", function(custom_filters) {
+    adblock_custom_filters = custom_filters;
+});
+
 // Get settings
-var adblock_settings;
+var adblock_settings = [];
 BGcall("get_settings", function(settings) {
-    adblock_settings = JSON.stringify(settings);
+    for (setting in settings)
+        adblock_settings.push(setting+": "+settings[setting] + "\n");
+    do
+        adblock_settings = adblock_settings.toString().replace(/\,/,"");
+    while (adblock_settings.indexOf(",") !== -1)
 });
 
 // Get last known error
@@ -34,9 +44,11 @@ var getDebugInfo = function() {
     info.push("==== Filter Lists ====");
     info.push(subscribed_filter_names.join('  \n'));
     info.push("");
+    info.push("==== Custom Filters ====");
+    info.push(adblock_custom_filters);
+    info.push("");
     info.push("==== Settings ====");
     info.push(adblock_settings);
-    info.push("");
     info.push("==== Other info: ====");
     if (AdBlockVersion)
         info.push("AdBlock version number: " + AdBlockVersion);
@@ -52,7 +64,7 @@ var makeReport = function(){
     var body = [];
     body.push(chrome.i18n.getMessage("englishonly") + "!");
     body.push("");
-    body.push("Please answer the following questions so that we can process your bug report, otherwise, we may have to ignore it.");
+    body.push("**Please answer the following questions so that we can process your bug report, otherwise, we may have to ignore it.**");
     body.push("Also, please put your name, or a screen name, and your email above so that we can contact you if needed.");
     body.push("If you don't want your report to be made public, check that box, too.");
     body.push("");
@@ -73,10 +85,10 @@ var makeReport = function(){
     body.push("");
     body.push("--- The questions below are optional but VERY helpful. ---");
     body.push("");
-    body.push("If unchecking all filter lists fixes the problem, which one filter" + 
+    body.push("If unchecking all filter lists fixes the problem, which one filter " + 
               "list must you check to cause the problem again after another restart?");
     body.push("");
-    body.push("Technical Chrome users: Go to chrome://extensions ->" +
+    body.push("Technical Chrome users: Go to chrome://extensions -> " +
               "Developer Mode -> Inspect views: background page -> Console. " +
               "Paste the contents here:");
     body.push("");
