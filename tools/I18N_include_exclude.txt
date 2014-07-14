@@ -13,8 +13,10 @@ The texts from manifest.json are not scanned
 +description2
 +adblock_click_for_details
 
-Keep this one for future options
+Keep these for future use
 +betalabel
++close
++loading
 
 The filter list ids are appended by JS, and as this isn't a javascript parser,
 these have to be hard-coded too...
