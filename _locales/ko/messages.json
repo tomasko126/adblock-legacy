@@ -773,14 +773,6 @@
     "message":"차단 가능 목록 열기",
     "description":"Entry in the AdBlock button menu"
   },
-  "how_to_use_adblock":{
-    "message":"애드블록 사용 방법",
-    "description":"Install page section title"
-  },
-  "adblock_auto_removes_ads_thats_all":{
-    "message":"애드블록은 <b>구독 필터<\/b>를 사용해 광고를 자동으로 차단합니다.",
-    "description":"Install page: explaining how to use AdBlock"
-  },
   "modifydomain":{
     "message":"사이트 : ",
     "description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"

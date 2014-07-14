@@ -781,14 +781,6 @@
     "message":"Forrás lista megjelenítése",
     "description":"Entry in the AdBlock button menu"
   },
-  "how_to_use_adblock":{
-    "message":"AdBlock használata:",
-    "description":"Install page section title"
-  },
-  "adblock_auto_removes_ads_thats_all":{
-    "message":" AdBlock automatikusan eltávolítja a reklámokat.  Ez minden amit tudni kell róla.",
-    "description":"Install page: explaining how to use AdBlock"
-  },
   "modifydomain":{
     "message":"Webhely:",
     "description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"

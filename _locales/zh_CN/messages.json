@@ -509,14 +509,6 @@
     "message":"单击Safari菜单 &rarr; 选项 &rarr; 扩展程序。",
     "description":"Step 1 for disabling Safari extensions"
   },
-  "disableforopera":{
-    "message":"Opera操作方法",
-    "description":"Opera instructions"
-  },
-  "disableforoperainstructions":{
-    "message":"单击左上角的菜单按钮。然后打开扩展 &rarr; 扩展管理。单击所有扩展各自的禁用按钮禁用它们。记住，不要禁用AdBlock！",
-    "description":"Shows user how to disable all their extensions in Opera"
-  },
   "reenableadsonebyone":{
     "message":"现在广告消失了，您必须找出是哪个扩展带来了广告。逐个启用每个扩展。带出广告的那个扩展就是您必须删除的。",
     "description":"Tells the user to reenable the extensions one by one"
@@ -1045,14 +1037,6 @@
     "message":"解决Hulu.com视频无法播放的问题（需要重启您的浏览器）",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."
   },
-  "how_to_use_adblock":{
-    "message":"如何使用AdBlock:",
-    "description":"Install page section title"
-  },
-  "adblock_auto_removes_ads_thats_all":{
-    "message":" AdBlock会自动移除广告。这就是它的功能。",
-    "description":"Install page: explaining how to use AdBlock"
-  },
   "modifydomain":{
     "message":"网站:",
     "description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"
@@ -1101,70 +1085,6 @@
     "message":"自定义：",
     "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
   },
-  "opera_reenable_button":{
-    "message":"您可以在此扩展的选项中选择重新显示按钮",
-    "description":"Opera browser button message when you click 'hide this button'"
-  },
-  "opera_linkunblock":{
-    "message":"在网域上显示广告",
-    "description":"Opera version of the 'linkunblock' string"
-  },
-  "opera_excludedomainorurl":{
-    "message":"AdBlock不应当屏蔽任何元素的网域",
-    "description":"Opera version of the 'excludedomainorurl' string"
-  },
-  "opera_show_toolbar_button":{
-    "message":"在工具栏上显示按钮",
-    "description":"Opera option to show\/hide the button"
-  },
-  "opera_can_also_change_setting":{
-    "message":"您也可以增加$setting$的值",
-    "description":"Message when the storage quota is reached, for advanced users in Opera",
-    "placeholders":{
-      "setting":{
-        "content":"$1",
-        "example":"opera:config#PersistentStorage|DomainQuotaForWidgetPreferences"
-      }
-    }
-  },
-  "opera_for_more_options":{
-    "message":"您可以单击工具栏按钮或通过打开扩展程序（菜单中）&rArr; 管理扩展 &rArr; 扳手图标 &rArr; 选项 来查看更多选项",
-    "description":"Install page string telling where to find the preferences in Opera. &rArr; makes a right arrow (->)"
-  },
-  "thats_it":{
-    "message":"就是这样！",
-    "description":"Install page string"
-  },
-  "close_tab_begin_browsing":{
-    "message":"您现在可以关闭此页面，并开始无广告的网上冲浪。玩得愉快！",
-    "description":"Install page string"
-  },
-  "opera_donations_install":{
-    "message":"如果您真的喜欢这个扩展，请考虑通过选项页面捐赠。",
-    "description":"Opera donate request in the install page"
-  },
-  "opera_donations_button":{
-    "message":"喜欢这个扩展吗？如果是这样，请考虑在选项页面中捐赠！",
-    "description":"Opera donate request in the button"
-  },
-  "opera_enabledin":{
-    "message":"在$browserversion$中启用",
-    "description":"Hover text of items disabled in an older browser version",
-    "placeholders":{
-      "browserversion":{
-        "content":"$1",
-        "example":"Opera 12.10"
-      }
-    }
-  },
-  "opera_120_install":{
-    "message":"在Opera 12.10之前的版本中，由于有些规则无法解析，某些广告可能无法被屏蔽。这个问题可以通过将Opera升级到12.10版解决。从该版本起，所有广告都会被正确地屏蔽。",
-    "description":"Opera < 12.10 warning during installation"
-  },
-  "opera_120_options":{
-    "message":"在Opera 12.10之前的版本中，某些选项显示为灰色，因为那些版本中不支持它们。",
-    "description":"Opera < 12.10 warning above options page"
-  },
   "filterorigin":{
     "message":"过滤规则来源：\n$list$",
     "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
@@ -1178,18 +1098,6 @@
   "firefox_explanation":{
     "message":"这个问题的目的是确定谁应当接收您的报告。如果您没有正确地回答这个问题，您的报告会送至错误的人手中，以致它被忽略。",
     "description":"Explanation of the Check-in-Firefox step in the ad reporter"
-  },
-  "opera_secure_pages":{
-    "message":"加密页面",
-    "description":"Title of an area in the ad report page in Opera. Only visible if the opener tab was a secure url (https)"
-  },
-  "opera_secure_pages_enabled":{
-    "message":"单击扩展程序（菜单中） &rArr; 扩展管理 &rArr; 找到AdBlock并单击它旁边的扳手图标 &rArr; 单击“隐私”。 <br\/>“允许访问加密页面”选项是否已启用？",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow."
-  },
-  "opera_allow_secure":{
-    "message":"如果您想要在加密页面（工具栏显示一个带锁图标的页面）上使用 AdBlock，您必须先启用允许AdBlock访问加密页面的选项。",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow."
   },
   "blocked_ads":{
     "message":"已屏蔽广告：",

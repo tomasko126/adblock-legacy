@@ -509,14 +509,6 @@
     "message":"Klik op het Safari menu &rarr; Voorkeuren &rarr; Extensies.",
     "description":"Step 1 for disabling Safari extensions"
   },
-  "disableforopera":{
-    "message":"Voor Opera",
-    "description":"Opera instructions"
-  },
-  "disableforoperainstructions":{
-    "message":"Klik op de menu knop in de linkerbovenhoek. Ga dan naar Extensies --> Beheer Extensies. Schakel dan alle extensies uit door op hun uitzet knoppen te drukken.",
-    "description":"Shows user how to disable all their extensions in Opera"
-  },
   "reenableadsonebyone":{
     "message":"Nu dat de advertenties weg zijn moet je uitzoeken welke extensie de oorzaak is. Activeer alle extensies 1 per 1. De extensie die de advertentie(s) terug laat verschijnen is degene die je moet verwijderen om van de advertentie af te geraken.",
     "description":"Tells the user to reenable the extensions one by one"
@@ -1045,14 +1037,6 @@
     "message":"Los problemen op Hulu.com (alleen beschikbaar in de VS) op (vereist het opnieuw opstarten van de browser)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."
   },
-  "how_to_use_adblock":{
-    "message":"Hoe AdBlock gebruiken:",
-    "description":"Install page section title"
-  },
-  "adblock_auto_removes_ads_thats_all":{
-    "message":"AdBlock blokkeert advertenties automatisch. U hoeft niets te doen.",
-    "description":"Install page: explaining how to use AdBlock"
-  },
   "modifydomain":{
     "message":"Website:",
     "description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"
@@ -1101,70 +1085,6 @@
     "message":"Aangepast:",
     "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
   },
-  "opera_reenable_button":{
-    "message":"Je kunt de knop weer inschakelen in de opties van deze extensie",
-    "description":"Opera browser button message when you click 'hide this button'"
-  },
-  "opera_linkunblock":{
-    "message":"Toon advertenties op een domein",
-    "description":"Opera version of the 'linkunblock' string"
-  },
-  "opera_excludedomainorurl":{
-    "message":"Het domein waar AdBlock niets moet blokkeren",
-    "description":"Opera version of the 'excludedomainorurl' string"
-  },
-  "opera_show_toolbar_button":{
-    "message":"Toon de knop in de werkbalk",
-    "description":"Opera option to show\/hide the button"
-  },
-  "opera_can_also_change_setting":{
-    "message":"Je kunt de waarde van de volgende instelling verhogen:\n$setting$",
-    "description":"Message when the storage quota is reached, for advanced users in Opera",
-    "placeholders":{
-      "setting":{
-        "content":"$1",
-        "example":"opera:config#PersistentStorage|DomainQuotaForWidgetPreferences"
-      }
-    }
-  },
-  "opera_for_more_options":{
-    "message":"Voor meer opties kun je op de werkbalkknop klikken of open de optiespagina via Extensies (in het menu) &rArr; Extensies Beheren &rArr; gereedschap icoontje &rArr; Voorkeuren",
-    "description":"Install page string telling where to find the preferences in Opera. &rArr; makes a right arrow (->)"
-  },
-  "thats_it":{
-    "message":"Dat is alles!",
-    "description":"Install page string"
-  },
-  "close_tab_begin_browsing":{
-    "message":"Je kunt deze tab sluiten en beginnen met browsen. Veel plezier!",
-    "description":"Install page string"
-  },
-  "opera_donations_install":{
-    "message":"Als je deze extensie nuttig vindt, overweeg dan aub om te doneren. Dit kun je doen via de opties van de extensie.",
-    "description":"Opera donate request in the install page"
-  },
-  "opera_donations_button":{
-    "message":"Hou je van deze extensie? Overweeg dan aub om te doneren via de opties van deze extensie!",
-    "description":"Opera donate request in the button"
-  },
-  "opera_enabledin":{
-    "message":"Ingeschakeld in $browserversion$",
-    "description":"Hover text of items disabled in an older browser version",
-    "placeholders":{
-      "browserversion":{
-        "content":"$1",
-        "example":"Opera 12.10"
-      }
-    }
-  },
-  "opera_120_install":{
-    "message":"In Opera versies voor Opera 12.10 kunnen enkele advertenties niet geblokkeerd worden, omdat niet alle filters verwerkt kunnen worden in deze versie. Dit zal opgelost zijn wanneer Opera naar versie 12.10 bijwerkt. Vanaf dat moment zullen alle advertenties geblokkeerd worden.",
-    "description":"Opera < 12.10 warning during installation"
-  },
-  "opera_120_options":{
-    "message":"In Opera versies lager dan Opera 12.10 zijn enkele opties uitgeschakeld, omdat die in deze versies niet ondersteund worden.",
-    "description":"Opera < 12.10 warning above options page"
-  },
   "filterorigin":{
     "message":"Oorsprong van het filter:\n$list$",
     "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
@@ -1178,18 +1098,6 @@
   "firefox_explanation":{
     "message":"Het doel van deze vraag is om na te gaan wie je melding moet ontvangen. Als je deze vraag incorrect beantwoordt zal de melding naar de verkeerde persoon gestuurd worden. Dit kan ervoor zorgen dat het niet behandeld zal worden.",
     "description":"Explanation of the Check-in-Firefox step in the ad reporter"
-  },
-  "opera_secure_pages":{
-    "message":"Veilige pagina's",
-    "description":"Title of an area in the ad report page in Opera. Only visible if the opener tab was a secure url (https)"
-  },
-  "opera_secure_pages_enabled":{
-    "message":"Klik Extensies (in het menu) &rArr; Extensies beheren &rArr; zoek naar AdBlock en klik op het gereedschapicoontje dat erbij staat &rArr; klik Privacy.<br\/>Is de optie 'Interactie met veilige pagina's toestaan' ingeschakeld?",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow."
-  },
-  "opera_allow_secure":{
-    "message":"Als je AdBlock op beveiligde pagina's (pagina's met een slotje in de adresbalk) wilt gebruiken, moet je eerst de optie 'Interactie met veilige pagina's toestaan' inschakelen",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow."
   },
   "blocked_ads":{
     "message":"Geblokkeerde advertenties:",

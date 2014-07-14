@@ -785,14 +785,6 @@
     "message":"顯示資源清單",
     "description":"Entry in the AdBlock button menu"
   },
-  "how_to_use_adblock":{
-    "message":"如何使用 AdBlock:",
-    "description":"Install page section title"
-  },
-  "adblock_auto_removes_ads_thats_all":{
-    "message":" AdBlock 會自動移除廣告。這就是它的功能。",
-    "description":"Install page: explaining how to use AdBlock"
-  },
   "modifydomain":{
     "message":"網站:",
     "description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"

@@ -509,14 +509,6 @@
     "message":"Натиснете Safari &rarr; Настройки &rarr; Разширения.",
     "description":"Step 1 for disabling Safari extensions"
   },
-  "disableforopera":{
-    "message":"За Opera",
-    "description":"Opera instructions"
-  },
-  "disableforoperainstructions":{
-    "message":"Натиснете бутона на менюто в горния ляв ъгъл и отидете в Разширения -> Организиране на разширенията. Изключете всички разширения, като натиснете съответните бутони за забраняване. Запомнете, че НЕ ТРЯБВА да забранявате AdBlock!",
-    "description":"Shows user how to disable all their extensions in Opera"
-  },
   "reenableadsonebyone":{
     "message":"Сега след като вече няма реклами, нека разберем кое е разширението, което ги предизвиква. За целта започнете да разрешавате разширенията едно по едно. Това, което ги върне е разширението, което трябва да изтриете, за да се отървете от тях.",
     "description":"Tells the user to reenable the extensions one by one"
@@ -1045,14 +1037,6 @@
     "message":"Ползвай заобиколен начин за нетръгващи клипове от Hulu.com (след повторен пуск на браузъра)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."
   },
-  "how_to_use_adblock":{
-    "message":"Използване на AdBlock:",
-    "description":"Install page section title"
-  },
-  "adblock_auto_removes_ads_thats_all":{
-    "message":"AdBlock автоматично премахва рекламите. И това е всичко, което прави.",
-    "description":"Install page: explaining how to use AdBlock"
-  },
   "modifydomain":{
     "message":"Сайт:",
     "description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"
@@ -1101,70 +1085,6 @@
     "message":"потребителски:",
     "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
   },
-  "opera_reenable_button":{
-    "message":"Можете да разрешите бутона повторно от настройките на разширението",
-    "description":"Opera browser button message when you click 'hide this button'"
-  },
-  "opera_linkunblock":{
-    "message":"Показване на реклами в домейна",
-    "description":"Opera version of the 'linkunblock' string"
-  },
-  "opera_excludedomainorurl":{
-    "message":"Домейн, за който AdBlock не блокира нищо:",
-    "description":"Opera version of the 'excludedomainorurl' string"
-  },
-  "opera_show_toolbar_button":{
-    "message":"Показвай бутон в лентата",
-    "description":"Opera option to show\/hide the button"
-  },
-  "opera_can_also_change_setting":{
-    "message":"Увеличете стойността на\n$setting$",
-    "description":"Message when the storage quota is reached, for advanced users in Opera",
-    "placeholders":{
-      "setting":{
-        "content":"$1",
-        "example":"opera:config#PersistentStorage|DomainQuotaForWidgetPreferences"
-      }
-    }
-  },
-  "opera_for_more_options":{
-    "message":"За допълнителни настройки щракнете бутона в лентата или отворете настройките чрез Opera &rArr; Разширения &rArr; Организиране на разширенията &rArr; икона ключ &rArr; Предпочитания",
-    "description":"Install page string telling where to find the preferences in Opera. &rArr; makes a right arrow (->)"
-  },
-  "thats_it":{
-    "message":"Това беше!",
-    "description":"Install page string"
-  },
-  "close_tab_begin_browsing":{
-    "message":"Можете вече да затворете преградката и да сърфирате без реклами. Забавлявайте се!",
-    "description":"Install page string"
-  },
-  "opera_donations_install":{
-    "message":"Ако харесвате разширението, помислете за дарение чрез страницата с настройки.",
-    "description":"Opera donate request in the install page"
-  },
-  "opera_donations_button":{
-    "message":"Харесва ви разширението? Ако е така, помислете за дарение от страницата с настройки!",
-    "description":"Opera donate request in the button"
-  },
-  "opera_enabledin":{
-    "message":"Разрешено в $browserversion$",
-    "description":"Hover text of items disabled in an older browser version",
-    "placeholders":{
-      "browserversion":{
-        "content":"$1",
-        "example":"Opera 12.10"
-      }
-    }
-  },
-  "opera_120_install":{
-    "message":"Във версиите на Opera до 12.10 някои реклами могат да не бъдат блокирани, тъй като е невъзможно да бъде направен разбор на всички правила. Ограничението ще отпадне с обновяване на Opera до версия 12.10 и същите реклами вече ще се блокират правилно.",
-    "description":"Opera < 12.10 warning during installation"
-  },
-  "opera_120_options":{
-    "message":"Във версиите на Opera до 12.10 някои от настройките са в сиво, защото не се поддържат.",
-    "description":"Opera < 12.10 warning above options page"
-  },
   "filterorigin":{
     "message":"Филтърът се намира в:\n$list$",
     "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
@@ -1178,18 +1098,6 @@
   "firefox_explanation":{
     "message":"Въпросът определя кой трябва да получи вашия доклад. Ако отговорите неправилно, докладът ви ще получат неподходящите хора и може да не бъде взет под внимание.",
     "description":"Explanation of the Check-in-Firefox step in the ad reporter"
-  },
-  "opera_secure_pages":{
-    "message":"Защитени страници",
-    "description":"Title of an area in the ad report page in Opera. Only visible if the opener tab was a secure url (https)"
-  },
-  "opera_secure_pages_enabled":{
-    "message":"От менюто отворете Разширения &rArr; Организиране на разширенията &rArr; AdBlock (и там до него щракнете по иконата ключ) &rArr; Лични данни.<br\/>Разрешена ли е настройката за достъп до защитени страници?",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow."
-  },
-  "opera_allow_secure":{
-    "message":"Ако искате да ползвате AdBlock в защитени страници (такива с икона катинар в лентата), първо разрешете настройката за достъп до защитени страници.",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow."
   },
   "blocked_ads":{
     "message":"Блокирани реклами:",

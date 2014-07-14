@@ -509,14 +509,6 @@
     "message":"Allez dans le menu Safari &rarr; Préférences &rarr; Extensions.",
     "description":"Step 1 for disabling Safari extensions"
   },
-  "disableforopera":{
-    "message":"Pour Opera",
-    "description":"Opera instructions"
-  },
-  "disableforoperainstructions":{
-    "message":"Cliquez sur le bouton du menu en haut à gauche. Ensuite allez dans Extensions &rarr; Gérer les extensions. Désactivez toutes les extensions en cliquant sur leurs boutons respectifs. NE désactivez PAS AdBlock !",
-    "description":"Shows user how to disable all their extensions in Opera"
-  },
   "reenableadsonebyone":{
     "message":"Maintenant que vous ne voyez plus les publicités, vous devez trouver quelle extension en est la cause. Réactivez-les une par une. L'extension qui affiche à nouveau les publicités est celle que vous devez supprimer pour vous débarrasser de la pub.",
     "description":"Tells the user to reenable the extensions one by one"
@@ -1045,14 +1037,6 @@
     "message":"Contourner le problème des vidéos Hulu.com qui ne se lisent pas (nécessite un redémarrage de votre navigateur)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."
   },
-  "how_to_use_adblock":{
-    "message":"Comment fonctionne AdBlock :",
-    "description":"Install page section title"
-  },
-  "adblock_auto_removes_ads_thats_all":{
-    "message":"Les publicités sont automatiquement bloquées. Il n'y a rien de spécial à faire.",
-    "description":"Install page: explaining how to use AdBlock"
-  },
   "modifydomain":{
     "message":"Site :",
     "description":"Caption for the whitelist wizard slider that modifies the domain part of a URL"
@@ -1101,70 +1085,6 @@
     "message":"Personnalisé :",
     "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
   },
-  "opera_reenable_button":{
-    "message":"Vous pouvez réactiver le bouton dans les préférences de cette extension",
-    "description":"Opera browser button message when you click 'hide this button'"
-  },
-  "opera_linkunblock":{
-    "message":"Afficher les pubs sur un domaine",
-    "description":"Opera version of the 'linkunblock' string"
-  },
-  "opera_excludedomainorurl":{
-    "message":"Le domaine où AdBlock ne doit rien bloquer",
-    "description":"Opera version of the 'excludedomainorurl' string"
-  },
-  "opera_show_toolbar_button":{
-    "message":"Afficher le bouton de la barre d'outils",
-    "description":"Opera option to show\/hide the button"
-  },
-  "opera_can_also_change_setting":{
-    "message":"Vous pouvez également augmenter la valeur de\n$setting$",
-    "description":"Message when the storage quota is reached, for advanced users in Opera",
-    "placeholders":{
-      "setting":{
-        "content":"$1",
-        "example":"opera:config#PersistentStorage|DomainQuotaForWidgetPreferences"
-      }
-    }
-  },
-  "opera_for_more_options":{
-    "message":"Pour plus d'options, vous pouvez cliquer sur le bouton de la barre d'outils ou ouvrir les préférences via Extensions (dans le menu) &rArr; Gérer les extensions &rArr; icône de roue dentée &rArr; Préférences",
-    "description":"Install page string telling where to find the preferences in Opera. &rArr; makes a right arrow (->)"
-  },
-  "thats_it":{
-    "message":"C'est tout !",
-    "description":"Install page string"
-  },
-  "close_tab_begin_browsing":{
-    "message":"Vous pouvez fermer cet onglet et commencer à naviguer sans publicités. Amusez-vous bien !",
-    "description":"Install page string"
-  },
-  "opera_donations_install":{
-    "message":"Si vous aimez vraiment cette extension, merci de songer à faire don via la page des options.",
-    "description":"Opera donate request in the install page"
-  },
-  "opera_donations_button":{
-    "message":"Vous aimez cette extension ? Si oui, songez à faire un don dans la page des options !",
-    "description":"Opera donate request in the button"
-  },
-  "opera_enabledin":{
-    "message":"Activé dans $browserversion$",
-    "description":"Hover text of items disabled in an older browser version",
-    "placeholders":{
-      "browserversion":{
-        "content":"$1",
-        "example":"Opera 12.10"
-      }
-    }
-  },
-  "opera_120_install":{
-    "message":"Dans les versions d'Opera antérieures à 12.10, certaines pubs peuvent ne pas être bloquées car il n'est pas possible d'analyser toutes les règles dans ces versions. Ce sera corrigé lorsqu'Opera sera mis à jour à la version 12.10. À partir de ce moment, toutes les pubs seront bloquées correctement.",
-    "description":"Opera < 12.10 warning during installation"
-  },
-  "opera_120_options":{
-    "message":"Dans les versions d'Opera antérieures à 12.10, certaines options sont grisées, car elles ne sont pas supportées dans ces versions.",
-    "description":"Opera < 12.10 warning above options page"
-  },
   "filterorigin":{
     "message":"Origine du filtre :\n$list$",
     "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
@@ -1178,18 +1098,6 @@
   "firefox_explanation":{
     "message":"Le but de cette question est de déterminer qui doit recevoir votre rapport. Si vous répondez incorrectement à cette question, le rapport ne sera pas envoyé aux bonnes personnes, et il pourrait être ignoré.",
     "description":"Explanation of the Check-in-Firefox step in the ad reporter"
-  },
-  "opera_secure_pages":{
-    "message":"Pages sécurisées",
-    "description":"Title of an area in the ad report page in Opera. Only visible if the opener tab was a secure url (https)"
-  },
-  "opera_secure_pages_enabled":{
-    "message":"Cliquez sur Extensions (dans le menu) &rArr; Gérer les extensions &rArr; cliquez sur la roue dentée à côté d'AdBlock &rArr; Vie privée.<br\/>Est-ce que l'interaction avec les pages sécurisées est permise ?",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow."
-  },
-  "opera_allow_secure":{
-    "message":"Si vous souhaitez utiliser AdBlock sur des pages sécurisées (pages avec un cadenas dans la barre d'outils), vous devez d'abord activer l'option pour permettre l'interaction avec les pages sécurisées.",
-    "description":"Content of an area in the ad report page in Opera. &rArr; makes a right arrow."
   },
   "blocked_ads":{
     "message":"Pubs bloquées :",
