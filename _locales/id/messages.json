@@ -897,10 +897,6 @@
     "message":"Ghie2lo",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"Halaman awal Projek",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "report_ad_on_page":{
     "message":"Laporkan sebuah iklan pada halaman ini",
     "description":"Entry in the AdBlock button menu"

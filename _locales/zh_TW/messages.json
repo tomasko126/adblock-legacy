@@ -777,10 +777,6 @@
     "message":"Tai-Lin Chu, Illusionmist62442",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"計畫首頁",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "report_ad_on_page":{
     "message":"回報這個頁面的廣告",
     "description":"Entry in the AdBlock button menu"

@@ -933,10 +933,6 @@
     "message":"BsT",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"עמוד הבית של הפרויקט (האתר שלנו)",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "report_ad_on_page":{
     "message":"דווח על פרסומת בעמוד זה",
     "description":"Entry in the AdBlock button menu"

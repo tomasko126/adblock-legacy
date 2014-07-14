@@ -945,10 +945,6 @@
     "message":"Eli",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"Pagina proiectului",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "report_ad_on_page":{
     "message":"Reportează o reclamă de pe această pagină",
     "description":"Entry in the AdBlock button menu"

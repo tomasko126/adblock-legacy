@@ -1025,10 +1025,6 @@
     "message":"Вадим Богайсков, Даниил Санкин",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"Домашняя страница проекта",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "tabsupport":{
     "message":"Поддержка",
     "description":"A tab on the options page"

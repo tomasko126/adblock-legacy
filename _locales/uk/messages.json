@@ -1025,10 +1025,6 @@
     "message":"Юрій Жарков",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"Домашня сторінка проекту",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "tabsupport":{
     "message":"Підтримка",
     "description":"A tab on the options page"

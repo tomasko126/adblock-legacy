@@ -861,10 +861,6 @@
     "message":"Ανέστης Βαρσαμίδης, Ελευθερία Κ.",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"Σελίδα του project",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "report_ad_on_page":{
     "message":"Αναφέρετε μία διαφήμιση στη σελίδα αυτή",
     "description":"Entry in the AdBlock button menu"

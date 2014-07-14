@@ -897,10 +897,6 @@
     "message":"Ponakala P",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"ప్రాజెక్ట్ హోం",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "report_ad_on_page":{
     "message":"ఈ పేజీలోని ప్రకటనను రిపోర్ట్ చేయి",
     "description":"Entry in the AdBlock button menu"

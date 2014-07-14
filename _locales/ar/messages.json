@@ -1025,10 +1025,6 @@
     "message":"umar hoj",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"المشاريع الرئيسية",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "tabsupport":{
     "message":"الدعم",
     "description":"A tab on the options page"

@@ -909,10 +909,6 @@
     "message":"Stefan Bajić",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"Početna stranica projekta",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "report_ad_on_page":{
     "message":"Prijavi reklamu na ovoj stranici",
     "description":"Entry in the AdBlock button menu"

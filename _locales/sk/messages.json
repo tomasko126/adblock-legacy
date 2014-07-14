@@ -1025,10 +1025,6 @@
     "message":"Tomáš Taro, Ján Krasnovský",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"Hlavná stránka projektu",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "tabsupport":{
     "message":"Podpora",
     "description":"A tab on the options page"

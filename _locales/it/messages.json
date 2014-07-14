@@ -1025,10 +1025,6 @@
     "message":"Fabio B.",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
-  "project_home":{
-    "message":"Home del progetto",
-    "description":"Text of link to the AdBlock open source project homepage (not the install page)"
-  },
   "tabsupport":{
     "message":"Supporto",
     "description":"A tab on the options page"
