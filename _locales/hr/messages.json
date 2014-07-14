@@ -1291,18 +1291,6 @@
     "message":"AdBlock podrška",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Našli ste grešku (bug)? Imate pitanja? Imate novih ideja za AdBlock? Idite na <a>našu stranicu za podršku<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Želite vidjeti AdBlock kȏd? Provjerite ga <a>ovdje<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Želite li vidjeti tko je pomogao napraviti AdBlock? Pogledajte našu stranicu <a>suradnika<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Provjeravanje ažuriranja (trebalo bi trajati samo nekoliko sekundi)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1317,6 +1305,46 @@
   },
   "whatsnew":{
     "message":"Što je novo u posljednjem izdanju? Pogledajte <a style='cursor:pointer;'>popis promjena<\/a>!",
-    "description":"Text for link to changelog"
+    "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"Samo engleski",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Pronašli ste grešku?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"AdBlock ažuriranja",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Želite li vidjeti kako radi AdBlock?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Imate pitanje ili novu ideju?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"Izvorni kod je <a>slobodno dostupan<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"Također, imamo i <a>stranicu<\/a> na kojoj možete pronaći ljude koji su napravili AdBlock!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"Da li je naš tim zatražio informacije o grešci? Kliknite <a href='#' id='debug'>ovdje<\/a> za to!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Zašto nam ne pošaljete <a href='#' id='report'>izvješće o grešci<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Recite nam na našoj <a>stranici podrške<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

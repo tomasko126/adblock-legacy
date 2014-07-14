@@ -1291,18 +1291,6 @@
     "message":"AdBlock Support",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Haben Sie einen Fehler gefunden? Haben Sie eine Frage? Oder haben Sie eine neue Idee für AdBlock? <a>Unsere Support-Seite<\/a> (nur auf English) wird Ihnen weiterhelfen!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Der Quelltext von AdBlock kann <a>hier<\/a> eingesehen werden.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Eine Liste aller Mitwirkenden kann unter <a>'Mitwirkende'<\/a> eingesehen werden.",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Updates werden abgefragt (dauert nur wenige Sekunden)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1317,6 +1305,46 @@
   },
   "whatsnew":{
     "message":"Die Änderungen der aktuellen Version von AdBlock können im <a style='cursor:pointer;'>Changelog<\/a> eingesehen werden.",
-    "description":"Text for link to changelog"
+    "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"nur auf Englisch",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Haben Sie einen Fehler gefunden?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"AdBlock Updates",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Wollen Sie wissen wer und was hinter AdBlock steckt?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Haben Sie eine Frage oder eine Idee für AdBlock?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"Der Quellcode ist <a>frei verfügbar<\/a>.",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"Eine Liste der Mitwirkenden von AdBlock finden Sie unter <a>\"Mitwirkende\"<\/a>.",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"Hat unser Team Sie nach Debug-Informationen gefragt? Klicken Sie  <a href='#' id='debug'>hier<\/a> um die Informationen anzuzeigen.",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Senden Sie uns einen <a href='#' id='report'>Fehlerbericht<\/a>.",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Teilen Sie uns Ihre Idee oder Ihre Frage auf unserer <a>Support-Seite<\/a> mit.",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

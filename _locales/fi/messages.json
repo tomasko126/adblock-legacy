@@ -1291,18 +1291,6 @@
     "message":"AdBlock-tuki",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Löysitkö virheen? Onko kysyttävää? Idea AdBlockille? Siirry <a>tukisivustollemme<\/a> (vain englanniksi)!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Haluatko nähdä AdBlockin koodia? Se on katseltavissa <a>täällä<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Haluatko tietää, ketkä ovat auttaneet AdBlockin kehityksessä? Tutustu <a>osallistujien sivuun<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Tarkistetaan päivityksiä (kestää vain muutaman sekunnin)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1314,5 +1302,49 @@
   "checkinternetconnection":{
     "message":"Ilmoittaaksesi mainoksesta sinun täytyy olla yhteydessä internetiin.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
+  },
+  "whatsnew":{
+    "message":"Mitä uutta uusimmassa versiossa? Katso <a style='cursor:pointer;'>muutosloki<\/a>!",
+    "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"Vain englanniksi",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Oletko löytänyt ohjelmavirheen?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"AdBlock-päivitykset",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Haluatko nähdä, kuinka AdBlock toimii?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Onko sinulla kysymys tai ehdotus?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"Lähdekoodi on <a>vapaasti saatavilla<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"Lisäksi löydät kaikki AdBlockin takana olevat henkilöt <a>täältä<\/a>!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"Onko tiimi pyytänyt vianratkaisutietoja? Napsauta <a href='#' id='debug'>tästä<\/a> saadaksesi ne!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Miksi et lähettäisi meille <a href='#' id='report'>vikailmoitusta<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Kerro meille <a>tukisivustolla<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

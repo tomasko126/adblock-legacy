@@ -1291,18 +1291,6 @@
     "message":"دعم AdBlock",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"عثرت على خطأ؟ حصلت على سؤال؟ حصلت على فكرة جديدة ل AdBlock؟ انتقل إلى <a>موقع الدعم الخاص بنا<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"تريد أن نرى التعليمات البرمجية ل AdBlock؟ التحقق من ذلك <a>هنا<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"هل تريد معرفة ما الذي يساعد في جعل احسن AdBlock؟ إلقاء نظرة على موقعنا <a>صفحة المساهمين<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"التحقق من وجود تحديثات (ينبغي أن يستغرق بضع ثوان فقط)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1317,6 +1305,6 @@
   },
   "whatsnew":{
     "message":"ما هو الجديد في الإصدار الأخير؟ راجع <a style='cursor:pointer;'> سجل التحديثات<\/a>!",
-    "description":"Text for link to changelog"
+    "description":"Link to display the changelog on the Support tab of the options"
   }
 }

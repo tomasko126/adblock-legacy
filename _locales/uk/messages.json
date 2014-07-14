@@ -1291,18 +1291,6 @@
     "message":"Підтримка користувачів AdBlock",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Знайшли помилку? Виникло запитання? З’явилась ідея щодо AdBlock? Перейдіть на наш <a>сайт підтримки<\/a> користувачів!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Хочете переглянути вихідний код AdBlock? Завітайте <a>сюди<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Хочете дізнатися, хто допомагає створювати AdBlock? Завітайте на нашу сторінку про <a>авторів та перекладачів<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Перевіряю оновлення (має зайняти лиш декілька секунд)...",
     "description":"Displayed when AdBlock is checking the newest available version"

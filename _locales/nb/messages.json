@@ -1279,10 +1279,6 @@
       }
     }
   },
-  "adblockcontributors":{
-    "message":"Vil du finne ut hvem som hjelper til med å lage AdBlock? Ta en titt på <a>Bidragsytere til AdBlock<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Ser etter oppdateringer (dette bør kun ta et par sekunder)...",
     "description":"Displayed when AdBlock is checking the newest available version"

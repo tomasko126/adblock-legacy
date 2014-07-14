@@ -1291,18 +1291,6 @@
     "message":"Suport d'AdBlock",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Heu trobat un error? Teniu preguntes? Alguna nova idea per a l'AdBlock? Aneu al <a>nostre lloc web de suport<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Voleu veure el codi de l'AdBlock? Feu-li una ullada <a>aquí<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Voleu saber qui ajuda a fer possible l'AdBlock? Feu una ullada a la nostra <a>pàgina de contribuïdors<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Comprovant l'existència d'actualitzacions (pot tardar pocs segons)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1317,6 +1305,46 @@
   },
   "whatsnew":{
     "message":"Què hi ha de nou en l'últim llançament? Vegeu <a style='cursor:pointer;'>el conjunt de canvis<\/a>!",
-    "description":"Text for link to changelog"
+    "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"Només en anglès",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Heu trobat un error?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"Actualització d'AdBlock",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Voleu veure els engranatges que mouen l'AdBlock?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Teniu alguna pregunta i\/o suggeriment?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"El codi font està <a>totalment disponible<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"Tenim una <a>pàgina<\/a> per tal que descobriu les persones que fan possible l'AdBlock!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"El nostre equip ha solicitat informació de depuració? Cliqueu <a href='#' id='debug'>aquí<\/a> per satisfer la sol·licitud!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Per què no ens envieu un <a href='#' id='report'>informe d'errors<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Feu-nos-ho saber en el nostre <a>lloc web de suport<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

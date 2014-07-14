@@ -1291,18 +1291,6 @@
     "message":"AdBlock Ondersteuning",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Heb je een fout gevonden? Heb je een vraag? Heb je een nieuw idee voor AdBlock? Ga naar onze <a>ondersteuningswebsite<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Wil je de code van AdBlock zien? Bekijk hem <a>hier<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Wil je te weten komen wie er allemaal bijdraagt aan AdBlock? Neem een kijkje op onze <a>bijdragers pagina<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Controleren op updates (duurt maar enkele seconden)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1317,6 +1305,6 @@
   },
   "whatsnew":{
     "message":"Wat is er nieuw in de laatste versie? Bekijk de <a style='cursor:pointer;'>changelog<\/a>!",
-    "description":"Text for link to changelog"
+    "description":"Link to display the changelog on the Support tab of the options"
   }
 }

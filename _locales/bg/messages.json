@@ -1291,18 +1291,6 @@
     "message":"Поддръжка",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Открихте грешка? Имате въпрос? Имате идея за AdBlock? Посетете <a>сайта за поддръжка<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Искате да разгледате кода на AdBlock? Проверете <a>тук<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Интересува ви кой ни помага за AdBlock? Погледнете <a>страницата с нашите сътрудници<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Проверка за обновяване (ще отнеме само няколко секунди)… ",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1316,7 +1304,47 @@
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
   "whatsnew":{
-    "message":"Какво е новото в изданието — вижте <a style='cursor:pointer;‘>списъка с изменения<\/a>!",
-    "description":"Text for link to changelog"
+    "message":"Какво е новото в изданието — вижте <a style='cursor:pointer;'>списъка с изменения<\/a>!",
+    "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"само на английски",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Открихте грешка?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"Обновяване на AdBlock",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Интересува ви какво движи AdBlock?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Имате въпрос или идея?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"Изходният код е <a>свободно достъпен<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"А на тази <a>страница<\/a> ще откриете хората, които стоят зад AdBlock!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"Изискват ли се предпроверочни данни? Щракнете <a href='#' id='debug‘>тук<\/a>, за да ги предадете!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Бихте ли ни изпратили <a href='#' id='report‘>доклад за грешка<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Споделете ги в нашия <a>сайт за поддръжка<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

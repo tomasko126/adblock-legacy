@@ -1291,18 +1291,6 @@
     "message":"AdBlock Support",
     "description":"Title of the support tab"
   },
-  "support":{
-    "message":"Hittat ett fel? Något du vill fråga om? Fått en ny idé för AdBlock? Gå till <a>vår supportsida<\/a>!",
-    "description":"Instructions for help. Add '(in English only)' to your translation as we only offer support in English at this time."
-  },
-  "seethecode":{
-    "message":"Vill du se AdBlocks källkod? Kolla <a>här<\/a>.",
-    "description":"Link to AdBlock's source code"
-  },
-  "adblockcontributors":{
-    "message":"Vill du veta vem som hjälpt till att göra AdBlock? Ta en titt på vår <a>bidragsgivarsida<\/a>!",
-    "description":"Text for link to contributors page"
-  },
   "checkforupdates":{
     "message":"Sök efter uppdateringar (tar bara några sekunder)...",
     "description":"Displayed when AdBlock is checking the newest available version"
@@ -1317,6 +1305,46 @@
   },
   "whatsnew":{
     "message":"Nyheter i den senaste versionen? Läs i <a style='cursor:pointer;'> ändringsloggen<\/a>!",
-    "description":"Text for link to changelog"
+    "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"Endast på engelska",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Hittat ett fel?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"AdBlock-uppdateringar",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Vill se vad som får AdBlock att fungera?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Har du en fråga eller någon ny idé?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"Källkoden är <a>fritt tillgänglig<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"Vi har också en <a>sida<\/a> som presenterar människorna bakom AdBlock!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"Har vårt team begärt någon felinformation? Klicka <a href='#' id='debug'> här<\/a> för det!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Varför inte skicka en <a href='#' id='report'> felrapport<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Låt oss veta, på vår <a>support-sida<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

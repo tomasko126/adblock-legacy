@@ -1309,7 +1309,7 @@
   },
   "englishonly":{
     "message":"English only",
-    "description":"Lets the user know that a link/page is available in English only"
+    "description":"Lets the user know that a link\/page is available in English only"
   },
   "foundbug":{
     "message":"Found a bug?",
@@ -1332,7 +1332,7 @@
     "description":"Link to the source code of AdBlock on the Support tab of the options"
   },
   "contributors":{
-    "message":"We've got a <a>page<\/a> to help you find out the people behind Adblock, as well!",
+    "message":"We've got a <a>page<\/a> to help you find out the people behind AdBlock, as well!",
     "description":"Link to the contributors page on the Support tab of the options"
   },
   "debuginfo":{
