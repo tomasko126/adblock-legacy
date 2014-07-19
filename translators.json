@@ -1,0 +1,128 @@
+{
+  "en":{
+    "language": "English",
+    "local": "English",
+    "translators":[
+      {
+        "name": "The AdBlock Team",
+        "username": "Neelfyn",
+        "proofreader": true,
+        "joined": "yyyy-mm"
+      }
+    ]
+  },
+  "fr": {
+    "language": "French",
+    "local": "Français",
+    "translators": [
+      {
+        "name": "Antoine Boegler",
+        "username": "Neelfyn",
+        "proofreader": true,
+        "joined": "yyyy-mm"
+      },
+      {
+        "name": "Matthieu Bobillot",
+        "username": null,
+        "proofreader": true,
+        "joined": "yyyy-mm"
+      },
+      {
+        "name": "Cash-man",
+        "username": null,
+        "proofreader": true,
+        "joined": "yyyy-mm"
+      }
+    ]
+  },
+  "ar": {
+    "language": "Arabic",
+    "local": "",
+    "translators": [
+      {
+        "name": "Ahmed Walid",
+        "username":"ahmedwalid05",
+        "proofreader":false,
+        "joined": "2013-04"
+      },
+      {
+        "name": "Umar Hoj",
+        "username": "uhoj999",
+        "proofreader": false,
+        "joined": "yyyy-mm"
+      }
+    ]
+  },
+  "ru": {
+    "language":"Russian",
+    "local":"",
+    "translators":[
+      {
+        "name": "Вадим Богайсков",
+        "username": "VBog",
+        "proofreader":true,
+        "joined":"2010-10"
+      },
+      {
+         "name": "Даниил Санкин",
+         "username":"dsankin",
+         "proofreader":false,
+         "joined":"yyyy-mm"
+       }
+    ]
+  },
+  "nl":{
+    "language":"Dutch",
+    "local":"",
+    "translators":[
+      {
+        "name":"Jérémy Keusters",
+        "username":"Jeremyboy222",
+        "proofreader": true,
+        "joined":"2013/09"
+      }
+    ]
+  },
+  "de":{
+    "language":"German",
+    "local":"Deutsch",
+    "translators":[
+      {
+        "name":"John Rey",
+        "username":"Johnnz",
+        "proofreader":false,
+        "joined":"2010-09"
+      }
+    ]
+  },
+  "sk":{
+    "language":"Slovak",
+    "local":"",
+    "translators":[
+      {
+        "name":"Tomáš Taro",
+        "username":"tomasko126",
+        "proofreader":true,
+        "joined":"2011-11"
+      },
+      {
+        "name":"Ján Krasnovský",
+        "username":null,
+        "proofreader":false,
+        "joined":"yyyy-mm"
+      }
+    ]
+  },
+  "code":{
+    "language":"",
+    "local":"",
+    "translators":[
+      {
+        "name":"",
+        "username":"",
+        "proofreader":,
+        "joined":"yyyy-mm"
+      }
+    ]
+  }
+}
