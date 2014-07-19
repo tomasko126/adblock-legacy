@@ -687,6 +687,48 @@
     "message":"Does the ad appear in that browser too?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
+  "checkinchrometitle":{
+    "message":"Check in Chrome $chrome$",
+    "description":"tell a user to see if a reported ad also appears in Chrome\/Chrome",
+    "placeholders":{
+      "chrome":{
+        "content":"<span id='chrome1'><\/span>",
+        "example":"'or Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
+      }
+    }
+  },
+  "checkinchrome_1":{
+    "message":"Install Chrome $chrome$ if you don't have it.",
+    "description":"instruction for how to check Chrome\/Chrome for a reported ad",
+    "placeholders":{
+      "chrome":{
+        "content":"<span id='chrome2'><\/span>",
+        "example":"'or Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
+      }
+    }
+  },
+  "checkinchrome_2":{
+    "message":"Install Adblock for Chrome $chrome$ if you don't have it.",
+    "description":"instruction for how to check Chrome\/Chrome for a reported ad. Don't translate the name 'AdBlock'.",
+    "placeholders":{
+      "chrome":{
+        "content":"<span id='adblockforchrome'><\/span>",
+        "example":"'or AdBlock for Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
+      }
+    }
+  },
+  "checkinchrome_3":{
+    "message":"In that browser, subscribe to the same filter lists as you have here.",
+    "description":"instruction for how to check Chrome\/Chrome for a reported ad"
+  },
+  "checkinchrome_4":{
+    "message":"In that browser, load the page with the ad.",
+    "description":"instruction for how to check Chrome\/Chrome for a reported ad"
+  },
+  "checkinchrome_5":{
+    "message":"Does the ad appear in that browser too?",
+    "description":"instruction for how to check Chrome\/Chrome for a reported ad"
+  },
   "refusetocheck":{
     "message":"I don't want to check this",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -1099,6 +1141,10 @@
     "message":"The purpose of this question is to determine who should receive your report. If you answer this question incorrectly, the report will be sent to the wrong people, so it may get ignored.",
     "description":"Explanation of the Check-in-Firefox step in the ad reporter"
   },
+  "chrome_explanation":{
+    "message":"The purpose of this question is to determine who should receive your report. If you answer this question incorrectly, the report will be sent to the wrong people, so it may get ignored.",
+    "description":"Explanation of the Check-in-Firefox step in the ad reporter"
+  },  
   "blocked_ads":{
     "message":"Blocked ads:",
     "description":"Title for popup menu section showing number of ads blocked"
