@@ -47,7 +47,6 @@ these have to be hard-coded too...
 +filterannoyances
 
 Firefox strings (the code is in a separate repo)
-+ff_chrome_explanation
 +ff_checkinchrometitle
 +ff_checkinchrome_1
 +ff_checkinchrome_2
