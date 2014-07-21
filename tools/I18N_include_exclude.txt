@@ -45,6 +45,8 @@ these have to be hard-coded too...
 +filterantisocial
 +filtermalware
 +filterannoyances
+
+Firefox strings (the code is in a separate repo)
 +ff_chrome_explanation
 +ff_checkinchrometitle
 +ff_checkinchrome_1
