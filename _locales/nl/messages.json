@@ -1210,5 +1210,41 @@
   "whatsnew":{
     "message":"Wat is er nieuw in de laatste versie? Bekijk de <a style='cursor:pointer;'>changelog<\/a>!",
     "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"Alleen in het Engels",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Heb je een bug gevonden?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"AdBlock updates",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Wil je zien hoe AdBlock werkt?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Heb je een vraag of een nieuw idee?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"The broncode is <a>gratis beschikbaar<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"Heeft ons team gevraagd om debug info? Klik daarvoor <a href='#' id='debug'>hier<\/a>!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Waarom verstuur je ons geen <a href='#' id='report'>bug rapport<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Laat het ons weten op onze <a>ondersteuning website<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

@@ -1014,11 +1014,11 @@
     "description":"Will be followed by a list of translator names (separate string)"
   },
   "translator_names":{
-    "message":"Dani de elASDFblog, Jotaele_",
+    "message":"Dani de elASDFblog, @Jotaele_",
     "example":"The translator's names go here. Example: Michael G, Drew R"
   },
   "tabsupport":{
-    "message":"Apoyo",
+    "message":"Soporte",
     "description":"A tab on the options page"
   },
   "report_ad_on_page":{
@@ -1210,5 +1210,45 @@
   "whatsnew":{
     "message":"¿Qué novedades hay en la última versión? ¡Compruébalo en la <a>lista de cambios<\/a>!",
     "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"Sólo en inglés",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"¿Has encontrado un error?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"Actualizaciones de AdBlock",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"¿Quieres ver los engranajes que mueven AdBlock?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"¿Tienes alguna pregunta o idea nueva?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"¡El código fuente está <a>disponible para todos<\/a>!",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"¡También tenemos una <a>página<\/a> en la que puedes echar un vistazo a toda la gente que hace posible AdBlock!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"¿Nuestro equipo te ha solicitado información de depuración? ¡Haz clic <a href='#' id='debug'>aquí<\/a> para enviárnosla!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"¿Por qué no nos envías un <a href='#' id='report'>informe de error<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"¡Háznoslo saber en nuestro <a>sitio de soporte<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }

@@ -1210,5 +1210,45 @@
   "whatsnew":{
     "message":"Что нового в последней версии? См. <a style='cursor:pointer;'>changelog<\/a>!",
     "description":"Link to display the changelog on the Support tab of the options"
+  },
+  "englishonly":{
+    "message":"Только на английском языке",
+    "description":"Lets the user know that a link\/page is available in English only"
+  },
+  "foundbug":{
+    "message":"Нашли ошибку?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "adblockupdates":{
+    "message":"Обновления AdBlock",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "whatmakesadblocktick":{
+    "message":"Хотите увидеть кто продвигает AdBlock?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "questionoridea":{
+    "message":"Есть вопрос или новая идея?",
+    "description":"Subtitle on the Support tab of the options"
+  },
+  "sourcecode":{
+    "message":"Исходный код <a>в свободном доступе<\/a> !",
+    "description":"Link to the source code of AdBlock on the Support tab of the options"
+  },
+  "contributors":{
+    "message":"А также у нас есть <a>страница<\/a>, которая поможет Вам узнать людей, стоящих за AdBlock!",
+    "description":"Link to the contributors page on the Support tab of the options"
+  },
+  "debuginfo":{
+    "message":"Наша команда запросила некоторую отладочную информацию? Нажмите <a href='#' id='debug'>здесь<\/a>!",
+    "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Почему бы Вам не отправить нам <a href='#' id='report'>отчет об ошибке<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
+  },
+  "supportsite":{
+    "message":"Дайте нам знать на нашем <a>сайте поддержки<\/a>!",
+    "description":"Link to the support site on the Support tab of the options"
   }
 }
