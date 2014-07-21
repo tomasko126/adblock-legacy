@@ -99,10 +99,25 @@ BGcall("storage_get", "userid", function(userId) {
 
 
 function displayTranslationCredit() {
-if (navigator.language.substring(0, 2) != "en") {
-    $("#translator_credit").text(translate("translator_credit"));
-    $("#translator_names").text(translate("translator_names"));
-  }
+    if (navigator.language.substring(0, 2) != "en") {
+        var translators = [];
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", chrome.extension.getURL('translators.json'), true);
+        xhr.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                var text = JSON.parse(this.responseText);
+                for (var id in text)
+                    if (id === navigator.language)
+                        for (var translator in text[id].translators) {
+                            var name = text[id].translators[translator].name;
+                            translators.push(" " + name);
+                        }
+                $("#translator_credit").text(translate("translator_credit"));
+                $("#translator_names").text(translators.toString());
+            }
+        }
+        xhr.send();
+    }
 }
 
 if (SAFARI && LEGACY_SAFARI) {
