@@ -1121,11 +1121,7 @@
   },
   "firefox_explanation":{
     "message":"The purpose of this question is to determine who should receive your report. If you answer this question incorrectly, the report will be sent to the wrong people, so it may get ignored.",
-    "description":"Explanation of the Check-in-Firefox step in the ad reporter"
-  },
-  "ff_chrome_explanation":{
-    "message":"The purpose of this question is to determine who should receive your report. If you answer this question incorrectly, the report will be sent to the wrong people, so it may get ignored.",
-    "description":"Explanation of the Check-in-Chrome step in the ad reporter"
+    "description":"Explanation of the Check-in-Firefox or Chrome step in the ad reporter"
   },  
   "blocked_ads":{
     "message":"Blocked ads:",
