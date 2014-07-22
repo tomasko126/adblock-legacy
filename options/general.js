@@ -8,7 +8,15 @@ $(function() {
   $("input.feature[type='checkbox']").change(function() {
     var is_enabled = $(this).is(':checked');
     var name = this.id.substring(7); // TODO: hack
-    BGcall("set_setting", name, is_enabled);
+    BGcall("set_setting", name, is_enabled, true);
+  });
+
+  BGcall("get_settings", function(settings) {
+      (settings.show_advanced_options && !SAFARI) ? $("#dropbox").show() : $("#dropbox").hide();
+  });
+
+  BGcall("dropboxauth", function(status) {
+      (status === true) ? $("#authenticate").addClass("authenticated") : $("#authenticate").addClass("not-authenticated");
   });
 });
 
@@ -37,3 +45,35 @@ $("#enable_show_advanced_options").change(function() {
     window.location.reload();
   }, 50);
 });
+
+// Authenticate button for login/logoff with Dropbox
+$("#authenticate").click(function() {
+    BGcall("dropboxauth", function(status) {
+        if (status === true) {
+            BGcall("dropboxlogout");
+        } else {
+            BGcall("dropboxlogin");
+        }
+    });
+});
+
+// Change button according to the status of authentication,
+// change settings according to the synced settings
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.message === "signedout")
+            $("#authenticate").css({background:"url(../img/dropbox1.png)", width:"186px"});
+        if (request.message === "signedin")
+            $("#authenticate").css({background:"url(../img/dropbox3.png)", width:"215px"});
+        if (request.message === "update_checkbox") {
+            BGcall("get_settings", function(settings) {
+                $("input[id='enable_show_google_search_text_ads']").prop("checked", settings.show_google_search_text_ads);
+                $("input[id='enable_youtube_channel_whitelist']").prop("checked", settings.youtube_channel_whitelist);
+                $("input[id='enable_show_context_menu_items']").prop("checked", settings.show_context_menu_items);
+                $("input[id='enable_show_advanced_options']").prop("checked", settings.show_advanced_options);
+                $("input[id='enable_whitelist_hulu_ads']").prop("checked", settings.whitelist_hulu_ads);
+                $("input[id='enable_debug_logging']").prop("checked", settings.debug_logging);
+            });
+        }
+    }
+);

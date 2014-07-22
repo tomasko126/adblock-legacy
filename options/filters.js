@@ -318,7 +318,8 @@ FilterListUtil.updateCheckbox = function(filter_list, id) {
         $("#language_select").find("option")[parseInt(index) + 1].remove();
       } else {
         var newOption = OptionForFilterList(filter_list, index);
-        LanguageSelectUtil.insertOption(newOption.get(), index);
+        if (newOption)
+            LanguageSelectUtil.insertOption(newOption.get(), index);
       }
     }
   }
