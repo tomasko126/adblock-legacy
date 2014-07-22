@@ -629,6 +629,18 @@
     "message":"or AdBlock for Chrome",
     "description":"Used for placeholder in checkinfirefox_2 string"
   },
+  "link":{
+    "message":"link",
+    "description":"the word used for placeholder in nodefaultfilter1 string"
+  },
+  "orchrome":{
+    "message":"or Chrome",
+    "description":"the word used for placeholder in checkinfirefoxtitle and checkinfirefox_1 string"
+  },
+  "oradblockforchrome":{
+    "message":"or AdBlock for Chrome",
+    "description":"the word used for placeholder in checkinfirefox_2 string"
+  },
   "nodefaultfilter1":{
     "message":"We don't have a default filter list for that language.<br\/>Please try to find a suitable list that supports this language $link$ or block this ad for yourself on the 'Customize' tab.",
     "description":"Instructions on ad report page pointing users to EasyList subscriptions list. 'Customize' should be the same text as the name of the 'Customize' tab.",
@@ -1181,15 +1193,13 @@
     "message":"here",
     "description":"This message is injected in other strings as a link\/button"
   },
+  "here":{
+    "message":"here",
+    "description":"This message is injected in other strings as a link/button"
+  },
   "update_available":{
-    "message":"There's an update for AdBlock! Go $here$ to update. <br> Note: If you want to receive updates automatically, just click on Safari > Preferences > Extensions > Updates <br> and check option 'Install updates automatically'.",
-    "description":"On the Options > Support page, shows when there are updates available for AdBlock",
-    "placeholders":{
-      "here":{
-        "content":"<a id='here'><\/a>",
-        "example":"<a>here<\/a>"
-      }
-    }
+    "message":"There's an update for AdBlock! Go <a id='here'><\/a> to update. <br> Note: If you want to receive updates automatically, just click on Safari > Preferences > Extensions > Updates <br> and check option 'Install updates automatically'.",
+    "description":"On the Options > Support page, shows when there are updates available for AdBlock. This needs to be short, unlike updatefromoldversion (on the Ad Report page, Safari Only)"
   },
   "adblocksupport":{
     "message":"AdBlock Support",
@@ -1254,5 +1264,9 @@
   "ad_report_please":{
     "message":"If you're seeing an ad, don't make a bug report, make an <a>ad report<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "authinfo":{
+    "message":"After signing in with Dropbox, your settings, filter lists & custom filters will be automatically synced between your devices",
+    "description":"Title for ? on General tab, which informs what will be synced"
   }
 }

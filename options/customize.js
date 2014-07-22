@@ -208,12 +208,12 @@ $(function() {
     $("#btnEditAdvancedFilters").show();
     $("#btnCleanUp").show();
   }
+
   $("#btnSaveAdvancedFilters").click(saveFilters);
 
   BGcall("get_custom_filters_text", function(text) {
     $("#txtFiltersAdvanced").val(text);
   });
-
 
   $("#btnCleanUp").click(function() {
     //Don't save immediately, first allow them to review changes

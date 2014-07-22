@@ -90,6 +90,7 @@
       show_advanced_options: false,
       display_stats: true,
       show_block_counts_help_link: true,
+      dropbox_sync: false,
     };
     var settings = storage_get('settings') || {};
     this._data = $.extend(defaults, settings);
@@ -394,6 +395,8 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
+    if (client.isAuthenticated())
+        settingstable.set("custom_filters", localStorage.custom_filters);
   }
 
   // Removes a custom filter entry.
@@ -477,11 +480,15 @@
     return _settings.get_all();
   }
 
-  set_setting = function(name, is_enabled) {
+  set_setting = function(name, is_enabled, sync) {
     _settings.set(name, is_enabled);
 
     if (name === "debug_logging")
       logging(is_enabled);
+    
+    if (sync) {
+        sync_setting(name, is_enabled);
+    }
   }
 
   // MYFILTERS PASSTHROUGHS
@@ -516,22 +523,40 @@
   //         requires: the id of a list if it is a supplementary list,
   //                   or null if nothing required
   // Returns: null, upon completion
-  subscribe = function(options) {
+  subscribe = function(options, sync) {
     _myfilters.changeSubscription(options.id, {
       subscribed: true,
       requiresList: options.requires
     });
+    if (sync !== true && client.isAuthenticated()) {
+        var subs = get_subscriptions_minus_text();
+        var subscribed_filter_names = [];
+        for (var id in subs) {
+            if (subs[id].subscribed)
+                subscribed_filter_names.push(id);
+        }
+        settingstable.set("filter_lists", subscribed_filter_names.toString());
+    }
   }
 
   // Unsubscribes from a filter subscription.
   // Inputs: id: id from which to unsubscribe.
   //         del: (bool) if the filter should be removed or not
   // Returns: null, upon completion.
-  unsubscribe = function(options) {
+  unsubscribe = function(options, sync) {
     _myfilters.changeSubscription(options.id, {
       subscribed: false,
       deleteMe: (options.del ? true : undefined)
     });
+    if (sync !== true && client.isAuthenticated()) {
+        var subs = get_subscriptions_minus_text();
+        var subscribed_filter_names = [];
+        for (var id in subs) {
+            if (subs[id].subscribed)
+                subscribed_filter_names.push(id);
+        }
+        settingstable.set("filter_lists", subscribed_filter_names.toString());
+    }
   }
 
   // Returns true if the url cannot be blocked
@@ -1111,5 +1136,157 @@
 
       return out;
   };
+
+  // SYNCHRONIZATION
+
+  // Sync settings, filter lists & custom filters
+  // after authentication with Dropbox
+  if (!SAFARI) {
+      var client = new Dropbox.Client({key: "astzzxu8dsxzerq"});
+      var settingstable;
+
+      // Set up authentication driver
+      client.authDriver(new Dropbox.AuthDriver.ChromeExtension({
+          receiverPath: "chrome_oauth_receiver.html"}));
+
+      // Login silently on background.js onload, 
+      // when user has been authenticated
+      if (client.isAuthenticated() === false && get_settings().dropbox_sync === true) {
+          client.authenticate(function(error, client) {
+              if (error) return;
+              settingssync();
+          });
+      }
+
+      // Returns true if authenticated
+      function dropboxauth() {
+          if (!SAFARI)
+              return client.isAuthenticated();
+      }
+
+      // Login with Dropbox
+      function dropboxlogin() {
+          client.authenticate(function(error, client) {
+              if (error) return;
+              set_setting("dropbox_sync", true);
+              settingssync();
+              chrome.runtime.sendMessage({message: "signedin"});
+          });
+      }
+
+      // Logout from Dropbox
+      function dropboxlogout() {
+          client.signOut(function(error, client) {
+              if (error) return;
+              set_setting("dropbox_sync", false);
+              chrome.runtime.sendMessage({message: "signedout"});
+          });
+      }
+
+      function settingssync() {
+          var datastoreManager = client.getDatastoreManager();
+          datastoreManager.openDefaultDatastore(function(error, datastore) {
+              if (error) return;
+              
+              function get_subscribed_filter_lists() {
+                  // Get subscribed filter lists
+                  var subs = get_subscriptions_minus_text();
+                  var subscribed_filter_names = [];
+                  for (var id in subs) {
+                      if (subs[id].subscribed)
+                          subscribed_filter_names.push(id);
+                  }
+                  return subscribed_filter_names;
+              }
+
+              // Create table for sync
+              var table = datastore.getTable("AdBlock");
+
+              // Fill table with user's settings, filter lists & custom filters
+              settingstable = table.getOrInsert("settings", {
+                  filter_lists: get_subscribed_filter_lists().toString(),
+                  debug_logging: get_settings().debug_logging,
+                  youtube_channel_whitelist: get_settings().youtube_channel_whitelist,
+                  show_google_search_text_ads: get_settings().show_google_search_text_ads,
+                  whitelist_hulu_ads: get_settings().whitelist_hulu_ads,
+                  show_context_menu_items: get_settings().show_context_menu_items,
+                  show_advanced_options: get_settings().show_advanced_options,
+                  display_stats: get_settings().display_stats,
+                  show_block_counts_help_link: get_settings().show_block_counts_help_link
+              });
+
+              // Prevent deleting filters in some cases
+              var sync = settingstable.get("custom_filters");
+              var local = localStorage.custom_filters;
+              var filters;
+              if (sync === local) {
+                  filters = "";
+              } else if (local === undefined && sync !== "") {
+                  filters = sync;
+              } else if (sync !== "" && local) {
+                  filters = local + sync;
+              } else {
+                  filters = local;
+              }
+              if (filters !== "" && filters !== undefined) {
+                  filters = filters.replace(/\""/g, "");
+                  settingstable.set("custom_filters", filters);
+              }
+
+              // Listener, which fires when table has been updated
+              datastore.recordsChanged.addListener(function(event) {
+                  savesettings();
+              });
+
+              // Set resolution to remote changes
+              table.setResolutionRule("completed", "remote");
+              savesettings();
+
+              // Get settings, filter lists & custom filters and save them
+              function savesettings() {
+                  // Subscribe & unsubscribe filter lists
+                  var filterlists_sync = settingstable.get("filter_lists").split(",");
+                  var filterlists_local = get_subscribed_filter_lists();
+                  for (var i=0; i < filterlists_sync.length; i++)
+                      if (settingstable.get("filter_lists") !== "")
+                          subscribe({id: filterlists_sync[i]}, true);
+                  for (var i=0; i < filterlists_local.length; i++) {
+                      if (filterlists_sync.indexOf(filterlists_local[i]) === -1)
+                          unsubscribe({id: filterlists_local[i]}, true);
+                  }
+
+                  // Set custom filters
+                  var custom = settingstable.get("custom_filters");
+                  localStorage.custom_filters = custom;
+                  chrome.extension.sendRequest({command: "filters_updated"});
+
+                  // Set settings
+                  var advanced = settingstable.get("show_advanced_options");
+                  set_setting("show_advanced_options", advanced);
+                  var debug = settingstable.get("debug_logging");
+                  set_setting("debug_logging", debug);
+                  var ytchannel = settingstable.get("youtube_channel_whitelist");
+                  set_setting("youtube_channel_whitelist", ytchannel);
+                  var googleads = settingstable.get("show_google_search_text_ads");
+                  set_setting("show_google_search_text_ads", googleads);
+                  var huluads = settingstable.get("whitelist_hulu_ads");
+                  set_setting("whitelist_hulu_ads", huluads);
+                  var showcontextmenu = settingstable.get("show_context_menu_items");
+                  set_setting("show_context_menu_items", showcontextmenu);
+                  var stats = settingstable.get("display_stats");
+                  set_setting("display_stats", stats);
+                  var blockcountslink = settingstable.get("show_block_counts_help_link");
+                  set_setting("show_block_counts_help_link", blockcountslink);
+                  chrome.runtime.sendMessage({message: "update_checkbox"});
+              }
+          });
+      }
+
+      // Sync value of changed setting
+      function sync_setting(name, is_enabled) {
+          if (settingstable && client.isAuthenticated())
+              settingstable.set(name, is_enabled); 
+      }
+  }
 
   log("\n===FINISHED LOADING===\n\n");
