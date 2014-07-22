@@ -21,9 +21,7 @@ var adblock_settings = [];
 BGcall("get_settings", function(settings) {
     for (setting in settings)
         adblock_settings.push(setting+": "+settings[setting] + "\n");
-    do
-        adblock_settings = adblock_settings.toString().replace(/\,/,"");
-    while (adblock_settings.indexOf(",") !== -1)
+    adblock_settings = adblock_settings.join('');
 });
 
 // Get last known error
