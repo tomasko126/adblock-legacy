@@ -1066,7 +1066,7 @@
   // Sync settings, filter lists & custom filters
   // after authentication with Dropbox
   if (!SAFARI) {
-      var client = new Dropbox.Client({key: "astzzxu8dsxzerq"});
+      var client = new Dropbox.Client({key: "qvuzaxgybbknxa0"});
       var settingstable;
 
       // Set up authentication driver
@@ -1082,7 +1082,7 @@
           });
       }
 
-      // Returns true if authenticated
+      // Return true, if client is authenticated
       function dropboxauth() {
           if (!SAFARI)
               return client.isAuthenticated();
@@ -1205,6 +1205,14 @@
               }
           });
       }
+      
+      // Reset client, if it got in an error state
+      chrome.runtime.onMessage.addListener(
+          function(request, sender, sendResponse) {
+              if (request.message === "clienterror")
+                  client.reset();
+          }
+      );
 
       // Sync value of changed setting
       function sync_setting(name, is_enabled) {
