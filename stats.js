@@ -44,15 +44,31 @@ STATS = (function() {
 
   // Tell the server we exist.
   var pingNow = function() {
-    var data = {
-      cmd: "ping",
-      u: userId,
-      v: version,
-      f: flavor,
-      o: os,
-      g: get_settings().show_google_search_text_ads ? '1': '0',
-      l: determineUserLanguage(),
-    };
+    var data = {};
+    if (SAFARI) {
+        data = {
+          cmd: "ping",
+          u: userId,
+          v: version,
+          f: flavor,
+          o: os,
+          g: get_settings().show_google_search_text_ads ? '1': '0',
+          l: determineUserLanguage(),
+        };
+    } else {
+        var installDate = new Date(blockCounts.get().start);
+        data = {
+          cmd: "ping",
+          u: userId,
+          v: version,
+          f: flavor,
+          o: os,
+          g: get_settings().show_google_search_text_ads ? '1': '0',
+          l: determineUserLanguage(),
+          i: (installDate.getFullYear() + '/' + (installDate.getMonth() + 1) + '/' + installDate.getDate()),
+          b: blockCounts.get().total
+        };
+    }
 
     $.post(stats_url, data
       , maybeSurvey // TODO: Remove when we no longer do a/b tests
@@ -160,7 +176,6 @@ STATS = (function() {
   return {
     // True if AdBlock was just installed.
     firstRun: firstRun,
-
     userId: userId,
     version: version,
     flavor: flavor,
@@ -168,7 +183,6 @@ STATS = (function() {
     browserVersion: browserVersion,
     os: os,
     osVersion: osVersion,
-
 
     // Ping the server when necessary.
     startPinging: function() {
