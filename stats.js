@@ -44,7 +44,7 @@ STATS = (function() {
 
   // Tell the server we exist.
   var pingNow = function() {
-    data = {
+    var data = {
       cmd: "ping",
       u: userId,
       v: version,
