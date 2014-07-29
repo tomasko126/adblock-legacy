@@ -60,6 +60,8 @@ var run_bandaids = function() {
       BGcall('set_first_run_to_false', null);
     },
     youtube_safari_only: function() {
+        var elemAd = document.querySelector(".video-ads");
+        elemAd.parentNode.removeChild(elemAd);
         // Disable some attributes in ytplayer object to skip ads in HTML5 video player
         var elemScript = document.createElement("script");
         elemScript.textContent = 
