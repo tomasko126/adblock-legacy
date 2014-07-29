@@ -65,6 +65,7 @@ var run_bandaids = function() {
         adcontainer.parentNode.removeChild(adcontainer);
         var adprogress = document.querySelector(".html5-ad-progress-list");
         adprogress.parentNode.removeChild(adprogress);
+        
         // Disable some attributes in ytplayer object to disable ads in HTML5 video player
         var elemScript = document.createElement("script");
         elemScript.textContent = 
@@ -110,16 +111,14 @@ var before_ready_bandaids = function() {
     youtube_only: function() {
         // If history.pushState is available,
         // YouTube uses it when navigating from one video
-        // to another and tells the flash player via JavaScript,
-        // which ads to show next bypassing the flashvars rewrite code.
-        // Disabling history.pushState on pages with YouTube's flash player
+        // to another and tells the HTML5 player via JavaScript,
+        // which ads to show next bypassing ytplayer object rewrite code.
+        // Disabling history.pushState on pages with YouTube's HTML5 player
         // will force YouTube to not use history.pushState
-        var s = document.createElement("script");
-        s.type = "application/javascript";
-        s.async = false;
-        s.textContent = "History.prototype.pushState = undefined;";
-        document.documentElement.appendChild(s);
-        document.documentElement.removeChild(s);
+        var elemScript = document.createElement("script");
+        elemScript.textContent = "History.prototype.pushState = undefined;";
+        document.documentElement.appendChild(elemScript);
+        document.documentElement.removeChild(elemScript);
     }
   }; // end bandaids
 
