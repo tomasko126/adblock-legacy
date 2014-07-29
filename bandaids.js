@@ -60,9 +60,12 @@ var run_bandaids = function() {
       BGcall('set_first_run_to_false', null);
     },
     youtube_safari_only: function() {
-        var elemAd = document.querySelector(".video-ads");
-        elemAd.parentNode.removeChild(elemAd);
-        // Disable some attributes in ytplayer object to skip ads in HTML5 video player
+        // Remove ad container & ad progress, so user won't notice removal of ads
+        var adcontainer = document.querySelector(".video-ads");
+        adcontainer.parentNode.removeChild(adcontainer);
+        var adprogress = document.querySelector(".html5-ad-progress-list");
+        adprogress.parentNode.removeChild(adprogress);
+        // Disable some attributes in ytplayer object to disable ads in HTML5 video player
         var elemScript = document.createElement("script");
         elemScript.textContent = 
             "var ytp = ytplayer['config']['args']; ytplayer['config'].loaded = false; ytp.ad3_module = 0;" + 
