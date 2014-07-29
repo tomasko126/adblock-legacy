@@ -5,7 +5,7 @@ var run_bandaids = function() {
     apply_bandaid_for = "hotmail";
   else if (SAFARI && /youtube/.test(document.location.hostname))
     apply_bandaid_for = "youtube_safari_only";
-  else if (/getadblock\.com/.test(document.location.hostname))
+  else if (/getadblock\.com$/.test(document.location.hostname))
     apply_bandaid_for = "getadblock";
   else if (/mobilmania\.cz|zive\.cz|doupe\.cz|e15\.cz|sportrevue\.cz|autorevue\.cz/.test(document.location.hostname))
     apply_bandaid_for = "czech_sites";
