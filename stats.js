@@ -55,8 +55,6 @@ STATS = (function() {
     };
     //only on Chrome
     if (flavor === "E" && blockCounts) {
-        var installDate = new Date(blockCounts.get().start);
-        data["i"] = (installDate.getFullYear() + '/' + (installDate.getMonth() + 1) + '/' + installDate.getDate());
         data["b"] = blockCounts.get().total;
     }
 
