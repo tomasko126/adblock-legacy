@@ -1045,6 +1045,17 @@
               openTab("https://getadblock.com/beta");
           }
       });
+
+      chrome.runtime.onMessageExternal.addListener(
+          function(request, sender, sendResponse) {
+              if (request.bugreport) {
+                  var out = makeReport();
+                  var result = "http://support.getadblock.com/discussion/new" +
+                      "?category_id=problems&discussion[body]=" + out;
+                  chrome.tabs.create({url: result});
+              }
+          }
+      );
   }
 
   log("\n===FINISHED LOADING===\n\n");
