@@ -109,7 +109,7 @@ function displayTranslationCredit() {
                 for (var id in text)
                     if (id === navigator.language)
                         for (var translator in text[id].translators) {
-                            var name = text[id].translators[translator].name;
+                            var name = text[id].translators[translator].credit;
                             translators.push(" " + name);
                         }
                 $("#translator_credit").text(translate("translator_credit"));
