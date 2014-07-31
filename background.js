@@ -953,7 +953,7 @@
   // Record that we exist.
   STATS.startPinging();
 
-  if (STATS.firstRun) {
+  if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom")) {
     openTab("https://getadblock.com/installed/?u=" + STATS.userId);
   }
 
@@ -1035,6 +1035,15 @@
                 return; // For example: only the background devtools or a popup are opened
             run_yt_channel_whitelist(tabs[0].url);
           });
+      });
+  }
+
+  // Display a new beta tab after each update for beta-users only
+  if (!SAFARI) {
+      chrome.runtime.onInstalled.addListener(function(details) {
+          if ((details.reason === "update" || details.reason === "install") && (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
+              openTab("https://getadblock.com/beta");
+          }
       });
   }
 
