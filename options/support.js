@@ -1,4 +1,15 @@
-$(document).ready(function() {	
+$(document).ready(function() {
+
+    // Get debug info
+    var debug_info = BGcall("getDebugInfo", function(info) {
+        debug_info = info;
+    });
+
+    // Make a bug-report
+    var report = BGcall("makeReport", function(info) {
+        report = info;
+    });
+
     // Check for updates
     $("#checkupdate").html(translate("checkforupdates"));
     checkupdates("help");
@@ -9,17 +20,15 @@ $(document).ready(function() {
 
     // Show debug info
     $("#debug").click(function(){
-        var settings = getDebugInfo();
         $("#debugInfo").css({ width: "450px", height: "100px"});
-        $("#debugInfo").html(settings);
+        $("#debugInfo").html(debug_info);
         $("#debugInfo").fadeIn();
     });
 
     // Report us the bug
     $("#report").click(function(){
-        var out = makeReport();
         var result = "http://support.getadblock.com/discussion/new" +
-        "?category_id=problems&discussion[body]=" + out;
+        "?category_id=problems&discussion[body]=" + report;
         document.location.href = result; 
     });
     

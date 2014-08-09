@@ -54,7 +54,7 @@ function customize_for_this_tab() {
     if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
       show(["div_whitelist_channel"]);
     }
- 
+
     if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
         show(["div_status_beta", "separator4"]);
 
@@ -83,7 +83,7 @@ function customize_for_this_tab() {
 // Click handlers
 $(function() {
   $("#bugreport").click(function() {
-      var out = makeReport();
+      var out = BG.makeReport();
       var result = "http://support.getadblock.com/discussion/new" +
           "?category_id=problems&discussion[body]=" + out;
       chrome.tabs.create({ url:result});
@@ -100,9 +100,9 @@ $(function() {
     var url = "https://chrome.google.com/webstore/detail/gighmmpiobklfepjocnamgkkbiglidom";
     var opera_url = "https://addons.opera.com/extensions/details/adblockforopera/";
     if (OPERA) {
-    BG.openTab(opera_url);
+        BG.openTab(opera_url);
     } else {
-    BG.openTab(url);
+        BG.openTab(url);
    }
    });
 
