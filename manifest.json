@@ -91,6 +91,6 @@
     "jquery/css/override-page.css"
   ],
   "externally_connectable": {
-    "matches": ["https://getadblock.com/beta", "*://localhost/*"]
+    "matches": ["https://getadblock.com/beta"]
   }
 }
