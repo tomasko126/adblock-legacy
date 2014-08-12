@@ -103,18 +103,16 @@ function displayTranslationCredit() {
         var translators = [];
         var xhr = new XMLHttpRequest();
         xhr.open("GET", chrome.extension.getURL('translators.json'), true);
-        xhr.onreadystatechange = function() {
-            if (this.readyState === 4) {
-                var text = JSON.parse(this.responseText);
-                for (var id in text)
-                    if (id === navigator.language)
-                        for (var translator in text[id].translators) {
-                            var name = text[id].translators[translator].credit;
-                            translators.push(" " + name);
-                        }
-                $("#translator_credit").text(translate("translator_credit"));
-                $("#translator_names").text(translators.toString());
-            }
+        xhr.onload = function() {
+            var text = JSON.parse(this.responseText);
+            for (var id in text)
+                if (id === navigator.language)
+                    for (var translator in text[id].translators) {
+                        var name = text[id].translators[translator].credit;
+                        translators.push(" " + name);
+                    }
+            $("#translator_credit").text(translate("translator_credit"));
+            $("#translator_names").text(translators.toString());
         }
         xhr.send();
     }
