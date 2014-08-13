@@ -92,7 +92,7 @@ STATS = (function() {
   }
   
   var pingAfterInterval(millisInterval) {
-    storage_set("next_ping_time", Date.now() + millisPing);
+    storage_set("next_ping_time", Date.now() + millisInterval);
     var delay = millisTillNextPing();
     window.setTimeout(function() {
         STATS.startPinging();
