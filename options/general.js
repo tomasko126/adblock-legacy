@@ -16,7 +16,7 @@ $(function() {
   });
 
   BGcall("dropboxauth", function(status) {
-      (status === true) ? $("#authenticate").addClass("authenticated") : $("#authenticate").addClass("not-authenticated");
+      (status === true) ? $("#dbauth").addClass("authenticated") : $("#dbauth").addClass("not-authenticated");
   });
 });
 
@@ -47,7 +47,7 @@ $("#enable_show_advanced_options").change(function() {
 });
 
 // Authenticate button for login/logoff with Dropbox
-$("#authenticate").click(function() {
+$("#dbauth").click(function() {
     BGcall("dropboxauth", function(status) {
         if (status === true) {
             BGcall("dropboxlogout");
@@ -62,9 +62,9 @@ $("#authenticate").click(function() {
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.message === "signedout")
-            $("#authenticate").css({background:"url(../img/dropbox1.png)", width:"186px"});
+            $("#dbauth").css({background:"url(../img/dropbox1.png)", width:"186px"});
         if (request.message === "signedin")
-            $("#authenticate").css({background:"url(../img/dropbox3.png)", width:"215px"});
+            $("#dbauth").css({background:"url(../img/dropbox3.png)", width:"215px"});
         if (request.message === "update_checkbox") {
             BGcall("get_settings", function(settings) {
                 $("input[id='enable_show_google_search_text_ads']").prop("checked", settings.show_google_search_text_ads);
