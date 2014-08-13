@@ -62,13 +62,69 @@ STATS = (function() {
       , maybeSurvey // TODO: Remove when we no longer do a/b tests
     );
   };
-
+  
+  var shouldShowSurvey(survey_data) {
+    var data = {
+      cmd: "survey",
+      u: userId,
+      sid: survey_data.survey_id
+    };
+    
+    function handle_should_survey(responseData) {
+      if (responseData.length ===  0)
+        return;
+      log('Pinging got some data', responseData);
+  
+      try {
+        var data = JSON.parse(responseData);
+        if (data.should_survey === 'true') {
+          openTab('https://getadblock.com/' + survey_data.open_this_url, true);
+        }
+      } catch (e) {
+        console.log("Something went wrong with opening a survey.");
+        console.log('error', e);
+        console.log('response data', responseData);
+        return;
+      }
+    }
+    
+    $.post(stats_url, data, handle_should_survey);
+  }
+  
+  var pingAfterInterval(millisInterval) {
+    storage_set("next_ping_time", Date.now() + millisPing);
+    var delay = millisTillNextPing();
+    window.setTimeout(function() {
+        STATS.startPinging();
+    }, delay);
+  }
+  
   // TODO: Remove when we no longer do a/b tests
-  var maybeSurvey = function(responseData) {
+  var maybeSurvey = function(responseData, textStatus, jqXHR) {
+    if (textStatus === "error") {
+      console.log("Ping returned error");
+      // ping returned error or no data, ping again tomorrow
+      pingAfterInterval(86400000);
+      return;
+    }
+
+    // check to see if the extension should change its ping interval
+    if (jqXHR && jqXHR.getResponseHeader("millis-to-ping"))  {
+        var millisPing = parseInt(jqXHR.getResponseHeader("millis-to-ping"), 10);
+        if (isNaN(millisPing) || millisPing < -1) // server is sick
+            millisPing = null;
+        if (millisPing === -1)
+            millisPing = null;
+        
+        if (millisPing !== null) {
+            pingAfterInterval(millisPing);
+        }
+    }
+    
     if (responseData.length ===  0)
       return;
-    console.log('Pinging got some data', responseData);
-
+    log('Pinging got some data', responseData);
+    
     try {
       var url_data = JSON.parse(responseData);
       if (!url_data.open_this_url.match(/^\/survey\//))
@@ -89,7 +145,8 @@ STATS = (function() {
         return; // one_time_opener was called multiple times
       one_time_opener.running = false;
       var open_the_tab = function() {
-        openTab('https://getadblock.com/' + url_data.open_this_url, true);
+        // see if survey should still be shown before opening tab
+        shouldShowSurvey(url_data);
       };
       if (SAFARI) {
         // Safari has a bug: if you open a new tab, it will shortly thereafter
