@@ -516,6 +516,17 @@
     }
     return result;
   }
+  
+  // Get subscribed filter lists
+  get_subscribed_filter_lists = function() {
+      var subs = get_subscriptions_minus_text();
+      var subscribed_filter_names = [];
+      for (var id in subs) {
+          if (subs[id].subscribed)
+              subscribed_filter_names.push(id);
+      }
+      return subscribed_filter_names;
+  }
 
   // Subscribes to a filter subscription.
   // Inputs: id: id to which to subscribe.  Either a well-known
@@ -524,19 +535,13 @@
   //                   or null if nothing required
   // Returns: null, upon completion
   subscribe = function(options, sync) {
-    _myfilters.changeSubscription(options.id, {
-      subscribed: true,
-      requiresList: options.requires
-    });
-    if (sync !== true && client.isAuthenticated()) {
-        var subs = get_subscriptions_minus_text();
-        var subscribed_filter_names = [];
-        for (var id in subs) {
-            if (subs[id].subscribed)
-                subscribed_filter_names.push(id);
-        }
-        settingstable.set("filter_lists", subscribed_filter_names.toString());
-    }
+      _myfilters.changeSubscription(options.id, {
+          subscribed: true,
+          requiresList: options.requires
+      });
+      if (!sync && client.isAuthenticated()) {
+          settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
+      }
   }
 
   // Unsubscribes from a filter subscription.
@@ -544,19 +549,13 @@
   //         del: (bool) if the filter should be removed or not
   // Returns: null, upon completion.
   unsubscribe = function(options, sync) {
-    _myfilters.changeSubscription(options.id, {
-      subscribed: false,
-      deleteMe: (options.del ? true : undefined)
-    });
-    if (sync !== true && client.isAuthenticated()) {
-        var subs = get_subscriptions_minus_text();
-        var subscribed_filter_names = [];
-        for (var id in subs) {
-            if (subs[id].subscribed)
-                subscribed_filter_names.push(id);
-        }
-        settingstable.set("filter_lists", subscribed_filter_names.toString());
-    }
+      _myfilters.changeSubscription(options.id, {
+          subscribed: false,
+          deleteMe: (options.del ? true : undefined)
+      });
+      if (!sync && client.isAuthenticated()) {
+          settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
+      }
   }
 
   // Returns true if the url cannot be blocked
@@ -1067,7 +1066,7 @@
   // after authentication with Dropbox
   if (!SAFARI) {
       var client = new Dropbox.Client({key: "qvuzaxgybbknxa0"});
-      var settingstable;
+      var settingstable = null;
 
       // Set up authentication driver
       client.authDriver(new Dropbox.AuthDriver.ChromeExtension({
@@ -1084,8 +1083,7 @@
 
       // Return true, if client is authenticated
       function dropboxauth() {
-          if (!SAFARI)
-              return client.isAuthenticated();
+          return client.isAuthenticated();
       }
 
       // Login with Dropbox
@@ -1111,17 +1109,6 @@
           var datastoreManager = client.getDatastoreManager();
           datastoreManager.openDefaultDatastore(function(error, datastore) {
               if (error) return;
-              
-              function get_subscribed_filter_lists() {
-                  // Get subscribed filter lists
-                  var subs = get_subscriptions_minus_text();
-                  var subscribed_filter_names = [];
-                  for (var id in subs) {
-                      if (subs[id].subscribed)
-                          subscribed_filter_names.push(id);
-                  }
-                  return subscribed_filter_names;
-              }
 
               // Create table for sync
               var table = datastore.getTable("AdBlock");

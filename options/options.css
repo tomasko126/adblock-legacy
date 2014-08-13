@@ -187,11 +187,15 @@
       }
 
       /* General tab */
-      #authenticate {
+      #dbauth {
         cursor: pointer;
         height: 44px;
         display: inline-block;
-        margin: 5px;
+        margin-left: 5px;
+      }
+      #dropboxlabel {
+        position: absolute;
+        margin-top: -4px;
       }
       .authenticated {
         background: transparent url(../img/dropbox3.png);
@@ -215,6 +219,7 @@
         background-image: url(../jquery/css/images/ui-icons_d8e7f3_256x240.png);
         width: 16px;
         height: 16px;
+        margin: -4px 7px 0px 0px;
       }
       #authinfo:hover {
         background-position: -15px -142px;
