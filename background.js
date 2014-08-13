@@ -539,7 +539,7 @@
           subscribed: true,
           requiresList: options.requires
       });
-      if (!sync && client.isAuthenticated()) {
+      if (sync !== true && client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -553,7 +553,7 @@
           subscribed: false,
           deleteMe: (options.del ? true : undefined)
       });
-      if (!sync && client.isAuthenticated()) {
+      if (sync !== true && client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
