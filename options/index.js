@@ -106,7 +106,7 @@ function displayTranslationCredit() {
         xhr.onload = function() {
             var text = JSON.parse(this.responseText);
             for (var id in text)
-                if (id === navigator.language)
+                if (id === navigator.language.substring(0, 2))
                     for (var translator in text[id].translators) {
                         var name = text[id].translators[translator].credit;
                         translators.push(" " + name);
