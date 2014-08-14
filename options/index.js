@@ -105,12 +105,39 @@ function displayTranslationCredit() {
         xhr.open("GET", chrome.extension.getURL('translators.json'), true);
         xhr.onload = function() {
             var text = JSON.parse(this.responseText);
-            for (var id in text)
-                if (id === navigator.language.substring(0, 2))
-                    for (var translator in text[id].translators) {
-                        var name = text[id].translators[translator].credit;
-                        translators.push(" " + name);
+            var lang = navigator.language;
+            for (var id in text) {
+                if (!SAFARI) {
+                    if (id === navigator.language) {
+                        for (var translator in text[id].translators) {
+                            var name = text[id].translators[translator].credit;
+                            translators.push(" " + name);
+                        }
+                    } else {
+                       for (var translator in text[id].translators) {
+                          var lang = navigator.language.toLowerCase();
+                          if (lang === id) {
+                              var name = text[lang].translators[translator].credit;
+                              translators.push(" " + name);
+                          }
+                       } 
                     }
+                } else {
+                    if (lang.substring(0, 2) === id) {
+                        for (var translator in text[id].translators) {
+                            var name = text[id].translators[translator].credit;
+                            translators.push(" " + name);
+                        }
+                    } else {
+                      for (var translator in text[id].translators) {
+                          if (lang === id) {
+                            var name = text[lang].translators[translator].credit;
+                            translators.push(" " + name);
+                          }
+                        }
+                    }
+                }
+            }
             $("#translator_credit").text(translate("translator_credit"));
             $("#translator_names").text(translators.toString());
         }
