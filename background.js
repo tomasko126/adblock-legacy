@@ -603,7 +603,7 @@
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         if (tabs.length === 0)
           return; // For example: only the background devtools or a popup are opened
-        
+
         var tab = tabs[0];
 
         if (tab && !tab.url) {
@@ -637,7 +637,7 @@
     } else {
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
-      
+
       var disabled_site = page_is_unblockable(tab.url);
 
       var result = {

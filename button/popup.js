@@ -61,6 +61,9 @@ $(function() {
         if (SAFARI)
             hide(["block_counts"]);
 
+        if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
+            show(["div_status_beta", "separator4"]);
+
         for (var div in shown)
             if (shown[div])
                 $('#' + div).show();
@@ -91,7 +94,7 @@ $(function() {
             safari.extension.popovers[0].width = wrapperwidth;
         });
 
-        // Store id of active tab
+        // Store tab id of an active tab
         var activeTab = safari.application.activeBrowserWindow.activeTab;
     }
 
@@ -111,6 +114,13 @@ $(function() {
     }
 
     // Click handlers
+    $("#bugreport").click(function() {
+        var out = BG.makeReport();
+        var result = "http://support.getadblock.com/discussion/new" +
+            "?category_id=problems&discussion[body]=" + out;
+        openTab(result);
+    });
+
     $("#toggle_badge_checkbox").click(function(){
         var checked = $(this).is(":checked");
         BG.getCurrentTabInfo(function(info) {
