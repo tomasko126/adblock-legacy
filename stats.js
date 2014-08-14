@@ -63,7 +63,7 @@ STATS = (function() {
     );
   };
   
-  var shouldShowSurvey(survey_data) {
+  var shouldShowSurvey = function(survey_data) {
     var data = {
       cmd: "survey",
       u: userId,
@@ -91,7 +91,7 @@ STATS = (function() {
     $.post(stats_url, data, handle_should_survey);
   }
   
-  var pingAfterInterval(millisInterval) {
+  var pingAfterInterval = function(millisInterval) {
     storage_set("next_ping_time", Date.now() + millisInterval);
     var delay = millisTillNextPing();
     window.setTimeout(function() {
