@@ -599,38 +599,57 @@
   //   }
   // Returns: null (asynchronous)
   getCurrentTabInfo = function(callback, secondTime) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      if (tabs.length === 0)
-        return; // For example: only the background devtools or a popup are opened
-      var tab = tabs[0];
+    if (!SAFARI) {
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        if (tabs.length === 0)
+          return; // For example: only the background devtools or a popup are opened
+        
+        var tab = tabs[0];
 
-      if (tab && !tab.url) {
-        // Issue 6877: tab URL is not set directly after you opened a window
-        // using window.open()
-        if (!secondTime)
-          window.setTimeout(function() {
-            getCurrentTabInfo(callback, true);
-          }, 250);
-        return;
-      }
+        if (tab && !tab.url) {
+          // Issue 6877: tab URL is not set directly after you opened a window
+          // using window.open()
+          if (!secondTime)
+            window.setTimeout(function() {
+              getCurrentTabInfo(callback, true);
+            }, 250);
+          return;
+        }
 
+        var disabled_site = page_is_unblockable(tab.url);
+        var total_blocked = blockCounts.getTotalAdsBlocked();
+        var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
+        var display_stats = get_settings().display_stats;
+
+        var result = {
+          tab: tab,
+          disabled_site: disabled_site,
+          total_blocked: total_blocked,
+          tab_blocked: tab_blocked,
+          display_stats: display_stats
+        };
+
+        if (!disabled_site)
+          result.whitelisted = page_is_whitelisted(tab.url);
+
+        callback(result);
+      });
+    } else {
+      var browserWindow = safari.application.activeBrowserWindow;
+      var tab = browserWindow.activeTab;
+      
       var disabled_site = page_is_unblockable(tab.url);
-      var total_blocked = blockCounts.getTotalAdsBlocked();
-      var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
-      var display_stats = get_settings().display_stats;
 
       var result = {
         tab: tab,
         disabled_site: disabled_site,
-        total_blocked: total_blocked,
-        tab_blocked: tab_blocked,
-        display_stats: display_stats
       };
+
       if (!disabled_site)
         result.whitelisted = page_is_whitelisted(tab.url);
 
       callback(result);
-    });
+    }
   }
 
   // Returns true if anything in whitelist matches the_domain.
@@ -675,7 +694,6 @@
     // Set the button image and context menus according to the URL
     // of the current tab.
     updateButtonUIAndContextMenus = function() {
-
       function setContextMenus(info) {
         chrome.contextMenus.removeAll();
         if (!get_settings().show_context_menu_items)
