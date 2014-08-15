@@ -168,7 +168,7 @@ STATS = (function() {
     survey_data = url_data;
 
     if (SAFARI) {
-      if (safari.application.hasEvenListener("open", one_time_opener))
+      if (safari.application.hasEventListener("open", one_time_opener))
           safari.application.removeEventListener("open", one_time_opener, true);
       safari.application.addEventListener("open", one_time_opener, true);
     } else {
