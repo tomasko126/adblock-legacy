@@ -41,6 +41,14 @@ STATS = (function() {
 
     return storage_get("userid");
   })();
+  
+  var pingAfterInterval = function(millisInterval) {
+    storage_set("next_ping_time", Date.now() + millisInterval);
+    var delay = millisTillNextPing();
+    window.setTimeout(function() {
+        STATS.startPinging();
+    }, delay);
+  }
 
   // Tell the server we exist.
   var pingNow = function() {
@@ -58,9 +66,16 @@ STATS = (function() {
         data["b"] = blockCounts.get().total;
     }
 
-    $.post(stats_url, data
-      , maybeSurvey // TODO: Remove when we no longer do a/b tests
-    );
+    $.ajax({
+      type: 'POST',
+      url: stats_url, 
+      data: data,
+      success: maybeSurvey, // TODO: Remove when we no longer do a/b tests
+      error: function(e) {
+        console.log("Ping returned error: ", e.status);
+        pingAfterInterval(86400000); // show
+      }, 
+    });
   };
   
   var shouldShowSurvey = function(survey_data) {
@@ -81,9 +96,7 @@ STATS = (function() {
           openTab('https://getadblock.com/' + survey_data.open_this_url, true);
         }
       } catch (e) {
-        console.log("Something went wrong with opening a survey.");
-        console.log('error', e);
-        console.log('response data', responseData);
+        console.log('Error parsing JSON: ', responseData, " Error: ", e);
         return;
       }
     }
@@ -91,23 +104,38 @@ STATS = (function() {
     $.post(stats_url, data, handle_should_survey);
   }
   
-  var pingAfterInterval = function(millisInterval) {
-    storage_set("next_ping_time", Date.now() + millisInterval);
-    var delay = millisTillNextPing();
-    window.setTimeout(function() {
-        STATS.startPinging();
-    }, delay);
+  var survey_data = null;
+  function one_time_opener() {
+    if (SAFARI) {
+      safari.application.removeEventListener("open", one_time_opener, true);
+    } else {
+      chrome.tabs.onCreated.removeListener(one_time_opener);
+    }
+    if (!one_time_opener.running)
+      return; // one_time_opener was called multiple times
+    if (survey_data == null)
+      return;
+    one_time_opener.running = false;
+    var open_the_tab = function() {
+      // see if survey should still be shown before opening tab
+      shouldShowSurvey(survey_data);
+    };
+    if (SAFARI) {
+      // Safari has a bug: if you open a new tab, it will shortly thereafter
+      // set the active tab's URL to "Top Sites". However, here, after the
+      // user opens a tab, we open another. It mistakenly thinks
+      // our tab is the one the user opened and clobbers our URL with "Top
+      // Sites."
+      // To avoid this, we wait a bit, let it update the user's tab, then
+      // open ours.
+      window.setTimeout(open_the_tab, 500);
+    } else {
+      open_the_tab();
+    }
   }
   
   // TODO: Remove when we no longer do a/b tests
   var maybeSurvey = function(responseData, textStatus, jqXHR) {
-    if (textStatus === "error") {
-      console.log("Ping returned error");
-      // ping returned error or no data, ping again tomorrow
-      pingAfterInterval(86400000);
-      return;
-    }
-
     // check to see if the extension should change its ping interval
     if (jqXHR && jqXHR.getResponseHeader("millis-to-ping"))  {
         var millisPing = parseInt(jqXHR.getResponseHeader("millis-to-ping"), 10);
@@ -135,37 +163,17 @@ STATS = (function() {
       console.log('response data', responseData);
       return;
     }
-    function one_time_opener() {
-      if (SAFARI) {
-        safari.application.removeEventListener("open", one_time_opener, true);
-      } else {
-        chrome.tabs.onCreated.removeListener(one_time_opener);
-      }
-      if (!one_time_opener.running)
-        return; // one_time_opener was called multiple times
-      one_time_opener.running = false;
-      var open_the_tab = function() {
-        // see if survey should still be shown before opening tab
-        shouldShowSurvey(url_data);
-      };
-      if (SAFARI) {
-        // Safari has a bug: if you open a new tab, it will shortly thereafter
-        // set the active tab's URL to "Top Sites". However, here, after the
-        // user opens a tab, we open another. It mistakenly thinks
-        // our tab is the one the user opened and clobbers our URL with "Top
-        // Sites."
-        // To avoid this, we wait a bit, let it update the user's tab, then
-        // open ours.
-        window.setTimeout(open_the_tab, 500);
-      } else {
-        open_the_tab();
-      }
-    }
     one_time_opener.running = true;
+    // overwrites the current survey if one exists
+    survey_data = url_data;
 
     if (SAFARI) {
+      if (safari.application.hasEvenListener("open", one_time_opener))
+          safari.application.removeEventListener("open", one_time_opener, true);
       safari.application.addEventListener("open", one_time_opener, true);
     } else {
+      if (chrome.tabs.onCreated.hasListener(one_time_opener))
+          chrome.tabs.onCreated.removeListener(one_time_opener);
       chrome.tabs.onCreated.addListener(one_time_opener);
     }
   };
