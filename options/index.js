@@ -130,7 +130,7 @@ function displayTranslationCredit() {
                         }
                     } else {
                       for (var translator in text[id].translators) {
-                          if (id === lang) { {
+                          if (id === lang) {
                             var name = text[lang].translators[translator].credit;
                             translators.push(" " + name);
                           }
@@ -140,7 +140,7 @@ function displayTranslationCredit() {
             }
             $("#translator_credit").text(translate("translator_credit"));
             $("#translator_names").text(translators.toString());
-        }
+        };
         xhr.send();
     }
 }
