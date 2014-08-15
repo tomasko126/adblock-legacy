@@ -108,15 +108,15 @@ function displayTranslationCredit() {
             var lang = navigator.language;
             for (var id in text) {
                 if (!SAFARI) {
-                    if (id === navigator.language) {
+                    if (id === lang) {
                         for (var translator in text[id].translators) {
                             var name = text[id].translators[translator].credit;
                             translators.push(" " + name);
                         }
                     } else {
                        for (var translator in text[id].translators) {
-                          var lang = navigator.language.toLowerCase();
-                          if (lang === id) {
+                          var lang = lang.toLowerCase();
+                          if (id === lang) {
                               var name = text[lang].translators[translator].credit;
                               translators.push(" " + name);
                           }
@@ -130,7 +130,7 @@ function displayTranslationCredit() {
                         }
                     } else {
                       for (var translator in text[id].translators) {
-                          if (lang === id) {
+                          if (id === lang) { {
                             var name = text[lang].translators[translator].credit;
                             translators.push(" " + name);
                           }
