@@ -1068,19 +1068,6 @@
       var client = new Dropbox.Client({key: "qvuzaxgybbknxa0"});
       var settingstable = null;
 
-      // Set up authentication driver
-      client.authDriver(new Dropbox.AuthDriver.ChromeExtension({
-          receiverPath: "chrome_oauth_receiver.html"}));
-
-      // Login silently on background.js onload, 
-      // when user has been authenticated
-      if (client.isAuthenticated() === false && get_settings().dropbox_sync === true) {
-          client.authenticate(function(error, client) {
-              if (error) return;
-              settingssync();
-          });
-      }
-
       // Return true, if client is authenticated
       function dropboxauth() {
           return client.isAuthenticated();
