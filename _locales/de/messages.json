@@ -1013,10 +1013,6 @@
     "message":"Übersetzung von:",
     "description":"Will be followed by a list of translator names (separate string)"
   },
-  "translator_names":{
-    "message":"John Rey",
-    "example":"The translator's names go here. Example: Michael G, Drew R"
-  },
   "tabsupport":{
     "message":"Support",
     "description":"A tab on the options page"

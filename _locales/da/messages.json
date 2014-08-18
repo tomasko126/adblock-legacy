@@ -1013,10 +1013,6 @@
     "message":"Tak for oversættelsen til:",
     "description":"Will be followed by a list of translator names (separate string)"
   },
-  "translator_names":{
-    "message":"stallemanden, Rasmus S.",
-    "example":"The translator's names go here. Example: Michael G, Drew R"
-  },
   "tabsupport":{
     "message":"Support",
     "description":"A tab on the options page"

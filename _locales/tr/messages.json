@@ -1013,10 +1013,6 @@
     "message":"Çeviri:",
     "description":"Will be followed by a list of translator names (separate string)"
   },
-  "translator_names":{
-    "message":"Necip Ateş",
-    "example":"The translator's names go here. Example: Michael G, Drew R"
-  },
   "tabsupport":{
     "message":"Destek",
     "description":"A tab on the options page"

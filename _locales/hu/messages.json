@@ -198,7 +198,7 @@
     "description":"Label for beta features in AdBlock Options"
   },
   "debuginlogoption":{
-    "message":"Mutassa a hibakeresési adatokat a Console Log-ban (ami lelassítja az AdBlock-ot)",
+    "message":"Hibakeresési kijelentések megjelenítése a Konzolnaplóban (ami lelassítja az AdBlock-ot)",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
@@ -362,7 +362,7 @@
     "description":"Subtitle on the 'Customize' tab"
   },
   "filtersavewarning":{
-    "message":"Legyen óvatos: ha hibázik, sok szűrő, beleértve a hivatalos szűrőket, elromolhatnak!<br\/>Olvassa el a <a>szűrő szintaxis segédletet<a>, hogy megtanulja, hogyan kell összetett feketelista, és fehérlista szűrőket hozzáadni.",
+    "message":"Legyen óvatos: ha itt hibát vét, sok más szűrő, beleértve a hivatalosakat is, szintén meghibásodhatnak!<br\/>Olvassa el a <a>szűrő mondattan oktatóanyagot<\/a>, hogy megtudja hogyan kell összetett fekete lista és fehér lista szűrőket hozzáadni.",
     "description":"Warning when blacklisting manually"
   },
   "savebutton":{
@@ -382,7 +382,7 @@
     "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
   },
   "updateyourlists":{
-    "message":"Make sure your filter lists are up to date",
+    "message":"Győződjön meg róla, hogy szűrőlistái naprakészek",
     "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
@@ -410,7 +410,7 @@
     "description":"On the ad report page, telling a user there is nothing to do"
   },
   "correctfilters":{
-    "message":"Correct filters",
+    "message":"Megfelelő szűrők",
     "description":"On the ad report page, label describing having the right set of filters"
   },
   "pagelanguagecheck":{
@@ -654,7 +654,7 @@
     "description":"resourceblocking page string"
   },
   "resourceblocklegend1":{
-    "message":"Előzmények:",
+    "message":"Jelmagyarázat:",
     "description":"resourceblocking page string"
   },
   "resourceblocklegend2":{
@@ -768,10 +768,6 @@
   "translator_credit":{
     "message":"Fordította:",
     "description":"Will be followed by a list of translator names (separate string)"
-  },
-  "translator_names":{
-    "message":"iScream, Ofalvai",
-    "example":"The translator's names go here. Example: Michael G, Drew R"
   },
   "report_ad_on_page":{
     "message":"Reklám jelentése ezen az oldalon",
