@@ -509,6 +509,18 @@
       }
     ]
   },
+  "vi":{
+    "language": "Vietnamese",
+    "localized": "Vietnamese",
+    "translators":[
+      {
+        "credit": "Tuấn Phạm",
+        "username": "TuanPham",
+        "proofreader": false,
+        "joined": "2014-06"
+      }
+    ]
+  },
   "zh-cn":{
     "language": "Chinese (Simplified)",
     "localized": "中文 (简体)",
