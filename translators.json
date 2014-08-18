@@ -266,6 +266,12 @@
         "username": null,
         "proofreader": false,
         "joined": "2010-10"
+      },
+      {
+        "credit": "s.tamaki",
+        "username": "randplus",
+        "proofreader": false,
+        "joined": "2014-07"
       }
     ]
   },
@@ -511,7 +517,7 @@
   },
   "vi":{
     "language": "Vietnamese",
-    "localized": "Vietnamese",
+    "localized": "Tiếng Việt",
     "translators":[
       {
         "credit": "Tuấn Phạm",
