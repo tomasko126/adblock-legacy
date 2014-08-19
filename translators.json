@@ -212,6 +212,12 @@
         "username": null,
         "proofreader": false,
         "joined": "2010-09"
+      },
+      {
+        "credit": "Shibelion",
+        "username": "AllenWalkerHU",
+        "proofreader": true,
+        "joined": "2014-08"
       }
     ]
   },
@@ -522,7 +528,7 @@
       {
         "credit": "Tuấn Phạm",
         "username": "TuanPham",
-        "proofreader": false,
+        "proofreader": true,
         "joined": "2014-06"
       }
     ]
