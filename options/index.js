@@ -5,7 +5,7 @@ function load_options() {
     $("#tabpages").
       tabs({
         spinner: "",
-        cache: true,
+        cache: false,
         cookie: {},
         load: function(event, ui) {
           //translation
@@ -19,7 +19,7 @@ function load_options() {
 
           // Must load tab .js here: CSP won't let injected html inject <script>
           // see index.html:data-scripts
-          ui.tab.dataset.scripts.split(' ').forEach(function(scriptToLoad) {
+          ui.tab["0"].dataset.scripts.split(' ').forEach(function(scriptToLoad) {
             // CSP blocks eval, which $().append(scriptTag) uses
             var s = document.createElement("script");
             s.src = scriptToLoad;
