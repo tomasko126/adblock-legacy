@@ -4,9 +4,6 @@ function load_options() {
     optionalSettings = settings;
     $("#tabpages").
       tabs({
-        spinner: "",
-        cache: false,
-        cookie: {},
         load: function(event, ui) {
           //translation
           localizePage();
