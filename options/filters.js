@@ -24,7 +24,7 @@ function CheckboxForFilterList(filter_list, filter_list_type, index, container) 
       attr("type", "checkbox").
       attr("id", this._id).
       css("margin-left", "2px").
-      attr("checked", this._filter_list.subscribed ? 'checked' : null).
+      prop("checked", this._filter_list.subscribed ? true : null).
       addClass("filter_list_control");
       
   this._label = $("<label></label>").
@@ -364,8 +364,8 @@ LanguageSelectUtil.init = function() {
     var selected_option = $this.find(':selected');
     var index = $(selected_option).data("index");
     var entry = language_filter_list_arr[index];
-    if(entry) {
-      $this.find('option:first').attr('selected','selected');
+    if (entry) {
+      $this.find('option:first').prop('selected', true);
       selected_option.remove();
       var $checkbox = $("[name='" + entry.id + "']").find("input");
       $checkbox.attr("checked", "checked");
