@@ -126,7 +126,7 @@ CheckboxForFilterList.prototype = {
     this._bindActions();
     
     if(isChecked) {
-      this._check_box.attr("checked", "checked");
+      this._check_box.prop("checked", true);
       this._check_box.trigger("change");
     }
   }
@@ -265,7 +265,7 @@ FilterListUtil.updateSubscriptionInfoAll = function() {
       if(subscription.user_submitted && 
         translate("failedtofetchfilter") === infoLabel.text()) {
         text = translate("invalidListUrl");
-        $("input", div).attr("disabled", "disabled");
+        $("input", div).prop("disabled", true);
       } else {
         text = translate("failedtofetchfilter");
       }
@@ -306,7 +306,7 @@ FilterListUtil.updateCheckbox = function(filter_list, id) {
   var checkbox = $(containing_div).find("input");
   // Check if subscribed and checkbox staus is equal, if not, update checkbox status according to subscribed status.
   if(checkbox.is(":checked") !== filter_list.subscribed) {
-    checkbox.attr("checked", filter_list.subscribed ? "checked" : null);
+    checkbox.prop("checked", filter_list.subscribed ? true : null);
     // Force update current info label since status is already updated in the background.
     $(".subscription_info", containing_div).text(filter_list.subscribed ? translate("fetchinglabel") : translate("unsubscribedlabel"));
     // If the filter is of language list type, check if subscribed and checkbox visibility matches, if not, update visibility.
@@ -368,7 +368,7 @@ LanguageSelectUtil.init = function() {
       $this.find('option:first').prop('selected', true);
       selected_option.remove();
       var $checkbox = $("[name='" + entry.id + "']").find("input");
-      $checkbox.attr("checked", "checked");
+      $checkbox.prop("checked", true);
       $checkbox.trigger("change");
     }
   });
@@ -480,7 +480,7 @@ CustomFilterListUploadUtil._updateExistingFilterList = function(existing_filter_
     if(checkbox.attr("id").indexOf("language_filter_list") > 0) {
       LanguageSelectUtil.triggerChange(existing_filter_list);
     } else {
-      checkbox.attr("checked", "checked");
+      checkbox.prop("checked", true);
       checkbox.trigger("change");
     }
   }
@@ -541,10 +541,10 @@ $(function() {
   }, 1000);
   
   $("#btnUpdateNow").click(function() {
-    $(this).attr("disabled", "disabled");
+    $(this).prop("disabled", true);
     BGcall("update_subscriptions_now");
     setTimeout(function() {
-      $("#btnUpdateNow").removeAttr("disabled");
+      $("#btnUpdateNow").prop("disabled", false);
     }, 300000); // Re-enable update button after 5 minutes.
   });
  

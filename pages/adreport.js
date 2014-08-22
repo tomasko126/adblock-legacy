@@ -141,9 +141,9 @@ $("input, select").change(function(event) {
 
 //Updating the users filters
 $("#UpdateFilters").click(function() {
-  $(this).attr("disabled", "disabled");
+  $(this).prop("disabled", true);
   BGcall("update_subscriptions_now", function() {
-    $(".afterFilterUpdate input").removeAttr('disabled');
+    $(".afterFilterUpdate input").prop('disabled', false);
     $(".afterFilterUpdate").removeClass('afterFilterUpdate');
   });
 });
