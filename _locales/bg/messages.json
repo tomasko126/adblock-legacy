@@ -1236,7 +1236,7 @@
     "description":"Link to the contributors page on the Support tab of the options"
   },
   "debuginfo":{
-    "message":"Изискват ли се предпроверочни данни? Щракнете <a href='#' id='debug‘>тук<\/a>, за да ги предадете!",
+    "message":"Изискват се предпроверочни данни? Щракнете <a href='#' id='debug‘>тук<\/a>, за да ги предадете!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{

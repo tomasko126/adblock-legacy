@@ -36,7 +36,7 @@
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
   "chromebutton_how_to_hide2":{
-    "message":"Để ẩn nút này, nhấp chuột phải và chọn Nút Ẩn. Để hiển thị trở lại bạn bấm vào 'Nút hiển thị' ở đây chrome:\/\/chrome\/extensions.",
+    "message":"Để ẩn nút này, nhấp chuột phải và chọn 'Nút ẩn'. Để hiển thị trở lại bạn bấm vào 'Nút hiển thị' ở đây chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2":{
@@ -44,7 +44,7 @@
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
   },
   "sliderexplanation":{
-    "message":"Di chuyển thanh trượt cho đến khi chọn đúng quảng cáo cần chặn, và phần từ bị chặn có vẻ hữu dụng.",
+    "message":"Trượt thanh trượt cho đến khi chọn đúng quảng cáo cần chặn, và các phần tử bị chặn sẽ trở nên hữu ích.",
     "description":"Blacklister slider page message"
   },
   "block_by_url_instead":{
@@ -386,7 +386,7 @@
     "description":"A filter list"
   },
   "blacklistclickmessage":{
-    "message":"Nhấp chuột phải vào quảng cáo để chặn - hoặc chặn bằng tay ở đây.",
+    "message":"Nhấp chuột phải vào quảng cáo để chặn -- hoặc chặn bằng tay ở đây.",
     "description":"Message at the top of the blacklist options tab"
   },
   "tabcustomizetitle":{
@@ -466,7 +466,7 @@
     "description":"Instruction on ad report page"
   },
   "reloadadpage":{
-    "message":"Tải lại trang với quảng cáo.",
+    "message":"Tải lại trang cùng với quảng cáo.",
     "description":"Instruction on ad report page"
   },
   "adstillappear":{

@@ -1246,5 +1246,9 @@
   "supportsite":{
     "message":"Teilen Sie uns Ihre Idee oder Ihre Frage auf unserer <a>Support-Seite<\/a> mit.",
     "description":"Link to the support site on the Support tab of the options"
+  },
+  "ad_report_please":{
+    "message":"Sollten Sie Werbung angezeigt bekommen, senden Sie bitte keinen Fehlerbericht sondern <a>melden Sie Werbung hier<\/a>!",
+    "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   }
 }
