@@ -2,6 +2,9 @@
 
 UNRELEASED:
 
+2.7.13: Added 'AdBlock Warning Removal' Filter list as an option on the Filter Lists option page. (#296)
+        Removed the logic to see if a user should be given a 'golden ticket'.  (#298)
+
 2.7.12: Fixed an issue with Safari and the new translation process (#292)
         Added retry logic to the ping process, and enhanced survey processing (#290)
 
