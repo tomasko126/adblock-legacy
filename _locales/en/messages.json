@@ -341,6 +341,10 @@
     "message":"Fanboy's Annoyances (removes annoyances on the Web)",
     "description":"Name of the filter list"
   },
+  "filterwarning_removal":{
+    "message":"AdBlock Warning Removal list (removes messages about using AdBlock)",
+    "description":"Name of the filter list"
+  },
   "filteradblock_custom":{
     "message":"AdBlock custom filters (recommended)",
     "description":"A filter list"
