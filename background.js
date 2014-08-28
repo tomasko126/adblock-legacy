@@ -953,7 +953,7 @@
   // Record that we exist.
   STATS.startPinging();
 
-  if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom")) {
+  if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
     openTab("https://getadblock.com/installed/?u=" + STATS.userId);
   }
 
