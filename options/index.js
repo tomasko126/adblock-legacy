@@ -4,6 +4,13 @@ function load_options() {
         optionalSettings = settings;
         $("#tabpages").
         tabs({
+            // Go to the last opened tab
+            active: $.cookie('activetab'),
+            activate: function(event, ui){
+                $.cookie('activetab', ui.newTab.index(), {
+                    expires : 10
+                });
+            },
             // Cache tabs
             beforeLoad: function(event, ui) {
                 if (ui.tab.data("loaded")) {
