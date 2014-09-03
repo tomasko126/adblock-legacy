@@ -234,8 +234,22 @@
 
       // When a tab is closed, delete all its data
       onTabClosedHandler: function(tabId) {
-        log("[DEBUG]", "----------- Closing tab", tabId);
-        delete frameData[tabId];
+          // Get id of all opened tabs - GH #300
+          var opened_tabs = [];
+          chrome.tabs.query({}, function(tabs) {
+              for (var i=0; i<tabs.length; i++)
+                  opened_tabs.push(tabs[i].id);
+              for (var j in frameData) {
+                  var tab_id = parseInt(j);
+                  // If tabId in frameData exists but cannot be found
+                  // in chrome.tabs.query, delete it from frameData
+                  if (!isNaN(tab_id) && opened_tabs.indexOf(tab_id) === -1) {
+                      console.log("[DEBUG]", "----------- Closing tab", tabId);
+                      console.log("[DEBUG]", "----------- Deleting frameData["+tab_id+"]");
+                      delete frameData[tab_id];
+                  }
+              }      
+          });      
       }
     };
 
