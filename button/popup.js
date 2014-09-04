@@ -60,7 +60,7 @@ $(function() {
         // Ad-counter is not available for Safari
         if (SAFARI)
             hide(["block_counts"]);
-        
+
         if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
             show(["div_status_beta", "separator4"]);
  
@@ -94,7 +94,7 @@ $(function() {
             safari.extension.popovers[0].width = wrapperwidth;
         });
 
-        // Store tab id of an active tab
+        // Store id of active tab
         var activeTab = safari.application.activeBrowserWindow.activeTab;
     }
 
