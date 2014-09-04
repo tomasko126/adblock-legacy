@@ -1181,12 +1181,14 @@
       }
       
       // Reset client, if it got in an error state
-      chrome.runtime.onMessage.addListener(
-          function(request, sender, sendResponse) {
-              if (request.message === "clienterror")
-                  client.reset();
-          }
-      );
+      if (!SAFARI) {
+          chrome.runtime.onMessage.addListener(
+              function(request, sender, sendResponse) {
+                  if (request.message === "clienterror")
+                      client.reset();
+              }
+          );
+      }
 
       // Sync value of changed setting
       function sync_setting(name, is_enabled) {
