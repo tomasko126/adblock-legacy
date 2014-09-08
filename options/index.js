@@ -6,14 +6,15 @@ function load_options() {
         tabs({
             // Go to the last opened tab
             active: $.cookie('activetab'),
-            activate: function(event, ui){
+            activate: function(event, ui) {
                 $.cookie('activetab', ui.newTab.index(), {
                     expires : 10
                 });
             },
             // Cache tabs
             beforeLoad: function(event, ui) {
-                if (ui.tab.data("loaded")) {
+                var tab_id = ui.tab.index();
+                if (ui.tab.data("loaded") && tab_id !== 3) {
                     event.preventDefault();
                     return;
                 }
