@@ -11,11 +11,11 @@ $(function() {
     BGcall("set_setting", name, is_enabled, true);
   });
 
-  if (!SAFARI) {
-      BGcall("get_settings", function(settings) {
-          (settings.show_advanced_options) ? $("#dropbox").show() : $("#dropbox").hide();
-      });
+  BGcall("get_settings", function(settings) {
+      (settings.show_advanced_options && !SAFARI) ? $("#dropbox").show() : $("#dropbox").hide();
+  });
 
+  if (!SAFARI) {
       BGcall("dropboxauth", function(status) {
           (status === true) ? $("#dbauth").addClass("authenticated") : $("#dbauth").addClass("not-authenticated");
       });
