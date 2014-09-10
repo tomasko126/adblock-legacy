@@ -11,13 +11,15 @@ $(function() {
     BGcall("set_setting", name, is_enabled, true);
   });
 
-  BGcall("get_settings", function(settings) {
-      (settings.show_advanced_options && !SAFARI) ? $("#dropbox").show() : $("#dropbox").hide();
-  });
+  if (!SAFARI) {
+      BGcall("get_settings", function(settings) {
+          (settings.show_advanced_options) ? $("#dropbox").show() : $("#dropbox").hide();
+      });
 
-  BGcall("dropboxauth", function(status) {
-      (status === true && !SAFARI) ? $("#dbauth").addClass("authenticated") : $("#dbauth").addClass("not-authenticated");
-  });
+      BGcall("dropboxauth", function(status) {
+          (status === true) ? $("#dbauth").addClass("authenticated") : $("#dbauth").addClass("not-authenticated");
+      });
+  }
 });
 
 // TODO: This is a dumb race condition, and still has a bug where
