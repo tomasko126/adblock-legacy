@@ -1141,7 +1141,7 @@
   // Sync settings, filter lists & custom filters
   // after authentication with Dropbox
   if (!SAFARI) {
-      var client = new Dropbox.Client({key: "qvuzaxgybbknxa0"});
+      var client = new Dropbox.Client({key: "3unh2i0le3dlzio"});
       var settingstable = null;
 
       // Return true, if client is authenticated
