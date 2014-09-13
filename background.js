@@ -1040,7 +1040,7 @@
 
       // Get custom filters
       var adblock_custom_filters = storage_get("custom_filters").
-                                   replace(/((http|https):\/\/)?(www.)?/, "")
+                                   replace(/((http|https):\/\/)?(www.)?/g, "");
 
       // Get settings
       var adblock_settings = [];
