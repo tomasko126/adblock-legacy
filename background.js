@@ -1039,7 +1039,8 @@
       var adblock_pings = storage_get("total_pings");
 
       // Get custom filters
-      var adblock_custom_filters = storage_get("custom_filters").replace(/www./,"");
+      var adblock_custom_filters = storage_get("custom_filters").
+                                   replace(/((http|https):\/\/)?(www.)?/, "")
 
       // Get settings
       var adblock_settings = [];
