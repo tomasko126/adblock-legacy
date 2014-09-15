@@ -395,7 +395,7 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (client.isAuthenticated())
+    if (dBclient.isAuthenticated() && !SAFARI)
         settingstable.set("custom_filters", localStorage.custom_filters);
   }
 
@@ -485,8 +485,8 @@
 
     if (name === "debug_logging")
       logging(is_enabled);
-    
-    if (sync) {
+
+    if (sync && !SAFARI) {
         sync_setting(name, is_enabled);
     }
   }
@@ -516,7 +516,7 @@
     }
     return result;
   }
-  
+
   // Get subscribed filter lists
   get_subscribed_filter_lists = function() {
       var subs = get_subscriptions_minus_text();
@@ -539,7 +539,7 @@
           subscribed: true,
           requiresList: options.requires
       });
-      if (sync !== true && client.isAuthenticated()) {
+      if (sync !== true && dBclient.isAuthenticated() && !SAFARI) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -553,7 +553,7 @@
           subscribed: false,
           deleteMe: (options.del ? true : undefined)
       });
-      if (sync !== true && client.isAuthenticated()) {
+      if (sync !== true && dBclient.isAuthenticated() && !SAFARI) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -1061,7 +1061,7 @@
 
       // Get total pings
       var adblock_pings = storage_get("total_pings");
-    
+
       // Get custom filters
       var adblock_custom_filters = storage_get("custom_filters");
 
@@ -1071,7 +1071,7 @@
       for (setting in settings)
           adblock_settings.push(setting+": "+get_settings()[setting] + "\n");
       adblock_settings = adblock_settings.join('');
- 
+
       // Create debug info for a bug report or an ad report
       var info = [];
       info.push("==== Filter Lists ====");
@@ -1085,7 +1085,7 @@
       info.push("==== Settings ====");
       info.push(adblock_settings);
       info.push("==== Other info: ====");
-      info.push("AdBlock version number: " + AdBlockVersion + 
+      info.push("AdBlock version number: " + AdBlockVersion +
                (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk" ? " Beta" : ""));
       if (adblock_error)
           info.push("Last known error: " + adblock_error);
@@ -1121,7 +1121,7 @@
       body.push("");
       body.push("--- The questions below are optional but VERY helpful. ---");
       body.push("");
-      body.push("If unchecking all filter lists fixes the problem, which one filter" + 
+      body.push("If unchecking all filter lists fixes the problem, which one filter" +
                 "list must you check to cause the problem again after another restart?");
       body.push("");
       body.push("Technical Chrome users: Go to chrome://extensions ->" +
@@ -1141,17 +1141,17 @@
   // Sync settings, filter lists & custom filters
   // after authentication with Dropbox
   if (!SAFARI) {
-      var client = new Dropbox.Client({key: "3unh2i0le3dlzio"});
+      var dBclient = new Dropbox.Client({key: "3unh2i0le3dlzio"});
       var settingstable = null;
 
-      // Return true, if client is authenticated
+      // Return true, if user is authenticated
       function dropboxauth() {
-          return client.isAuthenticated();
+          return dBclient.isAuthenticated();
       }
 
       // Login with Dropbox
       function dropboxlogin() {
-          client.authenticate(function(error, client) {
+          dBclient.authenticate(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", true);
               settingssync();
@@ -1161,7 +1161,7 @@
 
       // Logout from Dropbox
       function dropboxlogout() {
-          client.signOut(function(error, client) {
+          dBclient.signOut(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", false);
               chrome.runtime.sendMessage({message: "signedout"});
@@ -1169,7 +1169,7 @@
       }
 
       function settingssync() {
-          var datastoreManager = client.getDatastoreManager();
+          var datastoreManager = dBclient.getDatastoreManager();
           datastoreManager.openDefaultDatastore(function(error, datastore) {
               if (error) return;
 
@@ -1255,21 +1255,21 @@
               }
           });
       }
-      
-      // Reset client, if it got in an error state
+
+      // Reset dBclient, if it got in an error state
       if (!SAFARI) {
           chrome.runtime.onMessage.addListener(
               function(request, sender, sendResponse) {
                   if (request.message === "clienterror")
-                      client.reset();
+                      dBclient.reset();
               }
           );
       }
 
       // Sync value of changed setting
       function sync_setting(name, is_enabled) {
-          if (settingstable && client.isAuthenticated())
-              settingstable.set(name, is_enabled); 
+          if (settingstable && dBclient.isAuthenticated())
+              settingstable.set(name, is_enabled);
       }
   }
 
