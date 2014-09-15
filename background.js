@@ -395,7 +395,7 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (db_client.isAuthenticated() && !SAFARI)
+    if (!SAFARI && db_client.isAuthenticated())
         settingstable.set("custom_filters", localStorage.custom_filters);
   }
 
