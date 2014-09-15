@@ -395,7 +395,7 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (dBclient.isAuthenticated() && !SAFARI)
+    if (db_client.isAuthenticated() && !SAFARI)
         settingstable.set("custom_filters", localStorage.custom_filters);
   }
 
@@ -539,7 +539,7 @@
           subscribed: true,
           requiresList: options.requires
       });
-      if (sync !== true && dBclient.isAuthenticated() && !SAFARI) {
+      if (sync !== true && db_client.isAuthenticated() && !SAFARI) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -553,7 +553,7 @@
           subscribed: false,
           deleteMe: (options.del ? true : undefined)
       });
-      if (sync !== true && dBclient.isAuthenticated() && !SAFARI) {
+      if (sync !== true && db_client.isAuthenticated() && !SAFARI) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -1141,17 +1141,17 @@
   // Sync settings, filter lists & custom filters
   // after authentication with Dropbox
   if (!SAFARI) {
-      var dBclient = new Dropbox.Client({key: "3unh2i0le3dlzio"});
+      var db_client = new Dropbox.Client({key: "3unh2i0le3dlzio"});
       var settingstable = null;
 
       // Return true, if user is authenticated
       function dropboxauth() {
-          return dBclient.isAuthenticated();
+          return db_client.isAuthenticated();
       }
 
       // Login with Dropbox
       function dropboxlogin() {
-          dBclient.authenticate(function(error, client) {
+          db_client.authenticate(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", true);
               settingssync();
@@ -1161,7 +1161,7 @@
 
       // Logout from Dropbox
       function dropboxlogout() {
-          dBclient.signOut(function(error, client) {
+          db_client.signOut(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", false);
               chrome.runtime.sendMessage({message: "signedout"});
@@ -1169,7 +1169,7 @@
       }
 
       function settingssync() {
-          var datastoreManager = dBclient.getDatastoreManager();
+          var datastoreManager = db_client.getDatastoreManager();
           datastoreManager.openDefaultDatastore(function(error, datastore) {
               if (error) return;
 
@@ -1256,19 +1256,19 @@
           });
       }
 
-      // Reset dBclient, if it got in an error state
+      // Reset db_client, if it got in an error state
       if (!SAFARI) {
           chrome.runtime.onMessage.addListener(
               function(request, sender, sendResponse) {
                   if (request.message === "clienterror")
-                      dBclient.reset();
+                      db_client.reset();
               }
           );
       }
 
       // Sync value of changed setting
       function sync_setting(name, is_enabled) {
-          if (settingstable && dBclient.isAuthenticated())
+          if (settingstable && db_client.isAuthenticated())
               settingstable.set(name, is_enabled);
       }
   }
