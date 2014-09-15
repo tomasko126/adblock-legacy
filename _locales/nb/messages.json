@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"Den mest populære Chrome-utvidelsen, med mer enn 15 millioner brukere! Blokkerer annonser på hele Internett.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - Klikk for mer informasjon",
