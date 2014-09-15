@@ -486,7 +486,7 @@
     if (name === "debug_logging")
       logging(is_enabled);
 
-    if (sync && !SAFARI) {
+    if (!SAFARI && sync) {
         sync_setting(name, is_enabled);
     }
   }
@@ -539,7 +539,7 @@
           subscribed: true,
           requiresList: options.requires
       });
-      if (sync !== true && db_client.isAuthenticated() && !SAFARI) {
+      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -553,7 +553,7 @@
           subscribed: false,
           deleteMe: (options.del ? true : undefined)
       });
-      if (sync !== true && db_client.isAuthenticated() && !SAFARI) {
+      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
