@@ -309,7 +309,7 @@ sub print_unused_missing {
         }
         
         if (@{$strings{missing}}){
-            print colored("!", 'red'), " Found $unusedcount MISSING strings:\n";
+            print colored("!", 'red'), " Found $missingcount MISSING strings:\n";
             foreach my $string (@{$strings{missing}}){
                 print "  - $string\n";
             }
