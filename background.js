@@ -396,6 +396,20 @@
     _myfilters.rebuild();
   }
 
+  // Get the user enterred exclude filters text as a \n-separated text string.
+  get_exclude_filters_text = function() {
+    return storage_get('exclude_filters') || '';
+  }
+  // Set the exclude filters to the given \n-separated text string, and
+  // rebuild the filterset.
+  // Inputs: filters:string the new filters.
+  set_exclude_filters = function(filters) {
+    storage_set('exclude_filters', filters);
+    FilterNormalizer.setExcludeFilters(filters);
+    chrome.extension.sendRequest({command: "filters_updated"});
+    _myfilters.rebuild();
+  }
+
   // Removes a custom filter entry.
   // Inputs: host:domain of the custom filters to be reset.
   remove_custom_filter = function(host) {
@@ -1037,7 +1051,7 @@
 
       // Get total pings
       var adblock_pings = storage_get("total_pings");
-    
+
       // Get custom filters
       var adblock_custom_filters = storage_get("custom_filters");
 
@@ -1047,7 +1061,7 @@
       for (setting in settings)
           adblock_settings.push(setting+": "+get_settings()[setting] + "\n");
       adblock_settings = adblock_settings.join('');
- 
+
       // Create debug info for a bug report or an ad report
       var info = [];
       info.push("==== Filter Lists ====");
@@ -1061,7 +1075,7 @@
       info.push("==== Settings ====");
       info.push(adblock_settings);
       info.push("==== Other info: ====");
-      info.push("AdBlock version number: " + AdBlockVersion + 
+      info.push("AdBlock version number: " + AdBlockVersion +
                (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk" ? " Beta" : ""));
       if (adblock_error)
           info.push("Last known error: " + adblock_error);
@@ -1097,7 +1111,7 @@
       body.push("");
       body.push("--- The questions below are optional but VERY helpful. ---");
       body.push("");
-      body.push("If unchecking all filter lists fixes the problem, which one filter" + 
+      body.push("If unchecking all filter lists fixes the problem, which one filter" +
                 "list must you check to cause the problem again after another restart?");
       body.push("");
       body.push("Technical Chrome users: Go to chrome://extensions ->" +
