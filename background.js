@@ -1039,8 +1039,7 @@
       var adblock_pings = storage_get("total_pings");
 
       // Get custom filters
-      var adblock_custom_filters = storage_get("custom_filters").
-                                   replace(/((http|https):\/\/)?(www.)?/g, "");
+      var adblock_custom_filters = storage_get("custom_filters");
 
       // Get settings
       var adblock_settings = [];
@@ -1105,9 +1104,11 @@
                 "Developer Mode -> Inspect views: background page -> Console. " +
                 "Paste the contents here:");
       body.push("");
+      body.push("```");
       body.push("====== Do not touch below this line ======");
       body.push("");
       body.push(getDebugInfo());
+      body.push("```");
       var out = encodeURIComponent(body.join('  \n'));
 
       return out;
