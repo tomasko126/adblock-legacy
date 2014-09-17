@@ -91,6 +91,7 @@
       display_stats: true,
       show_block_counts_help_link: true,
       dropbox_sync: false,
+      show_survey: true,
     };
     var settings = storage_get('settings') || {};
     this._data = $.extend(defaults, settings);
