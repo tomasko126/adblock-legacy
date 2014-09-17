@@ -3,7 +3,7 @@
 $(function() {
   for (var name in optionalSettings) {
     $("#enable_" + name).
-      attr("checked", optionalSettings[name]);
+      prop("checked", optionalSettings[name]);
   }
   $("input.feature[type='checkbox']").change(function() {
     var is_enabled = $(this).is(':checked');
