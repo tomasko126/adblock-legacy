@@ -8,11 +8,11 @@
         var stack = "-" + ((e.error && e.error.message)||"") +
                     "-" + ((e.error && e.error.stack)||"");
         stack = stack.replace(/:/gi, ";").replace(/\n/gi, "");
-        //check to see if there's any URL info in the stack trace, if so remove it
-        if (stack.indexOf("http") >= 0) {
-           stack = "-removed URL-";
-        }
         str += stack;
+    }
+    //check to see if there's any URL info in the stack trace, if so, don't log it
+    if (str.indexOf("http") >= 0) {
+       return;
     }
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
@@ -1037,7 +1037,7 @@
 
       // Get total pings
       var adblock_pings = storage_get("total_pings");
-    
+
       // Get custom filters
       var adblock_custom_filters = storage_get("custom_filters");
 
@@ -1047,7 +1047,7 @@
       for (setting in settings)
           adblock_settings.push(setting+": "+get_settings()[setting] + "\n");
       adblock_settings = adblock_settings.join('');
- 
+
       // Create debug info for a bug report or an ad report
       var info = [];
       info.push("==== Filter Lists ====");
@@ -1061,7 +1061,7 @@
       info.push("==== Settings ====");
       info.push(adblock_settings);
       info.push("==== Other info: ====");
-      info.push("AdBlock version number: " + AdBlockVersion + 
+      info.push("AdBlock version number: " + AdBlockVersion +
                (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk" ? " Beta" : ""));
       if (adblock_error)
           info.push("Last known error: " + adblock_error);
@@ -1097,7 +1097,7 @@
       body.push("");
       body.push("--- The questions below are optional but VERY helpful. ---");
       body.push("");
-      body.push("If unchecking all filter lists fixes the problem, which one filter" + 
+      body.push("If unchecking all filter lists fixes the problem, which one filter" +
                 "list must you check to cause the problem again after another restart?");
       body.push("");
       body.push("Technical Chrome users: Go to chrome://extensions ->" +
