@@ -59,6 +59,11 @@ $("#dbauth").click(function() {
     });
 });
 
+$("#dbauthinfo").click(function() {
+    BGcall("openTab",
+           "http://support.getadblock.com/kb/about-the-project/how-do-i-use-the-dropbox-synchronization-feature");
+});
+
 // Change button according to the status of authentication,
 // change settings according to the synced settings
 if (!SAFARI) {

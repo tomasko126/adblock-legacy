@@ -202,7 +202,7 @@
         width: 215px;
         transition: 0.5s;
       }
-      .not-authenticated {  
+      .not-authenticated {
         background: transparent url(../img/dropbox1.png);
         width: 186px;
         transition: 0.5s;
@@ -211,7 +211,7 @@
         background: transparent url(../img/dropbox2.png);
         transition: 0.25s;
       }
-      #authinfo {
+      #dbauthinfo {
         cursor: pointer;
         vertical-align: top;
         display: inline-block;
@@ -221,9 +221,9 @@
         height: 16px;
         margin: -4px 7px 0px 0px;
       }
-      #authinfo:hover {
+      #dbauthinfo:hover {
         background-position: -15px -142px;
-        background-image: url(../jquery/css/images/ui-icons_056b93_256x240.png);  
+        background-image: url(../jquery/css/images/ui-icons_056b93_256x240.png);
       }
 
       /* Filters tab */
