@@ -301,6 +301,8 @@
 
     // Popup blocking
     function onCreatedNavigationTargetHandler(details) {
+      if (adblock_is_paused())
+          return;
       var opener = frameData.get(details.sourceTabId, details.sourceFrameId);
       if (opener === undefined)
         return;
