@@ -8,11 +8,11 @@
         var stack = "-" + ((e.error && e.error.message)||"") +
                     "-" + ((e.error && e.error.stack)||"");
         stack = stack.replace(/:/gi, ";").replace(/\n/gi, "");
-        //check to see if there's any URL info in the stack trace, if so remove it
-        if (stack.indexOf("http") >= 0) {
-           stack = "-removed URL-";
-        }
         str += stack;
+    }
+    //check to see if there's any URL info in the stack trace, if so, don't log it
+    if (str.indexOf("http") >= 0) {
+       return;
     }
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
