@@ -1205,7 +1205,7 @@
               } else {
                   filters = local;
               }
-              if (filters !== "" && filters !== undefined) {
+              if (filters && filters !== "" && filters !== undefined) {
                   filters = filters.replace(/\""/g, "");
                   settingstable.set("custom_filters", filters);
               }
