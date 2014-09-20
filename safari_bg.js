@@ -4,99 +4,110 @@ emit_page_broadcast = function(request) {
 
 // Imitate frameData object for Safari to avoid issues when using blockCounts.
 frameData = (function() {
-  // Map that will serve as cache for the block count.
-  // key: Numeric - tab id.
-  // value: Numeric - actual block count for the tab.
-  var countMap = {};
+    // Map that will serve as cache for the block count.
+    // key: Numeric - tab id.
+    // value: Numeric - actual block count for the tab.
+    var countMap = {};
 
-  return {
-    getCountMap: function() {
-      return countMap;
-    },
+    return {
+        getCountMap: function() {
+            return countMap;
+        },
 
-    // Get frameData for the tab.
-    // Input:
-    //  tabId: Numberic - id of the tab you want to get
-    get: function(tabId) {
-      return countMap[tabId] || {};
-    },
+        // Get frameData for the tab.
+        // Input:
+        //  tabId: Numberic - id of the tab you want to get
+        get: function(tabId) {
+            return countMap[tabId] || {};
+        },
 
-    // Create a new frameData
-    // Input:
-    //  tabId: Numeric - id of the tab you want to add in the frameData
-    create: function(tabId, url, domain) {
-        var activeTab = safari.application.activeBrowserWindow.activeTab;
-        if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
-        return frameData._initializeMap(tabId, url, domain);
-    },
-    // Reset a frameData
-    // Input:
-    //  tabId: Numeric - id of the tab you want to add in the frameData
-    //  url: new URL for the tab
-    reset: function(tabId, url) {
-        var activeTab = safari.application.activeBrowserWindow.activeTab;
-        if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
-        var domain = parseUri(url).hostname;
-        return frameData._initializeMap(tabId, url, domain);
-    },
-    // Initialize map
-    // Input:
-    //  tabId: Numeric - id of the tab you want to add in the frameData
-    //  url: new URL for the tab
-    //  domain: domain of the request
-    _initializeMap: function(tabId, url, domain) {
-        var tracker = countMap[tabId];
+        // Create a new frameData
+        // Input:
+        //  tabId: Numeric - id of the tab you want to add in the frameData
+        create: function(tabId, url, domain) {
+            var activeTab = safari.application.activeBrowserWindow.activeTab;
+            if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
+            return frameData._initializeMap(tabId, url, domain);
+        },
+        // Reset a frameData
+        // Input:
+        //  tabId: Numeric - id of the tab you want to add in the frameData
+        //  url: new URL for the tab
+        reset: function(tabId, url) {
+            var activeTab = safari.application.activeBrowserWindow.activeTab;
+            if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
+            var domain = parseUri(url).hostname;
+            return frameData._initializeMap(tabId, url, domain);
+        },
+        // Initialize map
+        // Input:
+        //  tabId: Numeric - id of the tab you want to add in the frameData
+        //  url: new URL for the tab
+        //  domain: domain of the request
+        _initializeMap: function(tabId, url, domain) {
+            var tracker = countMap[tabId];
 
-        var shouldTrack = !tracker || tracker.url !== url;
-        if (shouldTrack) {
-          countMap[tabId] = {
-            blockCount: 0,
-            domain: domain,
-            url: url,
-          };
+            var shouldTrack = !tracker || tracker.url !== url;
+            if (shouldTrack) {
+                countMap[tabId] = {
+                    blockCount: 0,
+                    domain: domain,
+                    url: url,
+                };
+            }
+            return tracker;
+        },
+        // Delete tabId from frameData
+        // Input:
+        //   tabId: Numeric - id of the tab you want to delete in the frameData
+        close: function(tabId) {
+            delete countMap[tabId];
         }
-        return tracker;
     }
-  }
 })();
 
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
 
-  if (messageEvent.name === "request") {
-    var args = messageEvent.message.data.args;
-    if (!messageEvent.target.url || messageEvent.target.url === args[1].tab.url)
-      frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-    else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
-        frameData.reset(messageEvent.target.id, args[1].tab.url);
-        updateBadge();
+    if (messageEvent.name === "request") {
+        var args = messageEvent.message.data.args;
+        if (!messageEvent.target.url || messageEvent.target.url === args[1].tab.url)
+            frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
+        else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
+            frameData.reset(messageEvent.target.id, args[1].tab.url);
+            updateBadge();
+        }
+        return;
     }
-    return;
-  }
 
-  if (messageEvent.name !== "canLoad")
-    return;
-  
-  if (adblock_is_paused() || page_is_unblockable(messageEvent.target.url) ||
-      page_is_whitelisted(messageEvent.target.url)) {
-    messageEvent.message = true;
-    return;
-  }
+    if (messageEvent.name !== "canLoad")
+        return;
+
+    var tab = messageEvent.target;
+    var frameInfo = messageEvent.message.frameInfo;
+    chrome._tabInfo.notice(tab, frameInfo);
+    var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
+
+    if (adblock_is_paused() || page_is_unblockable(sendingTab.url) ||
+        page_is_whitelisted(sendingTab.url)) {
+        messageEvent.message = true;
+        return;
+    }
 
     var url = messageEvent.message.url;
     var elType = messageEvent.message.elType;
     var frameDomain = messageEvent.message.frameDomain;
 
-  var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
-  if (isMatched) {
-    // If matched, add one block count to the corresponding tab that owns the request,
-    // update the badge afterwards
-    var tabId = messageEvent.target.id;
-    blockCounts.recordOneAdBlocked(tabId);
-    updateBadge();
-    log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
-  }
-  messageEvent.message = !isMatched;
+    var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
+    if (isMatched) {
+        // If matched, add one block count to the corresponding tab that owns the request,
+        // update the badge afterwards
+        var tabId = messageEvent.target.id;
+        blockCounts.recordOneAdBlocked(tabId);
+        updateBadge();
+        log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
+    }
+    messageEvent.message = !isMatched;
 }, false);
 
 // Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
@@ -104,72 +115,84 @@ var windowByMenuId = {};
 
 // Show number of blocked ads in badge for each tab
 safari.application.addEventListener("activate", function(event) {
-  if (get_settings().display_stats) {
-    var tabId = safari.application.activeBrowserWindow.activeTab.id;
-    var get_blocked_ads = frameData.get(tabId).blockCount;
-    var safari_toolbars = safari.extension.toolbarItems;
+    if (get_settings().display_stats) {
+        var tabId = safari.application.activeBrowserWindow.activeTab.id;
+        var get_blocked_ads = frameData.get(tabId).blockCount;
+        var safari_toolbars = safari.extension.toolbarItems;
 
-    for (var i = 0; i < safari_toolbars.length; i++ ) {
-      safari_toolbars[i].badge = get_blocked_ads;
+        for (var i = 0; i < safari_toolbars.length; i++ ) {
+            safari_toolbars[i].badge = get_blocked_ads;
+        }
     }
-  }
 }, true);
 
 // Clear badge on Top Sites
 safari.application.addEventListener("navigate", function() {
-  if (safari.application.activeBrowserWindow.activeTab.url === undefined) {
-    var tabId = safari.application.activeBrowserWindow.activeTab.id;
-    var safari_toolbars = safari.extension.toolbarItems;
-    for (var i = 0; i < safari_toolbars.length; i++ ) {
-      safari_toolbars[i].badge = "0";
+    if (safari.application.activeBrowserWindow.activeTab.url === undefined) {
+        var tabId = safari.application.activeBrowserWindow.activeTab.id;
+        frameData.reset(tabId);
+        updateBadge();
     }
-    frameData.reset(tabId);
-  }
 });
 
 safari.application.addEventListener("beforeNavigate", function(event) {
-  var tab = safari.application.activeBrowserWindow.activeTab;
-  if (tab.url === event.url) {
-    frameData.get(tab.id).blockCount = 0;
-    updateBadge();
-  }
+    var tab = safari.application.activeBrowserWindow.activeTab;
+    if (tab.url === event.url) {
+        frameData.get(tab.id).blockCount = 0;
+        updateBadge();
+    }
 }, true);
 
 safari.application.addEventListener("open", function(event) {
-  var tab = safari.application.activeBrowserWindow.activeTab;
-  if (!tab.url) {
-    if (!tab.id) {
-      setTimeout(function() {
-        var tab = safari.application.activeBrowserWindow.activeTab;
-      }, 200);
+    var tab = safari.application.activeBrowserWindow.activeTab;
+    if (!tab.url) {
+        if (!tab.id) {
+            setTimeout(function() {
+                var tab = safari.application.activeBrowserWindow.activeTab;
+            }, 200);
+        }
+        if (!tab.id)
+            return;
+        frameData.create(tab.id);
     }
-    if (!tab.id)
-      return;
-    frameData.create(tab.id);
-  }
+}, true);
+
+// On close event, delete countMap[tabId]
+safari.application.addEventListener("close", function(event) {
+    setTimeout(function() {
+        var opened_tabs = [];
+        var safari_tabs = safari.application.activeBrowserWindow.tabs;
+        for (var i=0; i < safari_tabs.length; i++)
+            opened_tabs.push(safari_tabs[i].id);
+        console.log(opened_tabs);
+
+        for (tab in frameData.getCountMap())
+            if (opened_tabs.indexOf(parseInt(tab)) === -1)
+                frameData.close(parseInt(tab));
+    }, 150);
 }, true);
 
 // Update the badge for each tool bars in a window.(Note: there is no faster way of updating
 // the tool bar item for the active window so I just updated all tool bar items' badge. That
 // way, I don't need to loop and compare.)
 var updateBadge = function() {
-  var show_block_counts = get_settings().display_stats;
+    var show_block_counts = get_settings().display_stats;
 
-  var url = safari.application.activeBrowserWindow.activeTab.url;
-  var paused = adblock_is_paused();
-  var canBlock = !page_is_unblockable(url);
-  var whitelisted = page_is_whitelisted(url);
+    var url = safari.application.activeBrowserWindow.activeTab.url;
+    var paused = adblock_is_paused();
+    var canBlock = !page_is_unblockable(url);
+    var whitelisted = page_is_whitelisted(url);
 
-  var count = 0;
-  if (show_block_counts && !paused && canBlock && !whitelisted) {
-    var tabId = safari.application.activeBrowserWindow.activeTab.id;
-    count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
-  }
-  var safari_toolbars = safari.extension.toolbarItems;
-  for (var i = 0; i < safari_toolbars.length; i++ ) {
-    safari_toolbars[i].badge = count;
-  }
-  frameData.get(tabId).blockCount = count;
+    var count = 0;
+    if (show_block_counts && !paused && canBlock && !whitelisted) {
+        var tabId = safari.application.activeBrowserWindow.activeTab.id;
+        count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
+    }
+    var safari_toolbars = safari.extension.toolbarItems;
+    for (var i = 0; i < safari_toolbars.length; i++ ) {
+        safari_toolbars[i].badge = count;
+    }
+    frameData.get(tabId).blockCount = count;
 }
 
 // Code for removing popover
@@ -270,19 +293,19 @@ safari.extension.settings.addEventListener("change", function(e) {
 
 // Add context menus
 safari.application.addEventListener("contextmenu", function(event) {
-  if (!event.userInfo)
-    return;
-  if (!get_settings().show_context_menu_items || adblock_is_paused())
-    return;
+    if (!event.userInfo)
+        return;
+    if (!get_settings().show_context_menu_items || adblock_is_paused())
+        return;
 
-  var url = event.target.url;
-  if (page_is_unblockable(url) || page_is_whitelisted(url))
-    return;
+    var url = event.target.url;
+    if (page_is_unblockable(url) || page_is_whitelisted(url))
+        return;
 
-  event.contextMenu.appendContextMenuItem("show-blacklist-wizard", translate("block_this_ad"));
-  event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
+    event.contextMenu.appendContextMenuItem("show-blacklist-wizard", translate("block_this_ad"));
+    event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
 
-  var host = parseUri(url).host;
-  if (count_cache.getCustomFilterCount(host))
-    event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
+    var host = parseUri(url).host;
+    if (count_cache.getCustomFilterCount(host))
+        event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
 }, false);
