@@ -152,6 +152,23 @@
     }
   };
 
+  // Reload already opened tab
+  // Input:
+  //   tabId: integer - id of the tab which should be reloaded
+  reloadTab = function(tabId) {
+      if (!SAFARI) {
+          chrome.tabs.reload(tabId, {bypassCache: true}, function() {
+              chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+                  if (changeInfo.status === "complete" && tab.status === "complete") {
+                      setTimeout(function() {
+                          chrome.runtime.sendMessage("reloadcomplete");
+                      }, 2000);
+                  }
+              });
+          });
+      }
+  }
+
   // Implement blocking via the Chrome webRequest API.
   if (!SAFARI) {
     // Stores url, whitelisting, and blocking info for a tabid+frameid
@@ -231,7 +248,7 @@
           return;
         var data = frameData.get(tabId, frameId);
         if (data !== undefined)
-          data.resources[elType + ':|:' + url] = null;
+            data.resources[url] = null;
       },
 
       // When a tab is closed, delete all its data
@@ -492,6 +509,10 @@
     if (!SAFARI && sync) {
         sync_setting(name, is_enabled);
     }
+  }
+
+  disable_setting = function(name) {
+      _settings.set(name, false);
   }
 
   // MYFILTERS PASSTHROUGHS

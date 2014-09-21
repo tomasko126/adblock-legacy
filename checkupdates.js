@@ -37,8 +37,6 @@ function checkupdates(page) {
             } else {
               if (page === "help") {
                 $("#checkupdate").html(translate("latest_version")).show();
-              } else {
-                $("#step_update_filters_DIV").show();
               }
             }
           } else {
@@ -50,8 +48,6 @@ function checkupdates(page) {
             } else {
               if (page === "help") {
                 $("#checkupdate").html(translate("latest_version")).show();
-              } else {
-                $("#step_update_filters_DIV").show();
               }
             }
           }

@@ -2,9 +2,93 @@ emit_page_broadcast = function(request) {
   safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
+// Imitate frameData object for Safari
+frameData = (function() {
+    // Map that will serve as cache
+    // key: Integer - tab id.
+    var countMap = {};
+
+    return {
+        getCountMap: function() {
+            return countMap;
+        },
+
+        // Get frameData for the tab.
+        // Input:
+        //  tabId: Integer - id of the tab you want to get
+        get: function(tabId) {
+            return countMap[tabId] || {};
+        },
+
+        // Create a new frameData
+        // Input:
+        //  tabId: Integerc - id of the tab you want to add in the frameData
+        create: function(tabId, url, domain) {
+            var activeTab = safari.application.activeBrowserWindow.activeTab;
+            if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
+            return frameData._initializeMap(tabId, url, domain);
+        },
+        // Reset a frameData
+        // Inputs:
+        //  tabId: Integer - id of the tab you want to add in the frameData
+        //  url: new URL for the tab
+        reset: function(tabId, url) {
+            var activeTab = safari.application.activeBrowserWindow.activeTab;
+            if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
+            var domain = parseUri(url).hostname;
+            return frameData._initializeMap(tabId, url, domain);
+        },
+        // Initialize map
+        // Inputs:
+        //  tabId: Integer - id of the tab you want to add in the frameData
+        //  url: new URL for the tab
+        //  domain: domain of the request
+        _initializeMap: function(tabId, url, domain) {
+            var tracker = countMap[tabId];
+
+            var shouldTrack = !tracker || tracker.url !== url;
+            if (shouldTrack) {
+                countMap[tabId] = {
+                    resources: {},
+                    domain: domain,
+                    url: url,
+                };
+            }
+            return tracker;
+        },
+        // Store resource
+        // Inputs:
+        //   tabId: Numeric - id of the tab you want to delete in the frameData
+        //   url: url of the resource
+        storeResource: function(tabId, url) {
+            if (!get_settings().show_advanced_options)
+                return;
+            var data = frameData.get(tabId);
+            if (data !== undefined)
+                data.resources[url] = null;
+        },
+        // Delete tabId from frameData
+        // Input:
+        //   tabId: Numeric - id of the tab you want to delete in the frameData
+        close: function(tabId) {
+            delete countMap[tabId];
+        }
+    }
+})();
+
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
-  if (messageEvent.name != "canLoad")
+  if (messageEvent.name === "request") {
+        var args = messageEvent.message.data.args;
+        if (!messageEvent.target.url || messageEvent.target.url === args[1].tab.url)
+            frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
+        else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
+            frameData.reset(messageEvent.target.id, args[1].tab.url);
+        }
+        return;
+    }
+
+    if (messageEvent.name != "canLoad")
     return;
 
   var tab = messageEvent.target;
@@ -21,6 +105,8 @@ safari.application.addEventListener("message", function(messageEvent) {
   var url = messageEvent.message.url;
   var elType = messageEvent.message.elType;
   var frameDomain = messageEvent.message.frameDomain;
+
+  frameData.storeResource(tab.id, url);
 
   var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
   if (isMatched)
@@ -76,7 +162,7 @@ safari.application.addEventListener("command", function(event) {
       tab.url = tab.url;
     }
   } else if (command === "report-ad") {
-    var url = "pages/adreport.html?url=" + escape(browserWindow.activeTab.url);
+    var url = "pages/adreport.html?url=" + escape(browserWindow.activeTab.url) + "?tabId=" + browserWindow.activeTab.id;
     openTab(url, true, browserWindow);
   } else if (command === "undo-last-block") {
     var tab = browserWindow.activeTab;
@@ -243,6 +329,21 @@ if (!LEGACY_SAFARI) {
     })
   })();
 }
+
+// On close event, delete countMap[tabId]
+safari.application.addEventListener("close", function(event) {
+    setTimeout(function() {
+        var opened_tabs = [];
+        var safari_tabs = safari.application.activeBrowserWindow.tabs;
+        for (var i=0; i < safari_tabs.length; i++)
+            opened_tabs.push(safari_tabs[i].id);
+        console.log(opened_tabs);
+
+        for (tab in frameData.getCountMap())
+            if (opened_tabs.indexOf(parseInt(tab)) === -1)
+                frameData.close(parseInt(tab));
+    }, 150);
+}, true);
 
 // Open Options page upon settings checkbox click.
 safari.extension.settings.openAdBlockOptions = false;
