@@ -89,9 +89,8 @@ $(function() {
         // Update the width and height of popover in Safari
         $(window).load(function() {
             wrapperheight = $("body").outerHeight();
-            wrapperwidth = $("body").outerWidth();
             safari.extension.popovers[0].height = wrapperheight + 5;
-            safari.extension.popovers[0].width = wrapperwidth;
+            safari.extension.popovers[0].width = 270;
         });
 
         // Store tab id of an active tab
@@ -253,57 +252,10 @@ $(function() {
         }
     });
 
-    // Share open/close click handlers
-    var state = "initial";
-    var bodysize = { width: SAFARI ? safari.extension.popovers[0].width : $("body").width(),
-                    height: SAFARI ? safari.extension.popovers[0].height : $("body").height() };
-    var linkHref = "https://getadblock.com/share/";
-    var bodysize;
     $("#link_open").click(function() {
-        if (LEGACY_SAFARI) {
-            BG.openTab(linkHref);
-            closeAndReloadPopup();
-            return;
-        }
-        bodysize = { width: $("#wrapper").width(), height: $("#wrapper").height() };
-        if (state === "initial") {
-            $("<iframe>").
-            attr("frameBorder", 0).
-            attr("src", linkHref).
-            width("100%").
-            height("100%").
-            appendTo("#slideout_wrapper");
-        }
-        if (state === "open")
-            return;
-        state = "open";
-        if (SAFARI) {
-            safari.extension.popovers[0].width = 660;
-            safari.extension.popovers[0].height = 470;
-        }
-        $("#link_close").show();
-        var slideoutWidth = parseInt($("#div_slideout").data("width"));
-        var slideoutHeight = parseInt($("#div_slideout").data("height"));
-        $("body").animate({width: slideoutWidth, height: slideoutHeight},
-                          {queue:false});
-        $("#menu-items").slideUp();
-        $("#slideout_wrapper").
-        width(0).height(0).show().
-        animate({width: slideoutWidth-50, height: slideoutHeight-40},
-                {queue:false});
-    });
-    $("#link_close").click(function() {
-        if (state != "open")
-            return;
-        state = "closed";
-        $("body").animate({width: bodysize.width, height: bodysize.height}, {queue:false});
-        $("#menu-items").slideDown();
-        $("#slideout_wrapper").animate({width: 0, height: 0}, {queue:false});
-        $("#link_close").hide();
-        $("#slideout_wrapper").slideUp();
-        if (SAFARI) {
-            safari.extension.popovers[0].width = wrapperwidth;
-            safari.extension.popovers[0].height = wrapperheight + 5;
-        }
+        var linkHref = "https://getadblock.com/share/";
+        BG.openTab(linkHref);
+        closeAndReloadPopup();
+        return;
     });
 });

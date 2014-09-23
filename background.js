@@ -637,28 +637,18 @@
     } else {
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
-
-        if (!disabled_site)
-          result.whitelisted = page_is_whitelisted(tab.url);
-
-        callback(result);
-      });
-    } else {
-      var browserWindow = safari.application.activeBrowserWindow;
-      var tab = browserWindow.activeTab;
-
       var disabled_site = page_is_unblockable(tab.url);
+
+      if (!disabled_site)
+        result.whitelisted = page_is_whitelisted(tab.url);
 
       var result = {
         tab: tab,
         disabled_site: disabled_site,
       };
 
-      if (!disabled_site)
-        result.whitelisted = page_is_whitelisted(tab.url);
-
-      callback(result);
-    }
+        callback(result);
+      }
   }
 
   // Returns true if anything in whitelist matches the_domain.
