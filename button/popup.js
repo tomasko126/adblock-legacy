@@ -239,9 +239,7 @@ $(function() {
     $("#div_help_hide").click(function() {
         if (OPERA) {
             $("#help_hide_explanation").text(translate("operabutton_how_to_hide2")).slideToggle();
-        } else if (!SAFARI) {
-            $("#help_hide_explanation").slideToggle();
-        } else {
+        } else if (SAFARI) {
             if ($("#help_hide_explanation").is(":visible")) {
                 safari.extension.popovers[0].height = wrapperheight + 5;
                 $("#help_hide_explanation").slideToggle();
@@ -249,6 +247,8 @@ $(function() {
                 safari.extension.popovers[0].height = wrapperheight + 70;
                 $("#help_hide_explanation").slideToggle();
             }
+        } else {
+            $("#help_hide_explanation").slideToggle();
         }
     });
 
