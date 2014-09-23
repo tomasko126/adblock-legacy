@@ -638,6 +638,15 @@
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
 
+        if (!disabled_site)
+          result.whitelisted = page_is_whitelisted(tab.url);
+
+        callback(result);
+      });
+    } else {
+      var browserWindow = safari.application.activeBrowserWindow;
+      var tab = browserWindow.activeTab;
+
       var disabled_site = page_is_unblockable(tab.url);
 
       var result = {
