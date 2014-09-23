@@ -639,13 +639,13 @@
       var tab = browserWindow.activeTab;
       var disabled_site = page_is_unblockable(tab.url);
 
-      if (!disabled_site)
-        result.whitelisted = page_is_whitelisted(tab.url);
-
       var result = {
         tab: tab,
         disabled_site: disabled_site,
       };
+
+      if (!disabled_site)
+        result.whitelisted = page_is_whitelisted(tab.url);
 
         callback(result);
       }
