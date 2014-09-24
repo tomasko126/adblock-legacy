@@ -232,24 +232,28 @@
           data.resources[elType + ':|:' + url] = null;
       },
 
-      // When a tab is closed, delete all its data
       onTabClosedHandler: function(tabId) {
-          // Get id of all opened tabs - GH #300
-          var opened_tabs = [];
-          chrome.tabs.query({}, function(tabs) {
-              for (var i=0; i<tabs.length; i++)
-                  opened_tabs.push(tabs[i].id);
-              for (var j in frameData) {
-                  var tab_id = parseInt(j);
-                  // If tabId in frameData exists but cannot be found
-                  // in chrome.tabs.query, delete it from frameData
-                  if (!isNaN(tab_id) && opened_tabs.indexOf(tab_id) === -1) {
-                      console.log("[DEBUG]", "----------- Closing tab", tabId);
-                      console.log("[DEBUG]", "----------- Deleting frameData["+tab_id+"]");
-                      delete frameData[tab_id];
-                  }
-              }      
-          });      
+        // check for stale frameData objects,
+        // if found, remove them
+        var opened_tabs = [];
+        // Get id of all opened tabs
+        chrome.tabs.query({}, function(tabs) {
+          if (tabs.length === 0)
+            return;
+          for (var i=0; i < tabs.length; i++) {
+            opened_tabs.push(tabs[i].id);
+          }
+          for (var tab_Id in frameData) {
+            // If tab_Id in frameData exists but
+            // cannot be found in chrome.tabs.query,
+            //  delete it from frameData
+            if (typeof frameData[tab_Id] === "object" &&
+                opened_tabs.indexOf(parseInt(tab_Id)) === -1) {
+
+                delete frameData[tab_Id];
+            }
+          }
+        });
       }
     };
 
