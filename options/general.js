@@ -84,6 +84,8 @@ if (!SAFARI) {
                     $("input[id='enable_show_survey']").prop("checked", settings.show_survey);
                 });
             }
+            if (request.message === "update_page")
+                document.location.reload();
         }
     );
 }

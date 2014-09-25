@@ -1240,6 +1240,9 @@
 
                   // Set settings
                   var advanced = settingstable.get("show_advanced_options");
+                  var advanced_local = get_settings().show_advanced_options;
+                  if (advanced_local !== advanced)
+                      chrome.runtime.sendMessage({message: "update_page"});
                   set_setting("show_advanced_options", advanced);
                   var debug = settingstable.get("debug_logging");
                   set_setting("debug_logging", debug);
