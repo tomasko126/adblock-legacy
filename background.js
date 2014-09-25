@@ -1158,7 +1158,7 @@
               if (error) return;
               set_setting("dropbox_sync", true);
               settingssync();
-              chrome.runtime.sendMessage({message: "signedin"});
+              chrome.runtime.sendMessage({message: "update_icon"});
           });
       }
 
@@ -1167,7 +1167,7 @@
           db_client.signOut(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", false);
-              chrome.runtime.sendMessage({message: "signedout"});
+              chrome.runtime.sendMessage({message: "update_icon"});
           });
       }
 
@@ -1269,8 +1269,10 @@
       if (!SAFARI) {
           chrome.runtime.onMessage.addListener(
               function(request, sender, sendResponse) {
-                  if (request.message === "clienterror")
+                  if (request.message === "clienterror") {
                       db_client.reset();
+                      chrome.runtime.sendMessage({message: "update_icon"});
+                  }
               }
           );
       }
