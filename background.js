@@ -476,7 +476,8 @@
     var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
     if (!confirm(confirmation_text)) { return; }
     remove_custom_filter_for_host(host);
-    chrome.tabs.reload();
+    if (!SAFARI)
+        chrome.tabs.reload();
   };
 
   get_settings = function() {

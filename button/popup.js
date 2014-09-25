@@ -165,6 +165,8 @@ $(function() {
             var host = parseUri(info.tab.url).host;
             BG.confirm_removal_of_custom_filters_on_host(host);
             closeAndReloadPopup();
+            if (SAFARI)
+                activeTab.url = activeTab.url;
         });
     });
 
