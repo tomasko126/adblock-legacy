@@ -1158,7 +1158,7 @@
               if (error) return;
               set_setting("dropbox_sync", true);
               settingssync();
-              chrome.runtime.sendMessage({message: "signedin"});
+              chrome.runtime.sendMessage({message: "update_icon"});
           });
       }
 
@@ -1167,7 +1167,7 @@
           db_client.signOut(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", false);
-              chrome.runtime.sendMessage({message: "signedout"});
+              chrome.runtime.sendMessage({message: "update_icon"});
           });
       }
 
@@ -1240,6 +1240,9 @@
 
                   // Set settings
                   var advanced = settingstable.get("show_advanced_options");
+                  var advanced_local = get_settings().show_advanced_options;
+                  if (advanced_local !== advanced)
+                      chrome.runtime.sendMessage({message: "update_page"});
                   set_setting("show_advanced_options", advanced);
                   var debug = settingstable.get("debug_logging");
                   set_setting("debug_logging", debug);
@@ -1266,8 +1269,10 @@
       if (!SAFARI) {
           chrome.runtime.onMessage.addListener(
               function(request, sender, sendResponse) {
-                  if (request.message === "clienterror")
+                  if (request.message === "clienterror") {
                       db_client.reset();
+                      chrome.runtime.sendMessage({message: "update_icon"});
+                  }
               }
           );
       }
