@@ -1090,7 +1090,7 @@
       var adblock_settings = [];
       var settings = get_settings();
       for (setting in settings)
-          adblock_settings.push(setting+": "+get_settings()[setting] + "\n");
+          adblock_settings.push(setting + ": "+ get_settings()[setting] + "\n");
       adblock_settings = adblock_settings.join('');
 
       // Create debug info for a bug report or an ad report
@@ -1149,9 +1149,11 @@
                 "Developer Mode -> Inspect views: background page -> Console. " +
                 "Paste the contents here:");
       body.push("");
+      body.push("```");
       body.push("====== Do not touch below this line ======");
       body.push("");
       body.push(getDebugInfo());
+      body.push("```");
       var out = encodeURIComponent(body.join('  \n'));
 
       return out;
