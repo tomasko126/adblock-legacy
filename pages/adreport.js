@@ -140,9 +140,9 @@ var checkmalware = function() {
             }
         }
 
-        // Compare domains of loaded resources with malware.json
+        // Compare domains of loaded resources with domain.json
         for (var i=0; i < extracted_domains.length; i++) {
-            if (json.adware.indexOf(extracted_domains[i]) > -1) {
+            if (malwareDomains.adware.indexOf(extracted_domains[i]) > -1) {
                 // User is probably infected by some kind of malware,
                 // because resource has been downloaded from malware/adware/spyware site.
                 var infected = true;
@@ -171,9 +171,10 @@ $("input, select").change(function(event) {
 
 // STEP 1: Malware/adware detection
 var xhr = new XMLHttpRequest();
-xhr.open("GET", chrome.extension.getURL("malware.json"), false);
+//TODO - update URL ...
+xhr.open("GET", "http://localhost:8000/malware/domains.json", false);
 xhr.send();
-var json = JSON.parse(xhr.responseText);
+var malwareDomains = JSON.parse(xhr.responseText);
 
 var domain = parseUri(options.url).hostname.replace(/((http|https):\/\/)?(www.)?/g, "");
 
