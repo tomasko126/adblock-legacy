@@ -234,10 +234,28 @@
           data.resources[elType + ':|:' + url] = null;
       },
 
-      // When a tab is closed, delete all its data
       onTabClosedHandler: function(tabId) {
-        log("[DEBUG]", "----------- Closing tab", tabId);
-        delete frameData[tabId];
+        // check for stale frameData objects,
+        // if found, remove them
+        var opened_tabs = [];
+        // Get id of all opened tabs
+        chrome.tabs.query({}, function(tabs) {
+          if (tabs.length === 0)
+            return;
+          for (var i=0; i < tabs.length; i++) {
+            opened_tabs.push(tabs[i].id);
+          }
+          for (var tab_Id in frameData) {
+            // If tab_Id in frameData exists but
+            // cannot be found in chrome.tabs.query,
+            //  delete it from frameData
+            if (typeof frameData[tab_Id] === "object" &&
+                opened_tabs.indexOf(parseInt(tab_Id)) === -1) {
+
+                delete frameData[tab_Id];
+            }
+          }
+        });
       }
     };
 
@@ -1090,7 +1108,7 @@
       var adblock_settings = [];
       var settings = get_settings();
       for (setting in settings)
-          adblock_settings.push(setting+": "+get_settings()[setting] + "\n");
+          adblock_settings.push(setting + ": "+ get_settings()[setting] + "\n");
       adblock_settings = adblock_settings.join('');
 
       // Create debug info for a bug report or an ad report
@@ -1149,9 +1167,11 @@
                 "Developer Mode -> Inspect views: background page -> Console. " +
                 "Paste the contents here:");
       body.push("");
+      body.push("```");
       body.push("====== Do not touch below this line ======");
       body.push("");
       body.push(getDebugInfo());
+      body.push("```");
       var out = encodeURIComponent(body.join('  \n'));
 
       return out;
@@ -1176,7 +1196,7 @@
               if (error) return;
               set_setting("dropbox_sync", true);
               settingssync();
-              chrome.runtime.sendMessage({message: "signedin"});
+              chrome.runtime.sendMessage({message: "update_icon"});
           });
       }
 
@@ -1185,7 +1205,7 @@
           db_client.signOut(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", false);
-              chrome.runtime.sendMessage({message: "signedout"});
+              chrome.runtime.sendMessage({message: "update_icon"});
           });
       }
 
@@ -1258,6 +1278,9 @@
 
                   // Set settings
                   var advanced = settingstable.get("show_advanced_options");
+                  var advanced_local = get_settings().show_advanced_options;
+                  if (advanced_local !== advanced)
+                      chrome.runtime.sendMessage({message: "update_page"});
                   set_setting("show_advanced_options", advanced);
                   var debug = settingstable.get("debug_logging");
                   set_setting("debug_logging", debug);
@@ -1284,8 +1307,10 @@
       if (!SAFARI) {
           chrome.runtime.onMessage.addListener(
               function(request, sender, sendResponse) {
-                  if (request.message === "clienterror")
+                  if (request.message === "clienterror") {
                       db_client.reset();
+                      chrome.runtime.sendMessage({message: "update_icon"});
+                  }
               }
           );
       }
