@@ -154,6 +154,6 @@ safari.application.addEventListener("contextmenu", function(event) {
     event.contextMenu.appendContextMenuItem("show-clickwatcher-ui", translate("block_an_ad_on_this_page"));
 
     var host = parseUri(url).host;
-    if (count_cache.getCustomFilterCount(host))
+    if (count_cache.getCustomFilterCount(host) && !LEGACY_SAFARI)
         event.contextMenu.appendContextMenuItem("undo-last-block", translate("undo_last_block"));
 }, false);

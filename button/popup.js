@@ -46,7 +46,9 @@ $(function() {
         var host = parseUri(info.tab.url).host;
         var eligible_for_undo = !paused && (info.disabled_site || !info.whitelisted);
         var url_to_check_for_undo = info.disabled_site ? undefined : host;
-        if (eligible_for_undo && BG.count_cache.getCustomFilterCount(url_to_check_for_undo))
+        if (eligible_for_undo && 
+            BG.count_cache.getCustomFilterCount(url_to_check_for_undo) &&
+            !LEGACY_SAFARI)
             show(["div_undo", "separator0"]);
 
         if (SAFARI || !BG.get_settings().show_advanced_options)
