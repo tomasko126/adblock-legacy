@@ -4,25 +4,17 @@ emit_page_broadcast = function(request) {
 
 // Imitate frameData object for Safari
 frameData = (function() {
-    // Map that will serve as cache
-    // key: Integer - tab id.
-    var countMap = {};
-
     return {
-        getCountMap: function() {
-            return countMap;
-        },
-
         // Get frameData for the tab.
         // Input:
-        //  tabId: Integer - id of the tab you want to get
+        //   tabId: Integer - id of the tab you want to get
         get: function(tabId) {
-            return countMap[tabId] || {};
+            return frameData[tabId] || {};
         },
 
         // Create a new frameData
         // Input:
-        //  tabId: Integerc - id of the tab you want to add in the frameData
+        //   tabId: Integerc - id of the tab you want to add in the frameData
         create: function(tabId, url, domain) {
             var activeTab = safari.application.activeBrowserWindow.activeTab;
             if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
@@ -30,8 +22,8 @@ frameData = (function() {
         },
         // Reset a frameData
         // Inputs:
-        //  tabId: Integer - id of the tab you want to add in the frameData
-        //  url: new URL for the tab
+        //   tabId: Integer - id of the tab you want to add in the frameData
+        //   url: new URL for the tab
         reset: function(tabId, url) {
             var activeTab = safari.application.activeBrowserWindow.activeTab;
             if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
@@ -40,15 +32,15 @@ frameData = (function() {
         },
         // Initialize map
         // Inputs:
-        //  tabId: Integer - id of the tab you want to add in the frameData
-        //  url: new URL for the tab
-        //  domain: domain of the request
+        //   tabId: Integer - id of the tab you want to add in the frameData
+        //   url: new URL for the tab
+        //   domain: domain of the request
         _initializeMap: function(tabId, url, domain) {
-            var tracker = countMap[tabId];
+            var tracker = frameData[tabId];
 
             var shouldTrack = !tracker || tracker.url !== url;
             if (shouldTrack) {
-                countMap[tabId] = {
+                frameData[tabId] = {
                     resources: {},
                     domain: domain,
                     url: url,
@@ -63,7 +55,7 @@ frameData = (function() {
         storeResource: function(tabId, url) {
             if (!get_settings().show_advanced_options)
                 return;
-            var data = frameData.get(tabId);
+            var data = this.get(tabId);
             if (data !== undefined)
                 data.resources[url] = null;
         },
@@ -71,7 +63,7 @@ frameData = (function() {
         // Input:
         //   tabId: Numeric - id of the tab you want to delete in the frameData
         close: function(tabId) {
-            delete countMap[tabId];
+            delete frameData[tabId];
         }
     }
 })();
@@ -330,18 +322,20 @@ if (!LEGACY_SAFARI) {
   })();
 }
 
-// On close event, delete countMap[tabId]
+// On close event, delete frameData[tabId]
 safari.application.addEventListener("close", function(event) {
     setTimeout(function() {
         var opened_tabs = [];
         var safari_tabs = safari.application.activeBrowserWindow.tabs;
+
         for (var i=0; i < safari_tabs.length; i++)
             opened_tabs.push(safari_tabs[i].id);
-        console.log(opened_tabs);
 
-        for (tab in frameData.getCountMap())
-            if (opened_tabs.indexOf(parseInt(tab)) === -1)
+        for (tab in frameData) {
+            if (typeof frameData[tab] === "object" && opened_tabs.indexOf(parseInt(tab)) === -1) {
                 frameData.close(parseInt(tab));
+            }
+        }
     }, 150);
 }, true);
 
