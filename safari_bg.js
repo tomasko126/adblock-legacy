@@ -25,8 +25,6 @@ frameData = (function() {
         // Input:
         //  tabId: Numeric - id of the tab you want to add in the frameData
         create: function(tabId, url, domain) {
-            var activeTab = safari.application.activeBrowserWindow.activeTab;
-            if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
             return frameData._initializeMap(tabId, url, domain);
         },
         // Reset a frameData
@@ -34,8 +32,6 @@ frameData = (function() {
         //  tabId: Numeric - id of the tab you want to add in the frameData
         //  url: new URL for the tab
         reset: function(tabId, url) {
-            var activeTab = safari.application.activeBrowserWindow.activeTab;
-            if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
             var domain = parseUri(url).hostname;
             return frameData._initializeMap(tabId, url, domain);
         },
@@ -69,7 +65,7 @@ frameData = (function() {
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
 
-    if (messageEvent.name === "request") {
+    if (messageEvent.name === "request" && messageEvent.message.data.args.length >= 2) {
         var args = messageEvent.message.data.args;
         if (!messageEvent.target.url || messageEvent.target.url === args[1].tab.url)
             frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
@@ -143,28 +139,15 @@ safari.application.addEventListener("beforeNavigate", function(event) {
     }
 }, true);
 
-safari.application.addEventListener("open", function(event) {
-    var tab = safari.application.activeBrowserWindow.activeTab;
-    if (!tab.url) {
-        if (!tab.id) {
-            setTimeout(function() {
-                var tab = safari.application.activeBrowserWindow.activeTab;
-            }, 200);
-        }
-        if (!tab.id)
-            return;
-        frameData.create(tab.id);
-    }
-}, true);
-
-// On close event, delete countMap[tabId]
+// On close event fires when tab is about to close,
+// not when tab was closed. Therefore we need to remove
+// countMap[tabId] after "close" event has been fired.
 safari.application.addEventListener("close", function(event) {
     setTimeout(function() {
         var opened_tabs = [];
         var safari_tabs = safari.application.activeBrowserWindow.tabs;
         for (var i=0; i < safari_tabs.length; i++)
             opened_tabs.push(safari_tabs[i].id);
-        console.log(opened_tabs);
 
         for (tab in frameData.getCountMap())
             if (opened_tabs.indexOf(parseInt(tab)) === -1)
@@ -177,6 +160,9 @@ safari.application.addEventListener("close", function(event) {
 // way, I don't need to loop and compare.)
 var updateBadge = function() {
     var show_block_counts = get_settings().display_stats;
+
+    if (!show_block_counts)
+        return;
 
     var url = safari.application.activeBrowserWindow.activeTab.url;
     var paused = adblock_is_paused();
