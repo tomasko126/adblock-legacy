@@ -90,8 +90,8 @@ $(function() {
     if (SAFARI) {
         // Update the width and height of popover in Safari
         $(window).load(function() {
-            wrapperheight = $("body").outerHeight();
-            safari.extension.popovers[0].height = wrapperheight + 5;
+            var popupheight = $("body").outerHeight();
+            safari.extension.popovers[0].height = popupheight + 5;
             safari.extension.popovers[0].width = 270;
         });
 
@@ -244,13 +244,11 @@ $(function() {
         if (OPERA) {
             $("#help_hide_explanation").text(translate("operabutton_how_to_hide2")).slideToggle();
         } else if (SAFARI) {
-            if ($("#help_hide_explanation").is(":visible")) {
-                safari.extension.popovers[0].height = wrapperheight + 5;
-                $("#help_hide_explanation").slideToggle();
-            } else {
-                safari.extension.popovers[0].height = wrapperheight + 70;
-                $("#help_hide_explanation").slideToggle();
-            }
+            $("#help_hide_explanation").text(translate("safaributton_how_to_hide2")).
+            slideToggle(function() {
+                var popupheight = $("body").outerHeight();
+                safari.extension.popovers[0].height = popupheight;
+            });
         } else {
             $("#help_hide_explanation").slideToggle();
         }

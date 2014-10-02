@@ -81,9 +81,7 @@ safari.application.addEventListener("validate", function(event) {
                         removePopover(ABPopover);
                     }
                     // And now recreate the popover for toolbar items in all windows.
-                    for (var i = 0; i < safari.extension.toolbarItems.length; i++) {
-                        setPopover(ABPopover);
-                    }
+                    setPopover(ABPopover);
                 } else {
                     // New window has been opened, create popover for it
                     setPopover(ABPopover);
