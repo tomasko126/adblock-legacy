@@ -16,8 +16,6 @@ frameData = (function() {
         // Input:
         //   tabId: Integerc - id of the tab you want to add in the frameData
         create: function(tabId, url, domain) {
-            var activeTab = safari.application.activeBrowserWindow.activeTab;
-            if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
             return frameData._initializeMap(tabId, url, domain);
         },
         // Reset a frameData
@@ -25,8 +23,6 @@ frameData = (function() {
         //   tabId: Integer - id of the tab you want to add in the frameData
         //   url: new URL for the tab
         reset: function(tabId, url) {
-            var activeTab = safari.application.activeBrowserWindow.activeTab;
-            if (!tabId) tabId = safari.application.activeBrowserWindow.activeTab.id;
             var domain = parseUri(url).hostname;
             return frameData._initializeMap(tabId, url, domain);
         },
@@ -70,7 +66,7 @@ frameData = (function() {
 
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
-  if (messageEvent.name === "request") {
+  if (messageEvent.name === "request" && messageEvent.message.data.args.length >= 2) {
         var args = messageEvent.message.data.args;
         if (!messageEvent.target.url || messageEvent.target.url === args[1].tab.url)
             frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
@@ -322,7 +318,9 @@ if (!LEGACY_SAFARI) {
   })();
 }
 
-// On close event, delete frameData[tabId]
+// On close event fires when tab is about to close,
+// not when tab was closed. Therefore we need to remove
+// frameData[tabId] after "close" event has been fired.
 safari.application.addEventListener("close", function(event) {
     setTimeout(function() {
         var opened_tabs = [];

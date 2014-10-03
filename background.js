@@ -248,7 +248,7 @@
           return;
         var data = frameData.get(tabId, frameId);
         if (data !== undefined)
-            data.resources[url] = null;
+            data.resources[url] = elType;
       },
 
       // When a tab is closed, delete all its data

@@ -107,6 +107,7 @@ function generateReportURL() {
     return result;
 }
 
+// Check every domain of downloaded resource with malware-known domains
 var checkmalware = function() {
     BGcall("resourceblock_get_frameData", tabId, function(tab) {
         if (!tab)
@@ -117,28 +118,38 @@ var checkmalware = function() {
         var extracted_domains = [];
         var infected = null;
 
+        console.log("Frames:");
         if (!SAFARI) {
             // Get all loaded frames
             for (var object in tab) {
                 if (!isNaN(object))
                     frames.push(object);
             }
+            console.log(frames);
 
+            console.log("Loaded resources:");
             for (var i=0; i < frames.length; i++) {
                 if (Object.keys(tab[frames[i]].resources).length !== 0)
                     loaded_resources.push(tab[frames[i]].resources);
             }
+            console.log(loaded_resources);
         } else {
+            console.log("Loaded resources:");
             if (Object.keys(tab.resources).length !== 0)
                 loaded_resources.push(tab.resources);
+            console.log(loaded_resources);
         }
 
+        console.log("Extracted domains:");
         // Extract domains from loaded resources
         for (var i=0; i < loaded_resources.length; i++) {
             for (var key in loaded_resources[i]) {
-                extracted_domains.push(parseUri(key).hostname);
+                // Push just domains, which are not already in extracted_domains array
+                if (extracted_domains.indexOf(parseUri(key).hostname) === -1)
+                    extracted_domains.push(parseUri(key).hostname);
             }
         }
+        console.log(extracted_domains);
 
         // Compare domains of loaded resources with domain.json
         for (var i=0; i < extracted_domains.length; i++) {
@@ -170,9 +181,10 @@ $("input, select").change(function(event) {
 });
 
 // STEP 1: Malware/adware detection
+
+// Fetch file with malware-known domains
 var xhr = new XMLHttpRequest();
-//TODO - update URL ...
-xhr.open("GET", "http://localhost:8000/malware/domains.json", false);
+xhr.open("GET", "https://data.getadblock.com/filters/domains.json", false);
 xhr.send();
 var malwareDomains = JSON.parse(xhr.responseText);
 
@@ -183,6 +195,8 @@ if (uri === "")
     uri = parseUri(options.url).hash;
 var tabId = uri.replace(/[^0-9]/g,'');
 
+// Check, if downloaded resources are available,
+// if not, just reload tab with parsed tabId
 BGcall("get_settings", "show_advanced_options", function(status) {
     if (status.show_advanced_options) {
         checkmalware();
