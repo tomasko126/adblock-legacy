@@ -96,7 +96,7 @@ function generateReportURL() {
     body.push("");
     body.push("=== Question Responses ===");
     var answers = $('span[class="answer"]');
-    var text = $('div[id^="step"][class="section"]:visible');
+    var text = $('div[class="section"]:visible');
     for (var i=0, n=1; i<answers.length, i<text.length; i++, n++) {
         body.push(n+"."+text[i].id+": "+answers[i].getAttribute("chosen"));
     }

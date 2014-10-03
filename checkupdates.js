@@ -34,6 +34,7 @@ function checkupdates(page) {
                    chrome.tabs.create({url: 'chrome://extensions/'});
                  }
                 });
+                $(".step").hide();
             } else {
               if (page === "help") {
                 $("#checkupdate").html(translate("latest_version")).show();
@@ -45,6 +46,7 @@ function checkupdates(page) {
               $("#checkupdate").html(translate("update_available"));
               var updateURL = $("key:contains(URL) + string", response).text();
               $("#here").html(translate("here")).attr("href", updateURL);
+              $(".step").hide();
             } else {
               if (page === "help") {
                 $("#checkupdate").html(translate("latest_version")).show();
