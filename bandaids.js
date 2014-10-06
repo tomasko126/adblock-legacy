@@ -64,7 +64,7 @@ var run_bandaids = function() {
       BGcall('set_first_run_to_false', null);
     },
     youtube_safari_only: function() {
-        
+
         function blockYoutubeAds(videoplayer) {
         var flashVars = videoplayer.getAttribute('flashvars');
         var inParam = false;
@@ -82,8 +82,8 @@ var run_bandaids = function() {
 
                 // Disable some attributes in ytplayer object to disable ads in HTML5 video player
                 var elemScript = document.createElement("script");
-                elemScript.textContent = 
-                    "var ytp = ytplayer['config']['args']; ytplayer['config'].loaded = false; ytp.ad3_module = 0;" + 
+                elemScript.textContent =
+                    "var ytp = ytplayer['config']['args']; ytplayer['config'].loaded = false; ytp.ad3_module = 0;" +
                     "ytp.ad_channel_code_instream = 0; ytp.ad_channel_code_overlay = 0; ytp.ad_device = 0; ytp.ad_eurl = 0;" +
                     "ytp.ad_host = 0; ytp.ad_host_tier = 0; ytp.ad_logging_flag = 0; ytp.ad_preroll = 0; ytp.ad_slots = 0;" +
                     "ytp.ad_tag = 0; ytp.ad_video_pub_id = 0; ytp.adsense_video_doc_id = 0; ytp.advideo = 0; ytp.afv = 0;" +
@@ -172,8 +172,6 @@ var before_ready_bandaids = function() {
 
         // Track actual URL
         var url = document.location.href;
-        
-        // Sadly, that onhrefchange event doesn't exist
         setInterval(function() {
             if (url !== document.location.href) {
                 history.go(0);
