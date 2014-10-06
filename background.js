@@ -1066,6 +1066,26 @@
   // Get debug info for bug reporting and ad reporting
   getDebugInfo = function() {
 
+      // Is this installed build of AdBlock the official one?
+      var AdBlockBuild = function() {
+          if (!SAFARI) {
+              if (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk") {
+                  return " Beta";
+              } else if (chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom" || 
+                         chrome.runtime.id === "aobdicepooefnbaeokijohmhjlleamfj") {
+                  return " Stable";
+              } else {
+                  return " Unofficial";
+              }
+          } else {
+              if (safari.extension.baseURI.indexOf("com.betafish.adblockforsafari-UAMUU4S2D9") > -1) {
+                  return " Stable";
+              } else {
+                  return " Unofficial";
+              }
+          }
+      }
+
       // Get AdBlock version
       var AdBlockVersion = chrome.runtime.getManifest().version;
 
@@ -1106,8 +1126,7 @@
       info.push("==== Settings ====");
       info.push(adblock_settings);
       info.push("==== Other info: ====");
-      info.push("AdBlock version number: " + AdBlockVersion +
-               (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk" ? " Beta" : ""));
+      info.push("AdBlock version number: " + AdBlockVersion + AdBlockBuild());
       if (adblock_error)
           info.push("Last known error: " + adblock_error);
       info.push("Total pings: " + adblock_pings);
