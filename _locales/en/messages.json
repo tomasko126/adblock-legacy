@@ -224,7 +224,11 @@
   "showcontextmenus2":{
     "message":"Add items to the right click menu",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },  
+  },
+  "show_survey":{
+    "message":"Show AdBlock surveys",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },   
   "debuginlogoption":{
     "message":"Show debug statements in Console Log (which slows down AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
