@@ -110,6 +110,7 @@ function generateReportURL() {
 // Check every domain of downloaded resource against malware-known domains
 var checkmalware = function() {
     BGcall("resourceblock_get_frameData", tabId, function(tab) {
+
         if (!tab)
             return;
 
@@ -130,23 +131,33 @@ var checkmalware = function() {
                     loaded_resources.push(tab[frames[i]].resources);
             }
         } else {
+
             if (Object.keys(tab.resources).length !== 0)
                 loaded_resources.push(tab.resources);
         }
         // Extract domains from loaded resources
+
         for (var i=0; i < loaded_resources.length; i++) {
             for (var key in loaded_resources[i]) {
                 // Push just domains, which are not already in extracted_domains array
+
+                //chrome resources include a element type as well as the URL
                 var resource = key.split(':|:');
                 if (resource &&
                     resource.length == 2 &&
-                    extracted_domains.indexOf(parseUri(resource[1]).hostname) === -1)
+                    extracted_domains.indexOf(parseUri(resource[1]).hostname) === -1) {
+
                     extracted_domains.push(parseUri(resource[1]).hostname);
+                } else if (extracted_domains.indexOf(parseUri(key).hostname) === -1) {
+                    //safari resources include only the URL
+                    extracted_domains.push(parseUri(key).hostname);
+                }
             }
         }
 
         // Compare domains of loaded resources with domain.json
         for (var i=0; i < extracted_domains.length; i++) {
+
             if (malwareDomains.adware.indexOf(extracted_domains[i]) > -1) {
                 // User is probably infected by some kind of malware,
                 // because resource has been downloaded from malware/adware/spyware site.
@@ -191,7 +202,7 @@ var tabId = options.tabId.replace(/[^0-9]/g,'');
 // Check, if downloaded resources are available,
 // if not, just reload tab with parsed tabId
 BGcall("get_settings", "show_advanced_options", function(status) {
-    if (status.show_advanced_options) {
+    if (SAFARI || status.show_advanced_options) {
         checkmalware();
     } else {
         BGcall("set_setting", "show_advanced_options");

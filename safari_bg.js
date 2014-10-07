@@ -67,11 +67,18 @@ frameData = (function() {
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
 
-  if (messageEvent.name === "request" && messageEvent.message.data.args.length >= 2) {
+  if (messageEvent.name === "request" && 
+      messageEvent.message.data.args.length >= 2 &&
+      messageEvent.message.data.args[0] &&
+      messageEvent.message.data.args[1]) {
         var args = messageEvent.message.data.args;
-        if (!messageEvent.target.url || messageEvent.target.url === args[1].tab.url)
+        if (!messageEvent.target.url || 
+            (args[1] && 
+             args[1].tab && 
+             args[1].tab.url && 
+             messageEvent.target.url === args[1].tab.url)) {
             frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-        else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
+        } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
             frameData.reset(messageEvent.target.id, args[1].tab.url);
         }
         return;
@@ -236,15 +243,17 @@ safari.application.addEventListener("contextmenu", function(event) {
 // frameData[tabId] after "close" event has been fired.
 safari.application.addEventListener("close", function(event) {
     setTimeout(function() {
-        var opened_tabs = [];
-        var safari_tabs = safari.application.activeBrowserWindow.tabs;
+        if (safari.application.activeBrowserWindow) {
+            var opened_tabs = [];
+            var safari_tabs = safari.application.activeBrowserWindow.tabs;
 
-        for (var i=0; i < safari_tabs.length; i++)
-            opened_tabs.push(safari_tabs[i].id);
+            for (var i=0; i < safari_tabs.length; i++)
+                opened_tabs.push(safari_tabs[i].id);
 
-        for (tab in frameData) {
-            if (typeof frameData[tab] === "object" && opened_tabs.indexOf(parseInt(tab)) === -1) {
-                frameData.close(parseInt(tab));
+            for (tab in frameData) {
+                if (typeof frameData[tab] === "object" && opened_tabs.indexOf(parseInt(tab)) === -1) {
+                    frameData.close(parseInt(tab));
+                }
             }
         }
     }, 150);
