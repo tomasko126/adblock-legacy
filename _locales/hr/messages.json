@@ -225,6 +225,10 @@
     "message":"Dodaj stavke na izbornik desnog klika",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "show_survey":{
+    "message":"Prikaži AdBlock ankete",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
   "debuginlogoption":{
     "message":"Prikaži izjave uklanjanja pogreške u zapisu konzole (usporava AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -339,6 +343,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (uklanja dosadne smetnje sa Weba)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"Lista uklanjanja upozorenja AdBlock-a (uklanja poruke o korištenju AdBlock-a)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{

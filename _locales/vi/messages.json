@@ -176,7 +176,7 @@
     "description":"Button for excluding a domain in the whitelister dialog"
   },
   "subscribingtitle":{
-    "message":"Đăng ký bộ lọc...",
+    "message":"Đang đăng ký bộ lọc...",
     "description":"abp: link subscriber title"
   },
   "subscribingfinished":{
@@ -223,6 +223,10 @@
   },
   "showcontextmenus2":{
     "message":"Thêm AdBlock vào menu chuột phải",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "show_survey":{
+    "message":"Hiển thị các khảo sát của AdBlock",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "debuginlogoption":{

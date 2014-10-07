@@ -251,10 +251,28 @@
             data.resources[url] = elType;
       },
 
-      // When a tab is closed, delete all its data
       onTabClosedHandler: function(tabId) {
-        log("[DEBUG]", "----------- Closing tab", tabId);
-        delete frameData[tabId];
+        // check for stale frameData objects,
+        // if found, remove them
+        var opened_tabs = [];
+        // Get id of all opened tabs
+        chrome.tabs.query({}, function(tabs) {
+          if (tabs.length === 0)
+            return;
+          for (var i=0; i < tabs.length; i++) {
+            opened_tabs.push(tabs[i].id);
+          }
+          for (var tab_Id in frameData) {
+            // If tab_Id in frameData exists but
+            // cannot be found in chrome.tabs.query,
+            //  delete it from frameData
+            if (typeof frameData[tab_Id] === "object" &&
+                opened_tabs.indexOf(parseInt(tab_Id)) === -1) {
+
+                delete frameData[tab_Id];
+            }
+          }
+        });
       }
     };
 
@@ -493,7 +511,8 @@
     var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
     if (!confirm(confirmation_text)) { return; }
     remove_custom_filter_for_host(host);
-    chrome.tabs.reload();
+    if (!SAFARI)
+        chrome.tabs.reload();
   };
 
   get_settings = function() {
@@ -620,38 +639,56 @@
   //   }
   // Returns: null (asynchronous)
   getCurrentTabInfo = function(callback, secondTime) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      if (tabs.length === 0)
-        return; // For example: only the background devtools or a popup are opened
-      var tab = tabs[0];
+    if (!SAFARI) {
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        if (tabs.length === 0)
+          return; // For example: only the background devtools or a popup are opened
 
-      if (tab && !tab.url) {
-        // Issue 6877: tab URL is not set directly after you opened a window
-        // using window.open()
-        if (!secondTime)
-          window.setTimeout(function() {
-            getCurrentTabInfo(callback, true);
-          }, 250);
-        return;
-      }
+        var tab = tabs[0];
 
+        if (tab && !tab.url) {
+          // Issue 6877: tab URL is not set directly after you opened a window
+          // using window.open()
+          if (!secondTime)
+            window.setTimeout(function() {
+              getCurrentTabInfo(callback, true);
+            }, 250);
+          return;
+        }
+
+        var disabled_site = page_is_unblockable(tab.url);
+        var total_blocked = blockCounts.getTotalAdsBlocked();
+        var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
+        var display_stats = get_settings().display_stats;
+
+        var result = {
+          tab: tab,
+          disabled_site: disabled_site,
+          total_blocked: total_blocked,
+          tab_blocked: tab_blocked,
+          display_stats: display_stats
+        };
+
+        if (!disabled_site)
+          result.whitelisted = page_is_whitelisted(tab.url);
+
+        callback(result);
+      });
+    } else {
+      var browserWindow = safari.application.activeBrowserWindow;
+      var tab = browserWindow.activeTab;
       var disabled_site = page_is_unblockable(tab.url);
-      var total_blocked = blockCounts.getTotalAdsBlocked();
-      var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
-      var display_stats = get_settings().display_stats;
 
       var result = {
         tab: tab,
         disabled_site: disabled_site,
-        total_blocked: total_blocked,
-        tab_blocked: tab_blocked,
-        display_stats: display_stats
       };
+
       if (!disabled_site)
         result.whitelisted = page_is_whitelisted(tab.url);
 
-      callback(result);
-    });
+        callback(result);
+      }
   }
 
   // Returns true if anything in whitelist matches the_domain.
@@ -696,7 +733,6 @@
     // Set the button image and context menus according to the URL
     // of the current tab.
     updateButtonUIAndContextMenus = function() {
-
       function setContextMenus(info) {
         chrome.contextMenus.removeAll();
         if (!get_settings().show_context_menu_items)
@@ -1069,6 +1105,26 @@
   // Get debug info for bug reporting and ad reporting
   getDebugInfo = function() {
 
+      // Is this installed build of AdBlock the official one?
+      var AdBlockBuild = function() {
+          if (!SAFARI) {
+              if (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk") {
+                  return " Beta";
+              } else if (chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom" || 
+                         chrome.runtime.id === "aobdicepooefnbaeokijohmhjlleamfj") {
+                  return " Stable";
+              } else {
+                  return " Unofficial";
+              }
+          } else {
+              if (safari.extension.baseURI.indexOf("com.betafish.adblockforsafari-UAMUU4S2D9") > -1) {
+                  return " Stable";
+              } else {
+                  return " Unofficial";
+              }
+          }
+      }
+
       // Get AdBlock version
       var AdBlockVersion = chrome.runtime.getManifest().version;
 
@@ -1093,7 +1149,7 @@
       var adblock_settings = [];
       var settings = get_settings();
       for (setting in settings)
-          adblock_settings.push(setting+": "+get_settings()[setting] + "\n");
+          adblock_settings.push(setting + ": "+ get_settings()[setting] + "\n");
       adblock_settings = adblock_settings.join('');
 
       // Create debug info for a bug report or an ad report
@@ -1109,8 +1165,7 @@
       info.push("==== Settings ====");
       info.push(adblock_settings);
       info.push("==== Other info: ====");
-      info.push("AdBlock version number: " + AdBlockVersion +
-               (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk" ? " Beta" : ""));
+      info.push("AdBlock version number: " + AdBlockVersion + AdBlockBuild());
       if (adblock_error)
           info.push("Last known error: " + adblock_error);
       info.push("Total pings: " + adblock_pings);
@@ -1152,9 +1207,11 @@
                 "Developer Mode -> Inspect views: background page -> Console. " +
                 "Paste the contents here:");
       body.push("");
+      body.push("```");
       body.push("====== Do not touch below this line ======");
       body.push("");
       body.push(getDebugInfo());
+      body.push("```");
       var out = encodeURIComponent(body.join('  \n'));
 
       return out;
@@ -1179,7 +1236,7 @@
               if (error) return;
               set_setting("dropbox_sync", true);
               settingssync();
-              chrome.runtime.sendMessage({message: "signedin"});
+              chrome.runtime.sendMessage({message: "update_icon"});
           });
       }
 
@@ -1188,7 +1245,7 @@
           db_client.signOut(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", false);
-              chrome.runtime.sendMessage({message: "signedout"});
+              chrome.runtime.sendMessage({message: "update_icon"});
           });
       }
 
@@ -1261,6 +1318,9 @@
 
                   // Set settings
                   var advanced = settingstable.get("show_advanced_options");
+                  var advanced_local = get_settings().show_advanced_options;
+                  if (advanced_local !== advanced)
+                      chrome.runtime.sendMessage({message: "update_page"});
                   set_setting("show_advanced_options", advanced);
                   var debug = settingstable.get("debug_logging");
                   set_setting("debug_logging", debug);
@@ -1287,8 +1347,10 @@
       if (!SAFARI) {
           chrome.runtime.onMessage.addListener(
               function(request, sender, sendResponse) {
-                  if (request.message === "clienterror")
+                  if (request.message === "clienterror") {
                       db_client.reset();
+                      chrome.runtime.sendMessage({message: "update_icon"});
+                  }
               }
           );
       }
