@@ -138,8 +138,11 @@ var checkmalware = function() {
         for (var i=0; i < loaded_resources.length; i++) {
             for (var key in loaded_resources[i]) {
                 // Push just domains, which are not already in extracted_domains array
-                if (extracted_domains.indexOf(parseUri(key).hostname) === -1)
-                    extracted_domains.push(parseUri(key).hostname);
+                var resource = key.split(':|:');
+                if (resource &&
+                    resource.length == 2 &&
+                    extracted_domains.indexOf(parseUri(resource[1]).hostname) === -1)
+                    extracted_domains.push(parseUri(resource[1]).hostname);
             }
         }
 
@@ -181,11 +184,10 @@ xhr.send();
 var malwareDomains = JSON.parse(xhr.responseText);
 
 var domain = parseUri(options.url).hostname.replace(/((http|https):\/\/)?(www.)?/g, "");
-
-var uri = parseUri(options.url).search;
+var uri = parseUri(options.url);
 if (uri === "")
     uri = parseUri(options.url).hash;
-var tabId = uri.replace(/[^0-9]/g,'');
+var tabId = options.tabId.replace(/[^0-9]/g,'');
 
 // Check, if downloaded resources are available,
 // if not, just reload tab with parsed tabId

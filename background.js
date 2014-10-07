@@ -248,7 +248,7 @@
           return;
         var data = frameData.get(tabId, frameId);
         if (data !== undefined)
-            data.resources[url] = elType;
+            data.resources[elType + ':|:' + url] = null;
       },
 
       onTabClosedHandler: function(tabId) {

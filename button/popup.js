@@ -201,13 +201,6 @@ $(function() {
         });
     });
 
-    $("#div_report_an_ad").click(function() {
-        BG.getCurrentTabInfo(function(info) {
-            var url = "pages/adreport.html?url=" + escape(info.tab.url) + "?tabId=" + info.tab.id;
-            BG.openTab(url, true);
-        });
-    });
-
     $("#div_whitelist").click(function() {
         BG.getCurrentTabInfo(function(info) {
             if (!SAFARI) {
