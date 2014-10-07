@@ -133,7 +133,6 @@ var checkmalware = function() {
             if (Object.keys(tab.resources).length !== 0)
                 loaded_resources.push(tab.resources);
         }
-
         // Extract domains from loaded resources
         for (var i=0; i < loaded_resources.length; i++) {
             for (var key in loaded_resources[i]) {
@@ -154,18 +153,16 @@ var checkmalware = function() {
                 var infected = true;
             }
         }
-
+        $('.gifloader').hide();
         if (infected) {
-            $('#donecheck').css({display: "block"});
-            $('#step_update_filters_DIV, .gifloader').css({display: "none"});
-            $('#donecheck').text("You are probably infected by some kind of malware, " +
-                                 "therefore you can see ads where they normally don't appear. " +
-                                 "Please run an anti-malware scan to remove those ads.");
+            $('#step_update_filters_DIV').hide();
+            $("#malwarewarning").html(translate("malwarewarning"));
+            $('#malwarelink').attr("href", "http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/")
         } else {
-            $('#donecheck').text("No known malware found.");
-            $('#step_update_filters_DIV, #donecheck').css({display: "block"});
-            $('.gifloader').css({display: "none"});
+            $('#step_update_filters_DIV').show();
+            $("#malwarewarning").html(translate("malwarenotfound"));
         }
+        $('#malwarewarning').show();
     });
 }
 
@@ -174,6 +171,8 @@ $("input, select").change(function(event) {
     event.preventDefault();
     $("html, body").animate({ scrollTop: 15000 }, 50);
 });
+
+
 
 // STEP 1: Malware/adware detection
 
@@ -184,7 +183,7 @@ xhr.send();
 var malwareDomains = JSON.parse(xhr.responseText);
 
 var domain = parseUri(options.url).hostname.replace(/((http|https):\/\/)?(www.)?/g, "");
-var uri = parseUri(options.url);
+var uri = parseUri(options.url).href;
 if (uri === "")
     uri = parseUri(options.url).hash;
 var tabId = options.tabId.replace(/[^0-9]/g,'');
@@ -195,9 +194,8 @@ BGcall("get_settings", "show_advanced_options", function(status) {
     if (status.show_advanced_options) {
         checkmalware();
     } else {
-        tabId = parseInt(tabId);
         BGcall("set_setting", "show_advanced_options");
-        BGcall("reloadTab", tabId);
+        BGcall("reloadTab", parseInt(tabId));
         chrome.runtime.onMessage.addListener(
             function(message, sender, sendResponse) {
                 if (message === "reloadcomplete") {
