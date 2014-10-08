@@ -7,14 +7,14 @@
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
   });
-  
+
   // Records how many ads have been blocked by AdBlock.  This is used
   // by the AdBlock app in the Chrome Web Store to display statistics
   // to the user.
   var blockCounts = (function() {
     var key = "blockage_stats";
     var data = storage_get(key);
-    if (!data) 
+    if (!data)
       data = {};
     if (data.start === undefined)
       data.start = Date.now();
@@ -25,18 +25,22 @@
 
     return {
       recordOneAdBlocked: function(tabId) {
+
         var data = storage_get(key);
         data.total += 1;
         storage_set(key, data);
-         
+
         //code for incrementing ad blocks
         currentTab = frameData.get(tabId);
         if (currentTab){
+          if (isNaN(currentTab.blockCount))
+            currentTab.blockCount = 0;
+
           currentTab.blockCount++;
         }
       },
-      get: function() { 
-        return storage_get(key); 
+      get: function() {
+        return storage_get(key);
       },
       getTotalAdsBlocked: function(tabId){
         if(tabId){
@@ -51,10 +55,10 @@
   var get_adblock_user_id = function() {
     return storage_get("userid");
   };
-  
+
   var get_first_run = function() {
     return STATS.firstRun;
-  };  
+  };
 
   // OPTIONAL SETTINGS
 
@@ -157,7 +161,7 @@
           fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
         }
       },
-      
+
       // Watch for requests for new tabs and frames, and track their URLs.
       // Inputs: details: object from onBeforeRequest callback
       // Returns false if this request's tab+frame are not trackable.
@@ -367,7 +371,7 @@
     var custom_filters_arr = text ? text.split("\n"):[];
     var new_custom_filters_arr = [];
     var identifier = host;
-    
+
     for(var i = 0; i < custom_filters_arr.length; i++) {
       var entry = custom_filters_arr[i];
       //Make sure that the identifier is at the start of the entry
@@ -613,9 +617,9 @@
       var main_frame = frameData.get(tabId, 0);
       // main_frame is undefined if the tab is a new one, so no use updating badge.
       if (!main_frame) return;
-      
+
       var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url) && !/chrome\/newtab/.test(main_frame.url);
-      
+
       if(display && (main_frame && isBlockable) && !adblock_is_paused()){
         badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
         if (badge_text === "0")
@@ -747,7 +751,7 @@
     if (/channel/.test(url)) {
       var get_channel = url.match(/channel=([^]*)/)[1];
     } else {
-      var get_channel = url.split('/').pop(); 
+      var get_channel = url.split('/').pop();
     }
     var filter = '@@||youtube.com/*' + get_channel + '$document';
     return add_custom_filter(filter);
@@ -844,7 +848,7 @@
   launch_resourceblocker = function(query) {
     openTab("pages/resourceblock.html" + query, true);
   }
-  
+
   // Open subscribe popup when new filter list was subscribed from site
   launch_subscribe_popup = function(loc) {
     window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
