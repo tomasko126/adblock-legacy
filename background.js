@@ -19,14 +19,14 @@
     storage_set("error", str);
     log(str);
   });
-  
+
   // Records how many ads have been blocked by AdBlock.  This is used
   // by the AdBlock app in the Chrome Web Store to display statistics
   // to the user.
   var blockCounts = (function() {
     var key = "blockage_stats";
     var data = storage_get(key);
-    if (!data) 
+    if (!data)
       data = {};
     if (data.start === undefined)
       data.start = Date.now();
@@ -37,18 +37,22 @@
 
     return {
       recordOneAdBlocked: function(tabId) {
+
         var data = storage_get(key);
         data.total += 1;
         storage_set(key, data);
-         
+
         //code for incrementing ad blocks
         currentTab = frameData.get(tabId);
         if (currentTab){
+          if (isNaN(currentTab.blockCount))
+            currentTab.blockCount = 0;
+
           currentTab.blockCount++;
         }
       },
-      get: function() { 
-        return storage_get(key); 
+      get: function() {
+        return storage_get(key);
       },
       getTotalAdsBlocked: function(tabId){
         if(tabId){
@@ -59,7 +63,15 @@
       }
     };
   })();
-  
+
+  var get_adblock_user_id = function() {
+    return storage_get("userid");
+  };
+
+  var get_first_run = function() {
+    return STATS.firstRun;
+  };
+
   // OPTIONAL SETTINGS
 
   function Settings() {

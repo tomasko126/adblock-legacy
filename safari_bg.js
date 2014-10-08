@@ -2,7 +2,7 @@ emit_page_broadcast = function(request) {
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
-// Imitate frameData object for Safari to avoid issues when using blockCounts.
+//frameData object for Safari
 frameData = (function() {
     // Map that will serve as cache for the block count.
     // key: Numeric - tab id.
@@ -13,51 +13,61 @@ frameData = (function() {
         getCountMap: function() {
             return countMap;
         },
-
         // Get frameData for the tab.
         // Input:
-        //  tabId: Numberic - id of the tab you want to get
+        //   tabId: Integer - id of the tab you want to get
         get: function(tabId) {
-            return countMap[tabId] || {};
+            return frameData[tabId] || {};
         },
 
         // Create a new frameData
         // Input:
-        //  tabId: Numeric - id of the tab you want to add in the frameData
+        //   tabId: Integerc - id of the tab you want to add in the frameData
         create: function(tabId, url, domain) {
             return frameData._initializeMap(tabId, url, domain);
         },
         // Reset a frameData
-        // Input:
-        //  tabId: Numeric - id of the tab you want to add in the frameData
-        //  url: new URL for the tab
+        // Inputs:
+        //   tabId: Integer - id of the tab you want to add in the frameData
+        //   url: new URL for the tab
         reset: function(tabId, url) {
             var domain = parseUri(url).hostname;
             return frameData._initializeMap(tabId, url, domain);
         },
         // Initialize map
-        // Input:
-        //  tabId: Numeric - id of the tab you want to add in the frameData
-        //  url: new URL for the tab
-        //  domain: domain of the request
+        // Inputs:
+        //   tabId: Integer - id of the tab you want to add in the frameData
+        //   url: new URL for the tab
+        //   domain: domain of the request
         _initializeMap: function(tabId, url, domain) {
-            var tracker = countMap[tabId];
+            var tracker = frameData[tabId];
 
             var shouldTrack = !tracker || tracker.url !== url;
             if (shouldTrack) {
-                countMap[tabId] = {
-                    blockCount: 0,
+                frameData[tabId] = {
+                    resources: {},
                     domain: domain,
                     url: url,
                 };
             }
             return tracker;
         },
+        // Store resource
+        // Inputs:
+        //   tabId: Numeric - id of the tab you want to delete in the frameData
+        //   url: url of the resource
+        storeResource: function(tabId, url) {
+            if (!get_settings().show_advanced_options)
+                return;
+            var data = this.get(tabId);
+            if (data !== undefined)
+                data.resources[url] = null;
+        },
         // Delete tabId from frameData
         // Input:
         //   tabId: Numeric - id of the tab you want to delete in the frameData
         close: function(tabId) {
-            delete countMap[tabId];
+            delete frameData[tabId];
         }
     }
 })();
@@ -65,13 +75,21 @@ frameData = (function() {
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
 
-    if (messageEvent.name === "request" && messageEvent.message.data.args.length >= 2) {
+  if (messageEvent.name === "request" &&
+      messageEvent.message.data.args.length >= 2 &&
+      messageEvent.message.data.args[0] &&
+      messageEvent.message.data.args[1] &&
+      messageEvent.message.data.args[1].tab &&
+      messageEvent.message.data.args[1].tab.url) {
         var args = messageEvent.message.data.args;
-        if (!messageEvent.target.url || messageEvent.target.url === args[1].tab.url)
+        if (!messageEvent.target.url ||
+            messageEvent.target.url === args[1].tab.url &&
+            messageEvent.message.frameInfo.top_level === true) {
+
             frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-        else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
+        } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url &&
+                   messageEvent.message.frameInfo.top_level === true) {
             frameData.reset(messageEvent.target.id, args[1].tab.url);
-            updateBadge();
         }
         return;
     }
@@ -115,7 +133,6 @@ safari.application.addEventListener("activate", function(event) {
         var tabId = safari.application.activeBrowserWindow.activeTab.id;
         var get_blocked_ads = frameData.get(tabId).blockCount;
         var safari_toolbars = safari.extension.toolbarItems;
-
         for (var i = 0; i < safari_toolbars.length; i++ ) {
             safari_toolbars[i].badge = get_blocked_ads;
         }
@@ -124,16 +141,19 @@ safari.application.addEventListener("activate", function(event) {
 
 // Clear badge on Top Sites
 safari.application.addEventListener("navigate", function() {
+    
     if (safari.application.activeBrowserWindow.activeTab.url === undefined) {
         var tabId = safari.application.activeBrowserWindow.activeTab.id;
         frameData.reset(tabId);
         updateBadge();
     }
+   
 });
 
 safari.application.addEventListener("beforeNavigate", function(event) {
     var tab = safari.application.activeBrowserWindow.activeTab;
     if (tab.url === event.url) {
+       
         frameData.get(tab.id).blockCount = 0;
         updateBadge();
     }
@@ -143,6 +163,7 @@ safari.application.addEventListener("beforeNavigate", function(event) {
 // not when tab was closed. Therefore we need to remove
 // countMap[tabId] after "close" event has been fired.
 safari.application.addEventListener("close", function(event) {
+
     setTimeout(function() {
         var opened_tabs = [];
         var safari_tabs = safari.application.activeBrowserWindow.tabs;
