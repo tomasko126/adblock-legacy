@@ -140,7 +140,6 @@ var checkmalware = function() {
         for (var i=0; i < loaded_resources.length; i++) {
             for (var key in loaded_resources[i]) {
                 // Push just domains, which are not already in extracted_domains array
-
                 //chrome resources include a element type as well as the URL
                 var resource = key.split(':|:');
                 if (resource &&
@@ -157,7 +156,6 @@ var checkmalware = function() {
 
         // Compare domains of loaded resources with domain.json
         for (var i=0; i < extracted_domains.length; i++) {
-
             if (malwareDomains.adware.indexOf(extracted_domains[i]) > -1) {
                 // User is probably infected by some kind of malware,
                 // because resource has been downloaded from malware/adware/spyware site.
@@ -189,7 +187,8 @@ $("input, select").change(function(event) {
 
 // Fetch file with malware-known domains
 var xhr = new XMLHttpRequest();
-xhr.open("GET", "https://data.getadblock.com/filters/domains.json", false);
+//the timestamp is add to the URL to prevent caching by the browser
+xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime(), false);
 xhr.send();
 var malwareDomains = JSON.parse(xhr.responseText);
 
