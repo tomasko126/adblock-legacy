@@ -110,7 +110,6 @@ function generateReportURL() {
 // Check every domain of downloaded resource against malware-known domains
 var checkmalware = function() {
     BGcall("resourceblock_get_frameData", tabId, function(tab) {
-
         if (!tab)
             return;
 
@@ -201,12 +200,12 @@ var tabId = options.tabId.replace(/[^0-9]/g,'');
 // Check, if downloaded resources are available,
 // if not, just reload tab with parsed tabId
 BGcall("get_settings", "show_advanced_options", function(status) {
-    if (SAFARI || status.show_advanced_options) {
+    if (status.show_advanced_options) {
         checkmalware();
     } else {
         BGcall("set_setting", "show_advanced_options");
         BGcall("reloadTab", parseInt(tabId));
-        chrome.runtime.onMessage.addListener(
+        chrome.extension.onRequest.addListener(
             function(message, sender, sendResponse) {
                 if (message === "reloadcomplete") {
                     BGcall("disable_setting", "show_advanced_options");

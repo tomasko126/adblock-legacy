@@ -156,7 +156,21 @@
   // Input:
   //   tabId: integer - id of the tab which should be reloaded
   reloadTab = function(tabId) {
-      if (!SAFARI) {
+    if (SAFARI) {
+        if (safari.application.activeBrowserWindow &&
+            safari.application.activeBrowserWindow.tabs) {
+
+              var tabs = safari.application.activeBrowserWindow.tabs;
+              //if the tabId is found, send a reload message to it
+              if (tabId in tabs) {
+                    tabs[tabId].page.dispatchMessage("reload", "");
+                    setTimeout(function() {
+                          chrome.extension.sendRequest("reloadcomplete");
+                    }, 2000);
+                    return;
+              }
+        }
+      } else {
           chrome.tabs.reload(tabId, {bypassCache: true}, function() {
               chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
                   if (changeInfo.status === "complete" && tab.status === "complete") {
@@ -1110,7 +1124,7 @@
           if (!SAFARI) {
               if (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk") {
                   return " Beta";
-              } else if (chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom" || 
+              } else if (chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom" ||
                          chrome.runtime.id === "aobdicepooefnbaeokijohmhjlleamfj") {
                   return " Stable";
               } else {

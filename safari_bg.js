@@ -70,13 +70,12 @@ safari.application.addEventListener("message", function(messageEvent) {
   if (messageEvent.name === "request" && 
       messageEvent.message.data.args.length >= 2 &&
       messageEvent.message.data.args[0] &&
-      messageEvent.message.data.args[1]) {
+      messageEvent.message.data.args[1] &&
+      messageEvent.message.data.args[1].tab &&
+      messageEvent.message.data.args[1].tab.url) {
         var args = messageEvent.message.data.args;
         if (!messageEvent.target.url || 
-            (args[1] && 
-             args[1].tab && 
-             args[1].tab.url && 
-             messageEvent.target.url === args[1].tab.url)) {
+            messageEvent.target.url === args[1].tab.url) {
             frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
         } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
             frameData.reset(messageEvent.target.id, args[1].tab.url);

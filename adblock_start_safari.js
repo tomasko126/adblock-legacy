@@ -39,7 +39,7 @@ beforeLoadHandler = function(event) {
   if (!el.nodeName) return; // issue 6256
   // Cancel the load if canLoad is false.
   var elType = typeForElement(el);
-  var data = { 
+  var data = {
     url: relativeToAbsoluteUrl(event.url),
     elType: elType,
     frameDomain: document.location.hostname,
@@ -64,10 +64,10 @@ beforeLoadHandler = function(event) {
 beforeLoadHandler.blockCount = 0;
 
 adblock_begin({
-  startPurger: function() { 
+  startPurger: function() {
     document.addEventListener("beforeload", beforeLoadHandler, true);
   },
-  stopPurger: function() { 
+  stopPurger: function() {
     document.removeEventListener("beforeload", beforeLoadHandler, true);
   },
   handleHiding: function(data) {
@@ -83,3 +83,12 @@ adblock_begin({
     }, false);
   }
 });
+
+if (window === window.top) {
+    function handleMessage(event) {
+       if (event.name === "reload") {
+          window.location.reload();
+       }
+    }
+    safari.self.addEventListener("message", handleMessage, false);
+}
