@@ -282,7 +282,7 @@
 
       // Because of bug in WebRequest API on Chrome 38+,
       // requests of type "object" are reported as type "other", see crbug.com/410382
-      if (reqType === "other" && /Chrome\/(38|39|40)/.test(navigator.userAgent))
+      if (reqType === "other" && /Chrome\/38/.test(navigator.userAgent))
           reqType = "object";
 
       var elType = ElementTypes.fromOnBeforeRequestType(reqType);
