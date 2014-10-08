@@ -152,6 +152,9 @@
     }
   };
 
+  // Chrome 38 has bug in WebRequest API, see onBeforeRequestHandler
+  var invalidChromeRequestType = /Chrome\/38/.test(navigator.userAgent);
+
   // Implement blocking via the Chrome webRequest API.
   if (!SAFARI) {
     // Stores url, whitelisting, and blocking info for a tabid+frameid
@@ -282,7 +285,6 @@
 
       // Because of bug in WebRequest API on Chrome 38,
       // requests of type "object" are reported as type "other", see crbug.com/410382
-      var invalidChromeRequestType = /Chrome\/38/.test(navigator.userAgent);
       if (invalidChromeRequestType && reqType === "other")
           reqType = "object";
 
