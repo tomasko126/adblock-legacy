@@ -207,7 +207,7 @@ BGcall("get_settings", "show_advanced_options", function(status) {
         BGcall("reloadTab", parseInt(tabId));
         chrome.extension.onRequest.addListener(
             function(message, sender, sendResponse) {
-                if (message === "reloadcomplete") {
+                if (message.command  === "reloadcomplete") {
                     BGcall("disable_setting", "show_advanced_options");
                     checkmalware();
                 }

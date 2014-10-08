@@ -161,26 +161,29 @@
             safari.application.activeBrowserWindow.tabs) {
 
               var tabs = safari.application.activeBrowserWindow.tabs;
-              //if the tabId is found, send a reload message to it
+              //if the tabId is found, send a reload message to it 
+              //  after waiting a short period of time
               if (tabId in tabs) {
                     tabs[tabId].page.dispatchMessage("reload", "");
                     setTimeout(function() {
-                          chrome.extension.sendRequest("reloadcomplete");
+                          chrome.extension.sendRequest({command: "reloadcomplete"});
                     }, 2000);
                     return;
               }
         }
-      } else {
-          chrome.tabs.reload(tabId, {bypassCache: true}, function() {
-              chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-                  if (changeInfo.status === "complete" && tab.status === "complete") {
-                      setTimeout(function() {
-                          chrome.runtime.sendMessage("reloadcomplete");
-                      }, 2000);
-                  }
-              });
-          });
-      }
+    } else {
+        chrome.tabs.reload(tabId, {bypassCache: true}, function() {
+            chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+                if (changeInfo.status === "complete" &&
+                    tab.status === "complete") {
+
+                    setTimeout(function() {
+                        chrome.extension.sendRequest({command: "reloadcomplete"});
+                    }, 2000);
+                 }
+            });
+        });
+    }
   }
 
   // Implement blocking via the Chrome webRequest API.
