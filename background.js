@@ -3,7 +3,8 @@
   window.addEventListener("error", function(e) {
     var str = "Error: " +
              (e.filename||"anywhere").replace(chrome.extension.getURL(""), "") +
-             ":" + (e.lineno||"anywhere");
+             ":" + (e.lineno||"anywhere") +
+             ":" + (e.colno||"anycol");
     if (chrome && chrome.runtime && (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
         var stack = "-" + ((e.error && e.error.message)||"") +
                     "-" + ((e.error && e.error.stack)||"");
@@ -1099,7 +1100,7 @@
           if (!SAFARI) {
               if (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk") {
                   return " Beta";
-              } else if (chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom" || 
+              } else if (chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom" ||
                          chrome.runtime.id === "aobdicepooefnbaeokijohmhjlleamfj") {
                   return " Stable";
               } else {
