@@ -55,13 +55,10 @@ $(function() {
             hide(["div_show_resourcelist"]);
 
         var path = info.tab.url;
-        if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
+        if (host === "www.youtube.com" && /channel|user/.test(path) && 
+            eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
             show(["div_whitelist_channel"]);
         }
-
-        // Ad-counter is not available for Safari
-        if (SAFARI)
-            hide(["block_counts"]);
 
         if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
             show(["div_status_beta", "separator4"]);

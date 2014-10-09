@@ -44,7 +44,7 @@
 
         //code for incrementing ad blocks
         currentTab = frameData.get(tabId);
-        if (currentTab){
+        if (currentTab) {
           if (isNaN(currentTab.blockCount))
             currentTab.blockCount = 0;
 
@@ -55,7 +55,7 @@
         return storage_get(key);
       },
       getTotalAdsBlocked: function(tabId){
-        if(tabId){
+        if (tabId) {
           currentTab = frameData.get(tabId);
           return currentTab ? currentTab.blockCount : 0;
         }
@@ -654,11 +654,18 @@
     } else {
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
+
       var disabled_site = page_is_unblockable(tab.url);
+      var total_blocked = blockCounts.getTotalAdsBlocked();
+      var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
+      var display_stats = get_settings().display_stats;
 
       var result = {
         tab: tab,
         disabled_site: disabled_site,
+        total_blocked: total_blocked,
+        tab_blocked: tab_blocked,
+        display_stats: display_stats
       };
 
       if (!disabled_site)
@@ -685,23 +692,7 @@
 
   updateDisplayStats = function(isChecked, tabId) {
     set_setting("display_stats", isChecked);
-    if (!SAFARI) {
       updateBadge(tabId);
-    } else {
-      if (isChecked) {
-        var tabId = safari.application.activeBrowserWindow.activeTab.id;
-        var get_blocked_ads = frameData.get(tabId).blockCount;
-        var safari_toolbars = safari.extension.toolbarItems;
-        for (var i = 0; i < safari_toolbars.length; i++ ) {
-          safari_toolbars[i].badge = get_blocked_ads;
-        }
-      } else {
-        var safari_toolbars = safari.extension.toolbarItems;
-        for (var i = 0; i < safari_toolbars.length; i++ ) {
-          safari_toolbars[i].badge = "0";
-        }
-      }
-    }
   }
 
   if (!SAFARI) {

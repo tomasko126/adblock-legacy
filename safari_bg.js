@@ -2,17 +2,9 @@ emit_page_broadcast = function(request) {
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
-//frameData object for Safari
+// frameData object for Safari
 frameData = (function() {
-    // Map that will serve as cache for the block count.
-    // key: Numeric - tab id.
-    // value: Numeric - actual block count for the tab.
-    var countMap = {};
-
     return {
-        getCountMap: function() {
-            return countMap;
-        },
         // Get frameData for the tab.
         // Input:
         //   tabId: Integer - id of the tab you want to get
@@ -22,7 +14,7 @@ frameData = (function() {
 
         // Create a new frameData
         // Input:
-        //   tabId: Integerc - id of the tab you want to add in the frameData
+        //   tabId: Integer - id of the tab you want to add in the frameData
         create: function(tabId, url, domain) {
             return frameData._initializeMap(tabId, url, domain);
         },
@@ -61,12 +53,12 @@ frameData = (function() {
                 return;
             var data = this.get(tabId);
             if (data !== undefined)
-                data.resources[url] = null;
+                data.resources[elType + ':|:' + url] = null;
         },
         // Delete tabId from frameData
         // Input:
         //   tabId: Numeric - id of the tab you want to delete in the frameData
-        close: function(tabId) {
+        onTabClosedHandler: function(tabId) {
             delete frameData[tabId];
         }
     }
@@ -85,7 +77,6 @@ safari.application.addEventListener("message", function(messageEvent) {
         if (!messageEvent.target.url ||
             messageEvent.target.url === args[1].tab.url &&
             messageEvent.message.frameInfo.top_level === true) {
-
             frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
         } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url &&
                    messageEvent.message.frameInfo.top_level === true) {
@@ -124,52 +115,50 @@ safari.application.addEventListener("message", function(messageEvent) {
     messageEvent.message = !isMatched;
 }, false);
 
-// Show number of blocked ads in badge for each tab
+// Update number of blocked ads in badge for each tab
 safari.application.addEventListener("activate", function(event) {
-    if (get_settings().display_stats) {
-        var tabId = safari.application.activeBrowserWindow.activeTab.id;
-        var get_blocked_ads = frameData.get(tabId).blockCount;
-        var safari_toolbars = safari.extension.toolbarItems;
-        for (var i = 0; i < safari_toolbars.length; i++ ) {
-            safari_toolbars[i].badge = get_blocked_ads;
-        }
+    if (!get_settings().display_stats)
+        return;
+
+    var tabId = safari.application.activeBrowserWindow.activeTab.id;
+    var get_blocked_ads = frameData.get(tabId).blockCount;
+    var safari_toolbars = safari.extension.toolbarItems;
+    for (var i = 0; i < safari_toolbars.length; i++ ) {
+        safari_toolbars[i].badge = get_blocked_ads;
     }
 }, true);
 
 // Clear badge on Top Sites
 safari.application.addEventListener("navigate", function() {
-    
     if (safari.application.activeBrowserWindow.activeTab.url === undefined) {
         var tabId = safari.application.activeBrowserWindow.activeTab.id;
         frameData.reset(tabId);
         updateBadge();
     }
-   
 });
 
+// Reset number of blocked ads when navigating away from the page
 safari.application.addEventListener("beforeNavigate", function(event) {
     var tab = safari.application.activeBrowserWindow.activeTab;
     if (tab.url === event.url) {
-       
         frameData.get(tab.id).blockCount = 0;
         updateBadge();
     }
 }, true);
 
-// On close event fires when tab is about to close,
+// Close event fires when tab is about to close,
 // not when tab was closed. Therefore we need to remove
-// countMap[tabId] after "close" event has been fired.
+// frameData[tabId] after event has been fired.
 safari.application.addEventListener("close", function(event) {
-
     setTimeout(function() {
         var opened_tabs = [];
         var safari_tabs = safari.application.activeBrowserWindow.tabs;
         for (var i=0; i < safari_tabs.length; i++)
             opened_tabs.push(safari_tabs[i].id);
 
-        for (tab in frameData.getCountMap())
-            if (opened_tabs.indexOf(parseInt(tab)) === -1)
-                frameData.close(parseInt(tab));
+        for (tab in frameData)
+            if (typeof frameData[tab] === "object" && opened_tabs.indexOf(parseInt(tab)) === -1)
+                frameData.onTabClosedHandler(parseInt(tab));
     }, 150);
 }, true);
 
@@ -179,8 +168,13 @@ safari.application.addEventListener("close", function(event) {
 var updateBadge = function() {
     var show_block_counts = get_settings().display_stats;
 
-    if (!show_block_counts)
+    if (!show_block_counts) {
+        var safari_toolbars = safari.extension.toolbarItems;
+        for (var i = 0; i < safari_toolbars.length; i++ ) {
+            safari_toolbars[i].badge = 0;
+        }
         return;
+    }
 
     var url = safari.application.activeBrowserWindow.activeTab.url;
     var paused = adblock_is_paused();
@@ -188,7 +182,7 @@ var updateBadge = function() {
     var whitelisted = page_is_whitelisted(url);
 
     var count = 0;
-    if (show_block_counts && !paused && canBlock && !whitelisted) {
+    if (!paused && canBlock && !whitelisted) {
         var tabId = safari.application.activeBrowserWindow.activeTab.id;
         count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
     }
@@ -196,7 +190,6 @@ var updateBadge = function() {
     for (var i = 0; i < safari_toolbars.length; i++ ) {
         safari_toolbars[i].badge = count;
     }
-    frameData.get(tabId).blockCount = count;
 }
 
 // Code for creating popover, not available on Safari 5.0
@@ -217,7 +210,7 @@ function removePopover(popover) {
     safari.extension.removePopover(popover);
 }
 
-// Reload popover when opening/activating tab, or URL was changed
+// Reload popover when opening/activating tab
 safari.application.addEventListener("activate", function(event) {
     if (event.target instanceof SafariBrowserTab) {
         safari.extension.popovers[0].contentWindow.location.reload();
@@ -227,6 +220,7 @@ safari.application.addEventListener("activate", function(event) {
     }
 }, true);
 
+// Reload popover when it's about to open
 safari.application.addEventListener("popover", function(event) {
     safari.extension.popovers[0].contentWindow.location.reload();
 }, true);
