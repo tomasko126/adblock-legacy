@@ -72,6 +72,10 @@
     return STATS.firstRun;
   };
 
+  var set_first_run_to_false = function() {
+    STATS.firstRun = false;
+  };
+
   // OPTIONAL SETTINGS
 
   function Settings() {

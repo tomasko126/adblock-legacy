@@ -124,8 +124,8 @@ safari.application.addEventListener("message", function(messageEvent) {
     messageEvent.message = !isMatched;
 }, false);
 
-// Allows us to figure out the window for commands sent from the menu. Not used in Safari 5.0.
-var windowByMenuId = {};
+// Code for creating popover, not available on Safari 5.0
+var ABPopover = safari.extension.createPopover("AdBlock", safari.extension.baseURI + "button/popup.html");
 
 // Show number of blocked ads in badge for each tab
 safari.application.addEventListener("activate", function(event) {
