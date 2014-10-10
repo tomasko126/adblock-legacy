@@ -53,6 +53,9 @@ $(function() {
 
         if (SAFARI || !BG.get_settings().show_advanced_options)
             hide(["div_show_resourcelist"]);
+        
+        if (SAFARI && !BG.get_settings().show_advanced_options)
+            hide(["div_report_an_ad", "separator1"]);
 
         var path = info.tab.url;
         if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {

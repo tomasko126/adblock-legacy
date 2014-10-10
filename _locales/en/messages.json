@@ -950,7 +950,7 @@
     "description":"Result of the final ad report question"
   },
   "malwarewarning":{
-    "message":"Your computer maybe infected by malware.  Click <a id='malwarelink'>here<\/a> for more information.",
+    "message":"Your computer may be infected by malware.  Click <a id='malwarelink'>here<\/a> for more information.",
     "description":"Text of the malware warning on the adreport page"
   },
   "malwarenotfound":{

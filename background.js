@@ -157,34 +157,18 @@
   // Input:
   //   tabId: integer - id of the tab which should be reloaded
   reloadTab = function(tabId) {
-    if (SAFARI) {
-        if (safari.application.activeBrowserWindow &&
-            safari.application.activeBrowserWindow.tabs) {
-
-              var tabs = safari.application.activeBrowserWindow.tabs;
-              //if the tabId is found, send a reload message to it 
-              //  after waiting a short period of time
-              if (tabId in tabs) {
-                    tabs[tabId].page.dispatchMessage("reload", "");
-                    setTimeout(function() {
+      if (!SAFARI) {
+          chrome.tabs.reload(tabId, {bypassCache: true}, function() {
+              chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+                  if (changeInfo.status === "complete" &&
+                      tab.status === "complete") {
+                      setTimeout(function() {
                           chrome.extension.sendRequest({command: "reloadcomplete"});
-                    }, 2000);
-                    return;
-              }
-        }
-    } else {
-        chrome.tabs.reload(tabId, {bypassCache: true}, function() {
-            chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-                if (changeInfo.status === "complete" &&
-                    tab.status === "complete") {
-
-                    setTimeout(function() {
-                        chrome.extension.sendRequest({command: "reloadcomplete"});
-                    }, 2000);
-                 }
-            });
-        });
-    }
+                      }, 2000);
+                  }
+              });
+          });
+      }
   }
 
   // Chrome 38 has bug in WebRequest API, see onBeforeRequestHandler

@@ -48,12 +48,12 @@ frameData = (function() {
         // Inputs:
         //   tabId: Numeric - id of the tab you want to delete in the frameData
         //   url: url of the resource
-        storeResource: function(tabId, url) {
+        storeResource: function(tabId, url, elType) {
             if (!get_settings().show_advanced_options)
                 return;
             var data = this.get(tabId);
             if (data !== undefined)
-                data.resources[url] = null;
+                data.resources[elType + ':|:' + url] = null;
         },
         // Delete tabId from frameData
         // Input:
@@ -101,7 +101,7 @@ safari.application.addEventListener("message", function(messageEvent) {
     var elType = messageEvent.message.elType;
     var frameDomain = messageEvent.message.frameDomain;
 
-    frameData.storeResource(tab.id, url);
+    frameData.storeResource(tab.id, url, elType);
 
     var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
     if (isMatched)

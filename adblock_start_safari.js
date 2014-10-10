@@ -83,12 +83,3 @@ adblock_begin({
     }, false);
   }
 });
-
-if (window === window.top) {
-    function handleMessage(event) {
-       if (event.name === "reload") {
-          window.location.reload();
-       }
-    }
-    safari.self.addEventListener("message", handleMessage, false);
-}
