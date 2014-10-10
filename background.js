@@ -3,7 +3,8 @@
   window.addEventListener("error", function(e) {
     var str = "Error: " +
              (e.filename||"anywhere").replace(chrome.extension.getURL(""), "") +
-             ":" + (e.lineno||"anywhere");
+             ":" + (e.lineno||"anywhere") +
+             ":" + (e.colno||"anycol");
     if (chrome && chrome.runtime && (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
         var stack = "-" + ((e.error && e.error.message)||"") +
                     "-" + ((e.error && e.error.stack)||"");
@@ -186,6 +187,9 @@
     }
   }
 
+  // Chrome 38 has bug in WebRequest API, see onBeforeRequestHandler
+  var invalidChromeRequestType = /Chrome\/38/.test(navigator.userAgent);
+
   // Implement blocking via the Chrome webRequest API.
   if (!SAFARI) {
     // Stores url, whitelisting, and blocking info for a tabid+frameid
@@ -302,7 +306,7 @@
         return { cancel: false };
 
       var tabId = details.tabId;
-      var elType = ElementTypes.fromOnBeforeRequestType(details.type);
+      var reqType = details.type;
 
       if (frameData.get(tabId, 0).whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted tab", tabId, details.url.substring(0, 100));
@@ -312,7 +316,14 @@
       // For most requests, Chrome and we agree on who sent the request: the frame.
       // But for iframe loads, we consider the request to be sent by the outer
       // frame, while Chrome claims it's sent by the new iframe.  Adjust accordingly.
-      var requestingFrameId = (details.type === 'sub_frame' ? details.parentFrameId : details.frameId);
+      var requestingFrameId = (reqType === 'sub_frame' ? details.parentFrameId : details.frameId);
+
+      // Because of bug in WebRequest API on Chrome 38,
+      // requests of type "object" are reported as type "other", see crbug.com/410382
+      if (invalidChromeRequestType && reqType === "other")
+          reqType = "object";
+
+      var elType = ElementTypes.fromOnBeforeRequestType(reqType);
 
       frameData.storeResource(tabId, requestingFrameId, details.url, elType);
 
@@ -341,7 +352,7 @@
         blockCounts.recordOneAdBlocked(tabId);
         updateBadge(tabId);
       }
-      log("[DEBUG]", "Block result", blocked, details.type, frameDomain, details.url.substring(0, 100));
+      log("[DEBUG]", "Block result", blocked, reqType, frameDomain, details.url.substring(0, 100));
       if (blocked && elType === ElementTypes.image) {
         // 1x1 px transparant image.
         // Same URL as ABP and Ghostery to prevent conflict warnings (issue 7042)
