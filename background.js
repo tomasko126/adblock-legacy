@@ -158,19 +158,23 @@
   //   tabId: integer - id of the tab which should be reloaded
   reloadTab = function(tabId) {
     if (SAFARI) {
-        if (safari.application.activeBrowserWindow &&
+         if (safari.application.activeBrowserWindow &&
             safari.application.activeBrowserWindow.tabs) {
+            var safari_tabs = safari.application.activeBrowserWindow.tabs;
+            //if the tabId is found, send a reload message to it
+            //  after waiting an abritrary period of time (2 secs), send a reloadcomplete message
+             for (var i=0; i < safari_tabs.length; i++) {
+                if (safari_tabs[i] &&
+                    safari_tabs[i].id &&
+                    safari_tabs[i].id === tabId) {
 
-              var tabs = safari.application.activeBrowserWindow.tabs;
-              //if the tabId is found, send a reload message to it 
-              //  after waiting a short period of time
-              if (tabId in tabs) {
-                    tabs[tabId].page.dispatchMessage("reload", "");
+                    safari_tabs[i].page.dispatchMessage("reload", "");
                     setTimeout(function() {
                           chrome.extension.sendRequest({command: "reloadcomplete"});
                     }, 2000);
                     return;
-              }
+                }
+            }
         }
     } else {
         chrome.tabs.reload(tabId, {bypassCache: true}, function() {
