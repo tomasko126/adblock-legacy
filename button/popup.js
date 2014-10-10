@@ -215,6 +215,20 @@ $(function() {
         });
     });
 
+    $("#div_whitelist").click(function() {
+        BG.getCurrentTabInfo(function(info) {
+            if (!SAFARI) {
+                BG.emit_page_broadcast(
+                    {fn:'top_open_whitelist_ui', options:{}},
+                    { tab: info.tab } // fake sender to determine target page
+                );
+            } else {
+                BG.dispatchMessage("show-whitelist-wizard");
+            }
+            closeAndReloadPopup();
+        });
+    });
+
     $("#div_show_resourcelist").click(function() {
         BG.getCurrentTabInfo(function(info) {
             BG.launch_resourceblocker("?tabId=" + info.tab.id);
