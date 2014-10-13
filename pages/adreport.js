@@ -26,6 +26,7 @@ $(function() {
         return (a.text > b.text) ? 1 : -1;
     });
     $("#step_language_lang").empty().append(languageOptions);
+    languageOptions[0].selected = true;
 });
 
 // Fetching the options...
