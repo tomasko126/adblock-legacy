@@ -224,8 +224,9 @@ $(function() {
 
   function saveExcludeFilters() {
     var exclude_filters_text = $("#txtExcludeFiltersAdvanced").val();
+    console.log("save exclude filters", exclude_filters_text);
     BGcall("set_exclude_filters", exclude_filters_text);
-
+console.log("save done exclude filters");  
     $("#divAddNewFilter").slideDown();
     $("#txtExcludeFiltersAdvanced").attr("disabled", "disabled");
     $("#spanSaveExcludeButton").hide();

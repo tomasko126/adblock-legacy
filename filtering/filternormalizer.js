@@ -5,8 +5,10 @@ var FilterNormalizer = {
   userExcludedFilterArray: [],
 
   setExcludeFilters: function(text) {
+    console.log("filternormalizer, setexcludefilters", text);
     if (text) {
         userExcludedFilterArray = text.split('\n');
+        console.log("filternormalizer, userExcludedFilterArray", userExcludedFilterArray);     
     }
   },
 
@@ -64,12 +66,12 @@ var FilterNormalizer = {
       filter = FilterNormalizer._old_style_hiding_to_new(filter);
       log('Converted ' + oldFilter + ' to ' + filter);
     }
-    if (typeof userExcludedFilterArray !== 'undefined' && userExcludedFilterArray.length > 0) {
-        if (userExcludedFilterArray.indexOf(filter) >= 0) {
+    if (typeof userExcludedFilterArray !== 'undefined' && 
+        userExcludedFilterArray.length > 0 &&
+        userExcludedFilterArray.indexOf(filter) >= 0) {
+            console.log(" normalizeLine: exclude filter found", filter);
             return null;
-        }
     }
-
 
     // If it is a hiding rule...
     if (Filter.isSelectorFilter(filter)) {

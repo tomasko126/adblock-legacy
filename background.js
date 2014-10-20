@@ -404,10 +404,11 @@
   // rebuild the filterset.
   // Inputs: filters:string the new filters.
   set_exclude_filters = function(filters) {
+    console.log("set_exclude_filters exclude filters", filters);  
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
-    chrome.extension.sendRequest({command: "filters_updated"});
-    _myfilters.rebuild();
+    update_subscriptions_now();
+    console.log("done set_exclude_filters exclude filters", filters);   
   }
 
   // Removes a custom filter entry.
