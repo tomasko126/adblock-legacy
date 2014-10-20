@@ -67,7 +67,7 @@ $(function() {
         if (SAFARI)
             hide(["block_counts"]);
 
-        if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
+       // if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
             show(["div_status_beta", "separator4"]);
 
         for (var div in shown)
@@ -123,7 +123,7 @@ $(function() {
         var out = BG.makeReport();
         var result = "http://support.getadblock.com/discussion/new" +
             "?category_id=problems&discussion[body]=" + out;
-        openTab(result);
+        BG.openTab(result);
     });
 
     $("#toggle_badge_checkbox").click(function(){
