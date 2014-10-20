@@ -67,7 +67,7 @@ $(function() {
         if (SAFARI)
             hide(["block_counts"]);
 
-       // if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
+        if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
             show(["div_status_beta", "separator4"]);
 
         for (var div in shown)
