@@ -123,7 +123,7 @@ $(function() {
         var out = BG.makeReport();
         var result = "http://support.getadblock.com/discussion/new" +
             "?category_id=problems&discussion[body]=" + out;
-        openTab(result);
+        BG.openTab(result);
     });
 
     $("#toggle_badge_checkbox").click(function(){
