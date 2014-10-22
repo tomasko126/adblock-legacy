@@ -257,27 +257,7 @@
       },
 
       onTabClosedHandler: function(tabId) {
-        // check for stale frameData objects,
-        // if found, remove them
-        var opened_tabs = [];
-        // Get id of all opened tabs
-        chrome.tabs.query({}, function(tabs) {
-          if (tabs.length === 0)
-            return;
-          for (var i=0; i < tabs.length; i++) {
-            opened_tabs.push(tabs[i].id);
-          }
-          for (var tab_Id in frameData) {
-            // If tab_Id in frameData exists but
-            // cannot be found in chrome.tabs.query,
-            //  delete it from frameData
-            if (typeof frameData[tab_Id] === "object" &&
-                opened_tabs.indexOf(parseInt(tab_Id)) === -1) {
-
-                delete frameData[tab_Id];
-            }
-          }
-        });
+        delete frameData[tabId];
       }
     };
 
@@ -366,6 +346,11 @@
         chrome.tabs.remove(details.tabId);
       frameData.storeResource(details.sourceTabId, details.sourceFrameId, details.url, ElementTypes.popup);
     };
+
+    // If tabId has been replaced by Chrome, delete it's data
+    chrome.webNavigation.onTabReplaced.addListener(function(details) {
+        frameData.onTabClosedHandler(details.replacedTabId);
+    });
   }
 
   debug_report_elemhide = function(selector, matches, sender) {
