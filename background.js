@@ -577,7 +577,8 @@
   subscribe = function(options, sync) {
       _myfilters.changeSubscription(options.id, {
           subscribed: true,
-          requiresList: options.requires
+          requiresList: options.requires,
+          title: options.title
       });
       if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
@@ -950,7 +951,7 @@
   launch_subscribe_popup = function(loc) {
     window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
     "_blank",
-    'scrollbars=0,location=0,resizable=0,width=450,height=140');
+    'scrollbars=0,location=0,resizable=0,width=450,height=150');
   }
 
   // Get the framedata for resourceblock
