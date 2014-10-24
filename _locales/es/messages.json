@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"¡La extensión más popular de Chrome, con más de 15 millones de usuarios! Bloquea anuncios de todo internet.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - Haz click para más detalles",
@@ -339,6 +339,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (elimina las molestias en internet)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"Lista de supresión de avisos sobre AdBlock (elimina los mensajes de alerta derivados del uso de AdBlock)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{

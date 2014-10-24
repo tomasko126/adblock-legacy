@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"Наиболее популярное расширение Chrome с более чем 15 миллионами пользователей! Блокирует рекламу по всему Интернету.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - нажмите, чтобы увидеть подробности",
@@ -42,6 +42,10 @@
   "operabutton_how_to_hide2":{
     "message":"Чтобы скрыть кнопку, перейдите в  opera:\/\/extensions и включите опцию \"Скрыть из панели инструментов\". Вы можете отобразить её снова, сняв эту опцию.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2":{
+    "message":"Чтобы скрыть кнопку, щелкните правой кнопкой мыши по панели инструментов Safari и выберите Настроить панель инструментов, а затем перетащите кнопку AdBlock с панели инструментов. Вы можете показать её снова, перетащив обратно на панель инструментов.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "sliderexplanation":{
     "message":"Сдвигайте ползунок до тех пор, пока реклама не будет заблокирована правильно, а заблокированный элемент выглядит пригодным.",
@@ -339,6 +343,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (удаляет отвлекающее содержимое в интернете)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"Список удаления предупреждений AdBlock (удаляет сообщения об использовании AdBlock)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{

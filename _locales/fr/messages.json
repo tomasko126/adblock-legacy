@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"La plus populaire des extensions Chrome, avec plus de 15 millions d'utilisateurs ! Bloque les publicités sur Internet.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - cliquez pour plus de détails",
@@ -42,6 +42,10 @@
   "operabutton_how_to_hide2":{
     "message":"Pour masquer ce bouton, allez sur opera:\/\/extensions et cochez \"Cacher de la barre d'outils\". Vous pouvez l'afficher à nouveau en décochant cette option.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2":{
+    "message":"Pour masquer ce bouton, faites un clic droit dessus et choisissez \"Personnaliser la barre d'outils\". Vous pouvez ensuite le faire glisser hors de la barre d'outils. Pour l'afficher à nouveau, glissez-le dans la barre d'outils.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "sliderexplanation":{
     "message":"Faites glisser le curseur jusqu'à ce que la pub disparaisse.",
@@ -339,6 +343,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (supprime les éléments agaçants sur le Web)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"Avertissements AdBlock (supprime les messages au sujet de l'utilisation d'AdBlock)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{

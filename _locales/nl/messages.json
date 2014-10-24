@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"De populairste Chrome extensie met meer dan 15 miljoen gebruikers! Blokkeert advertenties op het internet.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - klik voor details",
@@ -42,6 +42,10 @@
   "operabutton_how_to_hide2":{
     "message":"Om de knop te verbergen, ga naar opera:\/\/extensions en selecteer de optie 'Verberg van knoppenbalk'. Je kan het opnieuw tonen door deze optie te deselecteren.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2":{
+    "message":"Als je deze knop wilt verbergen, klik dan met de rechtermuisknop op de Safari werkbalk, kies pas knoppenbalk aan en sleep hierna de AdBlock knop uit de knoppenbalk. Je kan de knop opnieuw weergeven door het terug naar de werkbalk te slepen.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "sliderexplanation":{
     "message":"Verplaats de schuifbalk tot de advertentie verdwenen is, en het geblokkeerde element bruikbaar lijkt.",
@@ -339,6 +343,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (verwijdert ergernissen)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"AdBlock Waarschuwingen Verwijder lijst (verwijdert meldingen over het gebruik van AdBlock)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
@@ -1232,15 +1240,15 @@
     "description":"Link to the source code of AdBlock on the Support tab of the options"
   },
   "contributors":{
-    "message":"We hebben ook een <a>pagina<\/a> die je helpt met het uitzoeken wie er allemaal achter AdBlock zit!",
+    "message":"We hebben ook een <a>pagina<\/a> die je toont wie er allemaal achter AdBlock zit!",
     "description":"Link to the contributors page on the Support tab of the options"
   },
   "debuginfo":{
-    "message":"Heeft ons team gevraagd om debug info? Klik daarvoor <a href='#' id='debug'>hier<\/a>!",
+    "message":"Heeft ons team gevraagd om debug info? Klik dan <a href='#' id='debug'>hier<\/a>!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
-    "message":"Waarom verstuur je ons geen <a href='#' id='report'>bug rapport<\/a>?",
+    "message":"Waarom stuur je ons geen <a href='#' id='report'>bug rapport<\/a>?",
     "description":"Link to send a bug report on the Support tab of the options"
   },
   "supportsite":{
@@ -1248,7 +1256,7 @@
     "description":"Link to the support site on the Support tab of the options"
   },
   "ad_report_please":{
-    "message":"Als je een advertentie ziet, maak dan geen bug rapport, maar maak een <a>advertentie rapport<\/a>!",
+    "message":"Als je een advertentie ziet, maak dan geen bug rapport, maar een <a>advertentie rapport<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   }
 }

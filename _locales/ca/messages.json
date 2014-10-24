@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"L'extensió més popular de Chrome, amb més de 15 milions d'usuaris! Bloqueja els anuncis de tota la xarxa.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock – cliqueu per obtenir més detalls",
@@ -42,6 +42,10 @@
   "operabutton_how_to_hide2":{
     "message":"Per ocultar el botó, dirigiu-vos a opera:\/\/extensions i seleccioneu l'opció 'Ocultar de la barra d'eines'. El podeu fer tornar a aperèixer desmarcant aquella opció.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2":{
+    "message":"Per ocultar el botó, feu clic dret a la barra d'eines de Safari i escolliu Personalitzar la barra d'eines, a continuació arrosegueu el botó d'AdBlock fora de la barra d'eines. El podeu fer tornar a aparèixer arrosegant-lo cap a la barra d'eines.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "sliderexplanation":{
     "message":"Feu lliscar el regulador fins que l'anunci sigui bloquejat correctament dins la pàgina i l'aspecte final sigui el desitjat.",
@@ -339,6 +343,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (elimina les molèsties de la xarxa)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"Llista de supressió d'alertes d'AdBlock (elimina els missatges derivats de l'ús d'AdBlock)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{

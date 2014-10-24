@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"Den mest populære Chrome-utvidelsen, med mer enn 15 millioner brukere! Blokkerer annonser på hele Internett.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - Klikk for mer informasjon",
@@ -339,6 +339,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (fjerner irritasjonsmomenter på nettet)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"AdBlock-advarselliste (fjerner advarsler om at du bruker AdBlock)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{

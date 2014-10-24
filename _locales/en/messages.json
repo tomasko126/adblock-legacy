@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"The most popular Chrome extension, with over 15 million users!  Blocks ads all over the web.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - click for details",
@@ -42,6 +42,10 @@
   "operabutton_how_to_hide2":{
     "message":"To hide the button, go to opera:\/\/extensions and check the 'Hide from toolbar' option. You can show it again by unchecking that option.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2":{
+    "message":"To hide the button, right click Safari's toolbar and choose Customize Toolbar, then drag the AdBlock button out of the toolbar. You can show it again by dragging it back into the toolbar.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "sliderexplanation":{
     "message":"Slide the slider until the ad is blocked correctly on the page, and the blocked element looks useful.",
@@ -949,6 +953,14 @@
     "message":"We can't block ads inside Flash and other plugins yet. We are awaiting support from the browser and WebKit.",
     "description":"Result of the final ad report question"
   },
+  "malwarewarning":{
+    "message":"Your computer may be infected by malware.  Click <a id='malwarelink'>here<\/a> for more information.",
+    "description":"Text of the malware warning on the adreport page"
+  },
+  "malwarenotfound":{
+    "message":"No known malware found.",
+    "description":"Text of the malware not found message on the adreport page"
+  },    
   "cleanuplist2":{
     "message":"Clean up this list",
     "description":"Option at the bottom of the 'Customize' options tab"

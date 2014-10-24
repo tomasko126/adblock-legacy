@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"Chromen suosituin lisäosa. Sitä käyttää yli 15 miljoonaa käyttäjää! Estää kaikki mainokset.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - napsauta saadaksesi tietoja",
@@ -42,6 +42,10 @@
   "operabutton_how_to_hide2":{
     "message":"Jos haluat piilottaa painikkeen, siirry osoitteeseen opera:\/\/extensions ja valitse ruutu 'Piilota työkaluriviltä'. Voit ottaa painikkeen käyttöön uudestaan poistamalla valinnan ruudusta.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2":{
+    "message":"Piilottaaksesi painikkeen, klikkaa hiiren oikealla Safarin työkaluriviä ja valitse Mukauta työkaluriviä, sitten vedä AdBlock-painike pois työkaluriviltä. Voit näyttää sen uudelleen vetämällä sen takaisin työkaluriviin.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "sliderexplanation":{
     "message":"Raahaa säädintä oikealle niin kauan, että mainos häviää näkyvistä ja sivu näyttää hyvältä.",
@@ -339,6 +343,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (poistaa ärsyttävät kohteet verkosta)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"AdBlock-varoitusten poistoluettelo (poistaa ilmoitukset AdBlockin käyttämisestä)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{
@@ -1148,7 +1156,7 @@
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
   },
   "allow_whitelisting_youtube_channels":{
-    "message":"Salli tiettyjen YouTube-kanavien mainosten salliminen",
+    "message":"Salli tiettyjen YouTube-kanavien mainosten näyttäminen",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "whitelist_youtube_channel":{

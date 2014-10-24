@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"最受欢迎的 Chrome 扩展，拥有超过 1500 万用户 ！屏蔽整个互联网上的广告。",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - 点击查看详情",
@@ -42,6 +42,10 @@
   "operabutton_how_to_hide2":{
     "message":"要隐藏按钮，转到 opera:\/\/extensions 并勾选“从工具栏隐藏”选项。通过取消选中该选项，您可以再次显示它。",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2":{
+    "message":"若要隐藏按钮，请右键单击Safari的工具栏并选择“自定义工具栏“，然后将AdBlock按钮拖出工具栏。若要再次显示按钮，您可以将它拖放回工具栏。",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "sliderexplanation":{
     "message":"移动滑块直到页面上的广告被正确地屏蔽。",
@@ -339,6 +343,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances（去除网页上令人心烦的干扰）",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"AdBlock警告移除列表（移除使用AdBlock时网站显示的警告信息）",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{

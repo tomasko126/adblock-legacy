@@ -1,7 +1,7 @@
 {
   "description2":{
     "message":"Det mest populära Chrome-tillägget, med över 15 miljoner användare!  Blockerar reklamtillägg över hela webben.",
-    "description":"Extension description in manifest"
+    "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
     "message":"AdBlock - Klicka för meny",
@@ -42,6 +42,10 @@
   "operabutton_how_to_hide2":{
     "message":"Om du vill dölja knappen, gå till 'opera:\/\/extensions' och markera alternativet \"Dölj verktygsfältet\". Du kan visa den igen genom att avmarkera alternativet.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Opera displays on the Extensions page."
+  },
+  "safaributton_how_to_hide2":{
+    "message":"Om du vill dölja knappen, högerklicka på Safaris verktygsfält och välj \"Anpassa verktygsfältet\". Dra sedan AdBlock-knappen bort från verktygsfältet. Du kan visa den igen genom att dra den tillbaka in i verktygsfältet.",
+    "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
   "sliderexplanation":{
     "message":"Dra i skjutreglaget tills reklamen är korrekt blockerad, och sidan förövrigt ser använbar ut.",
@@ -339,6 +343,10 @@
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (tar bort störande innehåll från webben)",
+    "description":"Name of the filter list"
+  },
+  "filterwarning_removal":{
+    "message":"Anti-AdBlocklista (tar bort meddelanden om att använda AdBlock)",
     "description":"Name of the filter list"
   },
   "filteradblock_custom":{

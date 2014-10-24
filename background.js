@@ -3,16 +3,17 @@
   window.addEventListener("error", function(e) {
     var str = "Error: " +
              (e.filename||"anywhere").replace(chrome.extension.getURL(""), "") +
-             ":" + (e.lineno||"anywhere");
+             ":" + (e.lineno||"anywhere") +
+             ":" + (e.colno||"anycol");
     if (chrome && chrome.runtime && (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
         var stack = "-" + ((e.error && e.error.message)||"") +
                     "-" + ((e.error && e.error.stack)||"");
         stack = stack.replace(/:/gi, ";").replace(/\n/gi, "");
-        //check to see if there's any URL info in the stack trace, if so remove it
-        if (stack.indexOf("http") >= 0) {
-           stack = "-removed URL-";
-        }
         str += stack;
+    }
+    //check to see if there's any URL info in the stack trace, if so, don't log it
+    if (str.indexOf("http") >= 0) {
+       return;
     }
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
@@ -90,6 +91,8 @@
       show_advanced_options: false,
       display_stats: true,
       show_block_counts_help_link: true,
+      dropbox_sync: false,
+      show_survey: true,
     };
     var settings = storage_get('settings') || {};
     this._data = $.extend(defaults, settings);
@@ -149,6 +152,27 @@
       tab.url = (relative ? chrome.extension.getURL(url) : url);
     }
   };
+
+  // Reload already opened tab
+  // Input:
+  //   tabId: integer - id of the tab which should be reloaded
+  reloadTab = function(tabId) {
+      if (!SAFARI) {
+          chrome.tabs.reload(tabId, {bypassCache: true}, function() {
+              chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+                  if (changeInfo.status === "complete" &&
+                      tab.status === "complete") {
+                      setTimeout(function() {
+                          chrome.extension.sendRequest({command: "reloadcomplete"});
+                      }, 2000);
+                  }
+              });
+          });
+      }
+  }
+
+  // Chrome 38 has bug in WebRequest API, see onBeforeRequestHandler
+  var invalidChromeRequestType = /Chrome\/38/.test(navigator.userAgent);
 
   // Implement blocking via the Chrome webRequest API.
   if (!SAFARI) {
@@ -229,12 +253,10 @@
           return;
         var data = frameData.get(tabId, frameId);
         if (data !== undefined)
-          data.resources[elType + ':|:' + url] = null;
+            data.resources[elType + ':|:' + url] = null;
       },
 
-      // When a tab is closed, delete all its data
       onTabClosedHandler: function(tabId) {
-        log("[DEBUG]", "----------- Closing tab", tabId);
         delete frameData[tabId];
       }
     };
@@ -248,7 +270,7 @@
         return { cancel: false };
 
       var tabId = details.tabId;
-      var elType = ElementTypes.fromOnBeforeRequestType(details.type);
+      var reqType = details.type;
 
       if (frameData.get(tabId, 0).whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted tab", tabId, details.url.substring(0, 100));
@@ -258,7 +280,14 @@
       // For most requests, Chrome and we agree on who sent the request: the frame.
       // But for iframe loads, we consider the request to be sent by the outer
       // frame, while Chrome claims it's sent by the new iframe.  Adjust accordingly.
-      var requestingFrameId = (details.type === 'sub_frame' ? details.parentFrameId : details.frameId);
+      var requestingFrameId = (reqType === 'sub_frame' ? details.parentFrameId : details.frameId);
+
+      // Because of bug in WebRequest API on Chrome 38,
+      // requests of type "object" are reported as type "other", see crbug.com/410382
+      if (invalidChromeRequestType && reqType === "other")
+          reqType = "object";
+
+      var elType = ElementTypes.fromOnBeforeRequestType(reqType);
 
       frameData.storeResource(tabId, requestingFrameId, details.url, elType);
 
@@ -287,7 +316,7 @@
         blockCounts.recordOneAdBlocked(tabId);
         updateBadge(tabId);
       }
-      log("[DEBUG]", "Block result", blocked, details.type, frameDomain, details.url.substring(0, 100));
+      log("[DEBUG]", "Block result", blocked, reqType, frameDomain, details.url.substring(0, 100));
       if (blocked && elType === ElementTypes.image) {
         // 1x1 px transparant image.
         // Same URL as ABP and Ghostery to prevent conflict warnings (issue 7042)
@@ -301,6 +330,8 @@
 
     // Popup blocking
     function onCreatedNavigationTargetHandler(details) {
+      if (adblock_is_paused())
+          return;
       var opener = frameData.get(details.sourceTabId, details.sourceFrameId);
       if (opener === undefined)
         return;
@@ -315,6 +346,11 @@
         chrome.tabs.remove(details.tabId);
       frameData.storeResource(details.sourceTabId, details.sourceFrameId, details.url, ElementTypes.popup);
     };
+
+    // If tabId has been replaced by Chrome, delete it's data
+    chrome.webNavigation.onTabReplaced.addListener(function(details) {
+        frameData.onTabClosedHandler(details.replacedTabId);
+    });
   }
 
   debug_report_elemhide = function(selector, matches, sender) {
@@ -394,6 +430,8 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
+    if (!SAFARI && db_client.isAuthenticated())
+        settingstable.set("custom_filters", localStorage.custom_filters);
   }
 
   // Get the user enterred exclude filters text as a \n-separated text string.
@@ -494,18 +532,27 @@
     var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
     if (!confirm(confirmation_text)) { return; }
     remove_custom_filter_for_host(host);
-    chrome.tabs.reload();
+    if (!SAFARI)
+        chrome.tabs.reload();
   };
 
   get_settings = function() {
     return _settings.get_all();
   }
 
-  set_setting = function(name, is_enabled) {
+  set_setting = function(name, is_enabled, sync) {
     _settings.set(name, is_enabled);
 
     if (name === "debug_logging")
       logging(is_enabled);
+
+    if (!SAFARI && sync) {
+        sync_setting(name, is_enabled);
+    }
+  }
+
+  disable_setting = function(name) {
+      _settings.set(name, false);
   }
 
   // MYFILTERS PASSTHROUGHS
@@ -534,28 +581,46 @@
     return result;
   }
 
+  // Get subscribed filter lists
+  get_subscribed_filter_lists = function() {
+      var subs = get_subscriptions_minus_text();
+      var subscribed_filter_names = [];
+      for (var id in subs) {
+          if (subs[id].subscribed)
+              subscribed_filter_names.push(id);
+      }
+      return subscribed_filter_names;
+  }
+
   // Subscribes to a filter subscription.
   // Inputs: id: id to which to subscribe.  Either a well-known
   //             id, or "url:xyz" pointing to a user-specified list.
   //         requires: the id of a list if it is a supplementary list,
   //                   or null if nothing required
   // Returns: null, upon completion
-  subscribe = function(options) {
-    _myfilters.changeSubscription(options.id, {
-      subscribed: true,
-      requiresList: options.requires
-    });
+  subscribe = function(options, sync) {
+      _myfilters.changeSubscription(options.id, {
+          subscribed: true,
+          requiresList: options.requires,
+          title: options.title
+      });
+      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
+          settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
+      }
   }
 
   // Unsubscribes from a filter subscription.
   // Inputs: id: id from which to unsubscribe.
   //         del: (bool) if the filter should be removed or not
   // Returns: null, upon completion.
-  unsubscribe = function(options) {
-    _myfilters.changeSubscription(options.id, {
-      subscribed: false,
-      deleteMe: (options.del ? true : undefined)
-    });
+  unsubscribe = function(options, sync) {
+      _myfilters.changeSubscription(options.id, {
+          subscribed: false,
+          deleteMe: (options.del ? true : undefined)
+      });
+      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
+          settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
+      }
   }
 
   // Returns true if the url cannot be blocked
@@ -596,38 +661,56 @@
   //   }
   // Returns: null (asynchronous)
   getCurrentTabInfo = function(callback, secondTime) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      if (tabs.length === 0)
-        return; // For example: only the background devtools or a popup are opened
-      var tab = tabs[0];
+    if (!SAFARI) {
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        if (tabs.length === 0)
+          return; // For example: only the background devtools or a popup are opened
 
-      if (tab && !tab.url) {
-        // Issue 6877: tab URL is not set directly after you opened a window
-        // using window.open()
-        if (!secondTime)
-          window.setTimeout(function() {
-            getCurrentTabInfo(callback, true);
-          }, 250);
-        return;
-      }
+        var tab = tabs[0];
 
+        if (tab && !tab.url) {
+          // Issue 6877: tab URL is not set directly after you opened a window
+          // using window.open()
+          if (!secondTime)
+            window.setTimeout(function() {
+              getCurrentTabInfo(callback, true);
+            }, 250);
+          return;
+        }
+
+        var disabled_site = page_is_unblockable(tab.url);
+        var total_blocked = blockCounts.getTotalAdsBlocked();
+        var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
+        var display_stats = get_settings().display_stats;
+
+        var result = {
+          tab: tab,
+          disabled_site: disabled_site,
+          total_blocked: total_blocked,
+          tab_blocked: tab_blocked,
+          display_stats: display_stats
+        };
+
+        if (!disabled_site)
+          result.whitelisted = page_is_whitelisted(tab.url);
+
+        callback(result);
+      });
+    } else {
+      var browserWindow = safari.application.activeBrowserWindow;
+      var tab = browserWindow.activeTab;
       var disabled_site = page_is_unblockable(tab.url);
-      var total_blocked = blockCounts.getTotalAdsBlocked();
-      var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
-      var display_stats = get_settings().display_stats;
 
       var result = {
         tab: tab,
         disabled_site: disabled_site,
-        total_blocked: total_blocked,
-        tab_blocked: tab_blocked,
-        display_stats: display_stats
       };
+
       if (!disabled_site)
         result.whitelisted = page_is_whitelisted(tab.url);
 
-      callback(result);
-    });
+        callback(result);
+      }
   }
 
   // Returns true if anything in whitelist matches the_domain.
@@ -672,7 +755,6 @@
     // Set the button image and context menus according to the URL
     // of the current tab.
     updateButtonUIAndContextMenus = function() {
-
       function setContextMenus(info) {
         chrome.contextMenus.removeAll();
         if (!get_settings().show_context_menu_items)
@@ -893,7 +975,7 @@
   launch_subscribe_popup = function(loc) {
     window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
     "_blank",
-    'scrollbars=0,location=0,resizable=0,width=450,height=140');
+    'scrollbars=0,location=0,resizable=0,width=450,height=150');
   }
 
   // Get the framedata for resourceblock
@@ -1045,6 +1127,26 @@
   // Get debug info for bug reporting and ad reporting
   getDebugInfo = function() {
 
+      // Is this installed build of AdBlock the official one?
+      var AdBlockBuild = function() {
+          if (!SAFARI) {
+              if (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk") {
+                  return " Beta";
+              } else if (chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom" ||
+                         chrome.runtime.id === "aobdicepooefnbaeokijohmhjlleamfj") {
+                  return " Stable";
+              } else {
+                  return " Unofficial";
+              }
+          } else {
+              if (safari.extension.baseURI.indexOf("com.betafish.adblockforsafari-UAMUU4S2D9") > -1) {
+                  return " Stable";
+              } else {
+                  return " Unofficial";
+              }
+          }
+      }
+
       // Get AdBlock version
       var AdBlockVersion = chrome.runtime.getManifest().version;
 
@@ -1069,7 +1171,7 @@
       var adblock_settings = [];
       var settings = get_settings();
       for (setting in settings)
-          adblock_settings.push(setting+": "+get_settings()[setting] + "\n");
+          adblock_settings.push(setting + ": "+ get_settings()[setting] + "\n");
       adblock_settings = adblock_settings.join('');
 
       // Create debug info for a bug report or an ad report
@@ -1085,8 +1187,7 @@
       info.push("==== Settings ====");
       info.push(adblock_settings);
       info.push("==== Other info: ====");
-      info.push("AdBlock version number: " + AdBlockVersion +
-               (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk" ? " Beta" : ""));
+      info.push("AdBlock version number: " + AdBlockVersion + AdBlockBuild());
       if (adblock_error)
           info.push("Last known error: " + adblock_error);
       info.push("Total pings: " + adblock_pings);
@@ -1128,12 +1229,159 @@
                 "Developer Mode -> Inspect views: background page -> Console. " +
                 "Paste the contents here:");
       body.push("");
+      body.push("```");
       body.push("====== Do not touch below this line ======");
       body.push("");
       body.push(getDebugInfo());
+      body.push("```");
       var out = encodeURIComponent(body.join('  \n'));
 
       return out;
   };
+
+  // SYNCHRONIZATION
+
+  // Sync settings, filter lists & custom filters
+  // after authentication with Dropbox
+  if (!SAFARI) {
+      var db_client = new Dropbox.Client({key: "3unh2i0le3dlzio"});
+      var settingstable = null;
+
+      // Return true, if user is authenticated
+      function dropboxauth() {
+          return db_client.isAuthenticated();
+      }
+
+      // Login with Dropbox
+      function dropboxlogin() {
+          db_client.authenticate(function(error, client) {
+              if (error) return;
+              set_setting("dropbox_sync", true);
+              settingssync();
+              chrome.runtime.sendMessage({message: "update_icon"});
+          });
+      }
+
+      // Logout from Dropbox
+      function dropboxlogout() {
+          db_client.signOut(function(error, client) {
+              if (error) return;
+              set_setting("dropbox_sync", false);
+              chrome.runtime.sendMessage({message: "update_icon"});
+          });
+      }
+
+      function settingssync() {
+          var datastoreManager = db_client.getDatastoreManager();
+          datastoreManager.openDefaultDatastore(function(error, datastore) {
+              if (error) return;
+
+              // Create table for sync
+              var table = datastore.getTable("AdBlock");
+
+              // Fill table with user's settings, filter lists & custom filters
+              settingstable = table.getOrInsert("settings", {
+                  filter_lists: get_subscribed_filter_lists().toString(),
+                  debug_logging: get_settings().debug_logging,
+                  youtube_channel_whitelist: get_settings().youtube_channel_whitelist,
+                  show_google_search_text_ads: get_settings().show_google_search_text_ads,
+                  whitelist_hulu_ads: get_settings().whitelist_hulu_ads,
+                  show_context_menu_items: get_settings().show_context_menu_items,
+                  show_advanced_options: get_settings().show_advanced_options,
+                  display_stats: get_settings().display_stats,
+                  show_block_counts_help_link: get_settings().show_block_counts_help_link,
+                  show_survey: get_settings().show_survey
+              });
+
+              // Prevent deleting filters in some cases
+              var sync = settingstable.get("custom_filters");
+              var local = localStorage.custom_filters;
+              var filters;
+              if (sync === local) {
+                  filters = "";
+              } else if (local === undefined && sync !== "") {
+                  filters = sync;
+              } else if (sync !== "" && local) {
+                  filters = local + sync;
+              } else {
+                  filters = local;
+              }
+              if (filters && filters !== "" && filters !== undefined) {
+                  filters = filters.replace(/\""/g, "");
+                  settingstable.set("custom_filters", filters);
+              }
+
+              // Listener, which fires when table has been updated
+              datastore.recordsChanged.addListener(function(event) {
+                  savesettings();
+              });
+
+              // Set resolution to remote changes
+              table.setResolutionRule("completed", "remote");
+              savesettings();
+
+              // Get settings, filter lists & custom filters and save them
+              function savesettings() {
+                  // Subscribe & unsubscribe filter lists
+                  var filterlists_sync = settingstable.get("filter_lists").split(",");
+                  var filterlists_local = get_subscribed_filter_lists();
+                  for (var i=0; i < filterlists_sync.length; i++)
+                      if (settingstable.get("filter_lists") !== "")
+                          subscribe({id: filterlists_sync[i]}, true);
+                  for (var i=0; i < filterlists_local.length; i++) {
+                      if (filterlists_sync.indexOf(filterlists_local[i]) === -1)
+                          unsubscribe({id: filterlists_local[i]}, true);
+                  }
+
+                  // Set custom filters
+                  var custom = settingstable.get("custom_filters");
+                  localStorage.custom_filters = custom;
+                  chrome.extension.sendRequest({command: "filters_updated"});
+
+                  // Set settings
+                  var advanced = settingstable.get("show_advanced_options");
+                  var advanced_local = get_settings().show_advanced_options;
+                  if (advanced_local !== advanced)
+                      chrome.runtime.sendMessage({message: "update_page"});
+                  set_setting("show_advanced_options", advanced);
+                  var debug = settingstable.get("debug_logging");
+                  set_setting("debug_logging", debug);
+                  var ytchannel = settingstable.get("youtube_channel_whitelist");
+                  set_setting("youtube_channel_whitelist", ytchannel);
+                  var googleads = settingstable.get("show_google_search_text_ads");
+                  set_setting("show_google_search_text_ads", googleads);
+                  var huluads = settingstable.get("whitelist_hulu_ads");
+                  set_setting("whitelist_hulu_ads", huluads);
+                  var showcontextmenu = settingstable.get("show_context_menu_items");
+                  set_setting("show_context_menu_items", showcontextmenu);
+                  var stats = settingstable.get("display_stats");
+                  set_setting("display_stats", stats);
+                  var blockcountslink = settingstable.get("show_block_counts_help_link");
+                  set_setting("show_block_counts_help_link", blockcountslink);
+                  var showsurvey = settingstable.get("show_survey");
+                  set_setting("show_survey", showsurvey);
+                  chrome.runtime.sendMessage({message: "update_checkbox"});
+              }
+          });
+      }
+
+      // Reset db_client, if it got in an error state
+      if (!SAFARI) {
+          chrome.runtime.onMessage.addListener(
+              function(request, sender, sendResponse) {
+                  if (request.message === "clienterror") {
+                      db_client.reset();
+                      chrome.runtime.sendMessage({message: "update_icon"});
+                  }
+              }
+          );
+      }
+
+      // Sync value of changed setting
+      function sync_setting(name, is_enabled) {
+          if (settingstable && db_client.isAuthenticated())
+              settingstable.set(name, is_enabled);
+      }
+  }
 
   log("\n===FINISHED LOADING===\n\n");
