@@ -5,10 +5,10 @@ var FilterNormalizer = {
   userExcludedFilterArray: [],
 
   setExcludeFilters: function(text) {
-    console.log("filternormalizer, setexcludefilters", text);
     if (text) {
         userExcludedFilterArray = text.split('\n');
-        console.log("filternormalizer, userExcludedFilterArray", userExcludedFilterArray);     
+    } else {
+        userExcludedFilterArray = null;
     }
   },
 
@@ -66,10 +66,10 @@ var FilterNormalizer = {
       filter = FilterNormalizer._old_style_hiding_to_new(filter);
       log('Converted ' + oldFilter + ' to ' + filter);
     }
-    if (typeof userExcludedFilterArray !== 'undefined' && 
+    if (typeof userExcludedFilterArray !== 'undefined' &&
+        userExcludedFilterArray &&
         userExcludedFilterArray.length > 0 &&
         userExcludedFilterArray.indexOf(filter) >= 0) {
-            console.log(" normalizeLine: exclude filter found", filter);
             return null;
     }
 

@@ -404,11 +404,20 @@
   // rebuild the filterset.
   // Inputs: filters:string the new filters.
   set_exclude_filters = function(filters) {
-    console.log("set_exclude_filters exclude filters", filters);  
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
-    console.log("done set_exclude_filters exclude filters", filters);   
+  }
+  // Add / concatenate the exclude filter to the existing excluded filters, and
+  // rebuild the filterset.
+  // Inputs: filter:string the new filter.
+  add_exclude_filter = function(filter) {
+    var currentExcludedFilters = get_exclude_filters_text();
+    if (currentExcludedFilters) {
+        set_exclude_filters(currentExcludedFilters + "\n" + filter);
+    } else {
+        set_exclude_filters(filter);
+    }
   }
 
   // Removes a custom filter entry.
