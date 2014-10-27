@@ -29,6 +29,7 @@ function top_open_whitelist_ui() {
     if ($("frameset").length === 1) {
         alert(translate('wizardcantrunonframesets')); 
         may_open_dialog_ui = true;
+        $(".adblock-ui-stylesheet").remove();
         return;
     }    
     var adblock_default_button_text = translate("buttonexclude");

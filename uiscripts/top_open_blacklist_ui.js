@@ -31,6 +31,7 @@ function top_open_blacklist_ui(options) {
     if ($("frameset").length === 1) {
         alert(translate('wizardcantrunonframesets')); 
         may_open_dialog_ui = true;
+        $(".adblock-ui-stylesheet").remove();
         return;
     }
 
