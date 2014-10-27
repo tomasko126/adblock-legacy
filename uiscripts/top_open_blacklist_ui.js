@@ -26,6 +26,15 @@ function top_open_blacklist_ui(options) {
     }
     if (rightclicked_item && rightclicked_item.nodeName == "BODY")
       rightclicked_item = null;
+    //check if we're running on website with a frameset, if so, tell 
+    //the user we can't run on it.      
+    if ($("frameset").length === 1) {
+        alert(translate('wizardcantrunonframesets')); 
+        may_open_dialog_ui = true;
+        return;
+    }
+
+    
     BGcall("get_settings", function(settings) {
       var advanced_user = settings.show_advanced_options;
       var blacklist_ui = new BlacklistUi(rightclicked_item, advanced_user);

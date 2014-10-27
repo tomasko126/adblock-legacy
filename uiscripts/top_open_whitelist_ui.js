@@ -24,6 +24,13 @@ function top_open_whitelist_ui() {
 
   // defined in blacklister.js
   load_jquery_ui(function() {
+    //check if we're running on website with a frameset, if so, tell 
+    //the user we can't run on it.
+    if ($("frameset").length === 1) {
+        alert(translate('wizardcantrunonframesets')); 
+        may_open_dialog_ui = true;
+        return;
+    }    
     var adblock_default_button_text = translate("buttonexclude");
     var btns = {};
     btns[adblock_default_button_text] = {

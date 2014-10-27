@@ -949,6 +949,10 @@
     "message":"We can't block ads inside Flash and other plugins yet. We are awaiting support from the browser and WebKit.",
     "description":"Result of the final ad report question"
   },
+  "wizardcantrunonframesets":{
+    "message":"AdBlock can't run our wizard on older sites with framesets.",
+    "description":"Result of the final ad report question"
+  },  
   "malwarewarning":{
     "message":"Your computer may be infected by malware.  Click <a id='malwarelink'>here<\/a> for more information.",
     "description":"Text of the malware warning on the adreport page"
