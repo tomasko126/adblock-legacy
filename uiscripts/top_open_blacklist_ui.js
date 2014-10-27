@@ -28,7 +28,7 @@ function top_open_blacklist_ui(options) {
       rightclicked_item = null;
     //check if we're running on website with a frameset, if so, tell 
     //the user we can't run on it.      
-    if ($("frameset").length === 1) {
+    if ($("frameset").length >= 1) {
         alert(translate('wizardcantrunonframesets')); 
         may_open_dialog_ui = true;
         $(".adblock-ui-stylesheet").remove();

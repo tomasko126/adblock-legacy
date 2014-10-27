@@ -950,7 +950,7 @@
     "description":"Result of the final ad report question"
   },
   "wizardcantrunonframesets":{
-    "message":"AdBlock can't run our wizard on older sites with framesets.",
+    "message":"AdBlock can't run our wizard on older sites.",
     "description":"Result of the final ad report question"
   },  
   "malwarewarning":{
