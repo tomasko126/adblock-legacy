@@ -1184,6 +1184,11 @@
           info.push(adblock_custom_filters);
           info.push("");
       }
+      if (get_exclude_filters_text()) {
+          info.push("==== Exclude Filters ====");
+          info.push(get_exclude_filters_text());
+          info.push("");
+      }      
       info.push("==== Settings ====");
       info.push(adblock_settings);
       info.push("==== Other info: ====");
