@@ -239,8 +239,15 @@ $(function() {
     $("#txtFiltersAdvanced").val(text);
   });
 
+  BGcall("get_settings", function(settings) {
+    if (settings.show_advanced_options)
+        $("#divExcludeFilters").show();    
+  });
+
   BGcall("get_exclude_filters_text", function(text) {
     $("#txtExcludeFiltersAdvanced").val(text);
+    if (text)
+        $("#divExcludeFilters").show();
   });
 
   $("#btnCleanUp").click(function() {
