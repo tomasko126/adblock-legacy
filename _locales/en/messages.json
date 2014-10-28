@@ -477,6 +477,10 @@
     "message":"Reload the page with the ad.",
     "description":"Instruction on ad report page"
   },
+  "reloadpageafterwhitelist":{
+    "message":"Reload the page.",
+    "description":"Checkbox on whitelist wizard"
+  },  
   "adstillappear":{
     "message":"Does the ad still appear?",
     "description":"Question on ad report page"
