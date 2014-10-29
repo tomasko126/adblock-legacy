@@ -955,7 +955,7 @@
   },
   "wizardcantrunonframesets2":{
     "message":"  You can blacklist or whitelist resources manually in the 'Customize' tab of the options page.",
-    "description":"A message (alert) to the user."
+    "description":"part two of the message (alert) to the user."
   },
   "malwarewarning":{
     "message":"Your computer may be infected by malware.  Click <a id='malwarelink'>here<\/a> for more information.",
