@@ -24,14 +24,14 @@ function top_open_whitelist_ui() {
 
   // defined in blacklister.js
   load_jquery_ui(function() {
-    //check if we're running on website with a frameset, if so, tell 
+    //check if we're running on website with a frameset, if so, tell
     //the user we can't run on it.
     if ($("frameset").length >= 1) {
-        alert(translate('wizardcantrunonframesets')); 
+        alert(translate('wizardcantrunonframesets1') + translate('wizardcantrunonframesets2'));
         may_open_dialog_ui = true;
         $(".adblock-ui-stylesheet").remove();
         return;
-    }    
+    }
     var adblock_default_button_text = translate("buttonexclude");
     var btns = {};
     btns[adblock_default_button_text] = {
