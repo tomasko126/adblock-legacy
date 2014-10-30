@@ -1321,21 +1321,21 @@
 
               //exclude filters
               // Prevent deleting filters in some cases
-              var sync = settingstable.get("exclude_filters");
-              var local = localStorage.exclude_filters;
-              var exfilters;
-              if (sync === local) {
-                  exfilters = "";
-              } else if (local === undefined && sync !== "") {
-                  exfilters = sync;
-              } else if (sync !== "" && local) {
-                  exfilters = local + sync;
+              var eXsync = settingstable.get("exclude_filters");
+              var eXlocal = localStorage.exclude_filters;
+              var eXfilters;
+              if (eXsync === eXlocal) {
+                  eXfilters = "";
+              } else if (eXlocal === undefined && eXsync !== "") {
+                  eXfilters = eXsync;
+              } else if (eXsync !== "" && eXlocal) {
+                  eXfilters = eXlocal + eXsync;
               } else {
-                  exfilters = local;
+                  eXfilters = eXlocal;
               }
-              if (exfilters && exfilters !== "" && exfilters !== undefined) {
-                  exfilters = exfilters.replace(/\""/g, "");
-                  settingstable.set("exclude_filters", exfilters);
+              if (eXfilters && eXfilters !== "" && eXfilters !== undefined) {
+                  eXfilters = eXfilters.replace(/\""/g, "");
+                  settingstable.set("exclude_filters", eXfilters);
               }
 
               // Listener, which fires when table has been updated
@@ -1363,9 +1363,6 @@
                   // Set custom filters
                   var custom = settingstable.get("custom_filters");
                   localStorage.custom_filters = custom;
-
-                  var exFilters = settingstable.get("exclude_filters");
-                  set_exclude_filters(exFilters);
                   chrome.extension.sendRequest({command: "filters_updated"});
 
                   // Set settings
@@ -1391,6 +1388,14 @@
                   var showsurvey = settingstable.get("show_survey");
                   set_setting("show_survey", showsurvey);
                   chrome.runtime.sendMessage({message: "update_checkbox"});
+
+                  // Set custom filters
+                  var exFilters = settingstable.get("exclude_filters");
+                  localStorage.exclude_filters = exFilters;
+                  //since the exclude filters may have been updated,
+                  //rebuild / update the entire filters
+                  FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
+                  update_subscriptions_now();
               }
           });
       }
