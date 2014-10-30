@@ -218,4 +218,5 @@ var FilterNormalizer = {
     }
   }
 }
+//Initialize the exclude filters at startup
 FilterNormalizer.setExcludeFilters(storage_get('exclude_filters'));

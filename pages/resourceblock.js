@@ -665,17 +665,19 @@ function finally_it_has_loaded_its_stuff() {
                 if (!ex) {
                     alert(translate("filterhasbeenadded"));
                     window.close();
-                } else
+                } else {
                     alert(translate("blacklistereditinvalid1", ex));
-                });
+                }
+            });
         } else {
             BGcall('add_custom_filter', generated_filter, function(ex) {
                 if (!ex) {
                     alert(translate("filterhasbeenadded"));
                     window.close();
-                } else
+                } else {
                     alert(translate("blacklistereditinvalid1", ex));
-                });
+                }
+            });
         }
       });
     });

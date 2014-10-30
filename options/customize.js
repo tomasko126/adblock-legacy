@@ -230,6 +230,11 @@ $(function() {
       $("#txtExcludeFiltersAdvanced").attr("disabled", "disabled");
       $("#spanSaveExcludeButton").hide();
       $("#btnEditExcludeAdvancedFilters").show();
+      BGcall("get_exclude_filters_text", function(text) {
+        $("#txtExcludeFiltersAdvanced").val(text);
+        if (text)
+            $("#divExcludeFilters").show();
+        });      
     });
 
   }

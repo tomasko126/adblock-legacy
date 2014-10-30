@@ -442,6 +442,8 @@
   // rebuild the filterset.
   // Inputs: filters:string the new filters.
   set_exclude_filters = function(filters) {
+    filters = filters.trim();
+    filters = filters.replace(/\n\n/g, '\n');
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
@@ -1329,7 +1331,7 @@
               } else if (eXlocal === undefined && eXsync !== "") {
                   eXfilters = eXsync;
               } else if (eXsync !== "" && eXlocal) {
-                  eXfilters = eXlocal + eXsync;
+                  eXfilters = eXlocal + "\n" + eXsync;
               } else {
                   eXfilters = eXlocal;
               }
