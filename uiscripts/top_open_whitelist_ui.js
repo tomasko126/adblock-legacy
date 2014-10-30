@@ -24,14 +24,7 @@ function top_open_whitelist_ui() {
 
   // defined in blacklister.js
   load_jquery_ui(function() {
-    //check if we're running on website with a frameset, if so, tell 
-    //the user we can't run on it.
-    if ($("frameset").length >= 1) {
-        alert(translate('wizardcantrunonframesets')); 
-        may_open_dialog_ui = true;
-        $(".adblock-ui-stylesheet").remove();
-        return;
-    }    
+  
     var adblock_default_button_text = translate("buttonexclude");
     var btns = {};
     btns[adblock_default_button_text] = {
@@ -63,7 +56,7 @@ function top_open_whitelist_ui() {
       append('<span id="modifypath">' + translate('modifypath') +
              '<input id="pathslider" type="range" min="0" value="0"/></span>').
       append('<br/><input type="checkbox" id="reload_page" checked/>'+
-             '<label for="reload_page">' + translate('reloadpageafterwhitelist') + '</label>').             
+             '<label style="display: inline;" for="reload_page">' + translate('reloadpageafterwhitelist') + '</label>').             
       dialog({
         title: translate("whitelistertitle2"),
         dialogClass: "adblock-whitelist-dialog",
