@@ -1365,7 +1365,7 @@
                   localStorage.custom_filters = custom;
 
                   var exFilters = settingstable.get("exclude_filters");
-                  localStorage.exclude_filters = exFilters;
+                  set_exclude_filters(exFilters);
                   chrome.extension.sendRequest({command: "filters_updated"});
 
                   // Set settings
