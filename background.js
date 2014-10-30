@@ -445,6 +445,8 @@
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
+    if (!SAFARI && db_client.isAuthenticated())
+        settingstable.set("exclude_filters", localStorage.exclude_filters);
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
   // rebuild the filterset.
@@ -1188,7 +1190,7 @@
           info.push("==== Exclude Filters ====");
           info.push(get_exclude_filters_text());
           info.push("");
-      }      
+      }
       info.push("==== Settings ====");
       info.push(adblock_settings);
       info.push("==== Other info: ====");
@@ -1298,6 +1300,7 @@
                   show_survey: get_settings().show_survey
               });
 
+              //custom filters
               // Prevent deleting filters in some cases
               var sync = settingstable.get("custom_filters");
               var local = localStorage.custom_filters;
@@ -1314,6 +1317,25 @@
               if (filters && filters !== "" && filters !== undefined) {
                   filters = filters.replace(/\""/g, "");
                   settingstable.set("custom_filters", filters);
+              }
+
+              //exclude filters
+              // Prevent deleting filters in some cases
+              var sync = settingstable.get("exclude_filters");
+              var local = localStorage.exclude_filters;
+              var exfilters;
+              if (sync === local) {
+                  exfilters = "";
+              } else if (local === undefined && sync !== "") {
+                  exfilters = sync;
+              } else if (sync !== "" && local) {
+                  exfilters = local + sync;
+              } else {
+                  exfilters = local;
+              }
+              if (exfilters && exfilters !== "" && exfilters !== undefined) {
+                  exfilters = exfilters.replace(/\""/g, "");
+                  settingstable.set("exclude_filters", exfilters);
               }
 
               // Listener, which fires when table has been updated
@@ -1341,6 +1363,9 @@
                   // Set custom filters
                   var custom = settingstable.get("custom_filters");
                   localStorage.custom_filters = custom;
+
+                  var exFilters = settingstable.get("exclude_filters");
+                  localStorage.exclude_filters = exFilters;
                   chrome.extension.sendRequest({command: "filters_updated"});
 
                   // Set settings
