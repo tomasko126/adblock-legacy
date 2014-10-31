@@ -446,7 +446,7 @@
     "description":"Subtitle on the 'Customize' tab"
   },
   "manualexcludefilteredit":{
-    "message":"Edit filters to exclude:",
+    "message":"Edit disabled filters:",
     "description":"Subtitle on the 'Customize' tab"
   },  
   "filtersavewarning":{
