@@ -445,6 +445,10 @@
     "message":"Manually edit your filters:",
     "description":"Subtitle on the 'Customize' tab"
   },
+  "manualexcludefilteredit":{
+    "message":"Edit disabled filters:",
+    "description":"Subtitle on the 'Customize' tab"
+  },  
   "filtersavewarning":{
     "message":"Be careful: if you make a mistake here a lot of other filters, including the official filters, could get broken too!<br\/>Read the <a>filter syntax tutorial<\/a> to learn how to add advanced blacklist and whitelist filters.",
     "description":"Warning when blacklisting manually"
