@@ -32,6 +32,7 @@ function top_open_whitelist_ui() {
         $(".adblock-ui-stylesheet").remove();
         return;
     }
+
     var adblock_default_button_text = translate("buttonexclude");
     var btns = {};
     btns[adblock_default_button_text] = {
@@ -40,22 +41,30 @@ function top_open_whitelist_ui() {
       click: function() {
         var filter = '@@||' + generateUrl() + '$document';
         BGcall('add_custom_filter', filter, function() {
-          document.location.reload();
+            if ($('#reload_page').is(':checked')) {
+                document.location.reload();
+            } else {
+                may_open_dialog_ui = true;
+                $(".adblock-ui-stylesheet").remove();
+                page.remove();
+            }
         });
       }
     }
     btns[translate("buttoncancel")] = function() { page.dialog('close');}
 
     var page = $("<div>").
-      append('<span>' + translate("adblock_wont_run_on_pages_matching") +
+      append('<span>' + translate('adblock_wont_run_on_pages_matching') +
              '</span>').
       append('<br/><br/><i id="domainpart"></i><i id="pathpart"></i>').
-      append("<br/><br/><br/><span id='whitelister_dirs'>" +
-             translate('you_can_slide_to_change') + "</span>").
+      append('<br/><br/><br/><span id="whitelister_dirs">' +
+             translate('you_can_slide_to_change') + '</span>').
       append('<br/><span id="modifydomain">' + translate('modifydomain') +
-             "<input id='domainslider' type='range' min='0' value='0'/></span>").
+             '<input id="domainslider" type="range" min="0" value="0"/></span>').
       append('<span id="modifypath">' + translate('modifypath') +
-             "<input id='pathslider' type='range' min='0' value='0'/></span>").
+             '<input id="pathslider" type="range" min="0" value="0"/></span>').
+      append('<br/><input type="checkbox" id="reload_page" checked/>'+
+             '<label style="display: inline;" for="reload_page">' + translate('reloadpageafterwhitelist') + '</label>').
       dialog({
         title: translate("whitelistertitle2"),
         dialogClass: "adblock-whitelist-dialog",
