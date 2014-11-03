@@ -493,14 +493,6 @@
     "message":"Nem kell tennie semmit, mivel a hirdetés már blokkolva van",
     "description":"On the ad report page, telling a user there is nothing to do"
   },
-  "sameAdsOnDifferentPages":{
-    "message":"Ugyanolyan vagy hasonló reklámokat lát sok különböző oldalon, pl. a honlapján, a munkahelyének weboldalán, stb.?",
-    "description":"A question on the ad report page, asking if the user sees similar ads on different websites"
-  },
-  "similarAds":{
-    "message":"Ugyanolyan\/hasonló reklámok minden oldalon",
-    "description":"Section header on the ad report page"
-  },
   "disableallextensions":{
     "message":"Minden bővítmény letiltása az AdBlock kivételével.",
     "description":"Instruction on ad report page"
@@ -520,14 +512,6 @@
   "reenableadsonebyone":{
     "message":"Most, hogy a hirdetés(ek) eltűnt(ek), ki kell derítenie, hogy melyik bővítmény az előidéző. Nézze át és egyesével engedélyezze mindegyik bővítményt. Az, amelyik visszahozza ő(ke)t az, amelyiket törölnie kell, hogy megszabaduljon a hirdetés(ek)től.",
     "description":"Tells the user to reenable the extensions one by one"
-  },
-  "scancomputer":{
-    "message":"A számítógép átvizsgálása kártevők után",
-    "description":"Section header on the ad report page"
-  },
-  "performscan":{
-    "message":"Végezzen el egy teljes vizsgálatot számítógépén antivírus\/anti-malware programja használatával. Egyes malwaretípusok képesek hirdetéseket beadni a weboldalba, és így megerülik az AdBlock-ot.",
-    "description":"Instruction on ad report page"
   },
   "correctfilters":{
     "message":"Megfelelő szűrők",

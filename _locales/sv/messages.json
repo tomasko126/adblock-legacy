@@ -493,14 +493,6 @@
     "message":"Du behöver inte göra något, eftersom reklamen redan är blockerad",
     "description":"On the ad report page, telling a user there is nothing to do"
   },
-  "sameAdsOnDifferentPages":{
-    "message":"Ser du samma eller liknande reklamtillägg på många olika sidor, exempelvis din hemsida eller din arbetsplats hemsida, etc?",
-    "description":"A question on the ad report page, asking if the user sees similar ads on different websites"
-  },
-  "similarAds":{
-    "message":"Samma\/Liknande tillägg på alla sidor",
-    "description":"Section header on the ad report page"
-  },
   "disableallextensions":{
     "message":"Inaktivera alla tillägg utom AdBlock",
     "description":"Instruction on ad report page"
@@ -520,14 +512,6 @@
   "reenableadsonebyone":{
     "message":"Nu när alla tillägg är avaktiverade, måste du undersöka vilket tillägg som är orsakar felet. Aktivera nu tilläggen ett och ett. Det tillägg som får reklamen att visas igen, är det tillägg som du måste avinstallera för att bli av med reklamen.",
     "description":"Tells the user to reenable the extensions one by one"
-  },
-  "scancomputer":{
-    "message":"Genomsök din dator efter skadlig kod",
-    "description":"Section header on the ad report page"
-  },
-  "performscan":{
-    "message":"Utför en fullständig genomsökning med ditt antivirus-\/antimalware-program.Vissa typer av skadlig kod kan injicera tillägg i webbsidor, och dessa tar sig förbi AdBlock.",
-    "description":"Instruction on ad report page"
   },
   "correctfilters":{
     "message":"Korrekt filter",

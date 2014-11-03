@@ -517,14 +517,6 @@
     "message":"Ne trebate ništa poduzeti jer je reklama već blokirana",
     "description":"On the ad report page, telling a user there is nothing to do"
   },
-  "sameAdsOnDifferentPages":{
-    "message":"Vidiš li iste ili slične reklame na više drugih stranica npr. tvojoj početnoj stranici, stranici tvoga posla, itd.?",
-    "description":"A question on the ad report page, asking if the user sees similar ads on different websites"
-  },
-  "similarAds":{
-    "message":"Iste\/slične reklame na svakoj stranici",
-    "description":"Section header on the ad report page"
-  },
   "disableallextensions":{
     "message":"Onemogući sva proširenja osim AdBlock-a.",
     "description":"Instruction on ad report page"
@@ -544,14 +536,6 @@
   "reenableadsonebyone":{
     "message":"Sad kad više nema reklama, pronađite koje proširenje je uzrok. Prođite kroz svako proširenje posebno, jedno po jedno ih omogućite. Proširenje koje vraća reklame je ono koje trebate obrisati da se riješite reklama.",
     "description":"Tells the user to reenable the extensions one by one"
-  },
-  "scancomputer":{
-    "message":"Provjerite svoj kompjuter na zločudne programe",
-    "description":"Section header on the ad report page"
-  },
-  "performscan":{
-    "message":"Obavite kompletan sken svog računala koristeći antivirusne\/antizločudne programe. Neki tipovi zločudnih programa mogu umetnuti reklame u internet stranice i tako zaobići AdBlock.",
-    "description":"Instruction on ad report page"
   },
   "correctfilters":{
     "message":"Ispravni filteri",

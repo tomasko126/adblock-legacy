@@ -517,14 +517,6 @@
     "message":"Du behøver ikke gøre noget, da reklamen allerede er blokeret",
     "description":"On the ad report page, telling a user there is nothing to do"
   },
-  "sameAdsOnDifferentPages":{
-    "message":"Ser du de samme eller lignende reklamer på mange forskellige sider, f.eks. din hjemmeside, din arbejdshjemmeside osv.?",
-    "description":"A question on the ad report page, asking if the user sees similar ads on different websites"
-  },
-  "similarAds":{
-    "message":"Samme\/lignende reklamer på hver side",
-    "description":"Section header on the ad report page"
-  },
   "disableallextensions":{
     "message":"Slå alle udvidelser fra, udover AdBlock.",
     "description":"Instruction on ad report page"
@@ -544,14 +536,6 @@
   "reenableadsonebyone":{
     "message":"Nu hvor reklamerne er væk, skal du finde ud af hvilken udvidelse der er årsagen. Gå igennem dem alle, og aktiver dem en efter en. Den udvidelse der får reklamerne til at komme frem igen, er den du skal have fjernet for at slippe for reklamer.",
     "description":"Tells the user to reenable the extensions one by one"
-  },
-  "scancomputer":{
-    "message":"Skan din computer for malware",
-    "description":"Section header on the ad report page"
-  },
-  "performscan":{
-    "message":"Udfør en fuld scanning af din computer med din antivirus\/antimalware-program. Nogle typer af malware kan indsætte reklamer på hjemmesider og dermed omgå AdBlock.",
-    "description":"Instruction on ad report page"
   },
   "correctfilters":{
     "message":"Ret filtre",
