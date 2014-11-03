@@ -487,7 +487,7 @@
     "description":"Section header on the ad report page"
   },
   "malwarewarning":{
-    "message":"Your computer may be infected by malware.  Click <a id='malwarelink'>here<\/a> for more information.",
+    "message":"Your computer may be infected by malware.  Click <a>here<\/a> for more information.",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware/adware"
   },
   "malwarenotfound":{
