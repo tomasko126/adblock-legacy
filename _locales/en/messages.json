@@ -179,14 +179,13 @@
     "message":"Exclude",
     "description":"Button for excluding a domain in the whitelister dialog"
   },
-
   "reloadpageafterwhitelist":{
     "message":"Reload the page.",
     "description":"Checkbox on whitelist wizard"
   },
   "wizardcantrunonframesets":{
     "message":"This AdBlock feature does not work on this site because it uses out of date technology. You can blacklist or whitelist resources manually in the 'Customize' tab of the options page.",
-    "description":"Message (alert) shown when the user tries to use a blacklist/whitelist wizard on an old website"
+    "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
   "subscribingtitle":{
     "message":"Subscribing to filter list...",
@@ -457,7 +456,7 @@
   "manualexcludefilteredit":{
     "message":"Edit disabled filters:",
     "description":"Subtitle on the 'Customize' tab"
-  },  
+  },
   "filtersavewarning":{
     "message":"Be careful: if you make a mistake here a lot of other filters, including the official filters, could get broken too!<br\/>Read the <a>filter syntax tutorial<\/a> to learn how to add advanced blacklist and whitelist filters.",
     "description":"Warning when blacklisting manually"
@@ -484,11 +483,11 @@
   },
   "malwarewarning":{
     "message":"Your computer may be infected by malware.  Click <a>here<\/a> for more information.",
-    "description":"On the ad report page, the ads the user is seeing might be caused by malware/adware"
+    "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
   },
   "malwarenotfound":{
     "message":"No known malware found.",
-    "description":"On the ad report page, the ads the user is seeing are probably not caused by malware/adware"
+    "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
   "updateyourlists":{
     "message":"Make sure your filter lists are up to date",

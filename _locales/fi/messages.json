@@ -394,7 +394,7 @@
     "description":"A filter list"
   },
   "blacklistclickmessage":{
-    "message":"Napsauta mainosta hiiren oikealla näppäimellä sivulla -- tai estä se tässä manuaalisesti.",
+    "message":"Klikkaa hiiren oikealla painikkeella mainosta sivulla -- tai estä se tässä manuaalisesti.",
     "description":"Message at the top of the blacklist options tab"
   },
   "tabcustomizetitle":{
@@ -1038,7 +1038,7 @@
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "work_around_hulu_problems":{
-    "message":"Korjaa ongelma, jssa Hulu.com-videot eivät toimi (vaatii selaimen uudelleenkäynnistyksen)",
+    "message":"Korjaa ongelma, jossa Hulu.com-videot eivät toimi (vaatii selaimen uudelleenkäynnistyksen)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."
   },
   "modifydomain":{
@@ -1050,7 +1050,7 @@
     "description":"Caption for the whitelist wizard slider that modifies the path part of a URL"
   },
   "show_ads_except_for":{
-    "message":"Näytä mainokset <i>kaikkialla<\/i> paitsi näissä domaineissa...",
+    "message":"Näytä mainokset <i>kaikkialla<\/i> paitsi näissä verkkotunnuksissa...",
     "description":"Section title for blacklisting section of Customize tab"
   },
   "only_block_ads_on_these_sites":{

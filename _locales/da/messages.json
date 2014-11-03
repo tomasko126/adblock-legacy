@@ -179,6 +179,14 @@
     "message":"Udeluk",
     "description":"Button for excluding a domain in the whitelister dialog"
   },
+  "reloadpageafterwhitelist":{
+    "message":"Genindlæs siden.",
+    "description":"Checkbox on whitelist wizard"
+  },
+  "wizardcantrunonframesets":{
+    "message":"Denne AdBlock-funktion virker ikke på denne hjemmeside, fordi den anvender forældet teknologi. Du kan blackliste eller whiteliste ressourcer manuelt under fanen 'Tilpas' i indstillingerne.",
+    "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
+  },
   "subscribingtitle":{
     "message":"Abonnér på filterliste...",
     "description":"abp: link subscriber title"
@@ -445,6 +453,10 @@
     "message":"Redigér dine filtre manuelt:",
     "description":"Subtitle on the 'Customize' tab"
   },
+  "manualexcludefilteredit":{
+    "message":"Redigér deaktiverede filtre:",
+    "description":"Subtitle on the 'Customize' tab"
+  },
   "filtersavewarning":{
     "message":"Vær varsom: hvis du laver en fejl her, kan en stor del af disse og de officielle filtre blive ubrugelige!<br\/>Læs <a>filtersyntaksguiden (engelsk)<\/a> for at lære hvordan man tilføjer avancerede blacklist og whitelist filtre.",
     "description":"Warning when blacklisting manually"
@@ -464,6 +476,18 @@
   "adreport2":{
     "message":"Okay, så du har fundet en reklame på en hjemmeside? Nå, men jeg vil hjælpe med og finde det rette sted og raportere den!<br\/> Husk: rapportering af reklamer er frivilligt. Hvis du ikke ønsker at gøre det, kan du blot lukke dette vindue og nøjes med at blokere den for kun dig, ved at tilføje den under 'Tilpas' tabben under Indstillinger!",
     "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
+  },
+  "malwarecheck":{
+    "message":"Malwaretjek",
+    "description":"Section header on the ad report page"
+  },
+  "malwarewarning":{
+    "message":"Din computer kan være inficeret med malware.  Klik <a>her<\/a> for mere information.",
+    "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
+  },
+  "malwarenotfound":{
+    "message":"Ingen kendt malware fundet.",
+    "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
   "updateyourlists":{
     "message":"Sikre at dine filtre er opdateret",

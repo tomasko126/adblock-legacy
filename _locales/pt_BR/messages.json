@@ -179,6 +179,14 @@
     "message":"Excluir",
     "description":"Button for excluding a domain in the whitelister dialog"
   },
+  "reloadpageafterwhitelist":{
+    "message":"Recarregue a página.",
+    "description":"Checkbox on whitelist wizard"
+  },
+  "wizardcantrunonframesets":{
+    "message":"Esse recurso do AdBlock não funciona neste site poque ele usa tecnologia desatualizada. Você pode colocar na lista negra ou na lista branca os recursos manualmente pela guia 'Personalizar' da página de opções.",
+    "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
+  },
   "subscribingtitle":{
     "message":"Subscrevendo-se a lista de filtros...",
     "description":"abp: link subscriber title"
@@ -445,6 +453,10 @@
     "message":"Edite seus filtros manualmente:",
     "description":"Subtitle on the 'Customize' tab"
   },
+  "manualexcludefilteredit":{
+    "message":"Editar os filtros desabilitados:",
+    "description":"Subtitle on the 'Customize' tab"
+  },
   "filtersavewarning":{
     "message":"Seja cuidadoso: se você fizer um erro aqui muitos outros filtros, incluindo os filtros oficiais, podem quebrar também!<br\/>Leia o <a>tutorial de sintaxe de filtro<\/a> para aprender como adicionar filtros avançados de listas negras e listas brancas.",
     "description":"Warning when blacklisting manually"
@@ -464,6 +476,18 @@
   "adreport2":{
     "message":"Então você encontrou uma propaganda em uma página da web? Bem, eu irei ajudá-lo a encontrar o lugar certo para reportá-lo!<br\/> Lembre-se: reportar propagandas é voluntário. Se você não deseja fazer isso você pode simplesmente fechar esta janela e bloqueá-la somente pra você adicionando um filtro na aba 'Personalizar' na página de opções!",
     "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
+  },
+  "malwarecheck":{
+    "message":"Verificação de malware",
+    "description":"Section header on the ad report page"
+  },
+  "malwarewarning":{
+    "message":"Seu computador pode estar infectado por malware.  Clique <a>aqui<\/a> para obter mais informações.",
+    "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
+  },
+  "malwarenotfound":{
+    "message":"Nenhum malware conhecido foi encontrado.",
+    "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
   "updateyourlists":{
     "message":"Tenha certeza de que suas listas de filtros estão atualizadas",

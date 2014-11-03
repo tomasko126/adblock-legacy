@@ -179,6 +179,10 @@
     "message":"Excluir",
     "description":"Button for excluding a domain in the whitelister dialog"
   },
+  "reloadpageafterwhitelist":{
+    "message":"Recargar la página.",
+    "description":"Checkbox on whitelist wizard"
+  },
   "subscribingtitle":{
     "message":"Subscribiéndose a la lista de filtros...",
     "description":"abp: link subscriber title"
