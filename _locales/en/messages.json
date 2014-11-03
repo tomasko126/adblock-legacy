@@ -184,13 +184,9 @@
     "message":"Reload the page.",
     "description":"Checkbox on whitelist wizard"
   },
-  "wizardcantrunonframesets1":{
-    "message":"This AdBlock feature does not work on this site because it uses out of date technology.",
+  "wizardcantrunonframesets":{
+    "message":"This AdBlock feature does not work on this site because it uses out of date technology. You can blacklist or whitelist resources manually in the 'Customize' tab of the options page.",
     "description":"Message (alert) shown when the user tries to use a blacklist/whitelist wizard on an old website"
-  },
-  "wizardcantrunonframesets2":{
-    "message":"You can blacklist or whitelist resources manually in the 'Customize' tab of the options page.",
-    "description":"Part two of the message shown when the user tries to use a blacklist/whitelist wizard on an old website"
   },
   "subscribingtitle":{
     "message":"Subscribing to filter list...",
