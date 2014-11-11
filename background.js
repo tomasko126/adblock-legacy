@@ -5,9 +5,12 @@
              (e.filename||"anywhere").replace(chrome.extension.getURL(""), "") +
              ":" + (e.lineno||"anywhere") +
              ":" + (e.colno||"anycol");
-    if (chrome && chrome.runtime && (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
-        var stack = "-" + ((e.error && e.error.message)||"") +
-                    "-" + ((e.error && e.error.stack)||"");
+
+    if (chrome && chrome.runtime && 
+       (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
+        var stack = "-" + (e.error ||"") +
+                    "-" + (e.message ||"") +
+                    "-" + (e.stack ||"");
         stack = stack.replace(/:/gi, ";").replace(/\n/gi, "");
         str += stack;
     }
@@ -648,6 +651,14 @@
     }
     sessionStorage.setItem('adblock_is_paused', newValue);
   }
+  
+
+  // Get if AdBlock is paused
+  // called from content scripts
+  // Returns: true if paused, false otherwise.
+  is_adblock_paused = function() {
+    return adblock_is_paused();
+  }  
 
   // INFO ABOUT CURRENT PAGE
 
