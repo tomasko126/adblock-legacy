@@ -6,7 +6,7 @@
              ":" + (e.lineno||"anywhere") +
              ":" + (e.colno||"anycol");
 
-    if (chrome && chrome.runtime && 
+    if (chrome && chrome.runtime &&
        (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
         var stack = "-" + (e.error ||"") +
                     "-" + (e.message ||"") +
@@ -651,14 +651,13 @@
     }
     sessionStorage.setItem('adblock_is_paused', newValue);
   }
-  
 
   // Get if AdBlock is paused
   // called from content scripts
   // Returns: true if paused, false otherwise.
   is_adblock_paused = function() {
     return adblock_is_paused();
-  }  
+  }
 
   // INFO ABOUT CURRENT PAGE
 

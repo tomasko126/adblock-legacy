@@ -1,5 +1,4 @@
 // Youtube-related code in this file based on code (c) Adblock Plus. GPLv3.
-// See https://hg.adblockplus.org/adblockpluschrome/file/4db6db04271c/safari/include.youtube.js
 // and https://hg.adblockplus.org/adblockpluschrome/file/aed8fd38e824/safari/include.youtube.js
 var run_bandaids = function() {
   // Tests to determine whether a particular bandaid should be applied
@@ -93,22 +92,24 @@ var before_ready_bandaids = function() {
 };
 
 //Safari & YouTube only
+//This function is outside the normal 'bandaids' processing
+//so that it works correctly
 (function() {
-    
-    if ((typeof SAFARI) !== 'undefined' && 
-         SAFARI && 
+    if ((typeof SAFARI) !== 'undefined' &&
+         SAFARI &&
          document.domain === "www.youtube.com") {
-       //continue  
+       //continue
     } else {
-       return;   
+       return;
     }
 
-      BGcall('is_adblock_paused', undefined, function(paused) {
+    BGcall('is_adblock_paused', function(paused) {
         if (paused) {
             return;
         }
+        //a regex used to test the ytplayer config / flashvars for youtube ads, references to ads, etc.
         var badArgumentsRegex = /^((.*_)?(ad|ads|afv|adsense)(_.*)?|(ad3|st)_module|prerolls|interstitial|infringe|iv_cta_url)$/;
-    
+
         function rewriteFlashvars(flashvars) {
             var pairs = flashvars.split("&");
             for (var i = 0; i < pairs.length; i++)
@@ -116,11 +117,11 @@ var before_ready_bandaids = function() {
                     pairs.splice(i--, 1);
             return pairs.join("&");
         }
-    
+
         function patchPlayer(player) {
             var newPlayer = player.cloneNode(true);
             var flashvarsChanged = false;
-    
+
             var flashvars = newPlayer.getAttribute("flashvars");
             if (flashvars) {
                 var newFlashvars = rewriteFlashvars(flashvars);
@@ -129,7 +130,7 @@ var before_ready_bandaids = function() {
                     flashvarsChanged = true;
                 }
             }
-    
+
             var param = newPlayer.querySelector("param[name=flashvars]");
             if (param) {
                 var value = param.getAttribute("value");
@@ -141,11 +142,11 @@ var before_ready_bandaids = function() {
                     }
                 }
             }
-    
+
             if (flashvarsChanged)
                 player.parentNode.replaceChild(newPlayer, player);
         }
-    
+
         function runInPage(fn, arg) {
             var script = document.createElement("script");
             script.type = "application/javascript";
@@ -154,12 +155,12 @@ var before_ready_bandaids = function() {
             document.documentElement.appendChild(script);
             document.documentElement.removeChild(script);
         }
-    
+
         document.addEventListener("beforeload", function(event) {
             if ((event.target.localName == "object" || event.target.localName == "embed") && /:\/\/[^\/]*\.ytimg\.com\//.test(event.url))
                 patchPlayer(event.target);
         }, true);
-    
+
         runInPage(function(badArgumentsRegex) {
             // If history.pushState is available, YouTube uses the history API
             // when navigation from one video to another, and tells the flash
@@ -167,7 +168,7 @@ var before_ready_bandaids = function() {
             // bypassing our flashvars rewrite code. So we disable
             // history.pushState before YouTube's JavaScript runs.
             History.prototype.pushState = undefined;
-    
+
             // The HTML5 player is configured via ytplayer.config.args. We have
             // to make sure that ad-related arguments are ignored as they are set.
             var ytplayer = undefined;
@@ -181,7 +182,7 @@ var before_ready_bandaids = function() {
                   ytplayer = rawYtplayer;
                   return;
                 }
-    
+
                 var config = undefined;
                 ytplayer = Object.create(rawYtplayer, {
                   config: {
@@ -194,7 +195,7 @@ var before_ready_bandaids = function() {
                         config = rawConfig;
                         return;
                       }
-    
+
                       var args = undefined;
                       config = Object.create(rawConfig, {
                         args: {
@@ -207,7 +208,7 @@ var before_ready_bandaids = function() {
                               args = rawArgs;
                               return;
                             }
-    
+
                             args = {};
                             for (var arg in rawArgs) {
                               if (!badArgumentsRegex.test(arg))
@@ -216,12 +217,12 @@ var before_ready_bandaids = function() {
                           }
                         }
                       });
-    
+
                       config.args = rawConfig.args;
                     }
                   }
                 });
-    
+
                 ytplayer.config = rawYtplayer.config;
               }
             });
