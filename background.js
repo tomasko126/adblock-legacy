@@ -5,7 +5,6 @@
              (e.filename||"anywhere").replace(chrome.extension.getURL(""), "") +
              ":" + (e.lineno||"anywhere") +
              ":" + (e.colno||"anycol");
-
     if (chrome && chrome.runtime &&
        (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
         var stack = "-" + (e.error ||"") +
