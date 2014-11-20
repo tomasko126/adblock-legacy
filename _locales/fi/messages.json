@@ -1,8 +1,4 @@
 {
-  "description2":{
-    "message":"Chromen suosituin lisäosa. Sitä käyttää yli 15 miljoonaa käyttäjää! Estää kaikki mainokset.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
   "adblock_click_for_details":{
     "message":"AdBlock - napsauta saadaksesi tietoja",
     "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button."
@@ -703,6 +699,14 @@
     "message":"Näkyykö mainos myös siinä selaimessa?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
+  "ff_checkinchrometitle":{
+    "message":"Tarkista Chromessa",
+    "description":"Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_5":{
+    "message":"Näkyykö mainos myös Chromessa?",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
   "refusetocheck":{
     "message":"En halua tarkistaa tätä",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -1109,7 +1113,7 @@
   },
   "firefox_explanation":{
     "message":"Tämän kysymyksen tarkoitus on se, kuka saa vastaanottaa raporttisi. Jos vastaat tähän kysymykseen väärin, raportti lähetetään väärille henkilöille, ja se saatetaan hylätä.",
-    "description":"Explanation of the Check-in-Firefox step in the ad reporter"
+    "description":"Explanation of the Check-in-Firefox or Chrome step in the ad reporter"
   },
   "blocked_ads":{
     "message":"Estetyt mainokset:",
