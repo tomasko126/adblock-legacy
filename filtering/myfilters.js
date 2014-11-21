@@ -221,20 +221,19 @@ MyFilters.prototype.rebuild = function() {
   // Fetch file with malware-known domains
   var xhr = new XMLHttpRequest();
   //the timestamp is add to the URL to prevent caching by the browser
-  //TODO -- uncomment
-  //xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime(), false);
-  xhr.open("GET", "http://localhost:8000/malware/domains.json?timestamp=" + new Date().getTime(), false);
-  xhr.send();
-  var malwareDomains = JSON.parse(xhr.responseText);
+  xhr.onload = function(e) {
+    var malwareDomains = JSON.parse(xhr.responseText);
 
-  this.blocking = new BlockingFilterSet(
-    FilterSet.fromFilters(filters.pattern), 
-    FilterSet.fromFilters(filters.whitelist),
-    malwareDomains
-  );
-  
-  
-  handlerBehaviorChanged(); // defined in background
+    this.blocking = new BlockingFilterSet(
+        FilterSet.fromFilters(filters.pattern), 
+        FilterSet.fromFilters(filters.whitelist),
+        malwareDomains
+    );
+    handlerBehaviorChanged(); // defined in background   
+  }
+  xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime());  
+  xhr.send();
+
   
   // After 90 seconds, delete the cache. That way the cache is available when
   // rebuilding multiple times in a row (when multiple lists have to update at
