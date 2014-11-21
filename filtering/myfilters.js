@@ -230,6 +230,10 @@ MyFilters.prototype.rebuild = function() {
       this._subscriptions.malware &&
       this._subscriptions.malware.subscribed) {
     this._loadMalwareDomains();
+    if (this._subscriptions['malware'].text) {
+        console.log("removing old malware filter list entries");
+        delete this._subscriptions['malware'].text;   
+    }
   }
 
 
