@@ -82,7 +82,7 @@ FilterSet.prototype = {
   },
 
   // Return the filter that matches this url+elementType on this frameDomain:
-  // the filter in a relevant entry in this.items who is not also in a 
+  // the filter in a relevant entry in this.items who is not also in a
   // relevant entry in this.exclude.
   // isThirdParty: true if url and frameDomain have different origins.
   matches: function(url, elementType, frameDomain, isThirdParty) {
@@ -111,12 +111,11 @@ FilterSet.prototype = {
 };
 
 
-BlockingFilterSet = function(patternFilterSet, whitelistFilterSet, malwareDoms) {
+BlockingFilterSet = function(patternFilterSet, whitelistFilterSet) {
   this.pattern = patternFilterSet;
   this.whitelist = whitelistFilterSet;
-  this.malwareDomains = malwareDoms;
 
-  // Caches results for this.matches() 
+  // Caches results for this.matches()
   this._matchCache = {};
 }
 
@@ -133,7 +132,7 @@ BlockingFilterSet.prototype = {
   // True if the url is blocked by this filterset.
   // Inputs:
   //   url:string - The URL of the resource to possibly block
-  //   elementType:ElementType - the type of element that is requesting the 
+  //   elementType:ElementType - the type of element that is requesting the
   //                             resource
   //   frameDomain:string - domain of the frame on which the element resides
   //   returnFilter?:bool - see Returns
@@ -164,12 +163,17 @@ BlockingFilterSet.prototype = {
       return this._matchCache[key];
     }
     if (this.malwareDomains &&
+        this.malwareDomains.adware &&
         this.malwareDomains.adware.indexOf(urlDomain) > -1) {
       log("matched malware domain", urlDomain);
       this._matchCache[key] = (returnFilter ? urlDomain: true);
-      return this._matchCache[key];     
-    }       
+      return this._matchCache[key];
+    }
     this._matchCache[key] = false;
     return this._matchCache[key];
   },
+  setMalwareDomains: function(malwareDoms) {
+    this.malwareDomains = malwareDoms;
+  },
 }
+
