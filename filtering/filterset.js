@@ -111,9 +111,10 @@ FilterSet.prototype = {
 };
 
 
-BlockingFilterSet = function(patternFilterSet, whitelistFilterSet) {
+BlockingFilterSet = function(patternFilterSet, whitelistFilterSet, malwareDoms) {
   this.pattern = patternFilterSet;
   this.whitelist = whitelistFilterSet;
+  this.malwareDomains = malwareDoms;
 
   // Caches results for this.matches() 
   this._matchCache = {};
@@ -162,6 +163,12 @@ BlockingFilterSet.prototype = {
       this._matchCache[key] = (returnFilter ? match._text: true);
       return this._matchCache[key];
     }
+    if (this.malwareDomains &&
+        this.malwareDomains.adware.indexOf(urlDomain) > -1) {
+      log("matched malware domain", urlDomain);
+      this._matchCache[key] = (returnFilter ? urlDomain: true);
+      return this._matchCache[key];     
+    }       
     this._matchCache[key] = false;
     return this._matchCache[key];
   },
