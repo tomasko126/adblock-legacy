@@ -230,12 +230,11 @@ MyFilters.prototype.rebuild = function() {
       this._subscriptions.malware &&
       this._subscriptions.malware.subscribed) {
     this._loadMalwareDomains();
+    //TODO - remove this after a couple of releases
     if (this._subscriptions['malware'].text) {
-        console.log("removing old malware filter list entries");
         delete this._subscriptions['malware'].text;   
     }
   }
-
 
   // After 90 seconds, delete the cache. That way the cache is available when
   // rebuilding multiple times in a row (when multiple lists have to update at
