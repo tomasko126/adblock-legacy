@@ -1,4 +1,8 @@
 {
+  "description2":{
+    "message":"Chromen suosituin lisäosa. Sitä käyttää yli 40 miljoonaa käyttäjää! Estää kaikki mainokset.",
+    "description":"Extension description in manifest. Should not exceed 132 characters."
+  },
   "adblock_click_for_details":{
     "message":"AdBlock - napsauta saadaksesi tietoja",
     "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button."
@@ -702,6 +706,22 @@
   "ff_checkinchrometitle":{
     "message":"Tarkista Chromessa",
     "description":"Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_1":{
+    "message":"Asenna Chrome, jos sinulla ei ole vielä sitä.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_2":{
+    "message":"Asenna AdBlock Chromelle, jos sinulla ei ole vielä sitä.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_3":{
+    "message":"Tilaa Chromessa samat suodattimet, jotka sinulla on tässä selaimessa.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_4":{
+    "message":"Lataa Chromessa sivu, jossa on mainos.",
+    "description":"Instruction for how to check Chrome for a reported ad"
   },
   "ff_checkinchrome_5":{
     "message":"Näkyykö mainos myös Chromessa?",
