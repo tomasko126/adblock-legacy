@@ -230,7 +230,7 @@
     "description":"Label for beta features in AdBlock Options"
   },
   "advanceBetaMessage":{
-    "message":"Since you're an advance user, would you like to install our Beta version?  If so, click <a>here<\/a>.  Be sure to uninstall/remove this version.",
+    "message":"Since you're an advanced user, would you care to help us out by using <a>AdBlock beta</a> and reporting any bugs you find?",
     "description":"message to advance users on the 'General' tab of the Options page, asking if they want to install the beta version"
   },
   "googletextads2":{

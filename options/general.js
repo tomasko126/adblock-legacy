@@ -17,8 +17,6 @@ $(function() {
     } else {
         $("#dropbox").hide();
     }
-    console.log("settings.show_advanced_options", settings.show_advanced_options);
-    console.log("chrome.runtime.id", chrome.runtime.id);
     if (settings.show_advanced_options &&
         chrome &&
         chrome.runtime &&
