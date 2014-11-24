@@ -1,8 +1,4 @@
 {
-  "description2":{
-    "message":"Najbolj priljubljena razširitev za brskalnik Google Chrome z več kot 15 milijonov uporabnikov!  Blokira oglase po vsem spletu.",
-    "description":"Extension description in manifest. Should not exceed 132 characters."
-  },
   "adblock_click_for_details":{
     "message":"AdBlock - kliknite za podrobnosti",
     "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button."
@@ -1085,7 +1081,7 @@
   },
   "firefox_explanation":{
     "message":"Namen tega vprašanja je ugotoviti kdo naj prejme vaše poročilo. V kolikor na to vprašanje odgovorite nepravilno, bo bilo poročilo poslano napačni skupini in zaradi tega ne bo obravnavano.",
-    "description":"Explanation of the Check-in-Firefox step in the ad reporter"
+    "description":"Explanation of the Check-in-Firefox or Chrome step in the ad reporter"
   },
   "blocked_ads":{
     "message":"Blokirani oglasi:",
