@@ -1132,7 +1132,7 @@
       // Display beta page after each update for beta-users only
       chrome.runtime.onInstalled.addListener(function(details) {
           if (details.reason === "update" || details.reason === "install") {
-              openTab("https://getadblock.com/beta");
+              openTab("https://getadblock.com/beta/install");
           }
       });
   }
