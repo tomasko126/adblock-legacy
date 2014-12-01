@@ -630,7 +630,8 @@
   }
 
   // Get the current (loaded) malware domains
-  // Returns: a JSON with all of the malware domains
+  // Returns: an object with all of the malware domains
+  // will return undefined, if the user is not subscribed to the Malware 'filter list'.
   getMalwareDomains = function() {
     return _myfilters.getMalwareDomains();
   }

@@ -260,9 +260,12 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
   //since the malware ID isn't really a filter list, we need to process it seperately
   if (id === "malware") {
     // Apply all changes from subData
-    for (var property in subData)
-      if (subData[property] !== undefined)
+    for (var property in subData) {
+      if (subData[property] !== undefined) {
         this._subscriptions[id][property] = subData[property];
+      }
+    }
+
     if (this._subscriptions[id].subscribed) {
         this._loadMalwareDomains();
         this._subscriptions[id].last_update = Date.now();
@@ -274,7 +277,7 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
         chrome.extension.sendRequest({command: "filters_updated"});
     } else {
         this.blocking.setMalwareDomains(null);
-        // If unsubscribed, remove some properties
+        // If unsubscribed, remove properties
         delete this._subscriptions[id].last_update;
         delete this._subscriptions[id].expiresAfterHours;
         delete this._subscriptions[id].last_update_failed_at;
@@ -496,6 +499,9 @@ MyFilters.prototype.customToDefaultId = function(id) {
   return id;
 }
 
+//Retreive the list of malware domains from our site.
+//and set the response (list of domains) on the blocking
+//filter set for processing.
 MyFilters.prototype._loadMalwareDomains = function() {
     // Fetch file with malware-known domains
     var xhr = new XMLHttpRequest();
@@ -508,6 +514,8 @@ MyFilters.prototype._loadMalwareDomains = function() {
     xhr.send();
 }
 
+//Get the current list of malware domains
+//will return undefined, if the user is not subscribed to the Malware 'filter list'.
 MyFilters.prototype.getMalwareDomains = function() {
     return this.blocking.getMalwareDomains();
 }
