@@ -20,7 +20,7 @@
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
     storage_set("error", str);
-    console.log(str);
+    log(str);
   });
 
   if (!SAFARI) {
@@ -627,6 +627,12 @@
       if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
+  }
+
+  // Get the current (loaded) malware domains
+  // Returns: a JSON with all of the malware domains
+  getMalwareDomains = function() {
+    return _myfilters.getMalwareDomains();
   }
 
   // Returns true if the url cannot be blocked

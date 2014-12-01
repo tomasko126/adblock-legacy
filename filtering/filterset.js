@@ -175,5 +175,8 @@ BlockingFilterSet.prototype = {
   setMalwareDomains: function(malwareDoms) {
     this.malwareDomains = malwareDoms;
   },
+  getMalwareDomains: function() {
+    return this.malwareDomains;
+  },
 }
 

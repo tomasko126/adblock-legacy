@@ -328,6 +328,11 @@ function createResourceblockFilterset(id, text) {
   local_filtersets[id].hiding = FilterSet.fromFilters(h);
   local_filtersets[id].blocking =
     new BlockingFilterSet(FilterSet.fromFilters(b), FilterSet.fromFilters(w));
+  if (id === "malware") {
+    BGcall('getMalwareDomains', function(domains) {
+        local_filtersets["malware"].blocking.setMalwareDomains(domains);
+    });
+  }
 }
 
 // Check an URL for it's validity
@@ -727,8 +732,11 @@ $(function() {
   BGcall('storage_get', 'filter_lists', function(filter_lists) {
 
     for (var id in filter_lists) {
-      if (filter_lists[id].subscribed) {
+      if (filter_lists[id].subscribed &&
+          filter_lists[id].text) {
         createResourceblockFilterset(id, filter_lists[id].text.split('\n'));
+      } else if (id === "malware") {
+        createResourceblockFilterset(id, []);
       }
     }
 

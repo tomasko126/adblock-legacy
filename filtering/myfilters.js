@@ -237,7 +237,7 @@ MyFilters.prototype.rebuild = function() {
     this._loadMalwareDomains();
     //TODO - remove this after a couple of releases
     if (this._subscriptions['malware'].text) {
-        delete this._subscriptions['malware'].text;   
+        delete this._subscriptions['malware'].text;
     }
   }
 
@@ -500,12 +500,16 @@ MyFilters.prototype._loadMalwareDomains = function() {
     // Fetch file with malware-known domains
     var xhr = new XMLHttpRequest();
     var that = this;
-    //the timestamp is add to the URL to prevent caching by the browser
     xhr.onload = function(e) {
        that.blocking.setMalwareDomains(JSON.parse(xhr.responseText));
     }
+    //the timestamp is add to the URL to prevent caching by the browser
     xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime());
     xhr.send();
+}
+
+MyFilters.prototype.getMalwareDomains = function() {
+    return this.blocking.getMalwareDomains();
 }
 
 // If the user wasn't subscribed to any lists, subscribe to
