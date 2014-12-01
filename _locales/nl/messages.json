@@ -1,6 +1,6 @@
 {
   "description2":{
-    "message":"De populairste Chrome extensie met meer dan 15 miljoen gebruikers! Blokkeert advertenties op het internet.",
+    "message":"De populairste Chrome extensie met meer dan 40 miljoen gebruikers! Blokkeert advertenties op het internet.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -703,6 +703,30 @@
     "message":"Zie je de advertentie ook in die browser?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
+  "ff_checkinchrometitle":{
+    "message":"Controleer in Chrome",
+    "description":"Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_1":{
+    "message":"Installeer Chrome als je dat nog niet hebt.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_2":{
+    "message":"Installeer AdBlock voor Chrome als je dat nog niet hebt.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_3":{
+    "message":"Abonneer je in Chrome op dezelfde filters als waarop je hier geabonneerd bent.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_4":{
+    "message":"Laad in Chrome de pagina met de advertentie.",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_5":{
+    "message":"Verschijnt de advertentie ook in Chrome?",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
   "refusetocheck":{
     "message":"Ik wil dit niet controleren",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -1109,7 +1133,7 @@
   },
   "firefox_explanation":{
     "message":"Het doel van deze vraag is om na te gaan wie je melding moet ontvangen. Als je deze vraag incorrect beantwoordt zal de melding naar de verkeerde persoon gestuurd worden. Dit kan ervoor zorgen dat het niet behandeld zal worden.",
-    "description":"Explanation of the Check-in-Firefox step in the ad reporter"
+    "description":"Explanation of the Check-in-Firefox or Chrome step in the ad reporter"
   },
   "blocked_ads":{
     "message":"Geblokkeerde advertenties:",

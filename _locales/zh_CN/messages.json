@@ -1,6 +1,6 @@
 {
   "description2":{
-    "message":"最受欢迎的 Chrome 扩展，拥有超过 1500 万用户 ！屏蔽整个互联网上的广告。",
+    "message":"最受欢迎的Chrome扩展，拥有超过4000万用户！屏蔽整个互联网上的广告。",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -703,6 +703,30 @@
     "message":"广告是否仍在浏览器中显示？",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
+  "ff_checkinchrometitle":{
+    "message":"使用Chrome查看",
+    "description":"Tell a user to see if a reported ad also appears in Chrome"
+  },
+  "ff_checkinchrome_1":{
+    "message":"如果您还没有Chrome，请先安装Chrome。",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_2":{
+    "message":"如果您的Chrome没有AdBlock，请为Chrome安装AdBlock扩展。",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_3":{
+    "message":"在Chrome中，订阅与您现在正使用的相同的过滤列表。",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_4":{
+    "message":"在Chrome中打开含有广告的页面。",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
+  "ff_checkinchrome_5":{
+    "message":"该广告是否也在Chrome中出现？",
+    "description":"Instruction for how to check Chrome for a reported ad"
+  },
   "refusetocheck":{
     "message":"我不想检查这个",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -1109,7 +1133,7 @@
   },
   "firefox_explanation":{
     "message":"这个问题的目的是确定谁应当接收您的报告。如果您没有正确地回答这个问题，您的报告会送至错误的人手中，以致它被忽略。",
-    "description":"Explanation of the Check-in-Firefox step in the ad reporter"
+    "description":"Explanation of the Check-in-Firefox or Chrome step in the ad reporter"
   },
   "blocked_ads":{
     "message":"已屏蔽广告：",

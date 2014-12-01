@@ -93,6 +93,11 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
     // Convert subscribed ex-official lists into user-submitted lists.
     // Convert subscribed ex-user-submitted lists into official lists.
     else {
+      // TODO: Remove this logic after a few releases
+      if (id === "easylist_plus_spanish") {
+          delete this._subscriptions[id];
+          continue;
+      }
       // Cache subscription that needs to be checked.
       var sub_to_check = this._subscriptions[id];
       var is_user_submitted = true;
@@ -518,7 +523,6 @@ MyFilters.prototype._load_default_subscriptions = function() {
       case 'cu': return 'easylist_plus_bulgarian';
       case 'da': return 'danish';
       case 'de': return 'easylist_plus_german';
-      case 'es': return 'easylist_plus_spanish';
       case 'el': return 'easylist_plus_greek';
       case 'fi': return 'easylist_plus_finnish';
       case 'fr': return 'easylist_plus_french';
@@ -636,9 +640,6 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "http://home.fredfiber.no/langsholt/adblock.txt",
       requiresList: "easylist",
     },
-    "easylist_plus_spanish": {  // Spanish filters
-      url: "http://abp.mozilla-hispano.org/nauscopio/filtros.txt",
-    },
     "swedish": {  // Swedish filters
       url: "http://fanboy.co.nz/fanboy-swedish.txt",
     },
@@ -654,12 +655,12 @@ MyFilters.prototype._make_subscription_options = function() {
     "malware": { // Malware protection
       url: "",
     },
-	"annoyances": { // Fanboy's Annoyances
+    "annoyances": { // Fanboy's Annoyances
       url: "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt",
-	},
+    },
     "warning_removal": { // AdBlock warning removal
       url: "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
-	}
+    }
   };
 }
 
