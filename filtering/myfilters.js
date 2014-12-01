@@ -233,8 +233,11 @@ MyFilters.prototype.rebuild = function() {
   //if the user is subscribed to malware, then get it
   if (this._subscriptions &&
       this._subscriptions.malware &&
-      this._subscriptions.malware.subscribed) {
+      this._subscriptions.malware.subscribed &&
+      !this.getMalwareDomains()) {
+
     this._loadMalwareDomains();
+
     //TODO - remove this after a couple of releases
     if (this._subscriptions['malware'].text) {
         delete this._subscriptions['malware'].text;
@@ -257,6 +260,21 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
   var subscribeRequiredListToo = false;
   var listDidntExistBefore = false;
 
+  // Check if the list has to be updated
+  function out_of_date(subscription) {
+    if (forceFetch) return true;
+    // After a failure, wait at least a day to refetch (overridden below if
+    // it's a new filter list, having no .text)
+    var failed_at = subscription.last_update_failed_at || 0;
+    if (Date.now() - failed_at < HOUR_IN_MS * 24)
+      return false;
+    // Don't let expiresAfterHours delay indefinitely (Issue 7443)
+    var hardStop = subscription.expiresAfterHoursHard || 240;
+    var smallerExpiry = Math.min(subscription.expiresAfterHours, hardStop);
+    var millis = Date.now() - subscription.last_update;
+    return (millis > HOUR_IN_MS * smallerExpiry);
+  }
+
   //since the malware ID isn't really a filter list, we need to process it seperately
   if (id === "malware") {
     // Apply all changes from subData
@@ -267,7 +285,10 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
     }
 
     if (this._subscriptions[id].subscribed) {
-        this._loadMalwareDomains();
+        //check to see if we need to load the malware domains
+        if (!this.getMalwareDomains() || out_of_date(this._subscriptions[id])) {
+            this._loadMalwareDomains();
+        }
         this._subscriptions[id].last_update = Date.now();
         this._subscriptions[id].last_modified = Date.now();
         delete this._subscriptions[id].last_update_failed_at;
@@ -319,20 +340,6 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
     delete this._subscriptions[id].last_modified;
 
   if (this._subscriptions[id].subscribed) {
-    // Check if the list has to be updated
-    function out_of_date(subscription) {
-      if (forceFetch) return true;
-      // After a failure, wait at least a day to refetch (overridden below if
-      // it's a new filter list, having no .text)
-      var failed_at = subscription.last_update_failed_at || 0;
-      if (Date.now() - failed_at < HOUR_IN_MS * 24)
-        return false;
-      // Don't let expiresAfterHours delay indefinitely (Issue 7443)
-      var hardStop = subscription.expiresAfterHoursHard || 240;
-      var smallerExpiry = Math.min(subscription.expiresAfterHours, hardStop);
-      var millis = Date.now() - subscription.last_update;
-      return (millis > HOUR_IN_MS * smallerExpiry);
-    }
 
     if (!this._subscriptions[id].text || out_of_date(this._subscriptions[id]))
       this.fetch_and_update(id, listDidntExistBefore);
