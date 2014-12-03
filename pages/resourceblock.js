@@ -731,7 +731,6 @@ $(function() {
     }
 
     BGcall('get_content_script_data', opts, function(data) {
-
       createResourceblockFilterset("build_in_filters",
             MyFilters.prototype.getExtensionFilters(data.settings));
 
@@ -767,9 +766,9 @@ $(function() {
                   resource: filter
                 };
               } else {
-                if (/\<|\"/.test(res)) continue;
+                if (/\<|\"/.test(res))
+                   continue;
                 var blockmatches = res.split(':|:');
-
                 if (blockmatches && blockmatches.length > 1 && blockmatches[1].indexOf(chrome.extension.getURL("")) === 0)
                   continue; // Blacklister resources shouldn't be visible
                 if (!/^[a-z\-]+\:\/\//.test(blockmatches[1]))
