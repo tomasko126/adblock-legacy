@@ -12,7 +12,20 @@ $(function() {
   });
 
   BGcall("get_settings", function(settings) {
-      (settings.show_advanced_options && !SAFARI) ? $("#dropbox").show() : $("#dropbox").hide();
+    if (settings.show_advanced_options && !SAFARI) {
+        $("#dropbox").show();
+    } else {
+        $("#dropbox").hide();
+    }
+    if (settings.show_advanced_options &&
+        chrome &&
+        chrome.runtime &&
+        (chrome.runtime.id === "gighmmpiobklfepjocnamgkkbiglidom")) {
+        $("#advanceBetaMessage").show();
+        $("a", "#advanceBetaMessage").attr("href", "https://getadblock.com/beta/");
+    } else {
+        $("#advanceBetaMessage").hide();
+    }
   });
 
   update_db_icon();
