@@ -198,7 +198,7 @@ function generateTable() {
       // frameData in the background. However, I consider that acceptable.
       if (getTypeName(resource.type) === "page") {
         alert(translate("excludefilterremoved"));
-        //window.close();
+        window.close();
       } else
         document.location.reload();
     });
@@ -721,16 +721,12 @@ $(function() {
     }
   }
 
-
   var opts = {
     domain: parseUri(url || "x://y/").hostname
   };
   BGcall('storage_get', 'filter_lists', function(filter_lists) {
-
-
     for (var id in filter_lists) {
       if (filter_lists[id].subscribed && filter_lists[id].text) {
-
         createResourceblockFilterset(id, filter_lists[id].text.split('\n'));
       }
     }
@@ -751,9 +747,7 @@ $(function() {
           loaded_frames = loaded_frames || {};
 
           for (var thisFrame in loaded_frames) {
-
             var frame = loaded_frames[thisFrame];
-
 
             if (Number(thisFrame) === 0 || Number(frame) === 0) {
               // We don't parse $document and $elemhide rules for subframes
@@ -799,7 +793,6 @@ $(function() {
 
       function continue_after_another_async_call() {
         BGcall('get_custom_filters_text', function(filters) {
-
           filters = filters.split('\n');
           for (var i=0; i<filters.length; i++)
             try {
