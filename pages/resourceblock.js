@@ -176,10 +176,9 @@ function generateTable() {
   }
   if (!rows.length) {
     alert(translate('noresourcessend2'));
-   // self.close();
+    window.close();
     return;
   }
-
   $("#loading").remove();
   $("#resourceslist tbody").empty();
   for (var i = 0; i < rows.length; i++) {
