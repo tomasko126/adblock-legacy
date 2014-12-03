@@ -21,9 +21,7 @@ function generateTable() {
 
   // Now create that table row-by-row
   var rows = [];
-  console.log("# of resources", Object.keys(resources).length);
   for (var i in resources) {
-    console.log("i", i, "resources[i]",resources[i]);
     var matchingfilter = resources[i].filter;
     var matchingListID = "", matchingListName = "";
     var typeName = getTypeName(resources[i].type);
@@ -99,7 +97,6 @@ function generateTable() {
     } else {
       matchingfilter = "";
     }
-    console.log(matchingfilter, type, typeName);
 
     // TODO: When crbug 80230 is fixed, allow $other again
     var disabled = (typeName === 'other' || typeName === 'unknown');
@@ -150,7 +147,6 @@ function generateTable() {
     resources[i].filterlist = matchingListName;
 
     // Cell 5: third-party or not
-    console.log("parseURI i", i);
     var resourceDomain = parseUri(i).hostname;
     var isThirdParty = (type.name === 'hiding' ? false :
         BlockingFilterSet.checkThirdParty(resources[i].domain, resourceDomain));
@@ -183,7 +179,7 @@ function generateTable() {
    // self.close();
     return;
   }
-  console.log("# of rows", rows.length);
+
   $("#loading").remove();
   $("#resourceslist tbody").empty();
   for (var i = 0; i < rows.length; i++) {
@@ -260,7 +256,7 @@ function generateFilterSuggestions() {
     strippedUrl = strippedUrl.substr(0, strippedUrl.indexOf('/'));
     blocksuggestions.push(strippedUrl);
   }
-console.log("strippedUrl", strippedUrl);
+
   var minimumdomain = parseUri.secondLevelDomainOnly(strippedUrl, true);
   if (minimumdomain !== strippedUrl) {
     blocksuggestions.push(minimumdomain);
@@ -338,8 +334,7 @@ function createResourceblockFilterset(id, text) {
 // Check an URL for it's validity
 function validateUrl(url) {
   if (!/^https?:\/\//.test(url)) {
-    //window.close();
-    console.log("validateURL close window");
+    window.close();
     return;
   }
 }
@@ -614,7 +609,6 @@ function finally_it_has_loaded_its_stuff() {
       if (!isThirdParty) {
         $("#thirdparty + * + *, #thirdparty + *, #thirdparty").remove();
       } else {
-        console.log("chosenResource.resourceDomain", chosenResource.resourceDomain);
         // Use .find().text() so data from query string isn't injected as HTML
         $("#thirdparty + label").
           html(translate("thirdpartycheckbox", "<i></i>")).
@@ -702,8 +696,7 @@ $(function() {
     var qps = parseUri.parseSearch(window.location.search);
     function validateItemType(itemType) {
       if (!ElementTypes[itemType]) {
-        console.log("ElementTYpe not found");
-        //window.close();
+        window.close();
         return;
       }
     }
@@ -712,8 +705,7 @@ $(function() {
       validateUrl(url);
     }
     if (qps.tabId && isNaN(qps.tabId)) {
-        console.log("qps.tabid console close");
-      //window.close();
+      window.close();
       return;
     }
     if (qps.itemType) {
@@ -734,17 +726,17 @@ $(function() {
     domain: parseUri(url || "x://y/").hostname
   };
   BGcall('storage_get', 'filter_lists', function(filter_lists) {
-   
+
 
     for (var id in filter_lists) {
       if (filter_lists[id].subscribed && filter_lists[id].text) {
-        
+
         createResourceblockFilterset(id, filter_lists[id].text.split('\n'));
       }
     }
 
     BGcall('get_content_script_data', opts, function(data) {
-        
+
       createResourceblockFilterset("build_in_filters",
             MyFilters.prototype.getExtensionFilters(data.settings));
 
@@ -756,13 +748,12 @@ $(function() {
       if (!qps.itemUrl) {
         // Load all stored resources
         BGcall('resourceblock_get_frameData', qps.tabId, function(loaded_frames) {
-            
           loaded_frames = loaded_frames || {};
 
           for (var thisFrame in loaded_frames) {
-            
+
             var frame = loaded_frames[thisFrame];
-            
+
 
             if (Number(thisFrame) === 0 || Number(frame) === 0) {
               // We don't parse $document and $elemhide rules for subframes
@@ -774,7 +765,7 @@ $(function() {
             }
             var resors = frame.resources || frame;
             for (var res in resors) {
-                
+
               if (/^HIDE\:\|\:.+/.test(res)) {
                 var filter = "##" + res.substring(7);
                 resources[filter] = {
@@ -784,7 +775,7 @@ $(function() {
                 };
               } else {
                 if (/\<|\"/.test(res)) continue;
-                var blockmatches = res.split(':|:');               
+                var blockmatches = res.split(':|:');
 
                 if (blockmatches && blockmatches.length > 1 && blockmatches[1].indexOf(chrome.extension.getURL("")) === 0)
                   continue; // Blacklister resources shouldn't be visible
@@ -808,7 +799,7 @@ $(function() {
 
       function continue_after_another_async_call() {
         BGcall('get_custom_filters_text', function(filters) {
-           
+
           filters = filters.split('\n');
           for (var i=0; i<filters.length; i++)
             try {
