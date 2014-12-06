@@ -12,6 +12,27 @@ chrome.extension.onRequest.addListener(function(request) {
 });
 
 $(function() {
+    //try to get filter syntax page with users language
+    //if it fails, default to english (en).
+    var syntaxURL = "https://adblockplus.org/" +
+                    determineUserLanguage() +
+                    "/filters";
+
+                    console.log("syntaxURL", syntaxURL );
+    $.ajax({
+      type: 'get',
+      url: syntaxURL,
+      success: function(e) {
+        console.log("sucess");
+        $('#tutorlink').attr("href", syntaxURL);
+      },
+      error: function(e) {
+        console.log("error");
+        $('#tutorlink').attr("href", "https://adblockplus.org/en/filters");
+      },
+    });
+
+
   // Add a custom filter to the list
   function appendCustomFilter(filter) {
     var customFilterText = $("#txtFiltersAdvanced").val();
@@ -234,7 +255,7 @@ $(function() {
         $("#txtExcludeFiltersAdvanced").val(text);
         if (text)
             $("#divExcludeFilters").show();
-        });      
+        });
     });
 
   }
@@ -246,7 +267,7 @@ $(function() {
 
   BGcall("get_settings", function(settings) {
     if (settings.show_advanced_options)
-        $("#divExcludeFilters").show();    
+        $("#divExcludeFilters").show();
   });
 
   BGcall("get_exclude_filters_text", function(text) {
