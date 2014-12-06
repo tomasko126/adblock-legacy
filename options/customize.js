@@ -18,7 +18,7 @@ $(function() {
                     determineUserLanguage() +
                     "/filters";
 
-                    console.log("syntaxURL", syntaxURL );
+console.log("syntaxURL", syntaxURL );
     $.ajax({
       type: 'get',
       url: syntaxURL,
