@@ -18,16 +18,13 @@ $(function() {
                     determineUserLanguage() +
                     "/filters";
 
-console.log("syntaxURL", syntaxURL );
     $.ajax({
       type: 'get',
       url: syntaxURL,
       success: function(e) {
-        console.log("sucess");
         $('#tutorlink').attr("href", syntaxURL);
       },
       error: function(e) {
-        console.log("error");
         $('#tutorlink').attr("href", "https://adblockplus.org/en/filters");
       },
     });
