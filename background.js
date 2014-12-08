@@ -19,7 +19,7 @@
     }
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
-    storage_set("error", str);
+    storage_set("error", "Date added:" + new Date() + " " + str);
     log(str);
   });
 
