@@ -747,7 +747,9 @@ $(function() {
           for (var thisFrame in loaded_frames) {
             var frame = loaded_frames[thisFrame];
 
-            if (Number(thisFrame) === 0 || Number(frame) === 0) {
+            if ((Number(thisFrame) === 0 ||
+                 Number(frame) === 0) &&
+                frame.url) {
               // We don't parse $document and $elemhide rules for subframes
               resources[frame.url] = {
                 type: ElementTypes.document | ElementTypes.elemhide,
@@ -762,7 +764,7 @@ $(function() {
                 var filter = "##" + res.substring(7);
                 resources[filter] = {
                   filter: filter,
-                  domain: frame.domain,
+                  domain: frame.domain || loaded_frames.domain,
                   resource: filter
                 };
               } else {
