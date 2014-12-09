@@ -64,7 +64,7 @@ $(function() {
             eligible_for_undo &&
             BG.get_settings().youtube_channel_whitelist) {
             $("#div_whitelist_channel").html(translate("whitelist_youtube_channel",
-                                                       parseUri.parseSearch(info.tab.url).channel));
+                                                       parseUri.parseSearch(info.tab.url).ab_channel));
             show(["div_whitelist_channel"]);
         }
 

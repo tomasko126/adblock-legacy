@@ -879,12 +879,12 @@
     return add_custom_filter(filter);
   }
 
-  // Creates a custom filter entry that whitelists YouTube channel
+  // Creates a custom filter entry that whitelists a YouTube channel
   // Inputs: url:string url of the page
   // Returns: null if successful, otherwise an exception
   create_whitelist_filter_for_youtube_channel = function(url) {
-    if (/channel=/.test(url)) {
-      var yt_channel = url.match(/channel=([^]*)/)[1];
+    if (/ab_channel=/.test(url)) {
+      var yt_channel = url.match(/ab_channel=([^]*)/)[1];
     } else {
       var yt_channel = url.split('/').pop();
     }
@@ -1106,7 +1106,7 @@
   // Script injection logic for Safari is done in safari_bg.js
   if (!SAFARI) {
       var runChannelWhitelist = function(tabUrl, tabId) {
-          if (/youtube.com/.test(tabUrl) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).channel) {
+          if (/youtube.com/.test(tabUrl) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).ab_channel) {
               chrome.tabs.executeScript(tabId, {file: "ytchannel.js", runAt: "document_start"});
           }
       }

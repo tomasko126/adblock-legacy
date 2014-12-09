@@ -55,9 +55,9 @@ function getVideoId(url) {
 //                 - reload the page, so AdBlock can properly whitelist the page (just if channel is whitelisted by user)
 function updateURL(channelName, isChannel) {
     if (isChannel) {
-        var updatedUrl = url+"?&channel="+channelName;
+        var updatedUrl = url+"?&ab_channel="+channelName;
     } else {
-        var updatedUrl = url+"&channel="+channelName;
+        var updatedUrl = url+"&ab_channel="+channelName;
     }
     // Add the name of the channel to the end of URL
     window.history.replaceState(null, null, updatedUrl);
