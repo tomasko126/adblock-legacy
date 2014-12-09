@@ -191,16 +191,6 @@ if (!LEGACY_SAFARI) {
                     frameData.close(parseInt(tab));
                 }
             }
-
-            // We no longer need channelNames[tabId] object, remove it
-            if (!get_settings().youtube_channel_whitelist)
-                return;
-
-            for (tabId in channelNames) {
-                if (typeof channelNames[tabId] === "object" && opened_tabs.indexOf(parseInt(tabId)) === -1) {
-                    channelNames.remove(tabId);
-                }
-            }
         }, 150);
 
         // Remove the popover when the window closes so we don't leak memory.
