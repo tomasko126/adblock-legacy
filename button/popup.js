@@ -47,19 +47,24 @@ $(function() {
         var advanced_option = BG.get_settings().show_advanced_options;
         var eligible_for_undo = !paused && (info.disabled_site || !info.whitelisted);
         var url_to_check_for_undo = info.disabled_site ? undefined : host;
-        if (eligible_for_undo && 
+        if (eligible_for_undo &&
             BG.count_cache.getCustomFilterCount(url_to_check_for_undo) &&
             !LEGACY_SAFARI_51)
             show(["div_undo", "separator0"]);
 
         if (SAFARI || !advanced_option)
             hide(["div_show_resourcelist"]);
-        
+
         if (SAFARI && !advanced_option)
             hide(["div_report_an_ad", "separator1"]);
 
         var path = info.tab.url;
-        if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
+        if (host === "www.youtube.com" &&
+            /channel|user/.test(path) &&
+            eligible_for_undo &&
+            BG.get_settings().youtube_channel_whitelist) {
+            $("#div_whitelist_channel").html(translate("whitelist_youtube_channel",
+                                                       parseUri.parseSearch(info.tab.url).channel));
             show(["div_whitelist_channel"]);
         }
 
