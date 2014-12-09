@@ -1126,10 +1126,6 @@
               }
           });
       });
-
-      chrome.tabs.onRemoved.addListener(function(tabId) {
-          channelNames.remove(tabId);
-      });
   }
 
   // BETA CODE
