@@ -629,6 +629,13 @@
       }
   }
 
+  // Get the current (loaded) malware domains
+  // Returns: an object with all of the malware domains
+  // will return undefined, if the user is not subscribed to the Malware 'filter list'.
+  getMalwareDomains = function() {
+    return _myfilters.getMalwareDomains();
+  }
+
   // Returns true if the url cannot be blocked
   page_is_unblockable = function(url) {
     if (!url) { // Safari empty/bookmarks/top sites page
@@ -1433,3 +1440,4 @@
   }
 
   log("\n===FINISHED LOADING===\n\n");
+
