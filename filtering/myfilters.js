@@ -647,7 +647,7 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "http://mozilla.gfsolone.com/filtri.txt",
     },
     "japanese": { // Japanese filters
-      url: "https://secure.fanboy.co.nz/fanboy-japanese.txt",
+      url: "https://raw.githubusercontent.com/k2jp/abp-japanese-filters/master/abpjf.txt",
     },
     "easylist_plun_korean": {  // Korean filters
       url: "https://secure.fanboy.co.nz/fanboy-korean.txt",
