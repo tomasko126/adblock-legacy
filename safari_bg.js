@@ -215,7 +215,11 @@ if (!LEGACY_SAFARI) {
 // YouTube Channel Whitelist
 safari.application.addEventListener("beforeNavigate", function(event) {
     if (/youtube.com/.test(event.url) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(event.url).ab_channel) {
-        safari.extension.addContentScriptFromURL(safari.extension.baseURI + "ytchannel.js", [], [], false);
+        if (!/user/.test(event.url)) {
+            safari.extension.addContentScriptFromURL(safari.extension.baseURI + "ytchannel.js", [], [], false);
+        } else {
+            safari.extension.addContentScriptFromURL(safari.extension.baseURI + "ytchannel.js", [], [], true);
+        }
     } else {
         safari.extension.removeContentScript(safari.extension.baseURI + "ytchannel.js");
     }
