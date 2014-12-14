@@ -116,10 +116,15 @@ parseUri.parseSearch = function(search) {
   // Fails if a key exists twice (e.g., ?a=foo&a=bar would return {a:"bar"}
   search = search.substring(search.indexOf("?")+1).split("&");
   var params = {}, pair;
-  // march and parse
-  for (var i = search.length - 1; i >= 0; i--) {
+  for (var i = 0; i < search.length; i++) {
     pair = search[i].split("=");
-    params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+    if (pair[0] && !pair[1])
+        pair[1] = "";
+    if (!params[decodeURIComponent(pair[0])] && decodeURIComponent(pair[1]) === "undefined") {
+        continue;
+    } else {
+        params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+    }
   }
   return params;
 };
