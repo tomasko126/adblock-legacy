@@ -1270,7 +1270,10 @@
 
   // Sync settings, filter lists & custom filters
   // after authentication with Dropbox
-  if (!SAFARI) {
+  if (!SAFARI &&
+       chrome &&
+       chrome.runtime &&
+       chrome.runtime.onMessage) {
       var db_client = new Dropbox.Client({key: "3unh2i0le3dlzio"});
       var settingstable = null;
 
