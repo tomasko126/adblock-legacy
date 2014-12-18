@@ -55,3 +55,4 @@ wrzesnia.pl##img[src*="/ads_files/"]
 
 ! whitelist to avoid AdBlock detection on CBS.com
 @@||a.axsbqa.net/adblock.js
+@@||b.aldieo.co/adblock.js
