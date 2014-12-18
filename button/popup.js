@@ -64,15 +64,6 @@ $(function() {
             show(["div_whitelist_channel"]);
         }
 
-        // Ad-counter is not available for Safari, or for other non-functioning pages
-        if (!SAFARI &&
-            info.display_menu_stats &&
-            !paused &&
-            !info.disabled_site &&
-            !info.whitelisted) {
-            show(["block_counts"]);
-        }
-
         if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
             show(["div_status_beta", "separator4"]);
 
