@@ -122,54 +122,74 @@
   //     to active window. Because Safari supports clickthrough on extension elements, Safari code will almost
   //    always need to pass this argument. Chrome doesn't support it, so leave this argument empty in Chrome code.
   function openTab(url, nearActive, safariWindow) {
-    if (!SAFARI) {
-      if (!nearActive) {
-        chrome.windows.getAll(function(window) {
-            for (var i=0; i<window.length; i++) {
-                if (!window[i].incognito) {
-                    chrome.tabs.create({windowId: window[i].id, url: url, active: true});
-                    chrome.windows.update(window[i].id, {focused: true});
-                    break;
-                }
-            }
-        });
-      } else {
-        chrome.windows.getAll(function(window) {
-            for (var i=0; i<window.length; i++) {
-                if (!window[i].incognito) {
-                    chrome.tabs.query({active: true, windowId: window[i].id}, function(tabs) {
-                        chrome.tabs.create({windowId: window[i].id, url: url,
-                                            index: (tabs[0] ? tabs[0].index + 1 : undefined), active: true});
-                        chrome.windows.update(window[i].id, {focused: true});
-                    });
-                    break;
-                }
-            }
-        });
-      }
-    } else {
-      safariWindow = safariWindow || safari.application.activeBrowserWindow;
-      var index = undefined;
-      if (nearActive && safariWindow && safariWindow.activeTab) {
-        for (var i = 0; i < safariWindow.tabs.length; i++) {
-          if (safariWindow.tabs[i] === safariWindow.activeTab) {
-            index = i + 1;
-            break;
+      if (!SAFARI) {
+          if (!nearActive) {
+              chrome.windows.getCurrent(function(current) {
+                  if (!current.incognito) {
+                      chrome.tabs.create({url: url});
+                  } else {
+                      chrome.windows.getAll(function(window) {
+                          for (var i=0; i<window.length; i++) {
+                              if (!window[i].incognito) {
+                                  chrome.tabs.create({windowId: window[i].id, url: url, active: true});
+                                  chrome.windows.update(window[i].id, {focused: true});
+                                  break;
+                              } else {
+                                  chrome.tabs.create({url: url});
+                                  break;
+                              }
+                          }
+                      });
+                  }
+              });
+          } else {
+              chrome.windows.getCurrent(function(current) {
+                  if (!current.incognito) {
+                      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                          chrome.tabs.create({ url: url, index: (tabs[0] ? tabs[0].index + 1 : undefined)});
+                      });
+                  } else {
+                      chrome.windows.getAll(function(window) {
+                          for (var i=0; i<window.length; i++) {
+                              if (!window[i].incognito) {
+                                  chrome.tabs.query({active: true, windowId: window[i].id}, function(tabs) {
+                                      chrome.tabs.create({windowId: window[i].id, url: url,
+                                                          index: (tabs[0] ? tabs[0].index + 1 : undefined), active: true});
+                                      chrome.windows.update(window[i].id, {focused: true});
+                                  });
+                                  break;
+                              } else {
+                                  chrome.tabs.create({url: url});
+                                  break;
+                              }
+                          }
+                      });
+                  }
+              });
           }
-        }
-      }
-      var tab;
-      if (safariWindow) {
-        tab = safariWindow.openTab("foreground", index); // index may be undefined
-        if (!safariWindow.visible) {
-          safariWindow.activate();
-        }
       } else {
-        tab = safari.application.openBrowserWindow().tabs[0];
+          safariWindow = safariWindow || safari.application.activeBrowserWindow;
+          var index = undefined;
+          if (nearActive && safariWindow && safariWindow.activeTab) {
+              for (var i = 0; i < safariWindow.tabs.length; i++) {
+                  if (safariWindow.tabs[i] === safariWindow.activeTab) {
+                      index = i + 1;
+                      break;
+                  }
+              }
+          }
+          var tab;
+          if (safariWindow) {
+              tab = safariWindow.openTab("foreground", index); // index may be undefined
+              if (!safariWindow.visible) {
+                  safariWindow.activate();
+              }
+          } else {
+              tab = safari.application.openBrowserWindow().tabs[0];
+          }
+          var relative = (!/:\/\//.test(url)); // fix relative URLs
+          tab.url = (relative ? chrome.extension.getURL(url) : url);
       }
-      var relative = (!/:\/\//.test(url)); // fix relative URLs
-      tab.url = (relative ? chrome.extension.getURL(url) : url);
-    }
   };
 
   // Reload already opened tab
