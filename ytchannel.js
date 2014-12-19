@@ -65,9 +65,9 @@ if (!/ab_channel/.test(url)) {
     //                 - reload the page, so AdBlock can properly whitelist the page (just if channel is whitelisted by user)
     function updateURL(channelName, isChannel) {
         if (isChannel) {
-            var updatedUrl = url+"?&ab_channel="+channelName;
+            var updatedUrl = url+"?&ab_channel="+channelName.replace(/\s/g,"");
         } else {
-            var updatedUrl = url+"&ab_channel="+channelName;
+            var updatedUrl = url+"&ab_channel="+channelName.replace(/\s/g,"");
         }
         // Add the name of the channel to the end of URL
         window.history.replaceState(null, null, updatedUrl);
