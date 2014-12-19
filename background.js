@@ -123,50 +123,49 @@
   //    always need to pass this argument. Chrome doesn't support it, so leave this argument empty in Chrome code.
   function openTab(url, nearActive, safariWindow) {
       if (!SAFARI) {
-          if (!nearActive) {
-              chrome.windows.getCurrent(function(current) {
-                  if (!current.incognito) {
+          chrome.windows.getCurrent(function(current) {
+              // Normal window - open tab in it
+              if (!current.incognito) {
+                  if (!nearActive) {
                       chrome.tabs.create({url: url});
                   } else {
-                      chrome.windows.getAll(function(window) {
-                          for (var i=0; i<window.length; i++) {
-                              if (!window[i].incognito) {
-                                  chrome.tabs.create({windowId: window[i].id, url: url, active: true});
-                                  chrome.windows.update(window[i].id, {focused: true});
-                                  break;
-                              } else {
-                                  chrome.tabs.create({url: url});
-                                  break;
-                              }
-                          }
-                      });
-                  }
-              });
-          } else {
-              chrome.windows.getCurrent(function(current) {
-                  if (!current.incognito) {
                       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                           chrome.tabs.create({ url: url, index: (tabs[0] ? tabs[0].index + 1 : undefined)});
                       });
-                  } else {
-                      chrome.windows.getAll(function(window) {
-                          for (var i=0; i<window.length; i++) {
-                              if (!window[i].incognito) {
-                                  chrome.tabs.query({active: true, windowId: window[i].id}, function(tabs) {
-                                      chrome.tabs.create({windowId: window[i].id, url: url,
-                                                          index: (tabs[0] ? tabs[0].index + 1 : undefined), active: true});
-                                      chrome.windows.update(window[i].id, {focused: true});
-                                  });
-                                  break;
-                              } else {
-                                  chrome.tabs.create({url: url});
-                                  break;
-                              }
-                          }
-                      });
                   }
-              });
-          }
+              } else {
+                  // Get all windows
+                  chrome.windows.getAll(function(window) {
+                      var windowId = null;
+                      for (var i=0; i<window.length; i++) {
+                          // We have found a normal (non-incognito) window
+                          if (!window[i].incognito) {
+                              // If more normal windows were found,
+                              // overwrite windowId, so we get the most recent
+                              // opened normal window
+                              windowId = window[i].id;
+                          }
+                      }
+                      // Create a new tab in found normal window
+                      if (windowId) {
+                          if (!nearActive) {
+                              chrome.tabs.create({windowId: windowId, url: url, active: true});
+                          } else {
+                              chrome.tabs.query({active: true, windowId: windowId}, function(tabs) {
+                                  chrome.tabs.create({windowId: windowId, url: url,
+                                                      index: (tabs[0] ? tabs[0].index + 1 : undefined), active: true});
+                                  chrome.windows.update(windowId, {focused: true});
+                              });
+                          }
+                          chrome.windows.update(windowId, {focused: true});
+                      } else {
+                          // Normal window is not currently opened,
+                          // so create a new one
+                          chrome.tabs.create({url: url});
+                      }
+                  });
+              }
+          });
       } else {
           safariWindow = safariWindow || safari.application.activeBrowserWindow;
           var index = undefined;
