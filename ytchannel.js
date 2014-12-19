@@ -34,9 +34,18 @@ if (/channel/.test(url)) {
     xhr.send(null);
 } else {
     if (/user/.test(url)) {
-        var channelName = document.querySelector("span .qualified-channel-title-text > a").textContent;
-        if (channelName) {
-            updateURL(channelName, true);
+        document.addEventListener("spfdone", function() {
+            var channelName = document.querySelector("span .qualified-channel-title-text > a").textContent;
+            if (channelName) {
+                updateURL(channelName, true);
+            }
+        }, true);
+        // Spfdone event doesn't fire, when you access YT user directly
+        window.onload = function() {
+            var channelName = document.querySelector("span .qualified-channel-title-text > a").textContent;
+            if (channelName) {
+                updateURL(channelName, true);
+            }
         }
     }
 }
