@@ -124,10 +124,27 @@
   function openTab(url, nearActive, safariWindow) {
     if (!SAFARI) {
       if (!nearActive) {
-        chrome.tabs.create({url: url});
+        chrome.windows.getAll(function(window) {
+            for (var i=0; i<window.length; i++) {
+                if (!window[i].incognito) {
+                    chrome.tabs.create({windowId: window[i].id, url: url, active: true});
+                    chrome.windows.update(window[i].id, {focused: true});
+                    break;
+                }
+            }
+        });
       } else {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-           chrome.tabs.create({ url: url, index: (tabs[0] ? tabs[0].index + 1 : undefined) });
+        chrome.windows.getAll(function(window) {
+            for (var i=0; i<window.length; i++) {
+                if (!window[i].incognito) {
+                    chrome.tabs.query({active: true, windowId: window[i].id}, function(tabs) {
+                        chrome.tabs.create({windowId: window[i].id, url: url,
+                                            index: (tabs[0] ? tabs[0].index + 1 : undefined), active: true});
+                        chrome.windows.update(window[i].id, {focused: true});
+                    });
+                    break;
+                }
+            }
         });
       }
     } else {
