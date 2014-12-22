@@ -26,14 +26,12 @@ $(function() {
             show(["div_pause_adblock", "div_blacklist", "div_whitelist",
                   "div_whitelist_page", "div_show_resourcelist",
                   "div_report_an_ad", "separator1", "div_options",
-                  "div_help_hide_start", "separator3","block_counts_and_checkboxes", "block_counts"]);
+                  "div_help_hide_start", "separator3", "block_counts"]);
 
             var page_count = info.tab_blocked || "0";
             $("#page_blocked_count").text(page_count);
             $("#total_blocked_count").text(info.total_blocked);
 
-            $("#toggle_badge_checkbox").attr("checked", info.display_stats);
-            $("#toggle_menu_checkbox").attr("checked", info.display_menu_stats);
             // Show help link until it is clicked.
             $("#block_counts_help").
             toggle(BG.get_settings().show_block_counts_help_link).
@@ -78,8 +76,6 @@ $(function() {
             info.whitelisted) {
             $("#block_counts").hide();
         }
-        if (SAFARI)
-            $("#block_counts_and_checkboxes").hide();
 
         // Secure Search UI
         var shouldShow = false;
@@ -131,19 +127,6 @@ $(function() {
         var result = "http://support.getadblock.com/discussion/new" +
             "?category_id=problems&discussion[body]=" + out;
         BG.openTab(result);
-    });
-
-    $("#toggle_badge_checkbox").click(function(){
-        var checked = $(this).is(":checked");
-        BG.getCurrentTabInfo(function(info) {
-            BG.updateDisplayStats(checked, info.tab.id);
-        });
-    });
-
-    $("#toggle_menu_checkbox").click(function(){
-        var checked = $(this).is(":checked");
-        BG.updateDisplayMenuStats(checked);
-        closeAndReloadPopup();
     });
 
     $("#titletext").click(function() {

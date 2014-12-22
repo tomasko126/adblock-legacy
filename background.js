@@ -752,15 +752,6 @@
     return whitelist.matches(url, type, parseUri(url).hostname, false);
   }
 
-  updateDisplayStats = function(isChecked, tabId) {
-    set_setting("display_stats", isChecked);
-    updateBadge(tabId);
-  }
-
-  updateDisplayMenuStats = function(isChecked) {
-    set_setting("display_menu_stats", isChecked);
-  }
-
   if (!SAFARI) {
     updateBadge = function(tabId) {
       var display = get_settings().display_stats;
