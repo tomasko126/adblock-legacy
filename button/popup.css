@@ -56,7 +56,7 @@ body {
   margin-top: -7px;
   font-family: "Courier", sans-serif;
 }
-#block_counts_and_checkboxes {
+#block_counts {
   display: none;
   margin-bottom: 1em;
 }
@@ -66,10 +66,6 @@ body {
 .block_count_number {
   font-weight: bold;
   color: red;
-}
-#block_counts_controls,#block_counts_menu {
-  margin-top: 3px;
-  padding-left: 1px;
 }
 a {
   color: #4D7BD6;
