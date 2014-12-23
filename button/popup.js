@@ -230,6 +230,7 @@ $(function() {
     $("#div_show_resourcelist").click(function() {
         BG.getCurrentTabInfo(function(info) {
             BG.launch_resourceblocker("?tabId=" + info.tab.id);
+            closeAndReloadPopup();
         });
     });
 
@@ -237,11 +238,13 @@ $(function() {
         BG.getCurrentTabInfo(function(info) {
             var url = "pages/adreport.html?url=" + escape(info.tab.url) + "&tabId=" + info.tab.id;
             BG.openTab(url, true);
+            closeAndReloadPopup();
         });
     });
 
     $("#div_options").click(function() {
         BG.openTab("options/index.html");
+        closeAndReloadPopup();
     });
 
     $("#div_help_hide").click(function() {

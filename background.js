@@ -139,7 +139,7 @@
                       var windowId = null;
                       for (var i=0; i<window.length; i++) {
                           // We have found a normal (non-incognito) window
-                          if (!window[i].incognito) {
+                          if (!window[i].incognito && window[i].type === "normal") {
                               // If more normal windows were found,
                               // overwrite windowId, so we get the most recent
                               // opened normal window
