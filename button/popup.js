@@ -124,6 +124,7 @@ $(function() {
         var result = "http://support.getadblock.com/discussion/new" +
             "?category_id=problems&discussion[body]=" + out;
         BG.openTab(result);
+        closeAndReloadPopup();
     });
 
     $("#toggle_badge_checkbox").click(function(){
@@ -144,6 +145,7 @@ $(function() {
         } else {
             BG.openTab(chrome_url);
         }
+        closeAndReloadPopup();
     });
 
     $("#div_enable_adblock_on_this_page").click(function() {
