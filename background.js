@@ -1327,9 +1327,9 @@
               var filters;
               if (sync === local) {
                   filters = "";
-              } else if (local === undefined && sync !== "") {
+              } else if (local === undefined && sync !== "" && sync !== null) {
                   filters = sync;
-              } else if (sync !== "" && local) {
+              } else if (sync !== "" && sync !== null && local) {
                   filters = local + sync;
               } else {
                   filters = local;
