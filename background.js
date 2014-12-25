@@ -1346,9 +1346,9 @@
               var eXfilters;
               if (eXsync === eXlocal) {
                   eXfilters = "";
-              } else if (eXlocal === undefined && eXsync !== "") {
+              } else if (eXlocal === undefined && eXsync !== "" && eXsync !== null) {
                   eXfilters = eXsync;
-              } else if (eXsync !== "" && eXlocal) {
+              } else if (eXsync !== "" && eXlocal && eXsync !== null) {
                   eXfilters = eXlocal + "\n" + eXsync;
               } else {
                   eXfilters = eXlocal;
