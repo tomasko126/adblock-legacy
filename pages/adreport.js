@@ -68,7 +68,7 @@ function generateReportURL() {
               "than what you give us in your report. Otherwise, we might not be able to fix it.");
     body.push("");
     if (!options.url) {
-        body.push("**" + count + ". Paste the URL of the webpage showing an ad: ");
+        body.push("**" + count + ". Paste the URL of the webpage showing an ad:** ");
         body.push("");
         body.push("");
         count++;
