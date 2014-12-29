@@ -1330,7 +1330,7 @@
               } else if (local === undefined && sync !== "" && sync !== null) {
                   filters = sync;
               } else if (sync !== "" && sync !== null && local) {
-                  filters = local + sync;
+                  filters = local + "\n" + sync;
               } else {
                   filters = local;
               }
