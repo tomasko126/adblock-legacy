@@ -1132,7 +1132,7 @@
     }
   },
   "firefox_explanation":{
-    "message":"Het doel van deze vraag is om na te gaan wie je melding moet ontvangen. Als je deze vraag incorrect beantwoordt zal de melding naar de verkeerde persoon gestuurd worden. Dit kan ervoor zorgen dat het niet behandeld zal worden.",
+    "message":"Het doel van deze vraag is om na te gaan wie je melding moet ontvangen. Als je deze vraag incorrect beantwoordt zal de melding naar de verkeerde persoon gestuurd worden. Dit kan ervoor zorgen dat deze niet behandeld zal worden.",
     "description":"Explanation of the Check-in-Firefox or Chrome step in the ad reporter"
   },
   "blocked_ads":{
@@ -1158,10 +1158,6 @@
         "example":"The number of ads blocked. Do not make any changes to this placeholder when translating."
       }
     }
-  },
-  "show_on_adblock_button":{
-    "message":"Laat dit zien op de knop",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
   },
   "adblockinglist":{
     "message":"Advertentie Blokkerende Filters",

@@ -1166,7 +1166,7 @@
   "show_on_adblock_menu":{
     "message":"Show number of ads blocked on AdBlock menu",
     "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
-  },  
+  },
   "adblockinglist":{
     "message":"Ad Blocking Filter Lists",
     "description":"List for subscribed ad blocking fiters"
