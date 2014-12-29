@@ -40,6 +40,7 @@ $(function() {
                 BG.set_setting("show_block_counts_help_link", false);
                 BG.openTab($(this).attr("href"));
                 $(this).hide();
+                closeAndReloadPopup();
             });
         }
 
