@@ -72,7 +72,6 @@ CheckboxForFilterList.prototype = {
         $(".remove_filter_list", parent).
           css("display", checked ? "none" : "inline");
         var id = parent.attr("name");
-        console.log("id", id, checked);
         if (checked) {
           $(".subscription_info", parent).text(translate("fetchinglabel"));
           SubscriptionUtil.subscribe(id);
@@ -84,41 +83,12 @@ CheckboxForFilterList.prototype = {
           delete FilterListUtil.cached_subscriptions[id].subscribed;
         }
         //if the checkbox clicked is the malware
-        //ask the user if they wish to be notified of blocked malware
-        if (id && id === "malware" && checked) {           
-            $("#malware-notification-message").show().dialog({
-                resizable: false,
-                height:"auto",
-                width: 500,
-                modal: true,
-                buttons: {
-                     Ok: function() {
-                        console.log("yes, notify me");
-                        chrome.permissions.request({
-                            permissions: ['notifications']
-                        }, function(granted) {
-                            // The callback argument will be true if the user granted the permissions.
-                            if (granted) {
-                                BGcall('storage_set', 'malware-notification', true);
-                            } else {
-                               BGcall('storage_set', 'malware-notification', false);
-                            }
-                        });
-                        $( this ).dialog( "close" );
-                    },
-                    Cancel: function() {
-                        BGcall('storage_set', 'malware-notification', false);
-                        $( this ).dialog( "close" );
-                    }
-                }
-            });
+        //add a checkbox to for the user to indicate if they wish to be notified of blocked malware
+        if (id && id === "malware" && checked) {
+            addMalwareNotificationDiv();
         } else if (id && id === "malware" && !checked) {
+            $("#malware-notification-message-div").remove();
             BGcall('storage_set', 'malware-notification', false);
-            chrome.permissions.remove({
-                permissions: ['notifications']
-            }, function(removed) {
-
-            });   
         }
       });
 
@@ -562,12 +532,38 @@ CustomFilterListUploadUtil.bindControls = function () {
   });
 };
 
-$(function() {
+//add a checkbox to for the user to indicate if they wish to be notified of blocked malware
+function addMalwareNotificationDiv() {
+    if (document.getElementById("malware-notification-message-div"))
+        return;//already exists, don't add it again.
 
-  $("#malware-notification-message").hide();
+    BGcall('storage_get', 'malware-notification', function(notify) {
+        var newDiv = $("<div>").
+          attr("id", "malware-notification-message-div");
+        var newInput = $('<input />').
+          attr("type", "checkbox").
+          attr("id", "malware-notification-message").
+          css("margin-left", "25px").
+          prop("checked", notify ? true : null);
+        var newLabel = $("<label>").
+          text(translate("malwarenotificationcheckboxmessage")).
+          attr("for", "malware-notification-message");
+        newDiv.append(newInput).append(newLabel);
+
+        $("div[name='malware']").after(newDiv);
+
+        $("#malware-notification-message").click(function() {
+            var checked = $(this).is(":checked");
+            BGcall('storage_set', 'malware-notification', checked);
+        });
+    });
+}
+
+$(function() {
 
   // Retrieves list of filter lists from the background.
   BGcall('get_subscriptions_minus_text', function(subs) {
+
     // Initialize page using subscriptions from the background.
     // Copy from update subscription list + setsubscriptionlist
     FilterListUtil.prepareSubscriptions(subs);
@@ -579,6 +575,11 @@ $(function() {
 
     LanguageSelectUtil.init();
     CustomFilterListUploadUtil.bindControls();
+
+    //if the user is subscribed to malware, add the checkbox for notifications
+    if (subs && subs["malware"] && subs["malware"].subscribed) {
+        addMalwareNotificationDiv();
+    }
   });
 
   window.setInterval(function() {
