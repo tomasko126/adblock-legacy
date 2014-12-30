@@ -12,26 +12,26 @@ function CheckboxForFilterList(filter_list, filter_list_type, index, container) 
   this._filter_list = filter_list;
   this._filter_list_type = filter_list_type;
   this._id = this._filter_list_type + "_" + index;
-  
+
   this._div = $("<div></div>").
       addClass("subscription").
       addClass(this._filter_list_type).
       attr("name", this._filter_list.id).
       css("display", this._filter_list_type === "language_filter_list" ?
         (this._filter_list.subscribed?"block":"none") : "block");
-      
+
   this._check_box = $('<input />').
       attr("type", "checkbox").
       attr("id", this._id).
       css("margin-left", "2px").
       prop("checked", this._filter_list.subscribed ? true : null).
       addClass("filter_list_control");
-      
+
   this._label = $("<label></label>").
       text(this._filter_list.label || this._filter_list.title || this._filter_list.url).
       attr("title", this._filter_list.url).
       attr("for", this._id);
-      
+
   this._link = $("<a></a>").
       text(this._filter_list.label || this._filter_list.title).
       css("margin-left", "6px").
@@ -40,11 +40,11 @@ function CheckboxForFilterList(filter_list, filter_list_type, index, container) 
       attr("target", "_blank").
       attr("class", "linkToList").
       attr("href", this._filter_list.url);
-      
+
   this._infospan = $("<span></span>").
       addClass("subscription_info").
       text(this._filter_list.subscribed && !this._filter_list.last_update ? (translate("fetchinglabel")) : "");
-  
+
   this._remove_filter_list_label = this._filter_list.user_submitted ?  $("<a>").
       css("font-size", "10px").
       css("display", this._filter_list.subscribed ? "none" : "inline").
@@ -72,6 +72,7 @@ CheckboxForFilterList.prototype = {
         $(".remove_filter_list", parent).
           css("display", checked ? "none" : "inline");
         var id = parent.attr("name");
+        console.log("id", id, checked);
         if (checked) {
           $(".subscription_info", parent).text(translate("fetchinglabel"));
           SubscriptionUtil.subscribe(id);
@@ -82,8 +83,45 @@ CheckboxForFilterList.prototype = {
             text(translate("unsubscribedlabel"));
           delete FilterListUtil.cached_subscriptions[id].subscribed;
         }
+        //if the checkbox clicked is the malware
+        //ask the user if they wish to be notified of blocked malware
+        if (id && id === "malware" && checked) {           
+            $("#malware-notification-message").show().dialog({
+                resizable: false,
+                height:"auto",
+                width: 500,
+                modal: true,
+                buttons: {
+                     Ok: function() {
+                        console.log("yes, notify me");
+                        chrome.permissions.request({
+                            permissions: ['notifications']
+                        }, function(granted) {
+                            // The callback argument will be true if the user granted the permissions.
+                            if (granted) {
+                                BGcall('storage_set', 'malware-notification', true);
+                            } else {
+                               BGcall('storage_set', 'malware-notification', false);
+                            }
+                        });
+                        $( this ).dialog( "close" );
+                    },
+                    Cancel: function() {
+                        BGcall('storage_set', 'malware-notification', false);
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+        } else if (id && id === "malware" && !checked) {
+            BGcall('storage_set', 'malware-notification', false);
+            chrome.permissions.remove({
+                permissions: ['notifications']
+            }, function(removed) {
+
+            });   
+        }
       });
-      
+
     if(this._filter_list_type === "language_filter_list") {
       this._check_box.
         change(function() {
@@ -97,7 +135,7 @@ CheckboxForFilterList.prototype = {
           }
         });
     };
-    
+
     if(this._filter_list.user_submitted) {
       this._remove_filter_list_label.
         click(function(event) {
@@ -108,8 +146,9 @@ CheckboxForFilterList.prototype = {
           parent.remove();
         });
     };
+
   },
-  
+
   // Create the actual check box div and append in the container.
   // Inputs:
   //   isChecked:boolean - Flag that will indicate that this checkbox is checked by default.
@@ -120,11 +159,11 @@ CheckboxForFilterList.prototype = {
       append(this._link).
       append(this._infospan).
       append(this._remove_filter_list_label);
-    
+
     this._container.append(this._div);
-    
+
     this._bindActions();
-    
+
     if(isChecked) {
       this._check_box.prop("checked", true);
       this._check_box.trigger("change");
@@ -139,7 +178,7 @@ CheckboxForFilterList.prototype = {
 function OptionForFilterList(filter_list, index) {
   this._filter_list = filter_list;
   this._index = index;
-  
+
   this._option = $("<option>", {
     value: this._filter_list.id,
     text: this._filter_list.label,
@@ -264,7 +303,7 @@ FilterListUtil.updateSubscriptionInfoAll = function() {
       continue;
     }
     if(subscription.last_update_failed_at) {
-      if(subscription.user_submitted && 
+      if(subscription.user_submitted &&
         translate("failedtofetchfilter") === infoLabel.text()) {
         text = translate("invalidListUrl");
         $("input", div).prop("disabled", true);
@@ -294,7 +333,7 @@ FilterListUtil.updateSubscriptionInfoAll = function() {
           text += translate("updateddayago");
         else
           text += translate("updateddaysago", [days]);
-    } 
+    }
     infoLabel.text(text);
   }
 };
@@ -361,7 +400,7 @@ LanguageSelectUtil.init = function() {
       LanguageSelectUtil.insertOption(option.get(), i);
     }
   }
-  
+
   $("#language_select").change(function() {
     var $this = $(this);
     var selected_option = $this.find(':selected');
@@ -383,7 +422,7 @@ LanguageSelectUtil.triggerChange = function(filter_list) {
   var $language_select = $("#language_select");
   $language_select.val(filter_list.id);
   $language_select.trigger("change");
-};  
+};
 
 // Utility class for Subscriptions.
 function SubscriptionUtil() {};
@@ -476,9 +515,9 @@ CustomFilterListUploadUtil._updateExistingFilterList = function(existing_filter_
     checkboxForFilterList.createCheckbox();
     containing_div = $("div[name='" + existing_filter_list.id + "']");
   }
-  
+
   var checkbox = $(containing_div).find("input");
-  
+
   if(!checkbox.is(":checked")) {
     if(checkbox.attr("id").indexOf("language_filter_list") > 0) {
       LanguageSelectUtil.triggerChange(existing_filter_list);
@@ -499,10 +538,10 @@ CustomFilterListUploadUtil.bindControls = function () {
     }
     url = url.trim();
     var subscribe_to = "url:" + url;
-    
+
     var existing_filter_list = FilterListUtil.checkUrlForExistingFilterList(url);
 
-    if (existing_filter_list) {  
+    if (existing_filter_list) {
       CustomFilterListUploadUtil._updateExistingFilterList(existing_filter_list);
     } else {
       if (/^https?\:\/\/[^\<]+$/.test(url)) {
@@ -513,7 +552,7 @@ CustomFilterListUploadUtil.bindControls = function () {
     }
     $("#txtNewSubscriptionUrl").val("");
   });
-  
+
   // Pressing enter will add the list too.
   $('#txtNewSubscriptionUrl').keypress(function(event) {
     if (event.keyCode === 13) {
@@ -524,25 +563,28 @@ CustomFilterListUploadUtil.bindControls = function () {
 };
 
 $(function() {
+
+  $("#malware-notification-message").hide();
+
   // Retrieves list of filter lists from the background.
   BGcall('get_subscriptions_minus_text', function(subs) {
     // Initialize page using subscriptions from the background.
     // Copy from update subscription list + setsubscriptionlist
     FilterListUtil.prepareSubscriptions(subs);
-    
+
     for(var id in filterListSections) {
       var sectionHandler = new SectionHandler(filterListSections[id], id);
       sectionHandler.initSection();
     }
-    
+
     LanguageSelectUtil.init();
     CustomFilterListUploadUtil.bindControls();
   });
-  
+
   window.setInterval(function() {
    FilterListUtil.updateSubscriptionInfoAll();
   }, 1000);
-  
+
   $("#btnUpdateNow").click(function() {
     $(this).prop("disabled", true);
     BGcall("update_subscriptions_now");
@@ -550,12 +592,14 @@ $(function() {
       $("#btnUpdateNow").prop("disabled", false);
     }, 300000); // Re-enable update button after 5 minutes.
   });
- 
+
   $("#btnShowLinks").click(function() {
     $(".linkToList").fadeIn("slow");
     $("#btnShowLinks").remove();
   });
-   
+
+
+
   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if (request.command !== "filters_updated")
       return;
@@ -577,15 +621,15 @@ $(function() {
               } else {
                 delete subs[id].last_update;
               }
-            } 
-            
+            }
+
             // Update last_update_failed_at and last_update field for the entry in cached subscriptions
             if(entry.last_update_failed_at) {
               cached_subscriptions[id].last_update_failed_at = entry.last_update_failed_at;
             } else if(entry.last_update) {
               cached_subscriptions[id].last_update = entry.last_update;
             }
-          } 
+          }
         }
       }
     });
