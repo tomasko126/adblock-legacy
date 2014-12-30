@@ -58,6 +58,13 @@ var run_bandaids = function() {
         elemDiv.style.display = "none";
         document.body.appendChild(elemDiv);
       });
+      var elemDiv = document.createElement("div");
+      elemDiv.id = "adblock_extension_id";
+      if (chrome && chrome.runtime && chrome.runtime.id) {
+        elemDiv.innerText = chrome.runtime.id;
+      }
+      elemDiv.style.display = "none";
+      document.body.appendChild(elemDiv);
       BGcall('set_first_run_to_false', null);
       if (document.getElementById("enable_show_survey")) {
         document.getElementById("enable_show_survey").onclick = function(event) {
