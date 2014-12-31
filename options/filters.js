@@ -553,7 +553,8 @@ function addMalwareNotificationDiv() {
               attr("for", "malware-notification-message");
             var betaLabel = $("<label>").
               text(translate("betalabel")).
-              css("padding", "0px 8px 0px 8px;");
+              attr("i18n", "betalabel").
+              css("padding-left", "5px");
             newDiv.append(newInput).append(newLabel).append(betaLabel);
 
             $("div[name='malware']").after(newDiv);
