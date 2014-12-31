@@ -486,13 +486,17 @@
     "description":"Title of the AdBlock message to the user"
   }, 
   "malwarenotificationmessage":{
-    "message":"AdBlock has detect a Malware.  Your computer maybe infected with Malware.",
+    "message":"AdBlock has detected Malware.  Your computer maybe infected with Malware.",
     "description":"Message to the user when a Malware request has been blocked."
   }, 
-  "malwarenotificationcontextmessage":{
-    "message":"Disable these messages under AdBlock Options, Filter tab.",
+  "malwarenotificationlearnmore":{
+    "message":"Click this to learn more",
+    "description":"Message to the user on where to learn more about malware on our website."
+  },    
+  "malwarenotificationdisablethesemessages":{
+    "message":"Click this to disable these notifications.",
     "description":"Message to the user on how to disable the messages."
-  },         
+  },       
   "malwarecheck":{
     "message":"Malware check",
     "description":"Section header on the ad report page"

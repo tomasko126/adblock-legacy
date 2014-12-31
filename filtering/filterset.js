@@ -167,17 +167,7 @@ BlockingFilterSet.prototype = {
         this.malwareDomains.adware.indexOf(urlDomain) > -1) {
       log("matched malware domain", urlDomain);
       this._matchCache[key] = (returnFilter ? urlDomain: true);
-      if (storage_get('malware-notification')) {
-        // Pop up a notification to the user.
-        chrome.notifications.create((Math.floor(Math.random() * 3000)).toString(), {
-            title: translate('malwarenotificationtitle'),
-            iconUrl: chrome.extension.getURL('img/icon48.png'),
-            type: 'basic',
-            message: translate('malwarenotificationmessage'),
-            contextMessage:translate('malwarenotificationcontextmessage')
-        }, function(notificationId) {
-        });
-      }
+      createMalwareNotification();
       return this._matchCache[key];
     }
     this._matchCache[key] = false;

@@ -1085,6 +1085,50 @@
     openTab("https://getadblock.com/installed/?u=" + STATS.userId);
   }
 
+  createMalwareNotification = function() {
+    if (!SAFARI &&
+        chrome &&
+        chrome.notifications &&
+        storage_get('malware-notification')) {
+
+        //get the current tab, so we only create 1 notification per tab
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            if (tabs.length === 0) {
+                return; // For example: only the background devtools or a popup are opened
+            }
+
+            var tab = tabs[0];
+            if (sessionStorage.getItem("malwareNotification" + tab.id)) {
+                //we've already notified the user, just return.
+                return;
+            } else {
+                sessionStorage.setItem("malwareNotification" + tab.id, true);
+            }
+            chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
+                if (buttonIndex === 0) {
+                    openTab("http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/");
+                }
+                if (buttonIndex === 1) {
+                    openTab("options/index.html?tab=1");
+                }
+            });
+            // Pop up a notification to the user.
+            chrome.notifications.create((Math.floor(Math.random() * 3000)).toString(), {
+                title: translate('malwarenotificationtitle'),
+                iconUrl: chrome.extension.getURL('img/icon48.png'),
+                type: 'basic',
+                message: translate('malwarenotificationmessage'),
+                buttons: [{title:translate('malwarenotificationlearnmore'),
+                           iconUrl:chrome.extension.getURL('img/icon24.png')},
+                          {title:translate('malwarenotificationdisablethesemessages'),
+                           iconUrl:chrome.extension.getURL('img/icon24.png')}]
+            }, function(notificationId) {
+                //do nothing in callback
+            });
+        });//end of chrome.tabs.query
+    }//end of if
+  }//end of createMalwareNotification function
+
   if (!SAFARI) {
     // Chrome blocking code.  Near the end so synchronous request handler
     // doesn't hang Chrome while AdBlock initializes.

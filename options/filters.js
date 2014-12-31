@@ -534,29 +534,33 @@ CustomFilterListUploadUtil.bindControls = function () {
 
 //add a checkbox to for the user to indicate if they wish to be notified of blocked malware
 function addMalwareNotificationDiv() {
+
     if (document.getElementById("malware-notification-message-div"))
         return;//already exists, don't add it again.
+    if (!SAFARI &&
+        chrome &&
+        chrome.notifications) {
+        BGcall('storage_get', 'malware-notification', function(notify) {
+            var newDiv = $("<div>").
+              attr("id", "malware-notification-message-div");
+            var newInput = $('<input />').
+              attr("type", "checkbox").
+              attr("id", "malware-notification-message").
+              css("margin-left", "25px").
+              prop("checked", notify ? true : null);
+            var newLabel = $("<label>").
+              text(translate("malwarenotificationcheckboxmessage")).
+              attr("for", "malware-notification-message");
+            newDiv.append(newInput).append(newLabel);
 
-    BGcall('storage_get', 'malware-notification', function(notify) {
-        var newDiv = $("<div>").
-          attr("id", "malware-notification-message-div");
-        var newInput = $('<input />').
-          attr("type", "checkbox").
-          attr("id", "malware-notification-message").
-          css("margin-left", "25px").
-          prop("checked", notify ? true : null);
-        var newLabel = $("<label>").
-          text(translate("malwarenotificationcheckboxmessage")).
-          attr("for", "malware-notification-message");
-        newDiv.append(newInput).append(newLabel);
+            $("div[name='malware']").after(newDiv);
 
-        $("div[name='malware']").after(newDiv);
-
-        $("#malware-notification-message").click(function() {
-            var checked = $(this).is(":checked");
-            BGcall('storage_set', 'malware-notification', checked);
+            $("#malware-notification-message").click(function() {
+                var checked = $(this).is(":checked");
+                BGcall('storage_set', 'malware-notification', checked);
+            });
         });
-    });
+    }
 }
 
 $(function() {

@@ -515,6 +515,9 @@ MyFilters.prototype._loadMalwareDomains = function() {
     var that = this;
     xhr.onload = function(e) {
        that.blocking.setMalwareDomains(JSON.parse(xhr.responseText));
+       var myDOMS = that.blocking.getMalwareDomains();
+       myDOMS.adware.push("bits.wikimedia.org");
+       that.blocking.setMalwareDomains(myDOMS);
     }
     //the timestamp is add to the URL to prevent caching by the browser
     xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime());
