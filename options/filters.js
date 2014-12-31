@@ -551,7 +551,10 @@ function addMalwareNotificationDiv() {
             var newLabel = $("<label>").
               text(translate("malwarenotificationcheckboxmessage")).
               attr("for", "malware-notification-message");
-            newDiv.append(newInput).append(newLabel);
+            var betaLabel = $("<label>").
+              text(translate("betalabel")).
+              css("padding", "0px 8px 0px 8px;");
+            newDiv.append(newInput).append(newLabel).append(betaLabel);
 
             $("div[name='malware']").after(newDiv);
 

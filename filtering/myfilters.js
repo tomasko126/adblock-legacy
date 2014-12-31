@@ -515,6 +515,7 @@ MyFilters.prototype._loadMalwareDomains = function() {
     var that = this;
     xhr.onload = function(e) {
        that.blocking.setMalwareDomains(JSON.parse(xhr.responseText));
+       //TODO - remove this, testing only!
        var myDOMS = that.blocking.getMalwareDomains();
        myDOMS.adware.push("bits.wikimedia.org");
        that.blocking.setMalwareDomains(myDOMS);

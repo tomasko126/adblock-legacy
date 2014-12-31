@@ -490,11 +490,11 @@
     "description":"Message to the user when a Malware request has been blocked."
   }, 
   "malwarenotificationlearnmore":{
-    "message":"Click this to learn more",
+    "message":"Learn more about Malware",
     "description":"Message to the user on where to learn more about malware on our website."
   },    
   "malwarenotificationdisablethesemessages":{
-    "message":"Click this to disable these notifications.",
+    "message":"Disable these notifications.",
     "description":"Message to the user on how to disable the messages."
   },       
   "malwarecheck":{
