@@ -247,9 +247,9 @@ sub missing_unused {
     } elsif ($project eq "getadblock_com"){
         find(sub{
             # don't look in directories that are separate projects
-			my $file = $_; # current filename
-			return $File::Find::prune = 1 if (any {$file eq $_} @{["contributors", "installed", "pay"]});
-			
+            my $file = $_; # current filename
+            return $File::Find::prune = 1 if (any {$file eq $_} @{["contributors", "installed", "pay"]});
+            
             return unless -f;
             return unless (/\.html$/ || /\.js$/);
             push(@files,$File::Find::name);
