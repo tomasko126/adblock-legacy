@@ -860,7 +860,9 @@
       }
       return "This filter is unsupported";
     } catch(ex) {
-      return ex;
+        //convert to a string so that Safari can pass
+        //it back to content scripts
+      return ex.toString();
     }
   };
 
