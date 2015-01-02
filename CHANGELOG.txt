@@ -2,12 +2,23 @@
 
 UNRELEASED:
 
+2.16:
+- AdBlock now uses the YouTube API to retreive the channel name when users have the Whitelist a YouTube Channel feature enabled. (#392)
+- The 'Filter syntax tutorial' link on the AdBlock options / Customize tab now checks if the generated URL is valid. (#394)
+- Added a check for chrome.runtime.onMessage API, since it isn't available in Chrome 25 and older versions. (#395)
+- Added an option to the General options tab to not display the ads block counter on the AdBlock popup menu.
+  The option to display the # of ads block was moved from the AdBlock popup menu to the General tab as well. (#401)
+- Added logic to set focus on new tabs open by AdBlock (for example, the options pages), when the Chrome is running in incognito mode. (#405)
+- On the 'Report an Ad' page, all of the questions are now bolded. (#416)
+- Reformated the text and fixed typos in the change log. (#418)
+- Modified several JavaScript throws statements to now use an Error object. (#420)
+
 2.15:
 - Improved performance of extension when using the Malware filter list (#384)
 - Added the 'show the resource list' page to the Safari version of the extension (#385)
 - Added a timestamp to the JavaScript error text that is saved in local storage (#390)
 - Added logic to determine the correct URL for the Filter list syntax link on the Custom tab based on the user's language (#387)
-- Updated the Japanese filter list URL (#386)      
+- Updated the Japanese filter list URL (#386)
 
 2.14.4: Removed unnecessary backup directory that was included in the zip and extz files.
 
