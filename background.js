@@ -122,37 +122,73 @@
   //     to active window. Because Safari supports clickthrough on extension elements, Safari code will almost
   //    always need to pass this argument. Chrome doesn't support it, so leave this argument empty in Chrome code.
   function openTab(url, nearActive, safariWindow) {
-    if (!SAFARI) {
-      if (!nearActive) {
-        chrome.tabs.create({url: url});
+      if (!SAFARI) {
+          chrome.windows.getCurrent(function(current) {
+              // Normal window - open tab in it
+              if (!current.incognito) {
+                  if (!nearActive) {
+                      chrome.tabs.create({url: url});
+                  } else {
+                      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                          chrome.tabs.create({ url: url, index: (tabs[0] ? tabs[0].index + 1 : undefined)});
+                      });
+                  }
+              } else {
+                  // Get all windows
+                  chrome.windows.getAll(function(window) {
+                      var windowId = null;
+                      for (var i=0; i<window.length; i++) {
+                          // We have found a normal (non-incognito) window
+                          if (!window[i].incognito && window[i].type === "normal") {
+                              // If more normal windows were found,
+                              // overwrite windowId, so we get the most recent
+                              // opened normal window
+                              windowId = window[i].id;
+                          }
+                      }
+                      // Create a new tab in found normal window
+                      if (windowId) {
+                          if (!nearActive) {
+                              chrome.tabs.create({windowId: windowId, url: url, active: true});
+                          } else {
+                              chrome.tabs.query({active: true, windowId: windowId}, function(tabs) {
+                                  chrome.tabs.create({windowId: windowId, url: url,
+                                                      index: (tabs[0] ? tabs[0].index + 1 : undefined), active: true});
+                                  chrome.windows.update(windowId, {focused: true});
+                              });
+                          }
+                          chrome.windows.update(windowId, {focused: true});
+                      } else {
+                          // Normal window is not currently opened,
+                          // so create a new one
+                          chrome.tabs.create({url: url});
+                      }
+                  });
+              }
+          });
       } else {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-           chrome.tabs.create({ url: url, index: (tabs[0] ? tabs[0].index + 1 : undefined) });
-        });
-      }
-    } else {
-      safariWindow = safariWindow || safari.application.activeBrowserWindow;
-      var index = undefined;
-      if (nearActive && safariWindow && safariWindow.activeTab) {
-        for (var i = 0; i < safariWindow.tabs.length; i++) {
-          if (safariWindow.tabs[i] === safariWindow.activeTab) {
-            index = i + 1;
-            break;
+          safariWindow = safariWindow || safari.application.activeBrowserWindow;
+          var index = undefined;
+          if (nearActive && safariWindow && safariWindow.activeTab) {
+              for (var i = 0; i < safariWindow.tabs.length; i++) {
+                  if (safariWindow.tabs[i] === safariWindow.activeTab) {
+                      index = i + 1;
+                      break;
+                  }
+              }
           }
-        }
+          var tab;
+          if (safariWindow) {
+              tab = safariWindow.openTab("foreground", index); // index may be undefined
+              if (!safariWindow.visible) {
+                  safariWindow.activate();
+              }
+          } else {
+              tab = safari.application.openBrowserWindow().tabs[0];
+          }
+          var relative = (!/:\/\//.test(url)); // fix relative URLs
+          tab.url = (relative ? chrome.extension.getURL(url) : url);
       }
-      var tab;
-      if (safariWindow) {
-        tab = safariWindow.openTab("foreground", index); // index may be undefined
-        if (!safariWindow.visible) {
-          safariWindow.activate();
-        }
-      } else {
-        tab = safari.application.openBrowserWindow().tabs[0];
-      }
-      var relative = (!/:\/\//.test(url)); // fix relative URLs
-      tab.url = (relative ? chrome.extension.getURL(url) : url);
-    }
   };
 
   // Reload already opened tab

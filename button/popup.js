@@ -40,6 +40,7 @@ $(function() {
                 BG.set_setting("show_block_counts_help_link", false);
                 BG.openTab($(this).attr("href"));
                 $(this).hide();
+                closeAndReloadPopup();
             });
         }
 
@@ -124,6 +125,7 @@ $(function() {
         var result = "http://support.getadblock.com/discussion/new" +
             "?category_id=problems&discussion[body]=" + out;
         BG.openTab(result);
+        closeAndReloadPopup();
     });
 
     $("#toggle_badge_checkbox").click(function(){
@@ -144,6 +146,7 @@ $(function() {
         } else {
             BG.openTab(chrome_url);
         }
+        closeAndReloadPopup();
     });
 
     $("#div_enable_adblock_on_this_page").click(function() {
@@ -230,6 +233,7 @@ $(function() {
     $("#div_show_resourcelist").click(function() {
         BG.getCurrentTabInfo(function(info) {
             BG.launch_resourceblocker("?tabId=" + info.tab.id);
+            closeAndReloadPopup();
         });
     });
 
@@ -237,11 +241,13 @@ $(function() {
         BG.getCurrentTabInfo(function(info) {
             var url = "pages/adreport.html?url=" + escape(info.tab.url) + "&tabId=" + info.tab.id;
             BG.openTab(url, true);
+            closeAndReloadPopup();
         });
     });
 
     $("#div_options").click(function() {
         BG.openTab("options/index.html");
+        closeAndReloadPopup();
     });
 
     $("#div_help_hide").click(function() {
