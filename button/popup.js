@@ -58,8 +58,14 @@ $(function() {
         if (SAFARI && !advanced_option)
             hide(["div_report_an_ad", "separator1"]);
 
-        var path = info.tab.url;
-        if (host === "www.youtube.com" && /channel|user/.test(path) && eligible_for_undo && BG.get_settings().youtube_channel_whitelist) {
+        var url = info.tab.url;
+        if (host === "www.youtube.com" &&
+            /channel|user/.test(url) &&
+            /ab_channel/.test(url) &&
+            eligible_for_undo &&
+            BG.get_settings().youtube_channel_whitelist) {
+            $("#div_whitelist_channel").html(translate("whitelist_youtube_channel",
+                                                       parseUri.parseSearch(url).ab_channel));
             show(["div_whitelist_channel"]);
         }
 

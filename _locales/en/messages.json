@@ -1196,8 +1196,14 @@
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "whitelist_youtube_channel":{
-    "message":"Whitelist this YouTube channel",
-    "description":"Text which is displayed on YouTube in popup menu"
+    "message":"Whitelist $name$ channel",
+    "description":"Text which is displayed on YouTube in popup menu",
+    "placeholders":{
+      "name":{
+        "content":"$1",
+        "example":"Name of channel"
+      }
+    }
   },
   "confirm_undo_custom_filters":{
     "message":"Are you sure you want to remove the $count$ blocks that you have created on $host$?",

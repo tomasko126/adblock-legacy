@@ -1132,8 +1132,14 @@
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "whitelist_youtube_channel":{
-    "message":"Odblokuj tento YouTube kanál",
-    "description":"Text which is displayed on YouTube in popup menu"
+    "message":"Odblokuj $name$ kanál",
+    "description":"Text which is displayed on YouTube in popup menu",
+    "placeholders":{
+      "name":{
+        "content":"$1",
+        "example":"Name of channel"
+      }
+    }
   },
   "confirm_undo_custom_filters":{
     "message":"Naozaj chcete odstrániť $count$ blokovania\/í, ktoré ste vytvorili na $host$?",

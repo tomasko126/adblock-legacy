@@ -923,12 +923,12 @@
     return add_custom_filter(filter);
   }
 
-  // Creates a custom filter entry that whitelists YouTube channel
+  // Creates a custom filter entry that whitelists a YouTube channel
   // Inputs: url:string url of the page
   // Returns: null if successful, otherwise an exception
   create_whitelist_filter_for_youtube_channel = function(url) {
-    if (/channel=/.test(url)) {
-      var yt_channel = url.match(/channel=([^]*)/)[1];
+    if (/ab_channel=/.test(url)) {
+      var yt_channel = url.match(/ab_channel=([^]*)/)[1];
     } else {
       var yt_channel = url.split('/').pop();
     }
@@ -1146,26 +1146,28 @@
     chrome.tabs.query({url: "https://*/*"}, handleEarlyOpenedTabs);
   }
 
-  /* YouTube Channel Whitelist implementation */
+  // YouTube Channel Whitelist
+  // Script injection logic for Safari is done in safari_bg.js
   if (!SAFARI) {
-      function run_yt_channel_whitelist(url) {
-          if (/youtube.com/.test(url) && get_settings().youtube_channel_whitelist)
-              chrome.tabs.executeScript({file:"ytchannel.js"});
+      var runChannelWhitelist = function(tabUrl, tabId) {
+          if (/youtube.com/.test(tabUrl) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).ab_channel) {
+              chrome.tabs.executeScript(tabId, {file: "ytchannel.js", runAt: "document_start"});
+          }
       }
 
-      chrome.tabs.onCreated.addListener(function() {
-          chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-            if (tabs.length === 0)
-                return;
-              run_yt_channel_whitelist(tabs[0].url);
+      chrome.tabs.onCreated.addListener(function(tab) {
+          chrome.tabs.get(tab.id, function(tabs) {
+              if (tabs && tabs.url && tabs.id) {
+                  runChannelWhitelist(tabs.url, tabs.id);
+              }
           });
       });
 
-      chrome.tabs.onUpdated.addListener(function() {
-          chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-            if (tabs.length === 0)
-                return; // For example: only the background devtools or a popup are opened
-            run_yt_channel_whitelist(tabs[0].url);
+      chrome.tabs.onUpdated.addListener(function(tabId) {
+          chrome.tabs.get(tabId, function(tabs) {
+              if (tabs && tabs.url && tabs.id) {
+                  runChannelWhitelist(tabs.url, tabs.id);
+              }
           });
       });
   }
