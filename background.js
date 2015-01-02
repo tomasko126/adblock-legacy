@@ -92,6 +92,7 @@
       show_context_menu_items: true,
       show_advanced_options: false,
       display_stats: true,
+      display_menu_stats: true,
       show_block_counts_help_link: true,
       dropbox_sync: false,
       show_survey: true,
@@ -714,6 +715,7 @@
   //     total_blocked: int - # of ads blocked since install
   //     tab_blocked: int - # of ads blocked on this tab
   //     display_stats: bool - whether block counts are displayed on button
+  //     display_menu_stats: bool - whether block counts are displayed on the popup menu
   //   }
   // Returns: null (asynchronous)
   getCurrentTabInfo = function(callback, secondTime) {
@@ -738,13 +740,15 @@
         var total_blocked = blockCounts.getTotalAdsBlocked();
         var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
         var display_stats = get_settings().display_stats;
+        var display_menu_stats = get_settings().display_menu_stats;
 
         var result = {
           tab: tab,
           disabled_site: disabled_site,
           total_blocked: total_blocked,
           tab_blocked: tab_blocked,
-          display_stats: display_stats
+          display_stats: display_stats,
+          display_menu_stats: display_menu_stats
         };
 
         if (!disabled_site)
@@ -782,11 +786,6 @@
       type = ElementTypes.document;
     var whitelist = _myfilters.blocking.whitelist;
     return whitelist.matches(url, type, parseUri(url).hostname, false);
-  }
-
-  updateDisplayStats = function(isChecked, tabId) {
-    set_setting("display_stats", isChecked);
-    updateBadge(tabId);
   }
 
   if (!SAFARI) {
@@ -1354,6 +1353,7 @@
                   show_context_menu_items: get_settings().show_context_menu_items,
                   show_advanced_options: get_settings().show_advanced_options,
                   display_stats: get_settings().display_stats,
+                  display_menu_stats: get_settings().display_menu_stats,
                   show_block_counts_help_link: get_settings().show_block_counts_help_link,
                   show_survey: get_settings().show_survey
               });
@@ -1441,6 +1441,8 @@
                   set_setting("show_context_menu_items", showcontextmenu);
                   var stats = settingstable.get("display_stats");
                   set_setting("display_stats", stats);
+                  var menu_stats = settingstable.get("display_menu_stats");
+                  set_setting("display_menu_stats", menu_stats);
                   var blockcountslink = settingstable.get("show_block_counts_help_link");
                   set_setting("show_block_counts_help_link", blockcountslink);
                   var showsurvey = settingstable.get("show_survey");

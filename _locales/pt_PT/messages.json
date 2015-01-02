@@ -1127,10 +1127,6 @@
       }
     }
   },
-  "show_on_adblock_button":{
-    "message":"Exibir no botão AdBlock",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
-  },
   "adblockinglist":{
     "message":"Listas de Filtros de Bloqueio de Anúncios",
     "description":"List for subscribed ad blocking fiters"
