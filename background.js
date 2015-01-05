@@ -1109,7 +1109,7 @@
                     openTab("http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/");
                 }
                 if (buttonIndex === 1) {
-                    openTab("options/index.html?tab=1");
+                    storage_set('malware-notification', false);
                 }
             });
             // Pop up a notification to the user.
