@@ -1300,5 +1300,10 @@
   "ad_report_please":{
     "message":"If you're seeing an ad, don't make a bug report, make an <a>ad report<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "blockyoutubestreamingads":{
+    "message":"Enable 'Click to Flash' compatibility mode",
+    "description":"Safari Only, allow AdBlock and the Click to Flash extension to work together better.  Option is on the general tab."
   }
+
 }
