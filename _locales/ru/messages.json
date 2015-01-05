@@ -1159,10 +1159,6 @@
     "message":"Разрешить заносить определенные каналы YouTube в белый список",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
-  "whitelist_youtube_channel":{
-    "message":"Занести этот YouTube канал в белый список",
-    "description":"Text which is displayed on YouTube in popup menu"
-  },
   "confirm_undo_custom_filters":{
     "message":"Вы уверены, что хотите удалить $count$ блокировок, которые Вы создали на $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",

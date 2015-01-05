@@ -1159,6 +1159,14 @@
       }
     }
   },
+  "show_on_adblock_button":{
+    "message":"AdBlock düğmesi üzerinde kaç tane reklamın engellendiğini göster",
+    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_adblock_menu":{
+    "message":"AdBlock menüsünde kaç tane reklamın engellendiğini göster",
+    "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
+  },
   "adblockinglist":{
     "message":"Reklam Engelleme Filtre Listeleri",
     "description":"List for subscribed ad blocking fiters"
@@ -1186,10 +1194,6 @@
   "allow_whitelisting_youtube_channels":{
     "message":"Belirli Youtube kanallarını beyaz listeye eklemeye izin ver",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },
-  "whitelist_youtube_channel":{
-    "message":"Bu Youtube kanalını beyaz listeye ekle",
-    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"$host$ alan adında yaptığınız $count$ engellemeyi kaldırmak istediğinize emin misiniz?",

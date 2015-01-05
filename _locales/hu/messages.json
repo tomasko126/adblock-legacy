@@ -1187,10 +1187,6 @@
     "message":"Adott YouTube csatornák fehér listára tételének engedélyezése",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
-  "whitelist_youtube_channel":{
-    "message":"YouTube csatorna fehérlistára tétele",
-    "description":"Text which is displayed on YouTube in popup menu"
-  },
   "confirm_undo_custom_filters":{
     "message":"Biztos benne, hogy szeretné törölni a(z) $count$ blokkolást, amelyet a(z) $host$ tartományhoz hozott létre?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",

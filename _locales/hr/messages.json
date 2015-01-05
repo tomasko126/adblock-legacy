@@ -1187,10 +1187,6 @@
     "message":"Dopusti postavljanje YouTube kanala na listu dopuštenih",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
-  "whitelist_youtube_channel":{
-    "message":"Dodaj na listu dopuštenih ovaj YouTube kanal",
-    "description":"Text which is displayed on YouTube in popup menu"
-  },
   "confirm_undo_custom_filters":{
     "message":"Jeste li sigurni da želite maknuti $count$ blokiranja koje ste napravili na $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",

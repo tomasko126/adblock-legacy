@@ -1131,16 +1131,6 @@
     "message":"Povoliť odblokovanie reklám na konkrétnych YouTube kanáloch",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
-  "whitelist_youtube_channel":{
-    "message":"Odblokuj $name$ kanál",
-    "description":"Text which is displayed on YouTube in popup menu",
-    "placeholders":{
-      "name":{
-        "content":"$1",
-        "example":"Name of channel"
-      }
-    }
-  },
   "confirm_undo_custom_filters":{
     "message":"Naozaj chcete odstrániť $count$ blokovania\/í, ktoré ste vytvorili na $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",

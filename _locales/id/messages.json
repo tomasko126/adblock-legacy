@@ -1095,10 +1095,6 @@
     "message":"Membolehkan akses tertentu pada saluran Youtube",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
-  "whitelist_youtube_channel":{
-    "message":"Whitelist YouTube ini saluran",
-    "description":"Text which is displayed on YouTube in popup menu"
-  },
   "confirm_undo_custom_filters":{
     "message":"Apakah Anda yakin ingin menghapus blok $count$ yang telah Anda buat pada $host$?",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",
