@@ -237,6 +237,10 @@
     "message":"Add items to the right click menu",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "blockyoutubestreamingads":{
+    "message":"Enable ClickToFlash compatibility mode",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Show debug statements in Console Log (which slows down AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -1300,10 +1304,5 @@
   "ad_report_please":{
     "message":"If you're seeing an ad, don't make a bug report, make an <a>ad report<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
-  },
-  "blockyoutubestreamingads":{
-    "message":"Enable 'Click to Flash' compatibility mode",
-    "description":"Safari Only, allow AdBlock and the Click to Flash extension to work together better.  Option is on the general tab."
   }
-
 }
