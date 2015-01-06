@@ -237,7 +237,7 @@
     "message":"Add items to the right click menu",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
-  "blockyoutubestreamingads":{
+  "disableyoutubestreamingads":{
     "message":"Enable ClickToFlash compatibility mode",
     "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
   },

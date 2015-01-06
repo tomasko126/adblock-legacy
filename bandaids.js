@@ -108,7 +108,7 @@ var before_ready_bandaids = function() {
             return;
         }
         BGcall("get_settings", function(settings) {
-            if (settings && settings.block_youtube_streaming_ads) {
+            if (settings && settings.clicktoflash_compatibility_mode) {
                 return;
             }
             //a regex used to test the ytplayer config / flashvars for youtube ads, references to ads, etc.
