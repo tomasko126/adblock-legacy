@@ -1330,7 +1330,7 @@
               } else if (local === undefined && sync !== "" && sync !== null) {
                   filters = sync;
               } else if (sync !== "" && sync !== null && local) {
-                  filters = local + "\n" + sync;
+                  filters = local + sync;
               } else {
                   filters = local;
               }
@@ -1349,7 +1349,7 @@
               } else if (eXlocal === undefined && eXsync !== "" && eXsync !== null) {
                   eXfilters = eXsync;
               } else if (eXsync !== "" && eXlocal && eXsync !== null) {
-                  eXfilters = eXlocal + "\n" + eXsync;
+                  eXfilters = eXlocal + eXsync;
               } else {
                   eXfilters = eXlocal;
               }
