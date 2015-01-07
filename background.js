@@ -1326,15 +1326,15 @@
               var local = localStorage.custom_filters;
               var filters;
               if (sync === local) {
-                  filters = "";
-              } else if (local === undefined && sync !== "" && sync !== null) {
+                  filters = null;
+              } else if (!local && sync && sync !== "") {
                   filters = sync;
-              } else if (sync !== "" && sync !== null && local) {
+              } else if (local && sync && sync !== "") {
                   filters = local + sync;
               } else {
                   filters = local;
               }
-              if (filters && filters !== "" && filters !== undefined) {
+              if (filters) {
                   filters = filters.replace(/\""/g, "");
                   settingstable.set("custom_filters", filters);
               }
@@ -1345,15 +1345,15 @@
               var eXlocal = localStorage.exclude_filters;
               var eXfilters;
               if (eXsync === eXlocal) {
-                  eXfilters = "";
-              } else if (eXlocal === undefined && eXsync !== "" && eXsync !== null) {
+                  eXfilters = null;
+              } else if (!eXlocal && eXsync && eXsync !== "") {
                   eXfilters = eXsync;
-              } else if (eXsync !== "" && eXlocal && eXsync !== null) {
+              } else if (eXlocal && eXsync && eXsync !== "") {
                   eXfilters = eXlocal + eXsync;
               } else {
                   eXfilters = eXlocal;
               }
-              if (eXfilters && eXfilters !== "" && eXfilters !== undefined) {
+              if (eXfilters) {
                   eXfilters = eXfilters.replace(/\""/g, "");
                   settingstable.set("exclude_filters", eXfilters);
               }
