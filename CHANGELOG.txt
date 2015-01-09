@@ -2,6 +2,9 @@
 
 UNRELEASED:
 
+2.16.1:
+- Fixed a bug in the Safari extension when a windows was closed (#428)
+
 2.16:
 - AdBlock now uses the YouTube API to retreive the channel name when users have the Whitelist a YouTube Channel feature enabled. (#392)
 - The 'Filter syntax tutorial' link on the AdBlock options / Customize tab now checks if the generated URL is valid. (#394)
