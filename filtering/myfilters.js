@@ -285,6 +285,10 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
     }
 
     if (this._subscriptions[id].subscribed) {
+        //if forceFetch, remove the last timestamp of the malware subscription check
+        if (forceFetch) {
+            sessionStorage.removeItem('last_malware_subscriptions_check');
+        }
         //check to see if we need to load the malware domains
         if (!this.getMalwareDomains() || out_of_date(this._subscriptions[id])) {
             this._loadMalwareDomains();
@@ -297,6 +301,7 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
         this._subscriptions[id].expiresAfterHours *= smear;
         chrome.extension.sendRequest({command: "filters_updated"});
     } else {
+        sessionStorage.removeItem('last_malware_subscriptions_check');
         this.blocking.setMalwareDomains(null);
         // If unsubscribed, remove properties
         delete this._subscriptions[id].last_update;
