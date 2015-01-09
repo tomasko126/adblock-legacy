@@ -2,6 +2,9 @@
 
 UNRELEASED:
 
+2.16.2:
+- Added control logic to the getting of the malware filter lists (#430)
+
 2.16.1:
 - Fixed a bug in the Safari extension when a windows was closed (#428)
 
