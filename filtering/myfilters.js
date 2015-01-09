@@ -510,15 +510,30 @@ MyFilters.prototype.customToDefaultId = function(id) {
 //and set the response (list of domains) on the blocking
 //filter set for processing.
 MyFilters.prototype._loadMalwareDomains = function() {
-    // Fetch file with malware-known domains
-    var xhr = new XMLHttpRequest();
-    var that = this;
-    xhr.onload = function(e) {
-       that.blocking.setMalwareDomains(JSON.parse(xhr.responseText));
+    
+    var key = 'last_malware_subscriptions_check';
+    var now = Date.now();
+    var delta = now - (sessionStorage.getItem(key) || now);
+    var delta_hours = delta / HOUR_IN_MS;
+    sessionStorage.setItem(key, now);
+    //throttle the getting the malware
+    //only get if older than 12, or if we've never got them (0)
+    //delta will be zero when browser starts
+    if (delta_hours > 12 || delta_hours === 0) {
+        // Fetch file with malware-known domains
+        var xhr = new XMLHttpRequest();
+        var that = this;
+        xhr.onerror = function(e) {
+            //if the request fail, retry the next time
+            sessionStorage.removeItem(key);
+        }                
+        xhr.onload = function(e) {
+           that.blocking.setMalwareDomains(JSON.parse(xhr.responseText));
+        }
+        //the timestamp is add to the URL to prevent caching by the browser
+        xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime());
+        xhr.send();
     }
-    //the timestamp is add to the URL to prevent caching by the browser
-    xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime());
-    xhr.send();
 }
 
 //Get the current list of malware domains
