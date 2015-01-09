@@ -290,16 +290,9 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
             sessionStorage.removeItem('last_malware_subscriptions_check');
         }
         //check to see if we need to load the malware domains
-        if (!this.getMalwareDomains() || out_of_date(this._subscriptions[id])) {
+        if (!this.getMalwareDomains()) {
             this._loadMalwareDomains();
         }
-        this._subscriptions[id].last_update = Date.now();
-        this._subscriptions[id].last_modified = Date.now();
-        delete this._subscriptions[id].last_update_failed_at;
-        this._subscriptions[id].expiresAfterHours = 120;
-        var smear = Math.random() * 0.4 + 0.8;
-        this._subscriptions[id].expiresAfterHours *= smear;
-        chrome.extension.sendRequest({command: "filters_updated"});
     } else {
         sessionStorage.removeItem('last_malware_subscriptions_check');
         this.blocking.setMalwareDomains(null);
@@ -519,9 +512,8 @@ MyFilters.prototype._loadMalwareDomains = function() {
     var key = 'last_malware_subscriptions_check';
     var now = Date.now();
     var delta = now - (sessionStorage.getItem(key) || now);
-    var delta_hours = delta / HOUR_IN_MS;
-    sessionStorage.setItem(key, now);
-    //throttle the getting the malware
+    var delta_hours = delta / HOUR_IN_MS;    
+    //throttle the getting of the malware file
     //only get if older than 12, or if we've never got them (0)
     //delta will be zero when browser starts
     if (delta_hours > 12 || delta_hours === 0) {
@@ -531,9 +523,18 @@ MyFilters.prototype._loadMalwareDomains = function() {
         xhr.onerror = function(e) {
             //if the request fail, retry the next time
             sessionStorage.removeItem(key);
+            that._subscriptions.malware.last_update_failed_at = Date.now();
         }                
         xhr.onload = function(e) {
            that.blocking.setMalwareDomains(JSON.parse(xhr.responseText));
+           sessionStorage.setItem(key, Date.now());
+           that._subscriptions.malware.last_update = Date.now();
+           that._subscriptions.malware.last_modified = Date.now();
+           delete that._subscriptions.malware.last_update_failed_at;
+           that._subscriptions.malware.expiresAfterHours = 120;
+           var smear = Math.random() * 0.4 + 0.8;
+           that._subscriptions.malware.expiresAfterHours *= smear;
+           chrome.extension.sendRequest({command: "filters_updated"});           
         }
         //the timestamp is add to the URL to prevent caching by the browser
         xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime());
