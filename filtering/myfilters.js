@@ -141,9 +141,6 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
 // When a subscription property changes, this function stores it
 // Inputs: rebuild? boolean, true if the filterset should be rebuilt
 MyFilters.prototype._onSubscriptionChange = function(rebuild) {
-    log("_onSubscriptionChange saving filters list");
-    if (this._subscriptions.malware.text)
-        log("this._subscriptions.malware.text saved");
   storage_set('filter_lists', this._subscriptions);
 
   // The only reasons to (re)build the filter set are
@@ -468,7 +465,7 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
 // Checks if subscriptions have to be updated
 // Inputs: force? (boolean), true if every filter has to be updated
 MyFilters.prototype.checkFilterUpdates = function(force) {
-    log("checkFilterUpdates");
+
   var key = 'last_subscriptions_check';
   var now = Date.now();
   var delta = now - (storage_get(key) || now);
@@ -554,12 +551,9 @@ MyFilters.prototype._loadMalwareDomains = function() {
 //and set the response (list of domains) on the blocking
 //filter set for processing.
 MyFilters.prototype._initializeMalwareDomains = function() {
-    log("_initializeMalwareDomains");
     if (this._subscriptions.malware.text) {
-        log("getting from text");
         this.blocking.setMalwareDomains(this._subscriptions.malware.text);
     } else {
-        log("calling loadmalwaredomains");
         this._loadMalwareDomains();
     }
 }
