@@ -143,7 +143,7 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
 MyFilters.prototype._onSubscriptionChange = function(rebuild) {
     log("_onSubscriptionChange saving filters list");
     if (this._subscriptions.malware.text)
-    log("this._subscriptions.malware.text saved");
+        log("this._subscriptions.malware.text saved");
   storage_set('filter_lists', this._subscriptions);
 
   // The only reasons to (re)build the filter set are
@@ -287,12 +287,11 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
     if (this._subscriptions[id].subscribed) {
         //if forceFetch, set the last update timestamp of the malware to zero, so it's updated now.
         if (forceFetch) {
+            console.log("forceFetch",forceFetch);
             this._subscriptions.malware.last_update = 0;
         }
-        //check to see if we need to load the malware domains
-        if (!this.getMalwareDomains()) {
-            this._loadMalwareDomains();
-        }
+        //load the malware domains
+        this._loadMalwareDomains();
     } else {
         this.blocking.setMalwareDomains(null);
         // If unsubscribed, remove properties
@@ -519,12 +518,16 @@ MyFilters.prototype._loadMalwareDomains = function() {
       return false;
     var hardStop = subscription.expiresAfterHoursHard || 240;
     var smallerExpiry = Math.min((subscription.expiresAfterHours || 24), hardStop);
+    console.log("subscription.last_update", subscription.last_update);
     var millis = Date.now() - (subscription.last_update || 0);
     console.log("outofdate", (millis > HOUR_IN_MS * smallerExpiry), millis, smallerExpiry);
     return (millis > HOUR_IN_MS * smallerExpiry);
   }
 
-    if (out_of_date(this._subscriptions.malware)) {
+    if (!this._subscriptions.malware.text || 
+        !this.getMalwareDomains() || 
+        out_of_date(this._subscriptions.malware)) {
+        //the timestamp is add to the URL to prevent caching by the browser
         var url = "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime();
         // Fetch file with malware-known domains
         var xhr = new XMLHttpRequest();
@@ -546,7 +549,6 @@ MyFilters.prototype._loadMalwareDomains = function() {
            chrome.extension.sendRequest({command: "filters_updated"});
            log("Fetched " + url);
         }
-        //the timestamp is add to the URL to prevent caching by the browser
         xhr.open("GET",  url);
         xhr.send();
     }
