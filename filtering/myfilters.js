@@ -234,13 +234,13 @@ MyFilters.prototype.rebuild = function() {
   handlerBehaviorChanged(); // defined in background
 
   //if the user is subscribed to malware, then get it
-  console.log("this._subscriptions.malware.subscribed", this._subscriptions.malware.subscribed);
-  console.log("this.getMalwareDomains()", this.getMalwareDomains());
+  console.log("rebuild this._subscriptions.malware.subscribed", this._subscriptions.malware.subscribed);
+  console.log("rebuild this.getMalwareDomains()", this.getMalwareDomains());
   if (this._subscriptions &&
       this._subscriptions.malware &&
       this._subscriptions.malware.subscribed &&
       !this.getMalwareDomains()) {
-
+ console.log("rebuild this.getMalwareDomains() - initializeMalwareDomains");
     this._initializeMalwareDomains();
   }
 
@@ -524,8 +524,8 @@ MyFilters.prototype._loadMalwareDomains = function() {
     return (millis > HOUR_IN_MS * smallerExpiry);
   }
 
-    if (!this._subscriptions.malware.text || 
-        !this.getMalwareDomains() || 
+    if (!this._subscriptions.malware.text ||
+        !this.getMalwareDomains() ||
         out_of_date(this._subscriptions.malware)) {
         //the timestamp is add to the URL to prevent caching by the browser
         var url = "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime();
@@ -543,6 +543,8 @@ MyFilters.prototype._loadMalwareDomains = function() {
            that._subscriptions.malware.last_update = Date.now();
            that._subscriptions.malware.last_modified = Date.now();
            delete that._subscriptions.malware.last_update_failed_at;
+           //since the AdBlock Malware Domains.json file is only updated once a day
+           //on the server, expiration is around 24 hours.
            that._subscriptions.malware.expiresAfterHours = 24;
            var smear = Math.random() * 0.4 + 0.8;
            that._subscriptions.malware.expiresAfterHours *= smear;
