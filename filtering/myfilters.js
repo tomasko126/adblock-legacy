@@ -234,13 +234,11 @@ MyFilters.prototype.rebuild = function() {
   handlerBehaviorChanged(); // defined in background
 
   //if the user is subscribed to malware, then get it
-  console.log("rebuild this._subscriptions.malware.subscribed", this._subscriptions.malware.subscribed);
-  console.log("rebuild this.getMalwareDomains()", this.getMalwareDomains());
+
   if (this._subscriptions &&
       this._subscriptions.malware &&
       this._subscriptions.malware.subscribed &&
       !this.getMalwareDomains()) {
- console.log("rebuild this.getMalwareDomains() - initializeMalwareDomains");
     this._initializeMalwareDomains();
   }
 
@@ -287,7 +285,6 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
     if (this._subscriptions[id].subscribed) {
         //if forceFetch, set the last update timestamp of the malware to zero, so it's updated now.
         if (forceFetch) {
-            console.log("forceFetch",forceFetch);
             this._subscriptions.malware.last_update = 0;
         }
         //load the malware domains
@@ -518,9 +515,7 @@ MyFilters.prototype._loadMalwareDomains = function() {
       return false;
     var hardStop = subscription.expiresAfterHoursHard || 240;
     var smallerExpiry = Math.min((subscription.expiresAfterHours || 24), hardStop);
-    console.log("subscription.last_update", subscription.last_update);
     var millis = Date.now() - (subscription.last_update || 0);
-    console.log("outofdate", (millis > HOUR_IN_MS * smallerExpiry), millis, smallerExpiry);
     return (millis > HOUR_IN_MS * smallerExpiry);
   }
 
