@@ -1195,6 +1195,16 @@
     "message":"允许特定YouTube频道的白名单",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "whitelist_youtube_channel":{
+    "message":"将$name$频道添加到白名单",
+    "description":"Entry in the AdBlock menu, when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
+    "placeholders":{
+      "name":{
+        "content":"$1",
+        "example":"Name of channel"
+      }
+    }
+  },
   "confirm_undo_custom_filters":{
     "message":"您确定要移除您在$host$上创建的$count$个屏蔽规则？",
     "description":"Confirmation message when user wants to undo their custom blocks for a domain. $count$ will be a number between 1 and 999,999,999, $host$ will be the domain where the custom blocks will be reset.",
