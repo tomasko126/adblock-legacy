@@ -1159,10 +1159,6 @@
       }
     }
   },
-  "show_on_adblock_button":{
-    "message":"Exibir no botão do AdBlock",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
-  },
   "adblockinglist":{
     "message":"Listas de Filtro de Bloqueio de Propaganda",
     "description":"List for subscribed ad blocking fiters"
@@ -1190,10 +1186,6 @@
   "allow_whitelisting_youtube_channels":{
     "message":"Permitir anúncios de canais específicos do YouTube",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },
-  "whitelist_youtube_channel":{
-    "message":"Colocar este canal do YouTube na lista branca",
-    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"Tem certeza que deseja remover os $count$ bloqueios que criou em $host$?",

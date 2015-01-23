@@ -1099,10 +1099,6 @@
       }
     }
   },
-  "show_on_adblock_button":{
-    "message":"وتظهر على الزر AdBlock",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
-  },
   "adblockinglist":{
     "message":"قوائم عوامل تصفية حظر الإعلان",
     "description":"List for subscribed ad blocking fiters"
@@ -1130,10 +1126,6 @@
   "allow_whitelisting_youtube_channels":{
     "message":"السماح لقنوات يوتيوب معينة",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },
-  "whitelist_youtube_channel":{
-    "message":"السماح لهذة القناة بالأعلانات",
-    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"هل أنت متأكد من أنك تريد إزالة $count$ المنع الذي قمت بإنشائه في $host$؟",

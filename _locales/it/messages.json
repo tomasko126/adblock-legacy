@@ -1160,8 +1160,12 @@
     }
   },
   "show_on_adblock_button":{
-    "message":"Mostra sul bottone di AdBlock",
+    "message":"Visualizza il numero di annunci bloccati sul pulsante di AdBlock",
     "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
+  },
+  "show_on_adblock_menu":{
+    "message":"Visualizza il numero di annunci bloccati nel menu di AdBlock",
+    "description":"Label for checkbox letting user choose whether the AdBlock popup menu should show the number of ads blocked"
   },
   "adblockinglist":{
     "message":"Liste Filtri",
@@ -1192,8 +1196,14 @@
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "whitelist_youtube_channel":{
-    "message":"Metti in whitelist questo canale YouTube",
-    "description":"Text which is displayed on YouTube in popup menu"
+    "message":"Canale $name$ in Whitelist",
+    "description":"Entry in the AdBlock menu, when a user is browsing YouTube and has enabled the YouTube channel whitelisting option",
+    "placeholders":{
+      "name":{
+        "content":"$1",
+        "example":"Name of channel"
+      }
+    }
   },
   "confirm_undo_custom_filters":{
     "message":"Sei sicuro di voler rimuovere i $count$ blocchi che hai creato su $host$?",

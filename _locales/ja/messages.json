@@ -1103,10 +1103,6 @@
       }
     }
   },
-  "show_on_adblock_button":{
-    "message":"AdBlock ボタンを表示",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
-  },
   "adblockinglist":{
     "message":"広告ブロックフィルターのリスト",
     "description":"List for subscribed ad blocking fiters"
@@ -1134,10 +1130,6 @@
   "allow_whitelisting_youtube_channels":{
     "message":"特定の YouTube チャンネルのホワイトリスト化を許可する",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },
-  "whitelist_youtube_channel":{
-    "message":"この YouTube チャンネルをホワイトリストに入れる",
-    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"$host$ に関して作成した  $count$ 個のブロックを本当に削除しますか？",

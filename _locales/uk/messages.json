@@ -1099,10 +1099,6 @@
       }
     }
   },
-  "show_on_adblock_button":{
-    "message":"Показувати лічильник на кнопці AdBlock",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
-  },
   "adblockinglist":{
     "message":"Списки фільтрів реклами",
     "description":"List for subscribed ad blocking fiters"
@@ -1130,10 +1126,6 @@
   "allow_whitelisting_youtube_channels":{
     "message":"Дозволити рекламу на вподобаних вами каналах YouTube",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },
-  "whitelist_youtube_channel":{
-    "message":"Дозволити рекламу на цьому каналі YouTube",
-    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"Ви впевнені, що хочете видалити блокування, створені на $host$? Кількість створених блокувань: $count$",

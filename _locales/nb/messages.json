@@ -1103,10 +1103,6 @@
       }
     }
   },
-  "show_on_adblock_button":{
-    "message":"Vis på AdBlock-knappen",
-    "description":"Label for checkbox letting user choose whether the toolbar button should show a badge with the number of ads blocked"
-  },
   "adblockinglist":{
     "message":"Liste over annonsefiltre",
     "description":"List for subscribed ad blocking fiters"
@@ -1134,10 +1130,6 @@
   "allow_whitelisting_youtube_channels":{
     "message":"Ikke blokker annonser på bestemte YouTube-kanaler",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },
-  "whitelist_youtube_channel":{
-    "message":"Ikke blokker annonser på denne YouTube-kanalen",
-    "description":"Text which is displayed on YouTube in popup menu"
   },
   "confirm_undo_custom_filters":{
     "message":"Er du sikker på at du vil ta bort $count$ blokkeringene som du har fjernet på $host$?",
