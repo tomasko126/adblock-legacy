@@ -491,11 +491,11 @@
   }, 
   "malwarenotificationlearnmore":{
     "message":"Learn more about Malware",
-    "description":"Message to the user on where to learn more about malware on our website."
+    "description":"Button text, and when clicked it will take users to a link about malware on our website."
   },    
   "malwarenotificationdisablethesemessages":{
-    "message":"Disable these notifications.",
-    "description":"Message to the user on how to disable the messages."
+    "message":"Disable these notifications",
+    "description":"Button text on the malware notification message that disable future notifications."
   },       
   "malwarecheck":{
     "message":"Malware check",
