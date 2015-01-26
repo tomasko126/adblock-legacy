@@ -490,7 +490,7 @@
     "description":"Title of the AdBlock message to the user"
   }, 
   "malwarenotificationmessage":{
-    "message":"AdBlock has detected Malware.  Your computer maybe infected with Malware.",
+    "message":"AdBlock has detected Malware.  Your computer may be infected with Malware.",
     "description":"Message to the user when a Malware request has been blocked."
   }, 
   "malwarenotificationlearnmore":{

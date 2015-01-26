@@ -82,7 +82,7 @@ CheckboxForFilterList.prototype = {
             text(translate("unsubscribedlabel"));
           delete FilterListUtil.cached_subscriptions[id].subscribed;
         }
-        //if the checkbox clicked is the malware
+        //if the checkbox that was clicked is the malware checkbox, then
         //add a checkbox to for the user to indicate if they wish to be notified of blocked malware
         if (id && id === "malware" && checked) {
             addMalwareNotificationDiv();

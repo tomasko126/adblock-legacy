@@ -1147,16 +1147,7 @@
             } else {
                 sessionStorage.setItem("malwareNotification" + tab.id, true);
             }
-            chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
-                if (buttonIndex === 0) {
-                    openTab("http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/");
-                }
-                if (buttonIndex === 1) {
-                    storage_set('malware-notification', false);
-                }
-            });
-            // Pop up a notification to the user.
-            chrome.notifications.create((Math.floor(Math.random() * 3000)).toString(), {
+            var notificationOptions = {
                 title: translate('malwarenotificationtitle'),
                 iconUrl: chrome.extension.getURL('img/icon48.png'),
                 type: 'basic',
@@ -1166,8 +1157,24 @@
                            iconUrl:chrome.extension.getURL('img/icon24.png')},
                           {title:translate('malwarenotificationdisablethesemessages'),
                            iconUrl:chrome.extension.getURL('img/icon24.png')}]
-            }, function(notificationId) {
-                //do nothing in callback
+            }
+            //OPERA currently doesn't support buttons on notifications, so remove them from the options.
+            if (OPERA) {
+                delete notificationOptions.buttons;
+            } else {
+            //But, Chrome does, so add button click handlers to process the button click events
+                chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
+                    if (buttonIndex === 0) {
+                        openTab("http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/");
+                    }
+                    if (buttonIndex === 1) {
+                        storage_set('malware-notification', false);
+                    }
+                });
+            }
+            // Pop up a notification to the user.
+            chrome.notifications.create((Math.floor(Math.random() * 3000)).toString(), notificationOptions, function(id) {
+                    //do nothing in callback
             });
         });//end of chrome.tabs.query
     }//end of if
