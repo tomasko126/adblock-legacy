@@ -185,18 +185,6 @@
       }
     }
   },
-  "tabgeneral":{
-    "message":"Γενικά",
-    "description":"A tab on the options page"
-  },
-  "tabfilterlists":{
-    "message":"Λίστες φίλτρων",
-    "description":"A tab on the options page"
-  },
-  "tabcustomize":{
-    "message":"Προσαρμογή",
-    "description":"A tab on the options page"
-  },
   "generaloptions":{
     "message":"Γενικές ρυθμίσεις",
     "description":"Title of first tab page"
