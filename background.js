@@ -257,7 +257,7 @@
           delete fd[tabId];
           fd.record(tabId, 0, details.url);
           fd[tabId].blockCount = 0;
-          console.log("\n-------", fd.get(tabId, 0).domain, ": loaded in tab", tabId, "--------\n\n");
+          log("\n-------", fd.get(tabId, 0).domain, ": loaded in tab", tabId, "--------\n\n");
           return true;
         }
 
