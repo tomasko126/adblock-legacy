@@ -483,7 +483,7 @@
   },
   "malwarenotificationcheckboxmessage":{
     "message":"Should AdBlock notify you when it detects malware?",
-    "description":"Message to the user when subscribing to the Malware Filter list on the Options Filter tab"
+    "description":"Message to the user when subscribing to the Malware Filter list on the Options Filter tab."
   },
   "malwarenotificationtitle":{
     "message":"AdBlock",
@@ -491,15 +491,15 @@
   }, 
   "malwarenotificationmessage":{
     "message":"AdBlock has detected Malware.  Your computer may be infected with Malware.",
-    "description":"Message to the user when a Malware request has been blocked."
+    "description":"Message to the user when a Malware request has been blocked.  Message should be under 90 characters"
   }, 
   "malwarenotificationlearnmore":{
     "message":"Learn more about Malware",
-    "description":"Button text, and when clicked it will take users to a link about malware on our website."
+    "description":"Button text, and when clicked it will take users to a link about malware on our website. Message should be under 45 characters"
   },    
   "malwarenotificationdisablethesemessages":{
     "message":"Disable these notifications",
-    "description":"Button text on the malware notification message that disable future notifications."
+    "description":"Button text on the malware notification message that disable future notifications.  Message should be under 45 characters"
   },       
   "malwarecheck":{
     "message":"Malware check",
