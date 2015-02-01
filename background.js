@@ -1471,6 +1471,14 @@
           });
       }
 
+      if (get_settings().dropbox_sync) {
+          chrome.storage.local.get(function(info) {
+              if (info.hasOwnProperty("dropbox_js_default_credentials")) {
+                  dropboxlogin();
+              }
+          });
+      }
+
       // Reset db_client, if it got in an error state
       if (!SAFARI) {
           chrome.runtime.onMessage.addListener(
@@ -1491,4 +1499,3 @@
   }
 
   log("\n===FINISHED LOADING===\n\n");
-
