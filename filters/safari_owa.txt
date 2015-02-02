@@ -1,0 +1,9 @@
+! Safari AdBlock OWA entries
+! Title: Safari-OWA
+! Last modified: 02 Feb 2015 23:00 UTC
+! Expires: 7 days (update frequency)
+! Please report any unblocked adverts or problems
+! in the forums (https://support.getadblock.com/)
+
+! add entries for the public OWA site
+@@||outlook.office365.com/owa/$document
