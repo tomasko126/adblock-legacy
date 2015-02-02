@@ -405,6 +405,10 @@
     "message":"Turkish",
     "description":"A filter list"
   },
+  "filtersafari_owa":{
+    "message":"Outlook Web Access (OWA) Compatbility list (Safari Only)",
+    "description":"A filter list for Safari users to enable Outlook Web Access to work correctly."
+  },  
   "blacklistclickmessage":{
     "message":"Right click an ad on a page to block it -- or block it here manually.",
     "description":"Message at the top of the blacklist options tab"
