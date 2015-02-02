@@ -217,7 +217,7 @@ FilterListUtil.getFilterListType = function(filter_list) {
     filter_list_type = "adblock_filter_list";
   } else if (filter_list.id === "easyprivacy" || filter_list.id === "antisocial"
              || filter_list.id === "malware" || filter_list.id === "annoyances"
-             || filter_list.id === "warning_removal") {
+             || filter_list.id === "warning_removal" || filter_list.id === "safari_owa") {
     filter_list_type = "other_filter_list";
   } else if (filter_list.user_submitted) {
     filter_list_type = "custom_filter_list";
@@ -230,6 +230,10 @@ FilterListUtil.prepareSubscriptions = function(subs) {
   FilterListUtil.cached_subscriptions = subs;
   for(var id in subs) {
     var entry = subs[id];
+    if (!SAFARI & entry.safari_only) {
+        //if we're in CHROME or OPERA, then don't add SAFARI specific filter lists
+        continue;    
+    }
     entry.label = translate("filter" + id);
     entry.id = id;
     var filter_list_type = FilterListUtil.getFilterListType(entry);

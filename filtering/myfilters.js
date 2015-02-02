@@ -10,6 +10,11 @@ var HOUR_IN_MS = 1000 * 60 * 60;
 function MyFilters() {
   this._subscriptions = storage_get('filter_lists');
   this._official_options = this._make_subscription_options();
+  //temp code, remove after a few releases... adds the Safari only setting to a new filter list
+  if (this._subscriptions &&
+      this._subscriptions.safari_owa) {      
+    this._subscriptions.safari_owa.safari_only = true;
+  }
 }
 
 // Update _subscriptions and _official_options in case there are changes.
@@ -618,6 +623,10 @@ MyFilters.prototype._make_subscription_options = function() {
   return {
     "adblock_custom": { // AdBlock custom filters
       url: "https://data.getadblock.com/filters/adblock_custom.txt",
+    },
+    "safari_owa": { // Whitelists Safari OWA sites
+      url: "https://data.getadblock.com/filters/safari_owa.txt",
+      safari_only: true,
     },
     "easylist": { // EasyList
       url: "https://easylist-downloads.adblockplus.org/easylist.txt"
