@@ -406,7 +406,7 @@
     "description":"A filter list"
   },
   "filtersafari_owa":{
-    "message":"Outlook Web Access (OWA) Compatbility list (Safari Only)",
+    "message":"Outlook Web Access (OWA) Compatbility list",
     "description":"A filter list for Safari users to enable Outlook Web Access to work correctly."
   },  
   "blacklistclickmessage":{
