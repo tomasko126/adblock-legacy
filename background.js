@@ -804,13 +804,22 @@
 
       var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url) && !/chrome\/newtab/.test(main_frame.url);
 
-      if(display && (main_frame && isBlockable) && !adblock_is_paused()){
-        badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
-        if (badge_text === "0")
-          badge_text = ""; // Only show the user when we've done something useful
+      if (display && (main_frame && isBlockable) && !adblock_is_paused()) {
+        
+          var iconCallback = function() {
+              if (chrome.runtime.lastError) {
+                  return;
+              }
+              chrome.browserAction.setBadgeText({text: badge_text, tabId: tabId});
+              chrome.browserAction.setBadgeBackgroundColor({ color: "#555" });
+          };        
+          badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
+          if (badge_text === "0")
+              badge_text = ""; // Only show the user when we've done something useful
+          var iconPaths = {'19': 'img/icon19.png', '38': 'img/icon38.png'};
+          //see for more details - https://code.google.com/p/chromium/issues/detail?id=410868#c8
+          chrome.browserAction.setIcon({ tabId: tabId, path: iconPaths }, iconCallback);
       }
-      chrome.browserAction.setBadgeText({text: badge_text, tabId: tabId});
-      chrome.browserAction.setBadgeBackgroundColor({ color: "#555" });
     };
 
     // Set the button image and context menus according to the URL
