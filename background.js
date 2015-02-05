@@ -253,7 +253,6 @@
         if (tabId === -1) {
            return false;
         }
-
         if (details.type === 'main_frame') { // New tab
           delete fd[tabId];
           fd.record(tabId, 0, details.url);
@@ -390,6 +389,25 @@
     chrome.webNavigation.onTabReplaced.addListener(function(details) {
         frameData.onTabClosedHandler(details.replacedTabId);
     });
+
+    chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
+        if (details &&
+            details.hasOwnProperty("frameId") &&
+            details.hasOwnProperty("tabId") &&
+            details.hasOwnProperty("url") &&
+            details.hasOwnProperty("transitionType") &&
+            details.transitionType === "link") {
+            //on some single page sites that update the URL using the History API pushState(),
+            //but they don't actually load a new page, we need to get notified when this happens
+            //and track these updates in the frameData object.
+            var tabData = frameData.get(details.tabId, details.frameId);
+            if (tabData &&
+                tabData.url !== details.url) {
+                details.type = 'main_frame';
+                frameData.track(details);
+            }
+        }
+    })
   }
 
   debug_report_elemhide = function(selector, matches, sender) {
