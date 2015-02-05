@@ -523,7 +523,7 @@ MyFilters.prototype._loadMalwareDomains = function() {
         !this.getMalwareDomains() ||
         out_of_date(this._subscriptions.malware)) {
         //the timestamp is add to the URL to prevent caching by the browser
-        var url = "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime();
+        var url = this._subscriptions.malware.url + "?timestamp=" + new Date().getTime();
         // Fetch file with malware-known domains
         var xhr = new XMLHttpRequest();
         var that = this;
@@ -711,7 +711,7 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "https://easylist-downloads.adblockplus.org/fanboy-social.txt",
     },
     "malware": { // Malware protection
-      url: "",
+      url: "https://data.getadblock.com/filters/domains.json",
     },
     "annoyances": { // Fanboy's Annoyances
       url: "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt",
