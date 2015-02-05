@@ -392,7 +392,7 @@
     });
   }
 
-  debug_report_elemhide = function(selector, matches, sender) {
+  var debug_report_elemhide = function(selector, matches, sender, matchedSelectors, hostname) {
     if (!window.frameData)
       return;
     if (SAFARI) {
@@ -410,6 +410,37 @@
     }
   }
 
+  var update_style_cache = function(matchedSelectors, hostname) {
+    console.log("matchedSelectors", matchedSelectors);
+    console.log("hostname", hostname);
+    if (matchedSelectors &&
+        hostname) {
+        function removeDuplicates(myArray) {
+            var seen = {};
+            var out = [];
+            var len = myArray.length;
+            var j = 0;
+            for(var i = 0; i < len; i++) {
+                 var item = myArray[i];
+                 if(seen[item] !== 1) {
+                       seen[item] = 1;
+                       out[j++] = item;
+                 }
+            }
+            return out;
+        }
+        var styleCache = storage_get('styleCache') || {};
+        if (Object.keys(styleCache).length > 1000)
+            return;
+        if (styleCache[hostname]) {
+            styleCache[hostname].concat(matchedSelectors);
+        } else {
+            styleCache[hostname] = matchedSelectors;
+        }
+        styleCache[hostname] = removeDuplicates(styleCache[hostname]);
+        storage_set('styleCache', styleCache);
+    }
+  }
   // UNWHITELISTING
 
   // Look for a custom filter that would whitelist options.url,
@@ -960,7 +991,13 @@
     };
 
     if (hiding) {
-      result.selectors = _myfilters.hiding.filtersFor(options.domain);
+      var styleCache = storage_get('styleCache') || {};
+      if (styleCache[options.domain]) {
+        console.log("style cache hit", options.domain, styleCache[options.domain]);
+        result.selectors = styleCache[options.domain];
+      } else {
+        result.selectors = _myfilters.hiding.filtersFor(options.domain);
+      }
     }
     return result;
   };

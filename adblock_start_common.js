@@ -116,18 +116,25 @@ function block_list_via_css(selectors) {
   fill_in_css_chunk();
 }
 
-function debug_print_selector_matches(selectors) {
-  selectors.
+function debug_print_selector_matches(data) {
+  var matchedSelectors = [];
+  data.selectors.
     filter(function(selector) { return document.querySelector(selector); }).
     forEach(function(selector) {
+      matchedSelectors.push(selector);
       var matches = "";
       var elems = document.querySelectorAll(selector);
       for (var i=0; i<elems.length; i++) {
         var el = elems[i];
         matches += "        " + el.nodeName + "#" + el.id + "." + el.className + "\n";
       }
-      BGcall("debug_report_elemhide", selector, matches);
+      if (data && data.settings && data.settings.debug_logging) {
+        BGcall("debug_report_elemhide", selector, matches);
+      }
     });
+    if (data && data.settings && data.show_advanced_options) {
+        BGcall("update_style_cache", matchedSelectors, document.location.hostname);
+    }
 }
 
 function handleABPLinkClicks() {
@@ -201,8 +208,8 @@ function adblock_begin(inputs) {
     onReady(function() {
       // TODO: ResourceList could pull html.innerText from page instead: we
       // could axe this (and Safari's .selectors calculation in debug mode)
-      if (data && data.settings && data.settings.debug_logging)
-        debug_print_selector_matches(data.selectors || []);
+      if (data && data.settings && (data.settings.debug_logging || data.show_advanced_options))
+        debug_print_selector_matches(data || []);
       // Chrome doesn't load bandaids.js unless the site needs a bandaid.
       if (typeof run_bandaids === "function") {
         run_bandaids("new");
