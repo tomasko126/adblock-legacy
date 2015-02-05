@@ -502,19 +502,22 @@ MyFilters.prototype.customToDefaultId = function(id) {
 //Retreive the list of malware domains from our site.
 //and set the response (list of domains) on the blocking
 //filter set for processing.
+//Retreive the list of malware domains from our site.
+//and set the response (list of domains) on the blocking
+//filter set for processing.
 MyFilters.prototype._loadMalwareDomains = function() {
 
-  function out_of_date(subscription) {
-    // After a failure, wait at least a day to refetch (overridden below if
-    // it has no .text)
-    var failed_at = subscription.last_update_failed_at || 0;
-    if (Date.now() - failed_at < HOUR_IN_MS * 24)
-      return false;
-    var hardStop = subscription.expiresAfterHoursHard || 240;
-    var smallerExpiry = Math.min((subscription.expiresAfterHours || 24), hardStop);
-    var millis = Date.now() - (subscription.last_update || 0);
-    return (millis > HOUR_IN_MS * smallerExpiry);
-  }
+    function out_of_date(subscription) {
+        // After a failure, wait at least a day to refetch (overridden below if
+        // it has no .text)
+        var failed_at = subscription.last_update_failed_at || 0;
+        if (Date.now() - failed_at < HOUR_IN_MS * 24)
+          return false;
+        var hardStop = subscription.expiresAfterHoursHard || 240;
+        var smallerExpiry = Math.min((subscription.expiresAfterHours || 24), hardStop);
+        var millis = Date.now() - (subscription.last_update || 0);
+        return (millis > HOUR_IN_MS * smallerExpiry);
+    }
 
     if (!this._subscriptions.malware.text ||
         !this.getMalwareDomains() ||
