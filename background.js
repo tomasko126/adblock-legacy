@@ -1445,15 +1445,23 @@
               var local = localStorage.custom_filters;
               var filters;
               if (sync === local) {
-                  filters = "";
-              } else if (local === undefined && sync !== "") {
+                  filters = null;
+              } else if (!local && sync && sync !== "") {
                   filters = sync;
-              } else if (sync !== "" && local) {
-                  filters = local + sync;
+              } else if (local && sync && sync !== "") {
+                  if (local.charAt(local.length - 1) === '"') {
+                    //remove the ending "
+                    local = local.substring(0, local.length - 1);
+                  }
+                  if (sync.charAt(0) === '"') {
+                    //remove the begining "
+                    sync = sync.substring(1);
+                  }
+                  filters = local + "\\" + "n" + sync;
               } else {
                   filters = local;
               }
-              if (filters && filters !== "" && filters !== undefined) {
+              if (filters) {
                   filters = filters.replace(/\""/g, "");
                   settingstable.set("custom_filters", filters);
               }
@@ -1464,15 +1472,23 @@
               var eXlocal = localStorage.exclude_filters;
               var eXfilters;
               if (eXsync === eXlocal) {
-                  eXfilters = "";
-              } else if (eXlocal === undefined && eXsync !== "") {
+                  eXfilters = null;
+              } else if (!eXlocal && eXsync && eXsync !== "") {
                   eXfilters = eXsync;
-              } else if (eXsync !== "" && eXlocal) {
-                  eXfilters = eXlocal + "\n" + eXsync;
+              } else if (eXlocal && eXsync && eXsync !== "") {
+                  if (eXlocal.charAt(eXlocal.length - 1) === '"') {
+                    //remove the ending "
+                    eXlocal = eXlocal.substring(0, eXlocal.length - 1);
+                  }
+                  if (eXsync.charAt(0) === '"') {
+                    //remove the begining "
+                    eXsync = eXsync.substring(1);
+                  }
+                  eXfilters = eXlocal + "\\" + "n" + eXsync;
               } else {
                   eXfilters = eXlocal;
               }
-              if (eXfilters && eXfilters !== "" && eXfilters !== undefined) {
+              if (eXfilters) {
                   eXfilters = eXfilters.replace(/\""/g, "");
                   settingstable.set("exclude_filters", eXfilters);
               }
