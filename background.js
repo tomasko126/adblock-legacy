@@ -296,35 +296,32 @@
         delete frameData[tabId];
       }
     };
-    
-    var normalizeRequestType = function(details) {               
-        // normalize type because of issue with Chrome 38+
+
+    var normalizeRequestType = function(details) {
+        // normalize type, because of issue with Chrome 38+
         var type = details.type;
         if (type !== 'other') {
-            return;
+            return type;
         }
         var url = parseUri(details.url);
         if (url && url.pathname) {
             var pos = url.pathname.lastIndexOf('.');
             if (pos === -1) {
-                return;
+                return type;
             }
         }
         var ext = url.pathname.slice(pos) + '.';
         if ('.eot.ttf.otf.svg.woff.woff2.'.indexOf(ext) !== -1) {
-            details.type = 'font';
-            return;
+            return 'font';
         }
         // Still need this because often behind-the-scene requests are wrongly
         // categorized as 'other'
         if ('.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
-            details.type = 'image';
-            return;
+            return 'image';
         }
         // https://code.google.com/p/chromium/issues/detail?id=410382
         if (type === 'other') {
-            details.type = 'object';
-            return;
+            return 'object';
         }
     };
 
@@ -332,14 +329,12 @@
     function onBeforeRequestHandler(details) {
       if (adblock_is_paused())
         return { cancel: false };
-        
-      normalizeRequestType(details);
 
       if (!frameData.track(details))
         return { cancel: false };
 
       var tabId = details.tabId;
-      var reqType = details.type;
+      var reqType = normalizeRequestType({url: details.url, type: details.type});
 
       if (frameData.get(tabId, 0).whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted tab", tabId, details.url.substring(0, 100));
