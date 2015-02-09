@@ -237,6 +237,10 @@
     "message":"Aggiungi AdBlock al menù contestuale (click destro)",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "disableyoutubestreamingads":{
+    "message":"Attiva la compatibilità con ClickToFlash",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Mostra messaggi di debug nella Console dei Log (rallenta AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"

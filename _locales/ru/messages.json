@@ -237,6 +237,10 @@
     "message":"Добавить элементы в меню правой кнопки мыши",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "disableyoutubestreamingads":{
+    "message":"Включить режим совместимости ClickToFlash",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Показывать сообщения отладки в Журнале Консоли (замедляет AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"

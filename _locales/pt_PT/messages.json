@@ -237,6 +237,10 @@
     "message":"Adicionar itens ao menu do botão direito",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "disableyoutubestreamingads":{
+    "message":"Ativar o modo de compatibilidade ClickToFlash",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Mostar as operações na Consola de Logs (torna o AdBlock lento)",
     "description":"Checkbox on the 'General' tab of the Options page"

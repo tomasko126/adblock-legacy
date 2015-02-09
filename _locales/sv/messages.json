@@ -237,6 +237,10 @@
     "message":"Lägg till AdBlock i högerklickmenyn",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "disableyoutubestreamingads":{
+    "message":"Aktivera ClickToFlash kompatibilitetsläge",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Visa felsökningsinformation i loggen (vilket gör AdBlock långsammare)",
     "description":"Checkbox on the 'General' tab of the Options page"

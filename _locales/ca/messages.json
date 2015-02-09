@@ -237,6 +237,10 @@
     "message":"Afegir ítems al menú de clic amb botó dret",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "disableyoutubestreamingads":{
+    "message":"Activeu el mode de compatibilitat amb ClickToFlash",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Mostrar les dades de depuració al registre de la consola (això alentirà l'AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"

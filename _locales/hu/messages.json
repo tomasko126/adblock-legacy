@@ -237,6 +237,10 @@
     "message":"Elemek hozzáadása a jobb klikk menühöz",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "disableyoutubestreamingads":{
+    "message":"ClickToFlash kompatibilitási üzemmód engedélyezése",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Hibakeresési kijelentések megjelenítése a Konzolnaplóban (ami lelassítja az AdBlock-ot)",
     "description":"Checkbox on the 'General' tab of the Options page"

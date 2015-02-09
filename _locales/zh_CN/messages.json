@@ -237,6 +237,10 @@
     "message":"在右键菜单中加入选项",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "disableyoutubestreamingads":{
+    "message":"启用ClickToFlash兼容模式",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"在控制台日志中显示调试信息（这将会降低AdBlock的效能）",
     "description":"Checkbox on the 'General' tab of the Options page"
