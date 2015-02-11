@@ -41,7 +41,7 @@ STATS = (function() {
 
     return storage_get("userid");
   })();
-  
+
   var pingAfterInterval = function(millisInterval) {
     storage_set("next_ping_time", Date.now() + millisInterval);
     var delay = millisTillNextPing();
@@ -52,6 +52,17 @@ STATS = (function() {
 
   // Tell the server we exist.
   var pingNow = function() {
+
+    var getInstallDate = function() {
+        var block_stats = localStorage.getItem("blockage_stats");
+        if (block_stats) {
+            var blockStats = JSON.parse(block_stats);
+            if (blockStats && blockStats.start) {
+                return blockStats.start;
+            }
+        }
+    }
+
     var data = {
       cmd: "ping",
       u: userId,
@@ -65,30 +76,33 @@ STATS = (function() {
     if (flavor === "E" && blockCounts) {
         data["b"] = blockCounts.get().total;
     }
-
+    var installDate = getInstallDate();
+    if (installDate) {
+       data["i"] = installDate;
+    }
     $.ajax({
       type: 'POST',
-      url: stats_url, 
+      url: stats_url,
       data: data,
       success: maybeSurvey, // TODO: Remove when we no longer do a/b tests
       error: function(e) {
         console.log("Ping returned error: ", e.status);
-      }, 
+      },
     });
   };
-  
+
   var shouldShowSurvey = function(survey_data) {
     var data = {
       cmd: "survey",
       u: userId,
       sid: survey_data.survey_id
     };
-    
+
     function handle_should_survey(responseData) {
       if (responseData.length ===  0)
         return;
       log('Pinging got some data', responseData);
-  
+
       try {
         var data = JSON.parse(responseData);
         if (data.should_survey === 'true') {
@@ -99,10 +113,10 @@ STATS = (function() {
         return;
       }
     }
-    
+
     $.post(stats_url, data, handle_should_survey);
   }
-  
+
   var survey_data = null;
   function one_time_opener() {
     if (SAFARI) {
@@ -132,7 +146,7 @@ STATS = (function() {
       open_the_tab();
     }
   }
-  
+
   // TODO: Remove when we no longer do a/b tests
   var maybeSurvey = function(responseData, textStatus, jqXHR) {
     // check to see if the extension should change its ping interval
@@ -142,12 +156,12 @@ STATS = (function() {
             millisPing = null;
         if (millisPing === -1)
             millisPing = null;
-        
+
         if (millisPing !== null) {
             pingAfterInterval(millisPing);
         }
     }
-    
+
     if (responseData.length ===  0)
       return;
 
@@ -155,7 +169,7 @@ STATS = (function() {
       return;
 
     log('Pinging got some data', responseData);
-    
+
     try {
       var url_data = JSON.parse(responseData);
       if (!url_data.open_this_url.match(/^\/survey\//))
