@@ -53,16 +53,6 @@ STATS = (function() {
   // Tell the server we exist.
   var pingNow = function() {
 
-    var getInstallDate = function() {
-        var block_stats = localStorage.getItem("blockage_stats");
-        if (block_stats) {
-            var blockStats = JSON.parse(block_stats);
-            if (blockStats && blockStats.start) {
-                return blockStats.start;
-            }
-        }
-    }
-
     var data = {
       cmd: "ping",
       u: userId,
@@ -76,10 +66,15 @@ STATS = (function() {
     if (flavor === "E" && blockCounts) {
         data["b"] = blockCounts.get().total;
     }
-    var installDate = getInstallDate();
-    if (installDate) {
-       data["i"] = installDate;
+    //if available, add the install Date to ping data
+    var block_stats = localStorage.getItem("blockage_stats");
+    if (block_stats) {
+        var blockStats = JSON.parse(block_stats);
+        if (blockStats && blockStats.start) {
+            data["i"] = blockStats.start;
+        }
     }
+
     $.ajax({
       type: 'POST',
       url: stats_url,
@@ -252,7 +247,9 @@ STATS = (function() {
     browserVersion: browserVersion,
     os: os,
     osVersion: osVersion,
-
+blah: function() {
+  pingNow();
+},
     // Ping the server when necessary.
     startPinging: function() {
       function sleepThenPing() {
