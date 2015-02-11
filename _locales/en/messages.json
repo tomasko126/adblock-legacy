@@ -485,10 +485,6 @@
     "message":"Should AdBlock notify you when it detects malware?",
     "description":"Message to the user when subscribing to the Malware Filter list on the Options Filter tab."
   },
-  "malwarenotificationtitle":{
-    "message":"AdBlock",
-    "description":"Title of the AdBlock message to the user"
-  }, 
   "malwarenotificationmessage":{
     "message":"AdBlock has detected Malware.  Your computer may be infected with Malware.",
     "description":"Message to the user when a Malware request has been blocked.  Message should be under 90 characters"
