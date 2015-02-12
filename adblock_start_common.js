@@ -135,11 +135,11 @@ function debug_print_selector_matches(data) {
     });
     if (data && data.settings && data.settings.show_advanced_options) {
         BGcall("update_style_cache", matchedSelectors, document.location.hostname);
-        myWW = new Worker(chrome.runtime.getURL('worker.js'));
-        myWW.onmessage = function(event) {
-            console.log('Message from worker: ' + event.data);
-        };
-        myWW.postMessage({command: "call", data:data});       
+//        myWW = new Worker(chrome.runtime.getURL('worker.js'));
+//        myWW.onmessage = function(event) {
+//            console.log('Message from worker: ' + event.data);
+//        };
+//        myWW.postMessage({command: "call", data:data});       
     }
 }
 
