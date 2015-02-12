@@ -52,6 +52,7 @@
       "js": [
         "port.js",
         "functions.js",
+        "patch-worker.js",
         "filtering/filteroptions.js",
         "adblock_start_common.js",
         "adblock_start_chrome.js"
@@ -90,6 +91,7 @@
     "jquery/css/images/ui-icons_d8e7f3_256x240.png",
     "jquery/css/jquery-ui.custom.css",
     "jquery/css/override-page.css",
-    "chrome_oauth_receiver.html"
+    "chrome_oauth_receiver.html",
+    "worker.js"
   ]
 }
