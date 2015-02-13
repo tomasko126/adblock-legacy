@@ -96,6 +96,7 @@
       show_block_counts_help_link: true,
       dropbox_sync: false,
       show_survey: true,
+      do_picreplacement: false,
     };
     var settings = storage_get('settings') || {};
     this._data = $.extend(defaults, settings);
@@ -346,7 +347,8 @@
         // receive this or not.  Because the #anchor of a page can change without navigating
         // the frame, ignore the anchor when matching.
         var frameUrl = frameData.get(tabId, requestingFrameId).url.replace(/#.*$/, "");
-        var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url:details.url, elType: elType };
+        var picreplacement_enabled = picreplacement_checker.enabled(frameUrl);
+        var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url:details.url, elType: elType, picreplacement_enabled: picreplacement_enabled };
         chrome.tabs.sendRequest(tabId, data);
       }
 
@@ -875,6 +877,12 @@
 
       function setBrowserButton(info) {
         var tabId = info.tab.id;
+//        var icons = {
+//          enabled: "img/icon19.png",
+//          disabled: "img/icon19-grayscale.png",
+//          whitelisted: "img/icon19-whitelisted.png"
+//        };
+//        icons = picreplacement_checker.get_icons(icons, info.tab.url);        
         chrome.browserAction.setBadgeText({text: "", tabId: tabId});
         if (adblock_is_paused()) {
           chrome.browserAction.setIcon({path:{'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"}, tabId: tabId});

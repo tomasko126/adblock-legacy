@@ -105,3 +105,25 @@ adblock_begin({
       block_list_via_css(data.selectors);
   }
 });
+
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+    if (request.command !== "purge-elements"
+        || request.frameUrl !== document.location.href)
+      return;
+    
+    var ads = document.querySelectorAll(request.selector);
+    
+    for (var i = 0; i < ads.length; i++)
+      picinjection.augmentBlockedElIfRightType(ads[i]);
+    
+    
+    sendResponse(true);
+});
+
+document.addEventListener("beforeload", function(event) {
+
+  if (picinjection._inHiddenSection(event.target)) {
+
+    picinjection._augmentHiddenSectionContaining(event.target);
+  }
+}, true);
