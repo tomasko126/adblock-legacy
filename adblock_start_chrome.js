@@ -10,10 +10,11 @@ var elementPurger = {
   // Remove elements on the page of |request.elType| that request
   // |request.url|.  Will try again if none are found unless |lastTry|.
   _purgeElements: function(request, lastTry) {
+    console.log("request", request);
     var elType = request.elType;
     var url = request.url;
 
-    log("[DEBUG]", "Purging:", lastTry, elType, url);
+    console.log("[DEBUG]", "Purging:", lastTry, elType, url);
 
     var tags = {};
     tags[ElementTypes.image] = { IMG:1 };
@@ -28,15 +29,17 @@ var elementPurger = {
         var selector = tag + '[' + attr + src.op + '"' + src.text + '"]';
 
         var results = document.querySelectorAll(selector);
-        log("[DEBUG]", "  ", results.length, "results for selector:", selector);
+        console.log("[DEBUG]", "  ", results.length, "results for selector:", selector);
         if (results.length) {
           for (var j=0; j < results.length; j++) {
+            if (request.picreplacement_enabled) {
+              picreplacement.augmentIfAppropriate({el: results[j], elType: elType, blocked: true});
+            }            
             destroyElement(results[j], elType);
           }
           var externalId = "kodkhcagmjcidjgljmbfiaconnbnohho";
           request.selector = selector;
-          chrome.extension.sendRequest(externalId, request);
-          
+          chrome.extension.sendRequest(externalId, request); 
           return; // I doubt the same URL was loaded via 2 different src attrs.
         }
       }
@@ -71,8 +74,8 @@ var elementPurger = {
       var page_dirs = page_parts.pathname.split('/');
       var url_dirs = url_parts.pathname.split('/');
       var i = 0;
-      while (page_dirs[i] === url_dirs[i] 
-             && i < page_dirs.length - 1 
+      while (page_dirs[i] === url_dirs[i]
+             && i < page_dirs.length - 1
              && i < url_dirs.length - 1) {
         i++; // i is set to first differing position
       }
@@ -105,25 +108,3 @@ adblock_begin({
       block_list_via_css(data.selectors);
   }
 });
-
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    if (request.command !== "purge-elements"
-        || request.frameUrl !== document.location.href)
-      return;
-    
-    var ads = document.querySelectorAll(request.selector);
-    
-    for (var i = 0; i < ads.length; i++)
-      picinjection.augmentBlockedElIfRightType(ads[i]);
-    
-    
-    sendResponse(true);
-});
-
-document.addEventListener("beforeload", function(event) {
-
-  if (picinjection._inHiddenSection(event.target)) {
-
-    picinjection._augmentHiddenSectionContaining(event.target);
-  }
-}, true);

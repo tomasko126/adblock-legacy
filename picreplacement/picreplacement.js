@@ -153,9 +153,11 @@ _targetSize: function(el) {
 // Returns placement details to replace |el|, or null
 // if we do not have enough info to replace |el|.
 _placementFor: function(el) {
+    
   var t = this._targetSize(el);
   var pics = this._picdata[t.type];
   var pic = pics[Math.floor(Math.random() * pics.length)];
+  console.log("_placementFor", t, pics, pic);
 
   // If we only have one dimension, we may choose to use the picture's ratio;
   // but don't go over 180k pixels (so e.g. 1000x__ doesn't insert a 1000x1000
@@ -170,11 +172,14 @@ _placementFor: function(el) {
     var parentX = this._parentDim(el, "width");
     t.x = (parentX ? Math.min(newX, parentX) : newX);
   }
-  if (!t.x || !t.y || t.x < 40 || t.y < 40)
+  if (!t.x || !t.y || t.x < 40 || t.y < 40) {
+    console.log("returning null", t);
     return null; // unknown dims or too small to bother
+  }
 
   var result = this._fit(pic, t);
   result.url = chrome.extension.getURL("picreplacement/img/" + pic.filename);
+  console.log("returning result", result);
   return result;
 },
 

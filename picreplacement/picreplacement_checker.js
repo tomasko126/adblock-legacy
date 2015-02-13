@@ -9,7 +9,7 @@ picreplacement_checker = {
       // Honor their choice. If there is none, default to "on" on day 1 only.
       var stored_settings = storage_get("settings") || {};
       var choice = stored_settings.do_picreplacement;
-      var default_setting = (new Date() < new Date(2012, 3, 2) ? true : false);
+      var default_setting = (new Date() < new Date(2015, 3, 2) ? true : false);
       return (choice === undefined ? default_setting : choice);
     }
     catch (ex) {
@@ -22,7 +22,8 @@ picreplacement_checker = {
     // Thanks :)  And drop me an email at adblockforchrome at gmail if you'd
     // like to say hi! - Michael
     var today = new Date();
-    return today < new Date(2015, 1, 11) || today >= new Date(2012, 1, 13);
+    //TODO - update dates
+    return today < new Date(2015, 1, 2) || today >= new Date(2015, 1, 20);
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))
