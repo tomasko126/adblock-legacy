@@ -1,112 +1,137 @@
 ﻿var notificationMin = 27;
 var notificationMax = 200;
-function showoverlay(a, b) {
+var iframeURLsrc;
+var iframeRandom;
+function showoverlay() {
     var mainBody = document.body;
     if (mainBody) {
-        var d = "", e = h = t = l = 0, f = !1;
-        d = g_iframerand = Math.floor(1E8 * Math.random());
-        e = getWindowWidth(window);
-        h = notificationMin;
-        l = 0;
-        t = document.body.scrollTop;
-        var g = document.createElement("div");
-        g.id = "ABtopspacer" + g_iframerand;
-        g.style.height = notificationMin + "px";
-        c.insertBefore(g, c.firstChild);
+        var d = "";
+        var f = !1;
+        iframeRandom = Math.floor(1E8 * Math.random());
+        var winWidth = getWindowWidth(window);
+        var t = document.body.scrollTop;
+        var spacerElement = document.createElement("div");
+        spacerElement.id = "ABtopspacer" + iframeRandom;
+        spacerElement.style.height = notificationMin + "px";
+        mainBody.insertBefore(spacerElement, mainBody.firstChild);
         window.addEventListener("resize", overlayresize, !1);
-        g = document.createElement("style");
-        g.type = "text/css";
-        g.styleSheet ? g.styleSheet.cssText = "@media print{.ABframeoverlay{display:none}}" : g.appendChild(document.createTextNode("@media print{.ABframeoverlay{display:none}}"));
-        document.getElementsByTagName("head")[0].appendChild(g);
-        g = document.createElement("div");
-        g.id = "ABframeoverlay" + d;
-        g.style.top = "0px";
-        g.style.left = "0px";
-        g.style.height = "1px";
-        g.style.width = "100%";
-        g.style.position = "fixed";
-        g.style.backgroundColor = "black";
-        g.style.zIndex = "1000000099";
-        g.style.visibility = "visible";
-        g.className = "ABframeoverlay";
-        if (m = window.getComputedStyle(c, null)) {
-            var k = parseInt(m.width) + parseInt(m.marginLeft) + parseInt(m.marginRight), j = lp_gettld_url(punycode.URLToASCII(document.location.href));
-            "ing.nl" == j && (!f && k > e) && (e = k);
-            if ("relative" == m.position) {
-                var f = document.body.getBoundingClientRect(), q = 0;
-                "ing.nl" != j && k < e && f.left > parseInt(m["margin-left"]) + parseInt(m["padding-left"]) + parseInt(m["border-left-width"]) ? q = (e - k) / 2 : 0 < parseInt(m["margin-left"]) && (q = parseInt(m["margin-left"]));
-                g.style.marginLeft = -1 * q + "px"
-            }
-        }
-        c.appendChild(g);
-        c = document.createElement("iframe");
-        c.id = "ABiframe" + d;
-        //TODO
-        c.src = urlprefix + "overlay.html?" + b;
-        c.style.height = h + "px";
-        c.style.width = e + "px";
-        c.style.border = "0px";
-        c.scrolling = "no";
-        g.appendChild(c);
+        var tempElement = document.createElement("style");
+        tempElement.type = "text/css";
+        tempElement.styleSheet ? tempElement.styleSheet.cssText = "@media print{.ABframeoverlay{display:none}}" : tempElement.appendChild(document.createTextNode("@media print{.ABframeoverlay{display:none}}"));
+        document.getElementsByTagName("head")[0].appendChild(tempElement);
+        tempElement = document.createElement("div");
+        tempElement.id = "ABframeoverlay" + iframeRandom;
+        tempElement.style.top = "0px";
+        tempElement.style.left = "0px";
+        tempElement.style.height = notificationMin + "px";
+        tempElement.style.width = "100%";
+        tempElement.style.position = "fixed";
+        //tempElement.style.backgroundColor = "black";
+        tempElement.style.zIndex = "1000000099";
+        tempElement.style.visibility = "visible";
+        tempElement.className = "ABframeoverlay";
+//        if (m = window.getComputedStyleForElement(mainBody, null)) {
+//            var k = parseInt(m.width) + parseInt(m.marginLeft) + parseInt(m.marginRight);
+//            if ("relative" == m.position) {
+//                tempElement.style.marginLeft = -1 * q + "px"
+//            }
+//        }
+        spacerElement.appendChild(tempElement);
+        var abFrame = document.createElement("iframe");
+        abFrame.id = "ABiframe" + iframeRandom;
+        //TODO - fix for prod
+        //abFrame.src ='https://getadblock.com/' + iframeURLsrc;
+        abFrame.src = 'http://localhost:8000/survey/' + iframeURLsrc;
+        abFrame.style.height = notificationMin + "px";
+        abFrame.style.width = winWidth + "px";
+        abFrame.style.border = "0px";
+        abFrame.scrolling = "no";
+        tempElement.appendChild(abFrame);
     }
 }
 function slidedownoverlay(a) {
-    var b = document.getElementById("ABiframe" + g_iframerand);
-    if (b) {
-        var c = parseInt(b.style.height);
-        c < g_notificationmax && (b.style.height = c + (10 < g_notificationmax - c ? 10 : g_notificationmax - c) + "px", setTimeout(function() {
+    var abFrame = document.getElementById("ABiframe" + iframeRandom);
+    if (abFrame) {
+        var frameHeight = parseInt(abFrame.style.height);
+        frameHeight < notificationMax && (abFrame.style.height = frameHeight + (10 < notificationMax - frameHeight ? 10 : notificationMax - frameHeight) + "px", setTimeout(function() {
             slidedownoverlay(a)
         }, 5))
     }
 }
 function slideupoverlay(a) {
-    var b = document.getElementById("ABiframe" + g_iframerand);
-    if (b) {
-        var c = parseInt(b.style.height);
-        c > notificationMin && (b.style.height = c - (10 < c - notificationMin ? 10 : c - notificationMin) + "px", setTimeout(function() {
+    var abFrame = document.getElementById("ABiframe" + iframeRandom);
+    if (abFrame) {
+        var frameHeight = parseInt(abFrame.style.height);
+        frameHeight > notificationMin && (abFrame.style.height = frameHeight - (10 < c - notificationMin ? 10 : frameHeight - notificationMin) + "px", setTimeout(function() {
             slideupoverlay(a)
         }, 5))
     }
 }
 function hideoverlay() {
-    document.getElementById("ABframeoverlay" + g_iframerand) && (document.body.removeChild(document.getElementById("ABframeoverlay" + g_iframerand)), document.body.removeChild(document.getElementById("lptopspacer" + g_iframerand)), window.removeEventListener("resize", overlayresize, !1))
+    document.getElementById("ABframeoverlay" + iframeRandom) && (document.body.removeChild(document.getElementById("ABframeoverlay" + iframeRandom)), document.body.removeChild(document.getElementById("ABtopspacer" + iframeRandom)), window.removeEventListener("resize", overlayresize, !1))
 }
 function overlayresize() {
-    if (document.getElementById("ABframeoverlay" + g_iframerand)) {
+    if (document.getElementById("ABframeoverlay" + iframeRandom)) {
         var a = getWindowWidth(window);
-        document.getElementById("ABframeoverlay" + g_iframerand).style.width = a + "px";
-        document.getElementById("ABiframe" + g_iframerand).style.width = a + "px"
+        document.getElementById("ABframeoverlay" + iframeRandom).style.width = a + "px";
+        document.getElementById("ABiframe" + iframeRandom).style.width = a + "px"
     }
 }
-function getWindowWidth(a) {
-    if (!a)
+function getWindowWidth(aWindow) {
+    if (!aWindow) {
         return 0;
-    var b = a.innerWidth, c = a.document;
-    if (!c)
+    }
+    var calculatedWidth = aWindow.innerWidth;
+    var aDoc = aWindow.document;
+    if (!aDoc) {
         return 0;
-    a = null;
-    "undefined" != typeof c.body ? a = c.body : c.getElementById("main") && (a = c.getElementById("main"));
-    var d = c.getElementById("_lpinvis");
-    null == d && (d = c.createElement("div"), d.id.left = "_lpinvis", d.style.left = "0px", d.style.right = "0px", d.style.top = "0px", d.style.height = "0px", d.style.visibility = "hidden", a.appendChild(d));
-    var e = getComputedStyle("undefined" != typeof window && window ? window : c.defaultView, a);
-    if (!e)
+    }
+    aWindow = null;
+    if ("undefined" != typeof aDoc.body) {
+        aWindow = aDoc.body
+    } else if (aDoc.getElementById("main")) {
+        aWindow = aDoc.getElementById("main");
+    }
+    var tempDiv = aDoc.getElementById("_invis");
+    if (null == tempDiv) {
+        tempDiv = aDoc.createElement("div");
+        tempDiv.id = "_invis";
+        tempDiv.style.left = "0px";
+        tempDiv.style.right = "0px";
+        tempDiv.style.top = "0px";
+        tempDiv.style.height = "0px";
+        tempDiv.style.visibility = "hidden";
+        aWindow.appendChild(tempDiv);
+    }
+    var theStyle = getComputedStyleForElement("undefined" != typeof window && window ? window : aDoc.defaultView, aWindow);
+    if (!theStyle) {
         return 0;
-    c = parseInt(e.marginLeft);
-    e = parseInt(e.marginRight);
-    0 < d.offsetWidth && (b = 0 < c || 0 < e ? d.offsetWidth + e + c : d.offsetWidth);
-    a.removeChild(d);
-    return b
+    }
+    var marginLeft = parseInt(theStyle.marginLeft);
+    var marginRight = parseInt(theStyle.marginRight);
+    0 < tempDiv.offsetWidth && (calculatedWidth = 0 < marginLeft || 0 < marginRight ? tempDiv.offsetWidth + marginRight + marginLeft : tempDiv.offsetWidth);
+    aWindow.removeChild(tempDiv);
+    return calculatedWidth;
 }
-function getComputedStyle(a, b) {
-    if (!b)
+
+function getComputedStyleForElement(parentEl, el) {
+    if (!el) {
         return null;
-    if ("undefined" != typeof a.getComputedStyle)
-        return a.getComputedStyle(b);
-    else
-        b.currentStyle;
+    }
+    if ("undefined" != typeof parentEl.getComputedStyle) {
+        return parentEl.getComputedStyle(el);
+    } else {
+        el.currentStyle;
+    }
 }
+
 (function() {
-    //get URL
-    //create DIV & frame
-    
+    //get URL to open
+     BGcall('getNotificationURL', function(url) {
+        if (!url) {
+            return;
+        }
+        iframeURLsrc = url;
+        showoverlay();
+     });
 })();

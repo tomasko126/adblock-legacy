@@ -1198,25 +1198,39 @@
     }//end of if
   }//end of createMalwareNotification function
 
+  var notificationURL;
   var createOverlay = function(url) {
     if (!url) {
         return;
     }
-    var notificationURL = url;
+    notificationURL = url;
     if (!SAFARI) {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            if (tabs.length === 0) {
-                return; // For example: only the background devtools or a popup are opened
+        chrome.windows.getCurrent(function(current) {
+            // Check if normal window
+            if (!current.incognito) {
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                    if (tabs.length === 0) {
+                        console.log("no tab found");
+                        return; // For example: only the background devtools or a popup are opened
+                    }
+                    var tab = tabs[0];
+                    var httpsRE = /^https:/;
+                    var httpRE = /^http:/;
+                    if (!httpRE.test(tab.url) || httpsRE.test(tab.url)) {
+                        console.log("not a HTTP tab");
+                        return;
+                    }
+                    console.log("tab info", tab);
+                    chrome.tabs.executeScript(tab.id, {file: "notificationoverlay.js"});
+                    chrome.tabs.executeScript(tab.id, {file: "functions.js"});
+                });
             }
-            var tab = tabs[0];
-            var httpsRE = /^https:/;
-            if (httpsRE.test(tab.url)) {
-                return false;
-            }
-
-            chrome.tabs.executeScript(tab.id, {file: "notificationoverlay.js"});
-       });
-    }
+        });
+     }
+  }
+  
+  var getNotificationURL = function() {
+    return notificationURL;
   }
 
   if (!SAFARI) {
