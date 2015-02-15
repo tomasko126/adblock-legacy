@@ -1198,6 +1198,27 @@
     }//end of if
   }//end of createMalwareNotification function
 
+  var createOverlay = function(url) {
+    if (!url) {
+        return;
+    }
+    var notificationURL = url;
+    if (!SAFARI) {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            if (tabs.length === 0) {
+                return; // For example: only the background devtools or a popup are opened
+            }
+            var tab = tabs[0];
+            var httpsRE = /^https:/;
+            if (httpsRE.test(tab.url)) {
+                return false;
+            }
+
+            chrome.tabs.executeScript(tab.id, {file: "notificationoverlay.js"});
+       });
+    }
+  }
+
   if (!SAFARI) {
     // Chrome blocking code.  Near the end so synchronous request handler
     // doesn't hang Chrome while AdBlock initializes.
