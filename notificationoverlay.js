@@ -54,7 +54,7 @@ function slidedownoverlay(a) {
     if (abFrame) {
         var frameHeight = parseInt(abFrame.style.height);
         frameHeight < notificationMax && (abFrame.style.height = frameHeight + (10 < notificationMax - frameHeight ? 10 : notificationMax - frameHeight) + "px", setTimeout(function() {
-            slidedownoverlay(a)
+            slidedownoverlay(a);
         }, 5))
     }
 }
@@ -63,7 +63,7 @@ function slideupoverlay(a) {
     if (abFrame) {
         var frameHeight = parseInt(abFrame.style.height);
         frameHeight > notificationMin && (abFrame.style.height = frameHeight - (10 < c - notificationMin ? 10 : frameHeight - notificationMin) + "px", setTimeout(function() {
-            slideupoverlay(a)
+            slideupoverlay(a);
         }, 5))
     }
 }
@@ -124,14 +124,25 @@ function getComputedStyleForElement(parentEl, el) {
         el.currentStyle;
     }
 }
-
 (function() {
-    //get URL to open
-     BGcall('getNotificationURL', function(url) {
-        if (!url) {
-            return;
-        }
-        iframeURLsrc = url;
-        showoverlay();
-     });
+    //if ('undefined' === (typeof SAFARI)) {
+    if (window.top === window) {
+        console.log("adding listener");
+        chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+            console.log("msg rec'd", request);
+            if (request.command === 'showoverlay' &&
+                request.overlayURL) {
+                iframeURLsrc = request.overlayURL;
+                showoverlay();            
+            }
+        });
+    }
+//    if (SAFARI && 
+//        (window.top === window) &&
+//        !document.hidden) {
+//        safari.self.addEventListener("message", function(event) {
+//        if (event.name === "showoverlay")
+//            top_open_whitelist_ui({});
+//        }  
+//    }
 })();

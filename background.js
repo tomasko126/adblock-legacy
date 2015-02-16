@@ -1198,39 +1198,35 @@
     }//end of if
   }//end of createMalwareNotification function
 
-  var notificationURL;
   var createOverlay = function(url) {
     if (!url) {
         return;
     }
-    notificationURL = url;
     if (!SAFARI) {
-        chrome.windows.getCurrent(function(current) {
-            // Check if normal window
-            if (!current.incognito) {
-                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                    if (tabs.length === 0) {
-                        console.log("no tab found");
-                        return; // For example: only the background devtools or a popup are opened
+        chrome.windows.getAll({populate : true}, function (windowList) {
+            var httpsRE = /^https:/;
+            var httpRE = /^http:/;
+            for(var inx=0; inx < windowList.length; inx++) {
+                if (!windowList[inx].incognito &&
+                    windowList[inx].type === "normal" &&
+                    windowList[inx].tabs &&
+                    windowList[inx].tabs.length) {
+                    var tabArray = windowList[inx].tabs;
+                    for(var jnx=0; jnx < tabArray.length; jnx++) {
+                        var theTab = tabArray[jnx];
+                        if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
+                            console.log("theTab.url", theTab.url);
+                            var data = { command: "showoverlay", overlayURL: url };
+                            chrome.tabs.sendRequest(theTab.id, data);                            
+                            //chrome.tabs.executeScript(theTab.id, {file: "notificationoverlay.js"});
+                            //chrome.tabs.executeScript(theTab.id, {file: "functions.js"});
+                            return;
+                        }
                     }
-                    var tab = tabs[0];
-                    var httpsRE = /^https:/;
-                    var httpRE = /^http:/;
-                    if (!httpRE.test(tab.url) || httpsRE.test(tab.url)) {
-                        console.log("not a HTTP tab");
-                        return;
-                    }
-                    console.log("tab info", tab);
-                    chrome.tabs.executeScript(tab.id, {file: "notificationoverlay.js"});
-                    chrome.tabs.executeScript(tab.id, {file: "functions.js"});
-                });
+                }
             }
         });
      }
-  }
-  
-  var getNotificationURL = function() {
-    return notificationURL;
   }
 
   if (!SAFARI) {
