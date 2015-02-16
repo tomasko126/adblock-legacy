@@ -131,7 +131,8 @@ function getComputedStyleForElement(parentEl, el) {
         chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             console.log("msg rec'd", request);
             if (request.command === 'showoverlay' &&
-                request.overlayURL) {
+                request.overlayURL &&
+                request.tabURL === document.location.href) {
                 iframeURLsrc = request.overlayURL;
                 showoverlay();            
             }

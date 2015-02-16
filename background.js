@@ -1202,10 +1202,10 @@
     if (!url) {
         return;
     }
+    var httpsRE = /^https:/;
+    var httpRE = /^http:/;    
     if (!SAFARI) {
         chrome.windows.getAll({populate : true}, function (windowList) {
-            var httpsRE = /^https:/;
-            var httpRE = /^http:/;
             for(var inx=0; inx < windowList.length; inx++) {
                 if (!windowList[inx].incognito &&
                     windowList[inx].type === "normal" &&
@@ -1216,7 +1216,7 @@
                         var theTab = tabList[jnx];
                         if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
                             console.log("theTab.url", theTab.url);
-                            var data = { command: "showoverlay", overlayURL: url };
+                            var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url};
                             chrome.tabs.sendRequest(theTab.id, data);                            
                             //chrome.tabs.executeScript(theTab.id, {file: "notificationoverlay.js"});
                             //chrome.tabs.executeScript(theTab.id, {file: "functions.js"});
@@ -1239,8 +1239,8 @@
                     var theTab = tabList[jnx];
                     if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
                         console.log("theTab.url", theTab.url);
-                        var data = { command: "showoverlay", overlayURL: url };
-                        chrome.tabs.sendRequest(theTab.id, data);                            
+                        var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url };
+                        chrome.extension.sendRequest(theTab.id, data);                            
                         //chrome.tabs.executeScript(theTab.id, {file: "notificationoverlay.js"});
                         //chrome.tabs.executeScript(theTab.id, {file: "functions.js"});
                         return;
