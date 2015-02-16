@@ -1211,9 +1211,9 @@
                     windowList[inx].type === "normal" &&
                     windowList[inx].tabs &&
                     windowList[inx].tabs.length) {
-                    var tabArray = windowList[inx].tabs;
-                    for(var jnx=0; jnx < tabArray.length; jnx++) {
-                        var theTab = tabArray[jnx];
+                    var tabList = windowList[inx].tabs;
+                    for(var jnx=0; jnx < tabList.length; jnx++) {
+                        var theTab = tabList[jnx];
                         if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
                             console.log("theTab.url", theTab.url);
                             var data = { command: "showoverlay", overlayURL: url };
@@ -1226,8 +1226,30 @@
                 }
             }
         });
-     }
-  }
+     } else if (SAFARI &&
+                safari &&
+                safari.application &&
+                safari.application.browserWindows) {
+        var windowList = safari.application.browserWindows;
+        for(var inx=0; inx < windowList.length; inx++) {
+            if (windowList[inx].tabs &&
+                windowList[inx].tabs.length) {
+                var tabList = windowList[inx].tabs;
+                for(var jnx=0; jnx < tabList.length; jnx++) {
+                    var theTab = tabList[jnx];
+                    if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
+                        console.log("theTab.url", theTab.url);
+                        var data = { command: "showoverlay", overlayURL: url };
+                        chrome.tabs.sendRequest(theTab.id, data);                            
+                        //chrome.tabs.executeScript(theTab.id, {file: "notificationoverlay.js"});
+                        //chrome.tabs.executeScript(theTab.id, {file: "functions.js"});
+                        return;
+                    }
+                }
+            }
+        }        
+    }
+  }//end of createOverlay()
 
   if (!SAFARI) {
     // Chrome blocking code.  Near the end so synchronous request handler
