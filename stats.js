@@ -91,10 +91,10 @@ STATS = (function() {
   
       try {
         var data = JSON.parse(responseData);
-        if (data && data.tabSurvey && data.should_survey === 'true') {
+        if (data && data.overlaySurvey === 'true' && (!data.overlaySurvey || data.overlaySurvey !== 'true')) {
           openTab('https://getadblock.com/' + survey_data.open_this_url, true);
         }
-        if (data && data.overlaySurvey && data.should_survey === 'true') {
+        if (data && data.overlaySurvey === 'true' && data.should_survey === 'true') {
           createOverlay(survey_data.open_this_url);
         }        
       } catch (e) {
