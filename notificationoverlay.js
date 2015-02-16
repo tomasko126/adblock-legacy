@@ -29,9 +29,7 @@ function showoverlay() {
         //create the iframe element, add it the DIV created above.
         var abFrame = document.createElement("iframe");
         abFrame.id = "ABiframe" + iframeRandom;
-        //TODO - fix for prod
-        //abFrame.src ='https://getadblock.com/' + iframeURLsrc;
-        abFrame.src = 'http://localhost:8000/survey/' + iframeURLsrc;
+        abFrame.src ='https://getadblock.com/' + iframeURLsrc;
         abFrame.style.height = notificationMin + "px";
         abFrame.style.width = winWidth + "px";
         abFrame.style.border = "0px";
