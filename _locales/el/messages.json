@@ -237,6 +237,10 @@
     "message":"Προσθήκη στοιχείων στο μενού του δεξιού κλικ",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "disableyoutubestreamingads":{
+    "message":"Ενεργοποίηση της λειτουργίας συμβατότητας του ClickToFlash",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Εμφάνιση στοιχείων αποσφαλμάτωσης στο αρχείο κονσόλας (καθυστερεί το AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
