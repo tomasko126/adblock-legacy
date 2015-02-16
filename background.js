@@ -1190,7 +1190,7 @@
       });
 
       chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-        if (tab.active && changeInfo.status === "loading") {
+        if (changeInfo.status === "loading") {
           chrome.tabs.get(tabId, function(tabs) {
             if (tabs && tabs.url && tabs.id) {
               runChannelWhitelist(tabs.url, tabs.id);
