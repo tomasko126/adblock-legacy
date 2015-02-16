@@ -1204,6 +1204,21 @@
     }
     var httpsRE = /^https:/;
     var httpRE = /^http:/;
+    var processTabList = function(tabList) {
+        if (!tabList) {
+            return;
+        }
+        for(var jnx=0; jnx < tabList.length; jnx++) {
+            var theTab = tabList[jnx];
+            if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
+                var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url};
+                chrome.tabs.sendRequest(theTab.id, data);
+                return true;
+            }
+        }
+        return false;        
+    };
+    
     if (!SAFARI) {
         chrome.windows.getAll({populate : true}, function (windowList) {
             for(var inx=0; inx < windowList.length; inx++) {
@@ -1211,14 +1226,9 @@
                     windowList[inx].type === "normal" &&
                     windowList[inx].tabs &&
                     windowList[inx].tabs.length) {
-                    var tabList = windowList[inx].tabs;
-                    for(var jnx=0; jnx < tabList.length; jnx++) {
-                        var theTab = tabList[jnx];
-                        if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
-                            var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url};
-                            chrome.tabs.sendRequest(theTab.id, data);
-                            return;
-                        }
+                    var results = processTabList(windowList[inx].tabs);
+                    if (results) {
+                        return;
                     }
                 }
             }
@@ -1231,22 +1241,16 @@
         for(var inx=0; inx < windowList.length; inx++) {
             if (windowList[inx].tabs &&
                 windowList[inx].tabs.length) {
-                var tabList = windowList[inx].tabs;
-                for(var jnx=0; jnx < tabList.length; jnx++) {
-                    var theTab = tabList[jnx];
-                    if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
-                        var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url };
-                        chrome.extension.sendRequest(data);
-                        return;
-                    }
+                var results = processTabList(windowList[inx].tabs);
+                if (results) {
+                    return;
                 }
             }
         }
     }
+    
     //if we get here, we didn't find an appropriate tab, retry in 5 mins.
-    console.log("no tab found, retry");
     setTimeout(function () { 
-        console.log("no tab found, retry 2");
         createOverlay(url); 
     }, 5 * 60 * 1000);    
   }//end of createOverlay()

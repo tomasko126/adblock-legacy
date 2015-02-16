@@ -40,27 +40,6 @@ function showoverlay() {
     }
 }
 
-//function slidedownoverlay(a) {
-//    var abFrame = document.getElementById("ABiframe" + iframeRandom);
-//    if (abFrame) {
-//        var frameHeight = parseInt(abFrame.style.height);
-//        frameHeight < notificationMax && (abFrame.style.height = frameHeight + (10 < notificationMax - frameHeight ? 10 : notificationMax - frameHeight) + "px", setTimeout(function() {
-//            slidedownoverlay(a);
-//        }, 5))
-//    }
-//}
-//function slideupoverlay(a) {
-//    var abFrame = document.getElementById("ABiframe" + iframeRandom);
-//    if (abFrame) {
-//        var frameHeight = parseInt(abFrame.style.height);
-//        frameHeight > notificationMin && (abFrame.style.height = frameHeight - (10 < c - notificationMin ? 10 : frameHeight - notificationMin) + "px", setTimeout(function() {
-//            slideupoverlay(a);
-//        }, 5))
-//    }
-//}
-//function hideoverlay() {
-//    document.getElementById("ABframeoverlay" + iframeRandom) && (document.body.removeChild(document.getElementById("ABframeoverlay" + iframeRandom)), document.body.removeChild(document.getElementById("ABtopspacer" + iframeRandom)), window.removeEventListener("resize", overlayresize, !1))
-//}
 function overlayresize() {
     if (document.getElementById("ABframeoverlay" + iframeRandom)) {
         var a = getWindowWidth(window);
