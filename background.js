@@ -1212,7 +1212,11 @@
             var theTab = tabList[jnx];
             if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
                 var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url};
-                chrome.tabs.sendRequest(theTab.id, data);
+                if (SAFARI) {
+                    chrome.extension.sendRequest(data);
+                } else {
+                    chrome.tabs.sendRequest(theTab.id, data);
+                }
                 return true;
             }
         }
