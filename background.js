@@ -1203,7 +1203,7 @@
         return;
     }
     var httpsRE = /^https:/;
-    var httpRE = /^http:/;    
+    var httpRE = /^http:/;
     if (!SAFARI) {
         chrome.windows.getAll({populate : true}, function (windowList) {
             for(var inx=0; inx < windowList.length; inx++) {
@@ -1215,11 +1215,8 @@
                     for(var jnx=0; jnx < tabList.length; jnx++) {
                         var theTab = tabList[jnx];
                         if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
-                            console.log("theTab.url", theTab.url);
                             var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url};
-                            chrome.tabs.sendRequest(theTab.id, data);                            
-                            //chrome.tabs.executeScript(theTab.id, {file: "notificationoverlay.js"});
-                            //chrome.tabs.executeScript(theTab.id, {file: "functions.js"});
+                            chrome.tabs.sendRequest(theTab.id, data);
                             return;
                         }
                     }
@@ -1238,17 +1235,20 @@
                 for(var jnx=0; jnx < tabList.length; jnx++) {
                     var theTab = tabList[jnx];
                     if (httpRE.test(theTab.url) && !httpsRE.test(theTab.url)) {
-                        console.log("theTab.url", theTab.url);
                         var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url };
-                        chrome.extension.sendRequest(theTab.id, data);                            
-                        //chrome.tabs.executeScript(theTab.id, {file: "notificationoverlay.js"});
-                        //chrome.tabs.executeScript(theTab.id, {file: "functions.js"});
+                        chrome.extension.sendRequest(data);
                         return;
                     }
                 }
             }
-        }        
+        }
     }
+    //if we get here, we didn't find an appropriate tab, retry in 5 mins.
+    console.log("no tab found, retry");
+    setTimeout(function () { 
+        console.log("no tab found, retry 2");
+        createOverlay(url); 
+    }, 5 * 60 * 1000);    
   }//end of createOverlay()
 
   if (!SAFARI) {
