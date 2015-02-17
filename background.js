@@ -1203,9 +1203,7 @@
         return;
     }
     var httpRE = /^http:/;
-    //var fiveMinutes = 5 * 60 * 1000;
-    //TODO -uncomment
-    var fiveMinutes = 1000;
+    var fiveMinutes = 5 * 60 * 1000;
     var processTabList = function(tabList) {
         if (!tabList) {
             return false;

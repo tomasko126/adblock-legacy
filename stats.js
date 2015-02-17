@@ -1,8 +1,7 @@
 // Allows interaction with the server to track install rate
 // and log messages.
 STATS = (function() {
-    //TODO - change this back to prod
-  var stats_url = "https://ping.getadblock.com/qa-stats/";
+  var stats_url = "https://ping.getadblock.com/stats/";
 
   //Get some information about the version, os, and browser
   var version = chrome.runtime.getManifest().version;
@@ -42,7 +41,7 @@ STATS = (function() {
 
     return storage_get("userid");
   })();
-  
+
   var pingAfterInterval = function(millisInterval) {
     storage_set("next_ping_time", Date.now() + millisInterval);
     var delay = millisTillNextPing();
@@ -69,41 +68,41 @@ STATS = (function() {
 
     $.ajax({
       type: 'POST',
-      url: stats_url, 
+      url: stats_url,
       data: data,
       success: maybeSurvey, // TODO: Remove when we no longer do a/b tests
       error: function(e) {
         console.log("Ping returned error: ", e.status);
-      }, 
+      },
     });
   };
-  
+
   var shouldShowSurvey = function(survey_data) {
     var data = {
       cmd: "survey",
       u: userId,
       sid: survey_data.survey_id
     };
-    
+
     function handle_should_survey(responseData) {
       if (responseData.length ===  0)
         return;
       log('Pinging got some data', responseData);
-  
+
       try {
         var data = JSON.parse(responseData);
         if (data.should_survey === 'true') {
           openTab('https://getadblock.com/' + survey_data.open_this_url, true);
-        }        
+        }
       } catch (e) {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
         return;
       }
     }
-    
+
     $.post(stats_url, data, handle_should_survey);
   }
-  
+
   var survey_data = null;
   function one_time_opener() {
     if (SAFARI) {
@@ -133,7 +132,7 @@ STATS = (function() {
       open_the_tab();
     }
   }
-  
+
   // TODO: Remove when we no longer do a/b tests
   var maybeSurvey = function(responseData, textStatus, jqXHR) {
     // check to see if the extension should change its ping interval
@@ -143,12 +142,12 @@ STATS = (function() {
             millisPing = null;
         if (millisPing === -1)
             millisPing = null;
-        
+
         if (millisPing !== null) {
             pingAfterInterval(millisPing);
         }
     }
-    
+
     if (responseData.length ===  0)
       return;
 
@@ -156,12 +155,11 @@ STATS = (function() {
       return;
 
     log('Pinging got some data', responseData);
-    
+
     try {
       var url_data = JSON.parse(responseData);
-      //TODO - uncomment
-      //if (!url_data.open_this_url.match(/^\/survey\//))
-      //  throw new Error("bad survey url.");
+      if (!url_data.open_this_url.match(/^\/survey\//))
+        throw new Error("bad survey url.");
     } catch (e) {
       console.log("Something went wrong with opening a survey.");
       console.log('error', e);
@@ -243,9 +241,6 @@ STATS = (function() {
     browserVersion: browserVersion,
     os: os,
     osVersion: osVersion,
-pingN: function() {
-    pingNow();
-},
     // Ping the server when necessary.
     startPinging: function() {
       function sleepThenPing() {
