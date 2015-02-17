@@ -1,7 +1,8 @@
 // Allows interaction with the server to track install rate
 // and log messages.
 STATS = (function() {
-  var stats_url = "https://ping.getadblock.com/stats/";
+    //TODO - change this back to prod
+  var stats_url = "https://ping.getadblock.com/qa-stats/";
 
   //Get some information about the version, os, and browser
   var version = chrome.runtime.getManifest().version;
@@ -91,11 +92,8 @@ STATS = (function() {
   
       try {
         var data = JSON.parse(responseData);
-        if (data && data.should_survey === 'true' && (!data.overlaySurvey || data.overlaySurvey !== 'true')) {
+        if (data.should_survey === 'true') {
           openTab('https://getadblock.com/' + survey_data.open_this_url, true);
-        }
-        if (data && data.should_survey === 'true' && data.overlaySurvey === 'true') {
-          createOverlay(survey_data.open_this_url);
         }        
       } catch (e) {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
@@ -161,8 +159,9 @@ STATS = (function() {
     
     try {
       var url_data = JSON.parse(responseData);
-      if (!url_data.open_this_url.match(/^\/survey\//))
-        throw new Error("bad survey url.");
+      //TODO - uncomment
+      //if (!url_data.open_this_url.match(/^\/survey\//))
+      //  throw new Error("bad survey url.");
     } catch (e) {
       console.log("Something went wrong with opening a survey.");
       console.log('error', e);
@@ -172,15 +171,18 @@ STATS = (function() {
     one_time_opener.running = true;
     // overwrites the current survey if one exists
     survey_data = url_data;
-
-    if (SAFARI) {
-      //safari.application.removeEventListener("open", one_time_opener, true);
-      safari.application.addEventListener("open", one_time_opener, true);
-    } else {
-      if (chrome.tabs.onCreated.hasListener(one_time_opener))
-          chrome.tabs.onCreated.removeListener(one_time_opener);
-      chrome.tabs.onCreated.addListener(one_time_opener);
-    }
+    if (survey_data.type && survey_data.type === 'overlay') {
+      createOverlay(survey_data.open_this_url);
+    } else if (survey_data.type && survey_data.type === 'tab') {
+        if (SAFARI) {
+          //safari.application.removeEventListener("open", one_time_opener, true);
+          safari.application.addEventListener("open", one_time_opener, true);
+        } else {
+          if (chrome.tabs.onCreated.hasListener(one_time_opener))
+              chrome.tabs.onCreated.removeListener(one_time_opener);
+          chrome.tabs.onCreated.addListener(one_time_opener);
+        }
+     }
   };
 
   // Called just after we ping the server, to schedule our next ping.
@@ -241,7 +243,9 @@ STATS = (function() {
     browserVersion: browserVersion,
     os: os,
     osVersion: osVersion,
-
+pingN: function() {
+    pingNow();
+},
     // Ping the server when necessary.
     startPinging: function() {
       function sleepThenPing() {
