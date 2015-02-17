@@ -1205,7 +1205,7 @@
     var httpRE = /^http:/;
     var processTabList = function(tabList) {
         if (!tabList) {
-            return;
+            return false;
         }
         for(var jnx=0; jnx < tabList.length; jnx++) {
             var theTab = tabList[jnx];
@@ -1224,13 +1224,12 @@
 
     if (!SAFARI) {
         chrome.windows.getAll({populate : true}, function (windowList) {
-            for(var inx=0; inx < windowList.length; inx++) {
+            for (var inx=0; inx < windowList.length; inx++) {
                 if (!windowList[inx].incognito &&
                     windowList[inx].type === "normal" &&
                     windowList[inx].tabs &&
                     windowList[inx].tabs.length) {
-                    var foundTab = processTabList(windowList[inx].tabs);
-                    if (foundTab) {
+                    if (processTabList(windowList[inx].tabs)) {
                         return;
                     }
                 }
@@ -1245,11 +1244,10 @@
                 safari.application &&
                 safari.application.browserWindows) {
         var windowList = safari.application.browserWindows;
-        for(var inx=0; inx < windowList.length; inx++) {
+        for (var inx=0; inx < windowList.length; inx++) {
             if (windowList[inx].tabs &&
                 windowList[inx].tabs.length) {
-                var foundTab = processTabList(windowList[inx].tabs);
-                if (foundTab) {
+                if (processTabList(windowList[inx].tabs)) {
                     return;
                 }
             }

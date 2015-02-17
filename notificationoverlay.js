@@ -8,10 +8,9 @@ function showoverlay() {
         //create overlay DIV tag
         iframeRandom = Math.floor(1E8 * Math.random());
         var winWidth = getWindowWidth(window);
-        document.body.scrollTop;
-        var spacerElement = document.createElement("div");
-        spacerElement.id = "ABtopspacer" + iframeRandom;
-        var st = spacerElement.style;
+        var overlayElement = document.createElement("div");
+        overlayElement.id = "ABoverlay" + iframeRandom;
+        var st = overlayElement.style;
         st.display = "block";
         st.top = "0px";
         st.left = "0px";
@@ -19,8 +18,8 @@ function showoverlay() {
         st.height = notificationMin + "px";
         st.position = "fixed";
         st.zIndex = "1000000099";
-        mainBody.insertBefore(spacerElement, mainBody.firstChild);
-        window.addEventListener("resize", overlayresize, !1);
+        mainBody.insertBefore(overlayElement, mainBody.firstChild);
+        window.addEventListener("resize", overlayResize, !1);
         //create style element, so that our DIV tag isn't printed, if the user decides to print the page.
         var styleElement = document.createElement("style");
         styleElement.type = "text/css";
@@ -34,17 +33,27 @@ function showoverlay() {
         abFrame.style.width = winWidth + "px";
         abFrame.style.border = "0px";
         abFrame.scrolling = "no";
-        spacerElement.appendChild(abFrame);
+        overlayElement.appendChild(abFrame);
     }
 }
 
-function overlayresize() {
-    if (document.getElementById("ABframeoverlay" + iframeRandom)) {
+function overlayResize() {
+    var overlayElement = document.getElementById("ABoverlay" + iframeRandom);
+    if (overlayElement) {
         var a = getWindowWidth(window);
-        document.getElementById("ABframeoverlay" + iframeRandom).style.width = a + "px";
+        overlayElement.style.width = a + "px";
         document.getElementById("ABiframe" + iframeRandom).style.width = a + "px"
     }
 }
+
+function hideOverlay() {
+    var overlayElement = document.getElementById("ABoverlay" + iframeRandom);
+    if (overlayElement) {
+        document.body.removeChild(overlayElement);
+        window.removeEventListener("resize", overlayResize, !1);
+    }
+}
+
 function getWindowWidth(aWindow) {
     if (!aWindow) {
         return 0;
@@ -54,7 +63,6 @@ function getWindowWidth(aWindow) {
     if (!aDoc) {
         return 0;
     }
-    aWindow = null;
     if ("undefined" != typeof aDoc.body) {
         aWindow = aDoc.body
     } else if (aDoc.getElementById("main")) {
