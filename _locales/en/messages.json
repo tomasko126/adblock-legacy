@@ -47,6 +47,10 @@
     "message":"To hide the button, right click Safari's toolbar and choose Customize Toolbar, then drag the AdBlock button out of the toolbar. You can show it again by dragging it back into the toolbar.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
+  "ff_button_how_to_hide":{
+  	"message":"To hide the button, right click it and choose Remove from Toolbar.  You can show it again under Firefox menu -> Customise.",
+  	"description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customise' should match the text that shows when you click the button on the Firefox toolbar with three lines."
+  },  
   "sliderexplanation":{
     "message":"Slide the slider until the ad is blocked correctly on the page, and the blocked element looks useful.",
     "description":"Blacklister slider page message"
