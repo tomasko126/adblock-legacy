@@ -13,7 +13,7 @@ function showOverlay(iframeURLsrc) {
         var overlayElement = document.createElement("div");
         overlayElement.id = divID;
         overlayElement.style.cssText = "display:block; top:0px; left:0px; width:100%; height:27px; position:fixed;";
-        // Finally, raise the overaly above *all* website UI, using max 32-bit signed int.
+        // Finally, raise the overlay above *all* website UI, using max 32-bit signed int.
         overlayElement.style.setProperty ("z-index", "2147483647", "important");
         mainBody.insertBefore(overlayElement, mainBody.firstChild);
         window.addEventListener("resize", overlayResize);
@@ -26,9 +26,7 @@ function showOverlay(iframeURLsrc) {
         //create the iframe element, add it the DIV created above.
         var abFrame = document.createElement("iframe");
         abFrame.id = iframeID;
-        //TODO - remove
-        //abFrame.src ='https://getadblock.com' + iframeURLsrc;
-        abFrame.src ='https://ping.getadblock.com' + iframeURLsrc;
+        abFrame.src ='https://getadblock.com' + iframeURLsrc;
         abFrame.style.cssText = "height:27px; border:0px";
         var winWidth = calculateWindowWidth(window);
         abFrame.style.width = winWidth + "px";

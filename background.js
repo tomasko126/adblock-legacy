@@ -1216,12 +1216,10 @@
                 tab.status === "complete" &&
                 httpRE.test(tab.url)) {
                 var data = { command: "showoverlay", overlayURL: url, tabURL:tab.url};
-                log("tab found for createOverlay", data);
                 chrome.tabs.sendRequest(tab.id, data);
                 return;
             }
             //if we get here, we didn't find an appropriate tab, retry in 5 mins.
-            log("no tab found for createOverlay, retrying in 5 mins");
             setTimeout(function () {
                 createOverlay(url);
             }, fiveMinutes);
@@ -1234,12 +1232,10 @@
         var tab = safari.application.activeBrowserWindow.activeTab;
         if (httpRE.test(tab.url)) {
             var data = { command: "showoverlay", overlayURL: url, tabURL:tab.url};
-            log("tab found for createOverlay", data);
             chrome.extension.sendRequest(data);
             return;
         }
         //if we get here, we didn't find an appropriate tab, retry in 5 mins.
-        log("no tab found for createOverlay, retrying in 5 mins");
         setTimeout(function () {
             createOverlay(url);
         }, fiveMinutes);
