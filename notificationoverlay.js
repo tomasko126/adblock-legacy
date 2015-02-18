@@ -104,7 +104,7 @@ function getComputedStyleForElement(parentEl, el) {
             if (request.command === 'showoverlay' &&
                 request.overlayURL &&
                 request.tabURL === document.location.href) {
-                showoverlay(request.overlayURL);
+                showOverlay(request.overlayURL);
                 sendResponse({});
             }
         });

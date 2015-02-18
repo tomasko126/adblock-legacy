@@ -1199,9 +1199,8 @@
   }//end of createMalwareNotification function
 
   //Display a notification overlay on the active tab
-  //To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
-  // and must
-  //
+  // To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
+  // and must not be using SSL / HTTPS
   var createOverlay = function(url) {
     if (!url) {
         return;
