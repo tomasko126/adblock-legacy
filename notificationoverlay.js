@@ -1,60 +1,62 @@
-﻿var notificationMin = 27;
-var notificationMax = 200;
-var iframeURLsrc;
-var iframeRandom;
-function showoverlay() {
+﻿var divID = "ABoverlay";
+var iframeID = "ABiframe";
+//create the DIV and IFRAME and insert them into the DOC
+function showOverlay(iframeURLsrc) {
+    if (document.getElementById(divID) &&
+        document.getElementById(iframeID)) {
+        return;
+    }
+    var notificationMin = 27;
     var mainBody = document.body;
     if (mainBody) {
         //create overlay DIV tag
-        iframeRandom = Math.floor(1E8 * Math.random());
-        var winWidth = getWindowWidth(window);
         var overlayElement = document.createElement("div");
-        overlayElement.id = "ABoverlay" + iframeRandom;
-        var st = overlayElement.style;
-        st.display = "block";
-        st.top = "0px";
-        st.left = "0px";
-        st.width = "100%";
-        st.height = notificationMin + "px";
-        st.position = "fixed";
-        st.zIndex = "1000000099";
+        overlayElement.id = divID;
+        overlayElement.style.cssText = "display:block; top:0px; left:0px; width:100%; height:27px; position:fixed;";
+        // Finally, raise the overaly above *all* website UI, using max 32-bit signed int.
+        overlayElement.style.setProperty ("z-index", "2147483647", "important");
         mainBody.insertBefore(overlayElement, mainBody.firstChild);
-        window.addEventListener("resize", overlayResize, !1);
+        window.addEventListener("resize", overlayResize);
         //create style element, so that our DIV tag isn't printed, if the user decides to print the page.
         var styleElement = document.createElement("style");
         styleElement.type = "text/css";
-        styleElement.styleSheet ? styleElement.styleSheet.cssText = "@media print{.ABframeoverlay{display:none}}" : styleElement.appendChild(document.createTextNode("@media print{.ABframeoverlay{display:none}}"));
-        document.getElementsByTagName("head")[0].appendChild(styleElement);
+        (document.head || document.documentElement).insertBefore(styleElement, null);
+        styleElement.sheet.insertRule("@media print{.ABframeoverlay{display:none}}", 0);
+
         //create the iframe element, add it the DIV created above.
         var abFrame = document.createElement("iframe");
-        abFrame.id = "ABiframe" + iframeRandom;
-        abFrame.src ='https://getadblock.com' + iframeURLsrc;
-        abFrame.style.height = notificationMin + "px";
+        abFrame.id = iframeID;
+        //TODO - remove
+        //abFrame.src ='https://getadblock.com' + iframeURLsrc;
+        abFrame.src ='https://ping.getadblock.com' + iframeURLsrc;
+        abFrame.style.cssText = "height:27px; border:0px";
+        var winWidth = calculateWindowWidth(window);
         abFrame.style.width = winWidth + "px";
-        abFrame.style.border = "0px";
         abFrame.scrolling = "no";
         overlayElement.appendChild(abFrame);
     }
 }
 
 function overlayResize() {
-    var overlayElement = document.getElementById("ABoverlay" + iframeRandom);
-    if (overlayElement) {
-        var a = getWindowWidth(window);
+    var overlayElement = document.getElementById(divID);
+    var frameElement = document.getElementById(iframeID);
+    if (overlayElement &&
+        frameElement) {
+        var a = calculateWindowWidth(window);
         overlayElement.style.width = a + "px";
-        document.getElementById("ABiframe" + iframeRandom).style.width = a + "px"
+        frameElement.style.width = a + "px"
     }
 }
 
-function hideOverlay() {
-    var overlayElement = document.getElementById("ABoverlay" + iframeRandom);
+function removeOverlay() {
+    var overlayElement = document.getElementById(divID);
     if (overlayElement) {
         document.body.removeChild(overlayElement);
         window.removeEventListener("resize", overlayResize, !1);
     }
 }
 
-function getWindowWidth(aWindow) {
+function calculateWindowWidth(aWindow) {
     if (!aWindow) {
         return 0;
     }
@@ -68,15 +70,11 @@ function getWindowWidth(aWindow) {
     } else if (aDoc.getElementById("main")) {
         aWindow = aDoc.getElementById("main");
     }
-    var tempDiv = aDoc.getElementById("_invis");
+    var tempDiv = aDoc.getElementById("AB_temp");
     if (null == tempDiv) {
         tempDiv = aDoc.createElement("div");
-        tempDiv.id = "_invis";
-        tempDiv.style.left = "0px";
-        tempDiv.style.right = "0px";
-        tempDiv.style.top = "0px";
-        tempDiv.style.height = "0px";
-        tempDiv.style.visibility = "hidden";
+        tempDiv.id = "AB_temp";
+        tempDiv.style.cssText = "left:0px; right:0px; top:0px; height:0px; visibility:hidden";
         aWindow.appendChild(tempDiv);
     }
     var theStyle = getComputedStyleForElement("undefined" != typeof window && window ? window : aDoc.defaultView, aWindow);
@@ -105,10 +103,9 @@ function getComputedStyleForElement(parentEl, el) {
         chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             if (request.command === 'showoverlay' &&
                 request.overlayURL &&
-                request.tabURL === document.location.href &&
-                iframeURLsrc === undefined) {
-                iframeURLsrc = request.overlayURL;
-                showoverlay();
+                request.tabURL === document.location.href) {
+                showoverlay(request.overlayURL);
+                sendResponse({});
             }
         });
     }

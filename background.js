@@ -1198,43 +1198,31 @@
     }//end of if
   }//end of createMalwareNotification function
 
+  //Display a notification overlay on the active tab
+  //To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
+  // and must
+  //
   var createOverlay = function(url) {
     if (!url) {
         return;
     }
     var httpRE = /^http:/;
     var fiveMinutes = 5 * 60 * 1000;
-    var processTabList = function(tabList) {
-        if (!tabList) {
-            return false;
-        }
-        for(var jnx=0; jnx < tabList.length; jnx++) {
-            var theTab = tabList[jnx];
-            if (httpRE.test(theTab.url)) {
-                var data = { command: "showoverlay", overlayURL: url, tabURL:theTab.url};
-                if (SAFARI) {
-                    chrome.extension.sendRequest(data);
-                } else {
-                    chrome.tabs.sendRequest(theTab.id, data);
-                }
-                return true;
-            }
-        }
-        return false;
-    };
     if (!SAFARI) {
-        chrome.windows.getAll({populate : true}, function (windowList) {
-            for (var inx=0; inx < windowList.length; inx++) {
-                if (!windowList[inx].incognito &&
-                    windowList[inx].type === "normal" &&
-                    windowList[inx].tabs &&
-                    windowList[inx].tabs.length) {
-                    if (processTabList(windowList[inx].tabs)) {
-                        return;
-                    }
-                }
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            if (tabs.length === 0)
+                return; // For example: only the background devtools or a popup are opened
+            var tab = tabs[0];
+            if (!tab.incognito &&
+                tab.status === "complete" &&
+                httpRE.test(tab.url)) {
+                var data = { command: "showoverlay", overlayURL: url, tabURL:tab.url};
+                log("tab found for createOverlay", data);
+                chrome.tabs.sendRequest(tab.id, data);
+                return;
             }
             //if we get here, we didn't find an appropriate tab, retry in 5 mins.
+            log("no tab found for createOverlay, retrying in 5 mins");
             setTimeout(function () {
                 createOverlay(url);
             }, fiveMinutes);
@@ -1242,17 +1230,17 @@
      } else if (SAFARI &&
                 safari &&
                 safari.application &&
-                safari.application.browserWindows) {
-        var windowList = safari.application.browserWindows;
-        for (var inx=0; inx < windowList.length; inx++) {
-            if (windowList[inx].tabs &&
-                windowList[inx].tabs.length) {
-                if (processTabList(windowList[inx].tabs)) {
-                    return;
-                }
-            }
+                safari.application.activeBrowserWindow &&
+                safari.application.activeBrowserWindow.activeTab) {
+        var tab = safari.application.activeBrowserWindow.activeTab;
+        if (httpRE.test(tab.url)) {
+            var data = { command: "showoverlay", overlayURL: url, tabURL:tab.url};
+            log("tab found for createOverlay", data);
+            chrome.extension.sendRequest(data);
+            return;
         }
         //if we get here, we didn't find an appropriate tab, retry in 5 mins.
+        log("no tab found for createOverlay, retrying in 5 mins");
         setTimeout(function () {
             createOverlay(url);
         }, fiveMinutes);
