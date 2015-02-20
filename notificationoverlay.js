@@ -15,7 +15,7 @@ if (window.top === window) {
                 sendResponse({});
             }
         });
-        //create the DIV and IFRAME and insert them into the DOC
+        //create the DIV and IFRAME and insert them into the DOM
         var showOverlay = function(iframeURLsrc) {
             //if the DIV and IFRAME already exist, don't add another one, just return
             if (document.getElementById(divID) &&
@@ -41,36 +41,26 @@ if (window.top === window) {
                 //create the iframe element, add it the DIV created above.
                 var abFrame = document.createElement("iframe");
                 abFrame.id = iframeID;
-                abFrame.src ='https://ping.getadblock.com' + iframeURLsrc;
                 var winWidth = calculateWindowWidth(window);
                 abFrame.style.width = winWidth + "px";
                 abFrame.scrolling = "no";
-                overlayElement.appendChild(abFrame);
-                //check 20 times if the frame is loaded
-                //if after 20 checks, the content isn't loaded, remove the frame
-                var checkIfFrameLoaded = function(numTimesCalled) {
-                    if (numTimesCalled > 20) {
-                        removeOverlay();
-                        return;
-                    }
-                    numTimesCalled++;
-                    var contents=document.getElementById(iframeID).contentWindow.document;
-                    if(contents &&
-                       contents.documentElement && 
-                       contents.documentElement.innerHTML &&
-                       contents.documentElement.innerHTML.indexOf("ab-content") > -1){
-                        return;
+                //try loading the contents of the iframe using an AJAX request first,
+                //this way we can capture the response code.
+                var frameRequest = new XMLHttpRequest();
+                frameRequest.onload = function() {
+                    if (200 >= frameRequest.status && 400 > frameRequest.status) {
+                        overlayElement.appendChild(abFrame);
+                        abFrame.contentWindow.document.write(frameRequest.response); 
+                        //abFrame.src ='https://ping.getadblock.com' + iframeURLsrc;
                     } else {
-                        //check again in 1 second 
-                        setTimeout(function() { 
-                            checkIfFrameLoaded(numTimesCalled); 
-                        }, 1000);   
+                        removeOverlay(); 
                     }
+                }
+                frameRequest.open('get', 'https://ping.getadblock.com' + iframeURLsrc);
+                frameRequest.onerror = function() { 
+                    removeOverlay();
                 };
-                //wait 3 seconds, then check to see if the frame loaded
-                setTimeout(function() { 
-                    checkIfFrameLoaded(1); 
-                }, 3000);
+                frameRequest.send();               
             }
         };
         
@@ -140,5 +130,7 @@ if (window.top === window) {
                 el.currentStyle;
             }
         };
+        //TODO - remove
+        return { showOverlay: showOverlay };
     })();        
 }
