@@ -1,8 +1,7 @@
 // Allows interaction with the server to track install rate
 // and log messages.
 STATS = (function() {
-    //TODO- change back to prod
-  var stats_url = "https://ping.getadblock.com/qa-stats/";
+  var stats_url = "https://ping.getadblock.com/stats/";
 
   //Get some information about the version, os, and browser
   var version = chrome.runtime.getManifest().version;
@@ -170,9 +169,8 @@ STATS = (function() {
 
     try {
       var url_data = JSON.parse(responseData);
-      //TODO-uncomment...
-      //if (!url_data.open_this_url.match(/^\/survey\//))
-      //  throw new Error("bad survey url.");
+      if (!url_data.open_this_url.match(/^\/survey\//))
+        throw new Error("bad survey url.");
     } catch (e) {
       console.log("Something went wrong with opening a survey.");
       console.log('error', e);
@@ -274,8 +272,8 @@ STATS = (function() {
       // call itself to start the process over again.
       sleepThenPing();
     },
+    //include shouldShowSurvey so that createOverlay in background.js can call it.
     shouldShowSurvey: shouldShowSurvey,
-    pingNow: pingNow,
     // Record some data, if we are not rate limited.
     msg: function(message) {
       if (!throttle.attempt()) {

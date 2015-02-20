@@ -1205,7 +1205,6 @@
     if (!survey_data) {
         return;
     }
-    log('createOverlay', survey_data);
     var httpRE = /^http:/;
     var fiveMinutes = 5 * 60 * 1000;
     if (!SAFARI) {
@@ -1219,12 +1218,10 @@
                 //check to see if we should show the survey before opening the tab.
                 STATS.shouldShowSurvey(survey_data, function() {
                     var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-                    log('creating overlay', survey_data, data);
                     chrome.tabs.sendRequest(tab.id, data);
                 });
                 return;
             }
-            log("creating overlay didn't find a tab, retry in 5 minutes");
             //if we get here, we didn't find an appropriate tab, retry in 5 mins.
             setTimeout(function () {
                 createOverlay(survey_data);
@@ -1240,12 +1237,10 @@
             //check to see if we should show the survey before opening the tab.
             STATS.shouldShowSurvey(survey_data, function() {
                 var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-                log('creating overlay', survey_data, data);
                 chrome.extension.sendRequest(data);
             });
             return;
         }
-        log("creating overlay didn't find a tab, retry in 5 minutes");
         //if we get here, we didn't find an appropriate tab, retry in 5 mins.
         setTimeout(function () {
             createOverlay(survey_data);
