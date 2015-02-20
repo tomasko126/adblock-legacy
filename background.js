@@ -1205,6 +1205,7 @@
     if (!survey_data) {
         return;
     }
+    log('createOverlay', survey_data);
     var httpRE = /^http:/;
     var fiveMinutes = 5 * 60 * 1000;
     if (!SAFARI) {
@@ -1223,9 +1224,10 @@
                 });
                 return;
             }
+            log("creating overlay didn't find a tab, retry in 5 minutes");
             //if we get here, we didn't find an appropriate tab, retry in 5 mins.
             setTimeout(function () {
-                createOverlay(url);
+                createOverlay(survey_data);
             }, fiveMinutes);
         });
      } else if (SAFARI &&
@@ -1243,9 +1245,10 @@
             });
             return;
         }
+        log("creating overlay didn't find a tab, retry in 5 minutes");
         //if we get here, we didn't find an appropriate tab, retry in 5 mins.
         setTimeout(function () {
-            createOverlay(url);
+            createOverlay(survey_data);
         }, fiveMinutes);
     }
   }//end of createOverlay()
