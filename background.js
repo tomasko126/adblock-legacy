@@ -1201,8 +1201,8 @@
   //Display a notification overlay on the active tab
   // To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
   // and must not be using SSL / HTTPS
-  var createOverlay = function(url) {
-    if (!url) {
+  var createOverlay = function(survey_data) {
+    if (!survey_data) {
         return;
     }
     var httpRE = /^http:/;
@@ -1215,8 +1215,12 @@
             if (!tab.incognito &&
                 tab.status === "complete" &&
                 httpRE.test(tab.url)) {
-                var data = { command: "showoverlay", overlayURL: url, tabURL:tab.url};
-                chrome.tabs.sendRequest(tab.id, data);
+                //check to see if we should show the survey before opening the tab.
+                STATS.shouldShowSurvey(survey_data, function() {
+                    var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
+                    log('creating overlay', survey_data, data);
+                    chrome.tabs.sendRequest(tab.id, data);
+                });
                 return;
             }
             //if we get here, we didn't find an appropriate tab, retry in 5 mins.
@@ -1231,8 +1235,12 @@
                 safari.application.activeBrowserWindow.activeTab) {
         var tab = safari.application.activeBrowserWindow.activeTab;
         if (httpRE.test(tab.url)) {
-            var data = { command: "showoverlay", overlayURL: url, tabURL:tab.url};
-            chrome.extension.sendRequest(data);
+            //check to see if we should show the survey before opening the tab.
+            STATS.shouldShowSurvey(survey_data, function() {
+                var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
+                log('creating overlay', survey_data, data);
+                chrome.extension.sendRequest(data);
+            });
             return;
         }
         //if we get here, we didn't find an appropriate tab, retry in 5 mins.

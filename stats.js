@@ -1,7 +1,8 @@
 // Allows interaction with the server to track install rate
 // and log messages.
 STATS = (function() {
-  var stats_url = "https://ping.getadblock.com/stats/";
+    //TODO- change back to prod
+  var stats_url = "https://ping.getadblock.com/qa-stats/";
 
   //Get some information about the version, os, and browser
   var version = chrome.runtime.getManifest().version;
@@ -77,7 +78,7 @@ STATS = (function() {
     });
   };
 
-  var shouldShowSurvey = function(survey_data) {
+  var shouldShowTabSurvey = function(survey_data) {
     var data = {
       cmd: "survey",
       u: userId,
@@ -100,8 +101,19 @@ STATS = (function() {
       }
     }
 
-    $.post(stats_url, data, handle_should_survey);
+    shouldShowSurvey(survey_data, handle_should_survey);
   }
+  
+  var shouldShowSurvey = function(survey_data, callback) {
+    var data = {
+      cmd: "survey",
+      u: userId,
+      sid: survey_data.survey_id
+    };
+    if (!callback)
+        return;
+    $.post(stats_url, data, callback);
+  }  
 
   var survey_data = null;
   function one_time_opener() {
@@ -117,7 +129,7 @@ STATS = (function() {
     one_time_opener.running = false;
     var open_the_tab = function() {
       // see if survey should still be shown before opening tab
-      shouldShowSurvey(survey_data);
+      shouldShowTabSurvey(survey_data);
     };
     if (SAFARI) {
       // Safari has a bug: if you open a new tab, it will shortly thereafter
@@ -158,8 +170,9 @@ STATS = (function() {
 
     try {
       var url_data = JSON.parse(responseData);
-      if (!url_data.open_this_url.match(/^\/survey\//))
-        throw new Error("bad survey url.");
+      //TODO-uncomment...
+      //if (!url_data.open_this_url.match(/^\/survey\//))
+      //  throw new Error("bad survey url.");
     } catch (e) {
       console.log("Something went wrong with opening a survey.");
       console.log('error', e);
@@ -170,7 +183,7 @@ STATS = (function() {
     // overwrites the current survey if one exists
     survey_data = url_data;
     if (survey_data.type && survey_data.type === 'overlay') {
-      createOverlay(survey_data.open_this_url);
+      createOverlay(survey_data);
     } else if (survey_data.type && survey_data.type === 'tab') {
         if (SAFARI) {
           //safari.application.removeEventListener("open", one_time_opener, true);
@@ -261,7 +274,8 @@ STATS = (function() {
       // call itself to start the process over again.
       sleepThenPing();
     },
-
+    shouldShowSurvey: shouldShowSurvey,
+    pingNow: pingNow,
     // Record some data, if we are not rate limited.
     msg: function(message) {
       if (!throttle.attempt()) {
