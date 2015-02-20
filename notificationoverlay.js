@@ -44,23 +44,28 @@ if (window.top === window) {
                 var winWidth = calculateWindowWidth(window);
                 abFrame.style.width = winWidth + "px";
                 abFrame.scrolling = "no";
-                //try loading the contents of the iframe using an AJAX request first,
-                //this way we can capture the response code.
-                var frameRequest = new XMLHttpRequest();
-                frameRequest.onload = function() {
-                    if (200 >= frameRequest.status && 400 > frameRequest.status) {
-                        overlayElement.appendChild(abFrame);
-                        abFrame.contentWindow.document.write(frameRequest.response); 
-                        //abFrame.src ='https://ping.getadblock.com' + iframeURLsrc;
-                    } else {
-                        removeOverlay(); 
+                if (SAFARI) {
+                    overlayElement.appendChild(abFrame);
+                    abFrame.src ='https://ping.getadblock.com' + iframeURLsrc;
+                } else {
+                    //CHROME browser allow us to load via AJAX
+                    //so we'll try loading the contents of the iframe using an AJAX request first,
+                    //this way we can capture the response code.
+                    var frameRequest = new XMLHttpRequest();
+                    frameRequest.onload = function() {
+                        if (200 >= frameRequest.status && 400 > frameRequest.status) {
+                            overlayElement.appendChild(abFrame);
+                            abFrame.contentWindow.document.write(frameRequest.response); 
+                        } else {
+                            removeOverlay(); 
+                        }
                     }
-                }
-                frameRequest.open('get', 'https://ping.getadblock.com' + iframeURLsrc);
-                frameRequest.onerror = function() { 
-                    removeOverlay();
-                };
-                frameRequest.send();               
+                    frameRequest.open('get', 'https://ping.getadblock.com' + iframeURLsrc);
+                    frameRequest.onerror = function() { 
+                        removeOverlay();
+                    };
+                    frameRequest.send();  
+                }             
             }
         };
         
