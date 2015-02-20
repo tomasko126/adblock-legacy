@@ -135,7 +135,5 @@ if (window.top === window) {
                 el.currentStyle;
             }
         };
-        //TODO - remove
-        return { showOverlay: showOverlay };
     })();        
 }
