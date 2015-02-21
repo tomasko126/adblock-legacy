@@ -1222,7 +1222,12 @@
         }
       });
     };
+    // True if we are willing to show an overlay on this tab.
+    // |tab| can be undefined.
     var validTab = function(tab) {
+      if (!tab) {
+        return false;
+      }
       if (!SAFARI) {
         if (tab.incognito || tab.status !== "complete") {
           return false;
@@ -1230,6 +1235,8 @@
       }
       return /^http:/.test(tab.url);
     }
+    // If |tab| is not a valid tab, retry in five minutes.
+    // |tab| can be undefined.
     var examineTab = function(tab) {
       if (validTab(tab)) {
         showOverlayIfAllowed(tab);
@@ -1241,8 +1248,6 @@
 
     if (!SAFARI) {
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        if (tabs.length === 0)
-          return; // For example: only the background devtools or a popup are opened
         examineTab(tabs[0]);
       });
     } else if (SAFARI &&
