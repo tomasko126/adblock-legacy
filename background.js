@@ -1205,7 +1205,6 @@
     if (!survey_data) {
       return;
     }
-    var httpRE = /^http:/;
     var retryInFiveMinutes = function() {
       var fiveMinutes = 5 * 60 * 1000;
       setTimeout(function() {
@@ -1229,7 +1228,7 @@
           return false;
         }
       }
-      return httpRE.test(tab.url);
+      return /^http:/.test(tab.url);
     }
     var examineTab = function(tab) {
       if (validTab(tab)) {
