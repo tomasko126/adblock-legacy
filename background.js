@@ -1212,6 +1212,17 @@
         createOverlay(survey_data);
       }, fiveMinutes);
     };
+    // Check to see if we should show the survey before showing the overlay.
+    var showOverlayIfAllowed = function(tab) {
+      STATS.shouldShowSurvey(survey_data, function() {
+        var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
+        if (SAFARI) {
+          chrome.extension.sendRequest(data);
+        } else {
+          chrome.tabs.sendRequest(tab.id, data);
+        }
+      });
+    };
     if (!SAFARI) {
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         if (tabs.length === 0)
@@ -1220,15 +1231,7 @@
         if (!tab.incognito &&
             tab.status === "complete" &&
             httpRE.test(tab.url)) {
-          //check to see if we should show the survey before opening the tab.
-          STATS.shouldShowSurvey(survey_data, function() {
-            var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-            if (SAFARI) {
-              chrome.extension.sendRequest(data);
-            } else {
-              chrome.tabs.sendRequest(tab.id, data);
-            }
-          });
+          showOverlayIfAllowed(tab);
           return;
         }
         // We didn't find an appropriate tab
@@ -1241,15 +1244,7 @@
                safari.application.activeBrowserWindow.activeTab) {
       var tab = safari.application.activeBrowserWindow.activeTab;
       if (httpRE.test(tab.url)) {
-        //check to see if we should show the survey before opening the tab.
-        STATS.shouldShowSurvey(survey_data, function() {
-          var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-          if (SAFARI) {
-            chrome.extension.sendRequest(data);
-          } else {
-            chrome.tabs.sendRequest(tab.id, data);
-          }
-        });
+        showOverlayIfAllowed(tab);
         return;
       }
       // We didn't find an appropriate tab
