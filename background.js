@@ -1209,16 +1209,15 @@
     var fiveMinutes = 5 * 60 * 1000;
     if (!SAFARI) {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            if (tabs.length === 0)
-                return; // For example: only the background devtools or a popup are opened
-            var tab = tabs[0];
-            if (!tab.incognito &&
-                tab.status === "complete" &&
-                httpRE.test(tab.url)) {
+            if (tabs.length > 0 &&
+                !tabs[0].incognito &&
+                tabs[0].status === "complete" &&
+                httpRE.test(tabs[0].url)) {
                 //check to see if we should show the survey before opening the tab.
                 STATS.shouldShowSurvey(survey_data, function() {
-                    var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-                    chrome.tabs.sendRequest(tab.id, data);
+                    var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tabs[0].url};
+                    log("open overlay", data);
+                    chrome.tabs.sendRequest(tabs[0].id, data);
                 });
                 return;
             }

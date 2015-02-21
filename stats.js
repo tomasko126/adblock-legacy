@@ -78,11 +78,6 @@ STATS = (function() {
   };
 
   var shouldShowTabSurvey = function(survey_data) {
-    var data = {
-      cmd: "survey",
-      u: userId,
-      sid: survey_data.survey_id
-    };
 
     function handle_should_survey(responseData) {
       if (responseData.length ===  0)

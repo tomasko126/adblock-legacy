@@ -23,6 +23,7 @@ if (window.top === window) {
                 return;
             }
             var notificationMin = 27;
+            var urlPrefix = 'https://getadblock.com';
             var mainBody = document.body;
             if (mainBody) {
                 //create overlay DIV tag
@@ -46,7 +47,7 @@ if (window.top === window) {
                 abFrame.scrolling = "no";
                 if (SAFARI) {
                     overlayElement.appendChild(abFrame);
-                    abFrame.src ='https://ping.getadblock.com' + iframeURLsrc;
+                    abFrame.src = urlPrefix + iframeURLsrc;
                 } else {
                     //CHROME browser allow us to load via AJAX
                     //so we'll try loading the contents of the iframe using an AJAX request first,
@@ -60,10 +61,10 @@ if (window.top === window) {
                             removeOverlay(); 
                         }
                     }
-                    frameRequest.open('get', 'https://ping.getadblock.com' + iframeURLsrc);
                     frameRequest.onerror = function() { 
                         removeOverlay();
                     };
+                    frameRequest.open('get', urlPrefix + iframeURLsrc);
                     frameRequest.send();  
                 }             
             }
