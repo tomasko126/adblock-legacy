@@ -1206,7 +1206,12 @@
         return;
     }
     var httpRE = /^http:/;
-    var fiveMinutes = 5 * 60 * 1000;
+    var retryInFiveMinutes = function() {
+      var fiveMinutes = 5 * 60 * 1000;
+      setTimeout(function() {
+        createOverlay(survey_data);
+      }, fiveMinutes);
+    };
     if (!SAFARI) {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             if (tabs.length > 0 &&
@@ -1221,10 +1226,8 @@
                 });
                 return;
             }
-            //if we get here, we didn't find an appropriate tab, retry in 5 mins.
-            setTimeout(function () {
-                createOverlay(survey_data);
-            }, fiveMinutes);
+            // We didn't find an appropriate tab
+            retryInFiveMinutes();
         });
      } else if (SAFARI &&
                 safari &&
@@ -1240,10 +1243,8 @@
             });
             return;
         }
-        //if we get here, we didn't find an appropriate tab, retry in 5 mins.
-        setTimeout(function () {
-            createOverlay(survey_data);
-        }, fiveMinutes);
+        // We didn't find an appropriate tab
+        retryInFiveMinutes();
     }
   }//end of createOverlay()
 
