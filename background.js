@@ -1223,7 +1223,11 @@
           //check to see if we should show the survey before opening the tab.
           STATS.shouldShowSurvey(survey_data, function() {
             var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-            chrome.tabs.sendRequest(tab.id, data);
+            if (SAFARI) {
+              chrome.extension.sendRequest(data);
+            } else {
+              chrome.tabs.sendRequest(tab.id, data);
+            }
           });
           return;
         }
@@ -1240,7 +1244,11 @@
         //check to see if we should show the survey before opening the tab.
         STATS.shouldShowSurvey(survey_data, function() {
           var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-          chrome.extension.sendRequest(data);
+          if (SAFARI) {
+            chrome.extension.sendRequest(data);
+          } else {
+            chrome.tabs.sendRequest(tab.id, data);
+          }
         });
         return;
       }
