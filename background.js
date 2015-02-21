@@ -1223,32 +1223,35 @@
         }
       });
     };
+    var validTab = function(tab) {
+      if (!SAFARI) {
+        if (tab.incognito || tab.status !== "complete") {
+          return false;
+        }
+      }
+      return httpRE.test(tab.url);
+    }
+    var examineTab = function(tab) {
+      if (validTab(tab)) {
+        showOverlayIfAllowed(tab);
+      } else {
+        // We didn't find an appropriate tab
+        retryInFiveMinutes();
+      }
+    };
+
     if (!SAFARI) {
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         if (tabs.length === 0)
           return; // For example: only the background devtools or a popup are opened
-        var tab = tabs[0];
-        if (!tab.incognito &&
-            tab.status === "complete" &&
-            httpRE.test(tab.url)) {
-          showOverlayIfAllowed(tab);
-          return;
-        }
-        // We didn't find an appropriate tab
-        retryInFiveMinutes();
+        examineTab(tabs[0]);
       });
     } else if (SAFARI &&
                safari &&
                safari.application &&
                safari.application.activeBrowserWindow &&
                safari.application.activeBrowserWindow.activeTab) {
-      var tab = safari.application.activeBrowserWindow.activeTab;
-      if (httpRE.test(tab.url)) {
-        showOverlayIfAllowed(tab);
-        return;
-      }
-      // We didn't find an appropriate tab
-      retryInFiveMinutes();
+      examineTab(safari.application.activeBrowserWindow.activeTab);
     }
   }//end of createOverlay()
 
