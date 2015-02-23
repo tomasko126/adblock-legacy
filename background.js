@@ -1223,11 +1223,7 @@
       });
     };
     // True if we are willing to show an overlay on this tab.
-    // |tab| can be undefined.
     var validTab = function(tab) {
-      if (!tab) {
-        return false;
-      }
       if (!SAFARI) {
         if (tab.incognito || tab.status !== "complete") {
           return false;
@@ -1236,25 +1232,23 @@
       return /^http:/.test(tab.url);
     }
 
-    // Find the active window's active tab and pass it to |callback|.
-    // |callback| may be passed undefined.
-    // |callback| won't be called in Safari if there is no active tab.
+    // Call |callback(tab)|, where |tab| is the active tab, or undefined if
+    // there is no active tab.
     var getActiveTab = function(callback) {
       if (!SAFARI) {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
           callback(tabs[0]);
         });
-      } else if (SAFARI &&
-                 safari &&
-                 safari.application &&
-                 safari.application.activeBrowserWindow &&
-                 safari.application.activeBrowserWindow.activeTab) {
-        callback(safari.application.activeBrowserWindow.activeTab);
+      } else {
+        var target = safari || {};
+        target = target.application || {};
+        target = target.activeBrowserWindow || {};
+        callback(target.activeTab);
       }
     };
 
     getActiveTab(function(tab) {
-      if (validTab(tab)) {
+      if (tab && validTab(tab)) {
         showOverlayIfAllowed(tab);
       } else {
         // We didn't find an appropriate tab
