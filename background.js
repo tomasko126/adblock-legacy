@@ -1235,28 +1235,32 @@
       }
       return /^http:/.test(tab.url);
     }
-    // If |tab| is not a valid tab, retry in five minutes.
-    // |tab| can be undefined.
-    var examineTab = function(tab) {
+
+    // Find the active window's active tab and pass it to |callback|.
+    // |callback| may be passed undefined.
+    // |callback| won't be called in Safari if there is no active tab.
+    var getActiveTab = function(callback) {
+      if (!SAFARI) {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          callback(tabs[0]);
+        });
+      } else if (SAFARI &&
+                 safari &&
+                 safari.application &&
+                 safari.application.activeBrowserWindow &&
+                 safari.application.activeBrowserWindow.activeTab) {
+        callback(safari.application.activeBrowserWindow.activeTab);
+      }
+    };
+
+    getActiveTab(function(tab) {
       if (validTab(tab)) {
         showOverlayIfAllowed(tab);
       } else {
         // We didn't find an appropriate tab
         retryInFiveMinutes();
       }
-    };
-
-    if (!SAFARI) {
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        examineTab(tabs[0]);
-      });
-    } else if (SAFARI &&
-               safari &&
-               safari.application &&
-               safari.application.activeBrowserWindow &&
-               safari.application.activeBrowserWindow.activeTab) {
-      examineTab(safari.application.activeBrowserWindow.activeTab);
-    }
+    });
   }//end of createOverlay()
 
   if (!SAFARI) {
