@@ -1205,32 +1205,6 @@
     if (!survey_data) {
       return;
     }
-    var retryInFiveMinutes = function() {
-      var fiveMinutes = 5 * 60 * 1000;
-      setTimeout(function() {
-        createOverlay(survey_data);
-      }, fiveMinutes);
-    };
-    // Check to see if we should show the survey before showing the overlay.
-    var showOverlayIfAllowed = function(tab) {
-      STATS.shouldShowSurvey(survey_data, function() {
-        var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-        if (SAFARI) {
-          chrome.extension.sendRequest(data);
-        } else {
-          chrome.tabs.sendRequest(tab.id, data);
-        }
-      });
-    };
-    // True if we are willing to show an overlay on this tab.
-    var validTab = function(tab) {
-      if (!SAFARI) {
-        if (tab.incognito || tab.status !== "complete") {
-          return false;
-        }
-      }
-      return /^http:/.test(tab.url);
-    }
 
     // Call |callback(tab)|, where |tab| is the active tab, or undefined if
     // there is no active tab.
@@ -1245,6 +1219,35 @@
         target = target.activeBrowserWindow || {};
         callback(target.activeTab);
       }
+    };
+
+    // True if we are willing to show an overlay on this tab.
+    var validTab = function(tab) {
+      if (!SAFARI) {
+        if (tab.incognito || tab.status !== "complete") {
+          return false;
+        }
+      }
+      return /^http:/.test(tab.url);
+    }
+
+    // Check to see if we should show the survey before showing the overlay.
+    var showOverlayIfAllowed = function(tab) {
+      STATS.shouldShowSurvey(survey_data, function() {
+        var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
+        if (SAFARI) {
+          chrome.extension.sendRequest(data);
+        } else {
+          chrome.tabs.sendRequest(tab.id, data);
+        }
+      });
+    };
+
+    var retryInFiveMinutes = function() {
+      var fiveMinutes = 5 * 60 * 1000;
+      setTimeout(function() {
+        createOverlay(survey_data);
+      }, fiveMinutes);
     };
 
     getActiveTab(function(tab) {
