@@ -62,10 +62,10 @@
   outline: none;
   box-shadow: none;
 }
-.ui-dialog.ui-corner-all {
+.ui-dialog .ui-corner-all {
   border-radius: 5px;
 }
-.ui-dialog.ui-state-hover button {
+.ui-dialog .ui-state-hover button {
   background: #79C9EC !important;
 }
 .ui-dialog .ui-dialog-titlebar-close {
