@@ -1,7 +1,9 @@
 // Allows interaction with the server to track install rate
 // and log messages.
 STATS = (function() {
-  var stats_url = "https://ping.getadblock.com/stats/";
+  //TODO - change back to correct URL
+  //var stats_url = "https://ping.getadblock.com/stats/";
+  var stats_url = "https://ping.getadblock.com/qa-stats/";
 
   //Get some information about the version, os, and browser
   var version = chrome.runtime.getManifest().version;
@@ -70,123 +72,11 @@ STATS = (function() {
       type: 'POST',
       url: stats_url,
       data: data,
-      success: maybeSurvey, // TODO: Remove when we no longer do a/b tests
+      success: checkForThottle,
       error: function(e) {
         console.log("Ping returned error: ", e.status);
       },
     });
-  };
-
-  var shouldShowTabSurvey = function(survey_data) {
-
-    function handle_should_survey(responseData) {
-      if (responseData.length ===  0)
-        return;
-      log('Pinging got some data', responseData);
-
-      try {
-        var data = JSON.parse(responseData);
-        if (data.should_survey === 'true') {
-          openTab('https://getadblock.com/' + survey_data.open_this_url, true);
-        }
-      } catch (e) {
-        console.log('Error parsing JSON: ', responseData, " Error: ", e);
-        return;
-      }
-    }
-
-    shouldShowSurvey(survey_data, handle_should_survey);
-  }
-  
-  var shouldShowSurvey = function(survey_data, callback) {
-    var data = {
-      cmd: "survey",
-      u: userId,
-      sid: survey_data.survey_id
-    };
-    if (!callback)
-        return;
-    $.post(stats_url, data, callback);
-  }  
-
-  var survey_data = null;
-  function one_time_opener() {
-    if (SAFARI) {
-      safari.application.removeEventListener("open", one_time_opener, true);
-    } else {
-      chrome.tabs.onCreated.removeListener(one_time_opener);
-    }
-    if (!one_time_opener.running)
-      return; // one_time_opener was called multiple times
-    if (survey_data == null)
-      return;
-    one_time_opener.running = false;
-    var open_the_tab = function() {
-      // see if survey should still be shown before opening tab
-      shouldShowTabSurvey(survey_data);
-    };
-    if (SAFARI) {
-      // Safari has a bug: if you open a new tab, it will shortly thereafter
-      // set the active tab's URL to "Top Sites". However, here, after the
-      // user opens a tab, we open another. It mistakenly thinks
-      // our tab is the one the user opened and clobbers our URL with "Top
-      // Sites."
-      // To avoid this, we wait a bit, let it update the user's tab, then
-      // open ours.
-      window.setTimeout(open_the_tab, 500);
-    } else {
-      open_the_tab();
-    }
-  }
-
-  // TODO: Remove when we no longer do a/b tests
-  var maybeSurvey = function(responseData, textStatus, jqXHR) {
-    // check to see if the extension should change its ping interval
-    if (jqXHR && jqXHR.getResponseHeader("millis-to-ping"))  {
-        var millisPing = parseInt(jqXHR.getResponseHeader("millis-to-ping"), 10);
-        if (isNaN(millisPing) || millisPing < -1) // server is sick
-            millisPing = null;
-        if (millisPing === -1)
-            millisPing = null;
-
-        if (millisPing !== null) {
-            pingAfterInterval(millisPing);
-        }
-    }
-
-    if (responseData.length ===  0)
-      return;
-
-    if (get_settings().show_survey === false)
-      return;
-
-    log('Pinging got some data', responseData);
-
-    try {
-      var url_data = JSON.parse(responseData);
-      if (!url_data.open_this_url.match(/^\/survey\//))
-        throw new Error("bad survey url.");
-    } catch (e) {
-      console.log("Something went wrong with opening a survey.");
-      console.log('error', e);
-      console.log('response data', responseData);
-      return;
-    }
-    one_time_opener.running = true;
-    // overwrites the current survey if one exists
-    survey_data = url_data;
-    if (survey_data.type && survey_data.type === 'overlay') {
-      createOverlay(survey_data);
-    } else if (survey_data.type && survey_data.type === 'tab') {
-        if (SAFARI) {
-          //safari.application.removeEventListener("open", one_time_opener, true);
-          safari.application.addEventListener("open", one_time_opener, true);
-        } else {
-          if (chrome.tabs.onCreated.hasListener(one_time_opener))
-              chrome.tabs.onCreated.removeListener(one_time_opener);
-          chrome.tabs.onCreated.addListener(one_time_opener);
-        }
-     }
   };
 
   // Called just after we ping the server, to schedule our next ping.
@@ -206,6 +96,20 @@ STATS = (function() {
     var millis = 1000 * 60 * 60 * delay_hours;
     storage_set("next_ping_time", Date.now() + millis);
   };
+
+  var checkForThottle = function(responseData, textStatus, jqXHR) {
+    // check to see if the extension should change its ping interval
+    if (jqXHR && jqXHR.getResponseHeader("millis-to-ping"))  {
+        var millisPing = parseInt(jqXHR.getResponseHeader("millis-to-ping"), 10);
+        if (isNaN(millisPing) || millisPing < -1) // server is sick
+            millisPing = null;
+        if (millisPing === -1)
+            millisPing = null;
+        if (millisPing !== null)
+            pingAfterInterval(millisPing);
+    }
+    SURVEY.maybeSurvey(responseData); // TODO: Remove when we no longer do a/b tests
+  }
 
   // Return the number of milliseconds until the next scheduled ping.
   var millisTillNextPing = function() {
@@ -267,8 +171,8 @@ STATS = (function() {
       // call itself to start the process over again.
       sleepThenPing();
     },
-    //include shouldShowSurvey so that createOverlay in background.js can call it.
-    shouldShowSurvey: shouldShowSurvey,
+    //TODO - remove
+    pingNow: pingNow,
     // Record some data, if we are not rate limited.
     msg: function(message) {
       if (!throttle.attempt()) {
