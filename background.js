@@ -1203,48 +1203,61 @@
   // and must not be using SSL / HTTPS
   var createOverlay = function(survey_data) {
     if (!survey_data) {
-        return;
+      return;
     }
-    var httpRE = /^http:/;
-    var fiveMinutes = 5 * 60 * 1000;
-    if (!SAFARI) {
+
+    // Call |callback(tab)|, where |tab| is the active tab, or undefined if
+    // there is no active tab.
+    var getActiveTab = function(callback) {
+      if (!SAFARI) {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            if (tabs.length > 0 &&
-                !tabs[0].incognito &&
-                tabs[0].status === "complete" &&
-                httpRE.test(tabs[0].url)) {
-                //check to see if we should show the survey before opening the tab.
-                STATS.shouldShowSurvey(survey_data, function() {
-                    var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tabs[0].url};
-                    log("open overlay", data);
-                    chrome.tabs.sendRequest(tabs[0].id, data);
-                });
-                return;
-            }
-            //if we get here, we didn't find an appropriate tab, retry in 5 mins.
-            setTimeout(function () {
-                createOverlay(survey_data);
-            }, fiveMinutes);
+          callback(tabs[0]);
         });
-     } else if (SAFARI &&
-                safari &&
-                safari.application &&
-                safari.application.activeBrowserWindow &&
-                safari.application.activeBrowserWindow.activeTab) {
-        var tab = safari.application.activeBrowserWindow.activeTab;
-        if (httpRE.test(tab.url)) {
-            //check to see if we should show the survey before opening the tab.
-            STATS.shouldShowSurvey(survey_data, function() {
-                var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-                chrome.extension.sendRequest(data);
-            });
-            return;
+      } else {
+        var target = safari || {};
+        target = target.application || {};
+        target = target.activeBrowserWindow || {};
+        callback(target.activeTab);
+      }
+    };
+
+    // True if we are willing to show an overlay on this tab.
+    var validTab = function(tab) {
+      if (!SAFARI) {
+        if (tab.incognito || tab.status !== "complete") {
+          return false;
         }
-        //if we get here, we didn't find an appropriate tab, retry in 5 mins.
-        setTimeout(function () {
-            createOverlay(survey_data);
-        }, fiveMinutes);
+      }
+      return /^http:/.test(tab.url);
     }
+
+    // Check to see if we should show the survey before showing the overlay.
+    var showOverlayIfAllowed = function(tab) {
+      STATS.shouldShowSurvey(survey_data, function() {
+        var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
+        if (SAFARI) {
+          chrome.extension.sendRequest(data);
+        } else {
+          chrome.tabs.sendRequest(tab.id, data);
+        }
+      });
+    };
+
+    var retryInFiveMinutes = function() {
+      var fiveMinutes = 5 * 60 * 1000;
+      setTimeout(function() {
+        createOverlay(survey_data);
+      }, fiveMinutes);
+    };
+
+    getActiveTab(function(tab) {
+      if (tab && validTab(tab)) {
+        showOverlayIfAllowed(tab);
+      } else {
+        // We didn't find an appropriate tab
+        retryInFiveMinutes();
+      }
+    });
   }//end of createOverlay()
 
   if (!SAFARI) {
