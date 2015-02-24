@@ -1198,68 +1198,6 @@
     }//end of if
   }//end of createMalwareNotification function
 
-  //Display a notification overlay on the active tab
-  // To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
-  // and must not be using SSL / HTTPS
-  var createOverlay = function(survey_data) {
-    if (!survey_data) {
-      return;
-    }
-
-    // Call |callback(tab)|, where |tab| is the active tab, or undefined if
-    // there is no active tab.
-    var getActiveTab = function(callback) {
-      if (!SAFARI) {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          callback(tabs[0]);
-        });
-      } else {
-        var target = safari || {};
-        target = target.application || {};
-        target = target.activeBrowserWindow || {};
-        callback(target.activeTab);
-      }
-    };
-
-    // True if we are willing to show an overlay on this tab.
-    var validTab = function(tab) {
-      if (!SAFARI) {
-        if (tab.incognito || tab.status !== "complete") {
-          return false;
-        }
-      }
-      return /^http:/.test(tab.url);
-    }
-
-    // Check to see if we should show the survey before showing the overlay.
-    var showOverlayIfAllowed = function(tab) {
-      SURVEY.shouldShowSurvey(survey_data, function() {
-        var data = { command: "showoverlay", overlayURL: survey_data.open_this_url, tabURL:tab.url};
-        if (SAFARI) {
-          chrome.extension.sendRequest(data);
-        } else {
-          chrome.tabs.sendRequest(tab.id, data);
-        }
-      });
-    };
-
-    var retryInFiveMinutes = function() {
-      var fiveMinutes = 5 * 60 * 1000;
-      setTimeout(function() {
-        createOverlay(survey_data);
-      }, fiveMinutes);
-    };
-
-    getActiveTab(function(tab) {
-      if (tab && validTab(tab)) {
-        showOverlayIfAllowed(tab);
-      } else {
-        // We didn't find an appropriate tab
-        retryInFiveMinutes();
-      }
-    });
-  }//end of createOverlay()
-
   if (!SAFARI) {
     // Chrome blocking code.  Near the end so synchronous request handler
     // doesn't hang Chrome while AdBlock initializes.
