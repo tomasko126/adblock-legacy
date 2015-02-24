@@ -23,7 +23,7 @@ if (window.top === window) {
                 return;
             }
             var notificationMin = 27;
-            var urlPrefix = 'https://getadblock.com';
+            var urlPrefix = 'https://ping.getadblock.com';
             var mainBody = document.body;
             if (mainBody) {
                 //create overlay DIV tag

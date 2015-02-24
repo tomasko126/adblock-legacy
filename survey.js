@@ -3,15 +3,47 @@
 SURVEY = (function() {
   var survey_url = "https://ping.getadblock.com/stats/";
   //long lived var to store tab survey data
-  var survey_data = null;
+  var tab_survey_data = null;
 
   var shouldShowTabSurvey = function(surveyData) {
     function handle_should_survey(responseData) {
       if (responseData.length ===  0)
         return;
       openTab('https://getadblock.com/' + surveyData.open_this_url, true);
+      //null out the data, since we've processed it.
+      tab_survey_data = null;
     }
     shouldShowSurvey(surveyData, handle_should_survey);
+  }
+
+  var shouldShowSurvey = function(surveyData, callback) {
+    var processPostData = function(responseData) {
+      log('survey check response data', responseData);
+      try {
+        var data = JSON.parse(responseData);
+        if (data.should_survey === 'true')
+          callback(responseData);
+      } catch (e) {
+        console.log('Error parsing JSON: ', responseData, " Error: ", e);
+        return;
+      }
+    };
+    var data = {
+      cmd: "survey",
+      u: STATS.userId,
+      sid: surveyData.survey_id
+    };
+    if (!callback)
+      return;
+    if (!surveyData)
+      return;
+    //check if the current state of tab_survey_data matches the surveyData argument
+    //for tab surveys, tab_survey_data should not be null, the surveyData type should be tab, and match tab_survey_data
+    //for overlay surveys, tab_survey_data should be null, the surveyData type should be overlay
+    if ((tab_survey_data && (tab_survey_data.type === surveyData.type) && (surveyData.type === 'tab')) ||
+        (!tab_survey_data && (surveyData.type === 'overlay'))) {
+      $.post(survey_url, data, processPostData);
+    }
   }
 
   function one_time_opener() {
@@ -22,12 +54,12 @@ SURVEY = (function() {
     }
     if (!one_time_opener.running)
       return; // one_time_opener was called multiple times
-    if (survey_data == null)
+    if (tab_survey_data == null)
       return;
     one_time_opener.running = false;
     var open_the_tab = function() {
       // see if survey should still be shown before opening tab
-      shouldShowTabSurvey(survey_data);
+      shouldShowTabSurvey(tab_survey_data);
     };
     if (SAFARI) {
       // Safari has a bug: if you open a new tab, it will shortly thereafter
@@ -45,41 +77,21 @@ SURVEY = (function() {
 
   return {
     //include shouldShowSurvey so that createOverlay in background.js can call it.
-    shouldShowSurvey: function(surveyData, callback) {
-      var processPostData = function(responseData) {
-        log('survey check response data', responseData);
-        try {
-          var data = JSON.parse(responseData);
-          if (data.should_survey === 'true')
-            callback(responseData);
-        } catch (e) {
-          console.log('Error parsing JSON: ', responseData, " Error: ", e);
-          return;
-        }
-      };
-      var data = {
-        cmd: "survey",
-        u: STATS.userId,
-        sid: surveyData.survey_id
-      };
-      if (!callback)
-          return;
-      $.post(survey_url, data, processPostData);
-    },
+    shouldShowSurvey: shouldShowSurvey,
     //include maybeSurvey so that STATS.js can call it.
     maybeSurvey: function(responseData) {
       if (responseData.length === 0)
         return;
-  
+
       if (get_settings().show_survey === false)
         return;
-  
+
       log('Pinging got some data', responseData);
-  
+
       try {
         var url_data = JSON.parse(responseData);
       } catch (e) {
-        console.log("Something went wrong with opening a survey.");
+        console.log("Something went wrong with parsing survey data.");
         console.log('error', e);
         console.log('response data', responseData);
         return;
@@ -91,11 +103,12 @@ SURVEY = (function() {
       //check the type of survey,
       if (url_data.type && url_data.type === 'overlay') {
         createOverlay(url_data);
-        //for overlay surveys don't set survey_data
+        //for overlay surveys don't set tab_survey_data
         //unset it, so a new tab isn't incorrectly openned
-        survey_data = null;
+        tab_survey_data = null;
       } else if (url_data.type && url_data.type === 'tab') {
-          survey_data = url_data;
+
+          tab_survey_data = url_data;
           one_time_opener.running = true;
           if (SAFARI) {
             //safari.application.removeEventListener("open", one_time_opener, true);
