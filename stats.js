@@ -1,9 +1,7 @@
 // Allows interaction with the server to track install rate
 // and log messages.
 STATS = (function() {
-  //TODO - change back to correct URL
-  //var stats_url = "https://ping.getadblock.com/stats/";
-  var stats_url = "https://ping.getadblock.com/qa-stats/";
+  var stats_url = "https://ping.getadblock.com/stats/";
 
   //Get some information about the version, os, and browser
   var version = chrome.runtime.getManifest().version;
@@ -108,7 +106,7 @@ STATS = (function() {
         if (millisPing !== null)
             pingAfterInterval(millisPing);
     }
-    SURVEY.maybeSurvey(responseData); // TODO: Remove when we no longer do a/b tests
+    SURVEY.maybeSurvey(responseData);
   }
 
   // Return the number of milliseconds until the next scheduled ping.
@@ -171,8 +169,6 @@ STATS = (function() {
       // call itself to start the process over again.
       sleepThenPing();
     },
-    //TODO - remove
-    pingNow: pingNow,
     // Record some data, if we are not rate limited.
     msg: function(message) {
       if (!throttle.attempt()) {

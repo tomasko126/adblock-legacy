@@ -1,9 +1,7 @@
 ﻿//if the ping reponse indicates a survey (tab or overlay)
 //gracefully processes the request
 SURVEY = (function() {
-  //TODO
-  //var survey_url = "https://ping.getadblock.com/stats/";
-  var survey_url = "https://ping.getadblock.com/qa-stats/";
+  var survey_url = "https://ping.getadblock.com/stats/";
   //long lived var to store tab survey data
   var survey_data = null;
 
@@ -14,29 +12,6 @@ SURVEY = (function() {
       openTab('https://getadblock.com/' + surveyData.open_this_url, true);
     }
     shouldShowSurvey(surveyData, handle_should_survey);
-  }
-
-  var shouldShowSurvey = function(surveyData, callback) {
-    var processPostData = function(responseData) {
-      try {
-        log('Pinging got some data', responseData);
-        var data = JSON.parse(responseData);
-        if (data.should_survey === 'true') {
-          callback(responseData);
-        }
-      } catch (e) {
-        console.log('Error parsing JSON: ', responseData, " Error: ", e);
-        return;
-      }
-    };
-    var data = {
-      cmd: "survey",
-      u: userId,
-      sid: surveyData.survey_id
-    };
-    if (!callback)
-        return;
-    $.post(survey_url, data, processPostData);
   }
 
   function one_time_opener() {
@@ -68,52 +43,69 @@ SURVEY = (function() {
     }
   }
 
-  // TODO: Remove when we no longer do a/b tests
-  var maybeSurvey = function(responseData) {
-
-    if (responseData.length === 0)
-      return;
-
-    if (get_settings().show_survey === false)
-      return;
-
-    log('Pinging got some data', responseData);
-
-    try {
-      var url_data = JSON.parse(responseData);
-    } catch (e) {
-      console.log("Something went wrong with opening a survey.");
-      console.log('error', e);
-      console.log('response data', responseData);
-      return;
-    }
-//TODO - uncomment when no longer testing the QA.    
-//    if (!url_data.open_this_url.match(/^\/survey\//)) {
-//        log("bad survey url.");    
-//        return;
-//    }
-    //check the type of survey,
-    if (url_data.type && url_data.type === 'overlay') {
-      //for overlay surveys don't set survey_data
-      createOverlay(url_data);
-    } else if (url_data.type && url_data.type === 'tab') {
-        survey_data = url_data;
-        one_time_opener.running = true;
-        if (SAFARI) {
-          //safari.application.removeEventListener("open", one_time_opener, true);
-          safari.application.addEventListener("open", one_time_opener, true);
-        } else {
-          if (chrome.tabs.onCreated.hasListener(one_time_opener))
-              chrome.tabs.onCreated.removeListener(one_time_opener);
-          chrome.tabs.onCreated.addListener(one_time_opener);
-        }
-     }
-  }
-
   return {
     //include shouldShowSurvey so that createOverlay in background.js can call it.
-    shouldShowSurvey: shouldShowSurvey,
+    shouldShowSurvey: function(surveyData, callback) {
+      var processPostData = function(responseData) {
+        log('survey check response data', responseData);
+        try {
+          var data = JSON.parse(responseData);
+          if (data.should_survey === 'true')
+            callback(responseData);
+        } catch (e) {
+          console.log('Error parsing JSON: ', responseData, " Error: ", e);
+          return;
+        }
+      };
+      var data = {
+        cmd: "survey",
+        u: STATS.userId,
+        sid: surveyData.survey_id
+      };
+      if (!callback)
+          return;
+      $.post(survey_url, data, processPostData);
+    },
     //include maybeSurvey so that STATS.js can call it.
-    maybeSurvey: maybeSurvey
+    maybeSurvey: function(responseData) {
+      if (responseData.length === 0)
+        return;
+  
+      if (get_settings().show_survey === false)
+        return;
+  
+      log('Pinging got some data', responseData);
+  
+      try {
+        var url_data = JSON.parse(responseData);
+      } catch (e) {
+        console.log("Something went wrong with opening a survey.");
+        console.log('error', e);
+        console.log('response data', responseData);
+        return;
+      }
+      if (!url_data.open_this_url.match(/^\/survey\//)) {
+          log("bad survey url.");
+          return;
+      }
+      //check the type of survey,
+      if (url_data.type && url_data.type === 'overlay') {
+        createOverlay(url_data);
+        //for overlay surveys don't set survey_data
+        //unset it, so a new tab isn't incorrectly openned
+        survey_data = null;
+      } else if (url_data.type && url_data.type === 'tab') {
+          survey_data = url_data;
+          one_time_opener.running = true;
+          if (SAFARI) {
+            //safari.application.removeEventListener("open", one_time_opener, true);
+            safari.application.addEventListener("open", one_time_opener, true);
+          } else {
+            if (chrome.tabs.onCreated.hasListener(one_time_opener))
+                chrome.tabs.onCreated.removeListener(one_time_opener);
+            chrome.tabs.onCreated.addListener(one_time_opener);
+          }
+       }
+    }//end of maybeSurvey
   };
 })();
