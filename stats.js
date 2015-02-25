@@ -70,7 +70,7 @@ STATS = (function() {
       type: 'POST',
       url: stats_url,
       data: data,
-      success: checkForThottle,
+      success: handlePingResponse,
       error: function(e) {
         console.log("Ping returned error: ", e.status);
       },
@@ -95,7 +95,12 @@ STATS = (function() {
     storage_set("next_ping_time", Date.now() + millis);
   };
 
-  var checkForThottle = function(responseData, textStatus, jqXHR) {
+  var handlePingResponse = function(responseData, textStatus, jqXHR) {
+    maybeThrottle(jqXHR);
+    SURVEY.maybeSurvey(responseData);
+  };
+
+  var maybeThrottle = function(jqXHR) {
     // check to see if the extension should change its ping interval
     if (jqXHR && jqXHR.getResponseHeader("millis-to-ping"))  {
         var millisPing = parseInt(jqXHR.getResponseHeader("millis-to-ping"), 10);
@@ -106,7 +111,6 @@ STATS = (function() {
         if (millisPing !== null)
             pingAfterInterval(millisPing);
     }
-    SURVEY.maybeSurvey(responseData);
   }
 
   // Return the number of milliseconds until the next scheduled ping.
