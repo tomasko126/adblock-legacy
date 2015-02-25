@@ -261,6 +261,32 @@ $("#step_disable_extensions_yes").click(function() {
     $("#step_disable_extensions").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
     $("#step_language_DIV").fadeIn().css("display", "block");
 });
+//Automatically disable / enable other extensions
+$("#OtherExtensions").click(function() {
+    $(this).prop("disabled", true);
+    if (!SAFARI) {
+      chrome.permissions.request({
+          permissions: ['management']
+      }, function(granted) {
+          // The callback argument will be true if the user granted the permissions.
+          if (granted) {
+            chrome.management.getAll(function(result) {
+              for (var i = 0; i < result.length; i++) {
+                if (result[i].enabled &&
+                    result[i].id !== "aokdkpphffpnbddmmpcooifjdmlgmkkj" &&
+                    result[i].id !== "gighmmpiobklfepjocnamgkkbiglidom" &&
+                    result[i].id !== "pljaalgmajnlogcgiohkhdmgpomjcihk") {
+                  chrome.management.setEnabled(result[i].id, false);
+                }
+              }
+              chrome.permissions.remove({
+                  permissions: ['management']
+              }, function(removed) {});
+            });
+          }
+      });
+    }
+});
 
 // STEP 4: language
 
@@ -313,8 +339,42 @@ $("#step_firefox_no").click(function() {
         $("#step_flash_DIV").fadeIn().css("display", "block");
     } else {
         $("#checkupdate").html(translate("reporttous2"));
-        $("a", "#checkupdate").attr("href", generateReportURL());
         $("#privacy").show();
+        $("a", "#checkupdate").attr("href", generateReportURL());
+        $("a", "#checkupdate").click(function(event) { 
+          //we have our own click handler for the anchor tag, so that we
+          //can ask retrieve other extension info.
+          event.preventDefault();
+          chrome.permissions.request({
+            permissions: ['management']
+          }, function(granted) {
+            // The callback argument will be true if the user granted the permissions.
+            if (granted) {
+              chrome.management.getAll(function(result) {
+                var currentHREF = $("a", "#checkupdate").attr("href");
+                var extInfo = [];
+                extInfo.push("==== Extension and App Information ====");
+                for (var i = 0; i < result.length; i++) {
+                    extInfo.push("Number " + (i + 1));
+                    extInfo.push("  name: " + result[i].name);
+                    extInfo.push("  id: " + result[i].id);
+                    extInfo.push("  version: " + result[i].version);
+                    extInfo.push("  enabled: " + result[i].enabled)
+                    extInfo.push("  type: " + result[i].type);
+                    extInfo.push("");
+                }
+                currentHREF = currentHREF + '  \n' + encodeURIComponent(extInfo.join('  \n'));
+                chrome.permissions.remove({
+                  permissions: ['management']
+                }, function(removed) {});
+                document.location.href = currentHREF;
+              });
+            } else {
+              //user didn't grant us permission, just go to site...
+              document.location.href = $("a", "#checkupdate").attr("href");
+            }
+          });
+       });        
     }
 });
 $("#step_firefox_wontcheck").click(function() {

@@ -37,7 +37,7 @@ $(document).ready(function() {
                         var extInfo = [];
                         extInfo.push("==== Extension and App Information ====");
                         for (var i = 0; i < result.length; i++) {
-                            extInfo.push("Number " + i);
+                            extInfo.push("Number " + (i + 1));
                             extInfo.push("  name: " + result[i].name);
                             extInfo.push("  id: " + result[i].id);
                             extInfo.push("  version: " + result[i].version);
