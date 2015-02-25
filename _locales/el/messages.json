@@ -230,7 +230,7 @@
     "description":"Label for beta features in AdBlock Options"
   },
   "googletextads2":{
-    "message":"Μου αρέσουν οι διαφημίσεις κειμένου στα αποτελέσματα αναζήτησης Google. εμφάνιζέ τες",
+    "message":"Μου αρέσουν οι διαφημίσεις κειμένου στα αποτελέσματα αναζήτησης Google, να εμφανίζονται",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "showcontextmenus2":{
