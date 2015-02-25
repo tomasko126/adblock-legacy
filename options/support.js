@@ -45,7 +45,7 @@ $(document).ready(function() {
                             extInfo.push("  type: " + result[i].type);
                             extInfo.push("");
                         }
-                        debug_info = debug_info + "\n" + extInfo.join('  \n');
+                        debug_info = debug_info + '  \n  \n' + extInfo.join('  \n');
                         showDebugInfo();
                         chrome.permissions.remove({
                             permissions: ['management']
