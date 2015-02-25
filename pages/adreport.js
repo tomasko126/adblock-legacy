@@ -353,6 +353,7 @@ $("#step_firefox_no").click(function() {
               chrome.management.getAll(function(result) {
                 var currentHREF = $("a", "#checkupdate").attr("href");
                 var extInfo = [];
+                extInfo.push("");
                 extInfo.push("==== Extension and App Information ====");
                 for (var i = 0; i < result.length; i++) {
                     extInfo.push("Number " + (i + 1));
@@ -363,7 +364,7 @@ $("#step_firefox_no").click(function() {
                     extInfo.push("  type: " + result[i].type);
                     extInfo.push("");
                 }
-                currentHREF = currentHREF + '  \n  \n' + encodeURIComponent(extInfo.join('  \n'));
+                currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
                 chrome.permissions.remove({
                   permissions: ['management']
                 }, function(removed) {});
