@@ -363,7 +363,7 @@ $("#step_firefox_no").click(function() {
                     extInfo.push("  type: " + result[i].type);
                     extInfo.push("");
                 }
-                currentHREF = currentHREF + '  \n' + encodeURIComponent(extInfo.join('  \n'));
+                currentHREF = currentHREF + '  \n  \n' + encodeURIComponent(extInfo.join('  \n'));
                 chrome.permissions.remove({
                   permissions: ['management']
                 }, function(removed) {});
