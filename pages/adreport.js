@@ -302,9 +302,15 @@ $("#OtherExtensions").click(function() {
             chrome.management.getAll(function(result) {
               for (var i = 0; i < result.length; i++) {
                 if (result[i].enabled &&
-                    result[i].id !== "aokdkpphffpnbddmmpcooifjdmlgmkkj" &&
+                    result[i].mayDisable &&
                     result[i].id !== "gighmmpiobklfepjocnamgkkbiglidom" &&
                     result[i].id !== "pljaalgmajnlogcgiohkhdmgpomjcihk") {
+                  //if the extension is a developer version, continue, don't disable.
+                  if (result[i].installType === "development" &&
+                      result[i].type === "extension" &&
+                      result[i].name === "AdBlock") {
+                    continue;
+                  }
                   chrome.management.setEnabled(result[i].id, false);
                   extensionsDisabled.push(result[i].id);
                 }
