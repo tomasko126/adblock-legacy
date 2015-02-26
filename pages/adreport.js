@@ -276,6 +276,19 @@ $("#step_disable_extensions_yes").click(function() {
   }
   $("#step_disable_extensions").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
   $("#step_language_DIV").fadeIn().css("display", "block");
+  if (chrome &&
+      chrome.tabs &&
+      chrome.tabs.detectLanguage) {        
+    chrome.tabs.detectLanguage(parseInt(tabId), function(language) { 
+      if (!language)
+        return;
+      var twoCharLanguage = language.match(/^[a-z]+/i)[0];
+      var langOption = $("#step_language_lang option[data-lang=" + twoCharLanguage+ "]");
+      if (langOption) {
+          langOption.attr('selected', 'selected');
+      }
+    });
+  }
 });
 //Automatically disable / enable other extensions
 $("#OtherExtensions").click(function() {
