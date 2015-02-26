@@ -255,18 +255,27 @@ $("#step_update_filters_yes").click(function() {
 //after user disables all extensions except for AdBlock
 //if the user clicks a radio button
 $("#step_disable_extensions_no").click(function() {
-    $("#step_disable_extensions").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
-    $("#checkupdate").text(translate("reenableadsonebyone"));
+  $("#step_disable_extensions").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
+  $("#checkupdate").text(translate("reenableadsonebyone"));
 });
 $("#step_disable_extensions_yes").click(function() {
-    if (extensionsDisabled.length > 0) {
-      for (var i = 0; i < extensionsDisabled.length; i++) {
-        chrome.management.setEnabled(extensionsDisabled[i], true);
-      }
-      alert(translate('enableotherextensionscomplete'));
-    }
-    $("#step_disable_extensions").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
-    $("#step_language_DIV").fadeIn().css("display", "block");
+  if (extensionsDisabled.length > 0) {
+    chrome.permissions.request({
+        permissions: ['management']
+    }, function(granted) {
+        // The callback argument will be true if the user granted the permissions.
+        if (granted) {
+          for (var i = 0; i < extensionsDisabled.length; i++) {
+            chrome.management.setEnabled(extensionsDisabled[i], true);
+          }
+          alert(translate('enableotherextensionscomplete'));
+        } else {
+          alert(translate('manuallyenableotherextensions'));
+        }
+    });
+  }
+  $("#step_disable_extensions").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
+  $("#step_language_DIV").fadeIn().css("display", "block");
 });
 //Automatically disable / enable other extensions
 $("#OtherExtensions").click(function() {
@@ -290,11 +299,13 @@ $("#OtherExtensions").click(function() {
               chrome.permissions.remove({
                   permissions: ['management']
               }, function(removed) {});
+              var alertDisplayed = false;
               alert(translate('disableotherextensionscomplete'));
               BGcall("reloadTab", parseInt(tabId));
               chrome.extension.onRequest.addListener(
                 function(message, sender, sendResponse) {
-                  if (message.command  === "reloadcomplete") {
+                  if (!alertDisplayed && message.command  === "reloadcomplete") {
+                    alertDisplayed = true;
                     alert(translate('tabreloadcomplete'));
                   }
                 }
