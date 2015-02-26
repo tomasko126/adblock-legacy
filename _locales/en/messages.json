@@ -551,8 +551,20 @@
   },
   "clickdisableotherextensions":{
     "message":"Or click this: <a>Disable all other extensions<\/a>",
-    "description":"Instruction on ad report page"
+    "description":"button text to disable other extensions on ad report page"
   },
+  "disableotherextensionscomplete":{
+    "message":"All other extensions have been disabled.  We'll now reload the tab.",
+    "description":"alert text notifying users that we've disabled all other extensions on ad report page"
+  },
+  "enableotherextensionscomplete":{
+    "message":"The extensions that were previously disabled have been enabled.",
+    "description":"alert text notifying users that we've re-enabled extensions that were previously disabled on ad report page"
+  },  
+  "tabreloadcomplete":{
+    "message":"The tab with the ad has been reloaded, please check that tab.",
+    "description":"alert text notifying users that we've disabled all other extensions on ad report page"
+  },     
   "disableforsafaristepone":{
     "message":"Click the Safari menu &rarr; Preferences &rarr; Extensions.",
     "description":"Step 1 for disabling Safari extensions"

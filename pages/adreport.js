@@ -1,4 +1,5 @@
 var malwareDomains = null;
+var extensionsDisabled = [];
 $(function() {
     localizePage();
 
@@ -258,6 +259,12 @@ $("#step_disable_extensions_no").click(function() {
     $("#checkupdate").text(translate("reenableadsonebyone"));
 });
 $("#step_disable_extensions_yes").click(function() {
+    if (extensionsDisabled.length > 0) {
+      for (var i = 0; i < extensionsDisabled.length; i++) {
+        chrome.management.setEnabled(extensionsDisabled[i], true);
+      }
+      alert(translate('enableotherextensionscomplete'));
+    }
     $("#step_disable_extensions").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
     $("#step_language_DIV").fadeIn().css("display", "block");
 });
@@ -277,11 +284,21 @@ $("#OtherExtensions").click(function() {
                     result[i].id !== "gighmmpiobklfepjocnamgkkbiglidom" &&
                     result[i].id !== "pljaalgmajnlogcgiohkhdmgpomjcihk") {
                   chrome.management.setEnabled(result[i].id, false);
+                  extensionsDisabled.push(result[i].id);
                 }
               }
               chrome.permissions.remove({
                   permissions: ['management']
               }, function(removed) {});
+              alert(translate('disableotherextensionscomplete'));
+              BGcall("reloadTab", parseInt(tabId));
+              chrome.extension.onRequest.addListener(
+                function(message, sender, sendResponse) {
+                  if (message.command  === "reloadcomplete") {
+                    alert(translate('tabreloadcomplete'));
+                  }
+                }
+              );              
             });
           }
       });
