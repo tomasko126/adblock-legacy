@@ -157,7 +157,6 @@ _placementFor: function(el) {
   var t = this._targetSize(el);
   var pics = this._picdata[t.type];
   var pic = pics[Math.floor(Math.random() * pics.length)];
-  console.log("_placementFor", t, pics, pic);
 
   // If we only have one dimension, we may choose to use the picture's ratio;
   // but don't go over 180k pixels (so e.g. 1000x__ doesn't insert a 1000x1000
@@ -173,13 +172,11 @@ _placementFor: function(el) {
     t.x = (parentX ? Math.min(newX, parentX) : newX);
   }
   if (!t.x || !t.y || t.x < 40 || t.y < 40) {
-    console.log("returning null", t);
     return null; // unknown dims or too small to bother
   }
 
   var result = this._fit(pic, t);
   result.url = chrome.extension.getURL("picreplacement/img/" + pic.filename);
-  console.log("returning result", result);
   return result;
 },
 
@@ -376,7 +373,7 @@ _replaceHiddenSectionContaining: function(el) {
 translate: function(key) {
   var text = {
     "explanation": {
-      en: "AdBlock now shows you cats instead of ads!",
+      en: "AdBlock for the Apple Watch!",
       es: "AdBlock ahora muestra los gatos en lugar de anuncios!",
       fr: "Dorénavant AdBlock affichera des chats à la place des publicités!",
       de: "AdBlock ersetzt ab heute Werbung durch Katzen!",

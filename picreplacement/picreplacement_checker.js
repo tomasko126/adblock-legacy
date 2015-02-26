@@ -23,7 +23,7 @@ picreplacement_checker = {
     // like to say hi! - Michael
     var today = new Date();
     //TODO - update dates
-    return today < new Date(2015, 1, 2) || today >= new Date(2015, 1, 20);
+    return today < new Date(2015, 1, 10) || today >= new Date(2015, 2, 3);
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))

@@ -10,11 +10,10 @@ var elementPurger = {
   // Remove elements on the page of |request.elType| that request
   // |request.url|.  Will try again if none are found unless |lastTry|.
   _purgeElements: function(request, lastTry) {
-    console.log("request", request);
     var elType = request.elType;
     var url = request.url;
 
-    console.log("[DEBUG]", "Purging:", lastTry, elType, url);
+    log("[DEBUG]", "Purging:", lastTry, elType, url);
 
     var tags = {};
     tags[ElementTypes.image] = { IMG:1 };
@@ -29,7 +28,7 @@ var elementPurger = {
         var selector = tag + '[' + attr + src.op + '"' + src.text + '"]';
 
         var results = document.querySelectorAll(selector);
-        console.log("[DEBUG]", "  ", results.length, "results for selector:", selector);
+        log("[DEBUG]", "  ", results.length, "results for selector:", selector);
         if (results.length) {
           for (var j=0; j < results.length; j++) {
             if (request.picreplacement_enabled) {
