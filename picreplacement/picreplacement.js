@@ -382,7 +382,7 @@ translate: function(key) {
       zh: "现在显示的AdBlock猫，而不是广告！",
     },
     "stop_showing": {
-      en: "Stop showing me cats!",
+      en: "Stop showing me AdBlock Apple Watch ads!",
       es: "No mostrar los gatos!",
       fr: "Arrêter l'affichage des chats!",
       de: "Keine Katzen mehr anzeigen!",
@@ -391,7 +391,7 @@ translate: function(key) {
       zh: "不显示猫图片！",
     },
     "ok_no_more": {
-      en: "OK, AdBlock will not show you any more cats.\n\nHappy April Fools' Day!",
+      en: "OK, AdBlock will not show you any more AdBlock Apple Watch ads.\n\nHappy April Fools' Day!",
       es: "OK, AdBlock no te mostrará los gatos.\n\nFeliz Día de los Inocentes!",
       fr: "OK, AdBlock n'affichera plus de chats.\n\nJ'espère que mon poisson d'avril vous a plu!",
       de: "AdBlock wird keine Katzen mehr anzeigen.\n\nApril, April!",
