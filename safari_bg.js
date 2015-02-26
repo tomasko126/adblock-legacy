@@ -92,10 +92,12 @@ safari.application.addEventListener("message", function(messageEvent) {
     var frameInfo = messageEvent.message.frameInfo;
     chrome._tabInfo.notice(tab, frameInfo);
     var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
-
+    var result = { picreplacement_enabled: picreplacement_checker.enabled(messageEvent.target.url) };
+    
     if (adblock_is_paused() || page_is_unblockable(sendingTab.url) ||
         page_is_whitelisted(sendingTab.url)) {
-        messageEvent.message = true;
+        result.can_load = true;
+        messageEvent.message = result;
         return;
     }
 
@@ -108,7 +110,8 @@ safari.application.addEventListener("message", function(messageEvent) {
     var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
     if (isMatched)
         log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
-    messageEvent.message = !isMatched;
+    result.can_load = !isMatched;
+    messageEvent.message = result;
 }, false);
 
 // Code for creating popover, not available on Safari 5.0

@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>Michael Gundlach</string>
 	<key>Builder Version</key>
-	<string>534.57.2</string>
+	<string>10600.3.18</string>
 	<key>CFBundleDisplayName</key>
 	<string>AdBlock</string>
 	<key>CFBundleIdentifier</key>
@@ -62,6 +62,7 @@
 				<string>functions.js</string>
 				<string>filtering/filteroptions.js</string>
 				<string>bandaids.js</string>
+				<string>picreplacement/picreplacement.js</string>
 				<string>adblock_start_common.js</string>
 				<string>adblock_start_safari.js</string>
 			</array>
@@ -69,6 +70,8 @@
 	</dict>
 	<key>Description</key>
 	<string>Blocks ads on all websites.  Also available for Chrome (getadblock.com)</string>
+	<key>DeveloperIdentifier</key>
+	<string>KU3C4BJ8BD</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
