@@ -187,7 +187,8 @@ _replace: function(el) {
   var placement = this._placementFor(el);
   if (!placement)
     return null; // don't know how to replace |el|
-
+  if (document.getElementsByClassName("picreplacement-image").length > 0)
+    return null; //we only want to show 1 ad per page
   var newPic = document.createElement("img");
   newPic.classList.add("picreplacement-image");
 
@@ -382,7 +383,7 @@ translate: function(key) {
       zh: "现在显示的AdBlock猫，而不是广告！",
     },
     "stop_showing": {
-      en: "Stop showing me AdBlock Apple Watch ads!",
+      en: "Stop showing these ads!",
       es: "No mostrar los gatos!",
       fr: "Arrêter l'affichage des chats!",
       de: "Keine Katzen mehr anzeigen!",
