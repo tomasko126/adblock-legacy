@@ -53,9 +53,6 @@ SURVEY = (function() {
   // To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
   // and must not be using SSL / HTTPS
   var processOverlay = function(surveyData) {
-    if (!surveyData) {
-      return;
-    }
     // Call |callback(tab)|, where |tab| is the active tab, or undefined if
     // there is no active tab.
     var getActiveTab = function(callback) {
