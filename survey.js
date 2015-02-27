@@ -6,17 +6,14 @@ SURVEY = (function() {
   //long lived var to store tab survey data
   var tabSurveyData = null;
 
-  //tabSurveyInProcess is used within the Tab open event handler within
-  //the Tab survey processing to prevent multiple tabs from being openned
+  //inProcess is used within the survey processing to prevent multiple tabs
+  //or overlays from being openned
   //such as the case with browsers that generate a lot of pings
-  var tabSurveyInProcess = true;
-  //overlaySurveyInProcess is used within the Overlay
-  //survey processing to prevent multiple Overlays from being openned
-  //such as the case with browsers that generate a lot of pings
-  var overlaySurveyInProcess = true;  
+  var inProcess = true;
 
   //open a Tab for a full page survey
   var processTab = function(surveyData) {
+    console.log("processTab", inProcess);
 
    var waitForUserAction = function() {
       if (SAFARI) {
@@ -24,13 +21,15 @@ SURVEY = (function() {
       } else {
         chrome.tabs.onCreated.removeListener(waitForUserAction);
       }
-      if (!tabSurveyInProcess) {
+      console.log("processTab", inProcess);
+      if (!inProcess) {
+        console.log("processTab returning");
         return; // waitForUserAction was called multiple times
       }
       if (tabSurveyData == null) {
         return;
       }
-      tabSurveyInProcess = false;
+      inProcess = false;
       var openTheTab = function() {
         // see if survey should still be shown before opening tab
         shouldShowTabSurvey(tabSurveyData);
@@ -104,11 +103,15 @@ SURVEY = (function() {
     // Check to see if we should show the survey before showing the overlay.
     var showOverlayIfAllowed = function(tab) {
       shouldShowSurvey(surveyData, function() {
-        if (!overlaySurveyInProcess) {
+        console.log("callbackoverlay", inProcess);
+        if (!inProcess) {
+          console.log("callbackoverlay returning", inProcess);
           return;
         }
-        overlaySurveyInProcess = false;        
+        inProcess = false;        
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
+        //TODO
+        console.log("open overlay", data);
         if (SAFARI) {
           chrome.extension.sendRequest(data);
         } else {
@@ -118,7 +121,8 @@ SURVEY = (function() {
     };
 
     var retryInFiveMinutes = function() {
-      var fiveMinutes = 5 * 60 * 1000;
+      //TODO
+      var fiveMinutes = 1 * 60 * 1000;
       setTimeout(function() {
         processOverlay(surveyData);
       }, fiveMinutes);
@@ -126,8 +130,11 @@ SURVEY = (function() {
 
     getActiveTab(function(tab) {
       if (tab && validTab(tab)) {
+        console.log("found tab");
         showOverlayIfAllowed(tab);
       } else {
+        //TODO
+        console.log("wait 5 min");
         // We didn't find an appropriate tab
         retryInFiveMinutes();
       }
@@ -139,12 +146,12 @@ SURVEY = (function() {
   var validCurrentSurveyData = function(surveyData) {
     //check if the current state of the 'InProcess' flags match the type in the surveyData argument
     //surveyData should not be null in either case and...
-    //For Tab Surveys, the surveyData type should be tab, and overlaySurveyInProcess should true (initial, default value)
-    //For Overlay Surveys, the surveyData type should be overlay, and tabSurveyInProcess should be true (initial, default value)
+    //For Tab Surveys, the surveyData type should be tab, and inProcess should true (initial, default value)
+    //For Overlay Surveys, the surveyData type should be overlay, and inProcess should be true (initial, default value)
     if (surveyData && surveyData.type && surveyData.type === 'tab') {
-      return overlaySurveyInProcess;
+      return inProcess;
     } else if (surveyData && surveyData.type && surveyData.type === 'overlay') {
-      return tabSurveyInProcess;
+      return inProcess;
     } else {
       return false; 
     }
@@ -155,8 +162,11 @@ SURVEY = (function() {
     var processPostData = function(responseData) {
       try {
         var data = JSON.parse(responseData);
-        if (data.should_survey === 'true')
+        console.log("shouldShowSurvey", data);
+        if (data.should_survey === 'true') {
+          console.log("calling callback");
           callback(responseData);
+        }
       } catch (e) {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
         return;
@@ -167,11 +177,13 @@ SURVEY = (function() {
       return;
     if (!surveyData)
       return;
-    if (!validCurrentSurveyData(surveyData))
-      return;
+//    if (!validCurrentSurveyData(surveyData))
+//      return;
 
     var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
-    $.post(survey_url, data, processPostData);
+    processPostData(JSON.stringify({"should_survey": "true", "type": "overlay"}));
+    //TODO
+    //$.post(survey_url, data, processPostData);
   }
 
   //check if the responseData from the initial 'ping' is valid
@@ -193,12 +205,13 @@ SURVEY = (function() {
         console.log('response data', responseData);
         return false;
       }
-      if (!url_data || 
-          !url_data.open_this_url ||
-          !url_data.open_this_url.match(/^\/survey\//)) {
-          log("bad survey url.");
-          return false;
-      }
+//TODO      
+//      if (!url_data || 
+//          !url_data.open_this_url ||
+//          !url_data.open_this_url.match(/^\/survey\//)) {
+//          log("bad survey url.");
+//          return false;
+//      }
       return url_data;
   }
 
@@ -208,9 +221,9 @@ SURVEY = (function() {
       //check the type of survey,
       if (url_data && url_data.type && url_data.type === 'overlay') {
         processOverlay(url_data);
-        //for overlay surveys don't set tabSurveyData
-        //unset it, so a new tab isn't incorrectly openned
-        tabSurveyData = null;
+//        //for overlay surveys don't set tabSurveyData
+//        //unset it, so a new tab isn't incorrectly openned
+//        tabSurveyData = null;
       } else if (url_data && url_data.type && url_data.type === 'tab') {
         processTab(url_data);
       }
