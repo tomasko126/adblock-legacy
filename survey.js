@@ -13,21 +13,18 @@ SURVEY = (function() {
   var processTab = function(surveyData) {
 
    var waitForUserAction = function() {
-      if (!inProcess) {
-        return; // waitForUserAction was called multiple times
-      }
       if (!surveyData) {
         return;
       }
-      inProcess = false;
       if (SAFARI) {
         safari.application.removeEventListener("open", waitForUserAction, true);
       } else {
         chrome.tabs.onCreated.removeListener(waitForUserAction);
       }
-
       var openTabIfAllowed = function() {
         shouldShowSurvey(surveyData, function () {
+          //set inProcess to false to stop other surveys
+          inProcess = false;
           openTab('https://getadblock.com/' + surveyData.open_this_url, true);
         });
       }
@@ -90,9 +87,7 @@ SURVEY = (function() {
     // Check to see if we should show the survey before showing the overlay.
     var showOverlayIfAllowed = function(tab) {
       shouldShowSurvey(surveyData, function() {
-        if (!inProcess) {
-          return;
-        }
+        //set inProcess to false to stop other surveys
         inProcess = false;
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
         if (SAFARI) {
@@ -128,7 +123,7 @@ SURVEY = (function() {
       try {
         var data = JSON.parse(responseData);
         if (data.should_survey === 'true') {
-          callback(responseData);
+          callback();
         }
       } catch (e) {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
@@ -139,6 +134,9 @@ SURVEY = (function() {
     if (!callback)
       return;
     if (!surveyData)
+      return;
+    //stop if there's another survey in process
+    if (!inProcess)
       return;
 
     var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
