@@ -13,9 +13,6 @@ SURVEY = (function() {
   var processTab = function(surveyData) {
 
    var waitForUserAction = function() {
-      if (!surveyData) {
-        return;
-      }
       if (SAFARI) {
         safari.application.removeEventListener("open", waitForUserAction, true);
       } else {
