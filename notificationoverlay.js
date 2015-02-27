@@ -23,8 +23,7 @@ if (window.top === window) {
         return;
       }
       var notificationMin = 27;
-      //TODO - change to prod.
-      var urlPrefix = 'https://ping.getadblock.com';
+      var urlPrefix = 'https://getadblock.com/';
       var mainBody = document.body;
       if (mainBody) {
         //create overlay DIV tag
@@ -98,7 +97,7 @@ if (window.top === window) {
       if (!window || !window.document) {
         return 0;
       }
-    
+
       var bestGuess = window.innerWidth;
       //replace the following:
       //var aDoc = document.body || document.getElementById("main") || document;
@@ -107,7 +106,7 @@ if (window.top === window) {
       tempDiv.id = "_AB_temp";
       tempDiv.style.cssText = "left:0px; right:0px; top:0px; height:0px; visibility:hidden";
       document.body.appendChild(tempDiv);
-    
+
       try {
         if (tempDiv.offsetWidth <= 0) {
           return bestGuess;
