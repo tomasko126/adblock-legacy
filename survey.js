@@ -181,7 +181,6 @@ SURVEY = (function() {
         console.log('response data', responseData);
         return false;
       }
-      if (
       if (!url_data || 
           !url_data.open_this_url ||
           !url_data.open_this_url.match(/^\/survey\//)) {
