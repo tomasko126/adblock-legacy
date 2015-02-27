@@ -2,16 +2,21 @@
 //gracefully processes the request
 SURVEY = (function() {
 
-  var survey_url = "https://ping.getadblock.com/stats/";
+  var survey_url = "https://ping.getadblock.com/qa-stats/";
   //long lived var to store tab survey data
   var tabSurveyData = null;
+
   //tabSurveyInProcess is used within the Tab open event handler within
   //the Tab survey processing to prevent multiple tabs from being openned
   //such as the case with browsers that generate a lot of pings
   var tabSurveyInProcess = true;
+  //overlaySurveyInProcess is used within the Overlay
+  //survey processing to prevent multiple Overlays from being openned
+  //such as the case with browsers that generate a lot of pings
+  var overlaySurveyInProcess = true;  
 
   //open a Tab for a full page survey
-  var processTab = function() {
+  var processTab = function(surveyData) {
 
    var waitForUserAction = function() {
       if (SAFARI) {
@@ -19,10 +24,12 @@ SURVEY = (function() {
       } else {
         chrome.tabs.onCreated.removeListener(waitForUserAction);
       }
-      if (!tabSurveyInProcess)
+      if (!tabSurveyInProcess) {
         return; // waitForUserAction was called multiple times
-      if (tabSurveyData == null)
+      }
+      if (tabSurveyData == null) {
         return;
+      }
       tabSurveyInProcess = false;
       var openTheTab = function() {
         // see if survey should still be shown before opening tab
@@ -47,14 +54,11 @@ SURVEY = (function() {
         if (responseData.length ===  0)
           return;
         openTab('https://getadblock.com/' + surveyData.open_this_url, true);
-        //set to true, since we've processed it
-        //this will allow the validCurrentData function to process correctly if
-        //a overlay survey is waiting for a valid Tab.
-        tabSurveyData = true;
       }
       shouldShowSurvey(surveyData, handle_should_survey);
     }
-
+ 
+    tabSurveyData = surveyData;   
     if (SAFARI) {
       safari.application.addEventListener("open", waitForUserAction, true);
     } else {
@@ -72,7 +76,6 @@ SURVEY = (function() {
     if (!surveyData) {
       return;
     }
-
     // Call |callback(tab)|, where |tab| is the active tab, or undefined if
     // there is no active tab.
     var getActiveTab = function(callback) {
@@ -101,6 +104,10 @@ SURVEY = (function() {
     // Check to see if we should show the survey before showing the overlay.
     var showOverlayIfAllowed = function(tab) {
       shouldShowSurvey(surveyData, function() {
+        if (!overlaySurveyInProcess) {
+          return;
+        }
+        overlaySurveyInProcess = false;        
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
         if (SAFARI) {
           chrome.extension.sendRequest(data);
@@ -130,17 +137,22 @@ SURVEY = (function() {
   //functions below are used by both Tab and Overlay Surveys
 
   var validCurrentSurveyData = function(surveyData) {
-    //check if the current state of tabSurveyData matches the surveyData argument
-    //for tab surveys, tabSurveyData should not be null, the surveyData type should be tab, and match tabSurveyData type
-    //for overlay surveys, tabSurveyData should be null, the surveyData type should be overlay
-    return ((tabSurveyData && (tabSurveyData.type === surveyData.type) && (surveyData.type === 'tab')) ||
-            (!tabSurveyData && (surveyData.type === 'overlay')));
+    //check if the current state of the 'InProcess' flags match the type in the surveyData argument
+    //surveyData should not be null in either case and...
+    //For Tab Surveys, the surveyData type should be tab, and overlaySurveyInProcess should true (initial, default value)
+    //For Overlay Surveys, the surveyData type should be overlay, and tabSurveyInProcess should be true (initial, default value)
+    if (surveyData && surveyData.type && surveyData.type === 'tab') {
+      return overlaySurveyInProcess;
+    } else if (surveyData && surveyData.type && surveyData.type === 'overlay') {
+      return tabSurveyInProcess;
+    } else {
+      return false; 
+    }
   }
 
   //double check with the ping server that the survey should be shown
   var shouldShowSurvey = function(surveyData, callback) {
     var processPostData = function(responseData) {
-      log('survey check response data', responseData);
       try {
         var data = JSON.parse(responseData);
         if (data.should_survey === 'true')
@@ -171,7 +183,7 @@ SURVEY = (function() {
       if (get_settings().show_survey === false)
         return false;
 
-      log('Pinging got some data', responseData);
+      log('validating ping response data', responseData);
 
       try {
         var url_data = JSON.parse(responseData);
@@ -200,8 +212,7 @@ SURVEY = (function() {
         //unset it, so a new tab isn't incorrectly openned
         tabSurveyData = null;
       } else if (url_data && url_data.type && url_data.type === 'tab') {
-        tabSurveyData = url_data;
-        processTab();
+        processTab(url_data);
       }
     }//end of maybeSurvey
   };
