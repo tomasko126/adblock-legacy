@@ -182,7 +182,10 @@ SURVEY = (function() {
         console.log('response data', responseData);
         return false;
       }
-      if (!url_data.open_this_url.match(/^\/survey\//)) {
+      if (
+      if (!url_data || 
+          !url_data.open_this_url ||
+          !url_data.open_this_url.match(/^\/survey\//)) {
           log("bad survey url.");
           return false;
       }
