@@ -130,13 +130,8 @@ SURVEY = (function() {
         return;
       }
     };
-
-    if (!callback)
-      return;
-    if (!surveyData)
-      return;
-    //stop if there's another survey in process
-    if (!inProcess)
+    //stop if there's no data, or no callback, or another survey in process
+    if (!surveyData || !callback || !inProcess)
       return;
 
     var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
