@@ -3,8 +3,6 @@
 SURVEY = (function() {
 
   var survey_url = "https://ping.getadblock.com/stats/";
-  //long lived var to store tab survey data
-  var tabSurveyData = null;
 
   //inProcess is used within the survey processing to prevent multiple tabs
   //or overlays from being openned
@@ -15,22 +13,24 @@ SURVEY = (function() {
   var processTab = function(surveyData) {
 
    var waitForUserAction = function() {
+      if (!inProcess) {
+        return; // waitForUserAction was called multiple times
+      }
+      if (!surveyData) {
+        return;
+      }
+      inProcess = false;
       if (SAFARI) {
         safari.application.removeEventListener("open", waitForUserAction, true);
       } else {
         chrome.tabs.onCreated.removeListener(waitForUserAction);
       }
-      if (!inProcess) {
-        return; // waitForUserAction was called multiple times
+
+      var openTabIfAllowed = function() {
+        shouldShowSurvey(surveyData, function () {
+          openTab('https://getadblock.com/' + surveyData.open_this_url, true);
+        });
       }
-      if (tabSurveyData == null) {
-        return;
-      }
-      inProcess = false;
-      var openTheTab = function() {
-        // see if survey should still be shown before opening tab
-        shouldShowTabSurvey(tabSurveyData);
-      };
       if (SAFARI) {
         // Safari has a bug: if you open a new tab, it will shortly thereafter
         // set the active tab's URL to "Top Sites". However, here, after the
@@ -39,22 +39,12 @@ SURVEY = (function() {
         // Sites."
         // To avoid this, we wait a bit, let it update the user's tab, then
         // open ours.
-        window.setTimeout(openTheTab, 500);
+        window.setTimeout(openTabIfAllowed, 500);
       } else {
-        openTheTab();
+        openTabIfAllowed();
       }
     }
 
-    var shouldShowTabSurvey = function(surveyData) {
-      function handle_should_survey(responseData) {
-        if (responseData.length ===  0)
-          return;
-        openTab('https://getadblock.com/' + surveyData.open_this_url, true);
-      }
-      shouldShowSurvey(surveyData, handle_should_survey);
-    }
- 
-    tabSurveyData = surveyData;   
     if (SAFARI) {
       safari.application.addEventListener("open", waitForUserAction, true);
     } else {
@@ -103,7 +93,7 @@ SURVEY = (function() {
         if (!inProcess) {
           return;
         }
-        inProcess = false;        
+        inProcess = false;
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
         if (SAFARI) {
           chrome.extension.sendRequest(data);
@@ -173,8 +163,8 @@ SURVEY = (function() {
         console.log('error', e);
         console.log('response data', responseData);
         return false;
-      }     
-      if (!url_data || 
+      }
+      if (!url_data ||
           !url_data.open_this_url ||
           !url_data.open_this_url.match(/^\/survey\//)) {
           log("bad survey url.");
