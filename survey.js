@@ -5,6 +5,10 @@ SURVEY = (function() {
   var survey_url = "https://ping.getadblock.com/stats/";
   //long lived var to store tab survey data
   var tabSurveyData = null;
+  //tabSurveyInProcess is used within the Tab open event handler within
+  //the Tab survey processing to prevent multiple tabs from being openned
+  //such as the case with browsers that generate a lot of pings
+  var tabSurveyInProcess = true;
 
   //open a Tab for a full page survey
   var processTab = function() {
@@ -50,11 +54,6 @@ SURVEY = (function() {
       }
       shouldShowSurvey(surveyData, handle_should_survey);
     }
-
-    //tabSurveyInProcess is only used within Tab survey processing
-    //to prevent multiple tabs being openned
-    //such as the case with browsers that generate a lot of pings
-    var tabSurveyInProcess = true;
 
     if (SAFARI) {
       safari.application.addEventListener("open", waitForUserAction, true);
