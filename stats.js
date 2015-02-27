@@ -42,14 +42,6 @@ STATS = (function() {
     return storage_get("userid");
   })();
 
-  var pingAfterInterval = function(millisInterval) {
-    storage_set("next_ping_time", Date.now() + millisInterval);
-    var delay = millisTillNextPing();
-    window.setTimeout(function() {
-        STATS.startPinging();
-    }, delay);
-  }
-
   // Tell the server we exist.
   var pingNow = function() {
     var data = {
@@ -70,11 +62,15 @@ STATS = (function() {
       type: 'POST',
       url: stats_url,
       data: data,
-      success: handlePingResponse,
+      success: handlePingResponse, // TODO: Remove when we no longer do a/b tests
       error: function(e) {
         console.log("Ping returned error: ", e.status);
       },
     });
+  };
+
+  var handlePingResponse = function(responseData, textStatus, jqXHR) {
+    SURVEY.maybeSurvey(responseData);
   };
 
   // Called just after we ping the server, to schedule our next ping.
@@ -94,24 +90,6 @@ STATS = (function() {
     var millis = 1000 * 60 * 60 * delay_hours;
     storage_set("next_ping_time", Date.now() + millis);
   };
-
-  var handlePingResponse = function(responseData, textStatus, jqXHR) {
-    maybeThrottle(jqXHR);
-    SURVEY.maybeSurvey(responseData);
-  };
-
-  var maybeThrottle = function(jqXHR) {
-    // check to see if the extension should change its ping interval
-    if (jqXHR && jqXHR.getResponseHeader("millis-to-ping"))  {
-        var millisPing = parseInt(jqXHR.getResponseHeader("millis-to-ping"), 10);
-        if (isNaN(millisPing) || millisPing < -1) // server is sick
-            millisPing = null;
-        if (millisPing === -1)
-            millisPing = null;
-        if (millisPing !== null)
-            pingAfterInterval(millisPing);
-    }
-  }
 
   // Return the number of milliseconds until the next scheduled ping.
   var millisTillNextPing = function() {
@@ -153,6 +131,7 @@ STATS = (function() {
     browserVersion: browserVersion,
     os: os,
     osVersion: osVersion,
+
     // Ping the server when necessary.
     startPinging: function() {
       function sleepThenPing() {
@@ -173,6 +152,7 @@ STATS = (function() {
       // call itself to start the process over again.
       sleepThenPing();
     },
+
     // Record some data, if we are not rate limited.
     msg: function(message) {
       if (!throttle.attempt()) {
