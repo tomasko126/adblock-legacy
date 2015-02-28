@@ -156,6 +156,7 @@ SURVEY = (function() {
       }
       if (!url_data ||
           !url_data.open_this_url ||
+          !url_data.open_this_url.match ||
           !url_data.open_this_url.match(/^\/survey\//)) {
           log("bad survey url.");
           return null;
