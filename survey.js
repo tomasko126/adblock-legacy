@@ -148,18 +148,15 @@ SURVEY = (function() {
 
       try {
         var url_data = JSON.parse(responseData);
+        if (!url_data.open_this_url.match(/^\/survey\//)) {
+          log("bad survey url.");
+          return null;
+        }
       } catch (e) {
         console.log("Something went wrong with parsing survey data.");
         console.log('error', e);
         console.log('response data', responseData);
         return null;
-      }
-      if (!url_data ||
-          !url_data.open_this_url ||
-          !url_data.open_this_url.match ||
-          !url_data.open_this_url.match(/^\/survey\//)) {
-          log("bad survey url.");
-          return null;
       }
       return url_data;
   }
