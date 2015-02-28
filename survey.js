@@ -12,7 +12,7 @@ SURVEY = (function() {
   //open a Tab for a full page survey
   var processTab = function(surveyData) {
 
-   var waitForUserAction = function() {
+    var waitForUserAction = function() {
       if (SAFARI) {
         safari.application.removeEventListener("open", waitForUserAction, true);
       } else {
