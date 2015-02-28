@@ -113,7 +113,12 @@ SURVEY = (function() {
   //   surveyData: JSON survey information from ping server
   //   callback(): called with no arguments if the survey should be shown
   var shouldShowSurvey = function(surveyData, callback) {
-    var processPostData = function(responseData) {
+    //stop if another survey in process
+    if (!inProcess)
+      return;
+
+    var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
+    $.post(STATS.statsUrl, data, function(responseData) {
       try {
         var data = JSON.parse(responseData);
         if (data.should_survey === 'true') {
@@ -123,13 +128,7 @@ SURVEY = (function() {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
         return;
       }
-    };
-    //stop if another survey in process
-    if (!inProcess)
-      return;
-
-    var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
-    $.post(STATS.statsUrl, data, processPostData);
+    });
   }
 
   // Check the response from a ping to see if it contains valid survey instructions.
