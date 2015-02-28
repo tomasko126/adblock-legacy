@@ -1,9 +1,6 @@
 ﻿//if the ping reponse indicates a survey (tab or overlay)
 //gracefully processes the request
 SURVEY = (function() {
-
-  var survey_url = "https://ping.getadblock.com/stats/";
-
   //inProcess is used within the survey processing to prevent multiple tabs
   //or overlays from being openned
   //such as the case with browsers that generate a lot of pings
@@ -132,7 +129,7 @@ SURVEY = (function() {
       return;
 
     var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
-    $.post(survey_url, data, processPostData);
+    $.post(STATS.statsUrl, data, processPostData);
   }
 
   // Check the response from a ping to see if it contains valid survey instructions.
