@@ -144,9 +144,6 @@ SURVEY = (function() {
       if (responseData.length === 0)
         return false;
 
-      if (get_settings().show_survey === false)
-        return false;
-
       log('validating ping response data', responseData);
 
       try {
@@ -168,6 +165,9 @@ SURVEY = (function() {
 
   return {
     maybeSurvey: function(responseData) {
+      if (get_settings().show_survey === false)
+        return;
+
       var surveyData = surveyDataFrom(responseData);
       //check the type of survey,
       if (surveyData && surveyData.type && surveyData.type === 'overlay') {
