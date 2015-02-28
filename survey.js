@@ -112,6 +112,9 @@ SURVEY = (function() {
   //functions below are used by both Tab and Overlay Surveys
 
   //double check with the ping server that the survey should be shown
+  // Inputs:
+  //   surveyData: JSON survey information from ping server
+  //   callback(): called with no arguments if the survey should be shown
   var shouldShowSurvey = function(surveyData, callback) {
     var processPostData = function(responseData) {
       try {
@@ -124,8 +127,8 @@ SURVEY = (function() {
         return;
       }
     };
-    //stop if there's no data, or no callback, or another survey in process
-    if (!surveyData || !callback || !inProcess)
+    //stop if another survey in process
+    if (!inProcess)
       return;
 
     var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
