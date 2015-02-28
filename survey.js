@@ -121,12 +121,11 @@ SURVEY = (function() {
     $.post(STATS.statsUrl, data, function(responseData) {
       try {
         var data = JSON.parse(responseData);
-        if (data.should_survey === 'true') {
-          callback();
-        }
       } catch (e) {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
-        return;
+      }
+      if (data && data.should_survey === 'true') {
+        callback();
       }
     });
   }
