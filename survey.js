@@ -135,9 +135,12 @@ SURVEY = (function() {
     $.post(survey_url, data, processPostData);
   }
 
-  //check if the responseData from the initial 'ping' is valid
-  //if so, parses it into an Object.
-  var validPingResponseData = function(responseData) {
+  // Check the response from a ping to see if it contains valid survey instructions.
+  // If so, return an object containing data about the survey to show.
+  // Otherwise, return false.
+  // Inputs:
+  //   responseData: string response from a ping
+  var surveyDataFrom = function(responseData) {
       if (responseData.length === 0)
         return false;
 
@@ -165,12 +168,12 @@ SURVEY = (function() {
 
   return {
     maybeSurvey: function(responseData) {
-      var url_data = validPingResponseData(responseData);
+      var surveyData = surveyDataFrom(responseData);
       //check the type of survey,
-      if (url_data && url_data.type && url_data.type === 'overlay') {
-        processOverlay(url_data);
-      } else if (url_data && url_data.type && url_data.type === 'tab') {
-        processTab(url_data);
+      if (surveyData && surveyData.type && surveyData.type === 'overlay') {
+        processOverlay(surveyData);
+      } else if (surveyData && surveyData.type && surveyData.type === 'tab') {
+        processTab(surveyData);
       }
     }//end of maybeSurvey
   };
