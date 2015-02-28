@@ -170,9 +170,9 @@ SURVEY = (function() {
 
       var surveyData = surveyDataFrom(responseData);
       //check the type of survey,
-      if (surveyData && surveyData.type && surveyData.type === 'overlay') {
+      if (surveyData && surveyData.type === 'overlay') {
         processOverlay(surveyData);
-      } else if (surveyData && surveyData.type && surveyData.type === 'tab') {
+      } else if (surveyData && surveyData.type === 'tab') {
         processTab(surveyData);
       }
     }//end of maybeSurvey
