@@ -34,7 +34,7 @@ SURVEY = (function() {
       } else {
         openTabIfAllowed();
       }
-    }
+    };
 
     if (SAFARI) {
       safari.application.addEventListener("open", waitForUserAction, true);
@@ -44,7 +44,7 @@ SURVEY = (function() {
       }
       chrome.tabs.onCreated.addListener(waitForUserAction);
     }
-  }//end of processTab()
+  }; //end of processTab()
 
   //Display a notification overlay on the active tab
   // To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
@@ -73,7 +73,7 @@ SURVEY = (function() {
         }
       }
       return /^http:/.test(tab.url);
-    }
+    };
 
     // Check to see if we should show the survey before showing the overlay.
     var showOverlayIfAllowed = function(tab) {
@@ -104,7 +104,7 @@ SURVEY = (function() {
         retryInFiveMinutes();
       }
     });
-  }//end of processOverlay()
+  }; //end of processOverlay()
 
   //functions below are used by both Tab and Overlay Surveys
 
@@ -128,7 +128,7 @@ SURVEY = (function() {
         callback();
       }
     });
-  }
+  };
 
   // Check the response from a ping to see if it contains valid survey instructions.
   // If so, return an object containing data about the survey to show.
@@ -154,7 +154,7 @@ SURVEY = (function() {
         return null;
       }
       return surveyData;
-  }
+  };
 
   return {
     maybeSurvey: function(responseData) {
