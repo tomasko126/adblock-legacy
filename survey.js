@@ -137,12 +137,12 @@ SURVEY = (function() {
 
   // Check the response from a ping to see if it contains valid survey instructions.
   // If so, return an object containing data about the survey to show.
-  // Otherwise, return false.
+  // Otherwise, return null.
   // Inputs:
   //   responseData: string response from a ping
   var surveyDataFrom = function(responseData) {
       if (responseData.length === 0)
-        return false;
+        return null;
 
       log('validating ping response data', responseData);
 
@@ -152,13 +152,13 @@ SURVEY = (function() {
         console.log("Something went wrong with parsing survey data.");
         console.log('error', e);
         console.log('response data', responseData);
-        return false;
+        return null;
       }
       if (!url_data ||
           !url_data.open_this_url ||
           !url_data.open_this_url.match(/^\/survey\//)) {
           log("bad survey url.");
-          return false;
+          return null;
       }
       return url_data;
   }
