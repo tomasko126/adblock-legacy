@@ -147,8 +147,8 @@ SURVEY = (function() {
       log('validating ping response data', responseData);
 
       try {
-        var url_data = JSON.parse(responseData);
-        if (!url_data.open_this_url.match(/^\/survey\//)) {
+        var surveyData = JSON.parse(responseData);
+        if (!surveyData.open_this_url.match(/^\/survey\//)) {
           log("bad survey url.");
           return null;
         }
@@ -158,7 +158,7 @@ SURVEY = (function() {
         console.log('response data', responseData);
         return null;
       }
-      return url_data;
+      return surveyData;
   }
 
   return {
