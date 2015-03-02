@@ -330,6 +330,8 @@ $("#OtherExtensions").click(function() {
                 }
               );              
             });
+          } else {
+            $(this).prop("disabled", false);  
           }
       });
     }
