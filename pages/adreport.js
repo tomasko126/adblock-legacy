@@ -405,13 +405,13 @@ $("#step_firefox_no").click(function() {
           //we have our own click handler for the anchor tag, so that we
           //can ask retrieve other extension info.
           event.preventDefault();
+          var currentHREF = $("a", "#checkupdate").attr("href");
           chrome.permissions.request({
             permissions: ['management']
           }, function(granted) {
             // The callback argument will be true if the user granted the permissions.
             if (granted) {
               chrome.management.getAll(function(result) {
-                var currentHREF = $("a", "#checkupdate").attr("href");
                 var extInfo = [];
                 extInfo.push("");
                 extInfo.push("==== Extension and App Information ====");
@@ -432,7 +432,7 @@ $("#step_firefox_no").click(function() {
               });
             } else {
               //user didn't grant us permission, just go to site...
-              document.location.href = $("a", "#checkupdate").attr("href");
+              document.location.href = currentHREF;
             }
           });
        });        
