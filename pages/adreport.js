@@ -334,6 +334,7 @@ $("#OtherExtensions").click(function() {
                   if (!alertDisplayed && message.command  === "reloadcomplete") {
                     alertDisplayed = true;
                     alert(translate('tabreloadcomplete'));
+                    sendResponse({});
                   }
                 }
               );              
