@@ -276,20 +276,6 @@ $("#step_disable_extensions_yes").click(function() {
         }
     });
   }
-  if (chrome &&
-      chrome.tabs &&
-      chrome.tabs.detectLanguage) {
-    chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
-      if (!language)
-        return;
-      var twoCharLanguage = language.match(/^[a-z]+/i)[0];
-      var langOption = $("#step_language_lang option[data-lang=" + twoCharLanguage+ "]");
-      if (langOption) {
-          langOption.attr('selected', 'selected');
-          langOption.change();
-      }
-    });
-  }
 });
 //Automatically disable / enable other extensions
 $("#OtherExtensions").click(function() {
@@ -300,6 +286,8 @@ $("#OtherExtensions").click(function() {
       }, function(granted) {
           // The callback argument will be true if the user granted the permissions.
           if (granted) {
+            //remove the Yes/No buttons, so users don't click them to soon.
+            $("#step_disable_extensions").fadeOut().css("display", "none");
             chrome.management.getAll(function(result) {
               for (var i = 0; i < result.length; i++) {
                 if (result[i].enabled &&
@@ -326,6 +314,8 @@ $("#OtherExtensions").click(function() {
                   if (!alertDisplayed && message.command  === "reloadcomplete") {
                     alertDisplayed = true;
                     alert(translate('tabreloadcomplete'));
+                    //we're done, redisplay the Yes/No buttons
+                    $("#step_disable_extensions").fadeIn().css("display", "block");
                     sendResponse({});
                   }
                 }
@@ -397,16 +387,17 @@ $("#step_firefox_no").click(function() {
           //can ask retrieve other extension info.
           event.preventDefault();
           var currentHREF = $("a", "#checkupdate").attr("href");
-          chrome.permissions.request({
-            permissions: ['management']
-          }, function(granted) {
-            // The callback argument will be true if the user granted the permissions.
-            if (granted) {
-              chrome.management.getAll(function(result) {
-                var extInfo = [];
-                extInfo.push("");
-                extInfo.push("==== Extension and App Information ====");
-                for (var i = 0; i < result.length; i++) {
+          var askUserToGatherExtensionInfo = function() {
+            chrome.permissions.request({
+              permissions: ['management']
+            }, function(granted) {
+              // The callback argument will be true if the user granted the permissions.
+              if (granted) {
+                chrome.management.getAll(function(result) {
+                  var extInfo = [];
+                  extInfo.push("");
+                  extInfo.push("==== Extension and App Information ====");
+                  for (var i = 0; i < result.length; i++) {
                     extInfo.push("Number " + (i + 1));
                     extInfo.push("  name: " + result[i].name);
                     extInfo.push("  id: " + result[i].id);
@@ -414,19 +405,37 @@ $("#step_firefox_no").click(function() {
                     extInfo.push("  enabled: " + result[i].enabled)
                     extInfo.push("  type: " + result[i].type);
                     extInfo.push("");
-                }
-                currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
-                chrome.permissions.remove({
-                  permissions: ['management']
-                }, function(removed) {});
+                  }
+                  currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
+                  chrome.permissions.remove({
+                    permissions: ['management']
+                  }, function(removed) {});
+                  document.location.href = currentHREF;
+                });
+              } else {
+                //user didn't grant us permission, just go to site...
                 document.location.href = currentHREF;
-              });
-            } else {
-              //user didn't grant us permission, just go to site...
-              document.location.href = currentHREF;
+              }
+            });
+        };//end of permission request
+        if (chrome &&
+            chrome.tabs &&
+            chrome.tabs.detectLanguage) {
+          chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
+            if (language) {
+              var extInfo = [];
+              extInfo.push("");
+              extInfo.push("Detected language of page: ");
+              extInfo.push(language);
+              extInfo.push("");
+              currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
             }
-          });
-       });
+            askUserToGatherExtensionInfo();
+          });//end of detectLanguage
+        } else {
+          askUserToGatherExtensionInfo();
+        }
+      });//end of click handler
     }
 });
 $("#step_firefox_wontcheck").click(function() {
