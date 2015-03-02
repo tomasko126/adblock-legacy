@@ -259,12 +259,9 @@ $("#step_disable_extensions_no").click(function() {
   $("#checkupdate").text(translate("reenableadsonebyone"));
 });
 $("#step_disable_extensions_yes").click(function() {
-  console.log("one");
   $("#step_disable_extensions").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
-  $("#step_language_DIV").fadeIn().css("display", "block");  
-  console.log("2");
+  $("#step_language_DIV").fadeIn().css("display", "block");
   if (extensionsDisabled.length > 0) {
-    console.log("3");
     chrome.permissions.request({
         permissions: ['management']
     }, function(granted) {
@@ -274,25 +271,20 @@ $("#step_disable_extensions_yes").click(function() {
             chrome.management.setEnabled(extensionsDisabled[i], true);
           }
           alert(translate('enableotherextensionscomplete'));
-          console.log("4");
         } else {
           alert(translate('manuallyenableotherextensions'));
         }
     });
   }
-  console.log("5");
   if (chrome &&
       chrome.tabs &&
-      chrome.tabs.detectLanguage) {        
-    chrome.tabs.detectLanguage(parseInt(tabId), function(language) { 
-      console.log("5");
+      chrome.tabs.detectLanguage) {
+    chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
       if (!language)
         return;
-console.log("7");        
       var twoCharLanguage = language.match(/^[a-z]+/i)[0];
       var langOption = $("#step_language_lang option[data-lang=" + twoCharLanguage+ "]");
       if (langOption) {
-console.log("8");        
           langOption.attr('selected', 'selected');
           langOption.change();
       }
@@ -337,11 +329,11 @@ $("#OtherExtensions").click(function() {
                     sendResponse({});
                   }
                 }
-              );              
+              );
               BGcall("reloadTab", parseInt(tabId));
             });// end of chrome.management.getAll()
           } else {
-            $("#OtherExtensions").prop("disabled", false);  
+            $("#OtherExtensions").prop("disabled", false);
           }
       });// end of chrome.permissions.request()
     }
@@ -352,7 +344,6 @@ $("#OtherExtensions").click(function() {
 //if the user clicks an item
 var contact = "";
 $("#step_language_lang").change(function() {
-  console.log("step language Lang change");
     var selected = $("#step_language_lang option:selected");
     $("#step_language").html("<span class='answer'>"+ selected.text() +"</span>");
     $("#step_language span").attr("chosen",selected.attr("i18n"));
@@ -401,7 +392,7 @@ $("#step_firefox_no").click(function() {
         $("#checkupdate").html(translate("reporttous2"));
         $("#privacy").show();
         $("a", "#checkupdate").attr("href", generateReportURL());
-        $("a", "#checkupdate").click(function(event) { 
+        $("a", "#checkupdate").click(function(event) {
           //we have our own click handler for the anchor tag, so that we
           //can ask retrieve other extension info.
           event.preventDefault();
@@ -435,7 +426,7 @@ $("#step_firefox_no").click(function() {
               document.location.href = currentHREF;
             }
           });
-       });        
+       });
     }
 });
 $("#step_firefox_wontcheck").click(function() {
