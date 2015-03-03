@@ -1,15 +1,34 @@
-chrome.extension.onRequest.addListener(function(request) {
-  if (request.command != "filters_updated")
-    return;
-  if ($("#txtFiltersAdvanced").prop("disabled") === false)
-    return;
-  BGcall("get_custom_filters_text", function(text) {
-    $("#txtFiltersAdvanced").val(text);
-  });
-  BGcall("get_exclude_filters_text", function(text) {
-    $("#txtExcludeFiltersAdvanced").val(text);
-  });
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+  if (request.command === "filters_updated") {
+    if ($("#txtFiltersAdvanced").prop("disabled") === false)
+      return;
+    BGcall("get_custom_filters_text", function(text) {
+      $("#txtFiltersAdvanced").val(text);
+    });
+    BGcall("get_exclude_filters_text", function(text) {
+      $("#txtExcludeFiltersAdvanced").val(text);
+    });
+    sendResponse({});
+  }
 });
+
+if (!SAFARI &&
+   chrome &&
+   chrome.runtime &&
+   chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+          if (request.message === "dropboxerror" && request.messagecode) {
+            $("#dbmessagecustom").text(translate(request.messagecode));
+            sendResponse({});
+          }
+          if (request.message === "cleardropboxerror") {
+            $("#dbmessagecustom").text("");
+            sendResponse({});
+          }
+        }
+    );
+}
 
 $(function() {
     //try to get filter syntax page with users language
@@ -235,20 +254,7 @@ $(function() {
 
   function saveFilters() {
     var custom_filters_text = $("#txtFiltersAdvanced").val();
-    console.log("custom_filters_text", custom_filters_text.length);
-    BGcall("set_custom_filters_text", custom_filters_text, function(responseText) {
-      if (responseText &&
-          responseText.indexOf &&
-          responseText.indexOf("Record (AdBlock, settings) too large:") >= 0) {
-        //if it's the Dropbox too large error, alert the user with our own version of it
-        alert(translate("dropboxwarning"));
-      } else if (responseText &&
-                 typeof responseText === "string") {
-        //if it's any other text, just display it.
-        alert(responseText);
-      }
-      return;
-    });
+    BGcall("set_custom_filters_text", custom_filters_text);
 
     updateCustomFiltersCount(custom_filters_text);
 
@@ -300,5 +306,10 @@ $(function() {
     var newFilters = FilterNormalizer.normalizeList($("#txtFiltersAdvanced").val(), true);
     newFilters = newFilters.replace(/(\n)+$/,'\n'); // Del trailing \n's
     $("#txtFiltersAdvanced").val(newFilters);
+  });
+
+  BGcall("sessionstorage_get", "dropboxerror", function(text) {
+    if (text)
+      $("#dbmessagecustom").text(translate(text));
   });
 });

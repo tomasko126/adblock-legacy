@@ -494,14 +494,7 @@
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
     if (!SAFARI && db_client && db_client.isAuthenticated()) {
-      try {
-        //an exception may be thrown here by the Dropbox API,
-        //if so, return a String version of the exception to notify the user.
-        settingstable.set("custom_filters", localStorage.custom_filters);
-      } catch (ex) {
-        log("ex", ex);
-        return ex.toString(); 
-      }
+      sync_custom_filters(localStorage.custom_filters);
     }
   }
 
@@ -518,8 +511,8 @@
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
-    if (!SAFARI && db_client.isAuthenticated())
-        settingstable.set("exclude_filters", localStorage.exclude_filters);
+    if (!SAFARI && db_client && db_client.isAuthenticated())
+      sync_exclude_filters(localStorage.exclude_filters);
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
   // rebuild the filterset.
@@ -1471,7 +1464,7 @@
               }
               if (filters) {
                   filters = filters.replace(/\""/g, "");
-                  settingstable.set("custom_filters", filters);
+                  sync_custom_filters(filters);
               }
 
               //exclude filters
@@ -1498,7 +1491,7 @@
               }
               if (eXfilters) {
                   eXfilters = eXfilters.replace(/\""/g, "");
-                  settingstable.set("exclude_filters", eXfilters);
+                  sync_exclude_filters(filters);
               }
 
               // Listener, which fires when table has been updated
@@ -1581,6 +1574,45 @@
       function sync_setting(name, is_enabled) {
           if (settingstable && db_client.isAuthenticated())
               settingstable.set(name, is_enabled);
+      }
+
+      function sync_custom_filters(filters) {
+          var syncError = null;
+          try {
+            settingstable.set("custom_filters", filters);
+          } catch(ex) {
+            syncError = ex;
+            log(ex);
+            //since the most likely exception at this point is a size exceeded message,
+            //store the message code.
+            sessionstorage_set("dropboxerror", "dropboxerrorforcustomfilters");
+            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorforcustomfilters"});
+          }
+          if (!syncError) {
+            //sync was successful, remove any previous error messages.
+            sessionstorage_set("dropboxerror");
+            chrome.runtime.sendMessage({message: "cleardropboxerror"});
+          }
+      }
+
+      function sync_exclude_filters(filters) {
+          var syncError = null;
+          try {
+            settingstable.set("exclude_filters", eXfilters);
+          } catch(ex) {
+            syncError = ex;
+            log(ex);
+            //since the most likely exception at this point is a size exceeded message,
+            //store the message code.
+            sessionstorage_set("dropboxerror", "dropboxerrorfordisabledfilters");
+            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorfordisabledfilters"});
+            storage_set();
+          }
+          if (!syncError) {
+            //sync was successful, remove any previous error messages.
+            sessionstorage_set("dropboxerror");
+            chrome.runtime.sendMessage({message: "cleardropboxerror"});
+          }
       }
   }
 
