@@ -235,7 +235,20 @@ $(function() {
 
   function saveFilters() {
     var custom_filters_text = $("#txtFiltersAdvanced").val();
-    BGcall("set_custom_filters_text", custom_filters_text);
+    console.log("custom_filters_text", custom_filters_text.length);
+    BGcall("set_custom_filters_text", custom_filters_text, function(responseText) {
+      if (responseText &&
+          responseText.indexOf &&
+          responseText.indexOf("Record (AdBlock, settings) too large:") >= 0) {
+        //if it's the Dropbox too large error, alert the user with our own version of it
+        alert(translate("dropboxwarning"));
+      } else if (responseText &&
+                 typeof responseText === "string") {
+        //if it's any other text, just display it.
+        alert(responseText);
+      }
+      return;
+    });
 
     updateCustomFiltersCount(custom_filters_text);
 

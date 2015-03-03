@@ -1203,6 +1203,10 @@
     "message":"Custom Filter Lists",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxwarning":{
+    "message":"You have exceed the Dropbox size limit.  Please remove some entries, and try again.",
+    "description":"Alert Message to Dropbox sync users on the Customize tab / custom filters text area."
+  },  
   "languagedropdowndescription":{
     "message":"Add filters for another language: ",
     "description":"Dropdown list for language-specific filters"

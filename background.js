@@ -493,8 +493,16 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (!SAFARI && db_client.isAuthenticated())
+    if (!SAFARI && db_client && db_client.isAuthenticated()) {
+      try {
+        //an exception may be thrown here by the Dropbox API,
+        //if so, return a String version of the exception to notify the user.
         settingstable.set("custom_filters", localStorage.custom_filters);
+      } catch (ex) {
+        log("ex", ex);
+        return ex.toString(); 
+      }
+    }
   }
 
   // Get the user enterred exclude filters text as a \n-separated text string.
