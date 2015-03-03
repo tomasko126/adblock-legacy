@@ -293,6 +293,7 @@ $("#OtherExtensions").click(function() {
                 if (result[i].enabled &&
                     result[i].mayDisable &&
                     result[i].id !== "gighmmpiobklfepjocnamgkkbiglidom" &&
+                    result[i].id !== "aobdicepooefnbaeokijohmhjlleamfj" &&
                     result[i].id !== "pljaalgmajnlogcgiohkhdmgpomjcihk") {
                   //if the extension is a developer version, continue, don't disable.
                   if (result[i].installType === "development" &&
