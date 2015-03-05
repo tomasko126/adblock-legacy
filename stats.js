@@ -44,7 +44,6 @@ STATS = (function() {
 
   // Tell the server we exist.
   var pingNow = function() {
-
     var data = {
       cmd: "ping",
       u: userId,
@@ -59,12 +58,9 @@ STATS = (function() {
         data["b"] = blockCounts.get().total;
     }
     //if available, add the install Date to ping data
-    var block_stats = localStorage.getItem("blockage_stats");
-    if (block_stats) {
-        var blockStats = JSON.parse(block_stats);
-        if (blockStats && blockStats.start) {
-            data["i"] = blockStats.start;
-        }
+    var block_stats = storage_get("blockage_stats");
+    if (block_stats && block_stats.start) {
+        data["i"] = block_stats.start;
     }
 
     $.ajax({
