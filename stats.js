@@ -247,9 +247,7 @@ STATS = (function() {
     browserVersion: browserVersion,
     os: os,
     osVersion: osVersion,
-blah: function() {
-  pingNow();
-},
+
     // Ping the server when necessary.
     startPinging: function() {
       function sleepThenPing() {
