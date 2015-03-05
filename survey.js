@@ -1,10 +1,9 @@
 ﻿//if the ping reponse indicates a survey (tab or overlay)
 //gracefully processes the request
 SURVEY = (function() {
-  //inProcess is used within the survey processing to prevent multiple tabs
-  //or overlays from being openned
-  //such as the case with browsers that generate a lot of pings
-  var inProcess = true;
+  // Only allow one survey per browser startup, to make sure users don't get
+  // spammed due to bugs in AdBlock / the ping server / the browser.
+  var surveyAllowed = true;
 
   //open a Tab for a full page survey
   var processTab = function(surveyData) {
@@ -17,8 +16,6 @@ SURVEY = (function() {
       }
       var openTabIfAllowed = function() {
         shouldShowSurvey(surveyData, function () {
-          //set inProcess to false to stop other surveys
-          inProcess = false;
           openTab('https://getadblock.com/' + surveyData.open_this_url, true);
         });
       }
@@ -78,8 +75,6 @@ SURVEY = (function() {
     // Check to see if we should show the survey before showing the overlay.
     var showOverlayIfAllowed = function(tab) {
       shouldShowSurvey(surveyData, function() {
-        //set inProcess to false to stop other surveys
-        inProcess = false;
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
         if (SAFARI) {
           chrome.extension.sendRequest(data);
@@ -108,15 +103,11 @@ SURVEY = (function() {
 
   //functions below are used by both Tab and Overlay Surveys
 
-  //double check with the ping server that the survey should be shown
+  // Double check that the survey should be shown
   // Inputs:
   //   surveyData: JSON survey information from ping server
   //   callback(): called with no arguments if the survey should be shown
   var shouldShowSurvey = function(surveyData, callback) {
-    //stop if another survey in process
-    if (!inProcess)
-      return;
-
     var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
     $.post(STATS.statsUrl, data, function(responseData) {
       try {
@@ -125,7 +116,10 @@ SURVEY = (function() {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
       }
       if (data && data.should_survey === 'true') {
-        callback();
+        if (surveyAllowed) {
+          surveyAllowed = false;
+          callback();
+        }
       }
     });
   };
