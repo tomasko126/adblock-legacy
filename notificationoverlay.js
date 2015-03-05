@@ -22,7 +22,6 @@ if (window.top === window) {
           document.getElementById(iframeID)) {
         return;
       }
-      var notificationMin = 27;
       var urlPrefix = 'https://getadblock.com/';
       var mainBody = document.body;
       if (mainBody) {
@@ -36,27 +35,33 @@ if (window.top === window) {
         styleElement.type = "text/css";
         styleElement.id = styleID;
         (document.head || document.documentElement).insertBefore(styleElement, null);
-        styleElement.sheet.insertRule("@media print { #_ABoverlay{ display:none } }", 0);
-        styleElement.sheet.insertRule("#_ABoverlay { display:block; top:0px; left:0px; width:100%; height:27px; position:fixed; z-index:2147483647 !important }", 0);
-        styleElement.sheet.insertRule("#_ABiframe { height:27px; border:0px }", 0);
+        styleElement.sheet.insertRule("@media print { #_ABoverlay{ height: 0px; display:none } }", 0);
+        styleElement.sheet.insertRule("#_ABoverlay { display:block; top:0px; left:0px; height: 0px; width:100%;position:fixed; z-index:2147483647 !important }", 0);
+        styleElement.sheet.insertRule("#_ABiframe {border:0px }", 0);
         //create the iframe element, add it the DIV created above.
         var abFrame = document.createElement("iframe");
         abFrame.id = iframeID;
         var winWidth = calculateWindowWidth();
         abFrame.style.width = winWidth + "px";
         abFrame.scrolling = "no";
+        var setABElementsHeight = function() {
+          abFrame.style.height = "27px";
+          overlayElement.style.height = "27px";
+        };
         if (SAFARI) {
           overlayElement.appendChild(abFrame);
           abFrame.src = urlPrefix + iframeURLsrc;
+          setABElementsHeight();
         } else {
           //CHROME browser allow us to load via AJAX
           //so we'll try loading the contents of the iframe using an AJAX request first,
           //this way we can capture the response code.
           var frameRequest = new XMLHttpRequest();
           frameRequest.onload = function() {
-            if (200 >= frameRequest.status && 400 > frameRequest.status) {
+            if (200 === frameRequest.status && frameRequest.response) {
               overlayElement.appendChild(abFrame);
               abFrame.contentWindow.document.write(frameRequest.response);
+              setABElementsHeight();
             } else {
               removeOverlay();
             }
@@ -68,19 +73,19 @@ if (window.top === window) {
           frameRequest.send();
         }
       }
-    }
+    };
 
     var removeOverlay = function() {
-      var overlayElement = document.getElementById(divID);
-      if (overlayElement) {
-        document.body.removeChild(overlayElement);
-        window.removeEventListener("resize", overlayResize, !1);
-      }
-      var styleElement = document.getElementById(styleID);
-      if (styleElement) {
-        (document.head || document.documentElement).removeChild(styleElement);
-      }
-    }
+      var removeById = function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.parentNode.removeChild(el);
+        }
+      };
+      removeById(divID);
+      removeById(styleID);
+      window.removeEventListener("resize", overlayResize);
+    };
 
     var overlayResize = function() {
       var overlayElement = document.getElementById(divID);
@@ -91,7 +96,7 @@ if (window.top === window) {
         overlayElement.style.width = a + "px";
         frameElement.style.width = a + "px";
       }
-    }
+    };
 
     var calculateWindowWidth = function() {
       if (!window || !window.document) {
@@ -99,11 +104,8 @@ if (window.top === window) {
       }
 
       var bestGuess = window.innerWidth;
-      //replace the following:
-      //var aDoc = document.body || document.getElementById("main") || document;
-      //with simply the following:  (since createElement is only on the document object)
+
       var tempDiv = document.createElement("div");
-      tempDiv.id = "_AB_temp";
       tempDiv.style.cssText = "left:0px; right:0px; top:0px; height:0px; visibility:hidden";
       document.body.appendChild(tempDiv);
 
@@ -125,6 +127,6 @@ if (window.top === window) {
       } finally {
         document.body.removeChild(tempDiv);
       }
-    }
+    };
   })();
 }
