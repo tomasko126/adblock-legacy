@@ -131,6 +131,7 @@ STATS = (function() {
     browserVersion: browserVersion,
     os: os,
     osVersion: osVersion,
+    statsUrl: stats_url,
 
     // Ping the server when necessary.
     startPinging: function() {

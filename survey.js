@@ -1,18 +1,14 @@
 ﻿//if the ping reponse indicates a survey (tab or overlay)
 //gracefully processes the request
 SURVEY = (function() {
-
-  var survey_url = "https://ping.getadblock.com/stats/";
-
-  //inProcess is used within the survey processing to prevent multiple tabs
-  //or overlays from being openned
-  //such as the case with browsers that generate a lot of pings
-  var inProcess = true;
+  // Only allow one survey per browser startup, to make sure users don't get
+  // spammed due to bugs in AdBlock / the ping server / the browser.
+  var surveyAllowed = true;
 
   //open a Tab for a full page survey
   var processTab = function(surveyData) {
 
-   var waitForUserAction = function() {
+    var waitForUserAction = function() {
       if (SAFARI) {
         safari.application.removeEventListener("open", waitForUserAction, true);
       } else {
@@ -20,8 +16,6 @@ SURVEY = (function() {
       }
       var openTabIfAllowed = function() {
         shouldShowSurvey(surveyData, function () {
-          //set inProcess to false to stop other surveys
-          inProcess = false;
           openTab('https://getadblock.com/' + surveyData.open_this_url, true);
         });
       }
@@ -37,7 +31,7 @@ SURVEY = (function() {
       } else {
         openTabIfAllowed();
       }
-    }
+    };
 
     if (SAFARI) {
       safari.application.addEventListener("open", waitForUserAction, true);
@@ -47,7 +41,7 @@ SURVEY = (function() {
       }
       chrome.tabs.onCreated.addListener(waitForUserAction);
     }
-  }//end of processTab()
+  }; //end of processTab()
 
   //Display a notification overlay on the active tab
   // To avoid security issues, the tab that is selected must not be incognito mode (Chrome only),
@@ -76,13 +70,11 @@ SURVEY = (function() {
         }
       }
       return /^http:/.test(tab.url);
-    }
+    };
 
     // Check to see if we should show the survey before showing the overlay.
     var showOverlayIfAllowed = function(tab) {
       shouldShowSurvey(surveyData, function() {
-        //set inProcess to false to stop other surveys
-        inProcess = false;
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
         if (SAFARI) {
           chrome.extension.sendRequest(data);
@@ -107,67 +99,70 @@ SURVEY = (function() {
         retryInFiveMinutes();
       }
     });
-  }//end of processOverlay()
+  }; //end of processOverlay()
 
   //functions below are used by both Tab and Overlay Surveys
 
-  //double check with the ping server that the survey should be shown
+  // Double check that the survey should be shown
+  // Inputs:
+  //   surveyData: JSON survey information from ping server
+  //   callback(): called with no arguments if the survey should be shown
   var shouldShowSurvey = function(surveyData, callback) {
-    var processPostData = function(responseData) {
+    var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
+    $.post(STATS.statsUrl, data, function(responseData) {
       try {
         var data = JSON.parse(responseData);
-        if (data.should_survey === 'true') {
-          callback();
-        }
       } catch (e) {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
-        return;
       }
-    };
-    //stop if there's no data, or no callback, or another survey in process
-    if (!surveyData || !callback || !inProcess)
-      return;
+      if (data && data.should_survey === 'true') {
+        if (surveyAllowed) {
+          surveyAllowed = false;
+          callback();
+        }
+      }
+    });
+  };
 
-    var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
-    $.post(survey_url, data, processPostData);
-  }
-
-  //check if the responseData from the initial 'ping' is valid
-  //if so, parses it into an Object.
-  var validPingResponseData = function(responseData) {
+  // Check the response from a ping to see if it contains valid survey instructions.
+  // If so, return an object containing data about the survey to show.
+  // Otherwise, return null.
+  // Inputs:
+  //   responseData: string response from a ping
+  var surveyDataFrom = function(responseData) {
       if (responseData.length === 0)
-        return false;
-
-      if (get_settings().show_survey === false)
-        return false;
+        return null;
 
       log('validating ping response data', responseData);
 
       try {
-        var url_data = JSON.parse(responseData);
+        var surveyData = JSON.parse(responseData);
+        if (!surveyData.open_this_url.match(/^\/survey\//)) {
+          log("bad survey url.");
+          return null;
+        }
       } catch (e) {
         console.log("Something went wrong with parsing survey data.");
         console.log('error', e);
         console.log('response data', responseData);
-        return false;
+        return null;
       }
-      if (!url_data ||
-          !url_data.open_this_url ||
-          !url_data.open_this_url.match(/^\/survey\//)) {
-          log("bad survey url.");
-          return false;
-      }
-      return url_data;
-  }
+      return surveyData;
+  };
 
   return {
     maybeSurvey: function(responseData) {
-      var url_data = validPingResponseData(responseData);
-      //check the type of survey,
-      if (url_data && url_data.type && url_data.type === 'overlay') {
-        processOverlay(url_data);
-      } else if (url_data && url_data.type && url_data.type === 'tab') {
-        processTab(url_data);
+      if (get_settings().show_survey === false)
+        return;
+
+      var surveyData = surveyDataFrom(responseData);
+      if (!surveyData)
+        return;
+
+      if (surveyData.type === 'overlay') {
+        processOverlay(surveyData);
+      } else if (surveyData.type === 'tab') {
+        processTab(surveyData);
       }
     }//end of maybeSurvey
   };
