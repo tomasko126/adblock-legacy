@@ -137,7 +137,9 @@ SURVEY = (function() {
 
       try {
         var surveyData = JSON.parse(responseData);
-        if (!surveyData.open_this_url.match(/^\/survey\//)) {
+        if (!surveyData.open_this_url ||
+            !surveyData.open_this_url.match ||
+            !surveyData.open_this_url.match(/^\/survey\//)) {        
           log("bad survey url.");
           return null;
         }
