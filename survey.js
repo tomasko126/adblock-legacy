@@ -154,7 +154,7 @@ SURVEY = (function() {
 
   return {
     maybeSurvey: function(responseData) {
-      if (get_settings().show_survey === false)
+      if (!get_settings().show_survey)
         return;
 
       var surveyData = surveyDataFrom(responseData);
