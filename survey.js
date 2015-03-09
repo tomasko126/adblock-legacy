@@ -140,7 +140,7 @@ SURVEY = (function() {
         if (!surveyData.open_this_url ||
             !surveyData.open_this_url.match ||
             !surveyData.open_this_url.match(/^\/survey\//)) {        
-          log("bad survey url.");
+          log("bad survey data", responseData);
           return null;
         }
       } catch (e) {
