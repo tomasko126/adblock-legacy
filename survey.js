@@ -168,7 +168,7 @@ SURVEY = (function() {
       }
     },//end of maybeSurvey
     types: function() {
-      return [ 'overlay', 'tab' ];
+      return [ 'O', 'T' ];
     }
   };
 })();
