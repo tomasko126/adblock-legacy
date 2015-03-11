@@ -1505,7 +1505,8 @@
               var filterlists_local = get_subscribed_filter_lists();
               for (var i=0; i < filterlists_sync.length; i++)
                   if (settingstable.get("filter_lists") !== "")
-                      subscribe({id: filterlists_sync[i]}, true);
+                      if (filterlists_local.indexOf(filterlists_sync[i]) === -1)
+                          subscribe({id: filterlists_sync[i]}, true);
               for (var i=0; i < filterlists_local.length; i++) {
                   if (filterlists_sync.indexOf(filterlists_local[i]) === -1)
                       unsubscribe({id: filterlists_local[i]}, true);
@@ -1548,15 +1549,21 @@
 
               // Set custom filters
               var exFilters = settingstable.get("exclude_filters");
+              // Since the exclude filters may have been updated,
+              // rebuild/update the entire filters
               if (SAFARI) {
-                  safari.extension.settings.setItem("exclude_filters", exFilters);
+                  if (safari.extension.settings.getItem("exclude_filters") !== exFilters) {
+                      safari.extension.settings.setItem("exclude_filters", exFilters);
+                      FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
+                      update_subscriptions_now();
+                  }
               } else {
-                  localStorage.custom_filters = custom;
+                  if (localStorage.custom_filters !== custom) {
+                      localStorage.custom_filters = custom;
+                      FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
+                      update_subscriptions_now();
+                  }
               }
-              //since the exclude filters may have been updated,
-              //rebuild / update the entire filters
-              FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
-              update_subscriptions_now();
           }
       });
   }
@@ -1567,9 +1574,16 @@
           if (request.message === "clienterror") {
               db_client.reset();
               chrome.extension.sendRequest({message: "update_icon"});
+              sendResponse({});
           }
       }
   );
+
+  // Login users automatically on browser start-up
+  if (get_settings().dropbox_sync && !dropboxauth()) {
+      dropboxlogin();
+  }
+
 
   // Sync value of changed setting
   function sync_setting(name, is_enabled) {

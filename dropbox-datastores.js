@@ -306,7 +306,7 @@
                     if (!SAFARI)
                         return t(r[e.storageKey] || null)
                     else
-                        return t(r || null)
+                        return t(r.dropbox_js_default_credentials || null)
                 }), this
             }, e.prototype.forgetCredentials = function(t) {
                 return chrome.storage.local.remove(this.storageKey, t), this

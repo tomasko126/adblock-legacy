@@ -202,10 +202,7 @@ if (typeof SAFARI == "undefined") {
                         var object = JSON.parse(xhr.responseText);
                         return object;
                     },
-                    id: function() {
-                        // We need to give fake return URL to DB
-                        return "https://getadblock.com"
-                    }
+                    id: safari.extension.baseURI
                 },
                 storage: {
                     local: {
@@ -214,25 +211,36 @@ if (typeof SAFARI == "undefined") {
                                 throw new Error("No callback specified!");
                                 return;
                             }
+                            if (key === null) {
+                                return callback(safari.extension.settings);
+                            }
                             var json = safari.extension.settings.getItem(key);
-                            if (json == null)
-                                callback(undefined);
+                            if (json === null)
+                                return callback(undefined);
                             try {
-                                callback(JSON.parse(json));
+                                return callback(JSON.parse(json));
                             } catch (e) {
                                 log("Couldn't parse json for " + key);
-                                callback(undefined);
+                                return callback(undefined);
                             }
                         },
                         set: function(key, value, callback) {
-                            safari.extension.settings.setItem(key, JSON.stringify(value));
-                            if (callback)
-                                callback();
+                            if (typeof value === "function") {
+                                callback = value;
+                            }
+                            if (typeof value === "object") {
+                                value = JSON.stringify(value);
+                            }
+                            if (key.hasOwnProperty("dropbox_js_default_credentials")) {
+                                safari.extension.settings.setItem("dropbox_js_default_credentials", JSON.stringify(key));
+                            } else {
+                                safari.extension.settings.setItem(key, JSON.stringify(value));
+                            }
+                            if (callback) callback();
                         },
                         remove: function(key, callback) {
                             safari.extension.settings.removeItem(key);
-                            if (callback)
-                                callback();
+                            if (callback) callback();
                         }
                     }
                 },
