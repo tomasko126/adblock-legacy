@@ -225,7 +225,8 @@ if (!LEGACY_SAFARI) {
 safari.application.addEventListener("beforeNavigate", function(event) {
     if (/youtube.com/.test(event.url) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(event.url).ab_channel) {
         safari.extension.addContentScriptFromURL(safari.extension.baseURI + "ytchannel.js", [], [], false);
-    } else if (/getadblock.com/.test(event.url)) {
+    // TODO: Remove localhost, once page is live
+    } else if (/getadblock.com/.test(event.url) || /localhost/.test(event.url)) {
         safari.extension.addContentScriptFromURL(safari.extension.baseURI + "dropbox/dropbox-datastores.js", [], [], false);
         safari.extension.addContentScriptFromURL(safari.extension.baseURI + "dropbox/chrome_oauth_receiver.js", [], [], false);
     } else {

@@ -327,7 +327,8 @@
         }(S.AuthDriver.ChromeBase), S.AuthDriver.ChromeExtension = function(t) {
             function e(t) {
                 var r;
-                e.__super__.constructor.call(this, t), r = t && t.receiverPath || "chrome_oauth_receiver.html", this.receiverUrl = (SAFARI ? "https://getadblock.com" : chrome.runtime.getURL(r))
+                // TODO: Remove localhost and replace it with live URL
+                e.__super__.constructor.call(this, t), r = t && t.receiverPath || "chrome_oauth_receiver.html", this.receiverUrl = (SAFARI ? "http://localhost:8000/dropbox.html" : chrome.runtime.getURL(r))
             }
             return ie(e, t), e.prototype.doAuthorize = function(t, e, r, n) {
                 var i, o, s = this;
@@ -340,12 +341,14 @@
                     return o = t
                 })
             }, e.oauthReceiver = function() {
-              if (/getadblock\.com$/.test(document.location.hostname) && window.top === window.self)
+              // TODO: Remove localhost, once DB page is live
+              if ((/getadblock\.com$/.test(document.location.hostname) ||
+                   /localhost/.test(document.location.href)) && window.top === window.self)
                 return window.addEventListener("load", function(event) {
                     var t;
                     return t = window.location.href, window.location.hash = "", chrome.extension.sendRequest({
                         dropbox_oauth_receiver_href: t
-                    }), window.close();
+                    }), SAFARI ? log("Logging into Dropbox") : window.close()
                     this.removeEventListener("load", arguments.callee);
                 })
             }, e
