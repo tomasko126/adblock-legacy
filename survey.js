@@ -166,6 +166,9 @@ SURVEY = (function() {
       } else if (surveyData.type === 'tab') {
         processTab(surveyData);
       }
-    }//end of maybeSurvey
+    },//end of maybeSurvey
+    types: function() {
+      return [ 'overlay', 'tab' ];
+    }
   };
 })();

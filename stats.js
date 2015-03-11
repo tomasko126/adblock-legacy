@@ -52,7 +52,9 @@ STATS = (function() {
       o: os,
       g: get_settings().show_google_search_text_ads ? '1': '0',
       l: determineUserLanguage(),
+      st: JSON.stringify(SURVEY.types())
     };
+
     //only on Chrome
     if (flavor === "E" && blockCounts) {
         data["b"] = blockCounts.get().total;
@@ -132,7 +134,6 @@ STATS = (function() {
     os: os,
     osVersion: osVersion,
     statsUrl: stats_url,
-
     // Ping the server when necessary.
     startPinging: function() {
       function sleepThenPing() {
