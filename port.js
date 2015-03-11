@@ -245,18 +245,9 @@ if (SAFARI) {
       }
     },
     tabs: {
-      create: function(details, nearActive, safariWindow) {
-        safariWindow = safariWindow || safari.application.activeBrowserWindow;
-          var index = undefined;
-          if (nearActive && safariWindow && safariWindow.activeTab) {
-            for (var i = 0; i < safariWindow.tabs.length; i++) {
-              if (safariWindow.tabs[i] === safariWindow.activeTab) {
-                index = i + 1;
-                break;
-              }
-            }
-          }
-        var tab;
+      create: function(details, callback) {
+        var safariWindow = safari.application.activeBrowserWindow;
+        var tab, index = undefined;
         if (safariWindow) {
           tab = safariWindow.openTab("foreground", index); // index may be undefined
           if (!safariWindow.visible) {
@@ -267,6 +258,7 @@ if (SAFARI) {
         }
         var relative = (!/:\/\//.test(details.url)); // fix relative URLs
         tab.url = (relative ? chrome.extension.getURL(details.url) : details.url);
+        if (callback) callback();
       },
       remove: function() {
         // CHROME PORT LIBRARY: onRequestExternal not supported.

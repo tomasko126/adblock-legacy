@@ -340,11 +340,13 @@
                     return o = t
                 })
             }, e.oauthReceiver = function() {
-                return window.addEventListener("load", function() {
+              if (/getadblock\.com$/.test(document.location.hostname) && window.top === window.self)
+                return window.addEventListener("load", function(event) {
                     var t;
                     return t = window.location.href, window.location.hash = "", chrome.extension.sendRequest({
                         dropbox_oauth_receiver_href: t
-                    }), !SAFARI ? window.close() : console.log("AdBlock is connecting to Dropbox...")
+                    }), window.close();
+                    this.removeEventListener("load", arguments.callee);
                 })
             }, e
         }(S.AuthDriver.ChromeBase), S.AuthDriver.Cordova = function(t) {
