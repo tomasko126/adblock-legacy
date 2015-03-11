@@ -210,9 +210,6 @@
       }
   }
 
-  // Chrome 38+ has bug in WebRequest API, see onBeforeRequestHandler
-  var invalidChromeRequestType = /Chrome\/(38|39|40)?/.test(navigator.userAgent);
-
   // Implement blocking via the Chrome webRequest API.
   if (!SAFARI) {
     // Stores url, whitelisting, and blocking info for a tabid+frameid
@@ -299,6 +296,34 @@
       }
     };
 
+    var normalizeRequestType = function(details) {
+        // normalize type, because of issue with Chrome 38+
+        var type = details.type;
+        if (type !== 'other') {
+            return type;
+        }
+        var url = parseUri(details.url);
+        if (url && url.pathname) {
+            var pos = url.pathname.lastIndexOf('.');
+            if (pos === -1) {
+                return type;
+            }
+        }
+        var ext = url.pathname.slice(pos) + '.';
+        if ('.eot.ttf.otf.svg.woff.woff2.'.indexOf(ext) !== -1) {
+            return 'font';
+        }
+        // Still need this because often behind-the-scene requests are wrongly
+        // categorized as 'other'
+        if ('.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
+            return 'image';
+        }
+        // https://code.google.com/p/chromium/issues/detail?id=410382
+        if (type === 'other') {
+            return 'object';
+        }
+    };
+
     // When a request starts, perhaps block it.
     function onBeforeRequestHandler(details) {
       if (adblock_is_paused())
@@ -308,7 +333,7 @@
         return { cancel: false };
 
       var tabId = details.tabId;
-      var reqType = details.type;
+      var reqType = normalizeRequestType({url: details.url, type: details.type});
 
       if (frameData.get(tabId, 0).whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted tab", tabId, details.url.substring(0, 100));
@@ -319,11 +344,6 @@
       // But for iframe loads, we consider the request to be sent by the outer
       // frame, while Chrome claims it's sent by the new iframe.  Adjust accordingly.
       var requestingFrameId = (reqType === 'sub_frame' ? details.parentFrameId : details.frameId);
-
-      // Because of bug in WebRequest API on Chrome 38,
-      // requests of type "object" are reported as type "other", see crbug.com/410382
-      if (invalidChromeRequestType && reqType === "other")
-          reqType = "object";
 
       var elType = ElementTypes.fromOnBeforeRequestType(reqType);
 
