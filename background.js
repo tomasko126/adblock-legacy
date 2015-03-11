@@ -511,8 +511,9 @@
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
-    if (!SAFARI && db_client && db_client.isAuthenticated())
+    if (!SAFARI && db_client && db_client.isAuthenticated()) {
       sync_exclude_filters(localStorage.exclude_filters);
+    }
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
   // rebuild the filterset.
@@ -1491,7 +1492,7 @@
               }
               if (eXfilters) {
                   eXfilters = eXfilters.replace(/\""/g, "");
-                  sync_exclude_filters(filters);
+                  sync_exclude_filters(eXfilters);
               }
 
               // Listener, which fires when table has been updated
@@ -1576,17 +1577,17 @@
               settingstable.set(name, is_enabled);
       }
 
-      function sync_custom_filters(filters) {
+      function _sync_filters(filters, name) {
           var syncError = null;
           try {
-            settingstable.set("custom_filters", filters);
+            settingstable.set(name, filters);
           } catch(ex) {
             syncError = ex;
             log(ex);
             //since the most likely exception at this point is a size exceeded message,
             //store the message code.
-            sessionstorage_set("dropboxerror", "dropboxerrorforcustomfilters");
-            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorforcustomfilters"});
+            sessionstorage_set("dropboxerror", "dropboxerrorforfilters");
+            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorforfilters"});
           }
           if (!syncError) {
             //sync was successful, remove any previous error messages.
@@ -1595,24 +1596,12 @@
           }
       }
 
-      function sync_exclude_filters(filters) {
-          var syncError = null;
-          try {
-            settingstable.set("exclude_filters", eXfilters);
-          } catch(ex) {
-            syncError = ex;
-            log(ex);
-            //since the most likely exception at this point is a size exceeded message,
-            //store the message code.
-            sessionstorage_set("dropboxerror", "dropboxerrorfordisabledfilters");
-            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorfordisabledfilters"});
-            storage_set();
-          }
-          if (!syncError) {
-            //sync was successful, remove any previous error messages.
-            sessionstorage_set("dropboxerror");
-            chrome.runtime.sendMessage({message: "cleardropboxerror"});
-          }
+      function sync_custom_filters(filters) {
+          _sync_filters(filters, "custom_filters");
+      }
+
+      function sync_exclude_filters(eXfilters) {
+          _sync_filters(eXfilters, "exclude_filters");
       }
   }
 

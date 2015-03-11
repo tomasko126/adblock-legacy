@@ -1203,13 +1203,9 @@
     "message":"Custom Filter Lists",
     "description":"List for custom filters the user subscribed to"
   },
-  "dropboxerrorforcustomfilters":{
-    "message":"You have exceed the Dropbox size limit.  Please remove some entries from your custom filters, and try again.",
-    "description":"Message to Dropbox sync users on the Customize tab, custom filters."
-  },
-  "dropboxerrorfordisabledfilters":{
-    "message":"You have exceed the Dropbox size limit.  Please remove some entries from your disabled filters, and try again.",
-    "description":"Message to Dropbox sync users on the General & Customize tab, disabled filters."
+  "dropboxerrorforfilters":{
+    "message":"You have exceed the Dropbox size limit.  Please remove some entries from your filters or disabled filters, and try again.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters / disabled."
   },
   "languagedropdowndescription":{
     "message":"Add filters for another language: ",
