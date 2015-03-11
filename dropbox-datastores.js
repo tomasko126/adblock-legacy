@@ -306,7 +306,7 @@
                     if (!SAFARI)
                         return t(r[e.storageKey] || null)
                     else
-                        return t(r.dropbox_js_default_credentials || null)
+                        return t(r && r["dropbox_js_default_credentials"] || null)
                 }), this
             }, e.prototype.forgetCredentials = function(t) {
                 return chrome.storage.local.remove(this.storageKey, t), this
@@ -344,7 +344,7 @@
                     var t;
                     return t = window.location.href, window.location.hash = "", chrome.extension.sendRequest({
                         dropbox_oauth_receiver_href: t
-                    }), window.close ? console.log("Should call window.close()") : void 0
+                    }), !SAFARI ? window.close() : console.log("AdBlock is connecting to Dropbox...")
                 })
             }, e
         }(S.AuthDriver.ChromeBase), S.AuthDriver.Cordova = function(t) {

@@ -182,8 +182,7 @@ if (typeof SAFARI == "undefined") {
                             });
                         },
                         removeListener: function(handler) {
-                            console.log("Removing listener");
-                            listeningContext().removeEventListener("message", handler, false);
+                            // CHROME PORT LIBRARY: onRequestExternal not supported.
                         }
                     },
 
@@ -269,7 +268,7 @@ if (typeof SAFARI == "undefined") {
                         tab.url = (relative ? chrome.extension.getURL(details.url) : details.url);
                     },
                     remove: function() {
-                        //safariWindow = safariWindow || safari.application.activeBrowserWindow;
+                        // CHROME PORT LIBRARY: onRequestExternal not supported.
                     }
                 },
 

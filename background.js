@@ -493,8 +493,9 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (db_client.isAuthenticated())
-        settingstable.set("custom_filters", localStorage.custom_filters);
+    if (db_client && db_client.isAuthenticated()) {
+        settingstable.set("custom_filters", storage_get("custom_filters"));
+    }
   }
 
   // Get the user enterred exclude filters text as a \n-separated text string.
@@ -510,8 +511,9 @@
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
-    if (db_client.isAuthenticated())
-        settingstable.set("exclude_filters", localStorage.exclude_filters);
+    if (db_client && db_client.isAuthenticated()) {
+        settingstable.set("exclude_filters", storage_get("exclude_filters"));
+    }
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
   // rebuild the filterset.
@@ -1438,7 +1440,7 @@
           //custom filters
           // Prevent deleting filters in some cases
           var sync = settingstable.get("custom_filters");
-          var local = (SAFARI ? safari.extension.settings.getItem("custom_filters") : localStorage.custom_filters);
+          var local = storage_get("custom_filters");
           var filters;
           if (sync === local) {
               filters = null;
@@ -1465,7 +1467,7 @@
           //exclude filters
           // Prevent deleting filters in some cases
           var eXsync = settingstable.get("exclude_filters");
-          var eXlocal = (SAFARI ? safari.extension.settings.getItem("exclude_filters") : localStorage.custom_filters)
+          var eXlocal = storage_get("exclude_filters");
           var eXfilters;
           if (eXsync === eXlocal) {
               eXfilters = null;
@@ -1514,11 +1516,7 @@
 
               // Set custom filters
               var custom = settingstable.get("custom_filters");
-              if (SAFARI) {
-                  safari.extension.settings.setItem("custom_filters", custom);
-              } else {
-                  localStorage.custom_filters = custom;
-              }
+              storage_set("custom_filters", custom);
               chrome.extension.sendRequest({command: "filters_updated"});
 
               // Set settings
@@ -1551,18 +1549,10 @@
               var exFilters = settingstable.get("exclude_filters");
               // Since the exclude filters may have been updated,
               // rebuild/update the entire filters
-              if (SAFARI) {
-                  if (safari.extension.settings.getItem("exclude_filters") !== exFilters) {
-                      safari.extension.settings.setItem("exclude_filters", exFilters);
-                      FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
-                      update_subscriptions_now();
-                  }
-              } else {
-                  if (localStorage.custom_filters !== custom) {
-                      localStorage.custom_filters = custom;
-                      FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
-                      update_subscriptions_now();
-                  }
+              if (storage_get("exclude_filters") !== exFilters) {
+                  storage_set("exclude_filters", exFilters);
+                  FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
+                  update_subscriptions_now();
               }
           }
       });
