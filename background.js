@@ -493,7 +493,7 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (!SAFARI && db_client.isAuthenticated())
+    if (db_client.isAuthenticated())
         settingstable.set("custom_filters", localStorage.custom_filters);
   }
 
@@ -510,7 +510,7 @@
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
-    if (!SAFARI && db_client.isAuthenticated())
+    if (db_client.isAuthenticated())
         settingstable.set("exclude_filters", localStorage.exclude_filters);
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
@@ -613,7 +613,7 @@
     if (name === "debug_logging")
       logging(is_enabled);
 
-    if (!SAFARI && sync) {
+    if (sync) {
         sync_setting(name, is_enabled);
     }
   }
@@ -671,7 +671,7 @@
           requiresList: options.requires,
           title: options.title
       });
-      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
+      if (sync !== true && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -685,7 +685,7 @@
           subscribed: false,
           deleteMe: (options.del ? true : undefined)
       });
-      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
+      if (sync !== true && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -1385,196 +1385,196 @@
 
   // Sync settings, filter lists & custom filters
   // after authentication with Dropbox
-  if (!SAFARI &&
-       chrome &&
-       chrome.runtime &&
-       chrome.runtime.onMessage) {
-      var db_client = new Dropbox.Client({key: "3unh2i0le3dlzio"});
-      var settingstable = null;
+  var db_client = new Dropbox.Client({key: "3unh2i0le3dlzio"});
+  var settingstable = null;
 
-      // Return true, if user is authenticated
-      function dropboxauth() {
-          return db_client.isAuthenticated();
-      }
+  // Return true, if user is authenticated
+  function dropboxauth() {
+      return db_client.isAuthenticated();
+  }
 
-      // Login with Dropbox
-      function dropboxlogin() {
-          db_client.authenticate(function(error, client) {
-              if (error) return;
-              set_setting("dropbox_sync", true);
-              settingssync();
-              chrome.runtime.sendMessage({message: "update_icon"});
+  // Login with Dropbox
+  function dropboxlogin() {
+      db_client.authenticate(function(error, client) {
+          if (error) return;
+          set_setting("dropbox_sync", true);
+          settingssync();
+          chrome.extension.sendRequest({message: "update_icon"});
+      });
+  }
+
+  // Logout from Dropbox
+  function dropboxlogout() {
+      db_client.signOut(function(error, client) {
+          if (error) return;
+          set_setting("dropbox_sync", false);
+          chrome.extension.sendRequest({message: "update_icon"});
+      });
+  }
+
+  function settingssync() {
+      var datastoreManager = db_client.getDatastoreManager();
+      datastoreManager.openDefaultDatastore(function(error, datastore) {
+          if (error) return;
+
+          // Create table for sync
+          var table = datastore.getTable("AdBlock");
+
+          // Fill table with user's settings, filter lists & custom filters
+          settingstable = table.getOrInsert("settings", {
+              filter_lists: get_subscribed_filter_lists().toString(),
+              debug_logging: get_settings().debug_logging,
+              youtube_channel_whitelist: get_settings().youtube_channel_whitelist,
+              show_google_search_text_ads: get_settings().show_google_search_text_ads,
+              whitelist_hulu_ads: get_settings().whitelist_hulu_ads,
+              show_context_menu_items: get_settings().show_context_menu_items,
+              show_advanced_options: get_settings().show_advanced_options,
+              display_stats: get_settings().display_stats,
+              display_menu_stats: get_settings().display_menu_stats,
+              show_block_counts_help_link: get_settings().show_block_counts_help_link,
+              show_survey: get_settings().show_survey
           });
-      }
 
-      // Logout from Dropbox
-      function dropboxlogout() {
-          db_client.signOut(function(error, client) {
-              if (error) return;
-              set_setting("dropbox_sync", false);
-              chrome.runtime.sendMessage({message: "update_icon"});
-          });
-      }
-
-      function settingssync() {
-          var datastoreManager = db_client.getDatastoreManager();
-          datastoreManager.openDefaultDatastore(function(error, datastore) {
-              if (error) return;
-
-              // Create table for sync
-              var table = datastore.getTable("AdBlock");
-
-              // Fill table with user's settings, filter lists & custom filters
-              settingstable = table.getOrInsert("settings", {
-                  filter_lists: get_subscribed_filter_lists().toString(),
-                  debug_logging: get_settings().debug_logging,
-                  youtube_channel_whitelist: get_settings().youtube_channel_whitelist,
-                  show_google_search_text_ads: get_settings().show_google_search_text_ads,
-                  whitelist_hulu_ads: get_settings().whitelist_hulu_ads,
-                  show_context_menu_items: get_settings().show_context_menu_items,
-                  show_advanced_options: get_settings().show_advanced_options,
-                  display_stats: get_settings().display_stats,
-                  display_menu_stats: get_settings().display_menu_stats,
-                  show_block_counts_help_link: get_settings().show_block_counts_help_link,
-                  show_survey: get_settings().show_survey
-              });
-
-              //custom filters
-              // Prevent deleting filters in some cases
-              var sync = settingstable.get("custom_filters");
-              var local = localStorage.custom_filters;
-              var filters;
-              if (sync === local) {
-                  filters = null;
-              } else if (!local && sync && sync !== "") {
-                  filters = sync;
-              } else if (local && sync && sync !== "") {
-                  if (local.charAt(local.length - 1) === '"') {
-                    //remove the ending "
-                    local = local.substring(0, local.length - 1);
-                  }
-                  if (sync.charAt(0) === '"') {
-                    //remove the begining "
-                    sync = sync.substring(1);
-                  }
-                  filters = local + "\\" + "n" + sync;
-              } else {
-                  filters = local;
+          //custom filters
+          // Prevent deleting filters in some cases
+          var sync = settingstable.get("custom_filters");
+          var local = (SAFARI ? safari.extension.settings.getItem("custom_filters") : localStorage.custom_filters);
+          var filters;
+          if (sync === local) {
+              filters = null;
+          } else if (!local && sync && sync !== "") {
+              filters = sync;
+          } else if (local && sync && sync !== "") {
+              if (local.charAt(local.length - 1) === '"') {
+                //remove the ending "
+                local = local.substring(0, local.length - 1);
               }
-              if (filters) {
-                  filters = filters.replace(/\""/g, "");
-                  settingstable.set("custom_filters", filters);
+              if (sync.charAt(0) === '"') {
+                //remove the begining "
+                sync = sync.substring(1);
               }
+              filters = local + "\\" + "n" + sync;
+          } else {
+              filters = local;
+          }
+          if (filters) {
+              filters = filters.replace(/\""/g, "");
+              settingstable.set("custom_filters", filters);
+          }
 
-              //exclude filters
-              // Prevent deleting filters in some cases
-              var eXsync = settingstable.get("exclude_filters");
-              var eXlocal = localStorage.exclude_filters;
-              var eXfilters;
-              if (eXsync === eXlocal) {
-                  eXfilters = null;
-              } else if (!eXlocal && eXsync && eXsync !== "") {
-                  eXfilters = eXsync;
-              } else if (eXlocal && eXsync && eXsync !== "") {
-                  if (eXlocal.charAt(eXlocal.length - 1) === '"') {
-                    //remove the ending "
-                    eXlocal = eXlocal.substring(0, eXlocal.length - 1);
-                  }
-                  if (eXsync.charAt(0) === '"') {
-                    //remove the begining "
-                    eXsync = eXsync.substring(1);
-                  }
-                  eXfilters = eXlocal + "\\" + "n" + eXsync;
-              } else {
-                  eXfilters = eXlocal;
+          //exclude filters
+          // Prevent deleting filters in some cases
+          var eXsync = settingstable.get("exclude_filters");
+          var eXlocal = (SAFARI ? safari.extension.settings.getItem("exclude_filters") : localStorage.custom_filters)
+          var eXfilters;
+          if (eXsync === eXlocal) {
+              eXfilters = null;
+          } else if (!eXlocal && eXsync && eXsync !== "") {
+              eXfilters = eXsync;
+          } else if (eXlocal && eXsync && eXsync !== "") {
+              if (eXlocal.charAt(eXlocal.length - 1) === '"') {
+                //remove the ending "
+                eXlocal = eXlocal.substring(0, eXlocal.length - 1);
               }
-              if (eXfilters) {
-                  eXfilters = eXfilters.replace(/\""/g, "");
-                  settingstable.set("exclude_filters", eXfilters);
+              if (eXsync.charAt(0) === '"') {
+                //remove the begining "
+                eXsync = eXsync.substring(1);
               }
+              eXfilters = eXlocal + "\\" + "n" + eXsync;
+          } else {
+              eXfilters = eXlocal;
+          }
+          if (eXfilters) {
+              eXfilters = eXfilters.replace(/\""/g, "");
+              settingstable.set("exclude_filters", eXfilters);
+          }
 
-              // Listener, which fires when table has been updated
-              datastore.recordsChanged.addListener(function(event) {
-                  savesettings();
-              });
-
-              // Set resolution to remote changes
-              table.setResolutionRule("completed", "remote");
+          // Listener, which fires when table has been updated
+          datastore.recordsChanged.addListener(function(event) {
               savesettings();
-
-              // Get settings, filter lists & custom filters and save them
-              function savesettings() {
-                  // Subscribe & unsubscribe filter lists
-                  var filterlists_sync = settingstable.get("filter_lists").split(",");
-                  var filterlists_local = get_subscribed_filter_lists();
-                  for (var i=0; i < filterlists_sync.length; i++)
-                      if (settingstable.get("filter_lists") !== "")
-                          subscribe({id: filterlists_sync[i]}, true);
-                  for (var i=0; i < filterlists_local.length; i++) {
-                      if (filterlists_sync.indexOf(filterlists_local[i]) === -1)
-                          unsubscribe({id: filterlists_local[i]}, true);
-                  }
-
-                  // Set custom filters
-                  var custom = settingstable.get("custom_filters");
-                  localStorage.custom_filters = custom;
-                  chrome.extension.sendRequest({command: "filters_updated"});
-
-                  // Set settings
-                  var advanced = settingstable.get("show_advanced_options");
-                  var advanced_local = get_settings().show_advanced_options;
-                  if (advanced_local !== advanced)
-                      chrome.runtime.sendMessage({message: "update_page"});
-                  set_setting("show_advanced_options", advanced);
-                  var debug = settingstable.get("debug_logging");
-                  set_setting("debug_logging", debug);
-                  var ytchannel = settingstable.get("youtube_channel_whitelist");
-                  set_setting("youtube_channel_whitelist", ytchannel);
-                  var googleads = settingstable.get("show_google_search_text_ads");
-                  set_setting("show_google_search_text_ads", googleads);
-                  var huluads = settingstable.get("whitelist_hulu_ads");
-                  set_setting("whitelist_hulu_ads", huluads);
-                  var showcontextmenu = settingstable.get("show_context_menu_items");
-                  set_setting("show_context_menu_items", showcontextmenu);
-                  var stats = settingstable.get("display_stats");
-                  set_setting("display_stats", stats);
-                  var menu_stats = settingstable.get("display_menu_stats");
-                  set_setting("display_menu_stats", menu_stats);
-                  var blockcountslink = settingstable.get("show_block_counts_help_link");
-                  set_setting("show_block_counts_help_link", blockcountslink);
-                  var showsurvey = settingstable.get("show_survey");
-                  set_setting("show_survey", showsurvey);
-                  chrome.runtime.sendMessage({message: "update_checkbox"});
-
-                  // Set custom filters
-                  var exFilters = settingstable.get("exclude_filters");
-                  localStorage.exclude_filters = exFilters;
-                  //since the exclude filters may have been updated,
-                  //rebuild / update the entire filters
-                  FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
-                  update_subscriptions_now();
-              }
           });
-      }
 
-      // Reset db_client, if it got in an error state
-      if (!SAFARI) {
-          chrome.runtime.onMessage.addListener(
-              function(request, sender, sendResponse) {
-                  if (request.message === "clienterror") {
-                      db_client.reset();
-                      chrome.runtime.sendMessage({message: "update_icon"});
-                  }
+          // Set resolution to remote changes
+          table.setResolutionRule("completed", "remote");
+          savesettings();
+
+          // Get settings, filter lists & custom filters and save them
+          function savesettings() {
+              // Subscribe & unsubscribe filter lists
+              var filterlists_sync = settingstable.get("filter_lists").split(",");
+              var filterlists_local = get_subscribed_filter_lists();
+              for (var i=0; i < filterlists_sync.length; i++)
+                  if (settingstable.get("filter_lists") !== "")
+                      subscribe({id: filterlists_sync[i]}, true);
+              for (var i=0; i < filterlists_local.length; i++) {
+                  if (filterlists_sync.indexOf(filterlists_local[i]) === -1)
+                      unsubscribe({id: filterlists_local[i]}, true);
               }
-          );
-      }
 
-      // Sync value of changed setting
-      function sync_setting(name, is_enabled) {
-          if (settingstable && db_client.isAuthenticated())
-              settingstable.set(name, is_enabled);
+              // Set custom filters
+              var custom = settingstable.get("custom_filters");
+              if (SAFARI) {
+                  safari.extension.settings.setItem("custom_filters", custom);
+              } else {
+                  localStorage.custom_filters = custom;
+              }
+              chrome.extension.sendRequest({command: "filters_updated"});
+
+              // Set settings
+              var advanced = settingstable.get("show_advanced_options");
+              var advanced_local = get_settings().show_advanced_options;
+              if (advanced_local !== advanced)
+                  chrome.extension.sendRequest({message: "update_page"});
+              set_setting("show_advanced_options", advanced);
+              var debug = settingstable.get("debug_logging");
+              set_setting("debug_logging", debug);
+              var ytchannel = settingstable.get("youtube_channel_whitelist");
+              set_setting("youtube_channel_whitelist", ytchannel);
+              var googleads = settingstable.get("show_google_search_text_ads");
+              set_setting("show_google_search_text_ads", googleads);
+              var huluads = settingstable.get("whitelist_hulu_ads");
+              set_setting("whitelist_hulu_ads", huluads);
+              var showcontextmenu = settingstable.get("show_context_menu_items");
+              set_setting("show_context_menu_items", showcontextmenu);
+              var stats = settingstable.get("display_stats");
+              set_setting("display_stats", stats);
+              var menu_stats = settingstable.get("display_menu_stats");
+              set_setting("display_menu_stats", menu_stats);
+              var blockcountslink = settingstable.get("show_block_counts_help_link");
+              set_setting("show_block_counts_help_link", blockcountslink);
+              var showsurvey = settingstable.get("show_survey");
+              set_setting("show_survey", showsurvey);
+              chrome.extension.sendRequest({message: "update_checkbox"});
+
+              // Set custom filters
+              var exFilters = settingstable.get("exclude_filters");
+              if (SAFARI) {
+                  safari.extension.settings.setItem("exclude_filters", exFilters);
+              } else {
+                  localStorage.custom_filters = custom;
+              }
+              //since the exclude filters may have been updated,
+              //rebuild / update the entire filters
+              FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
+              update_subscriptions_now();
+          }
+      });
+  }
+
+  // Reset db_client, if it got in an error state
+  chrome.extension.onRequest.addListener(
+      function(request, sender, sendResponse) {
+          if (request.message === "clienterror") {
+              db_client.reset();
+              chrome.extension.sendRequest({message: "update_icon"});
+          }
       }
+  );
+
+  // Sync value of changed setting
+  function sync_setting(name, is_enabled) {
+      if (settingstable && db_client.isAuthenticated())
+          settingstable.set(name, is_enabled);
   }
 
   log("\n===FINISHED LOADING===\n\n");
-

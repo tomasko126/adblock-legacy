@@ -70,6 +70,9 @@ frameData = (function() {
 safari.application.addEventListener("message", function(messageEvent) {
 
   if (messageEvent.name === "request" &&
+      messageEvent.message &&
+      messageEvent.message.data &&
+      messageEvent.message.data.args &&
       messageEvent.message.data.args.length >= 2 &&
       messageEvent.message.data.args[0] &&
       messageEvent.message.data.args[1] &&
@@ -180,11 +183,11 @@ if (!LEGACY_SAFARI) {
     // and then remove frameData[tabId] after close event.
     safari.application.addEventListener("close", function(event) {
         setTimeout(function() {
-            if (safari && 
-                safari.application && 
-                safari.application.activeBrowserWindow && 
+            if (safari &&
+                safari.application &&
+                safari.application.activeBrowserWindow &&
                 safari.application.activeBrowserWindow.tabs) {
-                    
+
                 var safari_tabs = safari.application.activeBrowserWindow.tabs;
 
                 var opened_tabs = [];
@@ -222,6 +225,9 @@ if (!LEGACY_SAFARI) {
 safari.application.addEventListener("beforeNavigate", function(event) {
     if (/youtube.com/.test(event.url) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(event.url).ab_channel) {
         safari.extension.addContentScriptFromURL(safari.extension.baseURI + "ytchannel.js", [], [], false);
+    } else if (/getadblock.com/.test(event.url)) {
+        safari.extension.addContentScriptFromURL(safari.extension.baseURI + "dropbox-datastores.js", [], [], false);
+        safari.extension.addContentScriptFromURL(safari.extension.baseURI + "chrome_oauth_receiver.js", [], [], false);
     } else {
         safari.extension.removeContentScript(safari.extension.baseURI + "ytchannel.js");
     }
