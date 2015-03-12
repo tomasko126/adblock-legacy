@@ -1542,29 +1542,15 @@
               set_custom_filters_text(storage_get("custom_filters"), true);
 
               // Set settings
-              var advanced = settingstable.get("show_advanced_options");
-              var advanced_local = get_settings().show_advanced_options;
-              if (advanced_local !== advanced)
-                  chrome.extension.sendRequest({message: "update_page"});
-              set_setting("show_advanced_options", advanced);
-              var debug = settingstable.get("debug_logging");
-              set_setting("debug_logging", debug);
-              var ytchannel = settingstable.get("youtube_channel_whitelist");
-              set_setting("youtube_channel_whitelist", ytchannel);
-              var googleads = settingstable.get("show_google_search_text_ads");
-              set_setting("show_google_search_text_ads", googleads);
-              var huluads = settingstable.get("whitelist_hulu_ads");
-              set_setting("whitelist_hulu_ads", huluads);
-              var showcontextmenu = settingstable.get("show_context_menu_items");
-              set_setting("show_context_menu_items", showcontextmenu);
-              var stats = settingstable.get("display_stats");
-              set_setting("display_stats", stats);
-              var menu_stats = settingstable.get("display_menu_stats");
-              set_setting("display_menu_stats", menu_stats);
-              var blockcountslink = settingstable.get("show_block_counts_help_link");
-              set_setting("show_block_counts_help_link", blockcountslink);
-              var showsurvey = settingstable.get("show_survey");
-              set_setting("show_survey", showsurvey);
+              for (var setting in get_settings()) {
+                var setting_sync = settingstable.get(setting);
+                set_setting(setting, setting_sync);
+                if (setting === "show_advanced_options") {
+                  if (get_settings()[setting] !== setting_sync) {
+                    chrome.extension.sendRequest({message: "update_page"});
+                  }
+                }
+              }
               chrome.extension.sendRequest({message: "update_checkbox"});
 
               // Set custom filters
