@@ -1387,7 +1387,7 @@
 
   // Sync settings, filter lists & custom filters
   // after authentication with Dropbox
-  var db_client = new Dropbox.Client({key: "3unh2i0le3dlzio"});
+  var db_client = new Dropbox.Client({key: atob("M3VuaDJpMGxlM2Rsemlv")});
   var settingstable = null;
 
   // Return true, if user is authenticated
@@ -1556,6 +1556,20 @@
               }
           }
       });
+  }
+
+  // Inject scripts for OAuth2 process, for Safari check safari_bg.js
+  if (!SAFARI) {
+    chrome.tabs.onUpdated.addListener(function(tabId) {
+      chrome.tabs.get(tabId, function(tabs) {
+        if (tabs &&
+            (/getadblock\.com$/.test(tabs.url) ||
+             /localhost/.test(tabs.url))) {
+          chrome.tabs.executeScript(tabId, {file: "dropbox/dropbox-datastores.js", runAt: "document_start"});
+          chrome.tabs.executeScript(tabId, {file: "dropbox/chrome_oauth_receiver.js", runAt: "document_start"});
+        }
+      });
+    });
   }
 
   // Reset db_client, if it got in an error state

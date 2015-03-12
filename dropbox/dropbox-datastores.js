@@ -328,7 +328,8 @@
             function e(t) {
                 var r;
                 // TODO: Remove localhost and replace it with live URL
-                e.__super__.constructor.call(this, t), r = t && t.receiverPath || "chrome_oauth_receiver.html", this.receiverUrl = (SAFARI ? "http://localhost:8000/dropbox.html" : chrome.runtime.getURL(r))
+                e.__super__.constructor.call(this, t), r = t && t.receiverPath || "dropbox/chrome_oauth_receiver.html",
+                  this.receiverUrl = "http://localhost:8000/dropbox.html"
             }
             return ie(e, t), e.prototype.doAuthorize = function(t, e, r, n) {
                 var i, o, s = this;
@@ -348,7 +349,7 @@
                     var t;
                     return t = window.location.href, window.location.hash = "", chrome.extension.sendRequest({
                         dropbox_oauth_receiver_href: t
-                    }), SAFARI ? log("Logging into Dropbox") : window.close()
+                    }),
                     this.removeEventListener("load", arguments.callee);
                 })
             }, e

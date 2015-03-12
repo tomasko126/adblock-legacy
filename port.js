@@ -182,7 +182,7 @@ if (SAFARI) {
           });
         },
         removeListener: function(handler) {
-          // CHROME PORT LIBRARY: onRequestExternal not supported.
+          // CHROME PORT LIBRARY: removeListener not supported.
         }
       },
 
@@ -261,7 +261,7 @@ if (SAFARI) {
         if (callback) callback();
       },
       remove: function() {
-        // CHROME PORT LIBRARY: onRequestExternal not supported.
+        // CHROME PORT LIBRARY: remove not supported.
       }
     },
 
