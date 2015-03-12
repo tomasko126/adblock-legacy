@@ -59,7 +59,7 @@ STATS = (function() {
     if (flavor === "E" && blockCounts) {
         data["b"] = blockCounts.get().total;
     }
-
+    log("about to ping, data", data);
     $.ajax({
       type: 'POST',
       url: stats_url,
@@ -95,11 +95,13 @@ STATS = (function() {
 
   // Return the number of milliseconds until the next scheduled ping.
   var millisTillNextPing = function() {
-    var next_ping_time = storage_get("next_ping_time");
-    if (!next_ping_time)
-      return 0;
-    else
-      return Math.max(0, next_ping_time - Date.now());
+//    var next_ping_time = storage_get("next_ping_time");
+//    if (!next_ping_time)
+//      return 0;
+//    else
+//      return Math.max(0, next_ping_time - Date.now());
+    //force a ping in 5 min intervals for testing (300000 = 5 minutes).
+    return 300000;
   };
 
   // Used to rate limit .message()s.  Rate limits reset at startup.
