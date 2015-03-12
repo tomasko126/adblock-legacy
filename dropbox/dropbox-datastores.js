@@ -303,10 +303,7 @@
             }, e.prototype.loadCredentials = function(t) {
                 var e = this;
                 return chrome.storage.local.get(this.storageKey, function(r) {
-                    if (!SAFARI)
-                        return t(r[e.storageKey] || null)
-                    else
-                        return t(r && r["dropbox_js_default_credentials"] || null)
+                    return t(r && r[e.storageKey] || null)
                 }), this
             }, e.prototype.forgetCredentials = function(t) {
                 return chrome.storage.local.remove(this.storageKey, t), this

@@ -207,6 +207,10 @@ if (SAFARI) {
     storage: {
       local: {
         get: function(key, callback) {
+          if (!isOnGlobalPage) {
+            throw new Error("It's not possible to use this method from content script!");
+            return;
+          }
           if (!callback) {
             throw new Error("No callback specified!");
             return;
@@ -219,22 +223,24 @@ if (SAFARI) {
             return callback(undefined);
           try {
             return callback(JSON.parse(json));
-          } catch (e) {
-            log("Couldn't parse json for " + key);
-            return callback(undefined);
+          } finally {
+            var obj = {};
+            obj[key] = json;
+            return callback(obj);
           }
         },
-        set: function(key, value, callback) {
-          if (typeof value === "function") {
-            callback = value;
+        set: function(info, callback) {
+          if (!isOnGlobalPage) {
+            throw new Error("It's not possible to use this method from content script!");
+            return;
           }
-          if (typeof value === "object") {
-            value = JSON.stringify(value);
-          }
-          if (key.hasOwnProperty("dropbox_js_default_credentials")) {
-            safari.extension.settings.setItem("dropbox_js_default_credentials", JSON.stringify(key));
-          } else {
-            safari.extension.settings.setItem(key, JSON.stringify(value));
+          for (var key in info) {
+            try {
+              value = JSON.stringify(info[key]);
+            } finally {
+              value = info[key];
+            }
+            safari.extension.settings.setItem(key, value);
           }
           if (callback) callback();
         },
@@ -244,6 +250,7 @@ if (SAFARI) {
         }
       }
     },
+
     tabs: {
       create: function(details, callback) {
         var safariWindow = safari.application.activeBrowserWindow;
