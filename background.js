@@ -489,11 +489,11 @@
   // Set the custom filters to the given \n-separated text string, and
   // rebuild the filterset.
   // Inputs: filters:string the new filters.
-  set_custom_filters_text = function(filters) {
+  set_custom_filters_text = function(filters, sync) {
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (db_client && db_client.isAuthenticated()) {
+    if (sync !== true && db_client && db_client.isAuthenticated()) {
       if (!SAFARI) {
         settingstable.set("custom_filters", localStorage.custom_filters);
       } else {
@@ -1533,13 +1533,13 @@
               }
 
               // Set custom filters
+              // We doesn't need to save custom filters on Safari,
+              // since set_custom_filters_text does it for us
               var custom = settingstable.get("custom_filters");
               if (!SAFARI) {
                 localStorage.custom_filters = custom;
-              } else {
-                safari.extension.settings.setItem("custom_filters", custom);
               }
-              chrome.extension.sendRequest({command: "filters_updated"});
+              set_custom_filters_text(storage_get("custom_filters"), true);
 
               // Set settings
               var advanced = settingstable.get("show_advanced_options");
