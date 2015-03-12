@@ -168,7 +168,8 @@ SURVEY = (function() {
       }
     },//end of maybeSurvey
     types: function() {
-      return [ 'O', 'T' ];
+      // 'O' = Overlay Surveys and 'T' = Tab Surveys
+      return "OT";
     }
   };
 })();
