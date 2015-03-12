@@ -52,7 +52,7 @@ STATS = (function() {
       o: os,
       g: get_settings().show_google_search_text_ads ? '1': '0',
       l: determineUserLanguage(),
-      st: JSON.stringify(SURVEY.types())
+      st: SURVEY.types()
     };
 
     //only on Chrome
