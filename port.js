@@ -207,12 +207,18 @@ if (SAFARI) {
     storage: {
       local: {
         get: function(key, callback) {
-          if (!isOnGlobalPage) {
-            throw new Error("It's not possible to use this method from content script!");
-            return;
-          }
           if (!callback) {
             throw new Error("No callback specified!");
+            return;
+          }
+          // Calling this method from content script
+          if (!isOnGlobalPage) {
+            safari.self.tab.dispatchMessage("get_setting", key);
+            safari.self.addEventListener("message", function(messageEvent) {
+              if (messageEvent.name === "get_setting_response") {
+                callback(messageEvent.message);
+              }
+            }, false);
             return;
           }
           if (key === null) {
@@ -222,31 +228,61 @@ if (SAFARI) {
           if (json === null)
             return callback(undefined);
           try {
-            return callback(JSON.parse(json));
-          } finally {
+            var obj = {};
+            obj[key] = JSON.parse(json);
+            return callback(obj);
+          } catch(e) {
             var obj = {};
             obj[key] = json;
             return callback(obj);
           }
         },
         set: function(info, callback) {
-          if (!isOnGlobalPage) {
-            throw new Error("It's not possible to use this method from content script!");
-            return;
-          }
           for (var key in info) {
             try {
               value = JSON.stringify(info[key]);
-            } finally {
+            } catch(e) {
               value = info[key];
             }
-            safari.extension.settings.setItem(key, value);
+            // Calling this method from content script
+            if (!isOnGlobalPage) {
+              var message_data = { key: key, value: value };
+              safari.self.tab.dispatchMessage("set_setting", message_data);
+            } else {
+              safari.extension.settings.setItem(key, value);
+            }
           }
-          if (callback) callback();
+          // Callback is optional
+          if (callback) {
+            if (!isOnGlobalPage) {
+              safari.self.addEventListener("message", function(messageEvent) {
+                if (messageEvent.name === "set_setting_response") {
+                  callback();
+                }
+              }, false);
+            } else {
+              callback();
+            }
+          }
         },
         remove: function(key, callback) {
-          safari.extension.settings.removeItem(key);
-          if (callback) callback();
+          if (!isOnGlobalPage) {
+            safari.self.tab.dispatchMessage("remove_setting", key);
+          } else {
+            safari.extension.settings.removeItem(key);
+          }
+          // Callback is optional
+          if (callback) {
+            if (!isOnGlobalPage) {
+              safari.self.addEventListener("message", function(messageEvent) {
+                if (messageEvent.name === "remove_setting_response") {
+                  callback();
+                }
+              }, false);
+            } else {
+              callback();
+            }
+          }
         }
       }
     },
