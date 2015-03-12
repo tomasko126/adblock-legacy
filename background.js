@@ -494,7 +494,7 @@
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
     if (db_client && db_client.isAuthenticated()) {
-        settingstable.set("custom_filters", storage_get("custom_filters"));
+        settingstable.set("custom_filters", localStorage.custom_filters);
     }
   }
 
@@ -512,7 +512,7 @@
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
     if (db_client && db_client.isAuthenticated()) {
-        settingstable.set("exclude_filters", storage_get("exclude_filters"));
+        settingstable.set("exclude_filters", localStorage.exclude_filters);
     }
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
@@ -1440,7 +1440,7 @@
           //custom filters
           // Prevent deleting filters in some cases
           var sync = settingstable.get("custom_filters");
-          var local = storage_get("custom_filters");
+          var local = localStorage.custom_filters;
           var filters;
           if (sync === local) {
               filters = null;
@@ -1467,7 +1467,7 @@
           //exclude filters
           // Prevent deleting filters in some cases
           var eXsync = settingstable.get("exclude_filters");
-          var eXlocal = storage_get("exclude_filters");
+          var eXlocal = localStorage.exclude_filters;
           var eXfilters;
           if (eXsync === eXlocal) {
               eXfilters = null;
@@ -1516,7 +1516,7 @@
 
               // Set custom filters
               var custom = settingstable.get("custom_filters");
-              storage_set("custom_filters", custom);
+              localStorage.custom_filters = custom;
               chrome.extension.sendRequest({command: "filters_updated"});
 
               // Set settings
@@ -1549,8 +1549,8 @@
               var exFilters = settingstable.get("exclude_filters");
               // Since the exclude filters may have been updated,
               // rebuild/update the entire filters
-              if (storage_get("exclude_filters") !== exFilters) {
-                  storage_set("exclude_filters", exFilters);
+              if (localStorage.exclude_filters !== exFilters) {
+                  localStorage.exclude_filters = exFilters;
                   FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
                   update_subscriptions_now();
               }
