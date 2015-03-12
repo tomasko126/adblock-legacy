@@ -1533,7 +1533,7 @@
               }
 
               // Set custom filters
-              // We doesn't need to save custom filters on Safari,
+              // We don't need to save custom filters on Safari,
               // since set_custom_filters_text does it for us
               var custom = settingstable.get("custom_filters");
               if (!SAFARI) {
