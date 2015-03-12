@@ -1335,7 +1335,7 @@
       for (var id in get_subscriptions) {
           if (get_subscriptions[id].subscribed) {
               subscribed_filter_names.push(id);
-              subscribed_filter_names.push("  last updated: " + new Date(get_subscriptions[id].last_update).toISOString());
+              subscribed_filter_names.push("  last updated: " + new Date(get_subscriptions[id].last_update).toUTCString());
           }
       }
 
