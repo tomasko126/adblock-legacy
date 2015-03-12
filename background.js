@@ -1333,8 +1333,10 @@
       var subscribed_filter_names = [];
       var get_subscriptions = get_subscriptions_minus_text();
       for (var id in get_subscriptions) {
-          if (get_subscriptions[id].subscribed)
+          if (get_subscriptions[id].subscribed) {
               subscribed_filter_names.push(id);
+              subscribed_filter_names.push("  last updated: " + new Date(get_subscriptions[id].last_update).toISOString());
+          }
       }
 
       // Get last known error
