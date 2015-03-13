@@ -238,15 +238,22 @@ if (SAFARI) {
           }
         },
         set: function(info, callback) {
+          var object_length = Object.keys(info).length;
+          var i = 0;
           for (var key in info) {
             try {
               value = JSON.stringify(info[key]);
             } catch(e) {
               value = info[key];
             }
+            i++;
             // Calling this method from content script
             if (!isOnGlobalPage) {
-              var message_data = { key: key, value: value };
+              if (object_length === i) {
+                var message_data = { key: key, value: value, callback: true };
+              } else {
+                var message_data = { key: key, value: value, callback: false };
+              }
               safari.self.tab.dispatchMessage("set_setting", message_data);
             } else {
               safari.extension.settings.setItem(key, value);

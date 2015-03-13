@@ -90,10 +90,9 @@ safari.application.addEventListener("message", function(messageEvent) {
 
     if (messageEvent.name === "get_setting") {
         var message = messageEvent.message;
-        var response;
         // We want to get all settings
         if (message === null) {
-            response = safari.extension.settings;
+            var response = safari.extension.settings;
         } else {
             var response = {};
             response.message = safari.extension.settings.getItem(message);
@@ -105,7 +104,9 @@ safari.application.addEventListener("message", function(messageEvent) {
     if (messageEvent.name === "set_setting") {
         var message = messageEvent.message;
         safari.extension.settings.setItem(message.key, message.value);
-        safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("set_setting_response", "");
+        if (message.callback === true) {
+          safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("set_setting_response", "");
+        }
         return;
     }
 
