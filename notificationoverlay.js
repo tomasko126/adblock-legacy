@@ -11,6 +11,7 @@ if (window.top === window) {
       if (request.command === 'showoverlay' &&
           request.overlayURL &&
           request.tabURL === document.location.href) {
+          log("show overlay message rec'd", request);
           showOverlay(request.overlayURL);
           sendResponse({});
       }
