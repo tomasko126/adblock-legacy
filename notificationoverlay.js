@@ -22,7 +22,7 @@ if (window.top === window) {
           document.getElementById(iframeID)) {
         return;
       }
-      var urlPrefix = 'https://getadblock.com/';
+      var urlPrefix = 'http://dev.getadblock.com/';
       var mainBody = document.body;
       if (mainBody) {
         //create overlay DIV tag
