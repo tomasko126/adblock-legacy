@@ -95,6 +95,7 @@ SURVEY = (function() {
       if (tab && validTab(tab)) {
         showOverlayIfAllowed(tab);
       } else {
+        log("no appropriate tab found, sleeping for 5 minutes");
         // We didn't find an appropriate tab
         retryInFiveMinutes();
       }
