@@ -30,6 +30,7 @@ if (window.top === window) {
         overlayElement.id = divID;
         mainBody.insertBefore(overlayElement, mainBody.firstChild);
         window.addEventListener("resize", overlayResize);
+        window.addEventListener("message", receiveMessage);
         //create style element, so that our DIV tag isn't printed, if the user decides to print the page.
         var styleElement = document.createElement("style");
         styleElement.type = "text/css";
@@ -48,6 +49,7 @@ if (window.top === window) {
           abFrame.style.height = "27px";
           overlayElement.style.height = "27px";
         };
+                
         if (SAFARI) {
           overlayElement.appendChild(abFrame);
           abFrame.src = urlPrefix + iframeURLsrc;
@@ -75,6 +77,12 @@ if (window.top === window) {
       }
     };
 
+    var receiveMessage = function(event){
+       if (event.data=="removethe_ABoverlay")
+          removeOverlay();
+       }
+    }
+
     var removeOverlay = function() {
       var removeById = function(id) {
         var el = document.getElementById(id);
@@ -85,6 +93,7 @@ if (window.top === window) {
       removeById(divID);
       removeById(styleID);
       window.removeEventListener("resize", overlayResize);
+      window.removeEventListener("message", receiveMessage);
     };
 
     var overlayResize = function() {
