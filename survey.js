@@ -111,6 +111,7 @@ SURVEY = (function() {
   var shouldShowSurvey = function(surveyData, callback) {
     var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
     $.post(STATS.statsUrl, data, function(responseData) {
+      log("shouldShowSurvey, response data", responseData);
       try {
         var data = JSON.parse(responseData);
       } catch (e) {
