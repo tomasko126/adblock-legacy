@@ -76,6 +76,7 @@ SURVEY = (function() {
     var showOverlayIfAllowed = function(tab) {
       shouldShowSurvey(surveyData, function() {
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
+        log("sending command to open an overlay", data);
         if (SAFARI) {
           chrome.extension.sendRequest(data);
         } else {
