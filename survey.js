@@ -121,7 +121,7 @@ SURVEY = (function() {
       log("shouldShowSurvey, data", data, surveyAllowed);
       if (data && data.should_survey === 'true') {
         if (surveyAllowed) {
-          surveyAllowed = false;
+          //surveyAllowed = false;
           callback();
         } else {
           log("shouldShowSurvey survey not allowd", surveyAllowed);
