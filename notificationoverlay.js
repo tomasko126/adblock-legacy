@@ -79,10 +79,10 @@ if (window.top === window) {
     };
 
     var receiveMessage = function(event){
-       if (event.data=="removethe_ABoverlay")
+       if (event.data=="removethe_ABoverlay"){
           removeOverlay();
        }
-    }
+    };
 
     var removeOverlay = function() {
       var removeById = function(id) {
