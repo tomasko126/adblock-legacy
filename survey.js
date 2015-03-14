@@ -118,11 +118,16 @@ SURVEY = (function() {
       } catch (e) {
         console.log('Error parsing JSON: ', responseData, " Error: ", e);
       }
+      log("shouldShowSurvey, data", data, surveyAllowed);
       if (data && data.should_survey === 'true') {
         if (surveyAllowed) {
           surveyAllowed = false;
           callback();
+        } else {
+          log("shouldShowSurvey survey not allowd", surveyAllowed);
         }
+      } else {
+        log("shouldShowSurvey data.should_survey !== 'true'", data);
       }
     });
   };

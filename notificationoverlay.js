@@ -8,10 +8,10 @@ if (window.top === window) {
     var styleID = "_ABstyle";
 
     chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+      console.log("message rec'd", request);
       if (request.command === 'showoverlay' &&
           request.overlayURL &&
           request.tabURL === document.location.href) {
-          log("show overlay message rec'd", request);
           showOverlay(request.overlayURL);
           sendResponse({});
       }
