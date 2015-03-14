@@ -3,14 +3,14 @@ function load_options() {
     BGcall("get_settings", function(settings) {
         optionalSettings = settings;
         var activeTab  = $.cookie('activetab');
-        if (window.location && 
+        if (window.location &&
             window.location.search) {
             var searchQuery = parseUri.parseSearch(window.location.search);
             if (searchQuery &&
                 searchQuery.tab) {
                 activeTab = searchQuery.tab;
             }
-        }        
+        }
         $("#tabpages").
         tabs({
             // Go to the last opened tab
@@ -106,17 +106,7 @@ function showMiniMenu() {
 }
 
 function displayVersionNumber() {
-  try {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", chrome.extension.getURL('manifest.json'), true);
-    xhr.onreadystatechange = function() {
-      if(this.readyState == 4) {
-        var theManifest = JSON.parse(this.responseText);
-        $("#version_number").text(translate("optionsversion", [theManifest.version]));
-      }
-    };
-    xhr.send();
-  } catch (ex) {} // silently fail
+    $("#version_number").text(translate("optionsversion", [chrome.runtime.getManifest().version]));
 }
 
 BGcall("storage_get", "userid", function(userId) {
