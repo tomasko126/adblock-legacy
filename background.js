@@ -1185,6 +1185,10 @@
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
     openTab("https://getadblock.com/installed/?u=" + STATS.userId);
   }
+  if (chrome.runtime && 
+      chrome.runtime.setUninstallURL) {
+    chrome.runtime.setUninstallURL("https://getadblock.com/uninstalled?_=" + STATS.userId);
+  }  
 
   createMalwareNotification = function() {
     if (!SAFARI &&
