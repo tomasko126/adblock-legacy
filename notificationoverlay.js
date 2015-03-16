@@ -30,6 +30,7 @@ if (window.top === window) {
         overlayElement.id = divID;
         mainBody.insertBefore(overlayElement, mainBody.firstChild);
         window.addEventListener("resize", overlayResize);
+        window.addEventListener("message", receiveMessage);
         //create style element, so that our DIV tag isn't printed, if the user decides to print the page.
         var styleElement = document.createElement("style");
         styleElement.type = "text/css";
@@ -85,6 +86,13 @@ if (window.top === window) {
       removeById(divID);
       removeById(styleID);
       window.removeEventListener("resize", overlayResize);
+      window.removeEventListener("message", receiveMessage);
+    };
+
+    var receiveMessage = function(event){
+       if (event.data=="removethe_ABoverlay"){
+          removeOverlay();
+       }
     };
 
     var overlayResize = function() {
