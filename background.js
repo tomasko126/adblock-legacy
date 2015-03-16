@@ -1187,7 +1187,7 @@
   }
   if (chrome.runtime && 
       chrome.runtime.setUninstallURL) {
-    chrome.runtime.setUninstallURL("https://getadblock.com/uninstalled?_=" + STATS.userId);
+    chrome.runtime.setUninstallURL("https://getadblock.com/uninstalled?u=" + STATS.userId);
   }  
 
   createMalwareNotification = function() {
