@@ -82,13 +82,13 @@ if (window.top === window) {
 
     var receiveMessage = function(event){
       if (event.data) {
-        var msgData = {};
         try {
-          msgData = JSON.parse(event.data);
+          var msgData = JSON.parse(event.data);
         } catch(ex) {
           return;//do nothing, bad data.
         }
-        if (msgData.command === "removethe_ABoverlay" &&
+        if (msgData &&
+            msgData.command === "removethe_ABoverlay" &&
             msgData.userID === userID) {
           removeOverlay();
         }
