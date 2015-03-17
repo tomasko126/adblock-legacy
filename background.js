@@ -1098,7 +1098,7 @@
   launch_subscribe_popup = function(loc) {
     window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
     "_blank",
-    'scrollbars=0,location=0,resizable=0,width=450,height=150');
+    'scrollbars=0,location=0,resizable=0,width=460,height=180');
   }
 
   // Get the framedata for resourceblock
