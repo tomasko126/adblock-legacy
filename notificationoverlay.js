@@ -6,6 +6,7 @@ if (window.top === window) {
     var divID = "_ABoverlay";
     var iframeID = "_ABiframe";
     var styleID = "_ABstyle";
+    var userID = "";
 
     chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
       console.log("message rec'd", request);
@@ -13,6 +14,7 @@ if (window.top === window) {
           request.overlayURL &&
           request.tabURL === document.location.href) {
           showOverlay(request.overlayURL);
+          userID = request.userID;
           sendResponse({});
       }
     });
@@ -50,7 +52,7 @@ if (window.top === window) {
           abFrame.style.height = "27px";
           overlayElement.style.height = "27px";
         };
-                
+
         if (SAFARI) {
           overlayElement.appendChild(abFrame);
           abFrame.src = urlPrefix + iframeURLsrc;
@@ -79,9 +81,18 @@ if (window.top === window) {
     };
 
     var receiveMessage = function(event){
-       if (event.data=="removethe_ABoverlay"){
+      if (event.data) {
+        var msgData = {};
+        try {
+          msgData = JSON.parse(event.data);
+        } catch(ex) {
+          return;//do nothing, bad data.
+        }
+        if (msgData.command === "removethe_ABoverlay" &&
+            msgData.userID === userID) {
           removeOverlay();
-       }
+        }
+      }
     };
 
     var removeOverlay = function() {

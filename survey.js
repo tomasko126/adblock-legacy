@@ -75,7 +75,7 @@ SURVEY = (function() {
     // Check to see if we should show the survey before showing the overlay.
     var showOverlayIfAllowed = function(tab) {
       shouldShowSurvey(surveyData, function() {
-        var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
+        var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL: tab.url, userID: STATS.userId};
         log("sending command to open an overlay", data);
         if (SAFARI) {
           chrome.extension.sendRequest(data);
@@ -147,7 +147,7 @@ SURVEY = (function() {
         var surveyData = JSON.parse(responseData);
         if (!surveyData.open_this_url ||
             !surveyData.open_this_url.match ||
-            !surveyData.open_this_url.match(/^\/survey\//)) {        
+            !surveyData.open_this_url.match(/^\/survey\//)) {
           log("bad survey data", responseData);
           return null;
         }
