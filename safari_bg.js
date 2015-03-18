@@ -34,6 +34,10 @@ frameData = (function() {
         _initializeMap: function(tabId, url, domain) {
             var tracker = frameData[tabId];
 
+            // We need to handle IDN URLs properly
+            url = getUnicodeUrl(url);
+            domain = getUnicodeDomain(domain);
+
             var shouldTrack = !tracker || tracker.url !== url;
             if (shouldTrack) {
                 frameData[tabId] = {
@@ -54,6 +58,7 @@ frameData = (function() {
             var data = this.get(tabId);
             if (data !== undefined &&
                 data.resources !== undefined) {
+                url = getUnicodeUrl(url);
                 data.resources[elType + ':|:' + url] = null;
             }
         },
@@ -89,7 +94,15 @@ safari.application.addEventListener("message", function(messageEvent) {
         return;
 
     var tab = messageEvent.target;
+    Object.defineProperty(tab, "url", {
+        value: getUnicodeUrl(tab.url)
+    });
+
     var frameInfo = messageEvent.message.frameInfo;
+    Object.defineProperty(frameInfo, "url", {
+        value: getUnicodeUrl(frameInfo.url)
+    });
+
     chrome._tabInfo.notice(tab, frameInfo);
     var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
 
@@ -180,11 +193,11 @@ if (!LEGACY_SAFARI) {
     // and then remove frameData[tabId] after close event.
     safari.application.addEventListener("close", function(event) {
         setTimeout(function() {
-            if (safari && 
-                safari.application && 
-                safari.application.activeBrowserWindow && 
+            if (safari &&
+                safari.application &&
+                safari.application.activeBrowserWindow &&
                 safari.application.activeBrowserWindow.tabs) {
-                    
+
                 var safari_tabs = safari.application.activeBrowserWindow.tabs;
 
                 var opened_tabs = [];
@@ -264,7 +277,7 @@ safari.application.addEventListener("contextmenu", function(event) {
     if (!get_settings().show_context_menu_items || adblock_is_paused())
         return;
 
-    var url = event.target.url;
+    var url = getUnicodeUrl(event.target.url);
     if (page_is_unblockable(url) || page_is_whitelisted(url))
         return;
 

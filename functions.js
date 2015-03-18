@@ -137,6 +137,32 @@ parseUri.secondLevelDomainOnly = function(domain, keepDot) {
   return match[keepDot ? 0 : 1].toLowerCase();
 };
 
+// Return URL encoded in Unicode
+getUnicodeUrl = function(url) {
+    var url = parseUri(url);
+    if (url.href.indexOf("xn--") < 0) {
+        return url.href;
+    } else {
+        url.href = url.href.replace(url.hostname, punycode.toUnicode(url.hostname));
+        return url.href;
+    }
+};
+
+getUnicodeDomain = function(domain) {
+    return punycode.toUnicode(domain);
+}
+
+// Return URL encoded in ASCII
+getASCIIUrl = function(url) {
+    var url = parseUri(url);
+    if (url.href.indexOf("xn--") < 0) {
+        return url.href;
+    } else {
+        url.href = url.href.replace(url.hostname, punycode.toASCII(url.hostname));
+        return url.href;
+    }
+};
+
 // TODO: move back into background.js since Safari can't use this
 // anywhere but in the background.  Do it after merging 6101 and 6238
 // and 5912 to avoid merge conflicts.

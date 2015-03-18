@@ -248,6 +248,7 @@
       // Returns false if this request's tab+frame are not trackable.
       track: function(details) {
         var fd = frameData, tabId = details.tabId;
+        details.url = getUnicodeUrl(details.url);
 
         // A hosted app's background page
         if (tabId === -1) {
@@ -290,8 +291,10 @@
         if (!get_settings().show_advanced_options)
           return;
         var data = frameData.get(tabId, frameId);
-        if (data !== undefined)
+        if (data !== undefined) {
+            url = getUnicodeUrl(url);
             data.resources[elType + ':|:' + url] = null;
+        }
       },
 
       onTabClosedHandler: function(tabId) {
@@ -346,11 +349,10 @@
         // receive this or not.  Because the #anchor of a page can change without navigating
         // the frame, ignore the anchor when matching.
         var frameUrl = frameData.get(tabId, requestingFrameId).url.replace(/#.*$/, "");
-        var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url:details.url, elType: elType };
+        var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url: details.url, elType: elType };
         chrome.tabs.sendRequest(tabId, data);
       }
-
-      if (blocked){
+      if (blocked) {
         blockCounts.recordOneAdBlocked(tabId);
         updateBadge(tabId);
       }
@@ -760,6 +762,8 @@
           return;
         }
 
+        tab.url = getUnicodeUrl(tab.url);
+
         var disabled_site = page_is_unblockable(tab.url);
         var total_blocked = blockCounts.getTotalAdsBlocked();
         var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
@@ -783,7 +787,8 @@
     } else {
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
-      var disabled_site = page_is_unblockable(tab.url);
+
+      var disabled_site = page_is_unblockable(tab.visible_url);
 
       var result = {
         tab: tab,
@@ -791,7 +796,7 @@
       };
 
       if (!disabled_site)
-        result.whitelisted = page_is_whitelisted(tab.url);
+        result.whitelisted = page_is_whitelisted(tab.visible_url);
 
         callback(result);
       }
@@ -805,6 +810,7 @@
     if (!url) { // Safari empty/bookmarks/top sites page
       return true;
     }
+    url = getUnicodeUrl(url);
     url = url.replace(/\#.*$/, ''); // Remove anchors
     if (!type)
       type = ElementTypes.document;
@@ -864,7 +870,7 @@
           );
         });
 
-        var host                = parseUri(info.tab.url).host;
+        var host                = getUnicodeDomain(parseUri(info.tab.url).host);
         var custom_filter_count = count_cache.getCustomFilterCount(host);
         if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
@@ -992,6 +998,7 @@
           include: [
             "jquery/jquery.min.js",
             "jquery/jquery-ui.custom.min.js",
+            "punycode.min.js",
             "uiscripts/load_jquery_ui.js",
             "uiscripts/top_open_whitelist_ui.js"
             ]
@@ -1001,6 +1008,7 @@
           include: [
             "jquery/jquery.min.js",
             "jquery/jquery-ui.custom.min.js",
+            "punycode.min.js",
             "uiscripts/load_jquery_ui.js",
             "uiscripts/blacklisting/overlay.js",
             "uiscripts/blacklisting/clickwatcher.js",
@@ -1211,8 +1219,9 @@
       log("Found", tabs.length, "tabs that were already opened");
       for (var i=0; i<tabs.length; i++) {
         var currentTab = tabs[i], tabId = currentTab.id;
-        if (!frameData.get(tabId)) // unknown tab
-          frameData.track({url: currentTab.url, tabId: tabId, type: "main_frame"});
+        if (!frameData.get(tabId)) { // unknown tab
+            frameData.track({url: currentTab.url, tabId: tabId, type: "main_frame"});
+        }
         updateBadge(tabId);
         // TODO: once we're able to get the parentFrameId, call
         // chrome.webNavigation.getAllFrames to 'load' the subframes
