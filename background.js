@@ -401,8 +401,9 @@
         details.url = opener.url;
       var match = _myfilters.blocking.matches(details.url, ElementTypes.popup, opener.domain);
       if (match) {
-          blockCounts.recordOneAdBlocked(details.sourceTabId);
           chrome.tabs.remove(details.tabId);
+          blockCounts.recordOneAdBlocked(details.sourceTabId);
+          updateBadge(details.sourceTabId);
       }
       frameData.storeResource(details.sourceTabId, details.sourceFrameId, details.url, ElementTypes.popup);
     };
