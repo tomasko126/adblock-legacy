@@ -1580,8 +1580,7 @@
     chrome.tabs.onUpdated.addListener(function(tabId) {
       chrome.tabs.get(tabId, function(tabs) {
         if (tabs &&
-            (/getadblock\.com$/.test(tabs.url) ||
-             /localhost/.test(tabs.url))) {
+            (/getadblock\.com\/dropbox.html/.test(tabs.url))) {
           chrome.tabs.executeScript(tabId, {file: "dropbox/dropbox-datastores.js", runAt: "document_start"});
           chrome.tabs.executeScript(tabId, {file: "dropbox/chrome_oauth_receiver.js", runAt: "document_start"});
         }
