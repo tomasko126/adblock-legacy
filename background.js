@@ -305,20 +305,20 @@
         var url = parseUri(details.url);
         if (url && url.pathname) {
             var pos = url.pathname.lastIndexOf('.');
-            if (pos === -1) {
-                return type;
-            }
         }
-        var ext = url.pathname.slice(pos) + '.';
-        if ('.eot.ttf.otf.svg.woff.woff2.'.indexOf(ext) !== -1) {
+        if (pos > -1) {
+          var ext = url.pathname.slice(pos) + '.';
+          if ('.eot.ttf.otf.svg.woff.woff2.'.indexOf(ext) !== -1) {
             return 'font';
-        }
-        // Still need this because often behind-the-scene requests are wrongly
-        // categorized as 'other'
-        if ('.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
+          }
+          // Still need this because often behind-the-scene requests are wrongly
+          // categorized as 'other'
+          if ((pos > -1) && '.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
             return 'image';
+          }
         }
         // https://code.google.com/p/chromium/issues/detail?id=410382
+        // or crbug.com/410382
         if (type === 'other') {
             return 'object';
         }
