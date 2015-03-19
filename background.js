@@ -400,8 +400,10 @@
       if (details.url === "about:blank")
         details.url = opener.url;
       var match = _myfilters.blocking.matches(details.url, ElementTypes.popup, opener.domain);
-      if (match)
-        chrome.tabs.remove(details.tabId);
+      if (match) {
+          blockCounts.recordOneAdBlocked(details.tabId);
+          chrome.tabs.remove(details.tabId);
+      }
       frameData.storeResource(details.sourceTabId, details.sourceFrameId, details.url, ElementTypes.popup);
     };
 
