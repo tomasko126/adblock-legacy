@@ -1,6 +1,32 @@
 var malwareDomains = null;
+
 $(function() {
     localizePage();
+
+    // Check for updates
+    checkupdates(function(info) {
+        if (info.latest === undefined) {
+            $("#checkupdate").html(translate("checkinternetconnection")).show();
+            $(".step").hide();
+        } else if (info.latest === false) {
+            if (!SAFARI) {
+                $("#checkupdate").html(translate("adblock_outdated_chrome")).show().
+                find("a").click(function() {
+                    if (OPERA) {
+                        chrome.tabs.create({url: 'opera://extensions/'});
+                    } else {
+                        chrome.tabs.create({url: 'chrome://extensions/'});
+                    }
+                });
+                $(".step").hide();
+            } else {
+                var updateURL = $("key:contains(URL) + string", info.response).text();
+                $("#checkupdate").html(translate("update_available"));
+                $("#here").html(translate("here")).attr("href", info.updateURL);
+                $(".step").hide();
+            }
+        }
+    });
 
     //Shows the instructions for how to enable all extensions according to the browser of the user
     if (SAFARI) {
@@ -181,7 +207,7 @@ $("input, select").change(function(event) {
 
 // STEP 1: Malware/adware detection
 var checkAdvanceOptions = function() {
-     // Check, if downloaded resources are available,
+    // Check, if downloaded resources are available,
     // if not, just reload tab with parsed tabId
     BGcall("get_settings", "show_advanced_options", function(status) {
         if (status.show_advanced_options) {
@@ -196,7 +222,7 @@ var checkAdvanceOptions = function() {
                         checkmalware();
                         sendResponse({});
                     }
-             });
+                });
         }
     });
 }
@@ -341,5 +367,3 @@ $("#step_flash_no").click(function() {
     $("a", "#checkupdate").attr("href", generateReportURL());
     $("#privacy").show();
 });
-
-checkupdates("adreport");

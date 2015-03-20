@@ -1,5 +1,5 @@
 // Check for updates
-function checkupdates(page) {
+function checkupdates(callback) {
     var AdBlockVersion = chrome.runtime.getManifest().version;
     var checkURL = (SAFARI ? "https://safariadblock.com/update.plist" :
                     "https://clients2.google.com/service/update2/crx?" +
@@ -12,49 +12,26 @@ function checkupdates(page) {
         dataType: "xml",
         url: checkURL,
         error: function() {
-            if (page === "help") {
-                $("#checkupdate").html(translate("somethingwentwrong")).show();
-            } else {
-                $("#checkupdate").html(translate("checkinternetconnection")).show();
-            }
+            return callback({latest: undefined});
         },
         success: function(response) {
             if (!SAFARI) {
                 if ($("updatecheck[status='ok'][codebase]", response).length) {
-                    $("#checkupdate").html(translate("adblock_outdated_chrome")).show().
-                    find("a").click(function() {
-                        if (OPERA) {
-                            chrome.tabs.create({url: 'opera://extensions/'});
-                        } else {
-                            chrome.tabs.create({url: 'chrome://extensions/'});
-                        }
-                    });
-                    $(".step").hide();
+                    return callback({latest: false});
                 } else {
-                    if (page === "help") {
-                        $("#checkupdate").html(translate("latest_version")).show();
-                    }
+                    return callback({latest: true});
                 }
             } else {
-                var version = $("key:contains(CFBundleShortVersionString) + string",response).text();
+                var version = $("key:contains(CFBundleShortVersionString) + string", response).text();
                 if (isNewerVersion(version)) {
-                    $("#checkupdate").html(translate("update_available"));
                     var updateURL = $("key:contains(URL) + string", response).text();
-                    $("#here").html(translate("here")).attr("href", updateURL);
-                    $(".step").hide();
+                    return callback({latest: false, updateURL: updateURL});
                 } else {
-                    if (page === "help") {
-                        $("#checkupdate").html(translate("latest_version")).show();
-                    }
+                    return callback({latest: true});
                 }
             }
         }
     });
-
-    // Hide ad-reporting wizard, when user is offline
-    if (page === "adreport" && $('#checkupdate').is(':visible')) {
-        $('.section').hide();
-    }
 
     // Check if newVersion is newer than AdBlockVersion
     function isNewerVersion(newVersion) {

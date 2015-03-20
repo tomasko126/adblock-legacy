@@ -12,8 +12,29 @@ $(document).ready(function() {
 
     // Check for updates
     $("#checkupdate").html(translate("checkforupdates"));
-    checkupdates("help");
-    
+
+    checkupdates(function(info) {
+        if (info.latest === undefined) {
+            $("#checkupdate").html(translate("somethingwentwrong")).show();
+        } else if (info.latest === false) {
+            if (!SAFARI) {
+                $("#checkupdate").html(translate("adblock_outdated_chrome")).show().
+                find("a").click(function() {
+                    if (OPERA) {
+                        chrome.tabs.create({url: 'opera://extensions/'});
+                    } else {
+                        chrome.tabs.create({url: 'chrome://extensions/'});
+                    }
+                });
+            } else {
+                $("#checkupdate").html(translate("update_available"));
+                $("#here").html(translate("here")).attr("href", info.updateURL);
+            }
+        } else {
+            $("#checkupdate").html(translate("latest_version")).show();
+        }
+    });
+
     if (navigator.language.substring(0, 2) != "en") {
         $(".english-only").css("display", "inline");
     }
@@ -28,10 +49,10 @@ $(document).ready(function() {
     // Report us the bug
     $("#report").click(function(){
         var result = "http://support.getadblock.com/discussion/new" +
-        "?category_id=problems&discussion[body]=" + report;
-        document.location.href = result; 
+            "?category_id=problems&discussion[body]=" + report;
+        document.location.href = result;
     });
-    
+
     // Show the changelog
     $("#whatsnew a").click(function() {
         var xhr = new XMLHttpRequest();
