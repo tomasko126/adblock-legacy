@@ -317,7 +317,6 @@
             }
           }
         }
-        // https://code.google.com/p/chromium/issues/detail?id=410382
         // or crbug.com/410382
         return 'object';
     };
