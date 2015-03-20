@@ -312,7 +312,7 @@
             }
             // Still need this because often behind-the-scene requests are wrongly
             // categorized as 'other'
-            if ((pos > -1) && '.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
+            if ('.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
               return 'image';
             }
           }
