@@ -317,7 +317,7 @@
             }
           }
         }
-        // or crbug.com/410382
+        // see crbug.com/410382
         return 'object';
     };
 
