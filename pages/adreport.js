@@ -20,7 +20,6 @@ $(function() {
                 });
                 $(".step").hide();
             } else {
-                var updateURL = $("key:contains(URL) + string", info.response).text();
                 $("#checkupdate").html(translate("update_available"));
                 $("#here").html(translate("here")).attr("href", info.updateURL);
                 $(".step").hide();
