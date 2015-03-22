@@ -71,7 +71,11 @@ if (!/ab_channel/.test(url)) {
         }
         // Add the name of the channel to the end of URL
         window.history.replaceState(null, null, updatedUrl);
-        // Reload page from cache
-        document.location.reload(false);
+        // Reload page from cache, just if it should be whitelisted
+        BGcall("page_is_whitelisted", updatedUrl, function(whitelisted) {
+            if (whitelisted) {
+                document.location.reload(false);
+            }
+        })
     }
 }
