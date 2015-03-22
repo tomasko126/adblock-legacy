@@ -227,15 +227,13 @@ if (SAFARI) {
           var json = safari.extension.settings.getItem(key);
           if (json === null)
             return callback(undefined);
+          var obj = {};
           try {
-            var obj = {};
             obj[key] = JSON.parse(json);
-            return callback(obj);
           } catch(e) {
-            var obj = {};
             obj[key] = json;
-            return callback(obj);
           }
+          return callback(obj);
         },
         set: function(info, callback) {
           var object_length = Object.keys(info).length;
