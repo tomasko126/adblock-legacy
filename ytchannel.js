@@ -76,6 +76,6 @@ if (!/ab_channel/.test(url)) {
             if (whitelisted) {
                 document.location.reload(false);
             }
-        })
+        });
     }
 }
