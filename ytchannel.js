@@ -7,7 +7,7 @@ if (!/ab_channel/.test(url)) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET",
                  "https://www.googleapis.com/youtube/v3/channels?part=snippet&id=" + getChannelId(url) +
-                 "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"), true);
+                 "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"), false);
         xhr.onload = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var json = JSON.parse(xhr.response);
@@ -22,7 +22,7 @@ if (!/ab_channel/.test(url)) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET",
                  "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=" + getVideoId(url) +
-                 "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"), true);
+                 "&key=" + atob("QUl6YVN5QzJKMG5lbkhJZ083amZaUUYwaVdaN3BKd3dsMFczdUlz"), false);
         xhr.onload = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var json = JSON.parse(xhr.response);
@@ -71,11 +71,5 @@ if (!/ab_channel/.test(url)) {
         }
         // Add the name of the channel to the end of URL
         window.history.replaceState(null, null, updatedUrl);
-        // Reload page from cache, just if it should be whitelisted
-        BGcall("page_is_whitelisted", updatedUrl, function(whitelisted) {
-            if (whitelisted) {
-                document.location.reload(false);
-            }
-        });
     }
 }
