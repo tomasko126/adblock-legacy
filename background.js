@@ -1180,7 +1180,34 @@
   STATS.startPinging();
 
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
-    openTab("https://getadblock.com/installed/?u=" + STATS.userId);
+    var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
+    if (SAFARI) {
+      openTab(installedURL);
+    } else {
+      //if Chrome, open the /installed tab, 
+      //check the status of the tab after 10 seconds
+      //if it failed to loaded, send a message
+      var tabStatus = "";
+      chrome.tabs.create({url: installedURL}, function(tab) {
+        tabStatus = tab.status;
+        var installedTabId = tab.id
+        var installedTabListener = function(tabId, changeInfo, tab) {
+          if (tabId !== installedTabId) {
+            return;
+          }
+          tabStatus = tab.status;
+        };
+        chrome.tabs.onUpdated.addListener(installedTabListener);
+        //wait 30 seconds, then check to see if the tabStatus is complete.
+        //if not, send a message
+        setTimeout(function() {
+          if (tabStatus !== "complete") {
+            record_message('installed tab not complete, last status ' + tabStatus);
+          }
+          chrome.tabs.onUpdated.removeListener(installedTabListener);
+        }, 30000);
+      });
+    }
   }
   if (chrome.runtime.setUninstallURL) {
     chrome.runtime.setUninstallURL("https://getadblock.com/uninstall/?u=" + STATS.userId);
