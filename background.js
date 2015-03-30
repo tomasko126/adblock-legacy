@@ -1209,7 +1209,7 @@
       openTab(installedURL);
     } else {
       //if Chrome, open the /installed tab, 
-      //check the status of the tab after 10 seconds
+      //check the status of the tab after 30 seconds
       //if it failed to loaded, send a message
       var tabStatus = "";
       chrome.tabs.create({url: installedURL}, function(tab) {
