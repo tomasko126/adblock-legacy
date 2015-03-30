@@ -1186,6 +1186,46 @@
     chrome.runtime.setUninstallURL("https://getadblock.com/uninstall/?u=" + STATS.userId);
   }
 
+  //validate STATS.firstRun against Chrome's Runtime API onInstalled
+  if (chrome.runtime.onInstalled) {
+    var validInstall = false;
+    chrome.runtime.onInstalled.addListener(function(details) {
+      validInstall = (details.reason === "install");
+    });
+    //wait a second, then check to see if validInstall is not equal to STATS.firstRun
+    //both booleans should match (either true or false).
+    //if they don't match, send a message
+    setTimeout(function() {
+      if (STATS.firstRun !== validInstall) {
+        record_message('invalid install - firstRun = ' + STATS.firstRun + ' valid install = ' + validInstall);
+      }
+    }, 1000);
+  }
+
+  // Log a message on GAB message server.  The user's userid will be prepended to the message.
+  // If callback() is specified, call callback() after logging has completed
+  var record_message = function(msg, callback) {
+    var url = 'https://getadblock.com/survey/results/record_message.php';
+    record_message_url(msg, url, callback);
+  };
+
+  var record_message_url = function(msg, url, callback) {
+    // Include user ID in message
+    var fullUrl = url + '?message=' + encodeURIComponent(STATS.userId + " " + msg);
+    $.ajax({
+      type: 'GET',
+      url: fullUrl,
+      success: function(responseData, textStatus, jqXHR) {
+        if (callback) {
+          callback();
+        }
+      },
+      error: function(e) {
+        console.log("message server returned error: ", e.status);
+      },
+    });
+  };
+
   createMalwareNotification = function() {
     if (!SAFARI &&
         chrome &&
