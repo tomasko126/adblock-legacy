@@ -1208,13 +1208,13 @@
     if (SAFARI) {
       openTab(installedURL);
     } else {
-      //if Chrome, open the /installed tab, 
+      //if Chrome, open the /installed tab,
       //check the status of the tab after 30 seconds
       //if it failed to loaded, send a message
       var tabStatus = "";
       chrome.tabs.create({url: installedURL}, function(tab) {
         tabStatus = tab.status;
-        var installedTabId = tab.id
+        var installedTabId = tab.id;
         var installedTabListener = function(tabId, changeInfo, tab) {
           if (tabId !== installedTabId) {
             return;
