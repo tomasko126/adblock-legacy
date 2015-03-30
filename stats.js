@@ -59,6 +59,9 @@ STATS = (function() {
     if (flavor === "E" && blockCounts) {
         data["b"] = blockCounts.get().total;
     }
+    if (chrome.runtime.id) {
+      data["extid"] = chrome.runtime.id;
+    }
 
     $.ajax({
       type: 'POST',
@@ -153,7 +156,7 @@ STATS = (function() {
       //if this is the first time we've run,
       //send a message
       if (firstRun && !storage_get("total_pings")) {
-        record_message('new install');          
+        record_message('new install');
       }
       // This will sleep, then ping, then schedule a new ping, then
       // call itself to start the process over again.
