@@ -197,6 +197,9 @@ if (SAFARI) {
             xhr.send();
             var object = JSON.parse(xhr.responseText);
             return object;
+        },
+        id: function() {
+            return parseUri(safari.extension.baseURI).host;
         }
     },
 
