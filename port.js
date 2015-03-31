@@ -213,6 +213,8 @@ if (SAFARI) {
           }
           // Calling this method from content script
           if (!isOnGlobalPage) {
+            // When this method is called from content script,
+            // we need to get a value of |key| from background page
             safari.self.tab.dispatchMessage("get_setting", key);
             safari.self.addEventListener("message", function(messageEvent) {
               if (messageEvent.name === "get_setting_response") {
@@ -221,33 +223,35 @@ if (SAFARI) {
             }, false);
             return;
           }
+          // Return all settings when |key| is null like on Chrome
           if (key === null) {
             return callback(safari.extension.settings);
           }
-          var json = safari.extension.settings.getItem(key);
-          if (json === null)
-            return callback(undefined);
+          var value = safari.extension.settings.getItem(key);
+          if (value === null) {
+              return callback(undefined);
+          }
           var obj = {};
           try {
-            obj[key] = JSON.parse(json);
+            obj[key] = JSON.parse(value);
           } catch(e) {
-            obj[key] = json;
+            obj[key] = value;
           }
           return callback(obj);
         },
         set: function(info, callback) {
-          var object_length = Object.keys(info).length;
+          var info_length = Object.keys(info).length;
           var i = 0;
           for (var key in info) {
             try {
-              value = JSON.stringify(info[key]);
+              var value = JSON.stringify(info[key]);
             } catch(e) {
-              value = info[key];
+              var value = info[key];
             }
             i++;
             // Calling this method from content script
             if (!isOnGlobalPage) {
-              if (object_length === i) {
+              if (info_length === i) {
                 var message_data = { key: key, value: value, callback: true };
               } else {
                 var message_data = { key: key, value: value, callback: false };
