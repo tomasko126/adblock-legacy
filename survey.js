@@ -76,16 +76,17 @@ SURVEY = (function() {
     var showOverlayIfAllowed = function(tab) {
       shouldShowSurvey(surveyData, function() {
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
+        var validateResponseFromTab = function(response) {
+          if (chrome.runtime.lastError) {
+            record_message('overlay message error ' + chrome.runtime.lastError);
+          } else if (!response || response.ack !== data.command) {
+            record_message('invalid response from notification overlay script' + response);
+          }
+        };        
         if (SAFARI) {
-          chrome.extension.sendRequest(data);
+          chrome.extension.sendRequest(data, validateResponseFromTab);
         } else {
-          chrome.tabs.sendRequest(tab.id, data, function(response) {
-            if (chrome.runtime.lastError) {
-              record_message('overlay message error ' + chrome.runtime.lastError);
-            } else if (!response || response.ack !== data.command) {
-              record_message('invalid response from notification overlay script' + response);
-            }
-          });
+          chrome.tabs.sendRequest(tab.id, data, validateResponseFromTab);
         }
       });
     };
