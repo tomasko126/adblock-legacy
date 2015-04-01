@@ -82,7 +82,7 @@ SURVEY = (function() {
           chrome.tabs.sendRequest(tab.id, data, function(response) {
             if (chrome.runtime.lastError) {
               record_message('overlay message error ' + chrome.runtime.lastError);
-            } else if (!response || response.ack !== "showoverlay") {
+            } else if (!response || response.ack !== data.command) {
               record_message('invalid response from notification overlay script' + response);
             }
           });
