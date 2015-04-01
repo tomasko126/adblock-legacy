@@ -1174,7 +1174,7 @@
   // Log a message on GAB message server.  The user's userid will be prepended to the message.
   // If callback() is specified, call callback() after logging has completed
   var record_message = function(msg, callback) {
-    var url = 'https://getadblock.com/survey/results/record_message.php';
+    var url = 'https://getadblock.com/log/record_error.php';
     record_message_url(msg, url, callback);
   };
 
