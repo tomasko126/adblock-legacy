@@ -82,7 +82,7 @@ SURVEY = (function() {
           } else if (!response || response.ack !== data.command) {
             record_message('invalid response from notification overlay script' + response);
           }
-        };        
+        };
         if (SAFARI) {
           chrome.extension.sendRequest(data, validateResponseFromTab);
         } else {
