@@ -3,8 +3,8 @@ var elementPurger = {
     if (request.command === 'purge-elements' &&
         request.frameUrl === document.location.href.replace(/#.*$/, ""))
       elementPurger._purgeElements(request);
-
-    sendResponse({});
+      sendResponse({});
+    }
   },
 
   // Remove elements on the page of |request.elType| that request

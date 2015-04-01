@@ -12,7 +12,7 @@ if (window.top === window) {
           request.overlayURL &&
           request.tabURL === document.location.href) {
           showOverlay(request.overlayURL);
-          sendResponse({});
+          sendResponse({ ack: "showoverlay" });
       }
     });
     //create the DIV and IFRAME and insert them into the DOM
