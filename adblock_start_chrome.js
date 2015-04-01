@@ -36,7 +36,7 @@ var elementPurger = {
           var externalId = "kodkhcagmjcidjgljmbfiaconnbnohho";
           request.selector = selector;
           chrome.extension.sendRequest(externalId, request);
-          
+
           return; // I doubt the same URL was loaded via 2 different src attrs.
         }
       }
@@ -71,8 +71,8 @@ var elementPurger = {
       var page_dirs = page_parts.pathname.split('/');
       var url_dirs = url_parts.pathname.split('/');
       var i = 0;
-      while (page_dirs[i] === url_dirs[i] 
-             && i < page_dirs.length - 1 
+      while (page_dirs[i] === url_dirs[i]
+             && i < page_dirs.length - 1
              && i < url_dirs.length - 1) {
         i++; // i is set to first differing position
       }
