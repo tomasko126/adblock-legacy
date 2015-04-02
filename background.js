@@ -1243,14 +1243,14 @@
     chrome.runtime.onInstalled.addListener(function(details) {
       validInstall = (details.reason === "install");
     });
-    //wait a second, then check to see if validInstall is not equal to STATS.firstRun
+    //wait 10 seconds, then check to see if validInstall is not equal to STATS.firstRun
     //both booleans should match (either true or false).
     //if they don't match, send a message
     setTimeout(function() {
       if (STATS.firstRun !== validInstall) {
         record_message('invalid install - firstRun = ' + STATS.firstRun + ' valid install = ' + validInstall);
       }
-    }, 1000);
+    }, 10000);
   }
 
   createMalwareNotification = function() {
