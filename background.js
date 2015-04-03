@@ -1171,14 +1171,19 @@
     }
   })();
 
-  // Log an error message on GAB log server.
+  // Log an 'error' message on GAB log server.
   var recordErrorMessage = function(msg, callback) {
     recordMessageUrl(msg, 'type=error', callback);
   };
 
-  // Log an information or status related message on GAB log server.
+  // Log an 'status' related message on GAB log server.
   var recordStatusMessage = function(msg, callback) {
     recordMessageUrl(msg, 'type=stats', callback);
+  };
+
+  // Log a 'general' message on GAB log server.
+  var recordGeneralMessage = function(msg, callback) {
+    recordMessageUrl(msg, 'type=general', callback);
   };
 
   // Log a message on GAB log server.  The user's userid will be prepended to the message.
