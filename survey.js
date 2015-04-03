@@ -78,9 +78,9 @@ SURVEY = (function() {
         var data = { command: "showoverlay", overlayURL: surveyData.open_this_url, tabURL:tab.url};
         var validateResponseFromTab = function(response) {
           if (chrome.runtime.lastError) {
-            record_message('overlay message error ' + chrome.runtime.lastError);
+            recordErrorMessage('overlay message error ' + chrome.runtime.lastError);
           } else if (!response || response.ack !== data.command) {
-            record_message('invalid response from notification overlay script' + response);
+            recordErrorMessage('invalid response from notification overlay script' + response);
           }
         };
         if (SAFARI) {

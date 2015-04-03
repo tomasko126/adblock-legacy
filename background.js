@@ -1171,16 +1171,27 @@
     }
   })();
 
-  // Log a message on GAB message server.  The user's userid will be prepended to the message.
-  // If callback() is specified, call callback() after logging has completed
-  var record_message = function(msg, callback) {
-    var url = 'https://getadblock.com/log/record_error.php';
-    record_message_url(msg, url, callback);
+  // Log an error message on GAB log server.
+  var recordErrorMessage = function(msg, callback) {
+    recordMessageUrl(msg, 'type=error', callback);
   };
 
-  var record_message_url = function(msg, url, callback) {
+  // Log an information or status related message on GAB log server.
+  var recordStatusMessage = function(msg, callback) {
+    recordMessageUrl(msg, 'type=stats', callback);
+  };
+
+  // Log a message on GAB log server.  The user's userid will be prepended to the message.
+  // If callback() is specified, call callback() after logging has completed
+  var recordMessageUrl = function(msg, queryType, callback) {
+    if (!msg || !queryType) {
+      return;
+    }
     // Include user ID in message
-    var fullUrl = url + '?message=' + encodeURIComponent(STATS.userId + " " + msg);
+    var fullUrl = 'https://log.getadblock.com/log/record_log.php?' + 
+                  queryType + 
+                  '&message=' + 
+                  encodeURIComponent(STATS.userId + " " + msg);
     $.ajax({
       type: 'GET',
       url: fullUrl,
@@ -1190,7 +1201,7 @@
         }
       },
       error: function(e) {
-        console.log("message server returned error: ", e.status);
+        log("message server returned error: ", e.status);
       },
     });
   };
@@ -1226,7 +1237,7 @@
         //if not, send a message
         setTimeout(function() {
           if (tabStatus !== "complete") {
-            record_message('installed tab not complete, last status ' + tabStatus);
+            recordErrorMessage('installed tab not complete, last status ' + tabStatus);
           }
           chrome.tabs.onUpdated.removeListener(installedTabListener);
         }, 30000);
@@ -1248,7 +1259,7 @@
     //if they don't match, send a message
     setTimeout(function() {
       if (STATS.firstRun !== validInstall) {
-        record_message('invalid install - firstRun = ' + STATS.firstRun + ' valid install = ' + validInstall);
+        recordErrorMessage('invalid install - firstRun = ' + STATS.firstRun + ' valid install = ' + validInstall);
       }
     }, 10000);
   }
