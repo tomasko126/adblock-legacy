@@ -50,6 +50,8 @@ STATS = (function() {
       v: version,
       f: flavor,
       o: os,
+      bv: browserVersion,
+      ov: osVersion,
       g: get_settings().show_google_search_text_ads ? '1': '0',
       l: determineUserLanguage(),
       st: SURVEY.types()
