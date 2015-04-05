@@ -1435,7 +1435,7 @@
       var adblock_settings = [];
       var settings = get_settings();
       for (setting in settings)
-          adblock_settings.push(setting + ": "+ get_settings()[setting] + "\n");
+          adblock_settings.push(setting + ": " + JSON.stringify(settings[setting]) + "\n");
       // We need to hardcode malware-notification setting,
       // because it isn't included in _settings object, but just in localStorage
       adblock_settings.push("malware-notification: " + storage_get('malware-notification') + "\n");
