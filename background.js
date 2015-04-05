@@ -1193,7 +1193,7 @@
       return;
     }
     // Include user ID in message
-    var fullUrl = 'https://log.getadblock.com/log/record_log.php?' + 
+    var fullUrl = 'https://log.getadblock.com/record_log.php?' + 
                   queryType + 
                   '&message=' + 
                   encodeURIComponent(STATS.userId + " " + msg);
