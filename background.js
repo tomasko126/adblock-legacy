@@ -1193,9 +1193,9 @@
       return;
     }
     // Include user ID in message
-    var fullUrl = 'https://log.getadblock.com/record_log.php?' + 
-                  queryType + 
-                  '&message=' + 
+    var fullUrl = 'https://log.getadblock.com/record_log.php?' +
+                  queryType +
+                  '&message=' +
                   encodeURIComponent(STATS.userId + " " + msg);
     $.ajax({
       type: 'GET',
@@ -1259,7 +1259,7 @@
     chrome.runtime.onInstalled.addListener(function(details) {
       validInstall = (details.reason === "install");
     });
-    //wait 10 seconds, then check 
+    //wait 10 seconds, then check
     //if extension and Chrome don't agree that this is a new installation send a message.
     //we only check if 'firstRun' is true because that is when the extension creates a new user id and opens /installed
     setTimeout(function() {
