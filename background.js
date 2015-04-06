@@ -5,11 +5,10 @@
              (e.filename||"anywhere").replace(chrome.extension.getURL(""), "") +
              ":" + (e.lineno||"anywhere") +
              ":" + (e.colno||"anycol");
-    if (chrome && chrome.runtime &&
-       (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
-        var stack = "-" + (e.error ||"") +
-                    "-" + (e.message ||"") +
-                    "-" + (e.stack ||"");
+    if (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk" &&
+        e.error) {
+        var stack = "-" + (e.error.message ||"") +
+                    "-" + (e.error.stack ||"");
         stack = stack.replace(/:/gi, ";").replace(/\n/gi, "");
         str += stack;
     }
@@ -1193,9 +1192,9 @@
       return;
     }
     // Include user ID in message
-    var fullUrl = 'https://log.getadblock.com/record_log.php?' + 
-                  queryType + 
-                  '&message=' + 
+    var fullUrl = 'https://log.getadblock.com/record_log.php?' +
+                  queryType +
+                  '&message=' +
                   encodeURIComponent(STATS.userId + " " + msg);
     $.ajax({
       type: 'GET',
