@@ -350,8 +350,10 @@ if (SAFARI) {
 
           // == Find all locales we might need to pull messages from, in order
           // 1: The user's current locale, converted to match the format of
-          //    the _locales directories (e.g. "en-US" becomes "en_US"
-          result.locales.push(navigator.language.replace('-', '_'));
+          //    the _locales directories (e.g. "pt-PT" becomes "pt_PT"
+          if ("pt,zh".indexOf(navigator.language.substring(0, 2)) > -1) {
+            result.locales.push(navigator.language.replace('-', '_'));
+          }
           // 2: Perhaps a region-agnostic version of the current locale
           if (navigator.language.length > 2)
             result.locales.push(navigator.language.substring(0, 2));
@@ -373,7 +375,7 @@ if (SAFARI) {
           return result;
         },
 
-        // Manually set the localization data.  You only need to call this
+        // Manually set the localization data. You only need to call this
         // if using chrome.i18n.getMessage() from a content script, before
         // the first call.  You must pass the value of _getL10nData(),
         // which can only be called by the global page.
