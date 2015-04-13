@@ -1,15 +1,15 @@
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-  if (request.command === "filters_updated") {
-    if ($("#txtFiltersAdvanced").prop("disabled") === false)
-      return;
-    BGcall("get_custom_filters_text", function(text) {
-      $("#txtFiltersAdvanced").val(text);
-    });
-    BGcall("get_exclude_filters_text", function(text) {
-      $("#txtExcludeFiltersAdvanced").val(text);
-    });
-    sendResponse({});
-  }
+  if (request.command != "filters_updated")
+    return;
+  if ($("#txtFiltersAdvanced").prop("disabled") === false)
+    return;
+  BGcall("get_custom_filters_text", function(text) {
+    $("#txtFiltersAdvanced").val(text);
+  });
+  BGcall("get_exclude_filters_text", function(text) {
+    $("#txtExcludeFiltersAdvanced").val(text);
+  });
+  // a call to sendResponse is not needed because of the call in filters.js
 });
 
 if (!SAFARI &&
