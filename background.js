@@ -509,8 +509,9 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (!SAFARI && db_client.isAuthenticated())
-        settingstable.set("custom_filters", localStorage.custom_filters);
+    if (!SAFARI && db_client && db_client.isAuthenticated()) {
+      sync_custom_filters(localStorage.custom_filters);
+    }
   }
 
   // Get the user enterred exclude filters text as a \n-separated text string.
@@ -526,8 +527,9 @@
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
-    if (!SAFARI && db_client.isAuthenticated())
-        settingstable.set("exclude_filters", localStorage.exclude_filters);
+    if (!SAFARI && db_client && db_client.isAuthenticated()) {
+      sync_exclude_filters(localStorage.exclude_filters);
+    }
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
   // rebuild the filterset.
@@ -687,7 +689,7 @@
           requiresList: options.requires,
           title: options.title
       });
-      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
+      if (!SAFARI && sync !== true && db_client && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -701,7 +703,7 @@
           subscribed: false,
           deleteMe: (options.del ? true : undefined)
       });
-      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
+      if (!SAFARI && sync !== true && db_client && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -1592,7 +1594,7 @@
               }
               if (filters) {
                   filters = filters.replace(/\""/g, "");
-                  settingstable.set("custom_filters", filters);
+                  sync_custom_filters(filters);
               }
 
               //exclude filters
@@ -1619,7 +1621,7 @@
               }
               if (eXfilters) {
                   eXfilters = eXfilters.replace(/\""/g, "");
-                  settingstable.set("exclude_filters", eXfilters);
+                  sync_exclude_filters(eXfilters);
               }
 
               // Listener, which fires when table has been updated
@@ -1712,6 +1714,33 @@
       function sync_setting(name, is_enabled) {
           if (settingstable && db_client.isAuthenticated())
               settingstable.set(name, is_enabled);
+      }
+
+      function _sync_filters(filters, name) {
+          var syncError = null;
+          try {
+            settingstable.set(name, filters);
+          } catch(ex) {
+            syncError = ex;
+            log(ex);
+            //since the most likely exception at this point is a size exceeded message,
+            //store the message code.
+            sessionstorage_set("dropboxerror", "dropboxerrorforfilters");
+            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorforfilters"});
+          }
+          if (!syncError) {
+            //sync was successful, remove any previous error messages.
+            sessionstorage_set("dropboxerror");
+            chrome.runtime.sendMessage({message: "cleardropboxerror"});
+          }
+      }
+
+      function sync_custom_filters(filters) {
+          _sync_filters(filters, "custom_filters");
+      }
+
+      function sync_exclude_filters(eXfilters) {
+          _sync_filters(eXfilters, "exclude_filters");
       }
   }
 
