@@ -1002,9 +1002,9 @@
   //           domain:string the domain of the calling frame.
   get_content_script_data = function(options, sender) {
     var settings = get_settings();
-    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.url || sender.tab.url);
-    var running = runnable && !page_is_whitelisted(sender.url || sender.tab.url);
-    var hiding = running && !page_is_whitelisted(sender.url || sender.tab.url, ElementTypes.elemhide);
+    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.url);
+    var running = runnable && !page_is_whitelisted(sender.url);
+    var hiding = running && !page_is_whitelisted(sender.url, ElementTypes.elemhide);
 
     var result = {
       settings: settings,
