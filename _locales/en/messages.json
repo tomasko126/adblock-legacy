@@ -1103,6 +1103,10 @@
     "message":"I'm an advanced user, show me advanced options",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "experimentalhiding":{
+    "message":"Experimental Memory Saver",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
   "work_around_hulu_problems":{
     "message":"Work around Hulu.com videos not playing (requires restarting your browser)",
     "description":"Advanced Options page checkbox, which users only need to use if Hulu.com videos break. It directs the user to restart their browser in order for changes to the checkbox to take effect."

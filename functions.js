@@ -50,6 +50,10 @@ onReady = function(callback) {
     window.addEventListener("load", callback, false);
 };
 
+onDOMContentLoaded = function(callback) {
+    window.addEventListener("DOMContentLoaded", callback, false);
+}
+
 translate = function(messageID, args) {
   return chrome.i18n.getMessage(messageID, args);
 };

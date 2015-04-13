@@ -443,6 +443,10 @@
       }
     }
   }
+  
+  setSelectors = function(url, selectors) {
+    _myfilters.hiding.setSelectors(url, selectors);
+  }
 
   // UNWHITELISTING
 
@@ -1004,6 +1008,7 @@
     var settings = get_settings();
     var runnable = !adblock_is_paused() && !page_is_unblockable(sender.tab.url);
     var running = runnable && !page_is_whitelisted(sender.tab.url);
+    console.log(sender);
     var hiding = running && !page_is_whitelisted(sender.tab.url,
                                                         ElementTypes.elemhide);
     var result = {
@@ -1014,7 +1019,12 @@
     };
 
     if (hiding) {
-      result.selectors = _myfilters.hiding.filtersFor(options.domain);
+      var cached_selectors = _myfilters.hiding.getSelectors(options.url);
+      if (cached_selectors) {
+         result._cachedSelectors = cached_selectors;
+      } else {
+        result.selectors = _myfilters.hiding.filtersFor(options.domain);
+      }
     }
     return result;
   };

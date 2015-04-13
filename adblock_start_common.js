@@ -119,18 +119,26 @@ function block_list_via_css(selectors) {
   fill_in_css_chunk();
 }
 
-function debug_print_selector_matches(selectors) {
-  selectors.
-    filter(function(selector) { return document.querySelector(selector); }).
+function hideMatchedElements(data, node, hide) {
+  var matchedSelectors = [];
+  data.selectors.
+    filter(function(selector) { return node.querySelector(selector); }).
     forEach(function(selector) {
-      var matches = "";
-      var elems = document.querySelectorAll(selector);
-      for (var i=0; i<elems.length; i++) {
-        var el = elems[i];
-        matches += "        " + el.nodeName + "#" + el.id + "." + el.className + "\n";
+      matchedSelectors.push(selector);
+      if (data.settings.debug_logging) {
+        var matches = "";
+        var elems = node.querySelectorAll(selector);
+        for (var i=0; i<elems.length; i++) {
+          var el = elems[i];
+          matches += "        " + el.nodeName + "#" + el.id + "." + el.className + "\n";
+        }
+        BGcall("debug_report_elemhide", selector, matches);
       }
-      BGcall("debug_report_elemhide", selector, matches);
     });
+  if (matchedSelectors.length > 0) {
+    if (hide) block_list_via_css(matchedSelectors);
+    BGcall("setSelectors", document.location.href, matchedSelectors);
+  }
 }
 
 function handleABPLinkClicks() {
@@ -145,7 +153,7 @@ function handleABPLinkClicks() {
       var reqLoc = queryparts.requiresLocation;
       var reqList = (reqLoc ? "url:" + reqLoc : undefined);
       var title = queryparts.title;
-      BGcall('translate', "subscribeconfirm",(title || loc), function(translatedMsg) {
+      BGcall('translate', "subscribeconfirm", (title || loc), function(translatedMsg) {
         if (abConfirm(translatedMsg)) {
           BGcall("subscribe", {id: "url:" + loc, requires: reqList, title: title});
           // Open subscribe popup
@@ -165,6 +173,32 @@ function handleABPLinkClicks() {
   for (var i=0; i<elems.length; i++) {
     elems[i].addEventListener("click", abplinkhandler, false);
   }
+}
+
+// Mutation Observer, which checks whether created child
+// should be hidden (Experimental hiding only)
+function observeChanges(data) {
+    // Select the target node
+    var target = document.body || document.documentElement;
+
+    // Create an observer instance
+    var mutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+    if (target &&
+        mutationObserver) {
+        new mutationObserver(function(info) {
+            for (var i=0; i<info.length; i++) {
+                if (info[i].addedNodes) {
+                    for (var j=0; j<info[i].addedNodes.length; j++) {
+                        var element = info[i].addedNodes[j];
+                        hideMatchedElements(data, element, true);
+                    }
+                }
+            }
+        }).observe(target, {
+            childList: true
+        });
+    }
 }
 
 // Called at document load.
@@ -192,13 +226,22 @@ function adblock_begin(inputs) {
 
   inputs.startPurger();
 
-  var opts = { domain: document.location.hostname };
+  var opts = { domain: document.location.hostname, url: document.location.href };
 
   BGcall('get_content_script_data', opts, function(data) {
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
-
-    inputs.handleHiding(data);
+    
+    console.log(data);
+    if (data.settings.experimental_hiding && data.hiding) {
+      if (!data._cachedSelectors) {
+        block_list_via_css(data.selectors);
+      } else {
+        block_list_via_css(data._cachedSelectors);
+      }
+    } else {
+      inputs.handleHiding(data);
+    }
 
     if (!data.running) {
       inputs.stopPurger();
@@ -206,15 +249,17 @@ function adblock_begin(inputs) {
     }
 
     onReady(function() {
-      // TODO: ResourceList could pull html.innerText from page instead: we
-      // could axe this (and Safari's .selectors calculation in debug mode)
-      if (data && data.settings && data.settings.debug_logging)
-        debug_print_selector_matches(data.selectors || []);
       // Chrome doesn't load bandaids.js unless the site needs a bandaid.
       if (typeof run_bandaids === "function") {
         run_bandaids("new");
       }
-
+      if (data.settings.experimental_hiding && data.hiding) {
+        if (data._cachedSelectors) {
+          observeChanges(data);
+        } else {
+          hideMatchedElements(data, document, false);
+        }
+      }
       handleABPLinkClicks();
     });
 
