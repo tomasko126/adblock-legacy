@@ -1636,9 +1636,12 @@
                   // Subscribe & unsubscribe filter lists
                   var filterlists_sync = settingstable.get("filter_lists").split(",");
                   var filterlists_local = get_subscribed_filter_lists();
-                  for (var i=0; i < filterlists_sync.length; i++)
-                      if (settingstable.get("filter_lists") !== "")
-                          subscribe({id: filterlists_sync[i]}, true);
+                  for (var i=0; i < filterlists_sync.length; i++) {
+                      if (settingstable.get("filter_lists") !== "") {
+                          if (filterlists_local.indexOf(filterlists_sync[i]) === -1)
+                              subscribe({id: filterlists_sync[i]}, true);
+                      }
+                  }
                   for (var i=0; i < filterlists_local.length; i++) {
                       if (filterlists_sync.indexOf(filterlists_local[i]) === -1)
                           unsubscribe({id: filterlists_local[i]}, true);
@@ -1677,13 +1680,20 @@
 
                   // Set custom filters
                   var exFilters = settingstable.get("exclude_filters");
-                  localStorage.exclude_filters = exFilters;
-                  //since the exclude filters may have been updated,
-                  //rebuild / update the entire filters
-                  FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
-                  update_subscriptions_now();
+                  // Since the exclude filters may have been updated,
+                  // rebuild / update the entire filters
+                  if (localStorage.exclude_filters !== exFilters) {
+                      localStorage.exclude_filters = exFilters;
+                      FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
+                      update_subscriptions_now();
+                  }
               }
           });
+      }
+
+      // Login users automatically on browser start-up
+      if (get_settings().dropbox_sync && !dropboxauth()) {
+          dropboxlogin();
       }
 
       // Reset db_client, if it got in an error state
@@ -1706,4 +1716,3 @@
   }
 
   log("\n===FINISHED LOADING===\n\n");
-
