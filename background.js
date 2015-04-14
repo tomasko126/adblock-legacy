@@ -1226,27 +1226,17 @@
       openTab(installedURL);
     } else {
       //if Chrome, open the /installed tab,
-      //check the status of the tab after 30 seconds
-      //if it failed to loaded, send a message
-      var tabStatus = "";
+      //check the URL of the tab
+      //if it's a mismatch, send an error message
       chrome.tabs.create({url: installedURL}, function(tab) {
-        tabStatus = tab.status;
-        var installedTabId = tab.id;
-        var installedTabListener = function(tabId, changeInfo, tab) {
-          if (tabId !== installedTabId) {
-            return;
-          }
-          tabStatus = tab.status;
-        };
-        chrome.tabs.onUpdated.addListener(installedTabListener);
-        //wait 30 seconds, then check to see if the tabStatus is complete.
-        //if not, send a message
-        setTimeout(function() {
-          if (tabStatus !== "complete") {
-            recordErrorMessage('installed tab not complete, last status ' + tabStatus);
-          }
-          chrome.tabs.onUpdated.removeListener(installedTabListener);
-        }, 30000);
+        if (!tab || !tab.url) {
+          recordErrorMessage('installed tab or URL null');
+        } else if (tab.url && installedURL !== tab.url) {
+          recordErrorMessage('installed tab URL mismatch');
+        } 
+        if (chrome.runtime.lastError && chrome.runtime.lastError.message) {
+          recordErrorMessage('installed tab open error ' + chrome.runtime.lastError.message);
+        }
       });
     }
   }
