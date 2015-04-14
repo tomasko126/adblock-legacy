@@ -1233,7 +1233,7 @@
           recordErrorMessage('installed tab or URL null');
         } else if (tab.url && installedURL !== tab.url) {
           recordErrorMessage('installed tab URL mismatch');
-        } 
+        }
         if (chrome.runtime.lastError && chrome.runtime.lastError.message) {
           recordErrorMessage('installed tab open error ' + chrome.runtime.lastError.message);
         }
@@ -1241,7 +1241,21 @@
     }
   }
   if (chrome.runtime.setUninstallURL) {
-    chrome.runtime.setUninstallURL("https://getadblock.com/uninstall/?u=" + STATS.userId);
+    var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
+    //if the start property of blockCount exists (which is the AdBlock installation timestamp)
+    //use it to calculate the approximate length of time that user has AdBlock installed
+    if (blockCounts && blockCounts.get().start) {
+      var fiveMinutes = 5 * 60 * 1000;
+      var updateUninstallURL = function() {
+        var installedDuration = (Date.now() - blockCounts.get().start);
+        chrome.runtime.setUninstallURL(uninstallURL + "&t=" + installedDuration);
+      };
+      //start an interval timer that will update the Uninstall URL every 5 minutes
+      setInterval(updateUninstallURL, fiveMinutes);
+      updateUninstallURL();
+    } else {
+      chrome.runtime.setUninstallURL(uninstallURL + "&t=-1");
+    }
   }
 
   //validate STATS.firstRun against Chrome's Runtime API onInstalled
