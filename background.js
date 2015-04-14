@@ -1174,17 +1174,17 @@
 
   // Log an 'error' message on GAB log server.
   var recordErrorMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=error', callback);
+    recordMessageUrl(msg, 'error', callback);
   };
 
   // Log an 'status' related message on GAB log server.
   var recordStatusMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=stats', callback);
+    recordMessageUrl(msg, 'stats', callback);
   };
 
   // Log a 'general' message on GAB log server.
   var recordGeneralMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=general', callback);
+    recordMessageUrl(msg, 'general', callback);
   };
 
   // Log a message on GAB log server.  The user's userid will be prepended to the message.
@@ -1194,7 +1194,7 @@
       return;
     }
     // Include user ID in message
-    var fullUrl = 'https://log.getadblock.com/record_log.php?' +
+    var fullUrl = 'https://log.getadblock.com/record_log.php?type=' +
                   queryType +
                   '&message=' +
                   encodeURIComponent(STATS.userId + " " + msg);
