@@ -194,7 +194,10 @@ function observeChanges(data) {
             for (var i=0; i<info.length; i++) {
                 if (info[i].addedNodes) {
                     for (var j=0; j<info[i].addedNodes.length; j++) {
-                        var element = info[i].addedNodes[j];
+                      var element = info[i].addedNodes[j];
+                      if (element.nodeType === Node.ELEMENT_NODE &&
+                          element.nodeName !== "STYLE" &&
+                          element.nodeName !== "SCRIPT")
                         logMatchedElements(data, element, true);
                     }
                 }

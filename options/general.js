@@ -52,6 +52,11 @@ $("#enable_show_advanced_options").change(function() {
   }, 50);
 });
 
+// Experimental hiding of ads is not available on Safari 5.0 & 5.1
+if (LEGACY_SAFARI_51) {
+    $("#enable_experimental_hiding").hide();
+}
+
 // Authenticate button for login/logoff with Dropbox
 $("#dbauth").click(function() {
     BGcall("dropboxauth", function(status) {
