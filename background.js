@@ -1006,10 +1006,9 @@
   //           domain:string the domain of the calling frame.
   get_content_script_data = function(options, sender) {
     var settings = get_settings();
-    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.tab.url);
-    var running = runnable && !page_is_whitelisted(sender.tab.url);
-    console.log(sender);
-    var hiding = running && !page_is_whitelisted(sender.tab.url,
+    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.url);
+    var running = runnable && !page_is_whitelisted(sender.url);
+    var hiding = running && !page_is_whitelisted(sender.url,
                                                         ElementTypes.elemhide);
     var result = {
       settings: settings,
@@ -1019,11 +1018,11 @@
     };
 
     if (hiding) {
-      var cached_selectors = _myfilters.hiding.getSelectors(options.url);
+      var cached_selectors = _myfilters.hiding.getSelectors(sender.url);
       if (cached_selectors) {
          result._cachedSelectors = cached_selectors;
       } else {
-        result.selectors = _myfilters.hiding.filtersFor(options.domain);
+        result.selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
       }
     }
     return result;

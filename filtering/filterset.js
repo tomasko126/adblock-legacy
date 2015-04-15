@@ -13,8 +13,6 @@ function FilterSet() {
   //   /f/$domain=foo.com,~sub.foo.com would appear in
   //     items['foo.com'], exclude['sub.foo.com']
   this.exclude = {};
-  // Caches selectors for this.setSelectors()
-  this._selectorsCache = {};
 }
 
 
@@ -46,6 +44,9 @@ FilterSet.prototype = {
   // sub.foo.com will get items['global', 'foo.com', 'sub.foo.com'] and
   // exclude['foo.com', 'sub.foo.com'].
   
+  // Caches selectors for this.setSelectors()
+  _selectorsCache: {},
+  
   // Save recorded selectors into cache
   setSelectors: function(url, selectors) {
     var urlDomain = parseUri(url).hostname;
@@ -57,13 +58,13 @@ FilterSet.prototype = {
       }
     }
     
-    this._selectorsCache[urlDomain] = [selectors];
-    log("Matched", selectors, "to url", url);
+    this._selectorsCache[urlDomain] = selectors;
   },
   
   // Get recorded selectors from cache
   getSelectors: function(url) {
     var urlDomain = parseUri(url).hostname;
+
     if (urlDomain in this._selectorsCache)
         return this._selectorsCache[urlDomain];
 

@@ -95,7 +95,7 @@ function destroyElement(el, elType) {
 
 // Add style rules hiding the given list of selectors.
 function block_list_via_css(selectors) {
-  if (!selectors.length)
+  if (!selectors || selectors.length < 1)
     return;
   // Issue 6480: inserting a <style> tag too quickly ignored its contents.
   // Use ABP's approach: wait for .sheet to exist before injecting rules.
@@ -120,8 +120,10 @@ function block_list_via_css(selectors) {
 }
 
 function hideMatchedElements(data, node, hide) {
+  var selectors = data._cachedSelectors || data.selectors;
   var matchedSelectors = [];
-  data.selectors.
+
+  selectors.
     filter(function(selector) { return node.querySelector(selector); }).
     forEach(function(selector) {
       matchedSelectors.push(selector);
@@ -137,8 +139,8 @@ function hideMatchedElements(data, node, hide) {
     });
   if (matchedSelectors.length > 0) {
     if (hide) block_list_via_css(matchedSelectors);
-    BGcall("setSelectors", document.location.href, matchedSelectors);
   }
+  BGcall("setSelectors", document.location.href, matchedSelectors);
 }
 
 function handleABPLinkClicks() {
@@ -232,7 +234,7 @@ function adblock_begin(inputs) {
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
     
-    console.log(data);
+    console.log(document.location.href, data);
     if (data.settings.experimental_hiding && data.hiding) {
       if (!data._cachedSelectors) {
         block_list_via_css(data.selectors);
