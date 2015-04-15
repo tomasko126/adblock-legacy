@@ -59,8 +59,22 @@ FilterSet.prototype = {
     }
     
     this._selectorsCache[urlDomain] = selectors;
+    this.cacheFilterListSelectors(urlDomain);
   },
-  
+
+  // Save selectors from filter list to cache
+  cacheFilterListSelectors: function(domain) {
+    var selectors = this._viewFor(domain).items[domain.replace(/^www./, "")];
+    if (selectors) {
+      for (var i=0; i<selectors.length; i++) {
+        if (!this._selectorsCache[domain]) {
+          this._selectorsCache[domain] = [];
+        }
+        this._selectorsCache[domain].push(selectors[i].selector);
+      }
+    }
+  },
+
   // Get recorded selectors from cache
   getSelectors: function(url) {
     var urlDomain = parseUri(url).hostname;
