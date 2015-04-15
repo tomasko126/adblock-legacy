@@ -119,7 +119,8 @@ function block_list_via_css(selectors) {
   fill_in_css_chunk();
 }
 
-function hideMatchedElements(data, node, hide) {
+// Log used selectors
+function logMatchedElements(data, node, hide) {
   var selectors = data.selectors || data._cachedSelectors;
   var matchedSelectors = [];
 
@@ -138,7 +139,7 @@ function hideMatchedElements(data, node, hide) {
       }
     });
 
-  if (matchedSelectors.length > -1 && hide) {
+  if (hide && matchedSelectors.length > -1) {
     block_list_via_css(matchedSelectors);
   }
   BGcall("setSelectors", document.location.href, matchedSelectors);
@@ -194,12 +195,12 @@ function observeChanges(data) {
                 if (info[i].addedNodes) {
                     for (var j=0; j<info[i].addedNodes.length; j++) {
                         var element = info[i].addedNodes[j];
-                        hideMatchedElements(data, element, true);
+                        logMatchedElements(data, element, true);
                     }
                 }
             }
         }).observe(target, {
-            childList: true
+            childList: true, attributes: true
         });
     }
 }
@@ -235,15 +236,7 @@ function adblock_begin(inputs) {
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
 
-    if (data.settings.experimental_hiding && data.hiding) {
-      if (!data._cachedSelectors) {
-        block_list_via_css(data.selectors);
-      } else {
-        block_list_via_css(data._cachedSelectors);
-      }
-    } else {
-      inputs.handleHiding(data);
-    }
+    inputs.handleHiding(data);
 
     if (!data.running) {
       inputs.stopPurger();
@@ -259,7 +252,7 @@ function adblock_begin(inputs) {
         if (data._cachedSelectors) {
           observeChanges(data);
         } else {
-          hideMatchedElements(data, document, false);
+          logMatchedElements(data, document, false);
         }
       }
       handleABPLinkClicks();

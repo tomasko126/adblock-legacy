@@ -101,7 +101,14 @@ adblock_begin({
     chrome.extension.onRequest.removeListener(elementPurger.onPurgeRequest);
   },
   handleHiding: function(data) {
-    if (data.hiding)
+    if (data.settings.experimental_hiding && data.hiding) {
+      if (!data._cachedSelectors) {
+        block_list_via_css(data.selectors);
+      } else {
+        block_list_via_css(data._cachedSelectors);
+      }
+    } else {
       block_list_via_css(data.selectors);
+    }
   }
 });

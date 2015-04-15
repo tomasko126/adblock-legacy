@@ -1008,8 +1008,8 @@
     var settings = get_settings();
     var runnable = !adblock_is_paused() && !page_is_unblockable(sender.url);
     var running = runnable && !page_is_whitelisted(sender.url);
-    var hiding = running && !page_is_whitelisted(sender.url,
-                                                        ElementTypes.elemhide);
+    var hiding = running && !page_is_whitelisted(sender.url, ElementTypes.elemhide);
+
     var result = {
       settings: settings,
       runnable: runnable,
@@ -1017,6 +1017,7 @@
       hiding: hiding
     };
 
+    // Return cached selectors if possible, otherwise return global & domain-specific CSS rules
     if (hiding) {
       var cached_selectors = _myfilters.hiding.getSelectors(sender.url);
       if (cached_selectors) {
