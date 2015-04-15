@@ -38,7 +38,7 @@ beforeLoadHandler = function(event) {
   // Since we don't block non-HTTP requests, return
   // without asking the background page.
   if (/^(?!https?:)[\w-]+:/.test(event.url))
-    return;  
+    return;
   var el = event.target;
   if (!el.nodeName) return; // issue 6256
   // Cancel the load if canLoad is false.
@@ -68,13 +68,13 @@ beforeLoadHandler = function(event) {
       // to avoid breaking element collapsing and pages that rely on those events.
       var eventName = "error";
       if (event.target.localName === "iframe") {
-        eventName = "load";    
+        eventName = "load";
       }
       setTimeout(function() {
         var evt = document.createEvent("Event");
         evt.initEvent(eventName);
         event.target.dispatchEvent(evt);
-      }, 0);      
+      }, 0);
     }
     if (!weakDestroyElement(el, elType))
       destroyElement(el, elType);
