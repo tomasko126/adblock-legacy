@@ -633,6 +633,10 @@
     if (name === "debug_logging")
       logging(is_enabled);
 
+    // Reset cache, when experimental hiding is going to be disabled
+    if (name === "experimental_hiding" && !is_enabled)
+      _myfilters.hiding._selectorsCache = [];
+
     if (!SAFARI && sync) {
         sync_setting(name, is_enabled);
     }

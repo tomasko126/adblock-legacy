@@ -203,7 +203,8 @@ function observeChanges(data) {
                 }
             }
         }).observe(target, {
-            childList: true, attributes: true
+            childList: true,
+            attributes: true
         });
     }
 }
