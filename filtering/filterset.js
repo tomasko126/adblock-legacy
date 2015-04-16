@@ -60,6 +60,7 @@ FilterSet.prototype = {
     
     this._selectorsCache[urlDomain] = selectors;
     this.cacheFilterListSelectors(urlDomain);
+    storage_set("cached_filters", this._selectorsCache);
   },
 
   // Save selectors from filter list to cache

@@ -1231,6 +1231,7 @@
 
   _myfilters = new MyFilters();
   _myfilters.init();
+  _myfilters.hiding._selectorsCache = storage_get("cached_filters");
   // Record that we exist.
   STATS.startPinging();
 
