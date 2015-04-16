@@ -1226,16 +1226,21 @@
       openTab(installedURL);
     } else {
       //if Chrome, open the /installed tab,
-      //check the URL of the tab
-      //if it's a mismatch, send an error message
-      chrome.tabs.create({url: installedURL}, function(tab) {
-        if (!tab || !tab.url) {
-          recordErrorMessage('installed tab or URL null');
-        }
-        if (chrome.runtime.lastError && chrome.runtime.lastError.message) {
-          recordErrorMessage('installed tab open error ' + chrome.runtime.lastError.message);
-        }
-      });
+      //if tab doesn't exist for any reason
+      // send an error message and retry in 5 minutes
+      var openInstalledTab = function() {
+        chrome.tabs.create({url: installedURL}, function(tab) {
+          if (!tab || !tab.url) {
+            recordErrorMessage('installed tab or URL null');
+            var retryInFiveMinutes = function() {
+              var fiveMinutes = 5 * 60 * 1000;
+              setTimeout(function() {
+                openInstalledTab();
+              }, fiveMinutes);
+            };
+          }
+        });
+      }();
     }
   }
   if (chrome.runtime.setUninstallURL) {
