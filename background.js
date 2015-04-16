@@ -1231,8 +1231,6 @@
       chrome.tabs.create({url: installedURL}, function(tab) {
         if (!tab || !tab.url) {
           recordErrorMessage('installed tab or URL null');
-        } else if (tab.url && installedURL !== tab.url) {
-          recordErrorMessage('installed tab URL mismatch');
         }
         if (chrome.runtime.lastError && chrome.runtime.lastError.message) {
           recordErrorMessage('installed tab open error ' + chrome.runtime.lastError.message);
