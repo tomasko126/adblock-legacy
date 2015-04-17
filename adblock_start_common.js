@@ -197,8 +197,9 @@ function observeChanges(data) {
                       var element = info[i].addedNodes[j];
                       if (element.nodeType === Node.ELEMENT_NODE &&
                           element.nodeName !== "STYLE" &&
-                          element.nodeName !== "SCRIPT")
+                          element.nodeName !== "SCRIPT") {
                         logMatchedElements(data, element, true);
+                      }
                     }
                 }
             }

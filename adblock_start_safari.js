@@ -90,14 +90,10 @@ adblock_begin({
     document.removeEventListener("beforeload", beforeLoadHandler, true);
   },
   handleHiding: function(data) {
-    if (data.settings.experimental_hiding && data.hiding) {
-      if (!data._cachedSelectors) {
-        block_list_via_css(data.selectors);
-      } else {
-        block_list_via_css(data._cachedSelectors);
-      }
-    } else {
+    if (!data._cachedSelectors) {
       block_list_via_css(data.selectors);
+    } else {
+      block_list_via_css(data._cachedSelectors);
     }
   },
   success: function() {
