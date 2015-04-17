@@ -158,7 +158,7 @@ STATS = (function() {
       //if this is the first time we've run,
       //send a message
       if (firstRun && !storage_get("total_pings")) {
-        if (chrome.management.getSelf) {
+        if (chrome.management && chrome.management.getSelf) {
           chrome.management.getSelf(function(info) {
             if (info) {
               recordGeneralMessage('new install ' + info.installType);
