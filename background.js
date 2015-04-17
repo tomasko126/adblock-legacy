@@ -90,6 +90,7 @@
       whitelist_hulu_ads: false, // Issue 7178
       show_context_menu_items: true,
       show_advanced_options: false,
+      experimental_hiding: false,
       display_stats: true,
       display_menu_stats: true,
       show_block_counts_help_link: true,
@@ -1025,11 +1026,25 @@
       hiding: hiding
     };
 
-    // Return cached selectors if possible, otherwise return global & domain-specific CSS rules
-    if (hiding) {
-      var cached_selectors = _myfilters.hiding.getSelectors(sender.url);
-      if (cached_selectors) {
-         result._cachedSelectors = cached_selectors;
+    function injectCSS(selectors) {
+      var GROUPSIZE = 1000; // Hide in smallish groups to isolate bad selectors
+      for (var i = 0; i < selectors.length; i += GROUPSIZE) {
+        var line = selectors.slice(i, i + GROUPSIZE);
+        var rule = line.join(",") + " { display:none !important; visibility: none !important; orphans: 4321 !important; }";
+        chrome.tabs.insertCSS(sender.tab.id, { code: rule, runAt: "document_start" });
+      }
+    }
+
+    var cached_selectors = _myfilters.hiding.getSelectors(sender.url);
+    if (cached_selectors) {
+      if (options.top) {
+        injectCSS(cached_selectors);
+      } else {
+        result._cachedSelectors = cached_selectors;
+      }
+    } else {
+      if (options.top) {
+        injectCSS(_myfilters.hiding.filtersFor(parseUri(sender.url).hostname));
       } else {
         result.selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
       }

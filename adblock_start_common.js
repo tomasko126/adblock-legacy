@@ -124,6 +124,7 @@ function logMatchedElements(data, node, hide) {
   var selectors = data.selectors || data._cachedSelectors;
   var matchedSelectors = [];
 
+  if (!selectors) return;
   selectors.
     filter(function(selector) { return node.querySelector(selector); }).
     forEach(function(selector) {
@@ -235,13 +236,20 @@ function adblock_begin(inputs) {
 
   inputs.startPurger();
 
-  var opts = { domain: document.location.hostname, url: document.location.href };
+  var opts = { domain: document.location.hostname, url: document.location.href, top: window.top === window.self };
 
   BGcall('get_content_script_data', opts, function(data) {
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
 
-    inputs.handleHiding(data);
+    if (data && data.settings && data.settings.experimental_hiding) {
+      // When experimental hiding is enabled, don't handle hiding in top frame
+      if (!opts.top) {
+        inputs.handleHiding(data);
+      }
+    } else {
+      inputs.handleHiding(data);
+    }
 
     if (!data.running) {
       inputs.stopPurger();
