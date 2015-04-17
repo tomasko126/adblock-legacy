@@ -1237,12 +1237,10 @@
         chrome.tabs.create({url: installedURL}, function(tab) {
           if (!tab || !tab.url) {
             recordErrorMessage('installed tab or URL null');
-            var retryInFiveMinutes = function() {
-              var fiveMinutes = 5 * 60 * 1000;
-              setTimeout(function() {
-                openInstalledTab();
-              }, fiveMinutes);
-            };
+            var fiveMinutes = 5 * 60 * 1000;
+            setTimeout(function() {
+              openInstalledTab();
+            }, fiveMinutes);
           }
         });
       }();
