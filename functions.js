@@ -137,17 +137,6 @@ parseUri.secondLevelDomainOnly = function(domain, keepDot) {
   return match[keepDot ? 0 : 1].toLowerCase();
 };
 
-// Return |url| encoded in ASCII
-getASCIIUrl = function(url) {
-    // URLs encoded in Punycode contain xn-- prefix
-    if (url && url.indexOf("xn--") > 0) {
-        var url = parseUri(url);
-        url.href = url.href.replace(url.hostname, punycode.toASCII(url.hostname));
-      return url.href;
-    }
-    return url;
-};
-
 // Return |domain| encoded in Unicode
 getUnicodeDomain = function(domain) {
     return punycode.toUnicode(domain);

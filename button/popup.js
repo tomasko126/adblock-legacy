@@ -241,7 +241,7 @@ $(function() {
 
     $("#div_report_an_ad").click(function() {
         BG.getCurrentTabInfo(function(info) {
-            var url = "pages/adreport.html?url=" + encodeURIComponent(getASCIIUrl(info.tab.url))
+            var url = "pages/adreport.html?url=" + encodeURIComponent(getUnicodeUrl(info.tab.url))
                     + "&tabId=" + info.tab.id;
             BG.openTab(url, true);
             closeAndReloadPopup();
