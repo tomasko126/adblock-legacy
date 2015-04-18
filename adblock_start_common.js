@@ -243,8 +243,9 @@ function adblock_begin(inputs) {
       logging(true);
 
     if (data && data.settings && data.settings.experimental_hiding) {
-      // When experimental hiding is enabled, don't handle hiding in top frame
-      if (!opts.top) {
+      // When experimental hiding is enabled,
+      // don't handle hiding in top frame on Chrome/Opera
+      if (SAFARI || !opts.top) {
         inputs.handleHiding(data);
       }
     } else {
