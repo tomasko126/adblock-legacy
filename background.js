@@ -1028,28 +1028,11 @@
 
     if (hiding) {
       if (settings.experimental_hiding) {
-        function injectCSS(selectors) {
-          var GROUPSIZE = 1000; // Hide in smallish groups to isolate bad selectors
-          for (var i = 0; i < selectors.length; i += GROUPSIZE) {
-            var line = selectors.slice(i, i + GROUPSIZE);
-            var rule = line.join(",") + " { display:none !important; visibility: none !important; orphans: 4321 !important; }";
-            console.log("RULE: ", rule);
-            console.log("TOP: ", options.top);
-            chrome.tabs.insertCSS(sender.tab.id, { code: rule, runAt: "document_start" });
-          }
-        }
-
         var cached_selectors = _myfilters.hiding.getSelectors(sender.url);
         if (cached_selectors) {
-          if (!SAFARI && options.top) {
-            injectCSS(cached_selectors);
-          }
           result._cachedSelectors = cached_selectors;
         } else {
           var selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
-          if (!SAFARI && options.top) {
-            injectCSS(selectors);
-          }
           result.selectors = selectors;
         }
       } else {

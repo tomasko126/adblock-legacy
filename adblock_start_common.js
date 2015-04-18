@@ -236,19 +236,13 @@ function adblock_begin(inputs) {
 
   inputs.startPurger();
 
-  var opts = { domain: document.location.hostname, url: document.location.href, top: window.top === window.self };
+  var opts = { domain: document.location.hostname, url: document.location.href };
 
   BGcall('get_content_script_data', opts, function(data) {
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
 
-    if (data && data.settings && data.settings.experimental_hiding) {
-      // When experimental hiding is enabled,
-      // don't handle hiding in top frame on Chrome/Opera
-      if (SAFARI || !opts.top) {
-        inputs.handleHiding(data);
-      }
-    } else {
+    if (!data.settings.experimental_hiding) {
       inputs.handleHiding(data);
     }
 
@@ -265,9 +259,6 @@ function adblock_begin(inputs) {
       if (data.settings.experimental_hiding && data.hiding) {
         if (data._cachedSelectors) {
           observeChanges(data);
-          if (opts.top) {
-            logMatchedElements(data, document, false);
-          }
         } else {
           logMatchedElements(data, document, false);
         }
