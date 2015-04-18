@@ -143,7 +143,6 @@ function logMatchedElements(data, node, hide) {
   if (hide && matchedSelectors.length > -1) {
     block_list_via_css(matchedSelectors);
   }
-  console.log("Matched selectors: ", matchedSelectors);
   BGcall("setSelectors", document.location.href, matchedSelectors);
 }
 
@@ -256,10 +255,6 @@ function adblock_begin(inputs) {
       inputs.stopPurger();
       return;
     }
-    
-    if (opts.top) {
-      console.log("DATA: ", data);
-    }
 
     onReady(function() {
       // Chrome doesn't load bandaids.js unless the site needs a bandaid.
@@ -270,7 +265,6 @@ function adblock_begin(inputs) {
         if (data._cachedSelectors) {
           observeChanges(data);
         } else {
-          console.log("Running logmatchedelements...");
           logMatchedElements(data, document, false);
         }
       }
