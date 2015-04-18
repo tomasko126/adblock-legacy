@@ -277,7 +277,7 @@ safari.application.addEventListener("contextmenu", function(event) {
     if (!get_settings().show_context_menu_items || adblock_is_paused())
         return;
 
-    var url = getUnicodeUrl(event.target.url);
+    var url = event.target.url;
     if (page_is_unblockable(url) || page_is_whitelisted(url))
         return;
 

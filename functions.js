@@ -137,30 +137,31 @@ parseUri.secondLevelDomainOnly = function(domain, keepDot) {
   return match[keepDot ? 0 : 1].toLowerCase();
 };
 
-// Return URL encoded in Unicode
-getUnicodeUrl = function(url) {
-    var url = parseUri(url);
-    if (url.href.indexOf("xn--") < 0) {
-        return url.href;
-    } else {
-        url.href = url.href.replace(url.hostname, punycode.toUnicode(url.hostname));
-        return url.href;
+// Return |url| encoded in ASCII
+getASCIIUrl = function(url) {
+    // URLs encoded in Punycode contain xn-- prefix
+    if (url && url.indexOf("xn--") > 0) {
+        var url = parseUri(url);
+        url.href = url.href.replace(url.hostname, punycode.toASCII(url.hostname));
+      return url.href;
     }
+    return url;
 };
 
+// Return |domain| encoded in Unicode
 getUnicodeDomain = function(domain) {
     return punycode.toUnicode(domain);
 }
 
-// Return URL encoded in ASCII
-getASCIIUrl = function(url) {
-    var url = parseUri(url);
-    if (url.href.indexOf("xn--") < 0) {
-        return url.href;
-    } else {
-        url.href = url.href.replace(url.hostname, punycode.toASCII(url.hostname));
-        return url.href;
+// Return |url| encoded in Unicode
+getUnicodeUrl = function(url) {
+    // URLs encoded in Punycode contain xn-- prefix
+    if (url && url.indexOf("xn--") > 0) {
+        var url = parseUri(url);
+        url.href = url.href.replace(url.hostname, punycode.toUnicode(url.hostname));
+      return url.href;
     }
+    return url;
 };
 
 // TODO: move back into background.js since Safari can't use this
