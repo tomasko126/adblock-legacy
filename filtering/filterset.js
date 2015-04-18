@@ -51,10 +51,6 @@ FilterSet.prototype = {
   setSelectors: function(url, selectors) {
     var urlDomain = parseUri(url).hostname.replace(/^www./, "");
 
-    if (typeof this._selectorsCache === "undefined") {
-      this._selectorsCache = {};
-    }
-
     // If we want to save another selectors
     if (urlDomain in this._selectorsCache) {
       for (var i=0; i<selectors.length; i++) {
@@ -69,9 +65,6 @@ FilterSet.prototype = {
 
   // Save selectors from filter list to cache
   cacheFilterListSelectors: function(domain) {
-    if (typeof this._selectorsCache === "undefined") {
-      this._selectorsCache = {};
-    }
     var selectors = this._viewFor(domain).items[domain];
     if (selectors) {
       for (var i=0; i<selectors.length; i++) {
@@ -86,10 +79,6 @@ FilterSet.prototype = {
   // Get recorded selectors from cache
   getSelectors: function(url) {
     var urlDomain = parseUri(url).hostname.replace(/^www./, "");
-
-    if (typeof this._selectorsCache === "undefined") {
-      this._selectorsCache = {};
-    }
 
     if (urlDomain in this._selectorsCache)
         return this._selectorsCache[urlDomain];

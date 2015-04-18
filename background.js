@@ -1033,6 +1033,8 @@
           for (var i = 0; i < selectors.length; i += GROUPSIZE) {
             var line = selectors.slice(i, i + GROUPSIZE);
             var rule = line.join(",") + " { display:none !important; visibility: none !important; orphans: 4321 !important; }";
+            console.log("RULE: ", rule);
+            console.log("TOP: ", options.top);
             chrome.tabs.insertCSS(sender.tab.id, { code: rule, runAt: "document_start" });
           }
         }
@@ -1041,16 +1043,14 @@
         if (cached_selectors) {
           if (!SAFARI && options.top) {
             injectCSS(cached_selectors);
-          } else {
-            result._cachedSelectors = cached_selectors;
           }
+          result._cachedSelectors = cached_selectors;
         } else {
           var selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
           if (!SAFARI && options.top) {
             injectCSS(selectors);
-          } else {
-            result.selectors = selectors;
           }
+          result.selectors = selectors;
         }
       } else {
         result.selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
@@ -1255,7 +1255,17 @@
 
   _myfilters = new MyFilters();
   _myfilters.init();
-  _myfilters.hiding._selectorsCache = storage_get("cached_filters");
+
+  // Initialize cached filters
+  (function() {
+    if (typeof storage_get("cached_filters") === "undefined" || 
+        typeof this._selectorsCache === "undefined") {
+      storage_set("cached_filters", "{}");
+      this._selectorsCache = {};
+    }
+    _myfilters.hiding._selectorsCache = storage_get("cached_filters");
+  });
+
   // Record that we exist.
   STATS.startPinging();
 

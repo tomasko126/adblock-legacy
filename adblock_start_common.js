@@ -265,6 +265,9 @@ function adblock_begin(inputs) {
       if (data.settings.experimental_hiding && data.hiding) {
         if (data._cachedSelectors) {
           observeChanges(data);
+          if (opts.top) {
+            logMatchedElements(data, document, false);
+          }
         } else {
           logMatchedElements(data, document, false);
         }
