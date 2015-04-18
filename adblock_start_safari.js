@@ -91,6 +91,7 @@ adblock_begin({
   },
   handleHiding: function(data) {
     if (!data._cachedSelectors) {
+      console.log("attaching whole stylesheet");
       block_list_via_css(data.selectors);
     } else {
       block_list_via_css(data._cachedSelectors);
