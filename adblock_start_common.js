@@ -95,7 +95,7 @@ function destroyElement(el, elType) {
 
 // Add style rules hiding the given list of selectors.
 function block_list_via_css(selectors) {
-  if (!selectors || selectors.length < 0)
+  if (!selectors || selectors.length === 0)
     return;
   // Issue 6480: inserting a <style> tag too quickly ignored its contents.
   // Use ABP's approach: wait for .sheet to exist before injecting rules.
@@ -119,11 +119,10 @@ function block_list_via_css(selectors) {
   fill_in_css_chunk();
 }
 
-// Log used selectors
+// Log matched selectors and save them into selectors cache
 function logMatchedElements(data, node, hide) {
   var selectors = data.selectors || data._cachedSelectors;
   var matchedSelectors = [];
-
   if (!selectors) return;
   selectors.
     filter(function(selector) { return node.querySelector(selector); }).
@@ -140,7 +139,7 @@ function logMatchedElements(data, node, hide) {
       }
     });
 
-  if (hide && matchedSelectors.length > -1) {
+  if (hide && matchedSelectors.length > 0) {
     block_list_via_css(matchedSelectors);
   }
   BGcall("setSelectors", document.location.href, matchedSelectors);
@@ -180,8 +179,8 @@ function handleABPLinkClicks() {
   }
 }
 
-// Mutation Observer, which checks whether created child
-// should be hidden (Experimental hiding only)
+// Mutation Observer, which checks whether created node
+// and it's children should be hidden or not
 function observeChanges(data) {
     // Select the target node
     var target = document.body || document.documentElement;
@@ -189,8 +188,7 @@ function observeChanges(data) {
     // Create an observer instance
     var mutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
-    if (target &&
-        mutationObserver) {
+    if (target && mutationObserver) {
         new mutationObserver(function(info) {
             for (var i=0; i<info.length; i++) {
                 if (info[i].addedNodes) {
@@ -198,7 +196,8 @@ function observeChanges(data) {
                       var element = info[i].addedNodes[j];
                       if (element.nodeType === Node.ELEMENT_NODE &&
                           element.nodeName !== "STYLE" &&
-                          element.nodeName !== "SCRIPT") {
+                          element.nodeName !== "SCRIPT" &&
+                          element.nodeName !== "AUDIO") {
                         logMatchedElements(data, element, true);
                       }
                     }
@@ -242,9 +241,7 @@ function adblock_begin(inputs) {
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
 
-    if (!data.settings.experimental_hiding) {
-      inputs.handleHiding(data);
-    }
+    inputs.handleHiding(data);
 
     if (!data.running) {
       inputs.stopPurger();
