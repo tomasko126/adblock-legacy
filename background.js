@@ -1266,7 +1266,9 @@
   // Script injection logic for Safari is done in safari_bg.js
   if (!SAFARI) {
       var runChannelWhitelist = function(tabUrl, tabId) {
-          if (/youtube.com/.test(tabUrl) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).ab_channel) {
+          if (parseUri(tabUrl).hostname === "www.youtube.com" &&
+              get_settings().youtube_channel_whitelist &&
+              !parseUri.parseSearch(tabUrl).ab_channel) {
               chrome.tabs.executeScript(tabId, {file: "ytchannel.js", runAt: "document_start"});
           }
       }
