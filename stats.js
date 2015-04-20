@@ -138,7 +138,6 @@ STATS = (function() {
   return {
     // True if AdBlock was just installed.
     firstRun: firstRun,
-    pingNow: pingNow,
     userId: userId,
     version: version,
     flavor: flavor,
