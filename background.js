@@ -1240,14 +1240,12 @@
   _myfilters.init();
 
   // Initialize cached filters
-  (function() {
-    if (typeof storage_get("cached_filters") === "undefined" || 
-        typeof this._selectorsCache === "undefined") {
+  if (typeof storage_get("cached_filters") === "undefined" ||
+      typeof _myfilters.hiding._selectorsCache === "undefined") {
       storage_set("cached_filters", "{}");
-      this._selectorsCache = {};
-    }
-    _myfilters.hiding._selectorsCache = storage_get("cached_filters");
-  });
+      _myfilters.hiding._selectorsCache = {};
+  }
+  _myfilters.hiding._selectorsCache = storage_get("cached_filters");
 
   // Record that we exist.
   STATS.startPinging();
