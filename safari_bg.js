@@ -77,10 +77,13 @@ safari.application.addEventListener("message", function(messageEvent) {
       messageEvent.message.data.args[1].tab.url) {
         var args = messageEvent.message.data.args;
         if (!messageEvent.target.url ||
-            messageEvent.target.url === args[1].tab.url) {
+            messageEvent.target.url === args[1].tab.url &&
+            messageEvent.message.frameInfo.top_level === true) {
             frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-        } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
+        } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url &&
+                   messageEvent.message.frameInfo.top_level === true) {
             frameData.reset(messageEvent.target.id, args[1].tab.url);
+            updateBadge();
         }
         return;
     }
@@ -106,10 +109,81 @@ safari.application.addEventListener("message", function(messageEvent) {
     frameData.storeResource(tab.id, url, elType);
 
     var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
-    if (isMatched)
+    if (isMatched) {
+        // If matched, add one block count to the corresponding tab that owns the request,
+        // update the badge afterwards
+        console.log("Sending tab", frameInfo);
+        var tabId = messageEvent.target.id;
+        blockCounts.recordOneAdBlocked(tabId);
+        updateBadge();
         log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
+    }
     messageEvent.message = !isMatched;
 }, false);
+
+// Update number of blocked ads in badge for each tab
+safari.application.addEventListener("activate", function(event) {
+    if (!get_settings().display_stats)
+        return;
+
+    var tabId = safari.application.activeBrowserWindow.activeTab.id;
+    var get_blocked_ads = frameData.get(tabId).blockCount;
+    var safari_toolbars = safari.extension.toolbarItems;
+    for (var i = 0; i < safari_toolbars.length; i++ ) {
+        safari_toolbars[i].badge = get_blocked_ads;
+    }
+}, true);
+
+// Clear badge on Top Sites
+safari.application.addEventListener("navigate", function(event) {
+    if (event.target.url === undefined) {
+        var tabId = event.target.id;
+        frameData.reset(tabId);
+        updateBadge();
+        return;
+    }
+});
+
+// Reset number of blocked ads when navigating away from the page
+safari.application.addEventListener("beforeNavigate", function(event) {
+    console.log("Before navigate event", event);
+    var tab = safari.application.activeBrowserWindow.activeTab;
+    if (tab.url === event.url) {
+        frameData.get(tab.id).blockCount = 0;
+        updateBadge();
+    }
+}, true);
+
+// Update the badge for each tool bars in a window.(Note: there is no faster way of updating
+// the tool bar item for the active window so I just updated all tool bar items' badge. That
+// way, I don't need to loop and compare.)
+var updateBadge = function() {
+    console.log("updating badge");
+    var show_block_counts = get_settings().display_stats;
+
+    if (!show_block_counts) {
+        var safari_toolbars = safari.extension.toolbarItems;
+        for (var i = 0; i < safari_toolbars.length; i++ ) {
+            safari_toolbars[i].badge = 0;
+        }
+        return;
+    }
+
+    var url = safari.application.activeBrowserWindow.activeTab.url;
+    var paused = adblock_is_paused();
+    var canBlock = !page_is_unblockable(url);
+    var whitelisted = page_is_whitelisted(url);
+
+    var count = 0;
+    if (!paused && canBlock && !whitelisted) {
+        var tabId = safari.application.activeBrowserWindow.activeTab.id;
+        count = tabId ? blockCounts.getTotalAdsBlocked(tabId) : 0;
+    }
+    var safari_toolbars = safari.extension.toolbarItems;
+    for (var i = 0; i < safari_toolbars.length; i++ ) {
+        safari_toolbars[i].badge = count;
+    }
+}
 
 // Code for creating popover, not available on Safari 5.0
 if (!LEGACY_SAFARI) {

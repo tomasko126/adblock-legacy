@@ -76,8 +76,7 @@ $(function() {
             if (shown[div])
                 $('#' + div).show();
 
-        if (SAFARI ||
-            !info.display_menu_stats ||
+        if (!info.display_menu_stats ||
             paused ||
             info.disabled_site ||
             info.whitelisted) {

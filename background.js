@@ -22,48 +22,46 @@
     log(str);
   });
 
-  if (!SAFARI) {
-    // Records how many ads have been blocked by AdBlock.  This is used
-    // by the AdBlock app in the Chrome Web Store to display statistics
-    // to the user.
-    var blockCounts = (function() {
-      var key = "blockage_stats";
-      var data = storage_get(key);
-      if (!data)
-        data = {};
-      if (data.start === undefined)
-        data.start = Date.now();
-      if (data.total === undefined)
-        data.total = 0;
-      data.version = 1;
-      storage_set(key, data);
+  blockCounts = (function() {
+    var key = "blockage_stats";
+    var data = storage_get(key);
+    if (!data)
+      data = {};
+    if (data.start === undefined)
+      data.start = Date.now();
+    if (data.total === undefined)
+      data.total = 0;
+    data.version = 1;
+    storage_set(key, data);
 
-      return {
-        recordOneAdBlocked: function(tabId) {
-          var data = storage_get(key);
-          data.total += 1;
-          storage_set(key, data);
+    return {
+      recordOneAdBlocked: function(tabId) {
 
-          //code for incrementing ad blocks
-          currentTab = frameData.get(tabId);
-          if(currentTab){
-            currentTab.blockCount++;
-          }
-        },
-        get: function() {
-          return storage_get(key);
-        },
-        getTotalAdsBlocked: function(tabId){
-          if(tabId){
-            currentTab = frameData.get(tabId);
-            return currentTab ? currentTab.blockCount : 0;
-          }
-          return this.get().total;
+        var data = storage_get(key);
+        data.total += 1;
+        storage_set(key, data);
+
+        //code for incrementing ad blocks
+        currentTab = frameData.get(tabId);
+        if (currentTab) {
+          if (isNaN(currentTab.blockCount))
+            currentTab.blockCount = 0;
+
+          currentTab.blockCount++;
         }
-      };
-    })();
-
-  }
+      },
+      get: function() {
+        return storage_get(key);
+      },
+      getTotalAdsBlocked: function(tabId){
+        if (tabId) {
+          currentTab = frameData.get(tabId);
+          return currentTab ? currentTab.blockCount : 0;
+        }
+        return this.get().total;
+      }
+    };
+  })();
 
   //called from bandaids, for use on our getadblock.com site
   var get_adblock_user_id = function() {
@@ -802,10 +800,18 @@
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
       var disabled_site = page_is_unblockable(tab.url);
+      var total_blocked = blockCounts.getTotalAdsBlocked();
+      var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
+      var display_stats = get_settings().display_stats;
+      var display_menu_stats = get_settings().display_menu_stats;
 
       var result = {
         tab: tab,
         disabled_site: disabled_site,
+        total_blocked: total_blocked,
+        tab_blocked: tab_blocked,
+        display_stats: display_stats,
+        display_menu_stats: display_menu_stats
       };
 
       if (!disabled_site)
