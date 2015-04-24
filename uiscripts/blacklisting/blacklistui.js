@@ -206,6 +206,8 @@ BlacklistUi.prototype._build_page2 = function() {
         "</div>" +
       "</div>" +
     "</div>" +
+    "<input type='checkbox' id='reload_page' checked/>" +
+    "<label style='display: inline;' for='reload_page'>" + translate('reloadpageafterwhitelist') + "</label>" +
     "</div>");
 
   var btns = {};
@@ -219,8 +221,12 @@ BlacklistUi.prototype._build_page2 = function() {
         var filter = document.location.hostname + "##" + rule;
         BGcall('add_custom_filter', filter, function() {
           block_list_via_css([rule]);
-          that._ui_page2.dialog('close');
-          that._fire('block');
+          if ($('#reload_page').is(':checked')) {
+            document.location.reload();
+          } else {
+            that._ui_page2.dialog('close');
+            that._fire('block');
+          }
         });
       } else {alert(translate("blacklisternofilter"));}
     }

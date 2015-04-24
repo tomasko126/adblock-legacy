@@ -44,15 +44,11 @@ function top_open_blacklist_ui(options) {
       });
       blacklist_ui.block(function() {
         may_open_dialog_ui = true;
-        // In case of frames, reload, as the frame might contain matches too.
-        if ($("iframe, frameset, frame").filter(":visible").length > 0)
-          document.location.reload();
       });
       blacklist_ui.show();
     });
     bind_enter_click_to_default();
   });
 }
-
 
 //@ sourceURL=/uiscripts/top_open_blacklist_ui.js
