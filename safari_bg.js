@@ -83,7 +83,6 @@ safari.application.addEventListener("message", function(messageEvent) {
         } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url &&
                    messageEvent.message.frameInfo.top_level === true) {
             frameData.reset(messageEvent.target.id, args[1].tab.url);
-            updateBadge();
         }
         return;
     }
@@ -112,10 +111,8 @@ safari.application.addEventListener("message", function(messageEvent) {
     if (isMatched) {
         // If matched, add one block count to the corresponding tab that owns the request,
         // update the badge afterwards
-        console.log("Sending tab", frameInfo);
         var tabId = messageEvent.target.id;
         blockCounts.recordOneAdBlocked(tabId);
-        updateBadge();
         log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
     }
     messageEvent.message = !isMatched;
@@ -142,11 +139,11 @@ safari.application.addEventListener("navigate", function(event) {
         updateBadge();
         return;
     }
+    updateBadge();
 });
 
 // Reset number of blocked ads when navigating away from the page
 safari.application.addEventListener("beforeNavigate", function(event) {
-    console.log("Before navigate event", event);
     var tab = safari.application.activeBrowserWindow.activeTab;
     if (tab.url === event.url) {
         frameData.get(tab.id).blockCount = 0;
@@ -158,7 +155,6 @@ safari.application.addEventListener("beforeNavigate", function(event) {
 // the tool bar item for the active window so I just updated all tool bar items' badge. That
 // way, I don't need to loop and compare.)
 var updateBadge = function() {
-    console.log("updating badge");
     var show_block_counts = get_settings().display_stats;
 
     if (!show_block_counts) {
