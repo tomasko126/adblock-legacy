@@ -1,8 +1,10 @@
+// Cache URL of tab for later use
+var tab_url = null;
+
 $(function() {
     localizePage();
 
     var BG = chrome.extension.getBackgroundPage();
-    var tab_url = null;
 
     // Set menu entries appropriately for the selected tab.
     $(".menu-entry, .menu-status, .separator").hide();
@@ -61,12 +63,12 @@ $(function() {
             hide(["div_report_an_ad", "separator1"]);
 
         if (host === "www.youtube.com" &&
-            /channel|user/.test(url) &&
-            /ab_channel/.test(url) &&
+            /channel|user/.test(tab_url) &&
+            /ab_channel/.test(tab_url) &&
             eligible_for_undo &&
             BG.get_settings().youtube_channel_whitelist) {
             $("#div_whitelist_channel").html(translate("whitelist_youtube_channel",
-                                                       parseUri.parseSearch(url).ab_channel));
+                                                       parseUri.parseSearch(tab_url).ab_channel));
             show(["div_whitelist_channel"]);
         }
 
