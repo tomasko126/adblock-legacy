@@ -1,6 +1,6 @@
 {
   "description2":{
-    "message":"Chromen suosituin lisäosa. Yli 40 miljoonaa käyttäjää! Estää kaikki mainokset.",
+    "message":"The most popular Chrome extension, with over 40 million users!  Blocks ads all over the web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -191,6 +191,16 @@
     "message":"Tämä AdBlock-ominaisuus ei toimi tällä sivustolla, koska sitä käytetään vanhentuneella tekniikalla. Voit lisätä kohteita mustalle tai valkoisille listalle manuaalisesti \"Mukauta\"-välilehdessä.",
     "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
+  "subscribeconfirm":{
+    "message":"Oletko varma, että haluat tilata suodatinlistan $title$?",
+    "description":"Prompt question before subscribing to the filter list",
+    "placeholders":{
+      "title":{
+        "content":"$1",
+        "example":"Prebake"
+      }
+    }
+  },
   "subscribingtitle":{
     "message":"Otetaan suodatinlistaa käyttöön...",
     "description":"abp: link subscriber title"
@@ -240,6 +250,10 @@
   "showcontextmenus2":{
     "message":"Lisää kohteet oikean klikkauksen valikkoon",
     "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "disableyoutubestreamingads":{
+    "message":"ClickToFlash-yhteensopivuustila",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
   },
   "debuginlogoption":{
     "message":"Näytä virheilmoitukset Virhekonsolissa (hidastaa AdBlockin toimintaa)",
@@ -492,6 +506,10 @@
   "malwarenotificationlearnmore":{
     "message":"Lisätietoja haittaohjelmista",
     "description":"Button on the malware notification that opens a page about malware on our website. Message should be under 45 characters!"
+  },
+  "malwarenotificationdisablethesemessages":{
+    "message":"Poista nämä ilmoitukset käytöstä",
+    "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
   "malwarecheck":{
     "message":"Haittaohjelmien tarkistaminen",

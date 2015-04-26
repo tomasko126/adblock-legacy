@@ -1,6 +1,6 @@
 {
   "description2":{
-    "message":"A extensão mais popular para o Chrome, com mais de 40 milhões de utilizadores! Bloqueia anúncios por todo o lado na Web.",
+    "message":"The most popular Chrome extension, with over 40 million users!  Blocks ads all over the web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -190,6 +190,16 @@
   "wizardcantrunonframesets":{
     "message":"Esta funcionalidade do AdBlock não funciona neste site porque apresenta tecnologia desactualizada. Pode colocar na lista negra ou nos recursos da whitelist manualmente no separador 'Personalizar' da página de opções.",
     "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
+  },
+  "subscribeconfirm":{
+    "message":"Tem a certeza que quer subscrever à lista de filtros de $title$?",
+    "description":"Prompt question before subscribing to the filter list",
+    "placeholders":{
+      "title":{
+        "content":"$1",
+        "example":"Prebake"
+      }
+    }
   },
   "subscribingtitle":{
     "message":"A inscrever-se na lista de filtros...",
@@ -484,6 +494,14 @@
   "adreport2":{
     "message":"Encontrou um anúncio numa página? Bem, eu vou ajudá-lo a encontrar o local correto para denunciá-lo!<br\/> Recorde: reportar anúncios é voluntário. Se não quiser fazer isso, pode simplesmente fechar esta janela e bloqueá-lo só para si, adicionando o seu filtro em 'Personalizar' na página das opções!",
     "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
+  },
+  "malwarenotificationcheckboxmessage":{
+    "message":"O AdBlock deve notificá-lo quando detecta malware?",
+    "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
+  },
+  "malwarenotificationmessage":{
+    "message":"O AdBlock detectou malware.  O seu computador pode estar infectado.",
+    "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
     "message":"Saber mais acerca do malware",

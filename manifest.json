@@ -1,6 +1,6 @@
 {
-  "name": "AdBlock",
-  "version": "2.18.1",
+  "name": "BetaFish Adblocker",
+  "version": "2.29",
   "background": {
     "scripts": [
       "jquery/jquery.min.js",
@@ -8,6 +8,7 @@
       "punycode.min.js",
       "functions.js",
       "stats.js",
+      "survey.js",
       "filtering/domainset.js",
       "filtering/filteroptions.js",
       "filtering/filtertypes.js",
@@ -63,7 +64,8 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": [
-        "uiscripts/blacklisting/rightclick_hook.js"
+        "uiscripts/blacklisting/rightclick_hook.js",
+        "notificationoverlay.js"
       ],
       "run_at": "document_end",
       "all_frames": false

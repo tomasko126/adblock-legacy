@@ -1,4 +1,4 @@
-chrome.extension.onRequest.addListener(function(request) {
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
   if (request.command != "filters_updated")
     return;
   if ($("#txtFiltersAdvanced").prop("disabled") === false)
@@ -9,7 +9,26 @@ chrome.extension.onRequest.addListener(function(request) {
   BGcall("get_exclude_filters_text", function(text) {
     $("#txtExcludeFiltersAdvanced").val(text);
   });
+  // a call to sendResponse is not needed because of the call in filters.js
 });
+
+if (!SAFARI &&
+   chrome &&
+   chrome.runtime &&
+   chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener(
+        function(request, sender, sendResponse) {
+          if (request.message === "dropboxerror" && request.messagecode) {
+            $("#dbmessagecustom").text(translate(request.messagecode));
+            sendResponse({});
+          }
+          if (request.message === "cleardropboxerror") {
+            $("#dbmessagecustom").text("");
+            sendResponse({});
+          }
+        }
+    );
+}
 
 $(function() {
     //try to get filter syntax page with users language
@@ -287,5 +306,10 @@ $(function() {
     var newFilters = FilterNormalizer.normalizeList($("#txtFiltersAdvanced").val(), true);
     newFilters = newFilters.replace(/(\n)+$/,'\n'); // Del trailing \n's
     $("#txtFiltersAdvanced").val(newFilters);
+  });
+
+  BGcall("sessionstorage_get", "dropboxerror", function(text) {
+    if (text)
+      $("#dbmessagecustom").text(translate(text));
   });
 });

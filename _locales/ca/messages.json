@@ -1,6 +1,6 @@
 {
   "description2":{
-    "message":"L'extensió més popular de Chrome, amb més de 40 milions d'usuaris! Bloqueja els anuncis de tota la xarxa.",
+    "message":"The most popular Chrome extension, with over 40 million users!  Blocks ads all over the web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -190,6 +190,16 @@
   "wizardcantrunonframesets":{
     "message":"Aquesta característica de l'AdBlock no s'executa en aquest lloc perquè utilitza tecnologia obsoleta. Podeu prohibir o permetre recursos manualment a la pestanya 'personalitzar' de la pàgina d'opcions.",
     "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
+  },
+  "subscribeconfirm":{
+    "message":"Segur que us voleu subscriure a la llista de filtres $title$?",
+    "description":"Prompt question before subscribing to the filter list",
+    "placeholders":{
+      "title":{
+        "content":"$1",
+        "example":"Prebake"
+      }
+    }
   },
   "subscribingtitle":{
     "message":"Subscrivint-se a la llista de filtres...",
