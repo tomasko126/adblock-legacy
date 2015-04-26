@@ -58,7 +58,6 @@ frameData = (function() {
             var data = this.get(tabId);
             if (data !== undefined &&
                 data.resources !== undefined) {
-                url = getUnicodeUrl(url);
                 data.resources[elType + ':|:' + url] = null;
             }
         },
@@ -94,14 +93,10 @@ safari.application.addEventListener("message", function(messageEvent) {
         return;
 
     var tab = messageEvent.target;
-    Object.defineProperty(tab, "url", {
-        value: getUnicodeUrl(tab.url)
-    });
+    tab.url = getUnicodeUrl(tab.url);
 
     var frameInfo = messageEvent.message.frameInfo;
-    Object.defineProperty(frameInfo, "url", {
-        value: getUnicodeUrl(frameInfo.url)
-    });
+    frameInfo.url = getUnicodeUrl(frameInfo.url);
 
     chrome._tabInfo.notice(tab, frameInfo);
     var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
@@ -112,9 +107,9 @@ safari.application.addEventListener("message", function(messageEvent) {
         return;
     }
 
-    var url = messageEvent.message.url;
+    var url = getUnicodeUrl(messageEvent.message.url);
     var elType = messageEvent.message.elType;
-    var frameDomain = messageEvent.message.frameDomain;
+    var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
 
     frameData.storeResource(tab.id, url, elType);
 

@@ -244,7 +244,6 @@
       // Returns false if this request's tab+frame are not trackable.
       track: function(details) {
         var fd = frameData, tabId = details.tabId;
-        details.url = getUnicodeUrl(details.url);
 
         // A hosted app's background page
         if (tabId === -1) {
@@ -288,7 +287,6 @@
           return;
         var data = frameData.get(tabId, frameId);
         if (data !== undefined) {
-            url = getUnicodeUrl(url);
             data.resources[elType + ':|:' + url] = null;
         }
       },
@@ -327,6 +325,8 @@
     function onBeforeRequestHandler(details) {
       if (adblock_is_paused())
         return { cancel: false };
+
+      details.url = getUnicodeUrl(details.url);
 
       if (!frameData.track(details))
         return { cancel: false };
@@ -397,10 +397,11 @@
       // blocking filter's regex rule. Github issue # 69
       if (details.url === "about:blank")
         details.url = opener.url;
-      var match = _myfilters.blocking.matches(details.url, ElementTypes.popup, opener.domain);
+      var url = getUnicodeUrl(details.url);
+      var match = _myfilters.blocking.matches(url, ElementTypes.popup, opener.domain);
       if (match)
         chrome.tabs.remove(details.tabId);
-      frameData.storeResource(details.sourceTabId, details.sourceFrameId, details.url, ElementTypes.popup);
+      frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup);
     };
 
     // If tabId has been replaced by Chrome, delete it's data
@@ -422,6 +423,7 @@
             if (tabData &&
                 tabData.url !== details.url) {
                 details.type = 'main_frame';
+                details.url = getUnicodeUrl(details.url);
                 frameData.track(details);
             }
         }

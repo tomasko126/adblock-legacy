@@ -87,8 +87,6 @@ FilterSet.prototype = {
   // relevant entry in this.exclude.
   // isThirdParty: true if url and frameDomain have different origins.
   matches: function(url, elementType, frameDomain, isThirdParty) {
-    url = getUnicodeUrl(url);
-    frameDomain = getUnicodeDomain(frameDomain);
     var limited = this._viewFor(frameDomain);
     for (var k in limited.items) {
       var entry = limited.items[k];
@@ -146,7 +144,6 @@ BlockingFilterSet.prototype = {
   //       true if the resource should be blocked, false otherwise
   matches: function(url, elementType, frameDomain, returnFilter) {
     var urlDomain = getUnicodeDomain(parseUri(url).hostname);
-    frameDomain = getUnicodeDomain(frameDomain);
     var isThirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
 
     // matchCache approach taken from ABP
