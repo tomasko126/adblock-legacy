@@ -995,7 +995,7 @@
       var yt_channel = url.split('/').pop();
     }
     if (yt_channel) {
-        var filter = '@@||youtube.com/*' + yt_channel + '$document';
+        var filter = '@@|https://www.youtube.com/*' + yt_channel + '|$document';
         return add_custom_filter(filter);
     }
   }
