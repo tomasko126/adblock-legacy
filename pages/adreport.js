@@ -177,8 +177,6 @@ $("input, select").change(function(event) {
     $("html, body").animate({ scrollTop: 15000 }, 50);
 });
 
-
-
 // STEP 1: Malware/adware detection
 var checkAdvanceOptions = function() {
      // Check, if downloaded resources are available,
@@ -196,7 +194,8 @@ var checkAdvanceOptions = function() {
                         checkmalware();
                         sendResponse({});
                     }
-             });
+                }
+            );
         }
     });
 }

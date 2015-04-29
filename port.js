@@ -200,6 +200,45 @@ if (SAFARI) {
         }
     },
 
+    tabs: {
+        reload: function(tabId, reloadProperties, callback) {
+            if (tabId) {
+                var windows = safari.application.browserWindows;
+
+                for (var i=0; i<windows.length; i++) {
+                    var tabs = windows[i].tabs;
+                    for (var j=0; j<tabs.length; j++) {
+                        if (tabs[j].id === tabId) {
+                            tabs[j].url = tabs[j].url;
+                            if (callback) callback();
+                            break;
+                        }
+                    }
+                }
+            } else {
+                var activeTab = safari.application.activeBrowserWindow.activeTab;
+                activeTab.url = activeTab.url;
+                if (callback) callback();
+            }
+        },
+        onUpdated: {
+            addListener: function(callback) {
+                safari.application.addEventListener("beforeNavigate", function(event) {
+                    callback(event.target.id,
+                             { status: "loading", url: event.target.url },
+                             { id: event.target.id, active: event.target.browserWindow.activeTab.id === event.target.id,
+                               url: event.target.url, title: event.target.title, status: "loading" });
+                }, true);
+                safari.application.addEventListener("navigate", function(event) {
+                    callback(event.target.id,
+                             { status: "complete", url: event.target.url },
+                             { id: event.target.id, active: event.target.browserWindow.activeTab.id === event.target.id,
+                               url: event.target.url, title: event.target.title, status: "complete" });
+                }, true);
+            }
+        }
+    },
+
     // Helper object to ensure that tabs sending requests to the global page
     // get some extra attributes for the global page to use:
     //   id: an ID assigned by us so we can refer to the tab by ID elsewhere.

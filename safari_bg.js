@@ -180,11 +180,11 @@ if (!LEGACY_SAFARI) {
     // and then remove frameData[tabId] after close event.
     safari.application.addEventListener("close", function(event) {
         setTimeout(function() {
-            if (safari && 
-                safari.application && 
-                safari.application.activeBrowserWindow && 
+            if (safari &&
+                safari.application &&
+                safari.application.activeBrowserWindow &&
                 safari.application.activeBrowserWindow.tabs) {
-                    
+
                 var safari_tabs = safari.application.activeBrowserWindow.tabs;
 
                 var opened_tabs = [];

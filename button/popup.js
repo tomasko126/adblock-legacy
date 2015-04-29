@@ -108,9 +108,6 @@ $(function() {
             safari.extension.popovers[0].height = popupheight + 5;
             safari.extension.popovers[0].width = 270;
         });
-
-        // Store tab id of an active tab
-        var activeTab = safari.application.activeBrowserWindow.activeTab;
     }
 
     // We need to reload popover in Safari, so that we could
@@ -154,7 +151,7 @@ $(function() {
     $("#div_enable_adblock_on_this_page").click(function() {
         BG.getCurrentTabInfo(function(info) {
             if (BG.try_to_unwhitelist(info.tab.url)) {
-                !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
+                chrome.tabs.reload();
                 closeAndReloadPopup();
             } else {
                 $("#div_status_whitelisted").
@@ -176,8 +173,6 @@ $(function() {
             var host = parseUri(info.tab.url).host;
             BG.confirm_removal_of_custom_filters_on_host(host);
             closeAndReloadPopup();
-            if (SAFARI)
-                activeTab.url = activeTab.url;
         });
     });
 
@@ -185,7 +180,7 @@ $(function() {
         BG.getCurrentTabInfo(function(info) {
             BG.create_whitelist_filter_for_youtube_channel(info.tab.url);
             closeAndReloadPopup();
-            !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
+            chrome.tabs.reload();
         });
     });
 
@@ -228,7 +223,7 @@ $(function() {
         BG.getCurrentTabInfo(function(info) {
             BG.create_page_whitelist_filter(info.tab.url);
             closeAndReloadPopup();
-            !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
+            chrome.tabs.reload();
         });
     });
 

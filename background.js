@@ -195,18 +195,16 @@
   // Input:
   //   tabId: integer - id of the tab which should be reloaded
   reloadTab = function(tabId) {
-      if (!SAFARI) {
-          chrome.tabs.reload(tabId, {bypassCache: true}, function() {
-              chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-                  if (changeInfo.status === "complete" &&
-                      tab.status === "complete") {
-                      setTimeout(function() {
-                          chrome.extension.sendRequest({command: "reloadcomplete"});
-                      }, 2000);
-                  }
-              });
+      chrome.tabs.reload(tabId, {bypassCache: true}, function() {
+          chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+              if (changeInfo.status === "complete" &&
+                  tab.status === "complete") {
+                  setTimeout(function() {
+                      chrome.extension.sendRequest({command: "reloadcomplete"});
+                  }, 2000);
+              }
           });
-      }
+      });
   }
 
   // Implement blocking via the Chrome webRequest API.
@@ -617,8 +615,7 @@
     var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
     if (!confirm(confirmation_text)) { return; }
     remove_custom_filter_for_host(host);
-    if (!SAFARI)
-        chrome.tabs.reload();
+    chrome.tabs.reload();
   };
 
   get_settings = function() {
