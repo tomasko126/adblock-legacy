@@ -1,5 +1,5 @@
-// Cache URL of tab for later use
-var tab_url = null;
+// An object, which contains |id| & |url| of current tab
+var tab = null;
 
 $(function() {
     localizePage();
@@ -10,7 +10,10 @@ $(function() {
     $(".menu-entry, .menu-status, .separator").hide();
 
     BG.getCurrentTabInfo(function(info) {
-        tab_url = info.tab.visible_url || info.tab.url;
+        // Cache tab object for later use
+        tab = info.tab;
+        tab.url = getUnicodeUrl(tab.url);
+
         var shown = {};
         function show(L) { L.forEach(function(x) { shown[x] = true;  }); }
         function hide(L) { L.forEach(function(x) { shown[x] = false; }); }
@@ -47,7 +50,7 @@ $(function() {
             });
         }
 
-        var host = parseUri(tab_url).host;
+        var host = parseUri(tab.url).host;
         var advanced_option = BG.get_settings().show_advanced_options;
         var eligible_for_undo = !paused && (info.disabled_site || !info.whitelisted);
         var url_to_check_for_undo = info.disabled_site ? undefined : host;
@@ -63,12 +66,12 @@ $(function() {
             hide(["div_report_an_ad", "separator1"]);
 
         if (host === "www.youtube.com" &&
-            /channel|user/.test(tab_url) &&
-            /ab_channel/.test(tab_url) &&
+            /channel|user/.test(tab.url) &&
+            /ab_channel/.test(tab.url) &&
             eligible_for_undo &&
             BG.get_settings().youtube_channel_whitelist) {
             $("#div_whitelist_channel").html(translate("whitelist_youtube_channel",
-                                                       parseUri.parseSearch(tab_url).ab_channel));
+                                                       parseUri.parseSearch(tab.url).ab_channel));
             show(["div_whitelist_channel"]);
         }
 
@@ -112,7 +115,7 @@ $(function() {
             safari.extension.popovers[0].width = 270;
         });
 
-        // Store tab id of an active tab
+        // Store info about active tab
         var activeTab = safari.application.activeBrowserWindow.activeTab;
     }
 
@@ -155,7 +158,7 @@ $(function() {
     });
 
     $("#div_enable_adblock_on_this_page").click(function() {
-        if (BG.try_to_unwhitelist(tab_url)) {
+        if (BG.try_to_unwhitelist(tab.url)) {
             !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
             closeAndReloadPopup();
         } else {
@@ -173,14 +176,14 @@ $(function() {
     });
 
     $("#div_undo").click(function() {
-        var host = parseUri(tab_url).host;
+        var host = parseUri(tab.url).host;
         BG.confirm_removal_of_custom_filters_on_host(host);
         closeAndReloadPopup();
         if (SAFARI) activeTab.url = activeTab.url;
     });
 
     $("#div_whitelist_channel").click(function() {
-        BG.create_whitelist_filter_for_youtube_channel(tab_url);
+        BG.create_whitelist_filter_for_youtube_channel(tab.url);
         closeAndReloadPopup();
         !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
     });
@@ -193,53 +196,45 @@ $(function() {
     });
 
     $("#div_blacklist").click(function() {
-        BG.getCurrentTabInfo(function(info) {
-            if (!SAFARI) {
-                BG.emit_page_broadcast(
-                    {fn:'top_open_blacklist_ui', options: { nothing_clicked: true }},
-                    { tab: info.tab } // fake sender to determine target page
-                );
-            } else {
-                BG.dispatchMessage("show-blacklist-wizard");
-            }
-            closeAndReloadPopup();
-        });
+        if (!SAFARI) {
+            BG.emit_page_broadcast(
+                {fn:'top_open_blacklist_ui', options: { nothing_clicked: true }},
+                { tab: tab } // fake sender to determine target page
+            );
+        } else {
+            BG.dispatchMessage("show-blacklist-wizard");
+        }
+        closeAndReloadPopup();
     });
 
     $("#div_whitelist").click(function() {
-        BG.getCurrentTabInfo(function(info) {
-            if (!SAFARI) {
-                BG.emit_page_broadcast(
-                    {fn:'top_open_whitelist_ui', options:{}},
-                    { tab: info.tab } // fake sender to determine target page
-                );
-            } else {
-                BG.dispatchMessage("show-whitelist-wizard");
-            }
-            closeAndReloadPopup();
-        });
+        if (!SAFARI) {
+            BG.emit_page_broadcast(
+                {fn:'top_open_whitelist_ui', options:{}},
+                { tab: tab } // fake sender to determine target page
+            );
+        } else {
+            BG.dispatchMessage("show-whitelist-wizard");
+        }
+        closeAndReloadPopup();
     });
 
     $("#div_whitelist_page").click(function() {
-        BG.create_page_whitelist_filter(tab_url);
+        BG.create_page_whitelist_filter(tab.url);
         closeAndReloadPopup();
         !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
     });
 
     $("#div_show_resourcelist").click(function() {
-        BG.getCurrentTabInfo(function(info) {
-            BG.launch_resourceblocker("?tabId=" + info.tab.id);
-            closeAndReloadPopup();
-        });
+        BG.launch_resourceblocker("?tabId=" + tab.id);
+        closeAndReloadPopup();
     });
 
     $("#div_report_an_ad").click(function() {
-        BG.getCurrentTabInfo(function(info) {
-            var url = "pages/adreport.html?url=" + encodeURIComponent(getUnicodeUrl(info.tab.url))
-                    + "&tabId=" + info.tab.id;
-            BG.openTab(url, true);
-            closeAndReloadPopup();
-        });
+        var url = "pages/adreport.html?url=" + encodeURIComponent(tab.url)
+                + "&tabId=" + tab.id;
+        BG.openTab(url, true);
+        closeAndReloadPopup();
     });
 
     $("#div_options").click(function() {
