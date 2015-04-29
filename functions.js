@@ -146,10 +146,10 @@ getUnicodeDomain = function(domain) {
 getUnicodeUrl = function(url) {
     // URLs encoded in Punycode contain xn-- prefix
     if (url && url.indexOf("xn--") > 0) {
-        var url = parseUri(url);
+        var parsed = parseUri(url);
         // IDN domains have just hostnames encoded in punycode
-        url.href = url.href.replace(url.hostname, punycode.toUnicode(url.hostname));
-      return url.href;
+        parsed.href = parsed.href.replace(parsed.hostname, punycode.toUnicode(parsed.hostname));
+      return parsed.href;
     }
     return url;
 };

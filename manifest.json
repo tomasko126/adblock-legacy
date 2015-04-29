@@ -3,9 +3,9 @@
   "version": "2.29",
   "background": {
     "scripts": [
+      "punycode.min.js",
       "jquery/jquery.min.js",
       "port.js",
-      "punycode.min.js",
       "functions.js",
       "stats.js",
       "survey.js",

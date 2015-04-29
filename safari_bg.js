@@ -93,11 +93,7 @@ safari.application.addEventListener("message", function(messageEvent) {
         return;
 
     var tab = messageEvent.target;
-    tab.url = getUnicodeUrl(tab.url);
-
     var frameInfo = messageEvent.message.frameInfo;
-    frameInfo.url = getUnicodeUrl(frameInfo.url);
-
     chrome._tabInfo.notice(tab, frameInfo);
     var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
 
