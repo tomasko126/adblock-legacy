@@ -1352,8 +1352,7 @@
         // chrome.webNavigation.getAllFrames to 'load' the subframes
       }
     }
-    chrome.tabs.query({url: "http://*/*"}, handleEarlyOpenedTabs);
-    chrome.tabs.query({url: "https://*/*"}, handleEarlyOpenedTabs);
+    chrome.tabs.query({url: ["http://*/*", "https://*/*"]}, handleEarlyOpenedTabs);
   }
 
   // YouTube Channel Whitelist
