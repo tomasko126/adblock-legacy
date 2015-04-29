@@ -117,29 +117,64 @@ function block_list_via_css(selectors) {
   fill_in_css_chunk();
 }
 
-function debug_print_selector_matches(data) {
-  var matchedSelectors = [];
-  data.selectors.
+function debug_print_selector_matches(selectors) {
+  selectors.
     filter(function(selector) { return document.querySelector(selector); }).
     forEach(function(selector) {
-      matchedSelectors.push(selector);
       var matches = "";
       var elems = document.querySelectorAll(selector);
       for (var i=0; i<elems.length; i++) {
         var el = elems[i];
         matches += "        " + el.nodeName + "#" + el.id + "." + el.className + "\n";
       }
-      if (data && data.settings && data.settings.debug_logging) {
-        BGcall("debug_report_elemhide", selector, matches);
-      }
+      BGcall("debug_report_elemhide", selector, matches);
     });
+}
+
+function debug_print_selector_matches(data) {
+  var matchedSelectors = [];
+  data.selectors.
+    filter(function(selector) { return document.querySelector(selector); }).
+    forEach(function(selector) {
+      matchedSelectors.push(selector);
+    });
+    if (hide && matchedSelectors.length > 0) {
+      block_list_via_css(matchedSelectors);
+      BGcall("update_style_cache", matchedSelectors, document.location.hostname); 
+    }    
     if (data && data.settings && data.settings.show_advanced_options) {
-        BGcall("update_style_cache", matchedSelectors, document.location.hostname);
-//        myWW = new Worker(chrome.runtime.getURL('worker.js'));
-//        myWW.onmessage = function(event) {
-//            console.log('Message from worker: ' + event.data);
-//        };
-//        myWW.postMessage({command: "call", data:data});       
+            
+    }
+}
+
+// Mutation Observer, which checks whether created node
+// and it's children should be hidden or not
+function observeChanges(data) {
+    // Select the target node
+    var target = document.body || document.documentElement;
+
+    // Create an observer instance
+    var mutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+    if (target && mutationObserver) {
+        new mutationObserver(function(info) {
+            for (var i=0; i<info.length; i++) {
+                if (info[i].addedNodes) {
+                    for (var j=0; j<info[i].addedNodes.length; j++) {
+                      var element = info[i].addedNodes[j];
+                      if (element.nodeType === Node.ELEMENT_NODE &&
+                          element.nodeName !== "STYLE" &&
+                          element.nodeName !== "SCRIPT" &&
+                          element.nodeName !== "AUDIO") {
+                        logMatchedElements(data, element, true);
+                      }
+                    }
+                }
+            }
+        }).observe(target, {
+            childList: true,
+            attributes: true
+        });
     }
 }
 
@@ -214,8 +249,12 @@ function adblock_begin(inputs) {
     onReady(function() {
       // TODO: ResourceList could pull html.innerText from page instead: we
       // could axe this (and Safari's .selectors calculation in debug mode)
-      if (data && data.settings && (data.settings.debug_logging || data.show_advanced_options))
-        debug_print_selector_matches(data || []);
+      if (data && data.settings && data.settings.debug_logging) {
+        debug_print_selector_matches(data.selectors || []);
+      }
+      if (data && data.settings && data.settings.experimental_hiding && data.hiding) {
+        observeChanges(data);
+      }      
       // Chrome doesn't load bandaids.js unless the site needs a bandaid.
       if (typeof run_bandaids === "function") {
         run_bandaids("new");

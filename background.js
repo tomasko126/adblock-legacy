@@ -91,6 +91,7 @@
       whitelist_hulu_ads: false, // Issue 7178
       show_context_menu_items: true,
       show_advanced_options: false,
+      experimental_hiding: false,
       display_stats: true,
       display_menu_stats: true,
       show_block_counts_help_link: true,
@@ -991,10 +992,14 @@
     };
 
     if (hiding) {
-      var styleCache = storage_get('styleCache') || {};
-      if (styleCache[options.domain]) {
-        console.log("style cache hit", options.domain, styleCache[options.domain]);
-        result.selectors = styleCache[options.domain];
+      if (settings.experimental_hiding) {
+        var styleCache = storage_get('styleCache') || {};
+        if (styleCache[options.domain]) {
+          console.log("style cache hit", options.domain, styleCache[options.domain]);
+          result.selectors = styleCache[options.domain];
+        } else {
+          result.selectors = _myfilters.hiding.filtersFor(options.domain);
+        }
       } else {
         result.selectors = _myfilters.hiding.filtersFor(options.domain);
       }
