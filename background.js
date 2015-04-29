@@ -326,6 +326,7 @@
       if (adblock_is_paused())
         return { cancel: false };
 
+      // Convert punycode domain to Unicode
       details.url = getUnicodeUrl(details.url);
 
       if (!frameData.track(details))
@@ -808,7 +809,7 @@
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
 
-      var disabled_site = page_is_unblockable(tab.visible_url);
+      var disabled_site = page_is_unblockable(tab.url);
 
       var result = {
         tab: tab,
@@ -816,7 +817,7 @@
       };
 
       if (!disabled_site)
-        result.whitelisted = page_is_whitelisted(tab.visible_url);
+        result.whitelisted = page_is_whitelisted(tab.url);
 
         callback(result);
       }
@@ -1036,9 +1037,9 @@
         'top_open_whitelist_ui': {
           allFrames: false,
           include: [
+            "punycode.min.js",
             "jquery/jquery.min.js",
             "jquery/jquery-ui.custom.min.js",
-            "punycode.min.js",
             "uiscripts/load_jquery_ui.js",
             "uiscripts/top_open_whitelist_ui.js"
             ]
@@ -1046,9 +1047,9 @@
         'top_open_blacklist_ui': {
           allFrames: false,
           include: [
+            "punycode.min.js",
             "jquery/jquery.min.js",
             "jquery/jquery-ui.custom.min.js",
-            "punycode.min.js",
             "uiscripts/load_jquery_ui.js",
             "uiscripts/blacklisting/overlay.js",
             "uiscripts/blacklisting/clickwatcher.js",
