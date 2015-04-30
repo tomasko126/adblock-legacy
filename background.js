@@ -445,72 +445,8 @@
     }
   }
 
-  chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    if (request.command !== "filters_updated")
-      return;
-    console.log("reset style cache - filters updated");
-    storage_set("styleCache", {});
-  });      
-
   var update_style_cache = function(matchedSelectors, hostname) {
-    console.log("matchedSelectors", matchedSelectors);
-    console.log("hostname", hostname);
-    if (matchedSelectors &&
-        hostname) {
-      function removeDuplicates(myArray) {
-        var seen = {};
-        var out = [];
-        var len = myArray.length;
-        var j = 0;
-        for(var i = 0; i < len; i++) {
-             var item = myArray[i];
-             if(seen[item] !== 1) {
-                   seen[item] = 1;
-                   out[j++] = item;
-             }
-        }
-        return out;
-      }
-      var styleCache = storage_get('styleCache') || {};
-      var CACHE_SIZE_LIMIT = 1000;
-      //limit the size of the cache.
-      //need to remove old elements ~ 10%
-      if (Object.keys(styleCache).length > CACHE_SIZE_LIMIT) {
-        idleHandler.scheduleItemOnce(function() {
-          var styleCache = storage_get('styleCache') || {}; 
-          var currentSize = Object.keys(styleCache).length;
-          var numItemsToRemove = (currentSize - (CACHE_SIZE_LIMIT * .9));
-          if (numItemsToRemove < 1) {
-            return;
-          }          
-          var tuples = [];
-          for (var key in styleCache) {
-            tuples.push([key, styleCache[key]]);
-          }
-          //sort the new array by the lastUpdate timestamps.
-          tuples.sort(function(a, b) {
-              var aLastUpdate = a[1].lastUpdate;
-              var bLastUpdate = b[1].lastUpdate;
-              return aLastUpdate < bLastUpdate ? -1 : (aLastUpdate > bLastUpdate ? 1 : 0);
-          });
-          //delete the old elements from the cache
-          for (var i = 0; i < numItemsToRemove; i++) {
-            delete styleCache[tuples[i][0]];
-          }
-          //save the update style cache
-          storage_set('styleCache', styleCache);
-        });
-      }
-      if (styleCache[hostname] && styleCache[hostname].selectors) {
-        styleCache[hostname].selectors.concat(matchedSelectors);
-      } else {
-        styleCache[hostname] = {};
-        styleCache[hostname].selectors = matchedSelectors;
-      }
-      styleCache[hostname].selectors = removeDuplicates(styleCache[hostname].selectors);
-      styleCache[hostname].lastUpdate = Date.now();
-      storage_set('styleCache', styleCache);
-    }
+    StyleCache.update_style_cache(matchedSelectors, hostname);
   };
   // UNWHITELISTING
 
@@ -698,11 +634,11 @@
 
     if (name === "debug_logging")
       logging(is_enabled);
-      
-    // Reset cache, when experimental hiding is disabled
+
+    // Reset the cache, when experimental hiding is disabled
     if (name === "experimental_hiding" && !is_enabled) {
-      storage_set("styleCache", {});
-    }      
+      StyleCache.reset();
+    }
 
     if (!SAFARI && sync) {
         sync_setting(name, is_enabled);
@@ -1090,16 +1026,11 @@
 
     if (hiding) {
       if (settings.experimental_hiding) {
-        var styleCache = storage_get('styleCache') || {};
-        if (styleCache[options.domain] && styleCache[options.domain].selectors) {
-          console.log("style cache hit", options.domain, styleCache[options.domain]);
-          result.selectors = styleCache[options.domain].selectors;
-        } else {
-           console.log("no style cache hit", options.domain);
+        result.selectors = StyleCache.getSelectors(options);
+        if (!result.selectors) {
           result.selectors = _myfilters.hiding.filtersFor(options.domain);
         }
       } else {
-        console.log("experimental_hiding disabled", options.domain);
         result.selectors = _myfilters.hiding.filtersFor(options.domain);
       }
     }
