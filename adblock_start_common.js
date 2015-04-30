@@ -256,6 +256,7 @@ function adblock_begin(inputs) {
         debug_print_selector_matches(data.selectors || []);
       }
       if (data && data.settings && data.settings.experimental_hiding && data.hiding) {
+        logMatchedElements(data, document);
         observeChanges(data);
       }
       // Chrome doesn't load bandaids.js unless the site needs a bandaid.
