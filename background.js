@@ -465,6 +465,8 @@
         return out;
       }
       var styleCache = storage_get('styleCache') || {};
+      //limit the size of the cache.
+      //need to remove old elements
       if (Object.keys(styleCache).length > 1000)
         return;
       if (styleCache[hostname] && styleCache[hostname].selectors) {
