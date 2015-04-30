@@ -691,6 +691,11 @@
 
     if (name === "debug_logging")
       logging(is_enabled);
+      
+    // Reset cache, when experimental hiding is disabled
+    if (name === "experimental_hiding" && !is_enabled) {
+      storage_set("styleCache", "{}");
+    }      
 
     if (!SAFARI && sync) {
         sync_setting(name, is_enabled);
