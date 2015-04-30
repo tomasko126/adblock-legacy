@@ -1,5 +1,4 @@
 // Return the ElementType element type of the given element.
-var myWW;
 function typeForElement(el) {
   // TODO: handle background images that aren't just the BODY.
   switch (el.nodeName.toUpperCase()) {
@@ -131,20 +130,17 @@ function debug_print_selector_matches(selectors) {
     });
 }
 
-function debug_print_selector_matches(data) {
+function logMatchedElements(data, node) {
   var matchedSelectors = [];
   data.selectors.
-    filter(function(selector) { return document.querySelector(selector); }).
+    filter(function(selector) { return node.querySelector(selector); }).
     forEach(function(selector) {
       matchedSelectors.push(selector);
     });
-    if (hide && matchedSelectors.length > 0) {
-      block_list_via_css(matchedSelectors);
-      BGcall("update_style_cache", matchedSelectors, document.location.hostname); 
-    }    
-    if (data && data.settings && data.settings.show_advanced_options) {
-            
-    }
+  if (matchedSelectors.length > 0) {
+    block_list_via_css(matchedSelectors);
+    BGcall("update_style_cache", matchedSelectors, document.location.hostname);
+  }
 }
 
 // Mutation Observer, which checks whether created node
@@ -166,7 +162,7 @@ function observeChanges(data) {
                           element.nodeName !== "STYLE" &&
                           element.nodeName !== "SCRIPT" &&
                           element.nodeName !== "AUDIO") {
-                        logMatchedElements(data, element, true);
+                        logMatchedElements(data, element);
                       }
                     }
                 }
@@ -254,7 +250,7 @@ function adblock_begin(inputs) {
       }
       if (data && data.settings && data.settings.experimental_hiding && data.hiding) {
         observeChanges(data);
-      }      
+      }
       // Chrome doesn't load bandaids.js unless the site needs a bandaid.
       if (typeof run_bandaids === "function") {
         run_bandaids("new");
