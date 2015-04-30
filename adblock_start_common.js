@@ -133,7 +133,10 @@ function debug_print_selector_matches(selectors) {
     });
 }
 
-function logMatchedElements(data, node) {
+//if experimental hiding / caching is enabled, calculate / determine
+//which selectors are matches to elements on the current site, then
+//save them to the cache
+function determineMatchedSelectors(data, node) {
   var matchedSelectors = [];
   data.selectors.
     filter(function(selector) { return node.querySelector(selector); }).
@@ -169,7 +172,7 @@ function observeChanges(data) {
                           element.nodeName !== "STYLE" &&
                           element.nodeName !== "SCRIPT" &&
                           element.nodeName !== "AUDIO") {
-                        logMatchedElements(data, element);
+                        determineMatchedSelectors(data, element);
                       }
                     }
                 }
@@ -260,7 +263,7 @@ function adblock_begin(inputs) {
         debug_print_selector_matches(data.selectors || []);
       }
       if (data && data.settings && data.settings.experimental_hiding && data.hiding) {
-        logMatchedElements(data, document);
+        determineMatchedSelectors(data, document);
         observeChanges(data);
       }
       // Chrome doesn't load bandaids.js unless the site needs a bandaid.
