@@ -544,6 +544,7 @@ MyFilters.prototype._loadMalwareDomains = function() {
            var smear = Math.random() * 0.4 + 0.8;
            that._subscriptions.malware.expiresAfterHours *= smear;
            chrome.extension.sendRequest({command: "filters_updated"});
+           StyleCache.reset();
            log("Fetched " + url);
         }
         xhr.open("GET",  url);
