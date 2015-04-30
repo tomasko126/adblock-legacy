@@ -465,21 +465,43 @@
         return out;
       }
       var styleCache = storage_get('styleCache') || {};
+      var CACHE_SIZE_LIMIT = 1000;
       //limit the size of the cache.
-      //need to remove old elements
-      if (Object.keys(styleCache).length > 1000)
-        return;
+      //need to remove old elements ~ 10%
+      if (Object.keys(styleCache).length > CACHE_SIZE_LIMIT) {
+        idleHandler.scheduleItemOnce(function() {
+          var styleCache = storage_get('styleCache') || {}; 
+          var currentSize = Object.keys(styleCache).length;
+          var numItemsToRemove = (currentSize - (CACHE_SIZE_LIMIT * .9));
+          if (numItemsToRemove < 1) {
+            return;
+          }          
+          var tuples = [];
+          for (var key in styleCache) {
+            tuples.push([key, styleCache[key]]);
+          }
+          //sort the new array by the lastUpdate timestamps.
+          tuples.sort(function(a, b) {
+              var aLastUpdate = a[1].lastUpdate;
+              var bLastUpdate = b[1].lastUpdate;
+              return aLastUpdate < bLastUpdate ? -1 : (aLastUpdate > bLastUpdate ? 1 : 0);
+          });
+          //delete the old elements from the cache
+          for (var i = 0; i < numItemsToRemove; i++) {
+            delete styleCache[tuples[i][0]];
+          }
+          //save the update style cache
+          storage_set('styleCache', styleCache);
+        });
+      }
       if (styleCache[hostname] && styleCache[hostname].selectors) {
         styleCache[hostname].selectors.concat(matchedSelectors);
       } else {
-        styleCache[hostname] = {};        
+        styleCache[hostname] = {};
         styleCache[hostname].selectors = matchedSelectors;
       }
       styleCache[hostname].selectors = removeDuplicates(styleCache[hostname].selectors);
-      if (!styleCache[hostname].lastUpdate) {
-        styleCache[hostname].lastUpdate = {};
-      }
-      styleCache[hostname].lastUpdate = new Date();       
+      styleCache[hostname].lastUpdate = Date.now();
       storage_set('styleCache', styleCache);
     }
   };
