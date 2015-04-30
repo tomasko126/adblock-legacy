@@ -467,15 +467,20 @@
         var styleCache = storage_get('styleCache') || {};
         if (Object.keys(styleCache).length > 1000)
             return;
-        if (styleCache[hostname]) {
-            styleCache[hostname].concat(matchedSelectors);
+        if (styleCache[hostname] && styleCache[hostname].selectors) {
+            styleCache[hostname].selectors.concat(matchedSelectors);
         } else {
-            styleCache[hostname] = matchedSelectors;
+            styleCache[hostname].selectors = [];         
+            styleCache[hostname].selectors = matchedSelectors;
         }
-        styleCache[hostname] = removeDuplicates(styleCache[hostname]);
+        styleCache[hostname] = removeDuplicates(styleCache[hostname].selectors);
+        if (!styleCache[hostname].lastUpdate) {
+            styleCache[hostname].lastUpdate = {};
+        }
+        styleCache[hostname].lastUpdate = new Date();       
         storage_set('styleCache', styleCache);
     }
-  }
+  };
   // UNWHITELISTING
 
   // Look for a custom filter that would whitelist options.url,
@@ -1050,13 +1055,15 @@
     if (hiding) {
       if (settings.experimental_hiding) {
         var styleCache = storage_get('styleCache') || {};
-        if (styleCache[options.domain]) {
+        if (styleCache[options.domain] && styleCache[hostname].selectors) {
           console.log("style cache hit", options.domain, styleCache[options.domain]);
-          result.selectors = styleCache[options.domain];
+          result.selectors = styleCache[hostname].selectors;
         } else {
+           console.log("no style cache hit", options.domain);
           result.selectors = _myfilters.hiding.filtersFor(options.domain);
         }
       } else {
+        console.log("experimental_hiding disabled", options.domain);
         result.selectors = _myfilters.hiding.filtersFor(options.domain);
       }
     }
