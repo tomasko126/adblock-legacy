@@ -445,6 +445,13 @@
     }
   }
 
+  chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+    if (request.command !== "filters_updated")
+      return;
+    console.log("reset style cache - filters updated");
+    storage_set("styleCache", {});
+  });      
+
   var update_style_cache = function(matchedSelectors, hostname) {
     console.log("matchedSelectors", matchedSelectors);
     console.log("hostname", hostname);
@@ -694,7 +701,7 @@
       
     // Reset cache, when experimental hiding is disabled
     if (name === "experimental_hiding" && !is_enabled) {
-      storage_set("styleCache", "{}");
+      storage_set("styleCache", {});
     }      
 
     if (!SAFARI && sync) {
