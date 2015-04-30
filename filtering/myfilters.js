@@ -94,7 +94,7 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
     // Convert subscribed ex-user-submitted lists into official lists.
     else {
       // TODO: Remove this logic after a few releases
-      if (id === "easylist_plus_spanish") {
+      if (id === "easylist_plus_spanish" || id === "norwegian") {
           delete this._subscriptions[id];
           continue;
       }
@@ -502,25 +502,28 @@ MyFilters.prototype.customToDefaultId = function(id) {
 //Retreive the list of malware domains from our site.
 //and set the response (list of domains) on the blocking
 //filter set for processing.
+//Retreive the list of malware domains from our site.
+//and set the response (list of domains) on the blocking
+//filter set for processing.
 MyFilters.prototype._loadMalwareDomains = function() {
 
-  function out_of_date(subscription) {
-    // After a failure, wait at least a day to refetch (overridden below if
-    // it has no .text)
-    var failed_at = subscription.last_update_failed_at || 0;
-    if (Date.now() - failed_at < HOUR_IN_MS * 24)
-      return false;
-    var hardStop = subscription.expiresAfterHoursHard || 240;
-    var smallerExpiry = Math.min((subscription.expiresAfterHours || 24), hardStop);
-    var millis = Date.now() - (subscription.last_update || 0);
-    return (millis > HOUR_IN_MS * smallerExpiry);
-  }
+    function out_of_date(subscription) {
+        // After a failure, wait at least a day to refetch (overridden below if
+        // it has no .text)
+        var failed_at = subscription.last_update_failed_at || 0;
+        if (Date.now() - failed_at < HOUR_IN_MS * 24)
+          return false;
+        var hardStop = subscription.expiresAfterHoursHard || 240;
+        var smallerExpiry = Math.min((subscription.expiresAfterHours || 24), hardStop);
+        var millis = Date.now() - (subscription.last_update || 0);
+        return (millis > HOUR_IN_MS * smallerExpiry);
+    }
 
     if (!this._subscriptions.malware.text ||
         !this.getMalwareDomains() ||
         out_of_date(this._subscriptions.malware)) {
         //the timestamp is add to the URL to prevent caching by the browser
-        var url = "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime();
+        var url = this._subscriptions.malware.url + "?timestamp=" + new Date().getTime();
         // Fetch file with malware-known domains
         var xhr = new XMLHttpRequest();
         var that = this;
@@ -589,7 +592,6 @@ MyFilters.prototype._load_default_subscriptions = function() {
       case 'ko': return 'easylist_plun_korean';
       case 'lv': return 'latvian';
       case 'nl': return 'dutch';
-      case 'no': return 'norwegian';
       case 'pl': return 'easylist_plus_polish';
       case 'ro': return 'easylist_plus_romanian';
       case 'ru': return 'russian';
@@ -691,10 +693,6 @@ MyFilters.prototype._make_subscription_options = function() {
     "latvian": {  // Latvian filters
       url: "https://gitorious.org/adblock-latvian/adblock-latvian/blobs/raw/master/lists/latvian-list.txt",
     },
-    "norwegian": {  // Additional Norwegian filters
-      url: "http://home.fredfiber.no/langsholt/adblock.txt",
-      requiresList: "easylist",
-    },
     "swedish": {  // Swedish filters
       url: "http://fanboy.co.nz/fanboy-swedish.txt",
     },
@@ -708,7 +706,7 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "https://easylist-downloads.adblockplus.org/fanboy-social.txt",
     },
     "malware": { // Malware protection
-      url: "",
+      url: "https://data.getadblock.com/filters/domains.json",
     },
     "annoyances": { // Fanboy's Annoyances
       url: "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt",

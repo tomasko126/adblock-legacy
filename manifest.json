@@ -1,12 +1,13 @@
 {
-  "name": "AdBlock",
-  "version": "2.17",
+  "name": "BetaFish Adblocker",
+  "version": "2.29",
   "background": {
     "scripts": [
       "jquery/jquery.min.js",
       "port.js",
       "functions.js",
       "stats.js",
+      "survey.js",
       "filtering/domainset.js",
       "filtering/filteroptions.js",
       "filtering/filtertypes.js",
@@ -63,7 +64,8 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": [
-        "uiscripts/blacklisting/rightclick_hook.js"
+        "uiscripts/blacklisting/rightclick_hook.js",
+        "notificationoverlay.js"
       ],
       "run_at": "document_end",
       "all_frames": false
@@ -82,10 +84,11 @@
   "minimum_chrome_version": "23",
   "options_page": "options/index.html",
   "permissions": [
-    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation", "alarms", "storage"
+    "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation", "alarms", "storage", "notifications"
   ],
   "web_accessible_resources": [
     "img/icon24.png",
+    "img/icon48.png",
     "jquery/css/images/ui-bg_inset-hard_100_fcfdfd_1x100.png",
     "jquery/css/images/ui-icons_056b93_256x240.png",
     "jquery/css/images/ui-icons_d8e7f3_256x240.png",

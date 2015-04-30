@@ -1,6 +1,6 @@
 {
   "description2":{
-    "message":"Nejpopulárnější rozšíření pro Chrome s více než 40 miliony uživateli! Blokujeme reklamy na celém webu.",
+    "message":"The most popular Chrome extension, with over 40 million users!  Blocks ads all over the web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -236,6 +236,10 @@
   "showcontextmenus2":{
     "message":"Přidat položky do nabídky po kliknutí pravým tlačítkem myši",
     "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "disableyoutubestreamingads":{
+    "message":"Povolit režim kompatibility ClickToFlash",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
   },
   "debuginlogoption":{
     "message":"Zobrazovat debug zprávy v Console Log (tohle zpomaluje AdBlock)",

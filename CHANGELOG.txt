@@ -1,6 +1,74 @@
 ## Versions ##
 
-UNRELEASED:
+2.29:
+- Name change to "BetaFish Adblocker" (temporary)
+
+2.28:
+- For Chrome, added installation type to the ping data. (#530)
+
+2.27:
+- For Chrome, added retry logic when the '/installed' page fails to open.  (#525)
+- For Chrome, added a message to include installation type, when AdBlock is installed.  (#526)
+
+2.26:
+- Added the extension Id to the data included with the JavaScript error message.  (#523)
+- For Chrome only, improved / fixed the logic that is checking if the '/installed' page is opened correctly. (#522)
+- For Chrome only, added the approximate installation duration to the uninstall URL. (#522)
+
+2.25:
+- Fixed an issue with the DropBox sync processing duplicating filters during browser start. (#442)
+- Added a message to the options page when the DropBox sync processing failed due to a large number of custom filters. (#474)
+- Updated Translations
+
+2.24:
+- Fixed JavaScript stack exception processing. (#515)
+- Modified the new install check logic to only send a message when first run is true. (#513)
+- Modified the survey acknowledgement processing to log the 'message' property of chrome.runtime.lastError (if it exists). (#516)
+
+2.23:
+- Added browser and os version information to ping data (#510)
+- Added validation logic to help detect an invalid installation state (#510)
+- Added acknowledgement processing from overlay surveys (#510)
+- Added 'stringify' to the AdBlock settings in the debug data (#512)
+- Added a style tag of 'display:none' to Beta div tag in the AdBlock pop up menu. (#508)
+
+2.22:
+- Enhanced survey processing (#453)
+
+2.21.1:
+- For Safari users, added a user confirmation prompt when subscribing to a new filter lists using the ABP syntax. (#502)
+
+2.21:
+- Removed the Norwegian filter list since it is no longer active. (#489)
+- For each subscribe filter list, added the last update timestamp to debug data. (#482)
+- Added the malware notification setting to debug data. (#458)
+- Added additional CSS to whitelist/blacklist dialogs to avoid display issues on some websites. (#460)
+- Removed an unnecessary call to sendResponse. (#484)
+- For Chrome users, added a user confirmation prompt when subscribing to a new filter lists using the ABP syntax. (#486)
+- Fixed an issue when the request URL didn't contain a '.' (#500)
+- Updated the Chrome web store description.(#501)
+
+2.20.1:
+- Updated Translations
+- In Chrome, added an uninstall URL (#493)
+
+2.19:
+- Updated Translations
+- In Safari, logic was added to dispatch an event when the extension blocked content (#478)
+- Fixed a small memory leak (#456)
+- Added the extension installation Date to ping data  (#448)
+- Fixed a JavaScript error in Chrome when updating badge text (#446)
+- Updated the workaround logic to Chrome's reporting fonts as "other" types (#439)
+
+2.18.1:
+- Updated Translations
+- Remove unnecessary code from ping processing.
+
+2.18:
+- Fixed an issue when syncing custom filters using DropBox. (#413)
+- Fixed an issue with the number of blocked ads on single page sites. (#414)
+- Fixed an issue with the URL of Malware filter lists on the AdBlock Options page - Filter List tab. (#436)
+- Added an new Malware Notification option when users are subscribed to the Malware filter list. (#435)
 
 2.17:
 - Added a new option for Safari users - "ClickToFlash compatibility mode". (#421)
