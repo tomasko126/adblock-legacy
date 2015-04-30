@@ -143,6 +143,10 @@ function logMatchedElements(data, node) {
   if (matchedSelectors.length > 0) {
     block_list_via_css(matchedSelectors);
     BGcall("update_style_cache", matchedSelectors, document.location.hostname);
+  } else if (node === document) {
+    //if the document doesn't have any selectors, add the empty array
+    //to the style cache so we don't continue to inject the default / large number of selectors
+    BGcall("update_style_cache", matchedSelectors, document.location.hostname);
   }
 }
 

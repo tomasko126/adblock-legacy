@@ -450,35 +450,35 @@
     console.log("hostname", hostname);
     if (matchedSelectors &&
         hostname) {
-        function removeDuplicates(myArray) {
-            var seen = {};
-            var out = [];
-            var len = myArray.length;
-            var j = 0;
-            for(var i = 0; i < len; i++) {
-                 var item = myArray[i];
-                 if(seen[item] !== 1) {
-                       seen[item] = 1;
-                       out[j++] = item;
-                 }
-            }
-            return out;
+      function removeDuplicates(myArray) {
+        var seen = {};
+        var out = [];
+        var len = myArray.length;
+        var j = 0;
+        for(var i = 0; i < len; i++) {
+             var item = myArray[i];
+             if(seen[item] !== 1) {
+                   seen[item] = 1;
+                   out[j++] = item;
+             }
         }
-        var styleCache = storage_get('styleCache') || {};
-        if (Object.keys(styleCache).length > 1000)
-            return;
-        if (styleCache[hostname] && styleCache[hostname].selectors) {
-            styleCache[hostname].selectors.concat(matchedSelectors);
-        } else {
-            styleCache[hostname].selectors = [];         
-            styleCache[hostname].selectors = matchedSelectors;
-        }
-        styleCache[hostname] = removeDuplicates(styleCache[hostname].selectors);
-        if (!styleCache[hostname].lastUpdate) {
-            styleCache[hostname].lastUpdate = {};
-        }
-        styleCache[hostname].lastUpdate = new Date();       
-        storage_set('styleCache', styleCache);
+        return out;
+      }
+      var styleCache = storage_get('styleCache') || {};
+      if (Object.keys(styleCache).length > 1000)
+        return;
+      if (styleCache[hostname] && styleCache[hostname].selectors) {
+        styleCache[hostname].selectors.concat(matchedSelectors);
+      } else {
+        styleCache[hostname] = {};        
+        styleCache[hostname].selectors = matchedSelectors;
+      }
+      styleCache[hostname].selectors = removeDuplicates(styleCache[hostname].selectors);
+      if (!styleCache[hostname].lastUpdate) {
+        styleCache[hostname].lastUpdate = {};
+      }
+      styleCache[hostname].lastUpdate = new Date();       
+      storage_set('styleCache', styleCache);
     }
   };
   // UNWHITELISTING
@@ -1055,9 +1055,9 @@
     if (hiding) {
       if (settings.experimental_hiding) {
         var styleCache = storage_get('styleCache') || {};
-        if (styleCache[options.domain] && styleCache[hostname].selectors) {
+        if (styleCache[options.domain] && styleCache[options.domain].selectors) {
           console.log("style cache hit", options.domain, styleCache[options.domain]);
-          result.selectors = styleCache[hostname].selectors;
+          result.selectors = styleCache[options.domain].selectors;
         } else {
            console.log("no style cache hit", options.domain);
           result.selectors = _myfilters.hiding.filtersFor(options.domain);
