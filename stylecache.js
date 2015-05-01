@@ -5,9 +5,6 @@
   };
   return {
     reset: function() {
-      if (!get_settings().experimental_hiding) {
-        return;
-      }
       storage_set("styleCache", {});
     },
     getSelectors: function(options) {
