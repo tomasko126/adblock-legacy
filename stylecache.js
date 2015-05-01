@@ -3,9 +3,12 @@
   var getStyleCache = function() {
     return storage_get('styleCache') || {};
   };
+  var saveStyleCache = function(newValue) {
+    storage_set("styleCache", newValue);
+  };
   return {
     reset: function() {
-      storage_set("styleCache", {});
+      saveStyleCache({});
     },
     getSelectors: function(options) {
       if (!get_settings().experimental_hiding) {
@@ -32,20 +35,23 @@
           var j = 0;
           for(var i = 0; i < len; i++) {
             var item = myArray[i];
-              if(seen[item] !== 1) {
-                seen[item] = 1;
-                out[j++] = item;
-              }
+            if(seen[item] !== 1) {
+              seen[item] = 1;
+              out[j++] = item;
             }
+          }
           return out;
         }
         var styleCache = getStyleCache();
         //limit the size of the cache.
-        //need to remove old elements ~ 10%
+        //if the number of elements in the cache exceed the limit, then
+        // remove the oldest elements (~ 10% reduction)
         if (Object.keys(styleCache).length > CACHE_SIZE_LIMIT) {
           idleHandler.scheduleItemOnce(function() {
             var styleCache = getStyleCache();
             var currentSize = Object.keys(styleCache).length;
+            //since this function can be schedule multiple times,
+            //a previous execution may have already removed the old elements
             if (currentSize < CACHE_SIZE_LIMIT) {
               return;
             }
@@ -53,14 +59,15 @@
             if (numItemsToRemove < 1) {
               return;
             }
+            //create a temporary array to be sorted by the last update timestamp
             var tuples = [];
             for (var key in styleCache) {
-              tuples.push([key, styleCache[key]]);
+              tuples.push([key, styleCache[key].lastUpdate]);
             }
-            //sort the new array by the lastUpdate timestamps.
+            //sort the temporary array.
             tuples.sort(function(a, b) {
-              var aLastUpdate = a[1].lastUpdate;
-              var bLastUpdate = b[1].lastUpdate;
+              var aLastUpdate = a[1];
+              var bLastUpdate = b[1];
               return aLastUpdate < bLastUpdate ? -1 : (aLastUpdate > bLastUpdate ? 1 : 0);
             });
             //delete the old elements from the cache
@@ -73,13 +80,13 @@
         }
         if (styleCache[hostname] && styleCache[hostname].selectors) {
           styleCache[hostname].selectors.concat(matchedSelectors);
+          styleCache[hostname].selectors = removeDuplicates(styleCache[hostname].selectors);
         } else {
           styleCache[hostname] = {};
           styleCache[hostname].selectors = matchedSelectors;
         }
-        styleCache[hostname].selectors = removeDuplicates(styleCache[hostname].selectors);
         styleCache[hostname].lastUpdate = Date.now();
-        storage_set('styleCache', styleCache);
+        saveStyleCache(styleCache);
       }
     },
   };
