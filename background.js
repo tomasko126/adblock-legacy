@@ -1025,12 +1025,8 @@
     };
 
     if (hiding) {
-      if (settings.experimental_hiding) {
-        result.selectors = StyleCache.getSelectors(options);
-        if (!result.selectors) {
-          result.selectors = _myfilters.hiding.filtersFor(options.domain);
-        }
-      } else {
+      result.selectors = StyleCache.getSelectors(options);
+      if (!result.selectors) {
         result.selectors = _myfilters.hiding.filtersFor(options.domain);
       }
     }
