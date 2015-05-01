@@ -1,23 +1,28 @@
 ﻿StyleCache = (function() {
-  var CACHE_SIZE_LIMIT = 1000;
+  
+  var CACHE_SIZE_LIMIT = 1000;  
+  
   var getStyleCache = function() {
     return storage_get('styleCache') || {};
   };
-  var saveStyleCache = function(newValue) {
-    storage_set("styleCache", newValue);
+  var saveStyleCache = function() {
+    storage_set("styleCache", _styleCache);
   };
+  //initialize the in-memory cache at startup.
+  var _styleCache = getStyleCache();
+  
   return {
     reset: function() {
-      saveStyleCache({});
+      _styleCache = {};
+      saveStyleCache();
     },
     getSelectors: function(options) {
       if (!get_settings().experimental_hiding) {
         return undefined;
       }
-      var styleCache = getStyleCache();
-      if (styleCache[options.domain] && styleCache[options.domain].selectors) {
+      if (_styleCache[options.domain] && _styleCache[options.domain].selectors) {
         log("style cache hit", options.domain);
-        return styleCache[options.domain].selectors;
+        return _styleCache[options.domain].selectors;
       } else {
         return undefined;
       }
@@ -42,11 +47,10 @@
           }
           return out;
         }
-        var styleCache = getStyleCache();
         //limit the size of the cache.
         //if the number of elements in the cache exceed the limit, then
         // remove the oldest elements (~ 10% reduction)
-        if (Object.keys(styleCache).length > CACHE_SIZE_LIMIT) {
+        if (Object.keys(_styleCache).length > CACHE_SIZE_LIMIT) {
           idleHandler.scheduleItemOnce(function() {
             var styleCache = getStyleCache();
             var currentSize = Object.keys(styleCache).length;
@@ -76,17 +80,18 @@
             }
             //save the update style cache
             storage_set('styleCache', styleCache);
+            _styleCache = styleCache;
           });
         }
-        if (styleCache[hostname] && styleCache[hostname].selectors) {
-          styleCache[hostname].selectors.concat(matchedSelectors);
-          styleCache[hostname].selectors = removeDuplicates(styleCache[hostname].selectors);
+        if (_styleCache[hostname] && _styleCache[hostname].selectors) {
+          _styleCache[hostname].selectors.concat(matchedSelectors);
+          _styleCache[hostname].selectors = removeDuplicates(_styleCache[hostname].selectors);
         } else {
-          styleCache[hostname] = {};
-          styleCache[hostname].selectors = matchedSelectors;
+          _styleCache[hostname] = {};
+          _styleCache[hostname].selectors = matchedSelectors;
         }
-        styleCache[hostname].lastUpdate = Date.now();
-        saveStyleCache(styleCache);
+        _styleCache[hostname].lastUpdate = Date.now();
+        saveStyleCache();
       }
     },
   };
