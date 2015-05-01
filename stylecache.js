@@ -76,9 +76,10 @@
             });
             //delete the old elements from the cache
             for (var i = 0; i < numItemsToRemove; i++) {
+              log("removing entry from style cache", tuples[i][0]);
               delete styleCache[tuples[i][0]];
             }
-            //save the update style cache
+            //save the update style cache & update the inmemory version
             storage_set('styleCache', styleCache);
             _styleCache = styleCache;
           });
