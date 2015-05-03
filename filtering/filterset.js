@@ -43,10 +43,10 @@ FilterSet.prototype = {
   // which relate to the given domain or any of its superdomains.  E.g.
   // sub.foo.com will get items['global', 'foo.com', 'sub.foo.com'] and
   // exclude['foo.com', 'sub.foo.com'].
-  
+
   // Caches selectors for this.setSelectors()
   _selectorsCache: {},
-  
+
   // Save recorded selectors into cache
   setSelectors: function(url, selectors) {
     var urlDomain = parseUri(url).hostname.replace(/^www./, "");
@@ -57,7 +57,7 @@ FilterSet.prototype = {
         this._selectorsCache[urlDomain].push(selectors[i]);
       }
     }
-    
+
     this._selectorsCache[urlDomain] = selectors;
     this.cacheFilterListSelectors(urlDomain);
     storage_set("cached_filters", this._selectorsCache);
@@ -78,12 +78,34 @@ FilterSet.prototype = {
 
   // Get recorded selectors from cache
   getSelectors: function(url) {
-    var urlDomain = parseUri(url).hostname.replace(/^www./, "");
+    if (!url) {
+        return this._selectorsCache;
+    }
 
+    var urlDomain = parseUri(url).hostname.replace(/^www./, "");
     if (urlDomain in this._selectorsCache)
         return this._selectorsCache[urlDomain];
 
     return null;
+  },
+
+  // Check, if selectors should be still in cache
+  // e.g. after filter lists update
+  checkSelectors: function() {
+    // Process every domain in this._selectorsCache
+    var cache = this._selectorsCache;
+    for (var domain in cache) {
+      if (cache.hasOwnProperty(domain)) {
+        var filters = this.filtersFor(domain);
+        cache[domain].forEach(function(filter) {
+          if (filters.indexOf(filter) < 0) {
+            var index = cache[domain].indexOf(filter);
+            cache[domain].splice(index, 1);
+          }
+        });
+      }
+    }
+    return cache;
   },
 
   _viewFor: function(domain) {

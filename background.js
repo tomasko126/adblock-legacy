@@ -444,7 +444,16 @@
       }
     }
   }
-  
+
+  // Experimental selectors cache
+  checkSelectors = function() {
+    if (_myfilters.hiding && get_settings().experimental_hiding) {
+      console.log("Re-checking selectors cache");
+      _myfilters.hiding.checkSelectors();
+    }
+    console.log(_myfilters.hiding._selectorsCache);
+  }
+
   setSelectors = function(url, selectors) {
     _myfilters.hiding.setSelectors(url, selectors);
   }
@@ -1031,13 +1040,10 @@
         var cached_selectors = _myfilters.hiding.getSelectors(sender.url);
         if (cached_selectors) {
           result._cachedSelectors = cached_selectors;
-        } else {
-          var selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
-          result.selectors = selectors;
         }
-      } else {
-        result.selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
       }
+      var selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
+      result.selectors = selectors;
     }
     return result;
   };

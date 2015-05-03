@@ -146,8 +146,11 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
   // The only reasons to (re)build the filter set are
   // - when AdBlock starts
   // - when a filter list text is changed ([un]subscribed or updated a list)
-  if (rebuild)
+  if (rebuild) {
     this.rebuild();
+  } else {
+    checkSelectors();
+  }
 
   chrome.extension.sendRequest({command: "filters_updated"});
 }
@@ -238,6 +241,8 @@ MyFilters.prototype.rebuild = function() {
       !this.getMalwareDomains()) {
     this._initializeMalwareDomains();
   }
+
+  checkSelectors();
 
   // After 90 seconds, delete the cache. That way the cache is available when
   // rebuilding multiple times in a row (when multiple lists have to update at
