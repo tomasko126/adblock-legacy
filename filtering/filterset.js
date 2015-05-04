@@ -78,10 +78,6 @@ FilterSet.prototype = {
 
   // Get recorded selectors from cache
   getSelectors: function(url) {
-    if (!url) {
-        return this._selectorsCache;
-    }
-
     var urlDomain = parseUri(url).hostname.replace(/^www./, "");
     if (urlDomain in this._selectorsCache)
         return this._selectorsCache[urlDomain];
@@ -94,13 +90,20 @@ FilterSet.prototype = {
   checkSelectors: function() {
     // Process every domain in this._selectorsCache
     var cache = this._selectorsCache;
+    console.log("Cache untouched: ", cache);
     for (var domain in cache) {
+      console.log("Domain ", domain);
       if (cache.hasOwnProperty(domain)) {
         var filters = this.filtersFor(domain);
+        console.log("Filters for domain: ", filters);
         cache[domain].forEach(function(filter) {
-          if (filters.indexOf(filter) < 0) {
-            var index = cache[domain].indexOf(filter);
+          console.log("Filter of cache[domain] ", filter);
+          if (filters.indexOf(filter, 0) < 0) {
+            console.log("Should be removed filter: ", filter);
+            var index = cache[domain].indexOf(filter, 0);
+            console.log("Index of position: ", index);
             cache[domain].splice(index, 1);
+            console.log("Touched cache: ", cache);
           }
         });
       }
