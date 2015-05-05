@@ -783,9 +783,9 @@
           return;
         }
 
-        tab.url = getUnicodeUrl(tab.url);
+        tab.unicodeUrl = getUnicodeUrl(tab.url);
 
-        var disabled_site = page_is_unblockable(tab.url);
+        var disabled_site = page_is_unblockable(tab.unicodeUrl);
         var total_blocked = blockCounts.getTotalAdsBlocked();
         var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
         var display_stats = get_settings().display_stats;
@@ -801,15 +801,16 @@
         };
 
         if (!disabled_site)
-          result.whitelisted = page_is_whitelisted(tab.url);
+          result.whitelisted = page_is_whitelisted(tab.unicodeUrl);
 
         callback(result);
       });
     } else {
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
+      tab.unicodeUrl = getUnicodeUrl(tab.url);
 
-      var disabled_site = page_is_unblockable(tab.url);
+      var disabled_site = page_is_unblockable(tab.unicodeUrl);
 
       var result = {
         tab: tab,
@@ -817,7 +818,7 @@
       };
 
       if (!disabled_site)
-        result.whitelisted = page_is_whitelisted(tab.url);
+        result.whitelisted = page_is_whitelisted(tab.unicodeUrl);
 
         callback(result);
       }

@@ -1,6 +1,3 @@
-// An object, which contains |id| & |url| of current tab
-var tab = null;
-
 $(function() {
     localizePage();
 
@@ -11,8 +8,7 @@ $(function() {
 
     BG.getCurrentTabInfo(function(info) {
         // Cache tab object for later use
-        tab = info.tab;
-        tab.url = getUnicodeUrl(tab.url);
+        var tab = info.tab;
 
         var shown = {};
         function show(L) { L.forEach(function(x) { shown[x] = true;  }); }
@@ -50,7 +46,7 @@ $(function() {
             });
         }
 
-        var host = parseUri(tab.url).host;
+        var host = parseUri(tab.unicodeUrl).host;
         var advanced_option = BG.get_settings().show_advanced_options;
         var eligible_for_undo = !paused && (info.disabled_site || !info.whitelisted);
         var url_to_check_for_undo = info.disabled_site ? undefined : host;
@@ -66,12 +62,12 @@ $(function() {
             hide(["div_report_an_ad", "separator1"]);
 
         if (host === "www.youtube.com" &&
-            /channel|user/.test(tab.url) &&
-            /ab_channel/.test(tab.url) &&
+            /channel|user/.test(tab.unicodeUrl) &&
+            /ab_channel/.test(tab.unicodeUrl) &&
             eligible_for_undo &&
             BG.get_settings().youtube_channel_whitelist) {
             $("#div_whitelist_channel").html(translate("whitelist_youtube_channel",
-                                                       parseUri.parseSearch(tab.url).ab_channel));
+                                                       parseUri.parseSearch(tab.unicodeUrl).ab_channel));
             show(["div_whitelist_channel"]);
         }
 
@@ -158,7 +154,7 @@ $(function() {
     });
 
     $("#div_enable_adblock_on_this_page").click(function() {
-        if (BG.try_to_unwhitelist(tab.url)) {
+        if (BG.try_to_unwhitelist(tab.unicodeUrl)) {
             !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
             closeAndReloadPopup();
         } else {
@@ -176,14 +172,14 @@ $(function() {
     });
 
     $("#div_undo").click(function() {
-        var host = parseUri(tab.url).host;
+        var host = parseUri(tab.unicodeUrl).host;
         BG.confirm_removal_of_custom_filters_on_host(host);
         closeAndReloadPopup();
         if (SAFARI) activeTab.url = activeTab.url;
     });
 
     $("#div_whitelist_channel").click(function() {
-        BG.create_whitelist_filter_for_youtube_channel(tab.url);
+        BG.create_whitelist_filter_for_youtube_channel(tab.unicodeUrl);
         closeAndReloadPopup();
         !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
     });
@@ -220,7 +216,7 @@ $(function() {
     });
 
     $("#div_whitelist_page").click(function() {
-        BG.create_page_whitelist_filter(tab.url);
+        BG.create_page_whitelist_filter(tab.unicodeUrl);
         closeAndReloadPopup();
         !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
     });
@@ -231,7 +227,7 @@ $(function() {
     });
 
     $("#div_report_an_ad").click(function() {
-        var url = "pages/adreport.html?url=" + encodeURIComponent(tab.url)
+        var url = "pages/adreport.html?url=" + encodeURIComponent(tab.unicodeUrl)
                 + "&tabId=" + tab.id;
         BG.openTab(url, true);
         closeAndReloadPopup();
