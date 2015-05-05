@@ -1,3 +1,6 @@
+//the tab object, which contains |id| and |url| (stored as unicodeUrl) of the current tab
+var tab = null;
+
 $(function() {
     localizePage();
 
@@ -8,7 +11,7 @@ $(function() {
 
     BG.getCurrentTabInfo(function(info) {
         // Cache tab object for later use
-        var tab = info.tab;
+        tab = info.tab;
 
         var shown = {};
         function show(L) { L.forEach(function(x) { shown[x] = true;  }); }
