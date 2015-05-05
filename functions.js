@@ -139,7 +139,11 @@ parseUri.secondLevelDomainOnly = function(domain, keepDot) {
 
 // Return |domain| encoded in Unicode
 getUnicodeDomain = function(domain) {
-    return punycode.toUnicode(domain);
+    if (domain) {
+        return punycode.toUnicode(domain);
+    } else {
+        return domain;
+    }
 }
 
 // Return |url| encoded in Unicode
