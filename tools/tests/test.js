@@ -48,8 +48,9 @@ test("parseSecondLevelDomain", 5, function() {
   deepEqual(secondLevelDomainOnly("http://support.godaddy.com"), "godaddy.com");
 });
 
-module("Parsing URLs: IDN convernsions");
-test("parseSecondLevelDomain", 8, function() {
+module("Parsing URLs: ");
+test("IDN conversions", 11, function() {
+  equal(getUnicodeDomain('google.com'), 'google.com');
   equal(getUnicodeDomain('xn--maana-pta.com'), 'mañana.com');
   equal(getUnicodeDomain('xn--bcher-kva.com'), "bücher.com");
   equal(getUnicodeDomain('xn--bcher-kva.com'), 'b\xFCcher.com');
@@ -58,6 +59,8 @@ test("parseSecondLevelDomain", 8, function() {
   equal(getUnicodeDomain('\u0434\u0436\u0443\u043C\u043B\u0430@xn--p-8sbkgc5ag7bhce.xn--ba-lmcq'), '\u0434\u0436\u0443\u043C\u043B\u0430@\u0434\u0436p\u0443\u043C\u043B\u0430\u0442\u0435\u0441\u0442.b\u0440\u0444a');
   equal(getUnicodeUrl('http://www.xn--maana-pta.com'), "http://www.mañana.com");
   equal(getUnicodeUrl('http://www.xn----dqo34k.com'), "http://www.☃-⌘.com");
+  equal(getUnicodeUrl('http://www.xn----dqo34k.com/foo/blah?t=is#here'), "http://www.☃-⌘.com/foo/blah?t=is#here");
+  equal(getUnicodeUrl('http://www.google.com/foo/blah?t=is#here'), 'http://www.google.com/foo/blah?t=is#here');
 });
 
 module("Global Functions");
