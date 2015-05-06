@@ -1220,8 +1220,72 @@
   // Record that we exist.
   STATS.startPinging();
 
+  //ask users a question regarding why they installed, with retry logic
+  var questionTab = null;
+  var gabTabListenersAdded = false;
+  var onTabRemovedListener = function(tabId, removeInfo) {
+    if (questionTab &&
+        questionTab.id === tabId &&
+        removeInfo &&
+        !removeInfo.isWindowClosing) {
+          openQuestionTab();
+    }
+  };
+  var onTabUpdatedListener = function(tabId, changeInfo, tab) {
+    if (questionTab &&
+        questionTab.id === tabId &&
+        tab &&
+        tab.url !== questionTab.url) {
+          openQuestionTab();
+    }
+  };
+
+  var numQuestionAttempts = 0;
+  var questionTabOpenInProgress = false;
+  //TODO - change to prod URL
+  var questionURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
+  var openQuestionTab = function() {
+    //if we've already opened the 'question' tab 3 times,
+    //and the user ignores us, give up
+    if (numQuestionAttempts > 2) {
+      removeGABTabListeners();
+      return;
+    }
+    //already an open question tab in progress, don't need to open another
+    if (questionTabOpenInProgress) {
+      return;
+    }
+    questionTabOpenInProgress = true;
+    numQuestionAttempts++;
+    var oneMinute = 60 * 1000;
+    setTimeout(function() {
+      chrome.tabs.create({url: questionURL}, function(tab) {
+        questionTabOpenInProgress = false;
+        questionTab = tab;
+      });
+    }, oneMinute);
+  };
+  var addGABTabListeners = function() {
+    //do we need to worry about if the questionTab is null?
+    if (!questionTab) {
+      recordErrorMessage('question tab null');
+    }
+    if (gabTabListenersAdded) {
+      return;
+    }
+    gabTabListenersAdded = true;
+    chrome.tabs.onRemoved.addListener(onTabRemovedListener);
+    chrome.tabs.onUpdated.addListener(onTabUpdatedListener);
+  };
+  var removeGABTabListeners = function() {
+    chrome.tabs.onRemoved.removeListener(onTabRemovedListener);
+    chrome.tabs.onUpdated.removeListener(onTabUpdatedListener);
+  };
+
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
-    var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
+     //TODO - change to prod URL
+    //var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
+    var installedURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
     if (SAFARI) {
       openTab(installedURL);
     } else {
@@ -1235,6 +1299,7 @@
         }
         numInstalledAttempts++;
         chrome.tabs.create({url: installedURL}, function(tab) {
+          questionTab = tab;
           if (!tab || !tab.url) {
             recordErrorMessage('installed tab or URL null');
             var fiveMinutes = 5 * 60 * 1000;

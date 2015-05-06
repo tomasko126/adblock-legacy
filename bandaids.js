@@ -6,6 +6,11 @@ var run_bandaids = function() {
   if (/mail\.live\.com/.test(document.location.hostname))
     apply_bandaid_for = "hotmail";
   else if (/getadblock\.com$/.test(document.location.hostname) &&
+           /\/question\/$/.test(document.location.pathname) &&
+           window.top === window.self)
+    apply_bandaid_for = "getadblockquestion";
+  else if (/getadblock\.com$/.test(document.location.hostname) &&
+           !/\/question\/$/.test(document.location.pathname) &&
            window.top === window.self)
     apply_bandaid_for = "getadblock";
   else if (/mobilmania\.cz|zive\.cz|doupe\.cz|e15\.cz|sportrevue\.cz|autorevue\.cz/.test(document.location.hostname))
@@ -18,7 +23,6 @@ var run_bandaids = function() {
     if (hosts.length > 0)
       apply_bandaid_for = "noblock";
   }
-
   var bandaids = {
     noblock: function() {
       var styles = document.querySelectorAll("style");
@@ -41,6 +45,26 @@ var run_bandaids = function() {
         el.style.setProperty("display", "none", null);
         el.style.setProperty("position", "absolute", null);
         el.style.setProperty("right", "0px", null);
+      }
+    },
+    getadblockquestion: function() {
+      BGcall('addGABTabListeners');
+      var personelBtn = document.getElementById("personal-use");
+      var enterpriseBtn = document.getElementById("enterprise-use");
+      var buttonListener = function(event) {
+        BGcall('removeGABTabListeners');
+        if (enterpriseBtn) {
+          enterpriseBtn.removeEventListener("click", buttonListener);
+        }
+        if (personelBtn) {
+          personelBtn.removeEventListener("click", buttonListener);
+        }
+      };
+      if (personelBtn) {
+        personelBtn.addEventListener("click", buttonListener);
+      }
+      if (enterpriseBtn) {
+        enterpriseBtn.addEventListener("click", buttonListener);
       }
     },
     getadblock: function() {
