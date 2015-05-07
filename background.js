@@ -1264,6 +1264,20 @@
   var questionTabOpenInProgress = false;
   //TODO - change to prod URL
   var questionURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
+  //opens a new Tab, and returns a reference to the new tab.
+  var openSafariTab = function() {
+    var newTab;
+    var safariWindow = safari.application.activeBrowserWindow;
+    if (safariWindow) {
+        newTab = safariWindow.openTab("foreground"); // index may be undefined
+        if (!safariWindow.visible) {
+            safariWindow.activate();
+        }
+    } else {
+        newTab = safari.application.openBrowserWindow().tabs[0];
+    }
+    return newTab;
+  }
   var openQuestionTab = function() {
     //if we've already opened the 'question' tab 3 times,
     //and the user ignores us, give up
@@ -1281,15 +1295,7 @@
     setTimeout(function() {
       questionTabOpenInProgress = false;
       if (SAFARI) {
-          var safariWindow = safariWindow || safari.application.activeBrowserWindow;
-          if (safariWindow) {
-              questionTab = safariWindow.openTab("foreground"); // index may be undefined
-              if (!safariWindow.visible) {
-                  safariWindow.activate();
-              }
-          } else {
-              questionTab = safari.application.openBrowserWindow().tabs[0];
-          }
+          questionTab = openSafariTab();
           questionTab.url = questionURL + "&a=" + numQuestionAttempts;
           //since we opened a new tab, need to add the listeners to the new tab
           gabTabListenersAdded = false;
@@ -1336,15 +1342,7 @@
     //var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     var installedURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
     if (SAFARI) {
-          var safariWindow = safariWindow || safari.application.activeBrowserWindow;
-          if (safariWindow) {
-              questionTab = safariWindow.openTab("foreground"); // index may be undefined
-              if (!safariWindow.visible) {
-                  safariWindow.activate();
-              }
-          } else {
-              questionTab = safari.application.openBrowserWindow().tabs[0];
-          }
+          questionTab = openSafariTab();
           questionTab.url = installedURL;
     } else {
       var numInstalledAttempts = 0;
