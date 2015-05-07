@@ -1308,9 +1308,10 @@
     }, oneMinute);
   };
   var addGABTabListeners = function() {
-    //do we need to worry about if the questionTab is null?
+    //if the question tab is null, log a message and return
     if (!questionTab) {
       recordErrorMessage('question tab null');
+      return;
     }
     if (gabTabListenersAdded || storage_get('type-question')) {
       return;
