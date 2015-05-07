@@ -329,8 +329,17 @@
       var tabId = details.tabId;
       var reqType = normalizeRequestType({url: details.url, type: details.type});
 
-      if (frameData.get(tabId, details.frameId).whitelisted) {
+      var top_frame = frameData.get(tabId, 0);
+      var sub_frame = (details.frameId !== 0 ? frameData.get(tabId, details.frameId) : null);
+
+      // If top frame is whitelisted, don't process anything
+      if (top_frame.whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted tab", tabId, details.url.substring(0, 100));
+        return { cancel: false };
+      // If request comes from whitelisted sub_frame and
+      // top frame is not whitelisted, don't process the request
+      } else if (!top_frame.whitelisted && sub_frame && sub_frame.whitelisted) {
+        log("[DEBUG]", "Ignoring whitelisted frame", tabId, details.url.substring(0, 100));
         return { cancel: false };
       }
 
