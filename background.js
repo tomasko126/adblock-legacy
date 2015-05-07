@@ -326,7 +326,7 @@
       if (adblock_is_paused())
         return { cancel: false };
 
-      // Convert punycode domain to Unicode
+      // Convert punycode domain to Unicode - GH #472
       details.url = getUnicodeUrl(details.url);
 
       if (!frameData.track(details))
@@ -783,6 +783,7 @@
           return;
         }
 
+        // GH #472
         tab.unicodeUrl = getUnicodeUrl(tab.url);
 
         var disabled_site = page_is_unblockable(tab.unicodeUrl);
@@ -808,7 +809,7 @@
     } else {
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
-      tab.unicodeUrl = getUnicodeUrl(tab.url);
+      tab.unicodeUrl = getUnicodeUrl(tab.url); // GH #472
 
       var disabled_site = page_is_unblockable(tab.unicodeUrl);
 
@@ -908,7 +909,7 @@
           );
         });
 
-        var host                = getUnicodeDomain(parseUri(info.tab.url).host);
+        var host                = getUnicodeDomain(parseUri(info.tab.unicodeUrl).host);
         var custom_filter_count = count_cache.getCustomFilterCount(host);
         if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
@@ -926,7 +927,7 @@
           browsersBadgeOptions.iconPaths = {'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"};
           setBrowserActions(browsersBadgeOptions);
         } else if (info.disabled_site &&
-            !/^chrome-extension:.*pages\/install\//.test(info.tab.url)) {
+            !/^chrome-extension:.*pages\/install\//.test(info.tab.unicodeUrl)) {
           // Show non-disabled icon on the installation-success page so it
           // users see how it will normally look. All other disabled pages
           // will have the gray one
@@ -1016,8 +1017,7 @@
     var settings = get_settings();
     var runnable = !adblock_is_paused() && !page_is_unblockable(sender.tab.url);
     var running = runnable && !page_is_whitelisted(sender.tab.url);
-    var hiding = running && !page_is_whitelisted(sender.tab.url,
-                                                        ElementTypes.elemhide);
+    var hiding = running && !page_is_whitelisted(sender.tab.url, ElementTypes.elemhide);
     var result = {
       settings: settings,
       runnable: runnable,
@@ -1358,6 +1358,7 @@
       for (var i=0; i<tabs.length; i++) {
         var currentTab = tabs[i], tabId = currentTab.id;
         if (!frameData.get(tabId)) { // unknown tab
+            currentTab.url = getUnicodeUrl(currentTab.url);
             frameData.track({url: currentTab.url, tabId: tabId, type: "main_frame"});
         }
         updateBadge(tabId);
