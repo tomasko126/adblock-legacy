@@ -1225,6 +1225,8 @@
   var questionTab = null;
   var gabTabListenersAdded = false;
   var onTabRemovedListener = function(tabId, removeInfo) {
+    //check if the tab remove is the question tab,
+    //if so, re-open it
     if (questionTab &&
         questionTab.id === tabId &&
         removeInfo &&
@@ -1233,6 +1235,8 @@
     }
   };
   var onTabUpdatedListener = function(tabId, changeInfo, tab) {
+    //check if the tab updated is the question tab,
+    //if so, re-open it    
     if (questionTab &&
         questionTab.id === tabId &&
         tab &&
@@ -1241,15 +1245,18 @@
     }
   };
   var onTabCloseListener = function(event) {
+    //called when the question tab is closed,
+    //if so, re-open the question tab    
     if (event &&
         event.type === "close") {
       openQuestionTab();
       //remove the listeners, so we don't listen to an old tab
       removeGABTabListeners();
     }
-
   };
   var onTabNavigateListener = function(event) {
+    //called when the user navigates to a different URL in the question tab
+    //re-open the question tab
     if (event &&
         event.type === "navigate" &&
         event.target &&
@@ -1259,7 +1266,6 @@
       removeGABTabListeners();
     }
   };
-
   var numQuestionAttempts = 0;
   var questionTabOpenInProgress = false;
   //TODO - change to prod URL
