@@ -1271,7 +1271,10 @@
   //TODO - change to prod URL
   var questionURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
   //opens a new Tab, and returns a reference to the new tab.
-  var openSafariTab = function() {
+  var openNewSafariTab = function() {
+    if (!SAFARI) {    
+      return null;  
+    }
     var newTab;
     var safariWindow = safari.application.activeBrowserWindow;
     if (safariWindow) {
@@ -1283,7 +1286,7 @@
         newTab = safari.application.openBrowserWindow().tabs[0];
     }
     return newTab;
-  }
+  };
   var openQuestionTab = function() {
     //if we've already opened the 'question' tab 3 times,
     //and the user ignores us, give up
@@ -1301,7 +1304,7 @@
     setTimeout(function() {
       questionTabOpenInProgress = false;
       if (SAFARI) {
-          questionTab = openSafariTab();
+          questionTab = openNewSafariTab();
           questionTab.url = questionURL + "&a=" + numQuestionAttempts;
           //since we opened a new tab, need to add the listeners to the new tab
           gabTabListenersAdded = false;
@@ -1349,7 +1352,7 @@
     //var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     var installedURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
     if (SAFARI) {
-          questionTab = openSafariTab();
+          questionTab = openNewSafariTab();
           questionTab.url = installedURL;
     } else {
       var numInstalledAttempts = 0;
