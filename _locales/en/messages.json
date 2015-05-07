@@ -1138,7 +1138,11 @@
   "experimentalhiding":{
     "message":"Experimental Memory Saver",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },  
+  }, 
+  "experimentalhidingincognitocheckboxmessage":{
+    "message":"Allow in Incognito Mode? (Incognito sites may be saved by this extension)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },   
   "safari50_updatenotice":{
     "message":"You are using an old version of Safari. Get the latest version in order to use the AdBlock toolbar button to pause AdBlock, whitelist websites, and report ads. <a>Upgrade now<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"

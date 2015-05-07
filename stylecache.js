@@ -27,8 +27,12 @@
         return undefined;
       }
     },
-    update_style_cache: function(matchedSelectors, hostname) {
+    update_style_cache: function(matchedSelectors, hostname, incognitoMode) {
       if (!get_settings().experimental_hiding) {
+        return;
+      }
+      console.log(incognitoMode, get_settings().experimental_hiding_incognito_mode);
+      if (incognitoMode && !get_settings().experimental_hiding_incognito_mode) {
         return;
       }
       if (matchedSelectors &&

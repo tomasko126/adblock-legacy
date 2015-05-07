@@ -4,10 +4,22 @@ $(function() {
   for (var name in optionalSettings) {
     $("#enable_" + name).
       prop("checked", optionalSettings[name]);
+      //if the user is subscribed to malware, add the checkbox for notifications
+      if (name === "experimental_hiding" && optionalSettings[name]) {
+        addExperimentalHidingIncognitoDiv(optionalSettings[name]);
+      }      
   }
   $("input.feature[type='checkbox']").change(function() {
     var is_enabled = $(this).is(':checked');
     var name = this.id.substring(7); // TODO: hack
+    //if the checkbox that was clicked is the malware checkbox, then
+    //add a checkbox to for the user to indicate if they wish to be notified of blocked malware
+    if (name === "experimental_hiding" && is_enabled) {
+        addExperimentalHidingIncognitoDiv();
+    } else if (name === "experimental_hiding" && !is_enabled) {
+        $("#experimental-hiding-incognito-div").remove();
+        BGcall("set_setting", "experimental_hiding_incognito", is_enabled, true);
+    }    
     BGcall("set_setting", name, is_enabled, true);
   });
 
@@ -136,4 +148,31 @@ if (!SAFARI &&
             }
         }
     );
+}
+
+//add a checkbox to for the user to indicate if they wish to be notified of blocked malware
+function addExperimentalHidingIncognitoDiv(checked) {
+    if (document.getElementById("experimental-hiding-incognito-div"))
+        return;//already exists, don't add it again.
+    if (!SAFARI) {
+        var newDiv = $("<div>").
+          attr("id", "experimental-hiding-incognito-div");
+        var newInput = $('<input />').
+          attr("type", "checkbox").
+          attr("class", "feature").
+          attr("id", "enable_experimental_hiding_incognito").
+          css("margin-left", "25px").
+          prop("checked", checked ? true : null);
+        var newLabel = $("<label>").
+          text(translate("experimentalhidingincognitocheckboxmessage")).
+          attr("for", "enable_experimental_hiding_incognito");
+        newDiv.append(newInput).append(newLabel);
+    
+        $("#enable_experimental_hiding_div").after(newDiv);
+        $("#enable_experimental_hiding_incognito").click(function() {
+            var is_enabled = $(this).is(':checked');
+            BGcall("set_setting", "experimental_hiding_incognito", is_enabled, true);
+        });        
+        
+    }
 }

@@ -445,8 +445,8 @@
     }
   }
 
-  var update_style_cache = function(matchedSelectors, hostname) {
-    StyleCache.update_style_cache(matchedSelectors, hostname);
+  var update_style_cache = function(matchedSelectors, hostname, incognitoMode) {
+    StyleCache.update_style_cache(matchedSelectors, hostname, incognitoMode);
   };
   // UNWHITELISTING
 
