@@ -1220,7 +1220,7 @@
   // Record that we exist.
   STATS.startPinging();
 
-  ///on the 'gab.com/question' page, 
+  ///on the 'gab.com/question' page,
   //ask users a question regarding why they installed, with retry logic
   var questionTab = null;
   var gabTabListenersAdded = false;
@@ -1241,14 +1241,13 @@
     }
   };
   var onTabCloseListener = function(event) {
-    console.log("onTabClose", event);
     if (event &&
         event.type === "close") {
       openQuestionTab();
       //remove the listeners, so we don't listen to an old tab
       removeGABTabListeners();
     }
-    
+
   };
   var onTabNavigateListener = function(event) {
     if (event &&
@@ -1258,26 +1257,22 @@
       openQuestionTab();
       //remove the listeners, so we don't listen to wrong tab
       removeGABTabListeners();
-    }    
-     console.log("onTabNavigateListener", event);
-  };  
+    }
+  };
 
   var numQuestionAttempts = 0;
   var questionTabOpenInProgress = false;
   //TODO - change to prod URL
   var questionURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
   var openQuestionTab = function() {
-    console.log('openQuestionTab',numQuestionAttempts , questionTabOpenInProgress);
     //if we've already opened the 'question' tab 3 times,
     //and the user ignores us, give up
     if (numQuestionAttempts > 2) {
-      console.log('openQuestionTab exceed attemp count');
       removeGABTabListeners(true);
       return;
     }
     //already an open question tab in progress, don't need to open another
     if (questionTabOpenInProgress) {
-       console.log('openQuestionTab open in progress');
       return;
     }
     questionTabOpenInProgress = true;
@@ -1286,7 +1281,6 @@
     setTimeout(function() {
       questionTabOpenInProgress = false;
       if (SAFARI) {
-        console.log('openQuestionTab tab opening');
           var safariWindow = safariWindow || safari.application.activeBrowserWindow;
           if (safariWindow) {
               questionTab = safariWindow.openTab("foreground"); // index may be undefined
@@ -1300,9 +1294,9 @@
           //since we opened a new tab, need to add the listeners to the new tab
           gabTabListenersAdded = false;
           addGABTabListeners();
-      } else {      
+      } else {
         chrome.tabs.create({url: questionURL + "&a=" + numQuestionAttempts}, function(tab) {
-        questionTab = tab;
+          questionTab = tab;
         });
       }
     }, oneMinute);
@@ -1332,7 +1326,6 @@
       chrome.tabs.onRemoved.removeListener(onTabRemovedListener);
       chrome.tabs.onUpdated.removeListener(onTabUpdatedListener);
     } else if (questionTab.removeEventListener) {
-      console.log("removeGABTabListeners 2");
       questionTab.removeEventListener("close", onTabCloseListener, true);
       questionTab.removeEventListener("navigate", onTabNavigateListener, true);
     }
