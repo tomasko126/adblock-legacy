@@ -1239,30 +1239,71 @@
           openQuestionTab();
     }
   };
+  var onTabCloseListener = function(event) {
+    console.log("onTabClose", event);
+    if (event &&
+        event.type === "close") {
+      openQuestionTab();
+      //remove the listeners, so we don't listen to an old tab
+      removeGABTabListeners();
+    }
+    
+  };
+  var onTabNavigateListener = function(event) {
+    if (event &&
+        event.type === "navigate" &&
+        event.target &&
+        event.target.url !== questionURL) {
+      openQuestionTab();
+      //remove the listeners, so we don't listen to wrong tab
+      removeGABTabListeners();
+    }    
+     console.log("onTabNavigateListener", event);
+  };  
 
   var numQuestionAttempts = 0;
   var questionTabOpenInProgress = false;
   //TODO - change to prod URL
   var questionURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
   var openQuestionTab = function() {
+    console.log('openQuestionTab',numQuestionAttempts , questionTabOpenInProgress);
     //if we've already opened the 'question' tab 3 times,
     //and the user ignores us, give up
     if (numQuestionAttempts > 2) {
+      console.log('openQuestionTab exceed attemp count');
       removeGABTabListeners();
       return;
     }
     //already an open question tab in progress, don't need to open another
     if (questionTabOpenInProgress) {
+       console.log('openQuestionTab open in progress');
       return;
     }
     questionTabOpenInProgress = true;
     numQuestionAttempts++;
     var oneMinute = 60 * 1000;
     setTimeout(function() {
-      chrome.tabs.create({url: questionURL}, function(tab) {
-        questionTabOpenInProgress = false;
+      questionTabOpenInProgress = false;
+      if (SAFARI) {
+        console.log('openQuestionTab tab opening');
+          var safariWindow = safariWindow || safari.application.activeBrowserWindow;
+          if (safariWindow) {
+              questionTab = safariWindow.openTab("foreground"); // index may be undefined
+              if (!safariWindow.visible) {
+                  safariWindow.activate();
+              }
+          } else {
+              questionTab = safari.application.openBrowserWindow().tabs[0];
+          }
+          questionTab.url = questionURL;
+          //since we opened a new tab, need to add the listeners to the new tab
+          gabTabListenersAdded = false;
+          addGABTabListeners();
+      } else {      
+        chrome.tabs.create({url: questionURL}, function(tab) {
         questionTab = tab;
-      });
+        });
+      }
     }, oneMinute);
   };
   var addGABTabListeners = function() {
@@ -1274,12 +1315,23 @@
       return;
     }
     gabTabListenersAdded = true;
-    chrome.tabs.onRemoved.addListener(onTabRemovedListener);
-    chrome.tabs.onUpdated.addListener(onTabUpdatedListener);
+    if (chrome.tabs && chrome.tabs.onRemoved && chrome.tabs.onUpdated) {
+      chrome.tabs.onRemoved.addListener(onTabRemovedListener);
+      chrome.tabs.onUpdated.addListener(onTabUpdatedListener);
+    } else if (questionTab.addEventListener) {
+      questionTab.addEventListener("close", onTabCloseListener, true);
+      questionTab.addEventListener("navigate", onTabNavigateListener, true);
+    }
   };
   var removeGABTabListeners = function() {
-    chrome.tabs.onRemoved.removeListener(onTabRemovedListener);
-    chrome.tabs.onUpdated.removeListener(onTabUpdatedListener);
+    if (chrome.tabs && chrome.tabs.onRemoved && chrome.tabs.onUpdated) {
+      chrome.tabs.onRemoved.removeListener(onTabRemovedListener);
+      chrome.tabs.onUpdated.removeListener(onTabUpdatedListener);
+    } else if (questionTab.removeEventListener) {
+      console.log("removeGABTabListeners 2");
+      questionTab.removeEventListener("close", onTabCloseListener, true);
+      questionTab.removeEventListener("navigate", onTabNavigateListener, true);
+    }
   };
 
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
@@ -1287,7 +1339,16 @@
     //var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     var installedURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
     if (SAFARI) {
-      openTab(installedURL);
+          var safariWindow = safariWindow || safari.application.activeBrowserWindow;
+          if (safariWindow) {
+              questionTab = safariWindow.openTab("foreground"); // index may be undefined
+              if (!safariWindow.visible) {
+                  safariWindow.activate();
+              }
+          } else {
+              questionTab = safari.application.openBrowserWindow().tabs[0];
+          }
+          questionTab.url = installedURL;
     } else {
       var numInstalledAttempts = 0;
       //if Chrome, open the /installed tab,
