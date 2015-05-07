@@ -1224,6 +1224,8 @@
   //ask users a question regarding why they installed, with retry logic
   var questionTab = null;
   var gabTabListenersAdded = false;
+
+  //Question tab listeners - Chrome & Safari
   var onTabRemovedListener = function(tabId, removeInfo) {
     //check if the tab remove is the question tab,
     //if so, re-open it
