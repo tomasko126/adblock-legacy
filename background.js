@@ -1296,12 +1296,12 @@
           } else {
               questionTab = safari.application.openBrowserWindow().tabs[0];
           }
-          questionTab.url = questionURL;
+          questionTab.url = questionURL + "&a=" + numQuestionAttempts;
           //since we opened a new tab, need to add the listeners to the new tab
           gabTabListenersAdded = false;
           addGABTabListeners();
       } else {      
-        chrome.tabs.create({url: questionURL}, function(tab) {
+        chrome.tabs.create({url: questionURL + "&a=" + numQuestionAttempts}, function(tab) {
         questionTab = tab;
         });
       }
