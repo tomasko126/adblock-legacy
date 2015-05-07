@@ -52,7 +52,7 @@ var run_bandaids = function() {
       var personelBtn = document.getElementById("personal-use");
       var enterpriseBtn = document.getElementById("enterprise-use");
       var buttonListener = function(event) {
-        BGcall('removeGABTabListeners');
+        BGcall('removeGABTabListeners', true);
         if (enterpriseBtn) {
           enterpriseBtn.removeEventListener("click", buttonListener);
         }

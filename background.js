@@ -1220,6 +1220,7 @@
   // Record that we exist.
   STATS.startPinging();
 
+  ///on the 'gab.com/question' page, 
   //ask users a question regarding why they installed, with retry logic
   var questionTab = null;
   var gabTabListenersAdded = false;
@@ -1271,7 +1272,7 @@
     //and the user ignores us, give up
     if (numQuestionAttempts > 2) {
       console.log('openQuestionTab exceed attemp count');
-      removeGABTabListeners();
+      removeGABTabListeners(true);
       return;
     }
     //already an open question tab in progress, don't need to open another
@@ -1311,7 +1312,7 @@
     if (!questionTab) {
       recordErrorMessage('question tab null');
     }
-    if (gabTabListenersAdded) {
+    if (gabTabListenersAdded || storage_get('type-question')) {
       return;
     }
     gabTabListenersAdded = true;
@@ -1323,7 +1324,10 @@
       questionTab.addEventListener("navigate", onTabNavigateListener, true);
     }
   };
-  var removeGABTabListeners = function() {
+  var removeGABTabListeners = function(saveState) {
+    if (saveState) {
+      storage_set('type-question',saveState);
+    }
     if (chrome.tabs && chrome.tabs.onRemoved && chrome.tabs.onUpdated) {
       chrome.tabs.onRemoved.removeListener(onTabRemovedListener);
       chrome.tabs.onUpdated.removeListener(onTabUpdatedListener);
