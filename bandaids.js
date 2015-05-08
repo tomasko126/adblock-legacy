@@ -48,7 +48,7 @@ var run_bandaids = function() {
       }
     },
     getadblockquestion: function() {
-      BGcall('addGABTabListeners');
+      BGcall('initGABTabListeners');
       var personelBtn = document.getElementById("personal-use");
       var enterpriseBtn = document.getElementById("enterprise-use");
       var buttonListener = function(event) {
