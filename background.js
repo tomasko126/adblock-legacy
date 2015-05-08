@@ -1220,9 +1220,14 @@
   // Record that we exist.
   STATS.startPinging();
 
+  //passthrough functions
   var initGABTabListeners = function(sender) {
     gabQuestion.init(sender);
   };
+  
+  var removeGABTabListeners = function() {
+    gabQuestion.removeGABTabListeners();
+  }
 
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
      //TODO - change to prod URL

@@ -133,6 +133,7 @@ gabQuestion = (function() {
   return {
     // True if AdBlock was just installed.
     init: addGABTabListeners,
+    removeGABTabListeners: removeGABTabListeners,
   };
       
 })();  
