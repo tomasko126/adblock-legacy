@@ -1225,8 +1225,8 @@
     gabQuestion.addGABTabListeners(sender);
   };
   
-  var removeGABTabListeners = function() {
-    gabQuestion.removeGABTabListeners();
+  var removeGABTabListeners = function(saveState) {
+    gabQuestion.removeGABTabListeners(saveState);
   }
 
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
@@ -1234,8 +1234,7 @@
     //var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     var installedURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
     if (SAFARI) {
-          questionTab = openNewSafariTab();
-          questionTab.url = installedURL;
+      openTab(installedURL);
     } else {
       var numInstalledAttempts = 0;
       //if Chrome, open the /installed tab,

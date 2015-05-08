@@ -1,5 +1,5 @@
 ﻿// Utlized on certain getadblock.com pages
-// adds retry (reopen) logic when we don't 
+// adds retry (reopen) logic when we don't
 // get a repsonse from the user
 // currently, on the 'gab.com/question' page
 gabQuestion = (function() {
@@ -18,7 +18,7 @@ gabQuestion = (function() {
   };
   var onTabUpdatedListener = function(tabId, changeInfo, tab) {
     //check if the tab updated is the question tab,
-    //if so, re-open it    
+    //if so, re-open it
     if (questionTab &&
         questionTab.id === tabId &&
         tab &&
@@ -29,10 +29,10 @@ gabQuestion = (function() {
   //Question tab listeners - Safari
   var onTabCloseListener = function(event) {
     //called when the question tab is closed,
-    //if so, re-open the question tab    
+    //if so, re-open the question tab
     if (event &&
         event.type === "close") {
-      openQuestionTab();      
+      openQuestionTab();
     }
   };
   var onTabNavigateListener = function(event) {
@@ -41,7 +41,8 @@ gabQuestion = (function() {
     if (event &&
         event.type === "navigate" &&
         event.target &&
-        event.target.url !== questionURL) {
+        event.target.url &&
+        event.target.url.lastIndexOf(questionURL, 0) !== 0) {
       openQuestionTab();
     }
   };
@@ -50,7 +51,7 @@ gabQuestion = (function() {
   //TODO - change to prod URL
   var questionURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
   //opens a new Tab, and returns a reference to the new tab.
-  //similiar to openTab() in background.js, 
+  //similiar to openTab() in background.js,
   //but different in that a reference to the new tab is returned.
   var openNewSafariTab = function(tabURL) {
     var safariWindow = safari.application.activeBrowserWindow;
@@ -70,7 +71,7 @@ gabQuestion = (function() {
     if (questionTabOpenInProgress) {
       return;
     }
-    questionTabOpenInProgress = true;    
+    questionTabOpenInProgress = true;
     //if we've already opened the 'question' tab 3 times,
     //and the user ignores us, give up
     if (numQuestionAttempts > 2) {
@@ -101,13 +102,24 @@ gabQuestion = (function() {
     if (storage_get('type-question')) {
       return;
     }
-    questionTab = sender.tab;
+    questionTab = undefined;
     if (chrome.tabs && chrome.tabs.onRemoved && chrome.tabs.onUpdated) {
+      questionTab = sender.tab;
       chrome.tabs.onRemoved.addListener(onTabRemovedListener);
       chrome.tabs.onUpdated.addListener(onTabUpdatedListener);
-    } else if (questionTab.addEventListener) {
-      questionTab.addEventListener("close", onTabCloseListener, true);
-      questionTab.addEventListener("navigate", onTabNavigateListener, true);
+    } else if (safari.application) {
+      //find the 'question' tab
+      var browserWindow = safari.application.activeBrowserWindow;
+      if (browserWindow && browserWindow.tabs) {
+        for (var i = 0; (i < browserWindow.tabs.length && questionTab === undefined); i++) {
+          if (browserWindow.tabs[i].url === sender.tab.url &&
+              browserWindow.tabs[i].id === sender.tab.id) {
+            questionTab = browserWindow.tabs[i];
+            questionTab.addEventListener("close", onTabCloseListener, true);
+            questionTab.addEventListener("navigate", onTabNavigateListener, true);
+          }
+        }
+      }
     }
   };
   var removeGABTabListeners = function(saveState) {
@@ -122,10 +134,10 @@ gabQuestion = (function() {
       questionTab.removeEventListener("navigate", onTabNavigateListener, true);
     }
   };
-  
+
   return {
     addGABTabListeners: addGABTabListeners,
     removeGABTabListeners: removeGABTabListeners,
   };
-      
-})();  
+
+})();
