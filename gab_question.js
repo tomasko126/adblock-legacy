@@ -91,9 +91,6 @@ gabQuestion = (function() {
       questionTabOpenInProgress = false;
       if (SAFARI) {
           questionTab = openNewSafariTab(questionURL + "&a=" + numQuestionAttempts);
-          //since we opened a new tab, need to add the listeners to the new tab
-          gabTabListenersAdded = false;
-          addGABTabListeners();
       } else {
         chrome.tabs.create({url: questionURL + "&a=" + numQuestionAttempts}, function(tab) {
           questionTab = tab;
@@ -101,15 +98,16 @@ gabQuestion = (function() {
       }
     }, oneMinute);
   };
-  var addGABTabListeners = function() {
+  var addGABTabListeners = function(sender) {
     //if the question tab is null, log a message and return
-    if (!questionTab) {
+    if (!sender || !sender.tab) {
       recordErrorMessage('question tab null');
       return;
     }
     if (gabTabListenersAdded || storage_get('type-question')) {
       return;
     }
+    questionTab = sender.tab;
     gabTabListenersAdded = true;
     if (chrome.tabs && chrome.tabs.onRemoved && chrome.tabs.onUpdated) {
       chrome.tabs.onRemoved.addListener(onTabRemovedListener);
