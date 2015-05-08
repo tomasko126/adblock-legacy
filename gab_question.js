@@ -5,7 +5,7 @@
 gabQuestion = (function() {
   var questionTab = null;
   var oneMinute = 60 * 1000;
-  //Question tab listeners - Safari
+  //Question tab listeners - Chrome
   var onTabRemovedListener = function(tabId, removeInfo) {
     //check if the tab remove is the question tab,
     //if so, re-open it
@@ -26,7 +26,7 @@ gabQuestion = (function() {
           openQuestionTab();
     }
   };
-  //Question tab listeners - Chrome
+  //Question tab listeners - Safari
   var onTabCloseListener = function(event) {
     //called when the question tab is closed,
     //if so, re-open the question tab    
