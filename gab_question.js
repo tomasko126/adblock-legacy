@@ -54,7 +54,9 @@ gabQuestion = (function() {
   //TODO - change to prod URL
   var questionURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
   //opens a new Tab, and returns a reference to the new tab.
-  var openNewSafariTab = function() {
+  //similiar to openTab() in background.js, 
+  //but different in that a reference to the new tab is returned.
+  var openNewSafariTab = function(tabURL) {
     if (!SAFARI) {    
       return null;  
     }
@@ -68,6 +70,7 @@ gabQuestion = (function() {
     } else {
         newTab = safari.application.openBrowserWindow().tabs[0];
     }
+    newTab.url = tabURL;
     return newTab;
   };
   var openQuestionTab = function() {
@@ -87,8 +90,7 @@ gabQuestion = (function() {
     setTimeout(function() {
       questionTabOpenInProgress = false;
       if (SAFARI) {
-          questionTab = openNewSafariTab();
-          questionTab.url = questionURL + "&a=" + numQuestionAttempts;
+          questionTab = openNewSafariTab(questionURL + "&a=" + numQuestionAttempts);
           //since we opened a new tab, need to add the listeners to the new tab
           gabTabListenersAdded = false;
           addGABTabListeners();
