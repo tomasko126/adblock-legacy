@@ -4,9 +4,8 @@
 // currently, on the 'gab.com/question' page
 gabQuestion = (function() {
   var questionTab = null;
-  var gabTabListenersAdded = false;
-
-  //Question tab listeners - Chrome & Safari
+  var oneMinute = 60 * 1000;
+  //Question tab listeners - Safari
   var onTabRemovedListener = function(tabId, removeInfo) {
     //check if the tab remove is the question tab,
     //if so, re-open it
@@ -27,14 +26,13 @@ gabQuestion = (function() {
           openQuestionTab();
     }
   };
+  //Question tab listeners - Chrome
   var onTabCloseListener = function(event) {
     //called when the question tab is closed,
     //if so, re-open the question tab    
     if (event &&
         event.type === "close") {
-      openQuestionTab();
-      //remove the listeners, so we don't listen to an old tab
-      removeGABTabListeners();
+      openQuestionTab();      
     }
   };
   var onTabNavigateListener = function(event) {
@@ -45,8 +43,6 @@ gabQuestion = (function() {
         event.target &&
         event.target.url !== questionURL) {
       openQuestionTab();
-      //remove the listeners, so we don't listen to wrong tab
-      removeGABTabListeners();
     }
   };
   var numQuestionAttempts = 0;
@@ -59,7 +55,7 @@ gabQuestion = (function() {
   var openNewSafariTab = function(tabURL) {
     var safariWindow = safari.application.activeBrowserWindow;
     if (safariWindow) {
-        var newTab = safariWindow.openTab("foreground"); // index may be undefined
+        var newTab = safariWindow.openTab("foreground");
         if (!safariWindow.visible) {
             safariWindow.activate();
         }
@@ -70,19 +66,21 @@ gabQuestion = (function() {
     return newTab;
   };
   var openQuestionTab = function() {
+    //already an open question tab in progress, don't need to open another
+    if (questionTabOpenInProgress) {
+      return;
+    }
+    questionTabOpenInProgress = true;    
     //if we've already opened the 'question' tab 3 times,
     //and the user ignores us, give up
     if (numQuestionAttempts > 2) {
       removeGABTabListeners(true);
       return;
+    } else {
+      //remove the listeners, so we don't listen to wrong tab
+      removeGABTabListeners();
     }
-    //already an open question tab in progress, don't need to open another
-    if (questionTabOpenInProgress) {
-      return;
-    }
-    questionTabOpenInProgress = true;
     numQuestionAttempts++;
-    var oneMinute = 60 * 1000;
     setTimeout(function() {
       questionTabOpenInProgress = false;
       if (SAFARI) {
@@ -100,11 +98,10 @@ gabQuestion = (function() {
       recordErrorMessage('question tab null');
       return;
     }
-    if (gabTabListenersAdded || storage_get('type-question')) {
+    if (storage_get('type-question')) {
       return;
     }
     questionTab = sender.tab;
-    gabTabListenersAdded = true;
     if (chrome.tabs && chrome.tabs.onRemoved && chrome.tabs.onUpdated) {
       chrome.tabs.onRemoved.addListener(onTabRemovedListener);
       chrome.tabs.onUpdated.addListener(onTabUpdatedListener);
