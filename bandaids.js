@@ -49,19 +49,19 @@ var run_bandaids = function() {
     },
     getadblockquestion: function() {
       BGcall('initGABTabListeners');
-      var personelBtn = document.getElementById("personal-use");
+      var personalBtn = document.getElementById("personal-use");
       var enterpriseBtn = document.getElementById("enterprise-use");
       var buttonListener = function(event) {
         BGcall('removeGABTabListeners', true);
         if (enterpriseBtn) {
           enterpriseBtn.removeEventListener("click", buttonListener);
         }
-        if (personelBtn) {
-          personelBtn.removeEventListener("click", buttonListener);
+        if (personalBtn) {
+          personalBtn.removeEventListener("click", buttonListener);
         }
       };
-      if (personelBtn) {
-        personelBtn.addEventListener("click", buttonListener);
+      if (personalBtn) {
+        personalBtn.addEventListener("click", buttonListener);
       }
       if (enterpriseBtn) {
         enterpriseBtn.addEventListener("click", buttonListener);
