@@ -7,7 +7,7 @@ var run_bandaids = function() {
     apply_bandaid_for = "hotmail";
   else if (/getadblock\.com$/.test(document.location.hostname) &&
            window.top === window.self) {
-    if (/\/question\/$/.test(document.location.pathname) {
+    if (/\/question\/$/.test(document.location.pathname)) {
       apply_bandaid_for = "getadblockquestion";   
     } else {
       apply_bandaid_for = "getadblock";
