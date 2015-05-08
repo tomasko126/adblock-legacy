@@ -57,18 +57,14 @@ gabQuestion = (function() {
   //similiar to openTab() in background.js, 
   //but different in that a reference to the new tab is returned.
   var openNewSafariTab = function(tabURL) {
-    if (!SAFARI) {    
-      return null;  
-    }
-    var newTab;
     var safariWindow = safari.application.activeBrowserWindow;
     if (safariWindow) {
-        newTab = safariWindow.openTab("foreground"); // index may be undefined
+        var newTab = safariWindow.openTab("foreground"); // index may be undefined
         if (!safariWindow.visible) {
             safariWindow.activate();
         }
     } else {
-        newTab = safari.application.openBrowserWindow().tabs[0];
+        var newTab = safari.application.openBrowserWindow().tabs[0];
     }
     newTab.url = tabURL;
     return newTab;
@@ -131,8 +127,7 @@ gabQuestion = (function() {
   };
   
   return {
-    // True if AdBlock was just installed.
-    init: addGABTabListeners,
+    addGABTabListeners: addGABTabListeners,
     removeGABTabListeners: removeGABTabListeners,
   };
       

@@ -1221,8 +1221,8 @@
   STATS.startPinging();
 
   //passthrough functions
-  var initGABTabListeners = function(sender) {
-    gabQuestion.init(sender);
+  var addGABTabListeners = function(sender) {
+    gabQuestion.addGABTabListeners(sender);
   };
   
   var removeGABTabListeners = function() {
