@@ -93,8 +93,8 @@ gabQuestion = (function() {
     }, oneMinute);
   };
   var addGABTabListeners = function(sender) {
-    //if the question tab is null, log a message and return
-    if (!sender || !sender.tab || !sender.url) {
+    //if the sender or any required property is null, log a message and return
+    if (!sender || !sender.tab || !(sender.url || sender.tab.url)) {
       recordErrorMessage('question tab null');
       return;
     }
@@ -102,7 +102,7 @@ gabQuestion = (function() {
       return;
     }
     if (!questionURL) {
-      var tempURLObj = parseUri(sender.url);
+      var tempURLObj = parseUri(sender.url || sender.tab.url);
       questionURL = tempURLObj.origin + tempURLObj.pathname + "?u=" + STATS.userId;
     }
     questionTab = undefined;
