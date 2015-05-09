@@ -4,6 +4,9 @@
 // currently, on the 'gab.com/question' page
 gabQuestion = (function() {
   var questionTab = null;
+  var numQuestionAttempts = 0;
+  var questionTabOpenInProgress = false;
+  var questionURL = undefined;
   var oneMinute = 60 * 1000;
   //Question tab listeners - Chrome
   var onTabRemovedListener = function(tabId, removeInfo) {
@@ -46,10 +49,6 @@ gabQuestion = (function() {
       openQuestionTab();
     }
   };
-  var numQuestionAttempts = 0;
-  var questionTabOpenInProgress = false;
-  //TODO - change to prod URL
-  var questionURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
   //opens a new Tab, and returns a reference to the new tab.
   //similiar to openTab() in background.js,
   //but different in that a reference to the new tab is returned.
@@ -95,12 +94,16 @@ gabQuestion = (function() {
   };
   var addGABTabListeners = function(sender) {
     //if the question tab is null, log a message and return
-    if (!sender || !sender.tab) {
+    if (!sender || !sender.tab || !sender.url) {
       recordErrorMessage('question tab null');
       return;
     }
     if (storage_get('type-question')) {
       return;
+    }
+    if (!questionURL) {
+      var tempURLObj = parseUri(sender.url);
+      questionURL = tempURLObj.origin + tempURLObj.pathname + "?u=" + STATS.userId;
     }
     questionTab = undefined;
     if (chrome.tabs && chrome.tabs.onRemoved && chrome.tabs.onUpdated) {
