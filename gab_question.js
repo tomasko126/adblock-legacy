@@ -92,6 +92,8 @@ gabQuestion = (function() {
       }
     }, oneMinute);
   };
+  //called from a content script when the retry/re-open logic is needed
+  // Inputs: sender: object containing information about the source (tab) of the message
   var addGABTabListeners = function(sender) {
     //if the sender or any required property is null, log a message and return
     if (!sender || !sender.tab || !(sender.url || sender.tab.url)) {
@@ -125,6 +127,10 @@ gabQuestion = (function() {
       }
     }
   };
+  //removes the listeners when a user navigates away, closes the tab, 
+  //the user clicks a button on the page in question, or the number of retries were exceeded
+  // Inputs: saveState:boolean if true (should only be true or undefined), save (persist)
+  //         to storage the user answerred, or the number of retries were exceeded
   var removeGABTabListeners = function(saveState) {
     if (saveState) {
       storage_set('type-question',saveState);
