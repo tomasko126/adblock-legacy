@@ -1232,7 +1232,7 @@
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
      //TODO - change to prod URL
     //var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
-    var installedURL = "http://dev.getadblock.com/question/?u=" + STATS.userId;
+    var installedURL = "http://dev.getadblock.com/installed/?u=" + STATS.userId;
     if (SAFARI) {
       openTab(installedURL);
     } else {
