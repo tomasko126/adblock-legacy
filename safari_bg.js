@@ -175,9 +175,8 @@ if (!LEGACY_SAFARI) {
     }, true);
 
 
-    // Close event fires when tab/window is about to close,
-    // not when tab has been closed. Therefore we need to wait
-    // and then remove frameData[tabId] after close event.
+    // Remove the popover when the window closes and
+    // cached data stored in frameData
     safari.application.addEventListener("close", function(event) {
         // Remove cached data for tab
         frameData.close(event.target.id);
