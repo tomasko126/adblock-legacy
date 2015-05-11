@@ -1243,7 +1243,8 @@
             }, fiveMinutes);
           }
         });
-      }();
+      };
+      openInstalledTab();
     }
   }
   if (chrome.runtime.setUninstallURL) {
