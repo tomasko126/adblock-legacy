@@ -1365,18 +1365,15 @@
                 openerTabId = id;
             }
         }
-        if (!openerTabId)
-            return;
-        if (frameData.get(openerTabId).whitelisted)
+        if (!openerTabId || frameData.get(openerTabId).whitelisted)
             return;
         // Change to opener's url in so that it would still be tested against the
-        //blocking filter's regex rule. Github issue # 69
+        // blocking filter's regex rule. Github issue # 69
         if (url === "about:blank") {
             url = openerUrl;
         }
         // Store resource in frameData
         frameData.storeResource(openerTabId, url, ElementTypes.popup);
-        // Should be window blocked?
         var match = _myfilters.blocking.matches(url, ElementTypes.popup, openerDomain);
         if (match) {
             return true;
