@@ -59,6 +59,7 @@
 			</array>
 			<key>Start</key>
 			<array>
+				<string>punycode.min.js</string>
 				<string>port.js</string>
 				<string>functions.js</string>
 				<string>filtering/filteroptions.js</string>
