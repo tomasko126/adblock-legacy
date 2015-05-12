@@ -1,6 +1,6 @@
 {
   "name": "AdBlock",
-  "version": "2.31",
+  "version": "2.32",
   "background": {
     "scripts": [
       "punycode.min.js",
