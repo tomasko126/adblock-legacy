@@ -1365,7 +1365,7 @@
                 openerTabId = id;
             }
         }
-        if (openerTabId === undefined)
+        if (!openerTabId)
             return;
         if (frameData.get(openerTabId).whitelisted)
             return;
