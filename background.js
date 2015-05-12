@@ -1220,6 +1220,15 @@
   // Record that we exist.
   STATS.startPinging();
 
+  //passthrough functions
+  var addGABTabListeners = function(sender) {
+    gabQuestion.addGABTabListeners(sender);
+  };
+  
+  var removeGABTabListeners = function(saveState) {
+    gabQuestion.removeGABTabListeners(saveState);
+  }
+
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
     var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     if (SAFARI) {
