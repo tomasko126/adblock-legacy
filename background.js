@@ -286,8 +286,9 @@
         if (!get_settings().show_advanced_options)
           return;
         var data = frameData.get(tabId, frameId);
-        if (data !== undefined)
+        if (data !== undefined) {
             data.resources[elType + ':|:' + url] = null;
+        }
       },
 
       onTabClosedHandler: function(tabId) {
@@ -324,6 +325,9 @@
     function onBeforeRequestHandler(details) {
       if (adblock_is_paused())
         return { cancel: false };
+
+      // Convert punycode domain to Unicode - GH #472
+      details.url = getUnicodeUrl(details.url);
 
       if (!frameData.track(details))
         return { cancel: false };
@@ -362,11 +366,10 @@
         // receive this or not.  Because the #anchor of a page can change without navigating
         // the frame, ignore the anchor when matching.
         var frameUrl = frameData.get(tabId, requestingFrameId).url.replace(/#.*$/, "");
-        var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url:details.url, elType: elType };
+        var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url: details.url, elType: elType };
         chrome.tabs.sendRequest(tabId, data);
       }
-
-      if (blocked){
+      if (blocked) {
         blockCounts.recordOneAdBlocked(tabId);
         updateBadge(tabId);
       }
@@ -395,10 +398,11 @@
       // blocking filter's regex rule. Github issue # 69
       if (details.url === "about:blank")
         details.url = opener.url;
-      var match = _myfilters.blocking.matches(details.url, ElementTypes.popup, opener.domain);
+      var url = getUnicodeUrl(details.url);
+      var match = _myfilters.blocking.matches(url, ElementTypes.popup, opener.domain);
       if (match)
         chrome.tabs.remove(details.tabId);
-      frameData.storeResource(details.sourceTabId, details.sourceFrameId, details.url, ElementTypes.popup);
+      frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup);
     };
 
     // If tabId has been replaced by Chrome, delete it's data
@@ -420,6 +424,7 @@
             if (tabData &&
                 tabData.url !== details.url) {
                 details.type = 'main_frame';
+                details.url = getUnicodeUrl(details.url);
                 frameData.track(details);
             }
         }
@@ -509,8 +514,9 @@
     storage_set('custom_filters', filters);
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
-    if (!SAFARI && db_client.isAuthenticated())
-        settingstable.set("custom_filters", localStorage.custom_filters);
+    if (!SAFARI && db_client && db_client.isAuthenticated()) {
+      sync_custom_filters(localStorage.custom_filters);
+    }
   }
 
   // Get the user enterred exclude filters text as a \n-separated text string.
@@ -526,8 +532,9 @@
     storage_set('exclude_filters', filters);
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
-    if (!SAFARI && db_client.isAuthenticated())
-        settingstable.set("exclude_filters", localStorage.exclude_filters);
+    if (!SAFARI && db_client && db_client.isAuthenticated()) {
+      sync_exclude_filters(localStorage.exclude_filters);
+    }
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
   // rebuild the filterset.
@@ -687,7 +694,7 @@
           requiresList: options.requires,
           title: options.title
       });
-      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
+      if (!SAFARI && sync !== true && db_client && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -701,7 +708,7 @@
           subscribed: false,
           deleteMe: (options.del ? true : undefined)
       });
-      if (!SAFARI && sync !== true && db_client.isAuthenticated()) {
+      if (!SAFARI && sync !== true && db_client && db_client.isAuthenticated()) {
           settingstable.set("filter_lists", get_subscribed_filter_lists().toString());
       }
   }
@@ -776,7 +783,10 @@
           return;
         }
 
-        var disabled_site = page_is_unblockable(tab.url);
+        // GH #472
+        tab.unicodeUrl = getUnicodeUrl(tab.url);
+
+        var disabled_site = page_is_unblockable(tab.unicodeUrl);
         var total_blocked = blockCounts.getTotalAdsBlocked();
         var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
         var display_stats = get_settings().display_stats;
@@ -792,14 +802,16 @@
         };
 
         if (!disabled_site)
-          result.whitelisted = page_is_whitelisted(tab.url);
+          result.whitelisted = page_is_whitelisted(tab.unicodeUrl);
 
         callback(result);
       });
     } else {
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
-      var disabled_site = page_is_unblockable(tab.url);
+      tab.unicodeUrl = getUnicodeUrl(tab.url); // GH #472
+
+      var disabled_site = page_is_unblockable(tab.unicodeUrl);
 
       var result = {
         tab: tab,
@@ -807,7 +819,7 @@
       };
 
       if (!disabled_site)
-        result.whitelisted = page_is_whitelisted(tab.url);
+        result.whitelisted = page_is_whitelisted(tab.unicodeUrl);
 
         callback(result);
       }
@@ -821,6 +833,7 @@
     if (!url) { // Safari empty/bookmarks/top sites page
       return true;
     }
+    url = getUnicodeUrl(url);
     url = url.replace(/\#.*$/, ''); // Remove anchors
     if (!type)
       type = ElementTypes.document;
@@ -896,7 +909,7 @@
           );
         });
 
-        var host                = parseUri(info.tab.url).host;
+        var host                = getUnicodeDomain(parseUri(info.tab.unicodeUrl).host);
         var custom_filter_count = count_cache.getCustomFilterCount(host);
         if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
@@ -914,7 +927,7 @@
           browsersBadgeOptions.iconPaths = {'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"};
           setBrowserActions(browsersBadgeOptions);
         } else if (info.disabled_site &&
-            !/^chrome-extension:.*pages\/install\//.test(info.tab.url)) {
+            !/^chrome-extension:.*pages\/install\//.test(info.tab.unicodeUrl)) {
           // Show non-disabled icon on the installation-success page so it
           // users see how it will normally look. All other disabled pages
           // will have the gray one
@@ -993,7 +1006,7 @@
       var yt_channel = url.split('/').pop();
     }
     if (yt_channel) {
-        var filter = '@@||youtube.com/*' + yt_channel + '$document';
+        var filter = '@@|https://www.youtube.com/*' + yt_channel + '|$document';
         return add_custom_filter(filter);
     }
   }
@@ -1012,6 +1025,7 @@
       running = false;
       hiding = false;
     }
+
     var result = {
       settings: settings,
       runnable: runnable,
@@ -1032,6 +1046,7 @@
         'top_open_whitelist_ui': {
           allFrames: false,
           include: [
+            "punycode.min.js",
             "jquery/jquery.min.js",
             "jquery/jquery-ui.custom.min.js",
             "uiscripts/load_jquery_ui.js",
@@ -1041,6 +1056,7 @@
         'top_open_blacklist_ui': {
           allFrames: false,
           include: [
+            "punycode.min.js",
             "jquery/jquery.min.js",
             "jquery/jquery-ui.custom.min.js",
             "uiscripts/load_jquery_ui.js",
@@ -1178,17 +1194,17 @@
 
   // Log an 'error' message on GAB log server.
   var recordErrorMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=error', callback);
+    recordMessageUrl(msg, 'error', callback);
   };
 
   // Log an 'status' related message on GAB log server.
   var recordStatusMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=stats', callback);
+    recordMessageUrl(msg, 'stats', callback);
   };
 
   // Log a 'general' message on GAB log server.
   var recordGeneralMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=general', callback);
+    recordMessageUrl(msg, 'general', callback);
   };
 
   // Log a message on GAB log server.  The user's userid will be prepended to the message.
@@ -1198,7 +1214,7 @@
       return;
     }
     // Include user ID in message
-    var fullUrl = 'https://log.getadblock.com/record_log.php?' +
+    var fullUrl = 'https://log.getadblock.com/record_log.php?type=' +
                   queryType +
                   '&message=' +
                   encodeURIComponent(STATS.userId + " " + msg);
@@ -1224,38 +1240,58 @@
   // Record that we exist.
   STATS.startPinging();
 
+  //passthrough functions
+  var addGABTabListeners = function(sender) {
+    gabQuestion.addGABTabListeners(sender);
+  };
+  
+  var removeGABTabListeners = function(saveState) {
+    gabQuestion.removeGABTabListeners(saveState);
+  }
+
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
     var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     if (SAFARI) {
       openTab(installedURL);
     } else {
+      var numInstalledAttempts = 0;
       //if Chrome, open the /installed tab,
-      //check the status of the tab after 30 seconds
-      //if it failed to loaded, send a message
-      var tabStatus = "";
-      chrome.tabs.create({url: installedURL}, function(tab) {
-        tabStatus = tab.status;
-        var installedTabId = tab.id;
-        var installedTabListener = function(tabId, changeInfo, tab) {
-          if (tabId !== installedTabId) {
-            return;
+      //if tab doesn't exist for any reason
+      // send an error message and retry in 5 minutes
+      var openInstalledTab = function() {
+        if (numInstalledAttempts > 10) {
+          return;
+        }
+        numInstalledAttempts++;
+        chrome.tabs.create({url: installedURL}, function(tab) {
+          if (!tab || !tab.url) {
+            recordErrorMessage('installed tab or URL null');
+            var fiveMinutes = 5 * 60 * 1000;
+            setTimeout(function() {
+              openInstalledTab();
+            }, fiveMinutes);
           }
-          tabStatus = tab.status;
-        };
-        chrome.tabs.onUpdated.addListener(installedTabListener);
-        //wait 30 seconds, then check to see if the tabStatus is complete.
-        //if not, send a message
-        setTimeout(function() {
-          if (tabStatus !== "complete") {
-            recordErrorMessage('installed tab not complete, last status ' + tabStatus);
-          }
-          chrome.tabs.onUpdated.removeListener(installedTabListener);
-        }, 30000);
-      });
+        });
+      };
+      openInstalledTab();
     }
   }
   if (chrome.runtime.setUninstallURL) {
-    chrome.runtime.setUninstallURL("https://getadblock.com/uninstall/?u=" + STATS.userId);
+    var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
+    //if the start property of blockCount exists (which is the AdBlock installation timestamp)
+    //use it to calculate the approximate length of time that user has AdBlock installed
+    if (blockCounts && blockCounts.get().start) {
+      var fiveMinutes = 5 * 60 * 1000;
+      var updateUninstallURL = function() {
+        var installedDuration = (Date.now() - blockCounts.get().start);
+        chrome.runtime.setUninstallURL(uninstallURL + "&t=" + installedDuration);
+      };
+      //start an interval timer that will update the Uninstall URL every 5 minutes
+      setInterval(updateUninstallURL, fiveMinutes);
+      updateUninstallURL();
+    } else {
+      chrome.runtime.setUninstallURL(uninstallURL + "&t=-1");
+    }
   }
 
   //validate STATS.firstRun against Chrome's Runtime API onInstalled
@@ -1339,8 +1375,10 @@
       log("Found", tabs.length, "tabs that were already opened");
       for (var i=0; i<tabs.length; i++) {
         var currentTab = tabs[i], tabId = currentTab.id;
-        if (!frameData.get(tabId)) // unknown tab
-          frameData.track({url: currentTab.url, tabId: tabId, type: "main_frame"});
+        if (!frameData.get(tabId)) { // unknown tab
+            currentTab.url = getUnicodeUrl(currentTab.url);
+            frameData.track({url: currentTab.url, tabId: tabId, type: "main_frame"});
+        }
         updateBadge(tabId);
         // TODO: once we're able to get the parentFrameId, call
         // chrome.webNavigation.getAllFrames to 'load' the subframes
@@ -1598,7 +1636,7 @@
               }
               if (filters) {
                   filters = filters.replace(/\""/g, "");
-                  settingstable.set("custom_filters", filters);
+                  sync_custom_filters(filters);
               }
 
               //exclude filters
@@ -1625,7 +1663,7 @@
               }
               if (eXfilters) {
                   eXfilters = eXfilters.replace(/\""/g, "");
-                  settingstable.set("exclude_filters", eXfilters);
+                  sync_exclude_filters(eXfilters);
               }
 
               // Listener, which fires when table has been updated
@@ -1642,9 +1680,12 @@
                   // Subscribe & unsubscribe filter lists
                   var filterlists_sync = settingstable.get("filter_lists").split(",");
                   var filterlists_local = get_subscribed_filter_lists();
-                  for (var i=0; i < filterlists_sync.length; i++)
-                      if (settingstable.get("filter_lists") !== "")
-                          subscribe({id: filterlists_sync[i]}, true);
+                  for (var i=0; i < filterlists_sync.length; i++) {
+                      if (settingstable.get("filter_lists") !== "") {
+                          if (filterlists_local.indexOf(filterlists_sync[i]) === -1)
+                              subscribe({id: filterlists_sync[i]}, true);
+                      }
+                  }
                   for (var i=0; i < filterlists_local.length; i++) {
                       if (filterlists_sync.indexOf(filterlists_local[i]) === -1)
                           unsubscribe({id: filterlists_local[i]}, true);
@@ -1683,13 +1724,20 @@
 
                   // Set custom filters
                   var exFilters = settingstable.get("exclude_filters");
-                  localStorage.exclude_filters = exFilters;
-                  //since the exclude filters may have been updated,
-                  //rebuild / update the entire filters
-                  FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
-                  update_subscriptions_now();
+                  // Since the exclude filters may have been updated,
+                  // rebuild / update the entire filters
+                  if (localStorage.exclude_filters !== exFilters) {
+                      localStorage.exclude_filters = exFilters;
+                      FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
+                      update_subscriptions_now();
+                  }
               }
           });
+      }
+
+      // Login users automatically on browser start-up
+      if (get_settings().dropbox_sync && !dropboxauth()) {
+          dropboxlogin();
       }
 
       // Reset db_client, if it got in an error state
@@ -1709,7 +1757,33 @@
           if (settingstable && db_client.isAuthenticated())
               settingstable.set(name, is_enabled);
       }
+
+      function _sync_filters(filters, name) {
+          var syncError = null;
+          try {
+            settingstable.set(name, filters);
+          } catch(ex) {
+            syncError = ex;
+            log(ex);
+            //since the most likely exception at this point is a size exceeded message,
+            //store the message code.
+            sessionstorage_set("dropboxerror", "dropboxerrorforfilters");
+            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorforfilters"});
+          }
+          if (!syncError) {
+            //sync was successful, remove any previous error messages.
+            sessionstorage_set("dropboxerror");
+            chrome.runtime.sendMessage({message: "cleardropboxerror"});
+          }
+      }
+
+      function sync_custom_filters(filters) {
+          _sync_filters(filters, "custom_filters");
+      }
+
+      function sync_exclude_filters(eXfilters) {
+          _sync_filters(eXfilters, "exclude_filters");
+      }
   }
 
   log("\n===FINISHED LOADING===\n\n");
-

@@ -64,8 +64,7 @@ STATS = (function() {
     if (chrome.runtime.id) {
       data["extid"] = chrome.runtime.id;
     }
-
-    $.ajax({
+    var ajaxOptions = {
       type: 'POST',
       url: stats_url,
       data: data,
@@ -73,7 +72,15 @@ STATS = (function() {
       error: function(e) {
         console.log("Ping returned error: ", e.status);
       },
-    });
+    };
+    if (chrome.management && chrome.management.getSelf) {
+      chrome.management.getSelf(function(info) {
+        data["it"] = info.installType.charAt(0);
+        $.ajax(ajaxOptions);
+      });
+    } else {
+      $.ajax(ajaxOptions);
+    }
   };
 
   var handlePingResponse = function(responseData, textStatus, jqXHR) {
@@ -158,7 +165,17 @@ STATS = (function() {
       //if this is the first time we've run,
       //send a message
       if (firstRun && !storage_get("total_pings")) {
-        recordGeneralMessage('new install');
+        if (chrome.management && chrome.management.getSelf) {
+          chrome.management.getSelf(function(info) {
+            if (info) {
+              recordGeneralMessage('new install ' + info.installType);
+            } else {
+              recordGeneralMessage('new install');
+            }
+          });
+        } else {
+          recordGeneralMessage('new install');
+        }
       }
       // This will sleep, then ping, then schedule a new ping, then
       // call itself to start the process over again.
@@ -182,6 +199,9 @@ STATS = (function() {
         o: os,
         ov: osVersion
       };
+      if (chrome.runtime.id) {
+        data["extid"] = chrome.runtime.id;
+      }
       $.ajax(stats_url, {
         type: "POST",
         data: data,

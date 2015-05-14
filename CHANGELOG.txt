@@ -2,6 +2,42 @@
 
 UNRELEASED:
 
+2.32:
+- Fixed a bug in the retry logic when trying to open the "/installed" page on getadblock.com. (#548)
+- Added retry logic when the user is the "/question" page on getadblock.com. (#543)
+- Added the filter text to the JavaScript exception message when an invalid option is found in a filter. (#537)
+- Fixed the logic for creating a YouTube whitelist channel filter to avoid white-listing other channels. (#534)
+- Fixed an issue with the whitelist / blacklist wizards not being displayed correctly on certain sites. (#527)
+- Added support for Internationalized domains (IDN) throughout AdBlock. (#495)
+- Updated Translations
+
+2.31:
+- New language: Gujarati
+
+2.30:
+- Name change to back to "AdBlock"
+- Updated Translations
+
+2.29:
+- Name change to "BetaFish Adblocker" (temporary)
+
+2.28:
+- For Chrome, added installation type to the ping data. (#530)
+
+2.27:
+- For Chrome, added retry logic when the '/installed' page fails to open.  (#525)
+- For Chrome, added a message to include installation type, when AdBlock is installed.  (#526)
+
+2.26:
+- Added the extension Id to the data included with the JavaScript error message.  (#523)
+- For Chrome only, improved / fixed the logic that is checking if the '/installed' page is opened correctly. (#522)
+- For Chrome only, added the approximate installation duration to the uninstall URL. (#522)
+
+2.25:
+- Fixed an issue with the DropBox sync processing duplicating filters during browser start. (#442)
+- Added a message to the options page when the DropBox sync processing failed due to a large number of custom filters. (#474)
+- Updated Translations
+
 2.24:
 - Fixed JavaScript stack exception processing. (#515)
 - Modified the new install check logic to only send a message when first run is true. (#513)

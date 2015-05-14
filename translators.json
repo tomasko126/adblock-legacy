@@ -197,6 +197,18 @@
       }
     ]
   },
+  "gu":{
+    "language": "Gujarati",
+    "localized": "ગુજરાતી",
+    "translators":[
+      {
+        "credit": "Vatsal Shah (imvatsalshah)",
+        "username": "imvatsalshah",
+        "proofreader": false,
+        "joined": "2015-04"
+      }
+    ]
+  },
   "he":{
     "language": "Hebrew",
     "localized": "עברית",
@@ -590,6 +602,18 @@
         "username": "yurqua",
         "proofreader": false,
         "joined": "2011-06"
+      },
+      {
+        "credit": "Maksym Tymoshyk",
+        "username": "maximillian_",
+        "proofreader": false,
+        "joined": "2015-01"
+      },
+      {
+        "credit": "Тимур Роман",
+        "username": "TSpell",
+        "proofreader": false,
+        "joined": "2015-01"
       }
     ]
   },
