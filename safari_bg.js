@@ -114,6 +114,8 @@ safari.application.addEventListener("message", function(messageEvent) {
         var tabId = messageEvent.target.id;
         blockCounts.recordOneAdBlocked(tabId);
         log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
+        if (tab.invisible_url === tab.visible_url)
+            updateBadge();
     }
     messageEvent.message = !isMatched;
 }, false);
@@ -140,7 +142,7 @@ safari.application.addEventListener("navigate", function(event) {
         return;
     }
     updateBadge();
-});
+}, true);
 
 // Reset number of blocked ads when navigating away from the page
 safari.application.addEventListener("beforeNavigate", function(event) {
