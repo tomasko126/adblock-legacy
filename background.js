@@ -338,7 +338,7 @@
         return { cancel: false };
       // If request comes from whitelisted sub_frame and
       // top frame is not whitelisted, don't process the request
-      } else if (!top_frame.whitelisted && sub_frame && sub_frame.whitelisted) {
+      } else if (sub_frame && sub_frame.whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted frame", tabId, details.url.substring(0, 100));
         return { cancel: false };
       }
