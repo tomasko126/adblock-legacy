@@ -1354,33 +1354,6 @@
     }
     chrome.tabs.query({url: "http://*/*"}, handleEarlyOpenedTabs);
     chrome.tabs.query({url: "https://*/*"}, handleEarlyOpenedTabs);
-  } else {
-    // Popup blocking in Safari
-    var checkPopup = function(url, openerDomain, openerUrl) {
-        if (adblock_is_paused())
-            return;
-        var openerTabId = null;
-        for (var id in frameData) {
-            if (frameData[id].url === openerUrl) {
-                openerTabId = id;
-            }
-        }
-        if (!openerTabId || frameData.get(openerTabId).whitelisted)
-            return;
-        // Change to opener's url in so that it would still be tested against the
-        // blocking filter's regex rule. Github issue # 69
-        if (url === "about:blank") {
-            url = openerUrl;
-        }
-        // Store resource in frameData
-        frameData.storeResource(openerTabId, url, ElementTypes.popup);
-        var match = _myfilters.blocking.matches(url, ElementTypes.popup, openerDomain);
-        if (match) {
-            return true;
-        } else {
-            return false;
-        }
-    } 
   }
 
   // YouTube Channel Whitelist

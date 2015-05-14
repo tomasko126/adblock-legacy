@@ -111,6 +111,28 @@ safari.application.addEventListener("message", function(messageEvent) {
     messageEvent.message = !isMatched;
 }, false);
 
+// Popup blocking support
+var checkPopup = function(url, openerDomain, openerUrl) {
+    if (adblock_is_paused())
+        return false;
+    var openerTabId = null;
+    for (var id in frameData) {
+        if (frameData[id].url === openerUrl) {
+            openerTabId = id;
+        }
+    }
+    if (!openerTabId || frameData.get(openerTabId).whitelisted)
+        return false;
+    // Change to opener's url in so that it would still be tested against the
+    // blocking filter's regex rule. Github issue # 69
+    if (url === "about:blank") {
+        url = openerUrl;
+    }
+    // Store resource in frameData
+    frameData.storeResource(openerTabId, url, ElementTypes.popup);
+    return _myfilters.blocking.matches(url, ElementTypes.popup, openerDomain);
+}
+
 // Code for creating popover, not available on Safari 5.0
 if (!LEGACY_SAFARI) {
     var ABPopover = safari.extension.createPopover("AdBlock", safari.extension.baseURI + "button/popup.html");
