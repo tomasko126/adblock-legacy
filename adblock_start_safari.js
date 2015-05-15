@@ -1,7 +1,7 @@
 // Popup blocking
 if (window.opener) {
     BGcall("checkPopup", document.location.href, window.opener.location.hostname,
-           window.opener.location.href, window.opener.document.referrer, function(block) {
+           window.opener.document.referrer === "" ? document.referrer : window.opener.document.referrer, function(block) {
         if (block) {
             window.close();
         }

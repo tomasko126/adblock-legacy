@@ -112,14 +112,10 @@ safari.application.addEventListener("message", function(messageEvent) {
 }, false);
 
 // Popup blocking support
-var checkPopup = function(url, openerDomain, openerUrl, openerWindowReferrer) {
+var checkPopup = function(url, openerDomain, openerUrl) {
     if (adblock_is_paused())
         return false;
     var openerTabId = null;
-    // Popup hasn't been created from top frame, adjust |openerUrl|
-    if (openerWindowReferrer) {
-        openerUrl = openerWindowReferrer;
-    }
     for (var id in frameData) {
         if (frameData[id].url === openerUrl) {
             openerTabId = id;
