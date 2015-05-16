@@ -308,7 +308,7 @@
           if (pos > -1) {
             var ext = url.pathname.slice(pos) + '.';
             if ('.eot.ttf.otf.svg.woff.woff2.'.indexOf(ext) !== -1) {
-              return 'font';
+              return 'other';
             }
             // Still need this because often behind-the-scene requests are wrongly
             // categorized as 'other'
