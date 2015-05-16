@@ -8,30 +8,32 @@ frameData = (function() {
         // Get frameData for the tab.
         // Input:
         //   tabId: Integer - id of the tab you want to get
-        get: function(tabId) {
-            return frameData[tabId] || {};
+        get: function(tabId, frameId) {
+            if (frameId !== undefined)
+                return (frameData[tabId] || {})[frameId];
+            return frameData[tabId];
         },
 
         // Create a new frameData
         // Input:
         //   tabId: Integerc - id of the tab you want to add in the frameData
-        create: function(tabId, url, domain) {
-            return frameData._initializeMap(tabId, url, domain);
+        create: function(tabId, frameId, url, domain) {
+            return frameData._initializeMap(tabId, frameId, url, domain);
         },
         // Reset a frameData
         // Inputs:
         //   tabId: Integer - id of the tab you want to add in the frameData
         //   url: new URL for the tab
-        reset: function(tabId, url) {
+        reset: function(tabId, frameId, url) {
             var domain = parseUri(url).hostname;
-            return frameData._initializeMap(tabId, url, domain);
+            return frameData._initializeMap(tabId, frameId, url, domain);
         },
         // Initialize map
         // Inputs:
         //   tabId: Integer - id of the tab you want to add in the frameData
         //   url: new URL for the tab
         //   domain: domain of the request
-        _initializeMap: function(tabId, url, domain) {
+        _initializeMap: function(tabId, frameId, url, domain) {
             var tracker = frameData[tabId];
 
             // We need to handle IDN URLs properly
@@ -40,11 +42,15 @@ frameData = (function() {
 
             var shouldTrack = !tracker || tracker.url !== url;
             if (shouldTrack) {
-                frameData[tabId] = {
+                if (!frameData[tabId]) frameData[tabId] = {};
+                frameData[tabId][frameId] = {
                     resources: {},
                     domain: domain,
                     url: url,
                 };
+            }
+            if (frameId === 0) {
+                frameData[tabId][frameId].whitelisted = page_is_whitelisted(url);
             }
             return tracker;
         },
@@ -52,10 +58,10 @@ frameData = (function() {
         // Inputs:
         //   tabId: Numeric - id of the tab you want to delete in the frameData
         //   url: url of the resource
-        storeResource: function(tabId, url, elType) {
+        storeResource: function(tabId, frameId, url, elType) {
             if (!get_settings().show_advanced_options)
                 return;
-            var data = this.get(tabId);
+            var data = this.get(tabId, frameId);
             if (data !== undefined &&
                 data.resources !== undefined) {
                 data.resources[elType + ':|:' + url] = null;
@@ -80,11 +86,13 @@ safari.application.addEventListener("message", function(messageEvent) {
       messageEvent.message.data.args[1].tab &&
       messageEvent.message.data.args[1].tab.url) {
         var args = messageEvent.message.data.args;
+        console.log(messageEvent);
+        var frameId = (messageEvent.message.frameInfo.top_level ? 0 : Object.keys(frameData.get(messageEvent.target.id)).length);
         if (!messageEvent.target.url ||
             messageEvent.target.url === args[1].tab.url) {
-            frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-        } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
-            frameData.reset(messageEvent.target.id, args[1].tab.url);
+            frameData.create(messageEvent.target.id, frameId, messageEvent.message.frameInfo.url, args[0].domain);
+        } else if (messageEvent.target.url === frameData.get(messageEvent.target.id, 0).url) {
+            frameData.reset(messageEvent.target.id, frameId, args[1].tab.url);
         }
         return;
     }
@@ -106,8 +114,25 @@ safari.application.addEventListener("message", function(messageEvent) {
     var url = getUnicodeUrl(messageEvent.message.url);
     var elType = messageEvent.message.elType;
     var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
+    
+    var frameId = null;
+    if (frameInfo.top_level) {
+        frameId = 0;
+    } else {
+        for (var tabId in frameData) {
+            if (frameData[tabId]) {
+                for (var i=0; i<Object.keys(frameData[tabId]).length; i++) {
+                    if (frameData[tabId][i].domain === frameDomain) {
+                        frameId = i;
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-    frameData.storeResource(tab.id, url, elType);
+    console.log("Frame ID: ", frameId);
+    frameData.storeResource(tab.id, frameId, url, elType);
 
     var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
     if (isMatched)
