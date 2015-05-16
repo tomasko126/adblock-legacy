@@ -86,7 +86,6 @@ safari.application.addEventListener("message", function(messageEvent) {
       messageEvent.message.data.args[1].tab &&
       messageEvent.message.data.args[1].tab.url) {
         var args = messageEvent.message.data.args;
-        console.log(messageEvent);
         var frameId = (messageEvent.message.frameInfo.top_level ? 0 : Object.keys(frameData.get(messageEvent.target.id)).length);
         if (!messageEvent.target.url ||
             messageEvent.target.url === args[1].tab.url) {
@@ -131,7 +130,6 @@ safari.application.addEventListener("message", function(messageEvent) {
         }
     }
 
-    console.log("Frame ID: ", frameId);
     frameData.storeResource(tab.id, frameId, url, elType);
 
     var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
