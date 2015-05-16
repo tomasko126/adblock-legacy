@@ -26,6 +26,7 @@ frameData = (function() {
         //   url: new URL for the tab
         reset: function(tabId, frameId, url) {
             var domain = parseUri(url).hostname;
+            delete frameData[tabId];
             return frameData._initializeMap(tabId, frameId, url, domain);
         },
         // Initialize map
