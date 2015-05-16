@@ -89,6 +89,7 @@ safari.application.addEventListener("message", function(messageEvent) {
         return;
 
     var tab = messageEvent.target;
+    var isPopup = messageEvent.message.isPopup;
     var frameInfo = messageEvent.message.frameInfo;
     chrome._tabInfo.notice(tab, frameInfo);
     var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
@@ -102,13 +103,33 @@ safari.application.addEventListener("message", function(messageEvent) {
     var url = messageEvent.message.url;
     var elType = messageEvent.message.elType;
     var frameDomain = messageEvent.message.frameDomain;
-
+    
     frameData.storeResource(tab.id, url, elType);
-
-    var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
-    if (isMatched)
-        log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
-    messageEvent.message = !isMatched;
+    
+    // Popup blocking support
+    if (isPopup) {
+        var match = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup, frameDomain);
+        if (match) {
+            // Close popup/tab
+            var windows = safari.application.browserWindows;
+            for (var i=0; i<windows.length; i++) {
+                var tabs = windows[i].tabs;
+                for (var j=0; j<tabs.length; j++) {
+                    if (tabs[j].id === sendingTab.id) {
+                        tabs[j].close();
+                        break;
+                    }
+                }
+            }
+        }
+        messageEvent.message = !match;
+    } else {
+        var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
+        if (isMatched) {
+            log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
+        } 
+        messageEvent.message = !isMatched;
+    }
 }, false);
 
 // Popup blocking support
