@@ -117,19 +117,10 @@ safari.application.addEventListener("message", function(messageEvent) {
             log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
         }
     } else {
-        var isMatched = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup, frameDomain);
+        var isMatched = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup,
+                                                    parseUri(messageEvent.message.refferer).hostname);
         if (isMatched) {
-            // Close popup/tab
-            var windows = safari.application.browserWindows;
-            for (var i=0; i<windows.length; i++) {
-                var tabs = windows[i].tabs;
-                for (var j=0; j<tabs.length; j++) {
-                    if (tabs[j].id === sendingTab.id) {
-                        tabs[j].close();
-                        break;
-                    }
-                }
-            }
+            tab.close();
         }
     }
     messageEvent.message = !isMatched;
