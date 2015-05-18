@@ -1214,8 +1214,8 @@
     "description":"List for custom filters the user subscribed to"
   },
   "dropboxerrorforfilters":{
-    "message":"You have exceed the Dropbox size limit.  Please remove some entries from your filters or disabled filters, and try again.",
-    "description":"Message to Dropbox sync users on the Customize tab, custom filters / disabled."
+    "message":"You have exceeded the Dropbox size limit. Please remove some entries from your custom or disabled filters, and try again.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
   },
   "languagedropdowndescription":{
     "message":"Add filters for another language: ",
@@ -1276,7 +1276,7 @@
     }
   },
   "ff_adblock_outdated":{
-    "message":"You are using an old version of AdBlock. Please click the Firefox menu button and choose Add-ons.  Then on the Add-ons page, under settings (gear icon), click on 'Check for updates'",
+    "message":"You are using an old version of AdBlock. Please click the Firefox menu button and choose Add-ons. Then on the Add-ons page, click the gear icon (Tools for all add-ons), and choose 'Check for Updates'.",
     "description":"On the Options > Support page, shows when there is an update available for AdBlock"
   },
   "adblocksupport":{
