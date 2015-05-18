@@ -118,7 +118,7 @@ safari.application.addEventListener("message", function(messageEvent) {
         }
     } else {
         var isMatched = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup,
-                                                    parseUri(messageEvent.message.refferer).hostname);
+                                                    parseUri(messageEvent.message.referrer).hostname);
         if (isMatched) {
             tab.close();
         }
