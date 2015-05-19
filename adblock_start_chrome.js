@@ -1,17 +1,17 @@
 var elementPurger = {
   onPurgeRequest: function(request, sender, sendResponse) {
     if (request.command === 'purge-elements' &&
-        request.frameUrl === document.location.href.replace(/#.*$/, ""))
+        request.frameUrl === document.location.href.replace(/#.*$/, "")) {
       elementPurger._purgeElements(request);
-
-    sendResponse({});
+      sendResponse({});
+    }
   },
 
   // Remove elements on the page of |request.elType| that request
   // |request.url|.  Will try again if none are found unless |lastTry|.
   _purgeElements: function(request, lastTry) {
     var elType = request.elType;
-    var url = request.url;
+    var url = getUnicodeUrl(request.url);
 
     log("[DEBUG]", "Purging:", lastTry, elType, url);
 
@@ -36,7 +36,7 @@ var elementPurger = {
           var externalId = "kodkhcagmjcidjgljmbfiaconnbnohho";
           request.selector = selector;
           chrome.extension.sendRequest(externalId, request);
-          
+
           return; // I doubt the same URL was loaded via 2 different src attrs.
         }
       }
@@ -71,8 +71,8 @@ var elementPurger = {
       var page_dirs = page_parts.pathname.split('/');
       var url_dirs = url_parts.pathname.split('/');
       var i = 0;
-      while (page_dirs[i] === url_dirs[i] 
-             && i < page_dirs.length - 1 
+      while (page_dirs[i] === url_dirs[i]
+             && i < page_dirs.length - 1
              && i < url_dirs.length - 1) {
         i++; // i is set to first differing position
       }

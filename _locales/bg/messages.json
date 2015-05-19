@@ -191,6 +191,16 @@
     "message":"Функцията на AdBlock няма да работи тук, защото сайтът ползва остаряла технология. Можете да забраните или да изключите ресурсите наръка от преградка „Нагласяване“ в страницата с настройки.",
     "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
+  "subscribeconfirm":{
+    "message":"Сигурен ли сте, че се абонирате за филтъра „$title$“?",
+    "description":"Prompt question before subscribing to the filter list",
+    "placeholders":{
+      "title":{
+        "content":"$1",
+        "example":"Prebake"
+      }
+    }
+  },
   "subscribingtitle":{
     "message":"Абониране за филтри",
     "description":"abp: link subscriber title"
@@ -898,11 +908,11 @@
     "description":"resourceblocking page string"
   },
   "selectresources":{
-    "message":"Изберете кой ресурс блокирате или деблокирате:",
+    "message":"Ресурс за блокиране или деблокиране:",
     "description":"resourceblocking page string"
   },
   "resourceblocktitle":{
-    "message":"Блокиране на ресурс",
+    "message":"Блокирани ресурси",
     "description":"resourceblocking page string"
   },
   "headerresource":{
@@ -978,7 +988,7 @@
     "description":"resourceblocking page string"
   },
   "ordisablefilter":{
-    "message":"… или забранете филтър:",
+    "message":"… или забрани филтъра:",
     "description":"On the resourceblocking page, choice to disable a filter instead of allowing or blocking a specific resource"
   },
   "thisfilterwillbedisabled":{
@@ -1203,6 +1213,10 @@
     "message":"Потребителски филтри",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxerrorforfilters":{
+    "message":"Надхвърляте ограничението за размер на файла в Dropbox. Моля, премахнете определени записи от потребителските или от изключващите филтри и опитайте отново.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
+  },
   "languagedropdowndescription":{
     "message":"Добави филтри за друг език: ",
     "description":"Dropdown list for language-specific filters"
@@ -1260,6 +1274,10 @@
         "example":"<a>here<\/a>"
       }
     }
+  },
+  "ff_adblock_outdated":{
+    "message":"Ползвате стара версия на AdBlock. Моля, изберете Добавки от меню на Firefox. Вече в страницата с добавки щракнете по иконата със зъбно колело (т.е. Инструменти за всички добавки) и посочете „Проверка за актуализации“.",
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
   },
   "adblocksupport":{
     "message":"Поддръжка",

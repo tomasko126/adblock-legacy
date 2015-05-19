@@ -191,6 +191,16 @@
     "message":"Tính năng này của AdBlock không hoạt động trên trang này bởi vì nó sử dụng công nghệ đã lỗi thời. Bạn có thể dùng danh sách đen hoặc danh sách trắng để chặn bằng tay trong thẻ 'Tùy Chỉnh' trên trang tùy chọn.",
     "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
+  "subscribeconfirm":{
+    "message":"Bạn có chắc bạn muốn đăng ký bộ lọc $title$ không?",
+    "description":"Prompt question before subscribing to the filter list",
+    "placeholders":{
+      "title":{
+        "content":"$1",
+        "example":"Prebake"
+      }
+    }
+  },
   "subscribingtitle":{
     "message":"Đang đăng ký bộ lọc...",
     "description":"abp: link subscriber title"
@@ -1183,6 +1193,10 @@
     "message":"Danh sách bộ lọc tùy chỉnh",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxerrorforfilters":{
+    "message":"Bạn đã vượt quá giới hạn dung lượng của Dropbox. Hãy xóa một số mục khỏi bộ lọc tùy chỉnh hoặc tắt một số bộ lọc, sau đó thử lại.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
+  },
   "languagedropdowndescription":{
     "message":"Thêm bộ lọc cho ngôn ngữ khác: ",
     "description":"Dropdown list for language-specific filters"
@@ -1240,6 +1254,10 @@
         "example":"<a>here<\/a>"
       }
     }
+  },
+  "ff_adblock_outdated":{
+    "message":"Bạn đang sử dụng phiên bản cũ của AdBlock. Hãy bấm vào menu và chọn Tiện ích. Trên trang Tiện ích, bấm biểu tượng bánh răng (Công cụ cho tất cả các tiện ích) và chọn 'Kiểm tra Cập nhật'.",
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
   },
   "adblocksupport":{
     "message":"Trung tâm hỗ trợ",
