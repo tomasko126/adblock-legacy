@@ -103,15 +103,13 @@ safari.application.addEventListener("message", function(messageEvent) {
         messageEvent.message = true;
         return;
     }
-
-    var url = getUnicodeUrl(messageEvent.message.url);
-    var elType = messageEvent.message.elType;
-    var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
-
-    frameData.storeResource(tab.id, url, elType);
     
     // Popup blocking support
     if (!isPopup) {
+        var url = getUnicodeUrl(messageEvent.message.url);
+        var elType = messageEvent.message.elType;
+        var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
+
         var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
         if (isMatched) {
             log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
@@ -123,6 +121,9 @@ safari.application.addEventListener("message", function(messageEvent) {
             tab.close();
         }
     }
+
+    frameData.storeResource(tab.id, url, elType);
+
     messageEvent.message = !isMatched;
 }, false);
 

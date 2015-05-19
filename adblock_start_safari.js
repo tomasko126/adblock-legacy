@@ -46,7 +46,7 @@ beforeLoadHandler = function(event) {
   var data = {
     url: relativeToAbsoluteUrl(event.url),
     elType: elType,
-    referrer: document.referrer,
+    referrer: getUnicodeUrl(document.referrer),
     isPopup: window.opener !== null,
     frameDomain: document.location.hostname,
     frameInfo: chrome._tabInfo.gatherFrameInfo()
