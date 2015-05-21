@@ -1019,9 +1019,17 @@
   //           domain:string the domain of the calling frame.
   get_content_script_data = function(options, sender) {
     var settings = get_settings();
-    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.tab.url);
-    var running = runnable && !page_is_whitelisted(sender.tab.url);
-    var hiding = running && !page_is_whitelisted(sender.tab.url, ElementTypes.elemhide);
+    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.url);
+    var running_top = runnable && !page_is_whitelisted(sender.tab.url);
+    var running = runnable && !page_is_whitelisted(sender.url);
+    var hiding = running && !page_is_whitelisted(sender.url, ElementTypes.elemhide);
+
+    // Don't run in frame, when top frame is whitelisted
+    if (!running_top && running) {
+      running = false;
+      hiding = false;
+    }
+
     var result = {
       settings: settings,
       runnable: runnable,
