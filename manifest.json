@@ -87,6 +87,7 @@
   "permissions": [
     "http://*/*", "https://*/*", "contextMenus", "tabs", "idle", "webRequest", "webRequestBlocking", "webNavigation", "alarms", "storage", "notifications"
   ],
+  "optional_permissions": [ "management" ],
   "web_accessible_resources": [
     "img/icon24.png",
     "img/icon48.png",
