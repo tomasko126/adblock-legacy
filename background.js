@@ -404,8 +404,11 @@
         details.url = opener.url;
       var url = getUnicodeUrl(details.url);
       var match = _myfilters.blocking.matches(url, ElementTypes.popup, opener.domain);
-      if (match)
-        chrome.tabs.remove(details.tabId);
+      if (match) {
+          chrome.tabs.remove(details.tabId);
+          blockCounts.recordOneAdBlocked(details.sourceTabId);
+          updateBadge(details.sourceTabId);
+      }
       frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup);
     };
 
