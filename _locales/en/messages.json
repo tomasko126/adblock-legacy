@@ -1213,6 +1213,20 @@
     "message":"Custom Filter Lists",
     "description":"List for custom filters the user subscribed to"
   },
+  "customfilterserrormessage":{
+    "message":"The following filter:<br/> $filter$ <br/> has an error: <br/> $message$",
+    "description":"Error message to custome filter users on the Customize tab, custom filters.",
+    "placeholders":{
+      "filter":{
+        "content":"$1",
+        "example":"@@.ad"
+      },
+      "message":{
+        "content":"$2",
+        "example":"invalid filter"
+      }
+    }
+  },
   "dropboxerrorforfilters":{
     "message":"You have exceeded the Dropbox size limit. Please remove some entries from your custom or disabled filters, and try again.",
     "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
