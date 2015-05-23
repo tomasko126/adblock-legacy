@@ -6,9 +6,13 @@ var run_bandaids = function() {
   if (/mail\.live\.com/.test(document.location.hostname))
     apply_bandaid_for = "hotmail";
   else if (/getadblock\.com$/.test(document.location.hostname) &&
-           window.top === window.self)
-    apply_bandaid_for = "getadblock";
-  else if (/mobilmania\.cz|zive\.cz|doupe\.cz|e15\.cz|sportrevue\.cz|autorevue\.cz/.test(document.location.hostname))
+           window.top === window.self) {
+    if (/\/question\/$/.test(document.location.pathname)) {
+      apply_bandaid_for = "getadblockquestion";   
+    } else {
+      apply_bandaid_for = "getadblock";
+    }
+  } else if (/mobilmania\.cz|zive\.cz|doupe\.cz|e15\.cz|sportrevue\.cz|autorevue\.cz/.test(document.location.hostname))
     apply_bandaid_for = "czech_sites";
   else if (/thepiratebay/.test(document.location.hostname))
     apply_bandaid_for = "the_pirate_bay_safari_only";
@@ -18,7 +22,6 @@ var run_bandaids = function() {
     if (hosts.length > 0)
       apply_bandaid_for = "noblock";
   }
-
   var bandaids = {
     noblock: function() {
       var styles = document.querySelectorAll("style");
@@ -41,6 +44,26 @@ var run_bandaids = function() {
         el.style.setProperty("display", "none", null);
         el.style.setProperty("position", "absolute", null);
         el.style.setProperty("right", "0px", null);
+      }
+    },
+    getadblockquestion: function() {
+      BGcall('addGABTabListeners');
+      var personalBtn = document.getElementById("personal-use");
+      var enterpriseBtn = document.getElementById("enterprise-use");
+      var buttonListener = function(event) {
+        BGcall('removeGABTabListeners', true);
+        if (enterpriseBtn) {
+          enterpriseBtn.removeEventListener("click", buttonListener);
+        }
+        if (personalBtn) {
+          personalBtn.removeEventListener("click", buttonListener);
+        }
+      };
+      if (personalBtn) {
+        personalBtn.addEventListener("click", buttonListener);
+      }
+      if (enterpriseBtn) {
+        enterpriseBtn.addEventListener("click", buttonListener);
       }
     },
     getadblock: function() {
@@ -95,135 +118,124 @@ var before_ready_bandaids = function() {
        return;
     }
 
-    BGcall('is_adblock_paused', function(paused) {
-        if (paused) {
-            return;
+    //a regex used to test the ytplayer config / flashvars for youtube ads, references to ads, etc.
+    var badArgumentsRegex = /^((.*_)?(ad|ads|afv|adsense)(_.*)?|(ad3|st)_module|prerolls|interstitial|infringe|iv_cta_url)$/;
+
+    function rewriteFlashvars(flashvars) {
+        var pairs = flashvars.split("&");
+        for (var i = 0; i < pairs.length; i++)
+            if (badArgumentsRegex.test(pairs[i].split("=")[0]))
+                pairs.splice(i--, 1);
+        return pairs.join("&");
+    }
+
+    function patchPlayer(player) {
+        var newPlayer = player.cloneNode(true);
+        var flashvarsChanged = false;
+
+        var flashvars = newPlayer.getAttribute("flashvars");
+        if (flashvars) {
+            var newFlashvars = rewriteFlashvars(flashvars);
+            if (flashvars != newFlashvars) {
+                newPlayer.setAttribute("flashvars", newFlashvars);
+                flashvarsChanged = true;
+            }
         }
-        BGcall("get_settings", function(settings) {
-            if (settings && settings.clicktoflash_compatibility_mode) {
-                return;
-            }
-            //a regex used to test the ytplayer config / flashvars for youtube ads, references to ads, etc.
-            var badArgumentsRegex = /^((.*_)?(ad|ads|afv|adsense)(_.*)?|(ad3|st)_module|prerolls|interstitial|infringe|iv_cta_url)$/;
 
-            function rewriteFlashvars(flashvars) {
-                var pairs = flashvars.split("&");
-                for (var i = 0; i < pairs.length; i++)
-                    if (badArgumentsRegex.test(pairs[i].split("=")[0]))
-                        pairs.splice(i--, 1);
-                return pairs.join("&");
-            }
-
-            function patchPlayer(player) {
-                var newPlayer = player.cloneNode(true);
-                var flashvarsChanged = false;
-
-                var flashvars = newPlayer.getAttribute("flashvars");
-                if (flashvars) {
-                    var newFlashvars = rewriteFlashvars(flashvars);
-                    if (flashvars != newFlashvars) {
-                        newPlayer.setAttribute("flashvars", newFlashvars);
-                        flashvarsChanged = true;
-                    }
+        var param = newPlayer.querySelector("param[name=flashvars]");
+        if (param) {
+            var value = param.getAttribute("value");
+            if (value) {
+                var newValue = rewriteFlashvars(value);
+                if (value != newValue) {
+                    param.setAttribute("value", newValue);
+                    flashvarsChanged = true;
                 }
+            }
+        }
 
-                var param = newPlayer.querySelector("param[name=flashvars]");
-                if (param) {
-                    var value = param.getAttribute("value");
-                    if (value) {
-                        var newValue = rewriteFlashvars(value);
-                        if (value != newValue) {
-                            param.setAttribute("value", newValue);
-                            flashvarsChanged = true;
+        if (flashvarsChanged)
+            player.parentNode.replaceChild(newPlayer, player);
+    }
+
+    function runInPage(fn, arg) {
+        var script = document.createElement("script");
+        script.type = "application/javascript";
+        script.async = false;
+        script.textContent = "(" + fn + ")(" + arg + ");";
+        document.documentElement.appendChild(script);
+        document.documentElement.removeChild(script);
+    }
+
+    document.addEventListener("beforeload", function(event) {
+        if ((event.target.localName == "object" || event.target.localName == "embed") && /:\/\/[^\/]*\.ytimg\.com\//.test(event.url))
+            patchPlayer(event.target);
+    }, true);
+
+    runInPage(function(badArgumentsRegex) {
+        // If history.pushState is available, YouTube uses the history API
+        // when navigation from one video to another, and tells the flash
+        // player with JavaScript which video and which ads to show next,
+        // bypassing our flashvars rewrite code. So we disable
+        // history.pushState before YouTube's JavaScript runs.
+        History.prototype.pushState = undefined;
+
+        // The HTML5 player is configured via ytplayer.config.args. We have
+        // to make sure that ad-related arguments are ignored as they are set.
+        var ytplayer = undefined;
+        Object.defineProperty(window, "ytplayer", {
+          configurable: true,
+          get: function() {
+            return ytplayer;
+          },
+          set: function(rawYtplayer) {
+            if (!rawYtplayer || typeof rawYtplayer != "object") {
+              ytplayer = rawYtplayer;
+              return;
+            }
+
+            var config = undefined;
+            ytplayer = Object.create(rawYtplayer, {
+              config: {
+                enumerable: true,
+                get: function() {
+                  return config;
+                },
+                set: function(rawConfig) {
+                  if (!rawConfig || typeof rawConfig != "object") {
+                    config = rawConfig;
+                    return;
+                  }
+
+                  var args = undefined;
+                  config = Object.create(rawConfig, {
+                    args: {
+                      enumerable: true,
+                      get: function() {
+                        return args;
+                      },
+                      set: function(rawArgs) {
+                        if (!rawArgs || typeof rawArgs != "object") {
+                          args = rawArgs;
+                          return;
                         }
-                    }
-                }
 
-                if (flashvarsChanged)
-                    player.parentNode.replaceChild(newPlayer, player);
-            }
-
-            function runInPage(fn, arg) {
-                var script = document.createElement("script");
-                script.type = "application/javascript";
-                script.async = false;
-                script.textContent = "(" + fn + ")(" + arg + ");";
-                document.documentElement.appendChild(script);
-                document.documentElement.removeChild(script);
-            }
-
-            document.addEventListener("beforeload", function(event) {
-                if ((event.target.localName == "object" || event.target.localName == "embed") && /:\/\/[^\/]*\.ytimg\.com\//.test(event.url))
-                    patchPlayer(event.target);
-            }, true);
-
-            runInPage(function(badArgumentsRegex) {
-                // If history.pushState is available, YouTube uses the history API
-                // when navigation from one video to another, and tells the flash
-                // player with JavaScript which video and which ads to show next,
-                // bypassing our flashvars rewrite code. So we disable
-                // history.pushState before YouTube's JavaScript runs.
-                History.prototype.pushState = undefined;
-
-                // The HTML5 player is configured via ytplayer.config.args. We have
-                // to make sure that ad-related arguments are ignored as they are set.
-                var ytplayer = undefined;
-                Object.defineProperty(window, "ytplayer", {
-                  configurable: true,
-                  get: function() {
-                    return ytplayer;
-                  },
-                  set: function(rawYtplayer) {
-                    if (!rawYtplayer || typeof rawYtplayer != "object") {
-                      ytplayer = rawYtplayer;
-                      return;
-                    }
-
-                    var config = undefined;
-                    ytplayer = Object.create(rawYtplayer, {
-                      config: {
-                        enumerable: true,
-                        get: function() {
-                          return config;
-                        },
-                        set: function(rawConfig) {
-                          if (!rawConfig || typeof rawConfig != "object") {
-                            config = rawConfig;
-                            return;
-                          }
-
-                          var args = undefined;
-                          config = Object.create(rawConfig, {
-                            args: {
-                              enumerable: true,
-                              get: function() {
-                                return args;
-                              },
-                              set: function(rawArgs) {
-                                if (!rawArgs || typeof rawArgs != "object") {
-                                  args = rawArgs;
-                                  return;
-                                }
-
-                                args = {};
-                                for (var arg in rawArgs) {
-                                  if (!badArgumentsRegex.test(arg))
-                                    args[arg] = rawArgs[arg];
-                                }
-                              }
-                            }
-                          });
-
-                          config.args = rawConfig.args;
+                        args = {};
+                        for (var arg in rawArgs) {
+                          if (!badArgumentsRegex.test(arg))
+                            args[arg] = rawArgs[arg];
                         }
                       }
-                    });
+                    }
+                  });
 
-                    ytplayer.config = rawYtplayer.config;
-                  }
-                });
-              }, badArgumentsRegex);//end of runInPage()
-          });//end of BGcall('block_youtube_streaming_ads')
-      });//end of BGcall('adblock_is_paused')
-  // }//end of if SAFARI
+                  config.args = rawConfig.args;
+                }
+              }
+            });
+
+            ytplayer.config = rawYtplayer.config;
+          }
+        });
+      }, badArgumentsRegex);//end of runInPage()
 })();

@@ -235,9 +235,7 @@
           domain: parseUri(url).hostname,
           resources: {}
         };
-        if (frameId === 0) {
-          fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
-        }
+        fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
       },
 
       // Watch for requests for new tabs and frames, and track their URLs.
@@ -287,8 +285,9 @@
         if (!get_settings().show_advanced_options)
           return;
         var data = frameData.get(tabId, frameId);
-        if (data !== undefined)
+        if (data !== undefined) {
             data.resources[elType + ':|:' + url] = null;
+        }
       },
 
       onTabClosedHandler: function(tabId) {
@@ -307,9 +306,6 @@
           var pos = url.pathname.lastIndexOf('.');
           if (pos > -1) {
             var ext = url.pathname.slice(pos) + '.';
-            if ('.eot.ttf.otf.svg.woff.woff2.'.indexOf(ext) !== -1) {
-              return 'font';
-            }
             // Still need this because often behind-the-scene requests are wrongly
             // categorized as 'other'
             if ('.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
@@ -326,14 +322,26 @@
       if (adblock_is_paused())
         return { cancel: false };
 
+      // Convert punycode domain to Unicode - GH #472
+      details.url = getUnicodeUrl(details.url);
+
       if (!frameData.track(details))
         return { cancel: false };
 
       var tabId = details.tabId;
       var reqType = normalizeRequestType({url: details.url, type: details.type});
 
-      if (frameData.get(tabId, 0).whitelisted) {
+      var top_frame = frameData.get(tabId, 0);
+      var sub_frame = (details.frameId !== 0 ? frameData.get(tabId, details.frameId) : null);
+
+      // If top frame is whitelisted, don't process anything
+      if (top_frame.whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted tab", tabId, details.url.substring(0, 100));
+        return { cancel: false };
+      // If request comes from whitelisted sub_frame and
+      // top frame is not whitelisted, don't process the request
+      } else if (sub_frame && sub_frame.whitelisted) {
+        log("[DEBUG]", "Ignoring whitelisted frame", tabId, details.url.substring(0, 100));
         return { cancel: false };
       }
 
@@ -363,11 +371,10 @@
         // receive this or not.  Because the #anchor of a page can change without navigating
         // the frame, ignore the anchor when matching.
         var frameUrl = frameData.get(tabId, requestingFrameId).url.replace(/#.*$/, "");
-        var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url:details.url, elType: elType };
+        var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url: details.url, elType: elType };
         chrome.tabs.sendRequest(tabId, data);
       }
-
-      if (blocked){
+      if (blocked) {
         blockCounts.recordOneAdBlocked(tabId);
         updateBadge(tabId);
       }
@@ -396,10 +403,14 @@
       // blocking filter's regex rule. Github issue # 69
       if (details.url === "about:blank")
         details.url = opener.url;
-      var match = _myfilters.blocking.matches(details.url, ElementTypes.popup, opener.domain);
-      if (match)
-        chrome.tabs.remove(details.tabId);
-      frameData.storeResource(details.sourceTabId, details.sourceFrameId, details.url, ElementTypes.popup);
+      var url = getUnicodeUrl(details.url);
+      var match = _myfilters.blocking.matches(url, ElementTypes.popup, opener.domain);
+      if (match) {
+          chrome.tabs.remove(details.tabId);
+          blockCounts.recordOneAdBlocked(details.sourceTabId);
+          updateBadge(details.sourceTabId);
+      }
+      frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup);
     };
 
     // If tabId has been replaced by Chrome, delete it's data
@@ -421,6 +432,7 @@
             if (tabData &&
                 tabData.url !== details.url) {
                 details.type = 'main_frame';
+                details.url = getUnicodeUrl(details.url);
                 frameData.track(details);
             }
         }
@@ -798,7 +810,10 @@
           return;
         }
 
-        var disabled_site = page_is_unblockable(tab.url);
+        // GH #472
+        tab.unicodeUrl = getUnicodeUrl(tab.url);
+
+        var disabled_site = page_is_unblockable(tab.unicodeUrl);
         var total_blocked = blockCounts.getTotalAdsBlocked();
         var tab_blocked = blockCounts.getTotalAdsBlocked(tab.id);
         var display_stats = get_settings().display_stats;
@@ -814,14 +829,16 @@
         };
 
         if (!disabled_site)
-          result.whitelisted = page_is_whitelisted(tab.url);
+          result.whitelisted = page_is_whitelisted(tab.unicodeUrl);
 
         callback(result);
       });
     } else {
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
-      var disabled_site = page_is_unblockable(tab.url);
+      tab.unicodeUrl = getUnicodeUrl(tab.url); // GH #472
+
+      var disabled_site = page_is_unblockable(tab.unicodeUrl);
 
       var result = {
         tab: tab,
@@ -829,7 +846,7 @@
       };
 
       if (!disabled_site)
-        result.whitelisted = page_is_whitelisted(tab.url);
+        result.whitelisted = page_is_whitelisted(tab.unicodeUrl);
 
         callback(result);
       }
@@ -843,6 +860,7 @@
     if (!url) { // Safari empty/bookmarks/top sites page
       return true;
     }
+    url = getUnicodeUrl(url);
     url = url.replace(/\#.*$/, ''); // Remove anchors
     if (!type)
       type = ElementTypes.document;
@@ -918,7 +936,7 @@
           );
         });
 
-        var host                = parseUri(info.tab.url).host;
+        var host                = getUnicodeDomain(parseUri(info.tab.unicodeUrl).host);
         var custom_filter_count = count_cache.getCustomFilterCount(host);
         if (custom_filter_count) {
           addMenu(translate("undo_last_block"), function(tab) {
@@ -936,7 +954,7 @@
           browsersBadgeOptions.iconPaths = {'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"};
           setBrowserActions(browsersBadgeOptions);
         } else if (info.disabled_site &&
-            !/^chrome-extension:.*pages\/install\//.test(info.tab.url)) {
+            !/^chrome-extension:.*pages\/install\//.test(info.tab.unicodeUrl)) {
           // Show non-disabled icon on the installation-success page so it
           // users see how it will normally look. All other disabled pages
           // will have the gray one
@@ -1015,7 +1033,7 @@
       var yt_channel = url.split('/').pop();
     }
     if (yt_channel) {
-        var filter = '@@||youtube.com/*' + yt_channel + '$document';
+        var filter = '@@|https://www.youtube.com/*' + yt_channel + '|$document';
         return add_custom_filter(filter);
     }
   }
@@ -1025,8 +1043,15 @@
   get_content_script_data = function(options, sender) {
     var settings = get_settings();
     var runnable = !adblock_is_paused() && !page_is_unblockable(sender.url);
+    var running_top = runnable && !page_is_whitelisted(sender.tab.url);
     var running = runnable && !page_is_whitelisted(sender.url);
     var hiding = running && !page_is_whitelisted(sender.url, ElementTypes.elemhide);
+
+    // Don't run in frame, when top frame is whitelisted
+    if (!running_top && running) {
+      running = false;
+      hiding = false;
+    }
 
     var result = {
       settings: settings,
@@ -1055,6 +1080,7 @@
         'top_open_whitelist_ui': {
           allFrames: false,
           include: [
+            "punycode.min.js",
             "jquery/jquery.min.js",
             "jquery/jquery-ui.custom.min.js",
             "uiscripts/load_jquery_ui.js",
@@ -1064,6 +1090,7 @@
         'top_open_blacklist_ui': {
           allFrames: false,
           include: [
+            "punycode.min.js",
             "jquery/jquery.min.js",
             "jquery/jquery-ui.custom.min.js",
             "uiscripts/load_jquery_ui.js",
@@ -1201,17 +1228,17 @@
 
   // Log an 'error' message on GAB log server.
   var recordErrorMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=error', callback);
+    recordMessageUrl(msg, 'error', callback);
   };
 
   // Log an 'status' related message on GAB log server.
   var recordStatusMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=stats', callback);
+    recordMessageUrl(msg, 'stats', callback);
   };
 
   // Log a 'general' message on GAB log server.
   var recordGeneralMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'type=general', callback);
+    recordMessageUrl(msg, 'general', callback);
   };
 
   // Log a message on GAB log server.  The user's userid will be prepended to the message.
@@ -1221,7 +1248,7 @@
       return;
     }
     // Include user ID in message
-    var fullUrl = 'https://log.getadblock.com/record_log.php?' +
+    var fullUrl = 'https://log.getadblock.com/record_log.php?type=' +
                   queryType +
                   '&message=' +
                   encodeURIComponent(STATS.userId + " " + msg);
@@ -1256,38 +1283,47 @@
   // Record that we exist.
   STATS.startPinging();
 
+  //passthrough functions
+  var addGABTabListeners = function(sender) {
+    gabQuestion.addGABTabListeners(sender);
+  };
+
+  var removeGABTabListeners = function(saveState) {
+    gabQuestion.removeGABTabListeners(saveState);
+  }
+
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
     var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     if (SAFARI) {
       openTab(installedURL);
     } else {
-      //if Chrome, open the /installed tab,
-      //check the status of the tab after 30 seconds
-      //if it failed to loaded, send a message
-      var tabStatus = "";
       chrome.tabs.create({url: installedURL}, function(tab) {
-        tabStatus = tab.status;
-        var installedTabId = tab.id;
-        var installedTabListener = function(tabId, changeInfo, tab) {
-          if (tabId !== installedTabId) {
-            return;
+        if (chrome.runtime.lastError) {
+          if (chrome.runtime.lastError.message) {
+            recordErrorMessage('/installed open error ' + chrome.runtime.lastError.message);
+          } else {
+            recordErrorMessage('/installed open error ' + JSON.stringify(chrome.runtime.lastError));
           }
-          tabStatus = tab.status;
-        };
-        chrome.tabs.onUpdated.addListener(installedTabListener);
-        //wait 30 seconds, then check to see if the tabStatus is complete.
-        //if not, send a message
-        setTimeout(function() {
-          if (tabStatus !== "complete") {
-            recordErrorMessage('installed tab not complete, last status ' + tabStatus);
-          }
-          chrome.tabs.onUpdated.removeListener(installedTabListener);
-        }, 30000);
+        }
       });
     }
   }
   if (chrome.runtime.setUninstallURL) {
-    chrome.runtime.setUninstallURL("https://getadblock.com/uninstall/?u=" + STATS.userId);
+    var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
+    //if the start property of blockCount exists (which is the AdBlock installation timestamp)
+    //use it to calculate the approximate length of time that user has AdBlock installed
+    if (blockCounts && blockCounts.get().start) {
+      var fiveMinutes = 5 * 60 * 1000;
+      var updateUninstallURL = function() {
+        var installedDuration = (Date.now() - blockCounts.get().start);
+        chrome.runtime.setUninstallURL(uninstallURL + "&t=" + installedDuration);
+      };
+      //start an interval timer that will update the Uninstall URL every 5 minutes
+      setInterval(updateUninstallURL, fiveMinutes);
+      updateUninstallURL();
+    } else {
+      chrome.runtime.setUninstallURL(uninstallURL + "&t=-1");
+    }
   }
 
   //validate STATS.firstRun against Chrome's Runtime API onInstalled
@@ -1371,8 +1407,10 @@
       log("Found", tabs.length, "tabs that were already opened");
       for (var i=0; i<tabs.length; i++) {
         var currentTab = tabs[i], tabId = currentTab.id;
-        if (!frameData.get(tabId)) // unknown tab
-          frameData.track({url: currentTab.url, tabId: tabId, type: "main_frame"});
+        if (!frameData.get(tabId)) { // unknown tab
+            currentTab.url = getUnicodeUrl(currentTab.url);
+            frameData.track({url: currentTab.url, tabId: tabId, type: "main_frame"});
+        }
         updateBadge(tabId);
         // TODO: once we're able to get the parentFrameId, call
         // chrome.webNavigation.getAllFrames to 'load' the subframes
@@ -1386,7 +1424,9 @@
   // Script injection logic for Safari is done in safari_bg.js
   if (!SAFARI) {
       var runChannelWhitelist = function(tabUrl, tabId) {
-          if (/youtube.com/.test(tabUrl) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).ab_channel) {
+          if (parseUri(tabUrl).hostname === "www.youtube.com" &&
+              get_settings().youtube_channel_whitelist &&
+              !parseUri.parseSearch(tabUrl).ab_channel) {
               chrome.tabs.executeScript(tabId, {file: "ytchannel.js", runAt: "document_start"});
           }
       }
