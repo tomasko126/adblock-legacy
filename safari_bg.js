@@ -119,14 +119,10 @@ safari.application.addEventListener("message", function(messageEvent) {
     if (frameInfo.top_level) {
         frameId = 0;
     } else {
-        for (var tabId in frameData) {
-            if (frameData[tabId]) {
-                for (var i=0; i<Object.keys(frameData[tabId]).length; i++) {
-                    if (frameData[tabId][i].domain === frameDomain) {
-                        frameId = i;
-                        break;
-                    }
-                }
+        for (var i=0; i<Object.keys(frameData[tab.id]).length; i++) {
+            if (frameData[tab.id][i].domain === frameDomain) {
+                frameId = i;
+                break;
             }
         }
     }
