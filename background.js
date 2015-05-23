@@ -458,12 +458,10 @@
   }
 
   // Experimental selectors cache
-  checkSelectors = function() {
+  cleanSelectorsCache = function() {
     if (_myfilters.hiding && get_settings().experimental_hiding) {
-      console.log("Re-checking selectors cache");
-      _myfilters.hiding.checkSelectors();
+      _myfilters.hiding.cleanSelectorsCache();
     }
-    console.log(_myfilters.hiding._selectorsCache);
   }
 
   setSelectors = function(url, selectors) {

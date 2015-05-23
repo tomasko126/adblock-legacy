@@ -127,7 +127,9 @@ function logMatchedElements(data, node, hide) {
   selectors.
     filter(function(selector) { return node.querySelector(selector); }).
     forEach(function(selector) {
-      matchedSelectors.push(selector);
+      if (getComputedStyle(document.querySelector(selector)).display !== "none") {
+          matchedSelectors.push(selector);
+      }
       if (data.settings.debug_logging) {
         var matches = "";
         var elems = node.querySelectorAll(selector);

@@ -50,27 +50,25 @@ FilterSet.prototype = {
   // Save recorded selectors into cache
   setSelectors: function(url, selectors) {
     var urlDomain = parseUri(url).hostname.replace(/^www./, "");
+    console.log("Pushing selectors ", selectors, "to URL: ", url, urlDomain);
 
-    // If we want to save another selectors
-    if (urlDomain in this._selectorsCache) {
-      for (var i=0; i<selectors.length; i++) {
-        this._selectorsCache[urlDomain].push(selectors[i]);
-      }
+    if (!this._selectorsCache[urlDomain]) {
+        this._selectorsCache[urlDomain] = [];
+        this.cacheFilterListSelectors(urlDomain);
     }
 
-    this._selectorsCache[urlDomain] = selectors;
-    this.cacheFilterListSelectors(urlDomain);
+    for (var i=0; i<selectors.length; i++) {
+       this._selectorsCache[urlDomain].push(selectors[i]);
+    }
+
     storage_set("cached_filters", this._selectorsCache);
   },
 
-  // Save selectors from filter list to cache
+  // Save selectors from filter lists to cache
   cacheFilterListSelectors: function(domain) {
     var selectors = this._viewFor(domain).items[domain];
     if (selectors) {
       for (var i=0; i<selectors.length; i++) {
-        if (!this._selectorsCache[domain]) {
-          this._selectorsCache[domain] = [];
-        }
         this._selectorsCache[domain].push(selectors[i].selector);
       }
     }
@@ -79,36 +77,16 @@ FilterSet.prototype = {
   // Get recorded selectors from cache
   getSelectors: function(url) {
     var urlDomain = parseUri(url).hostname.replace(/^www./, "");
-    if (urlDomain in this._selectorsCache)
+    if (this._selectorsCache[urlDomain])
         return this._selectorsCache[urlDomain];
 
     return null;
   },
 
-  // Check, if selectors should be still in cache
-  // e.g. after filter lists update
-  checkSelectors: function() {
-    // Process every domain in this._selectorsCache
-    var cache = this._selectorsCache;
-    console.log("Cache untouched: ", cache);
-    for (var domain in cache) {
-      console.log("Domain ", domain);
-      if (cache.hasOwnProperty(domain)) {
-        var filters = this.filtersFor(domain);
-        console.log("Filters for domain: ", filters);
-        cache[domain].forEach(function(filter) {
-          console.log("Filter of cache[domain] ", filter);
-          if (filters.indexOf(filter, 0) < 0) {
-            console.log("Should be removed filter: ", filter);
-            var index = cache[domain].indexOf(filter, 0);
-            console.log("Index of position: ", index);
-            cache[domain].splice(index, 1);
-            console.log("Touched cache: ", cache);
-          }
-        });
-      }
-    }
-    return cache;
+  // Delete cached selectors
+  cleanSelectorsCache: function() {
+    this._selectorsCache = {};
+    storage_set("cached_filters", this._selectorsCache);
   },
 
   _viewFor: function(domain) {
