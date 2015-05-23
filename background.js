@@ -459,13 +459,13 @@
 
   // Experimental selectors cache
   cleanSelectorsCache = function() {
-    if (_myfilters.hiding && get_settings().experimental_hiding) {
-      _myfilters.hiding.cleanSelectorsCache();
+    if (get_settings().experimental_hiding) {
+      SelectorsCache.cleanSelectorsCache();
     }
   }
 
   setSelectors = function(url, selectors) {
-    _myfilters.hiding.setSelectors(url, selectors);
+    SelectorsCache.setSelectors(url, selectors);
   }
 
   // UNWHITELISTING
@@ -657,8 +657,7 @@
 
     // Reset cache, when experimental hiding is going to be disabled
     if (name === "experimental_hiding" && !is_enabled) {
-      storage_set("cached_filters", "{}");
-      _myfilters.hiding._selectorsCache = {};
+      SelectorsCache.cleanSelectorsCache();
     }
 
     if (!SAFARI && sync) {
@@ -1060,7 +1059,7 @@
 
     if (hiding) {
       if (settings.experimental_hiding) {
-        var cached_selectors = _myfilters.hiding.getSelectors(sender.url);
+        var cached_selectors = SelectorsCache.getSelectors(sender.url);
         if (cached_selectors) {
           result._cachedSelectors = cached_selectors;
         }
@@ -1272,11 +1271,10 @@
 
   // Initialize cached filters
   if (typeof storage_get("cached_filters") === "undefined" ||
-      typeof _myfilters.hiding._selectorsCache === "undefined") {
-      storage_set("cached_filters", "{}");
-      _myfilters.hiding._selectorsCache = {};
+      typeof SelectorsCache._selectorsCache === "undefined") {
+      SelectorsCache.cleanSelectorsCache();
   }
-  _myfilters.hiding._selectorsCache = storage_get("cached_filters");
+  SelectorsCache._selectorsCache = storage_get("cached_filters");
 
   // Record that we exist.
   STATS.startPinging();
