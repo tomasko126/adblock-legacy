@@ -38,7 +38,7 @@ SelectorsCache = {
     },
 
     // Delete cached selectors
-    cleanSelectorsCache: function() {
+    reset: function() {
         this._selectorsCache = {};
         storage_set("cached_filters", this._selectorsCache);
     }

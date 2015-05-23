@@ -149,7 +149,7 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
   if (rebuild) {
     this.rebuild();
   } else {
-    SelectorsCache.cleanSelectorsCache();
+    SelectorsCache.reset();
   }
 
   chrome.extension.sendRequest({command: "filters_updated"});
@@ -242,7 +242,7 @@ MyFilters.prototype.rebuild = function() {
     this._initializeMalwareDomains();
   }
 
-  SelectorsCache.cleanSelectorsCache();
+  SelectorsCache.reset();
 
   // After 90 seconds, delete the cache. That way the cache is available when
   // rebuilding multiple times in a row (when multiple lists have to update at

@@ -460,7 +460,7 @@
   // Experimental selectors cache
   cleanSelectorsCache = function() {
     if (get_settings().experimental_hiding) {
-      SelectorsCache.cleanSelectorsCache();
+      SelectorsCache.reset();
     }
   }
 
@@ -657,7 +657,7 @@
 
     // Reset cache, when experimental hiding is going to be disabled
     if (name === "experimental_hiding" && !is_enabled) {
-      SelectorsCache.cleanSelectorsCache();
+      SelectorsCache.reset();
     }
 
     if (!SAFARI && sync) {
