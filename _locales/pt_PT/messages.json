@@ -184,7 +184,7 @@
     "description":"Button for excluding a domain in the whitelister dialog"
   },
   "reloadpageafterwhitelist":{
-    "message":"Recarregue a página.",
+    "message":"Recarregar a página.",
     "description":"Checkbox on whitelist wizard"
   },
   "wizardcantrunonframesets":{

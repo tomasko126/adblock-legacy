@@ -1213,6 +1213,10 @@
     "message":"Mukautetut suodatinlistat",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxerrorforfilters":{
+    "message":"Olet ylittänyt Dropboxin kokorajoituksen. Poista kohteita mukautetuista tai käytöstä poistetuista suodattimista ja yritä uudelleen.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
+  },
   "languagedropdowndescription":{
     "message":"Lisää suodattimia toiselle kielelle: ",
     "description":"Dropdown list for language-specific filters"

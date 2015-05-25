@@ -1213,6 +1213,10 @@
     "message":"Lista de filtros elegidos",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxerrorforfilters":{
+    "message":"Has excedido el límite de espacio de Dropbox. Elimina algunas entradas de tus filtros personalizados o desactivados y vuélvelo a intentar.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
+  },
   "languagedropdowndescription":{
     "message":"Añadir filtros para otro idioma: ",
     "description":"Dropdown list for language-specific filters"
@@ -1270,6 +1274,10 @@
         "example":"<a>here<\/a>"
       }
     }
+  },
+  "ff_adblock_outdated":{
+    "message":"Estás usando una versión antigua de AdBlock. Haz clic en el botón del menú de Firefox y selecciona 'Complementos'. A continuación, en la página de Complementos, haz clic en el engranaje y selecciona 'Buscar actualizaciones'.",
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
   },
   "adblocksupport":{
     "message":"Soporte de AdBlock",

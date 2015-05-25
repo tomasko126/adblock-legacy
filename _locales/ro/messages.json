@@ -1213,6 +1213,10 @@
     "message":"Filtre personalizate",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxerrorforfilters":{
+    "message":"Ai depăşit limita de spaţiu Dropbox. Te rugăm îndepărtează câteva intrări din filtrele proprii sau cele dezactivate şi încearcă din nou.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
+  },
   "languagedropdowndescription":{
     "message":"Adaugă filtru pentru altă limbă: ",
     "description":"Dropdown list for language-specific filters"
@@ -1270,6 +1274,10 @@
         "example":"<a>here<\/a>"
       }
     }
+  },
+  "ff_adblock_outdated":{
+    "message":"Utilizaţi o versiune veche de AdBlock. Vă rugăm să faceţi clic pe butonul Firefox Meniu şi selectaţi Suplimente. Apoi in pagina de suplimente, faceţi clic pe pictograma roţii dinţate (instrumente pentru suplimente) şi alegeţi 'Verifică actualizari'.",
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
   },
   "adblocksupport":{
     "message":"Suport AdBlock",

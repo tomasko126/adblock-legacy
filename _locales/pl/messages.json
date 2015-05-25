@@ -36,7 +36,7 @@
     "description":"Resource list column title telling if the resource originates from a different domain"
   },
   "chromebutton_how_to_hide2":{
-    "message":"Aby ukryć przycisk, kliknij PPM na ikonie AdBlock'a a następnie wybierz \"Ukryj przycisk\". Możesz ponownie włączyć pokazywanie go pod adresem chrome:\/\/extensions.",
+    "message":"Aby ukryć przycisk, kliknij prawym przyciskiem myszy na ikonie AdBlocka a następnie wybierz \"Ukryj przycisk\". Możesz ponownie włączyć pokazywanie go pod adresem chrome:\/\/extensions\/.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
   },
   "operabutton_how_to_hide2":{
@@ -1213,6 +1213,10 @@
     "message":"Własne listy filtrów",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxerrorforfilters":{
+    "message":"Przekroczyłeś limit rozmiaru Dropbox. Proszę usunąć niektóre wpisy z własnych lub wyłączonych filtrów i spróbuj ponownie.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
+  },
   "languagedropdowndescription":{
     "message":"Dodaj filtry dla innego języka: ",
     "description":"Dropdown list for language-specific filters"
@@ -1270,6 +1274,10 @@
         "example":"<a>here<\/a>"
       }
     }
+  },
+  "ff_adblock_outdated":{
+    "message":"Używaj starej wersji AdBlocka. Proszę kliknąć przycisk menu Firefoksa i wybrać \"Dodatki\". Następnie na stronie dodatków, kliknij ikonę koła zębatego (narzędzia dla wszystkich dodatków) i wybierz \"Sprawdź aktualizacje\".",
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
   },
   "adblocksupport":{
     "message":"Wsparcie dla AdBlock'a",

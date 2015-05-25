@@ -1213,6 +1213,10 @@
     "message":"કસ્ટમ ફિલ્ટર યાદી",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxerrorforfilters":{
+    "message":"તમે ડ્રૉપબૉક્સ માપ મર્યાદા વટાવી દીધી છે. તમારી વૈવિધ્યપૂર્ણ અથવા અક્ષમ ફિલ્ટર કેટલાક પ્રવેશોને દૂર કરો અને ફરી પ્રયત્ન કરો.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
+  },
   "languagedropdowndescription":{
     "message":"અન્ય ભાષા માટે ફિલ્ટર્સ ઉમેરો: ",
     "description":"Dropdown list for language-specific filters"
@@ -1270,6 +1274,10 @@
         "example":"<a>here<\/a>"
       }
     }
+  },
+  "ff_adblock_outdated":{
+    "message":"તમે AdBlock ની જૂની આવૃત્તિ વાપરી રહ્યા હોય. Firefox મેનુ બટન પર ક્લિક કરો અને એડ-ઓન્સ પસંદ કરો. પછી ઑન્સ પાનાં પર ઉમેરો, ગિયર ચિહ્ન (બધા એડ ઓન માટે  ના સાધનો) પર ક્લિક કરો, અને 'સુધારાઓ માટે ચકાસો' ને પસંદ કરો.",
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
   },
   "adblocksupport":{
     "message":"AdBlock નો આધાર",
