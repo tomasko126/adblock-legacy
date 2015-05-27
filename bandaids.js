@@ -35,10 +35,10 @@ var run_bandaids = function() {
     },
     hotmail: function() {
       //removing the space remaining in Hotmail/WLMail
-      el = document.querySelector(".WithRightRail");
-      if (el) {el.style.setProperty("right", "0px", null);}
-      el = document.getElementById("RightRailContainer");
-      if (el) {el.style.setProperty("display", "none", null);}
+      var el = document.querySelector(".WithRightRail");
+      if (el) {
+        el.style.setProperty("right", "0px", null);
+      }
     },
     getadblockquestion: function() {
       BGcall('addGABTabListeners');
