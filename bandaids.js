@@ -8,7 +8,7 @@ var run_bandaids = function() {
   else if (/getadblock\.com$/.test(document.location.hostname) &&
            window.top === window.self) {
     if (/\/question\/$/.test(document.location.pathname)) {
-      apply_bandaid_for = "getadblockquestion";   
+      apply_bandaid_for = "getadblockquestion";
     } else {
       apply_bandaid_for = "getadblock";
     }
@@ -35,16 +35,10 @@ var run_bandaids = function() {
     },
     hotmail: function() {
       //removing the space remaining in Hotmail/WLMail
-      el = document.querySelector(".Unmanaged .WithSkyscraper #MainContent");
-      if (el) {el.style.setProperty("margin-right", "1px", null);}
-      el = document.querySelector(".Managed .WithSkyscraper #MainContent");
-      if (el) {el.style.setProperty("right", "1px", null);}
-      el = document.getElementById("SkyscraperContent");
-      if (el) {
-        el.style.setProperty("display", "none", null);
-        el.style.setProperty("position", "absolute", null);
-        el.style.setProperty("right", "0px", null);
-      }
+      el = document.querySelector(".WithRightRail");
+      if (el) {el.style.setProperty("right", "0px", null);}
+      el = document.getElementById("RightRailContainer");
+      if (el) {el.style.setProperty("display", "none", null);}
     },
     getadblockquestion: function() {
       BGcall('addGABTabListeners');
