@@ -1765,8 +1765,8 @@
             log(ex);
             //since the most likely exception at this point is a size exceeded message,
             //store the message code.
-            sessionstorage_set("dropboxerror", "dropboxerrorforfilters");
-            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorforfilters"});
+            sessionstorage_set("dropboxerror", translate("dropboxerrorforfilters"));
+            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: translate("dropboxerrorforfilters") });
           }
           if (!syncError) {
             //sync was successful, remove any previous error messages.
