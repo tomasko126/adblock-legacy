@@ -1277,7 +1277,7 @@
   },
   "ff_adblock_outdated":{
     "message":"您正在使用旧版本的AdBlock 。请单击Firefox菜单按钮，并选择\"附加组件\"。在附加组件管理器页面，单击右上角的均衡器图标 (用于所有附加组件的工具)，然后选择\"检查更新\"。",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"AdBlock技术支持",

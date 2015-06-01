@@ -1277,7 +1277,7 @@
   },
   "ff_adblock_outdated":{
     "message":"Utilizaţi o versiune veche de AdBlock. Vă rugăm să faceţi clic pe butonul Firefox Meniu şi selectaţi Suplimente. Apoi in pagina de suplimente, faceţi clic pe pictograma roţii dinţate (instrumente pentru suplimente) şi alegeţi 'Verifică actualizari'.",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"Suport AdBlock",

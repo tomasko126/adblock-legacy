@@ -1277,7 +1277,7 @@
   },
   "ff_adblock_outdated":{
     "message":"Estás usando una versión antigua de AdBlock. Haz clic en el botón del menú de Firefox y selecciona 'Complementos'. A continuación, en la página de Complementos, haz clic en el engranaje y selecciona 'Buscar actualizaciones'.",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"Soporte de AdBlock",

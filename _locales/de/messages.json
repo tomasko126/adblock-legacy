@@ -1210,7 +1210,7 @@
     "description":"List for other filters the user subscribed to"
   },
   "customfilters":{
-    "message":"Eigene Filterlisten",
+    "message":"Benutzerdefinierte Filterlisten",
     "description":"List for custom filters the user subscribed to"
   },
   "languagedropdowndescription":{

@@ -1277,7 +1277,7 @@
   },
   "ff_adblock_outdated":{
     "message":"Używaj starej wersji AdBlocka. Proszę kliknąć przycisk menu Firefoksa i wybrać \"Dodatki\". Następnie na stronie dodatków, kliknij ikonę koła zębatego (narzędzia dla wszystkich dodatków) i wybierz \"Sprawdź aktualizacje\".",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"Wsparcie dla AdBlock'a",

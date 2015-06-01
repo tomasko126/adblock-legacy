@@ -1277,7 +1277,7 @@
   },
   "ff_adblock_outdated":{
     "message":"તમે AdBlock ની જૂની આવૃત્તિ વાપરી રહ્યા હોય. Firefox મેનુ બટન પર ક્લિક કરો અને એડ-ઓન્સ પસંદ કરો. પછી ઑન્સ પાનાં પર ઉમેરો, ગિયર ચિહ્ન (બધા એડ ઓન માટે  ના સાધનો) પર ક્લિક કરો, અને 'સુધારાઓ માટે ચકાસો' ને પસંદ કરો.",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"AdBlock નો આધાર",

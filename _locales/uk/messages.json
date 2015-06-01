@@ -1277,7 +1277,7 @@
   },
   "ff_adblock_outdated":{
     "message":"Ви використовуєте застарілу версію AdBlock. Будь ласка відкрийте меню й оберіть Доповнення. Потім на сторінці доповнень натисніть іконку з шестернею (Інструменти для всіх доповнень), та виберіть 'Перевірити наявність оновлень'.",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"Підтримка користувачів AdBlock",

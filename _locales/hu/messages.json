@@ -1277,7 +1277,7 @@
   },
   "ff_adblock_outdated":{
     "message":"Ön az AdBlock egy régebbi verzióját használja. Kérjük kattintson a Firefox menügombjára és válassza a Kiegészítők menüpontot. Aztán a Kiegészítők oldalon kattintson a fogaskerék ikonra (eszközök minden kiegészítőhöz), majd válassza a 'Frissítések keresése' menüpontot.",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock"
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"AdBlock ügyfélszolgálat",
