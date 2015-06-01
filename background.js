@@ -1262,7 +1262,7 @@
       openTab(installedURL);
     } else {
       chrome.tabs.create({url: installedURL}, function(tab) {
-        //if we couldn't open a tab to '/installed', save that fact, so we can retry later
+        //if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
         if (chrome.runtime.lastError) {
           storage_set("/installed_error", { retry_count: 0 } );
         }
@@ -1277,7 +1277,7 @@
     var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
     chrome.tabs.create({url: retryInstalledURL}, function(tab) {
       if (chrome.runtime.lastError) {
-        //if there an error (again), increment the count, and re-save.
+        //if there is an error (again), increment the count, and re-save.
         storage_set("/installed_error", installError);
       } else {
         //if we successfully opened the tab,
