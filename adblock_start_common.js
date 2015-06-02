@@ -122,8 +122,9 @@ function block_list_via_css(selectors) {
 // Log matched selectors and save them into selectors cache
 function logMatchedElements(data, node, hide) {
   var selectors = data.selectors || data._cachedSelectors;
-  var matchedSelectors = [];
   if (!selectors) return;
+
+  var matchedSelectors = [];
   selectors.
     filter(function(selector) { return node.querySelector(selector); }).
     forEach(function(selector) {
