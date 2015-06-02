@@ -439,7 +439,7 @@
     } else {
         frameData.storeResource(sender.tab.id, sender.frameId, selector, "HIDE");
     }
-    var data = frameData.get(sender.tab.id, sender.frameId);
+    var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
       if (!SAFARI) {
