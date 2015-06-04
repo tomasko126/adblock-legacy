@@ -86,7 +86,7 @@ STATS = (function() {
   var handlePingResponse = function(responseData, textStatus, jqXHR) {
     SURVEY.maybeSurvey(responseData);
   };
-  
+
   //after installation; for 'admin' installation, do a ping at start up.
   if (!firstRun && chrome.management && chrome.management.getSelf) {
     chrome.management.getSelf(function(info) {
@@ -94,7 +94,7 @@ STATS = (function() {
         pingNow();
       }
     });
-  }  
+  }
 
   // Called just after we ping the server, to schedule our next ping.
   var scheduleNextPing = function() {
