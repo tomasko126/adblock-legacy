@@ -1271,7 +1271,7 @@
   }
   //retry logic for '/installed' - retries on browser / AdBlock startup
   var installError = storage_get("/installed_error");
-  if (installError && !SAFARI) {
+  if (installError && installError.retry_count >= 0 && !SAFARI) {
     //append the retry count to the URL
     installError.retry_count += 1;
     var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
