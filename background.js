@@ -1277,7 +1277,18 @@
     var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
     chrome.tabs.create({url: retryInstalledURL}, function(tab) {
       if (chrome.runtime.lastError) {
-        //if there is an error (again), increment the count, and re-save.
+        //if there is an error (again), log a message and re-save.
+        if (chrome.runtime.lastError.message) {
+          recordErrorMessage('/installed open error count: ' +
+                              installError.retry_count +
+                              " error: " +
+                              chrome.runtime.lastError.message);
+        } else {
+          recordErrorMessage('/installed open error count: ' +
+                              installError.retry_count +
+                              " error: " +
+                              JSON.stringify(chrome.runtime.lastError));
+        }
         storage_set("/installed_error", installError);
       } else {
         //if we successfully opened the tab,
