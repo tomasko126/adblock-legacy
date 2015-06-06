@@ -42,10 +42,8 @@ STATS = (function() {
     return storage_get("userid");
   })();
 
-  // Tell the server we exist.
-  var pingNow = function() {
+  var getPingData = function() {
     var data = {
-      cmd: "ping",
       u: userId,
       v: version,
       f: flavor,
@@ -56,7 +54,6 @@ STATS = (function() {
       l: determineUserLanguage(),
       st: SURVEY.types()
     };
-
     //only on Chrome
     if (flavor === "E" && blockCounts) {
         data["b"] = blockCounts.get().total;
@@ -64,6 +61,12 @@ STATS = (function() {
     if (chrome.runtime.id) {
       data["extid"] = chrome.runtime.id;
     }
+    return data;
+  };
+  // Tell the server we exist.
+  var pingNow = function() {
+    var data = getPingData();
+    data["cmd"] = 'ping';
     var ajaxOptions = {
       type: 'POST',
       url: stats_url,
@@ -82,6 +85,22 @@ STATS = (function() {
       $.ajax(ajaxOptions);
     }
   };
+  //tell the server we've started
+  var adminPing = function() {
+    var data = getPingData();
+    data["cmd"] = 'adminping';
+    //hard code the 'admin' type
+    data["it"] = 'a';
+    $.ajax({
+      type: 'POST',
+      url: stats_url,
+      data: data,
+      success: handlePingResponse, // TODO: Remove when we no longer do a/b tests
+      error: function(e) {
+        console.log("Ping returned error: ", e.status);
+      },
+    });
+  };
 
   var handlePingResponse = function(responseData, textStatus, jqXHR) {
     SURVEY.maybeSurvey(responseData);
@@ -91,7 +110,7 @@ STATS = (function() {
   if (!firstRun && chrome.management && chrome.management.getSelf) {
     chrome.management.getSelf(function(info) {
       if (info && info.installType === "admin") {
-        pingNow();
+        adminPing();
       }
     });
   }
@@ -149,6 +168,8 @@ STATS = (function() {
     firstRun: firstRun,
     userId: userId,
     version: version,
+    pingNow: pingNow,
+    adminPing: adminPing,
     flavor: flavor,
     browser: ({O:"Opera", S:"Safari", E:"Chrome"})[flavor],
     browserVersion: browserVersion,
