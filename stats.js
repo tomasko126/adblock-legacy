@@ -168,8 +168,6 @@ STATS = (function() {
     firstRun: firstRun,
     userId: userId,
     version: version,
-    pingNow: pingNow,
-    adminPing: adminPing,
     flavor: flavor,
     browser: ({O:"Opera", S:"Safari", E:"Chrome"})[flavor],
     browserVersion: browserVersion,
