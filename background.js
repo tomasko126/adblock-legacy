@@ -1261,15 +1261,26 @@
     if (SAFARI) {
       openTab(installedURL);
     } else {
-      chrome.tabs.create({url: installedURL}, function(tab) {
-        if (chrome.runtime.lastError) {
-          if (chrome.runtime.lastError.message) {
-            recordErrorMessage('/installed open error ' + chrome.runtime.lastError.message);
-          } else {
-            recordErrorMessage('/installed open error ' + JSON.stringify(chrome.runtime.lastError));
+      var openInstalledTab = function() {
+        chrome.tabs.create({url: installedURL}, function(tab) {
+          if (chrome.runtime.lastError) {
+            if (chrome.runtime.lastError.message) {
+              recordErrorMessage('/installed open error ' + chrome.runtime.lastError.message);
+            } else {
+              recordErrorMessage('/installed open error ' + JSON.stringify(chrome.runtime.lastError));
+            }
           }
-        }
-      });
+        });
+      };
+      if (chrome.management && chrome.management.getSelf) {
+        chrome.management.getSelf(function(info) {
+          if (info && info.installType !== "admin") {
+            openInstalledTab();
+          }
+        });
+      } else {
+        openInstalledTab();
+      }
     }
   }
   if (chrome.runtime.setUninstallURL) {
