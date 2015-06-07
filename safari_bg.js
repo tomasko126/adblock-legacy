@@ -2,84 +2,8 @@ emit_page_broadcast = function(request) {
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
-//frameData object for Safari
-frameData = (function() {
-    return {
-        // Get frameData for the tab.
-        // Input:
-        //   tabId: Integer - id of the tab you want to get
-        get: function(tabId, frameId) {
-            if (frameId !== undefined)
-                return (frameData[tabId] || {})[frameId];
-            return frameData[tabId];
-        },
-
-        // Create a new frameData
-        // Input:
-        //   tabId: Integerc - id of the tab you want to add in the frameData
-        create: function(tabId, frameId, url, domain) {
-            return frameData._initializeMap(tabId, frameId, url, domain);
-        },
-        // Reset a frameData
-        // Inputs:
-        //   tabId: Integer - id of the tab you want to add in the frameData
-        //   url: new URL for the tab
-        reset: function(tabId, frameId, url) {
-            var domain = parseUri(url).hostname;
-            delete frameData[tabId];
-            return frameData._initializeMap(tabId, frameId, url, domain);
-        },
-        // Initialize map
-        // Inputs:
-        //   tabId: Integer - id of the tab you want to add in the frameData
-        //   url: new URL for the tab
-        //   domain: domain of the request
-        _initializeMap: function(tabId, frameId, url, domain) {
-            var tracker = frameData[tabId];
-
-            // We need to handle IDN URLs properly
-            url = getUnicodeUrl(url);
-            domain = getUnicodeDomain(domain);
-
-            var shouldTrack = !tracker || tracker.url !== url;
-            if (shouldTrack) {
-                if (!frameData[tabId]) frameData[tabId] = {};
-                frameData[tabId][frameId] = {
-                    resources: {},
-                    domain: domain,
-                    url: url,
-                };
-            }
-            if (frameId === 0) {
-                frameData[tabId][frameId].whitelisted = page_is_whitelisted(url);
-            }
-            return tracker;
-        },
-        // Store resource
-        // Inputs:
-        //   tabId: Numeric - id of the tab you want to delete in the frameData
-        //   url: url of the resource
-        storeResource: function(tabId, frameId, url, elType) {
-            if (!get_settings().show_advanced_options)
-                return;
-            var data = this.get(tabId, frameId);
-            if (data !== undefined &&
-                data.resources !== undefined) {
-                data.resources[elType + ':|:' + url] = null;
-            }
-        },
-        // Delete tabId from frameData
-        // Input:
-        //   tabId: Numeric - id of the tab you want to delete in the frameData
-        close: function(tabId) {
-            delete frameData[tabId];
-        }
-    }
-})();
-
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
-
   if (messageEvent.name === "request" &&
       messageEvent.message.data.args.length >= 2 &&
       messageEvent.message.data.args[0] &&
@@ -90,9 +14,10 @@ safari.application.addEventListener("message", function(messageEvent) {
         var frameId = (messageEvent.message.frameInfo.top_level ? 0 : Object.keys(frameData.get(messageEvent.target.id)).length);
         if (!messageEvent.target.url ||
             messageEvent.target.url === args[1].tab.url) {
-            frameData.create(messageEvent.target.id, frameId, messageEvent.message.frameInfo.url, args[0].domain);
+            frameData.record(messageEvent.target.id, frameId, messageEvent.message.frameInfo.url);
         } else if (messageEvent.target.url === frameData.get(messageEvent.target.id, 0).url) {
-            frameData.reset(messageEvent.target.id, frameId, args[1].tab.url);
+            frameData.onTabClosedHandler(messageEvent.target.id);
+            frameData.record(messageEvent.target.id, frameId, args[1].tab.url);
         }
         return;
     }
@@ -217,7 +142,7 @@ if (!LEGACY_SAFARI) {
 
                 for (tab in frameData) {
                     if (typeof frameData[tab] === "object" && opened_tabs.indexOf(parseInt(tab)) === -1) {
-                        frameData.close(parseInt(tab));
+                        frameData.onTabClosedHandler(parseInt(tab));
                     }
                 }
             }//end of if
@@ -242,8 +167,11 @@ if (!LEGACY_SAFARI) {
     }, true);
 }
 
-// YouTube Channel Whitelist
 safari.application.addEventListener("beforeNavigate", function(event) {
+    // Remove frameData[tab.id] before navigating to another site
+    frameData.onTabClosedHandler(event.target.id);
+
+    // YouTube Channel Whitelist
     if (/youtube.com/.test(event.url) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(event.url).ab_channel) {
         safari.extension.addContentScriptFromURL(safari.extension.baseURI + "ytchannel.js", [], [], false);
     } else {
