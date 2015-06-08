@@ -1261,12 +1261,23 @@
     if (SAFARI) {
       openTab(installedURL);
     } else {
-      chrome.tabs.create({url: installedURL}, function(tab) {
-        //if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
-        if (chrome.runtime.lastError) {
-          storage_set("/installed_error", { retry_count: 0 } );
-        }
-      });
+      var openInstalledTab = function() {
+        chrome.tabs.create({url: installedURL}, function(tab) {
+          //if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
+          if (chrome.runtime.lastError) {
+            storage_set("/installed_error", { retry_count: 0 } );
+          }
+        });
+      };
+      if (chrome.management && chrome.management.getSelf) {
+        chrome.management.getSelf(function(info) {
+          if (info && info.installType !== "admin") {
+            openInstalledTab();
+          }
+        });
+      } else {
+        openInstalledTab();
+      }
     }
   }
   //retry logic for '/installed' - retries on browser / AdBlock startup
