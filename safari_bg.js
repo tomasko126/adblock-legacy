@@ -93,6 +93,7 @@ safari.application.addEventListener("message", function(messageEvent) {
         return;
 
     var tab = messageEvent.target;
+    var isPopup = messageEvent.message.isPopup;
     var frameInfo = messageEvent.message.frameInfo;
     chrome._tabInfo.notice(tab, frameInfo);
     var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
@@ -102,16 +103,27 @@ safari.application.addEventListener("message", function(messageEvent) {
         messageEvent.message = true;
         return;
     }
+    
+    // Popup blocking support
+    if (!isPopup) {
+        var url = getUnicodeUrl(messageEvent.message.url);
+        var elType = messageEvent.message.elType;
+        var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
 
-    var url = getUnicodeUrl(messageEvent.message.url);
-    var elType = messageEvent.message.elType;
-    var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
+        var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
+        if (isMatched) {
+            log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
+        }
+    } else {
+        var isMatched = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup,
+                                                    parseUri(getUnicodeUrl(messageEvent.message.referrer)).hostname);
+        if (isMatched) {
+            tab.close();
+        }
+    }
 
     frameData.storeResource(tab.id, url, elType);
 
-    var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
-    if (isMatched)
-        log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
     messageEvent.message = !isMatched;
 }, false);
 
