@@ -66,7 +66,7 @@
       {
         "credit": "Viktor De Pasquale",
         "username": "neytireyqa",
-        "proofreader": false,
+        "proofreader": true,
         "joined": "2015-01"
       }
     ]
@@ -126,7 +126,7 @@
       {
         "credit": "Νίκος Αγγελής",
         "username": "Nikos_Aggelis",
-        "proofreader": false,
+        "proofreader": true,
         "joined": "2014-12"
       }
     ]
@@ -197,6 +197,18 @@
       }
     ]
   },
+  "gu":{
+    "language": "Gujarati",
+    "localized": "ગુજરાતી",
+    "translators":[
+      {
+        "credit": "Vatsal Shah (imvatsalshah)",
+        "username": "imvatsalshah",
+        "proofreader": false,
+        "joined": "2015-04"
+      }
+    ]
+  },
   "he":{
     "language": "Hebrew",
     "localized": "עברית",
@@ -242,6 +254,12 @@
         "username": "AllenWalkerHU",
         "proofreader": true,
         "joined": "2014-08"
+      },
+      {
+        "credit": "Moonline",
+        "username": "Moonline",
+        "proofreader": false,
+        "joined": "2014-06"
       }
     ]
   },
@@ -260,6 +278,12 @@
         "username": "azbez",
         "proofreader": false,
         "joined": "2014-07"
+      },
+      {
+        "credit": "M. Ridwan Hakim",
+        "username": "Remoirex",
+        "proofreader": true,
+        "joined": "2014-11"
       }
     ]
   },
@@ -374,6 +398,30 @@
         "username": null,
         "proofreader": false,
         "joined": "2012-10"
+      },
+      {
+        "credit": "skmedix",
+        "username": "skmedix",
+        "proofreader": false,
+        "joined": "2014-06"
+      },
+      {
+        "credit": "Piter432",
+        "username": "Piter432",
+        "proofreader": false,
+        "joined": "2014-07"
+      },
+      {
+        "credit": "damian1432",
+        "username": "damian1432",
+        "proofreader": false,
+        "joined": "2015-01"
+      },
+      {
+        "credit": "maciejka45",
+        "username": "maciejka45",
+        "proofreader": false,
+        "joined": "2015-02"
       }
     ]
   },
@@ -440,6 +488,12 @@
         "username": "gamangabriel",
         "proofreader": false,
         "joined": "2014-07"
+      },
+      {
+        "credit": "Marina Bercea",
+        "username": "marinab",
+        "proofreader": false,
+        "joined": "2015-02"
       }
     ]
   },
@@ -548,6 +602,18 @@
         "username": "yurqua",
         "proofreader": false,
         "joined": "2011-06"
+      },
+      {
+        "credit": "Maksym Tymoshyk",
+        "username": "maximillian_",
+        "proofreader": false,
+        "joined": "2015-01"
+      },
+      {
+        "credit": "Тимур Роман",
+        "username": "TSpell",
+        "proofreader": false,
+        "joined": "2015-01"
       }
     ]
   },

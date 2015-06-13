@@ -191,6 +191,16 @@
     "message":"Эта функция AdBlock не работает на этом сайте, потому что он использует устаревшие технологии. Вы можете внести её в черный или белый список ресурсов вручную на вкладке «Настроить» страницы параметров.",
     "description":"Message (alert) shown when the user tries to use a blacklist\/whitelist wizard on an old website"
   },
+  "subscribeconfirm":{
+    "message":"Вы уверены, что хотите подписаться на список фильтров $title$?",
+    "description":"Prompt question before subscribing to the filter list",
+    "placeholders":{
+      "title":{
+        "content":"$1",
+        "example":"Prebake"
+      }
+    }
+  },
   "subscribingtitle":{
     "message":"Подписка на список фильтров...",
     "description":"abp: link subscriber title"
@@ -395,10 +405,6 @@
   },
   "filterlatvian":{
     "message":"Латышский",
-    "description":"A filter list"
-  },
-  "filternorwegian":{
-    "message":"Норвежский",
     "description":"A filter list"
   },
   "filterswedish":{
@@ -704,20 +710,6 @@
         "example":"'or Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
       }
     }
-  },
-  "checkinfirefox_2":{
-    "message":"Установите Adblock Plus для Firefox $chrome$, если у Вас их нет.",
-    "description":"Instruction for how to check Firefox\/Chrome for a reported ad.",
-    "placeholders":{
-      "chrome":{
-        "content":"<span id='adblockforchrome'><\/span>",
-        "example":"'or AdBlock for Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
-      }
-    }
-  },
-  "checkinfirefox_3":{
-    "message":"В этом браузере, подпишитесь на те же списки фильтров, как и здесь (за исключением Пользовательских фильтров AdBlock в FireFox).",
-    "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
   "checkinfirefox_4":{
     "message":"В этом браузере, загрузите страницу с рекламой.",
@@ -1203,6 +1195,10 @@
     "message":"Пользовательские списки фильтров",
     "description":"List for custom filters the user subscribed to"
   },
+  "dropboxerrorforfilters":{
+    "message":"Превышен предельный размер Dropbox. Пожалуйста, удалите некоторые записи из Ваших действующих или отключенных фильтров и повторите попытку.",
+    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
+  },
   "languagedropdowndescription":{
     "message":"Добавьте фильтры для другого языка: ",
     "description":"Dropdown list for language-specific filters"
@@ -1260,6 +1256,10 @@
         "example":"<a>here<\/a>"
       }
     }
+  },
+  "ff_adblock_outdated":{
+    "message":"Вы используете старую версию AdBlock. Пожалуйста, нажмите на кнопку меню Firefox и выберите Дополнения. Затем на странице Дополнений, нажмите на значок шестеренки (инструменты для всех Дополнений) и выберите «Проверить наличие обновлений».",
+    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"Поддержка AdBlock",
