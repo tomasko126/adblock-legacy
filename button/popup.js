@@ -176,9 +176,8 @@ $(function() {
 
     $("#div_undo").click(function() {
         var host = parseUri(tab.unicodeUrl).host;
-        BG.confirm_removal_of_custom_filters_on_host(host);
+        BG.confirm_removal_of_custom_filters_on_host(host, activeTab);
         closeAndReloadPopup();
-        if (SAFARI) activeTab.url = activeTab.url;
     });
 
     $("#div_whitelist_channel").click(function() {

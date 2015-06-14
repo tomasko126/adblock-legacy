@@ -618,19 +618,22 @@
   }
 
   remove_custom_filter_for_host = function(host) {
-    if(count_cache.getCustomFilterCount(host)) {
+    if (count_cache.getCustomFilterCount(host)) {
       remove_custom_filter(host);
       count_cache.removeCustomFilterCount(host);
     }
   }
 
-  confirm_removal_of_custom_filters_on_host = function(host) {
+  confirm_removal_of_custom_filters_on_host = function(host, activeTab) {
     var custom_filter_count = count_cache.getCustomFilterCount(host);
     var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
     if (!confirm(confirmation_text)) { return; }
     remove_custom_filter_for_host(host);
-    if (!SAFARI)
+    if (!SAFARI) {
         chrome.tabs.reload();
+    } else {
+        activeTab.url = activeTab.url;
+    }
   };
 
   get_settings = function() {
