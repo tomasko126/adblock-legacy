@@ -13,6 +13,10 @@
         if (stack.indexOf("http") === -1) {
            str += stack;
         }
+        //don't send large stack traces
+        if (str.length > 64) {
+          str = str.substr(0,63);
+        }
     }
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
