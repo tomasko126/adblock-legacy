@@ -5,16 +5,14 @@
              (e.filename||"anywhere").replace(chrome.extension.getURL(""), "") +
              ":" + (e.lineno||"anywhere") +
              ":" + (e.colno||"anycol");
-    if (chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk" &&
-        e.error) {
+    if (e.error) {
         var stack = "-" + (e.error.message ||"") +
                     "-" + (e.error.stack ||"");
         stack = stack.replace(/:/gi, ";").replace(/\n/gi, "");
-        str += stack;
-    }
-    //check to see if there's any URL info in the stack trace, if so, don't log it
-    if (str.indexOf("http") >= 0) {
-       return;
+        //only append the stack info if there isn't any URL info in the stack trace
+        if (stack.indexOf("http") === -1) {
+           str += stack;
+        }
     }
     STATS.msg(str);
     sessionStorage.setItem("errorOccurred", true);
