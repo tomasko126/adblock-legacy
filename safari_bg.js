@@ -2,130 +2,6 @@ emit_page_broadcast = function(request) {
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
-//frameData object for Safari
-frameData = (function() {
-    return {
-        // Get frameData for the tab.
-        // Input:
-        //   tabId: Integer - id of the tab you want to get
-        get: function(tabId) {
-            return frameData[tabId] || {};
-        },
-
-        // Create a new frameData
-        // Input:
-        //   tabId: Integerc - id of the tab you want to add in the frameData
-        create: function(tabId, url, domain) {
-            return frameData._initializeMap(tabId, url, domain);
-        },
-        // Reset a frameData
-        // Inputs:
-        //   tabId: Integer - id of the tab you want to add in the frameData
-        //   url: new URL for the tab
-        reset: function(tabId, url) {
-            var domain = parseUri(url).hostname;
-            return frameData._initializeMap(tabId, url, domain);
-        },
-        // Initialize map
-        // Inputs:
-        //   tabId: Integer - id of the tab you want to add in the frameData
-        //   url: new URL for the tab
-        //   domain: domain of the request
-        _initializeMap: function(tabId, url, domain) {
-            var tracker = frameData[tabId];
-
-            // We need to handle IDN URLs properly
-            url = getUnicodeUrl(url);
-            domain = getUnicodeDomain(domain);
-
-            var shouldTrack = !tracker || tracker.url !== url;
-            if (shouldTrack) {
-                frameData[tabId] = {
-                    resources: {},
-                    domain: domain,
-                    url: url,
-                };
-            }
-            return tracker;
-        },
-        // Store resource
-        // Inputs:
-        //   tabId: Numeric - id of the tab you want to delete in the frameData
-        //   url: url of the resource
-        storeResource: function(tabId, url, elType) {
-            if (!get_settings().show_advanced_options)
-                return;
-            var data = this.get(tabId);
-            if (data !== undefined &&
-                data.resources !== undefined) {
-                data.resources[elType + ':|:' + url] = null;
-            }
-        },
-        // Delete tabId from frameData
-        // Input:
-        //   tabId: Numeric - id of the tab you want to delete in the frameData
-        close: function(tabId) {
-            delete frameData[tabId];
-        }
-    }
-})();
-
-// True blocking support.
-safari.application.addEventListener("message", function(messageEvent) {
-
-  if (messageEvent.name === "request" &&
-      messageEvent.message.data.args.length >= 2 &&
-      messageEvent.message.data.args[0] &&
-      messageEvent.message.data.args[1] &&
-      messageEvent.message.data.args[1].tab &&
-      messageEvent.message.data.args[1].tab.url) {
-        var args = messageEvent.message.data.args;
-        if (!messageEvent.target.url ||
-            messageEvent.target.url === args[1].tab.url) {
-            frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
-        } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
-            frameData.reset(messageEvent.target.id, args[1].tab.url);
-        }
-        return;
-    }
-
-    if (messageEvent.name != "canLoad")
-        return;
-
-    var tab = messageEvent.target;
-    var isPopup = messageEvent.message.isPopup;
-    var frameInfo = messageEvent.message.frameInfo;
-    chrome._tabInfo.notice(tab, frameInfo);
-    var sendingTab = chrome._tabInfo.info(tab, frameInfo.visible);
-
-    if (adblock_is_paused() || page_is_unblockable(sendingTab.url) ||
-        page_is_whitelisted(sendingTab.url)) {
-        messageEvent.message = true;
-        return;
-    }
-    
-    // Popup blocking support
-    if (!isPopup) {
-        var url = getUnicodeUrl(messageEvent.message.url);
-        var elType = messageEvent.message.elType;
-        var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
-
-        var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
-        if (isMatched) {
-            log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
-        }
-    } else {
-        var isMatched = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup,
-                                                    parseUri(getUnicodeUrl(messageEvent.message.referrer)).hostname);
-        if (isMatched) {
-            tab.close();
-        }
-    }
-
-    frameData.storeResource(tab.id, url, elType);
-
-    messageEvent.message = !isMatched;
-}, false);
 
 // Code for creating popover, not available on Safari 5.0
 if (!LEGACY_SAFARI) {
@@ -191,11 +67,29 @@ if (!LEGACY_SAFARI) {
     }, true);
 
 
-    // Remove the popover when the window closes and
-    // cached data stored in frameData
+    // Close event fires when tab/window is about to close,
+    // not when tab has been closed. Therefore we need to wait
+    // and then remove frameData[tabId] after close event.
     safari.application.addEventListener("close", function(event) {
-        // Remove cached data for tab
-        frameData.close(event.target.id);
+        setTimeout(function() {
+            if (safari &&
+                safari.application &&
+                safari.application.activeBrowserWindow &&
+                safari.application.activeBrowserWindow.tabs) {
+
+                var safari_tabs = safari.application.activeBrowserWindow.tabs;
+
+                var opened_tabs = [];
+                for (var i=0; i < safari_tabs.length; i++)
+                    opened_tabs.push(safari_tabs[i].id);
+
+                for (tab in frameData) {
+                    if (typeof frameData[tab] === "object" && opened_tabs.indexOf(parseInt(tab)) === -1) {
+                        frameData.close(parseInt(tab));
+                    }
+                }
+            }//end of if
+        }, 150);//end of setTimeout
 
         // Remove the popover when the window closes so we don't leak memory.
         if (event.target instanceof SafariBrowserWindow) { // don't handle tabs
@@ -216,13 +110,8 @@ if (!LEGACY_SAFARI) {
     }, true);
 }
 
-
+// YouTube Channel Whitelist
 safari.application.addEventListener("beforeNavigate", function(event) {
-    //remove bandaids.js from YouTube.com when a user pauses AdBlock or if the enabled click to flash compatibility mode
-    if (/youtube.com/.test(event.url) && (is_adblock_paused() || (get_settings().clicktoflash_compatibility_mode === true))) {
-      safari.extension.removeContentScript(safari.extension.baseURI + "bandaids.js");
-    } 
-    // YouTube Channel Whitelist 
     if (/youtube.com/.test(event.url) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(event.url).ab_channel) {
         safari.extension.addContentScriptFromURL(safari.extension.baseURI + "ytchannel.js", [], [], false);
     } else {

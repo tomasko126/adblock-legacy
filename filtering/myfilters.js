@@ -220,24 +220,57 @@ MyFilters.prototype.rebuild = function() {
     var hider = SelectorFilter.merge(filter, filters.exclude[filter.selector]);
     filters.hiding[hider.id] = hider;
   }
+  
+ 
+  
+  if (safari && 
+      safari.extension && 
+      safari.extension.setContentBlocker) {
+        log("safari 9 content blocking detected");
+    // If Safari 9 content blocking
+    // if Safari has just started, don't re-register filters unless none are
+    // registered (implying it was just installed).
+    // TODO - malware - domains
+    //      - add start up / initial install logic (firstRun)
+    var registerTheRules = function() {
+      var malwareDomains = [];
+      if (this._subscriptions &&
+          this._subscriptions.malware &&
+          this._subscriptions.malware.subscribed &&
+          this.getMalwareDomains()) {
+        malwareDomains = this._subscriptions.malware.text.adware; 
+      }
+              
+      var patternFilters = [];
+      for (var id in filters.pattern)
+        patternFilters.push(filters.pattern[id]);
+      var whitelistFilters = [];
+      for (var id in filters.whitelist)
+        whitelistFilters.push(filters.whitelist[id]);           
+      var selectorFilters = [];
+      for (var id in filters.hiding)
+        selectorFilters.push(filters.hiding[id]);          
+      DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, malwareDomains);
+    }
+    registerTheRules();        
+  } else {
+    this.hiding = FilterSet.fromFilters(filters.hiding);
 
-  this.hiding = FilterSet.fromFilters(filters.hiding);
+    this.blocking = new BlockingFilterSet(
+      FilterSet.fromFilters(filters.pattern),
+      FilterSet.fromFilters(filters.whitelist)
+    );
 
-  this.blocking = new BlockingFilterSet(
-    FilterSet.fromFilters(filters.pattern),
-    FilterSet.fromFilters(filters.whitelist)
-  );
-
-  handlerBehaviorChanged(); // defined in background
-
-  //if the user is subscribed to malware, then get it
-
-  if (this._subscriptions &&
-      this._subscriptions.malware &&
-      this._subscriptions.malware.subscribed &&
-      !this.getMalwareDomains()) {
-    this._initializeMalwareDomains();
+    handlerBehaviorChanged(); // defined in background
+    //if the user is subscribed to malware, then get it
+    if (this._subscriptions &&
+        this._subscriptions.malware &&
+        this._subscriptions.malware.subscribed &&
+        !this.getMalwareDomains()) {
+      this._initializeMalwareDomains();
+    }     
   }
+
 
   // After 90 seconds, delete the cache. That way the cache is available when
   // rebuilding multiple times in a row (when multiple lists have to update at
@@ -604,8 +637,8 @@ MyFilters.prototype._load_default_subscriptions = function() {
     }
   }
   //Update will be done immediately after this function returns
-  result["adblock_custom"] = { subscribed: true };
-  result["easylist"] = { subscribed: true };
+  //result["adblock_custom"] = { subscribed: true };
+  //result["easylist"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };

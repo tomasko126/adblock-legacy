@@ -234,7 +234,9 @@
           domain: parseUri(url).hostname,
           resources: {}
         };
-        fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
+        if (frameId === 0) {
+          fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
+        }
       },
 
       // Watch for requests for new tabs and frames, and track their URLs.
@@ -305,6 +307,9 @@
           var pos = url.pathname.lastIndexOf('.');
           if (pos > -1) {
             var ext = url.pathname.slice(pos) + '.';
+            if ('.eot.ttf.otf.svg.woff.woff2.'.indexOf(ext) !== -1) {
+              return 'font';
+            }
             // Still need this because often behind-the-scene requests are wrongly
             // categorized as 'other'
             if ('.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
@@ -330,17 +335,8 @@
       var tabId = details.tabId;
       var reqType = normalizeRequestType({url: details.url, type: details.type});
 
-      var top_frame = frameData.get(tabId, 0);
-      var sub_frame = (details.frameId !== 0 ? frameData.get(tabId, details.frameId) : null);
-
-      // If top frame is whitelisted, don't process anything
-      if (top_frame.whitelisted) {
+      if (frameData.get(tabId, 0).whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted tab", tabId, details.url.substring(0, 100));
-        return { cancel: false };
-      // If request comes from whitelisted sub_frame and
-      // top frame is not whitelisted, don't process the request
-      } else if (sub_frame && sub_frame.whitelisted) {
-        log("[DEBUG]", "Ignoring whitelisted frame", tabId, details.url.substring(0, 100));
         return { cancel: false };
       }
 
@@ -404,11 +400,8 @@
         details.url = opener.url;
       var url = getUnicodeUrl(details.url);
       var match = _myfilters.blocking.matches(url, ElementTypes.popup, opener.domain);
-      if (match) {
-          chrome.tabs.remove(details.tabId);
-          blockCounts.recordOneAdBlocked(details.sourceTabId);
-          updateBadge(details.sourceTabId);
-      }
+      if (match)
+        chrome.tabs.remove(details.tabId);
       frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup);
     };
 
@@ -444,9 +437,9 @@
     if (SAFARI) {
         frameData.storeResource(sender.tab.id, selector, "HIDE");
     } else {
-        frameData.storeResource(sender.tab.id, 0, selector, "HIDE");
+        frameData.storeResource(sender.tab.id, sender.frameId, selector, "HIDE");
     }
-    var data = frameData.get(sender.tab.id, 0);
+    var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
       if (!SAFARI) {
@@ -1022,17 +1015,9 @@
   //           domain:string the domain of the calling frame.
   get_content_script_data = function(options, sender) {
     var settings = get_settings();
-    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.url);
-    var running_top = runnable && !page_is_whitelisted(sender.tab.url);
-    var running = runnable && !page_is_whitelisted(sender.url);
-    var hiding = running && !page_is_whitelisted(sender.url, ElementTypes.elemhide);
-
-    // Don't run in frame, when top frame is whitelisted
-    if (!running_top && running) {
-      running = false;
-      hiding = false;
-    }
-
+    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.tab.url);
+    var running = runnable && !page_is_whitelisted(sender.tab.url);
+    var hiding = running && !page_is_whitelisted(sender.tab.url, ElementTypes.elemhide);
     var result = {
       settings: settings,
       runnable: runnable,
@@ -1198,6 +1183,46 @@
       }
     }
   })();
+//TODO - remove - for testing only
+var myFiltersArray = [];
+myFiltersArray.push("http://example23.com/*");
+myFiltersArray.push("@@|http://example34.com");
+myFiltersArray.push("|http://baddomain.example/");
+myFiltersArray.push("||example31.com/banner.gif");
+myFiltersArray.push("^example33.com^");
+myFiltersArray.push("*/ads/*$script,match-case");
+myFiltersArray.push("@@||360haven.com^$elemhide");
+myFiltersArray.push("@@|http://www.bye.com/|$document");
+myFiltersArray.push("@@||bye1.com/stores/$document");
+myFiltersArray.push("@@||vhobbies.com/admgr/*.aspx?ZoneID=$script,domain=vcoins.com");
+myFiltersArray.push("@@||yahoo.com/combo?$stylesheet");
+myFiltersArray.push("@@||youtube.com^*_adsense_$xmlhttprequest");
+myFiltersArray.push("/admatcher.$~object-subrequest,~xmlhttprequest");
+myFiltersArray.push("/banner.asp?$third-party");
+myFiltersArray.push("||healthaffiliatesnetwork.com^$third-party");
+myFiltersArray.push("@@||replgroup.com/banners/$image,~third-party");
+myFiltersArray.push("||milanomoda.info^$domain=uploadlw.com");
+myFiltersArray.push("||mydirtyhobby.com^$third-party,domain=~my-dirty-hobby.com|~mydirtyhobby.de");
+myFiltersArray.push("||myhobby.com^$domain=my-hobby.com|~myhobby.de");
+myFiltersArray.push("||ngohq.com/images/ad.jpg$~collapse");
+myFiltersArray.push("_ad_layer_");
+myFiltersArray.push("###ad-21");
+myFiltersArray.push("##.DeptAd");
+myFiltersArray.push('##div[id^="YFBMSN"]');
+myFiltersArray.push("###mn #center_col > div > h2.spon:first-child");
+myFiltersArray.push("wg-gesucht.de#@#.ad_wrap");
+myFiltersArray.push("domain1.example,domain2.example,domain3.example##*.sponsor");
+myFiltersArray.push("domain1.example,domain2.example,domain3.example##*.sponsor");
+myFiltersArray.push("domain43.example##*.sponsor");
+myFiltersArray.push("##*.AD_banner");
+myFiltersArray.push("splush.org#@#*.AD_banner");
+myFiltersArray.push("linkshrink.net#@##overlay_ad");
+myFiltersArray.push("||123date.me^$third-party");
+console.log("my filters length: " , myFiltersArray.length);
+var myFiltersString = myFiltersArray.join('\n');
+console.log("my filters: " , myFiltersString);
+ storage_set('custom_filters',myFiltersString);
+
 
   // Log an 'error' message on GAB log server.
   var recordErrorMessage = function(msg, callback) {
@@ -1256,59 +1281,22 @@
     gabQuestion.removeGABTabListeners(saveState);
   }
 
-  var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
+    var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     if (SAFARI) {
       openTab(installedURL);
     } else {
-      var openInstalledTab = function() {
-        chrome.tabs.create({url: installedURL}, function(tab) {
-          //if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
-          if (chrome.runtime.lastError) {
-            storage_set("/installed_error", { retry_count: 0 } );
+      chrome.tabs.create({url: installedURL}, function(tab) {
+        if (chrome.runtime.lastError) {
+          if (chrome.runtime.lastError.message) {
+            recordErrorMessage('/installed open error ' + chrome.runtime.lastError.message);
+          } else {
+            recordErrorMessage('/installed open error ' + JSON.stringify(chrome.runtime.lastError));
           }
-        });
-      };
-      if (chrome.management && chrome.management.getSelf) {
-        chrome.management.getSelf(function(info) {
-          if (info && info.installType !== "admin") {
-            openInstalledTab();
-          }
-        });
-      } else {
-        openInstalledTab();
-      }
+        }
+      });
     }
   }
-  //retry logic for '/installed' - retries on browser / AdBlock startup
-  var installError = storage_get("/installed_error");
-  if (installError && installError.retry_count >= 0 && !SAFARI) {
-    //append the retry count to the URL
-    installError.retry_count += 1;
-    var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
-    chrome.tabs.create({url: retryInstalledURL}, function(tab) {
-      if (chrome.runtime.lastError) {
-        //if there is an error (again), log a message and re-save.
-        if (chrome.runtime.lastError.message) {
-          recordErrorMessage('/installed open error count: ' +
-                              installError.retry_count +
-                              " error: " +
-                              chrome.runtime.lastError.message);
-        } else {
-          recordErrorMessage('/installed open error count: ' +
-                              installError.retry_count +
-                              " error: " +
-                              JSON.stringify(chrome.runtime.lastError));
-        }
-        storage_set("/installed_error", installError);
-      } else {
-        //if we successfully opened the tab,
-        // delete the 'installed error' so we don't display it again
-        storage_set("/installed_error");
-      }
-    });
-  }
-
   if (chrome.runtime.setUninstallURL) {
     var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
     //if the start property of blockCount exists (which is the AdBlock installation timestamp)
@@ -1425,9 +1413,7 @@
   // Script injection logic for Safari is done in safari_bg.js
   if (!SAFARI) {
       var runChannelWhitelist = function(tabUrl, tabId) {
-          if (parseUri(tabUrl).hostname === "www.youtube.com" &&
-              get_settings().youtube_channel_whitelist &&
-              !parseUri.parseSearch(tabUrl).ab_channel) {
+          if (/youtube.com/.test(tabUrl) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).ab_channel) {
               chrome.tabs.executeScript(tabId, {file: "ytchannel.js", runAt: "document_start"});
           }
       }
@@ -1802,8 +1788,8 @@
             log(ex);
             //since the most likely exception at this point is a size exceeded message,
             //store the message code.
-            sessionstorage_set("dropboxerror", translate("dropboxerrorforfilters"));
-            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: translate("dropboxerrorforfilters") });
+            sessionstorage_set("dropboxerror", "dropboxerrorforfilters");
+            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorforfilters"});
           }
           if (!syncError) {
             //sync was successful, remove any previous error messages.
