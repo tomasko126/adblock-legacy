@@ -834,9 +834,10 @@
       return true;
     }
     //TODO - temporary fix, need long term fix
-    if (safari &&
-      safari.extension &&
-      safari.extension.setContentBlocker) {
+    if (SAFARI &&
+        safari &&
+        safari.extension &&
+        safari.extension.setContentBlocker) {
       return false;
     }
     url = getUnicodeUrl(url);

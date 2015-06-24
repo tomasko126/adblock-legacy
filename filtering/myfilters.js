@@ -221,9 +221,8 @@ MyFilters.prototype.rebuild = function() {
     filters.hiding[hider.id] = hider;
   }
 
-
-
-  if (safari &&
+  if (SAFARI &&
+      safari &&
       safari.extension &&
       safari.extension.setContentBlocker) {
         log("safari 9 content blocking detected");
