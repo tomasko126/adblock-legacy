@@ -14,12 +14,17 @@
 // TypeError: undefined is not an object (evaluating '_myfilters.blocking.whitelist')  page_is_whitelisted in background.js uses _myfilters.blocking
 
 // TODO:
+// - check if pre-roll ads are blocked on YouTube
+// -  if so, remove bandaids.js and the ClickToFlash compatibility mode option
 // - remove 'pause' from popup menu
 // - don't target AdBlock's own requests.
 // - add RegEx cleanup / parsing
 // - add document whitelisting
 // - add resource (other - not document or elemhide) whitelisting
 // - add unit tests
+
+// test scenario
+// in Safari & Chrome - Malware Domains - adding, removing filter list, browser start up with and without subscription
 
 
 DeclarativeWebRequest = (function() {
@@ -348,7 +353,7 @@ function toRegExp(text) {
       //step 3, now add the blocking rules
       patternFilters.forEach(function(filter) {
         if (isSupported(filter)) {
-         //rules.push(getRule(filter));
+         rules.push(getRule(filter));
         }
       });
       //step 4, now add malware domains as one blocking rule (if there are malware domains)
@@ -359,11 +364,11 @@ function toRegExp(text) {
       }
       //step 5, add all $document
       documentWhitelistFilters.forEach(function(filter) {
-        rules.push(createDocumentIgnoreRule(filter));
+        //rules.push(createDocumentIgnoreRule(filter));
       });
       //step 6, add other whitelist rules
       whitelistAnyOtherFilters.forEach(function(filter) {
-        rules.push(createIgnoreRule(filter));
+        //rules.push(createIgnoreRule(filter));
       });
 
       try {

@@ -565,7 +565,10 @@ MyFilters.prototype._loadMalwareDomains = function() {
             that._subscriptions.malware.last_update_failed_at = Date.now();
         }
         xhr.onload = function(e) {
-           that.blocking.setMalwareDomains(JSON.parse(xhr.responseText));
+           //make sure the blocking filter set exists (it may not in Safari 9)
+           if (that.blocking) {
+              that.blocking.setMalwareDomains(JSON.parse(xhr.responseText));
+           }
            //set the response text on the 'text' property so it's persisted to storage
            that._subscriptions.malware.text = JSON.parse(xhr.responseText);
            that._subscriptions.malware.last_update = Date.now();
@@ -596,7 +599,12 @@ MyFilters.prototype._initializeMalwareDomains = function() {
 //Get the current list of malware domains
 //will return undefined, if the user is not subscribed to the Malware 'filter list'.
 MyFilters.prototype.getMalwareDomains = function() {
-    return this.blocking.getMalwareDomains();
+    //make sure the blocking filter set exists (it may not in Safari 9)
+    if (this.blocking ) {
+        return this.blocking.getMalwareDomains();
+    } else {
+        return this._subscriptions.malware.text
+    }
 }
 
 // If the user wasn't subscribed to any lists, subscribe to
