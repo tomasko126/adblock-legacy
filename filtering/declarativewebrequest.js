@@ -21,7 +21,13 @@
 // - add resource (other - not document or elemhide) whitelisting
 // - add unit tests
 
+    // Special cases:
+    // 1. $document requires a second rule to cancel all lower-level rules.
+    // 2. $domain=~x requires special rules cancelling the normal domain rules.
+
 DeclarativeWebRequest = (function() {
+  var HTML_PREFIX = "^https?://";
+  var REGEX_WILDCARD = ".*";
   //  allowed ASCII characters, except:
   //  x25 = NAK
   //  x2D = -
@@ -39,11 +45,11 @@ DeclarativeWebRequest = (function() {
     'font': 'font',
     'xmlhttprequest': 'raw',
     'svg-document' : 'svg-document',
-    //'object': 'object',
+    'object': 'object',
     //'subdocument': 'sub_frame',
-    // object_subrequest: renamed to 'object' by normalizer, as above
+    // object_subrequest:
     'media': 'media',
-    //'other': 'other',
+    //'other': 'raw',
     'popup': 'popup',
     // 'elemhide': special cased
   };
@@ -57,7 +63,7 @@ DeclarativeWebRequest = (function() {
     rule.action = {};
     rule.action.type = "block";
     rule.trigger = {};
-    rule.trigger["url-filter"] = "^https?://.*";
+    rule.trigger["url-filter"] = HTML_PREFIX + REGEX_WILDCARD;
     return rule;
   };
 
@@ -117,16 +123,39 @@ DeclarativeWebRequest = (function() {
   // Returns an array of resource types that should be checked by rules for
   // filters with the given allowedElementTypes.
   var getResourceTypesByElementType = function(elementTypes) {
-    var map = {};
-    for (var name in toResourceType) {
-      if (elementTypes & ElementTypes[name]) {
-        map[toResourceType[name]] = true;
-      }
-    }
     var result = [];
-    for (var k in map) {
-      result.push(k);
+  	if (elementTypes & ElementTypes.image) {
+  		result.push("image");
     }
+  	if (elementTypes & ElementTypes.stylesheet) {
+  		result.push("style-sheet");
+    }
+  	if (elementTypes & ElementTypes.script) {
+  		result.push("script");
+    }
+  	if (elementTypes & ElementTypes.media) {
+  		result.push("media");
+  	}
+  	if (elementTypes & ElementTypes.popup) {
+  		result.push("popup");
+  	}
+  	if (elementTypes & (ElementTypes.xmlhttprequest | ElementTypes.other)) {
+  		result.push("raw");
+  	}
+//    TODO-what to do about these types
+//  	if (elementTypes & ElementTypes.FONT) {
+//  		result.push("font");
+//    }
+//    if (elementTypes & ElementTypes.SUBDOCUMENT) {
+//    		result.push("subdocument");
+//    }
+//    if (elementTypes & ElementTypes.OBJECT) {
+//    		result.push("object");
+//    }
+//    if (elementTypes & ElementTypes.OBJECT_SUBREQUEST) {
+//    		result.push("object-subrequest");
+//    }
+    console.log("elementTypes", elementTypes, "result", result);
     return result;
   };
 
@@ -149,45 +178,45 @@ DeclarativeWebRequest = (function() {
   }
 
 function toRegExp(text) {
-	var result = "";
+	var parsedRegEx = "";
 	var lastIndex = text.length - 1;
 	for (var inx = 0; inx < text.length; inx++) {
-		var aChar = text[inx];
+		var aChar = text.charAt(inx);
 		switch (aChar) {
 			case "*":
         //for any 'zero or more' quantifiers that occur
         //in any location but the first or last position, add a match any single character.
-				if (result.length > 0 &&
+				if (parsedRegEx.length > 0 &&
 				    inx < lastIndex &&
 				    text[inx + 1] != "*") {
-					result += ".*";
+					parsedRegEx += ".*";
 			  }
 				break;
 			case "^":
 			  //convert the separator character (anything but a letter, a digit, or one of the following: _ - . %)
 				if (inx === lastIndex) {
-					result += "(?![^" + allowedASCIIchars + "])";
+					parsedRegEx += "(?![^" + allowedASCIIchars + "])";
 				} else {
-					result += "[" + allowedASCIIchars + "]";
+					parsedRegEx += "[" + allowedASCIIchars + "]";
 			  }
 				break;
 			case "|":
 			  //if the first character is |,
 			  // add the RegEx begining of line marker
 				if (inx === 0) {
-					result += "^";
+					parsedRegEx += "^";
 					break;
 				}
 			  //if the last character is |,
 			  // add the RegEx end of line marker
 				if (inx === lastIndex) {
-					result += "$";
+					parsedRegEx += "$";
 					break;
 				}
 			  //if the first and second character is |,
 			  // add a restriction for |HTTP(S)://|
 				if (inx === 1 && text[0] === "|") {
-					result += "https?://";
+					parsedRegEx += HTML_PREFIX;
 					break;
 				}
 			case ".":
@@ -202,19 +231,16 @@ function toRegExp(text) {
 			case "]":
 			case "\\":
 			//add RegEx escape for all of the above characters
-				result += "\\";
+				parsedRegEx += "\\";
 			default:
 			  //add the character
-				result += aChar;
+				parsedRegEx += aChar;
 		}
 	}
-//console.log("text", text, "result", result);
-	return result;
+//console.log("text", text, "parsedRegEx", parsedRegEx);
+	return parsedRegEx;
 }
 
-function getRegExpSource(filter) {
-
-}
 //
 //  var preProcessWhitelistFilters = function(whitelistFilters){
 //    console.log("whitelistFilters.length ", whitelistFilters.length);
@@ -270,34 +296,12 @@ function getRegExpSource(filter) {
     rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
     addDomainsToRule(filter, rule);
     return rule;
-
-    // Special cases:
-    // 1. $document requires a second rule to cancel all lower-level rules.
-    // 2. $domain=~x requires special rules cancelling the normal domain rules.
-//
-//    if (filter._allowedElementTypes & ElementTypes.document) {
-//      rules.push({
-//        priority: priority,
-//        trigger: _getDocumentOverrideConditions(filter),
-//        action: [ ]
-//      });
-//    } else if (domains.excluded.length > 0) {
-//      var tag = "tag" + _nextTagNumber++;
-//      rules[0].tags = [ tag ];
-//      rules.push({
-//        priority: priority + 1,
-//        trigger: _getConditions(filter, domains.excluded),
-//        action: [ ]
-//      });
-//    }
   };
   // Return the rule (JSON) required to represent this Selector Filter in Safari blocking syntax.
   var createSelectorRule = function(filter) {
     var rule = createDefaultRule();
-    rule.action.selector = _parseSelector(filter.selector);
+    rule.action.selector = parseSelector(filter.selector);
     rule.action.type = "css-display-none";
-    rule.trigger["url-filter"] = "^https?://.*";
-
     addDomainsToRule(filter, rule);
     return rule;
   };
@@ -305,31 +309,25 @@ function getRegExpSource(filter) {
   var createSelectorExceptionRule = function(filter) {
     var rule = createDefaultRule();
     rule.action = {"type": "ignore-previous-rules"};
-    //TODO - add parsing of RegEx source
-    rule.trigger = {"url-filter": filter._rule.source};
+    rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
     addDomainsToRule(filter, rule);
     return rule;
   };
 
   // Returns false if the given filter cannot be handled Safari 9 content blocking.
-  var _isSupported = function(filter) {
-    return true;
-
-    //TODO: need to test popups
-    //return !(filter._allowedElementTypes & ElementTypes.popup)
+  var isSupported = function(filter) {
+    return !((filter._allowedElementTypes & ElementTypes.SUBDOCUMENT) ||
+             (filter._allowedElementTypes & ElementTypes.OBJECT) ||
+    		     (filter._allowedElementTypes & ElementTypes.OBJECT_SUBREQUEST));
   };
 
   // Remove any characters from the filter lists that are not needed, such as |##| and |.|
-  var _parseSelector = function(selector) {
+  var parseSelector = function(selector) {
     if (selector.indexOf('##') === 0) {
       selector = selector.substring(2, selector.length);
     }
     return selector;
   };
-
-  var recordSelectorException = function (filter) {
-
-  }
 
   return {
     // Registers rules for the given list of PatternFilters and SelectorFilters,
@@ -340,7 +338,7 @@ function getRegExpSource(filter) {
       var rules = [];
       selectorFilters.forEach(function(filter) {
         //step 1, add all of the hiding filters (CSS selectors)
-        if (_isSupported(filter)) {
+        if (isSupported(filter)) {
           rules.push(createSelectorRule(filter));
         }
       });
@@ -352,7 +350,7 @@ function getRegExpSource(filter) {
       });
       patternFilters.forEach(function(filter) {
         //step 3, now add the blocking rules
-        if (_isSupported(filter)) {
+        if (isSupported(filter)) {
           rules.push(getRule(filter));
         }
       });
