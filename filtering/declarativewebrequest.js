@@ -21,9 +21,6 @@
 // - add resource (other - not document or elemhide) whitelisting
 // - add unit tests
 
-    // Special cases:
-    // 1. $document requires a second rule to cancel all lower-level rules.
-    // 2. $domain=~x requires special rules cancelling the normal domain rules.
 
 DeclarativeWebRequest = (function() {
   var HTML_PREFIX = "^https?://";
@@ -37,23 +34,7 @@ DeclarativeWebRequest = (function() {
   //  x5F - _
   //  x61 - x7A = lower case alpha
   var allowedASCIIchars = "\\x00-\\x24\\x26-\\x2C\\x2F\\x3A-\\x40\\x5B-\\x5E\\x60\\x7B-\\x7F";
-  var toResourceType = {
-    'document' : 'document',
-    'image': 'image',
-    'stylesheet': 'style-sheet',
-    'script': 'script',
-    'font': 'font',
-    'xmlhttprequest': 'raw',
-    'svg-document' : 'svg-document',
-    'object': 'object',
-    //'subdocument': 'sub_frame',
-    // object_subrequest:
-    'media': 'media',
-    //'other': 'raw',
-    'popup': 'popup',
-    // 'elemhide': special cased
-  };
-  whitelistOnlyFilters = [];
+  whitelistAnyOtherFilters = [];
   elementWhitelistFilters = [];
   documentWhitelistFilters = [];
   elemhideSelectorExceptions = {};
@@ -155,7 +136,7 @@ DeclarativeWebRequest = (function() {
 //    if (elementTypes & ElementTypes.OBJECT_SUBREQUEST) {
 //    		result.push("object-subrequest");
 //    }
-    console.log("elementTypes", elementTypes, "result", result);
+//    console.log("elementTypes", elementTypes, "result", result);
     return result;
   };
 
@@ -241,36 +222,35 @@ function toRegExp(text) {
 	return parsedRegEx;
 }
 
-//
-//  var preProcessWhitelistFilters = function(whitelistFilters){
-//    console.log("whitelistFilters.length ", whitelistFilters.length);
-//    for (var inx = 0; inx < whitelistFilters.length; inx++) {
-//      var filter = whitelistFilters[inx];
-//      if (filter._allowedElementTypes &
-//          (ElementTypes.script |
-//           ElementTypes.image |
-//           ElementTypes.stylesheet |
-//           ElementTypes.object |
-//           ElementTypes.subdocument |
-//           ElementTypes.object_subrequest |
-//           ElementTypes.media |
-//           ElementTypes.other |
-//           ElementTypes.xmlhttprequest)) {
-//        whitelistOnlyFilters.push(filter);
-//      }
-//      if (filter._allowedElementTypes & ElementTypes.elemhide) {
-//        elementWhitelistFilters.push(filter);
-//      }
-//      if (filter._allowedElementTypes & ElementTypes.document) {
-//        documentWhitelistFilters.push(filter);
-//      }
-//    }
-//
-//    console.log("whitelistOnly.length ", whitelistOnlyFilters.length);
-//    console.log("elementWhitelistFilters.length ", elementWhitelistFilters.length);
-//    console.log("documentWhitelistFilters.length ", documentWhitelistFilters.length);
-//
-//  }
+
+  var preProcessWhitelistFilters = function(whitelistFilters){
+    console.log("whitelistFilters.length ", whitelistFilters.length);
+    for (var inx = 0; inx < whitelistFilters.length; inx++) {
+      var filter = whitelistFilters[inx];
+      if (isSupported(filter) &&
+          (filter._allowedElementTypes &
+           (ElementTypes.script |
+            ElementTypes.image |
+            ElementTypes.stylesheet |
+            ElementTypes.object |
+            ElementTypes.subdocument |
+            ElementTypes.object_subrequest |
+            ElementTypes.media |
+            ElementTypes.other |
+            ElementTypes.xmlhttprequest))) {
+        whitelistAnyOtherFilters.push(filter);
+      }
+      if (isSupported(filter) && (filter._allowedElementTypes & ElementTypes.elemhide)) {
+        elementWhitelistFilters.push(filter);
+      }
+      if (isSupported(filter) && (filter._allowedElementTypes & ElementTypes.document)) {
+        documentWhitelistFilters.push(filter);
+      }
+    }
+    console.log("whitelistOnly.length ", whitelistAnyOtherFilters.length);
+    console.log("elementWhitelistFilters.length ", elementWhitelistFilters.length);
+    console.log("documentWhitelistFilters.length ", documentWhitelistFilters.length);
+  }
 //  var preProcessSelectorFilters = function(selectorFilters){
 //    console.log("selectorFilters.length ", selectorFilters.length);
 //    for (var inx = 0; inx < selectorFilters.length; inx++) {
@@ -305,11 +285,30 @@ function toRegExp(text) {
     addDomainsToRule(filter, rule);
     return rule;
   };
-  // Return the rule (JSON) required to represent this Selector Exception Filter in Safari blocking syntax.
-  var createSelectorExceptionRule = function(filter) {
+  // Return the rule (JSON) required to represent this $elemhide Whitelist Filter in Safari blocking syntax.
+  var createElemhideIgnoreRule = function(filter) {
     var rule = createDefaultRule();
     rule.action = {"type": "ignore-previous-rules"};
     rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
+    rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
+    addDomainsToRule(filter, rule);
+    return rule;
+  };
+  // Return the rule (JSON) required to represent this $document Whitelist Filter in Safari blocking syntax.
+  var createDocumentIgnoreRule = function(filter) {
+    var rule = createDefaultRule();
+    rule.action = {"type": "ignore-previous-rules"};
+    rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
+    rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
+    addDomainsToRule(filter, rule);
+    return rule;
+  };
+  // Return the rule (JSON) required to represent this Whitelist Filter in Safari blocking syntax.
+  var createIgnoreRule = function(filter) {
+    var rule = createDefaultRule();
+    rule.action = {"type": "ignore-previous-rules"};
+    rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
+    rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
     addDomainsToRule(filter, rule);
     return rule;
   };
@@ -333,25 +332,23 @@ function toRegExp(text) {
     // Registers rules for the given list of PatternFilters and SelectorFilters,
     // clearing any existing rules.
     register: function(patternFilters, whitelistFilters, selectorFilters, malwareDomains) {
-//      preProcessWhitelistFilters(whitelistFilters);
+      preProcessWhitelistFilters(whitelistFilters);
 //      console.log("malwareDomains", malwareDomains);
       var rules = [];
+      //step 1, add all of the hiding filters (CSS selectors)
       selectorFilters.forEach(function(filter) {
-        //step 1, add all of the hiding filters (CSS selectors)
         if (isSupported(filter)) {
-          rules.push(createSelectorRule(filter));
+          //rules.push(createSelectorRule(filter));
         }
       });
-      whitelistFilters.forEach(function(filter) {
-        //step 2, now add only the $elemhide filters
-        if (filter._allowedElementTypes & ElementTypes.elemhide) {
-          rules.push(createSelectorExceptionRule(filter));
-        }
+      //step 2, now add only the $elemhide filters
+      elementWhitelistFilters.forEach(function(filter) {
+        rules.push(createElemhideIgnoreRule(filter));
       });
+      //step 3, now add the blocking rules
       patternFilters.forEach(function(filter) {
-        //step 3, now add the blocking rules
         if (isSupported(filter)) {
-          rules.push(getRule(filter));
+         //rules.push(getRule(filter));
         }
       });
       //step 4, now add malware domains as one blocking rule (if there are malware domains)
@@ -361,18 +358,12 @@ function toRegExp(text) {
         rules.push(rule);
       }
       //step 5, add all $document
-      whitelistFilters.forEach(function(filter) {
-//        if (filter._allowedElementTypes & ElementTypes.elemhide) {
-//          console.log("whitelist filter (entire document) ", filter,  filter._options, filter._allowedElementTypes);
-//        }
-//        rules.push(getRules(filter));
+      documentWhitelistFilters.forEach(function(filter) {
+        rules.push(createDocumentIgnoreRule(filter));
       });
       //step 6, add other whitelist rules
-      whitelistFilters.forEach(function(filter) {
-//        if (!(filter._allowedElementTypes & ElementTypes.elemhide)) {
-//           console.log("whitelist filter (unkown) ", filter,  filter._options, filter._allowedElementTypes);
-//        }
-//        rules.push(getRules(filter));
+      whitelistAnyOtherFilters.forEach(function(filter) {
+        rules.push(createIgnoreRule(filter));
       });
 
       try {
