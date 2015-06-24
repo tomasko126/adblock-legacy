@@ -220,11 +220,11 @@ MyFilters.prototype.rebuild = function() {
     var hider = SelectorFilter.merge(filter, filters.exclude[filter.selector]);
     filters.hiding[hider.id] = hider;
   }
-  
- 
-  
-  if (safari && 
-      safari.extension && 
+
+
+
+  if (safari &&
+      safari.extension &&
       safari.extension.setContentBlocker) {
         log("safari 9 content blocking detected");
     // If Safari 9 content blocking
@@ -238,21 +238,21 @@ MyFilters.prototype.rebuild = function() {
           this._subscriptions.malware &&
           this._subscriptions.malware.subscribed &&
           this.getMalwareDomains()) {
-        malwareDomains = this._subscriptions.malware.text.adware; 
+        malwareDomains = this._subscriptions.malware.text.adware;
       }
-              
+
       var patternFilters = [];
       for (var id in filters.pattern)
         patternFilters.push(filters.pattern[id]);
       var whitelistFilters = [];
       for (var id in filters.whitelist)
-        whitelistFilters.push(filters.whitelist[id]);           
+        whitelistFilters.push(filters.whitelist[id]);
       var selectorFilters = [];
       for (var id in filters.hiding)
-        selectorFilters.push(filters.hiding[id]);          
+        selectorFilters.push(filters.hiding[id]);
       DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, malwareDomains);
     }
-    registerTheRules();        
+    registerTheRules();
   } else {
     this.hiding = FilterSet.fromFilters(filters.hiding);
 
@@ -268,7 +268,7 @@ MyFilters.prototype.rebuild = function() {
         this._subscriptions.malware.subscribed &&
         !this.getMalwareDomains()) {
       this._initializeMalwareDomains();
-    }     
+    }
   }
 
 
@@ -637,6 +637,7 @@ MyFilters.prototype._load_default_subscriptions = function() {
     }
   }
   //Update will be done immediately after this function returns
+  //TODO - uncomment!
   //result["adblock_custom"] = { subscribed: true };
   //result["easylist"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();

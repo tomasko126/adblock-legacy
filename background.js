@@ -833,6 +833,12 @@
     if (!url) { // Safari empty/bookmarks/top sites page
       return true;
     }
+    //TODO - temporary fix, need long term fix
+    if (safari &&
+      safari.extension &&
+      safari.extension.setContentBlocker) {
+      return false;
+    }
     url = getUnicodeUrl(url);
     url = url.replace(/\#.*$/, ''); // Remove anchors
     if (!type)
@@ -1186,26 +1192,47 @@
 //TODO - remove - for testing only
 var myFiltersArray = [];
 myFiltersArray.push("http://example23.com/*");
-myFiltersArray.push("@@|http://example34.com");
-myFiltersArray.push("|http://baddomain.example/");
+myFiltersArray.push("&ad_box_");
+myFiltersArray.push("||google.com/jsapi?autoload=*%22ads%22$script,domain=youtube.com");
+myFiltersArray.push("||topspin.net/secure/media/$image,domain=youtube.com");
+myFiltersArray.push("/pagead2.");
+myFiltersArray.push("/pubads_");
+myFiltersArray.push("/pagead2.");
+myFiltersArray.push("/pagead/gen_");
+myFiltersArray.push("/googleads.");
+myFiltersArray.push("=300x250,");
+myFiltersArray.push("&ad_type=");
+myFiltersArray.push("&ad_zones=");
+myFiltersArray.push("&adbannerid=");
+myFiltersArray.push("||/banner/");
+myFiltersArray.push("/admatcher.$~object,-subrequest,~xmlhttprequest");
+myFiltersArray.push("/banner.asp?$third-party");
+myFiltersArray.push("||healthaffiliatesnetwork.com^$third-party");
+myFiltersArray.push("|baddomain.example/");
 myFiltersArray.push("||example31.com/banner.gif");
 myFiltersArray.push("^example33.com^");
 myFiltersArray.push("*/ads/*$script,match-case");
+myFiltersArray.push("||milanomoda.info^$domain=uploadlw.com");
+myFiltersArray.push("/mydirtyhobby.$domain=~mydirtyhobby.com|~mydirtyhobby.de");
+myFiltersArray.push("||mydirtyhobby.com^$third-party,domain=~my-dirty-hobby.com|~mydirtyhobby.de");
+myFiltersArray.push("||mydirtyhobby.com/?$popup,third-party");
+myFiltersArray.push("||online.mydirtyhobby.com^*?naff=$popup,third-party");
+myFiltersArray.push("||myhobby.com^$domain=my-hobby.com|~myhobby.de");
+myFiltersArray.push("||123date.me^$third-party");
+
+myFiltersArray.push("||ngohq.com/images/ad.jpg$~collapse");
+myFiltersArray.push("_ad_layer_");
 myFiltersArray.push("@@||360haven.com^$elemhide");
 myFiltersArray.push("@@|http://www.bye.com/|$document");
 myFiltersArray.push("@@||bye1.com/stores/$document");
 myFiltersArray.push("@@||vhobbies.com/admgr/*.aspx?ZoneID=$script,domain=vcoins.com");
 myFiltersArray.push("@@||yahoo.com/combo?$stylesheet");
 myFiltersArray.push("@@||youtube.com^*_adsense_$xmlhttprequest");
-myFiltersArray.push("/admatcher.$~object-subrequest,~xmlhttprequest");
-myFiltersArray.push("/banner.asp?$third-party");
-myFiltersArray.push("||healthaffiliatesnetwork.com^$third-party");
+myFiltersArray.push("@@|http://example34.com");
 myFiltersArray.push("@@||replgroup.com/banners/$image,~third-party");
-myFiltersArray.push("||milanomoda.info^$domain=uploadlw.com");
-myFiltersArray.push("||mydirtyhobby.com^$third-party,domain=~my-dirty-hobby.com|~mydirtyhobby.de");
-myFiltersArray.push("||myhobby.com^$domain=my-hobby.com|~myhobby.de");
-myFiltersArray.push("||ngohq.com/images/ad.jpg$~collapse");
-myFiltersArray.push("_ad_layer_");
+
+myFiltersArray.push('нашбийск.рф##a[href*="/banners/"] > img');
+myFiltersArray.push('promebelclub.ru,форум-мебельщиков.рф##.tborder[width="165"]');
 myFiltersArray.push("###ad-21");
 myFiltersArray.push("##.DeptAd");
 myFiltersArray.push('##div[id^="YFBMSN"]');
@@ -1217,11 +1244,9 @@ myFiltersArray.push("domain43.example##*.sponsor");
 myFiltersArray.push("##*.AD_banner");
 myFiltersArray.push("splush.org#@#*.AD_banner");
 myFiltersArray.push("linkshrink.net#@##overlay_ad");
-myFiltersArray.push("||123date.me^$third-party");
-console.log("my filters length: " , myFiltersArray.length);
+
 var myFiltersString = myFiltersArray.join('\n');
-console.log("my filters: " , myFiltersString);
- storage_set('custom_filters',myFiltersString);
+storage_set('custom_filters',myFiltersString);
 
 
   // Log an 'error' message on GAB log server.

@@ -35,11 +35,16 @@ var run_bandaids = function() {
     },
     hotmail: function() {
       //removing the space remaining in Hotmail/WLMail
-      var css_chunk = document.createElement("style");
-      css_chunk.type = "text/css";
-      (document.head || document.documentElement).insertBefore(css_chunk, null);
-      css_chunk.sheet.insertRule(".WithRightRail { right:0px !important; }", 0);
-      css_chunk.sheet.insertRule("#RightRailContainer  { display:none !important; visibility: none !important; orphans: 4321 !important; }" , 0);
+      el = document.querySelector(".Unmanaged .WithSkyscraper #MainContent");
+      if (el) {el.style.setProperty("margin-right", "1px", null);}
+      el = document.querySelector(".Managed .WithSkyscraper #MainContent");
+      if (el) {el.style.setProperty("right", "1px", null);}
+      el = document.getElementById("SkyscraperContent");
+      if (el) {
+        el.style.setProperty("display", "none", null);
+        el.style.setProperty("position", "absolute", null);
+        el.style.setProperty("right", "0px", null);
+      }
     },
     getadblockquestion: function() {
       BGcall('addGABTabListeners');
@@ -101,136 +106,3 @@ var before_ready_bandaids = function() {
 
 };
 
-//Safari & YouTube only
-//This function is outside the normal 'bandaids' processing
-//so that it works correctly
-(function() {
-    if ((typeof SAFARI) !== 'undefined' &&
-         SAFARI &&
-         document.domain === "www.youtube.com") {
-       //continue
-    } else {
-       return;
-    }
-
-    //a regex used to test the ytplayer config / flashvars for youtube ads, references to ads, etc.
-    var badArgumentsRegex = /^((.*_)?(ad|ads|afv|adsense)(_.*)?|(ad3|st)_module|prerolls|interstitial|infringe|iv_cta_url)$/;
-
-    function rewriteFlashvars(flashvars) {
-        var pairs = flashvars.split("&");
-        for (var i = 0; i < pairs.length; i++)
-            if (badArgumentsRegex.test(pairs[i].split("=")[0]))
-                pairs.splice(i--, 1);
-        return pairs.join("&");
-    }
-
-    function patchPlayer(player) {
-        var newPlayer = player.cloneNode(true);
-        var flashvarsChanged = false;
-
-        var flashvars = newPlayer.getAttribute("flashvars");
-        if (flashvars) {
-            var newFlashvars = rewriteFlashvars(flashvars);
-            if (flashvars != newFlashvars) {
-                newPlayer.setAttribute("flashvars", newFlashvars);
-                flashvarsChanged = true;
-            }
-        }
-
-        var param = newPlayer.querySelector("param[name=flashvars]");
-        if (param) {
-            var value = param.getAttribute("value");
-            if (value) {
-                var newValue = rewriteFlashvars(value);
-                if (value != newValue) {
-                    param.setAttribute("value", newValue);
-                    flashvarsChanged = true;
-                }
-            }
-        }
-
-        if (flashvarsChanged)
-            player.parentNode.replaceChild(newPlayer, player);
-    }
-
-    function runInPage(fn, arg) {
-        var script = document.createElement("script");
-        script.type = "application/javascript";
-        script.async = false;
-        script.textContent = "(" + fn + ")(" + arg + ");";
-        document.documentElement.appendChild(script);
-        document.documentElement.removeChild(script);
-    }
-
-    document.addEventListener("beforeload", function(event) {
-        if ((event.target.localName == "object" || event.target.localName == "embed") && /:\/\/[^\/]*\.ytimg\.com\//.test(event.url))
-            patchPlayer(event.target);
-    }, true);
-
-    runInPage(function(badArgumentsRegex) {
-        // If history.pushState is available, YouTube uses the history API
-        // when navigation from one video to another, and tells the flash
-        // player with JavaScript which video and which ads to show next,
-        // bypassing our flashvars rewrite code. So we disable
-        // history.pushState before YouTube's JavaScript runs.
-        History.prototype.pushState = undefined;
-
-        // The HTML5 player is configured via ytplayer.config.args. We have
-        // to make sure that ad-related arguments are ignored as they are set.
-        var ytplayer = undefined;
-        Object.defineProperty(window, "ytplayer", {
-          configurable: true,
-          get: function() {
-            return ytplayer;
-          },
-          set: function(rawYtplayer) {
-            if (!rawYtplayer || typeof rawYtplayer != "object") {
-              ytplayer = rawYtplayer;
-              return;
-            }
-
-            var config = undefined;
-            ytplayer = Object.create(rawYtplayer, {
-              config: {
-                enumerable: true,
-                get: function() {
-                  return config;
-                },
-                set: function(rawConfig) {
-                  if (!rawConfig || typeof rawConfig != "object") {
-                    config = rawConfig;
-                    return;
-                  }
-
-                  var args = undefined;
-                  config = Object.create(rawConfig, {
-                    args: {
-                      enumerable: true,
-                      get: function() {
-                        return args;
-                      },
-                      set: function(rawArgs) {
-                        if (!rawArgs || typeof rawArgs != "object") {
-                          args = rawArgs;
-                          return;
-                        }
-
-                        args = {};
-                        for (var arg in rawArgs) {
-                          if (!badArgumentsRegex.test(arg))
-                            args[arg] = rawArgs[arg];
-                        }
-                      }
-                    }
-                  });
-
-                  config.args = rawConfig.args;
-                }
-              }
-            });
-
-            ytplayer.config = rawYtplayer.config;
-          }
-        });
-      }, badArgumentsRegex);//end of runInPage()
-})();
