@@ -144,6 +144,9 @@ BlockingFilterSet.prototype = {
   //       true if the resource should be blocked, false otherwise
   matches: function(url, elementType, frameDomain, returnFilter) {
     var urlDomain = getUnicodeDomain(parseUri(url).hostname);
+    if (SAFARI && (!urlDomain || !frameDomain)) {
+    	recordErrorMessage("safari debug, url: " + url + " , frameDomain: " + frameDomain); 
+    }     
     var isThirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
 
     // matchCache approach taken from ABP
