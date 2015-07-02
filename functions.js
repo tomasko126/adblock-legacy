@@ -1,5 +1,6 @@
 // Set to true to get noisier console.log statements
-VERBOSE_DEBUG = false;
+// TODO - change back to false;
+VERBOSE_DEBUG = true;
 
 // Issue 6614: Don't run in a frame, to avoid manipulation by websites.
 if (window.location.origin + "/" === chrome.extension.getURL("")) {
@@ -40,7 +41,8 @@ logging = function(enabled) {
     log = logGroup = logGroupEnd = function() {};
   }
 };
-logging(false); // disabled by default
+// TODO - change back to false;
+logging(true); // disabled by default
 
 // Behaves very similarly to $.ready() but does not require jQuery.
 onReady = function(callback) {

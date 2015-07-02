@@ -1194,6 +1194,7 @@
 var myFiltersArray = [];
 myFiltersArray.push("http://example23.com/*");
 myFiltersArray.push("&ad_box_");
+myFiltersArray.push("png$image");
 myFiltersArray.push("||google.com/jsapi?autoload=*%22ads%22$script,domain=youtube.com");
 myFiltersArray.push("||topspin.net/secure/media/$image,domain=youtube.com");
 myFiltersArray.push("/pagead2.");
@@ -1220,31 +1221,31 @@ myFiltersArray.push("||mydirtyhobby.com/?$popup,third-party");
 myFiltersArray.push("||online.mydirtyhobby.com^*?naff=$popup,third-party");
 myFiltersArray.push("||myhobby.com^$domain=my-hobby.com|~myhobby.de");
 myFiltersArray.push("||123date.me^$third-party");
-
-myFiltersArray.push("||ngohq.com/images/ad.jpg$~collapse");
-myFiltersArray.push("_ad_layer_");
-myFiltersArray.push("@@||360haven.com^$elemhide");
-myFiltersArray.push("@@|http://www.bye.com/|$document");
-myFiltersArray.push("@@||bye1.com/stores/$document");
-myFiltersArray.push("@@||vhobbies.com/admgr/*.aspx?ZoneID=$script,domain=vcoins.com");
-myFiltersArray.push("@@||yahoo.com/combo?$stylesheet");
-myFiltersArray.push("@@||youtube.com^*_adsense_$xmlhttprequest");
-myFiltersArray.push("@@|http://example34.com");
-myFiltersArray.push("@@||replgroup.com/banners/$image,~third-party");
-
-myFiltersArray.push('нашбийск.рф##a[href*="/banners/"] > img');
-myFiltersArray.push('promebelclub.ru,форум-мебельщиков.рф##.tborder[width="165"]');
-myFiltersArray.push("###ad-21");
-myFiltersArray.push("##.DeptAd");
-myFiltersArray.push('##div[id^="YFBMSN"]');
-myFiltersArray.push("###mn #center_col > div > h2.spon:first-child");
-myFiltersArray.push("wg-gesucht.de#@#.ad_wrap");
-myFiltersArray.push("domain1.example,domain2.example,domain3.example##*.sponsor");
-myFiltersArray.push("domain1.example,domain2.example,domain3.example##*.sponsor");
-myFiltersArray.push("domain43.example##*.sponsor");
-myFiltersArray.push("##*.AD_banner");
-myFiltersArray.push("splush.org#@#*.AD_banner");
-myFiltersArray.push("linkshrink.net#@##overlay_ad");
+//
+//myFiltersArray.push("||ngohq.com/images/ad.jpg$~collapse");
+//myFiltersArray.push("_ad_layer_");
+//myFiltersArray.push("@@||360haven.com^$elemhide");
+//myFiltersArray.push("@@|http://www.bye.com/|$document");
+//myFiltersArray.push("@@||bye1.com/stores/$document");
+//myFiltersArray.push("@@||vhobbies.com/admgr/*.aspx?ZoneID=$script,domain=vcoins.com");
+//myFiltersArray.push("@@||yahoo.com/combo?$stylesheet");
+//myFiltersArray.push("@@||youtube.com^*_adsense_$xmlhttprequest");
+//myFiltersArray.push("@@|http://example34.com");
+//myFiltersArray.push("@@||replgroup.com/banners/$image,~third-party");
+//
+//myFiltersArray.push('нашбийск.рф##a[href*="/banners/"] > img');
+//myFiltersArray.push('promebelclub.ru,форум-мебельщиков.рф##.tborder[width="165"]');
+//myFiltersArray.push("###ad-21");
+//myFiltersArray.push("##.DeptAd");
+//myFiltersArray.push('##div[id^="YFBMSN"]');
+//myFiltersArray.push("###mn #center_col > div > h2.spon:first-child");
+//myFiltersArray.push("wg-gesucht.de#@#.ad_wrap");
+//myFiltersArray.push("domain1.example,domain2.example,domain3.example##*.sponsor");
+//myFiltersArray.push("domain1.example,domain2.example,domain3.example##*.sponsor");
+//myFiltersArray.push("domain43.example##*.sponsor");
+//myFiltersArray.push("##*.AD_banner");
+//myFiltersArray.push("splush.org#@#*.AD_banner");
+//myFiltersArray.push("linkshrink.net#@##overlay_ad");
 
 var myFiltersString = myFiltersArray.join('\n');
 storage_set('custom_filters',myFiltersString);
