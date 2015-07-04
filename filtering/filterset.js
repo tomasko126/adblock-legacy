@@ -43,9 +43,11 @@ FilterSet.prototype = {
   // which relate to the given domain or any of its superdomains.  E.g.
   // sub.foo.com will get items['global', 'foo.com', 'sub.foo.com'] and
   // exclude['foo.com', 'sub.foo.com'].
-  _viewFor: function(domain) {
+  _viewFor: function(domain, matchGeneric) {
     var result = new FilterSet();
-    result.items['global'] = this.items['global'];
+    if (!matchGeneric) {
+      result.items['global'] = this.items['global'];
+    }
     for (var nextDomain in DomainSet.domainAndParents(domain)) {
       if (this.items[nextDomain])
         result.items[nextDomain] = this.items[nextDomain];
@@ -58,9 +60,9 @@ FilterSet.prototype = {
   // Get a list of all Filter objects that should be tested on the given
   // domain, and return it with the given map function applied. This function
   // is for hiding rules only
-  filtersFor: function(domain) {
+  filtersFor: function(domain, matchGeneric) {
     domain = getUnicodeDomain(domain);
-    var limited = this._viewFor(domain);
+    var limited = this._viewFor(domain, matchGeneric);
     var data = {};
     // data = set(limited.items)
     for (var subdomain in limited.items) {
@@ -86,8 +88,8 @@ FilterSet.prototype = {
   // the filter in a relevant entry in this.items who is not also in a
   // relevant entry in this.exclude.
   // isThirdParty: true if url and frameDomain have different origins.
-  matches: function(url, elementType, frameDomain, isThirdParty) {
-    var limited = this._viewFor(frameDomain);
+  matches: function(url, elementType, frameDomain, isThirdParty, matchGeneric) {
+    var limited = this._viewFor(frameDomain, matchGeneric);
     for (var k in limited.items) {
       var entry = limited.items[k];
       for (var i = 0; i < entry.length; i++) {
@@ -137,12 +139,13 @@ BlockingFilterSet.prototype = {
   //                             resource
   //   frameDomain:string - domain of the frame on which the element resides
   //   returnFilter?:bool - see Returns
+  //   matchGeneric:bool - if an url should be tested against generic filters
   // Returns:
   //   if returnFilter is true:
   //       text of matching pattern/whitelist filter, null if no match
   //   if returnFilter is false:
   //       true if the resource should be blocked, false otherwise
-  matches: function(url, elementType, frameDomain, returnFilter) {
+  matches: function(url, elementType, frameDomain, returnFilter, matchGeneric) {
     var urlDomain = getUnicodeDomain(parseUri(url).hostname);
     var isThirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
 
@@ -151,13 +154,13 @@ BlockingFilterSet.prototype = {
     if (key in this._matchCache)
       return this._matchCache[key];
 
-    var match = this.whitelist.matches(url, elementType, frameDomain, isThirdParty);
+    var match = this.whitelist.matches(url, elementType, frameDomain, isThirdParty, matchGeneric);
     if (match) {
       log(frameDomain, ": whitelist rule", match._rule, "exempts url", url);
       this._matchCache[key] = (returnFilter ? match._text : false);
       return this._matchCache[key];
     }
-    match = this.pattern.matches(url, elementType, frameDomain, isThirdParty);
+    match = this.pattern.matches(url, elementType, frameDomain, isThirdParty, matchGeneric);
     if (match) {
       log(frameDomain, ": matched", match._rule, "to url", url);
       this._matchCache[key] = (returnFilter ? match._text: true);
@@ -181,4 +184,3 @@ BlockingFilterSet.prototype = {
     return this.malwareDomains;
   },
 }
-

@@ -353,9 +353,13 @@
 
       frameData.storeResource(tabId, requestingFrameId, details.url, elType);
 
-      // May the URL be loaded by the requesting frame?
       var frameDomain = frameData.get(tabId, requestingFrameId).domain;
-      var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+
+      // If |matchGeneric| is false, don't test request against blocking generic rules
+      var matchGeneric = _myfilters.blocking.whitelist.matches(top_frame.url, ElementTypes.genericblock, top_frame.url);
+
+      // May the URL be loaded by the requesting frame?
+      var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain, false, matchGeneric);
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
@@ -1041,7 +1045,9 @@
     };
 
     if (hiding) {
-      result.selectors = _myfilters.hiding.filtersFor(options.domain);
+      // If |matchGeneric| is false, don't test request against hiding generic rules
+      var matchGeneric = _myfilters.blocking.whitelist.matches(sender.tab.url, ElementTypes.generichide, sender.tab.url);
+      result.selectors = _myfilters.hiding.filtersFor(options.domain, matchGeneric);
     }
     return result;
   };
