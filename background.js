@@ -1287,10 +1287,10 @@
   if (installError && installError.retry_count >= 0 && !SAFARI) {
     //append the retry count to the URL
     installError.retry_count += 1;
-    if (installError.retry_count > 100) {
-      //if we've retried 100 or more times, give up...
+    if (installError.retry_count > 10) {
+      //if we've retried 10 or more times, give up...
       // send a message, and delete the 'installed error'
-      recordErrorMessage('/installed open error count > 100 ');
+      recordErrorMessage("/installed open error count > 10");
       storage_set("/installed_error");
     } else {
       var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
