@@ -1061,7 +1061,7 @@
       if (settings.experimental_hiding) {
         var cached_selectors = SelectorsCache.getSelectors(sender.url);
         if (cached_selectors) {
-          result._cachedSelectors = cached_selectors;
+          result.cachedSelectors = cached_selectors;
         }
       }
       var selectors = _myfilters.hiding.filtersFor(parseUri(sender.url).hostname);
@@ -1270,11 +1270,9 @@
   _myfilters.init();
 
   // Initialize cached filters
-  if (typeof storage_get("cached_filters") === "undefined" ||
-      typeof SelectorsCache._selectorsCache === "undefined") {
-      SelectorsCache.cleanSelectorsCache();
+  if (get_settings().experimental_hiding) {
+      SelectorsCache.init();
   }
-  SelectorsCache._selectorsCache = storage_get("cached_filters");
 
   // Record that we exist.
   STATS.startPinging();

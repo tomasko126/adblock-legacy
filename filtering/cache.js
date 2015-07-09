@@ -1,6 +1,15 @@
 SelectorsCache = {
     _selectorsCache: {},
 
+    init: function() {
+        if (typeof storage_get("cached_filters") === "undefined" ||
+            typeof this._selectorsCache === "undefined") {
+            this.reset();
+        } else {
+            this._selectorsCache = storage_get("cached_filters");
+        }
+    },
+
     // Save recorded selectors into cache
     setSelectors: function(url, selectors) {
         var urlDomain = parseUri(url).hostname.replace(/^www./, "");

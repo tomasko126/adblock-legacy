@@ -95,7 +95,7 @@ function destroyElement(el, elType) {
 
 // Add style rules hiding the given list of selectors.
 function block_list_via_css(selectors) {
-  if (!selectors || selectors.length === 0)
+  if (!selectors)
     return;
   // Issue 6480: inserting a <style> tag too quickly ignored its contents.
   // Use ABP's approach: wait for .sheet to exist before injecting rules.
@@ -259,8 +259,8 @@ function adblock_begin(inputs) {
         run_bandaids("new");
       }
       if (data.settings.experimental_hiding && data.hiding) {
-        if (data._cachedSelectors) {
-          console.log("onready::cached selectors received", data._cachedSelectors);
+        if (data.cachedSelectors) {
+          console.log("onready::cached selectors received", data.cachedSelectors);
           observeChanges(data);
           logMatchedElements(data, document, true);
         } else {
