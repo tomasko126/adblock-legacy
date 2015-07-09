@@ -43,7 +43,6 @@ FilterSet.prototype = {
   // which relate to the given domain or any of its superdomains.  E.g.
   // sub.foo.com will get items['global', 'foo.com', 'sub.foo.com'] and
   // exclude['foo.com', 'sub.foo.com'].
-
   _viewFor: function(domain) {
     var result = new FilterSet();
     result.items['global'] = this.items['global'];
@@ -62,24 +61,26 @@ FilterSet.prototype = {
   filtersFor: function(domain) {
     domain = getUnicodeDomain(domain);
     var limited = this._viewFor(domain);
-    var data = {};
-    // data = set(limited.items)
+
+    // Get IDs of excluded filters
+    var excluded = [];
+    for (var subdomain in limited.exclude) {
+      for (var filterId in limited.exclude[subdomain]) {
+        excluded.push(filterId);
+      }
+    }
+
+    // result -= excluded
+    var result = [];
     for (var subdomain in limited.items) {
       var entry = limited.items[subdomain];
       for (var i = 0; i < entry.length; i++) {
         var filter = entry[i];
-        data[filter.id] = filter;
+        if (excluded.indexOf(filter.id) > -1)
+          continue; 
+        result.push(filter.selector);
       }
     }
-    // data -= limited.exclude
-    for (var subdomain in limited.exclude) {
-      for (var filterId in limited.exclude[subdomain]) {
-        delete data[filterId];
-      }
-    }
-    var result = [];
-    for (var k in data)
-      result.push(data[k].selector);
     return result;
   },
 
@@ -182,3 +183,4 @@ BlockingFilterSet.prototype = {
     return this.malwareDomains;
   },
 }
+
