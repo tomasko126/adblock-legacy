@@ -185,12 +185,12 @@ BlockingFilterSet.prototype = {
     var domains = malwareDoms.adware;
     var result = {};
     for (var i=0; i < domains.length; i++) {
-        var filter = domains[i];
-        var char = filter.charAt(0);
+        var domain = domains[i];
+        var char = domain.charAt(0);
         if (!result[char]) {
             result[char] = [];
         }
-        result[char].push(filter);
+        result[char].push(domain);
     }
     this.malwareDomains = result;
   },
