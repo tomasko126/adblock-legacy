@@ -605,6 +605,10 @@ MyFilters.prototype._load_default_subscriptions = function() {
   //Update will be done immediately after this function returns
   result["adblock_custom"] = { subscribed: true };
   result["easylist"] = { subscribed: true };
+  // Prevent auto-subscribing to the Malware filter list for existing users
+  if (STATS.firstRun) {
+     result["malware"] = { subscribed: true }; 
+  } 
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
