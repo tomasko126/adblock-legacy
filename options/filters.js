@@ -609,7 +609,7 @@ $(function() {
 
 
 
-  chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+  onMessage.addListener(function(request, sender, sendResponse) {
     if (request.command !== "filters_updated")
       return;
     BGcall("get_subscriptions_minus_text", function(subs) {

@@ -94,17 +94,9 @@ if (SAFARI) {
 
   // Replace the 'chrome' object with a Safari adapter.
   chrome = {
-    extension: {
-      getBackgroundPage: function() {
-        return safari.extension.globalPage.contentWindow;
-      },
-
-      getURL: function(path) {
-        return safari.extension.baseURI + path;
-      },
-
-      sendRequest: (function() {
-        // Where to call .dispatchMessage() when sendRequest is called.
+    runtime: {
+      sendMessage: (function() {
+        // Where to call .dispatchMessage() when sendMessage is called.
         var dispatchTargets = [];
         if (!isOnGlobalPage) {
           // In a non-global context, the dispatch target is just the local
@@ -113,11 +105,11 @@ if (SAFARI) {
         }
         else {
           // In the global context, we must call .dispatchMessage() wherever
-          // someone has called .onRequest().  There's no good way to get at
-          // them directly, though, so .onRequest calls *us*, so we get access
+          // someone has called .onMessage().  There's no good way to get at
+          // them directly, though, so .onMessage calls *us*, so we get access
           // to a messageEvent object that points to their page that we can
           // call .dispatchMessage() upon.
-          listenFor("onRequest registration", function(messageEvent) {
+          listenFor("onMessage registration", function(messageEvent) {
             var context = dispatchContext(messageEvent);
             if (dispatchTargets.indexOf(context) == -1)
               dispatchTargets.push(context);
@@ -155,18 +147,18 @@ if (SAFARI) {
         return theFunction;
       })(),
 
-      onRequest: {
+      onMessage: {
         addListener: function(handler) {
           // If listening for requests from the global page, we must call the
           // global page so it can get a messageEvent through which to send
           // requests to us.
           if (!isOnGlobalPage)
-            dispatchContext().dispatchMessage("onRequest registration", {});
+            dispatchContext().dispatchMessage("onMessage registration", {});
 
           listenFor("request", function(messageEvent) {
             var request = messageEvent.message.data;
 
-            var sender = {}; // Empty in onRequest in non-global contexts.
+            var sender = {}; // Empty in onMessage in non-global contexts.
             if (isOnGlobalPage) { // But filled with sender data otherwise.
               var tab = messageEvent.target;
               var frameInfo = messageEvent.message.frameInfo;
@@ -184,22 +176,23 @@ if (SAFARI) {
           });
         }
       },
-
-      onRequestExternal: {
-        addListener: function() {
-          // CHROME PORT LIBRARY: onRequestExternal not supported.
-        }
+      getManifest: function() {
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", chrome.extension.getURL("manifest.json"), false);
+          xhr.send();
+          var object = JSON.parse(xhr.responseText);
+          return object;
       }
     },
 
-    runtime: {
-        getManifest: function() {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", chrome.extension.getURL("manifest.json"), false);
-            xhr.send();
-            var object = JSON.parse(xhr.responseText);
-            return object;
-        }
+    extension: {
+        getBackgroundPage: function() {
+            return safari.extension.globalPage.contentWindow;
+        },
+
+        getURL: function(path) {
+            return safari.extension.baseURI + path;
+        },
     },
 
     // Helper object to ensure that tabs sending requests to the global page

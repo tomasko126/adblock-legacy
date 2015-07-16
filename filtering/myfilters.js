@@ -149,7 +149,7 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
   if (rebuild)
     this.rebuild();
 
-  chrome.extension.sendRequest({command: "filters_updated"});
+  sendMessage({command: "filters_updated"});
 }
 
 // get filters that are defined in the extension
@@ -542,7 +542,7 @@ MyFilters.prototype._loadMalwareDomains = function() {
            that._subscriptions.malware.expiresAfterHours = 24;
            var smear = Math.random() * 0.4 + 0.8;
            that._subscriptions.malware.expiresAfterHours *= smear;
-           chrome.extension.sendRequest({command: "filters_updated"});
+           sendMessage({command: "filters_updated"});
            log("Fetched " + url);
         }
         xhr.open("GET",  url);

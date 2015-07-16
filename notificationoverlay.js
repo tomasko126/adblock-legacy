@@ -1,4 +1,4 @@
-﻿//only run this if the top / main page.
+//only run this if the top / main page.
 //we need this check because Safari currently does not allow us to control
 //which documents this file is inject in, where Chrome does.
 if (window.top === window) {
@@ -7,7 +7,7 @@ if (window.top === window) {
     var iframeID = "_ABiframe";
     var styleID = "_ABstyle";
 
-    chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+    onMessage.addListener(function(request, sender, sendResponse) {
       if (request.command === 'showoverlay' &&
           request.overlayURL &&
           request.tabURL === document.location.href) {

@@ -1,4 +1,4 @@
-﻿//if the ping reponse indicates a survey (tab or overlay)
+//if the ping reponse indicates a survey (tab or overlay)
 //gracefully processes the request
 SURVEY = (function() {
   // Only allow one survey per browser startup, to make sure users don't get
@@ -88,9 +88,9 @@ SURVEY = (function() {
           }
         };
         if (SAFARI) {
-          chrome.extension.sendRequest(data, validateResponseFromTab);
+          sendMessage(data, validateResponseFromTab);
         } else {
-          chrome.tabs.sendRequest(tab.id, data, validateResponseFromTab);
+          sendTabMessage(tab.id, data, validateResponseFromTab);
         }
       });
     };

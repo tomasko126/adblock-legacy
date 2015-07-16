@@ -1,6 +1,48 @@
 // Set to true to get noisier console.log statements
 VERBOSE_DEBUG = false;
 
+// Messaging API layer for older versions of Chrome/Opera
+sendMessage = function() {
+    var args = [];
+    for (var i=0; i < arguments.length; i++) {
+        args.push(arguments[i]);
+    }
+    var api = chrome.runtime.sendMessage;
+    if (!api) {
+        api = chrome.extension.sendRequest;
+    }
+    api.apply(this, args);
+}
+
+sendTabMessage = function() {
+    var args = [];
+    for (var i=0; i < arguments.length; i++) {
+        args.push(arguments[i]);
+    }
+    var api = chrome.tabs.sendMessage;
+    if (!api) {
+        api = chrome.tabs.sendRequest;
+    }
+    api.apply(this, args);
+}
+
+onMessage = {
+    addListener: function(callback) {
+        if (chrome.runtime.onMessage) {
+            chrome.runtime.onMessage.addListener(callback);
+        } else {
+            chrome.extension.onRequest.addListener(callback);
+        }
+    },
+    removeListener: function(callback) {
+        if (chrome.runtime.onMessage) {
+            chrome.runtime.onMessage.removeListener(callback);
+        } else {
+            chrome.extension.onRequest.removeListener(callback);
+        }
+    }
+}
+
 // Issue 6614: Don't run in a frame, to avoid manipulation by websites.
 if (window.location.origin + "/" === chrome.extension.getURL("")) {
   // above line avoids content scripts making their host page break frames
@@ -23,7 +65,8 @@ BGcall = function() {
   var fn = args.shift();
   var has_callback = (typeof args[args.length - 1] == "function");
   var callback = (has_callback ? args.pop() : function() {});
-  chrome.extension.sendRequest({command: "call", fn:fn, args:args}, callback);
+  sendMessage({command: "call", fn:fn, args:args}, callback);
+  //chrome.runtime.sendMessage({command: "call", fn:fn, args:args}, callback);
 };
 
 // Enabled in adblock_start_common.js and background.js if the user wants

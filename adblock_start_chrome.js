@@ -35,6 +35,7 @@ var elementPurger = {
           }
           var externalId = "kodkhcagmjcidjgljmbfiaconnbnohho";
           request.selector = selector;
+          // Keep sendRequest API in order to keep CatBlock working
           chrome.extension.sendRequest(externalId, request);
 
           return; // I doubt the same URL was loaded via 2 different src attrs.
@@ -95,10 +96,10 @@ var elementPurger = {
 
 adblock_begin({
   startPurger: function() {
-    chrome.extension.onRequest.addListener(elementPurger.onPurgeRequest);
+    onMessage.addListener(elementPurger.onPurgeRequest);
   },
   stopPurger: function() {
-    chrome.extension.onRequest.removeListener(elementPurger.onPurgeRequest);
+    onMessage.removeListener(elementPurger.onPurgeRequest);
   },
   handleHiding: function(data) {
     if (data.hiding)

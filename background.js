@@ -203,7 +203,7 @@
                   if (changeInfo.status === "complete" &&
                       tab.status === "complete") {
                       setTimeout(function() {
-                          chrome.extension.sendRequest({command: "reloadcomplete"});
+                          sendMessage({command: "reloadcomplete"});
                       }, 2000);
                   }
               });
@@ -373,7 +373,7 @@
         // the frame, ignore the anchor when matching.
         var frameUrl = frameData.get(tabId, requestingFrameId).url.replace(/#.*$/, "");
         var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url: details.url, elType: elType };
-        chrome.tabs.sendRequest(tabId, data);
+        sendTabMessage(tabId, data);
       }
       if (blocked) {
         blockCounts.recordOneAdBlocked(tabId);
@@ -521,7 +521,7 @@
   // Inputs: filters:string the new filters.
   set_custom_filters_text = function(filters) {
     storage_set('custom_filters', filters);
-    chrome.extension.sendRequest({command: "filters_updated"});
+    sendMessage({command: "filters_updated"});
     _myfilters.rebuild();
     if (!SAFARI && db_client && db_client.isAuthenticated()) {
       sync_custom_filters(localStorage.custom_filters);
@@ -1141,7 +1141,7 @@
 
   // BGcall DISPATCH
   (function() {
-    chrome.extension.onRequest.addListener(
+    onMessage.addListener(
       function(request, sender, sendResponse) {
         if (request.command != "call")
           return; // not for us
@@ -1613,7 +1613,7 @@
               if (error) return;
               set_setting("dropbox_sync", true);
               settingssync();
-              chrome.runtime.sendMessage({message: "update_icon"});
+              sendMessage({message: "update_icon"});
           });
       }
 
@@ -1622,7 +1622,7 @@
           db_client.signOut(function(error, client) {
               if (error) return;
               set_setting("dropbox_sync", false);
-              chrome.runtime.sendMessage({message: "update_icon"});
+              sendMessage({message: "update_icon"});
           });
       }
 
@@ -1731,13 +1731,13 @@
                   // Set custom filters
                   var custom = settingstable.get("custom_filters");
                   localStorage.custom_filters = custom;
-                  chrome.extension.sendRequest({command: "filters_updated"});
+                  sendMessage({command: "filters_updated"});
 
                   // Set settings
                   var advanced = settingstable.get("show_advanced_options");
                   var advanced_local = get_settings().show_advanced_options;
                   if (advanced_local !== advanced)
-                      chrome.runtime.sendMessage({message: "update_page"});
+                      sendMessage({message: "update_page"});
                   set_setting("show_advanced_options", advanced);
                   var debug = settingstable.get("debug_logging");
                   set_setting("debug_logging", debug);
@@ -1757,7 +1757,7 @@
                   set_setting("show_block_counts_help_link", blockcountslink);
                   var showsurvey = settingstable.get("show_survey");
                   set_setting("show_survey", showsurvey);
-                  chrome.runtime.sendMessage({message: "update_checkbox"});
+                  sendMessage({message: "update_checkbox"});
 
                   // Set custom filters
                   var exFilters = settingstable.get("exclude_filters");
@@ -1779,11 +1779,11 @@
 
       // Reset db_client, if it got in an error state
       if (!SAFARI) {
-          chrome.runtime.onMessage.addListener(
+          onMessage.addListener(
               function(request, sender, sendResponse) {
                   if (request.message === "clienterror") {
                       db_client.reset();
-                      chrome.runtime.sendMessage({message: "update_icon"});
+                      sendMessage({message: "update_icon"});
                   }
               }
           );
@@ -1805,12 +1805,12 @@
             //since the most likely exception at this point is a size exceeded message,
             //store the message code.
             sessionstorage_set("dropboxerror", translate("dropboxerrorforfilters"));
-            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: translate("dropboxerrorforfilters") });
+            sendMessage({message: "dropboxerror", messagecode: translate("dropboxerrorforfilters") });
           }
           if (!syncError) {
             //sync was successful, remove any previous error messages.
             sessionstorage_set("dropboxerror");
-            chrome.runtime.sendMessage({message: "cleardropboxerror"});
+            sendMessage({message: "cleardropboxerror"});
           }
       }
 
