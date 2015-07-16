@@ -7,10 +7,7 @@ sendMessage = function() {
     for (var i=0; i < arguments.length; i++) {
         args.push(arguments[i]);
     }
-    var api = chrome.runtime.sendMessage;
-    if (!api) {
-        api = chrome.extension.sendRequest;
-    }
+    var api = chrome.runtime.sendMessage || chrome.extension.sendRequest;
     api.apply(this, args);
 }
 
@@ -19,10 +16,7 @@ sendTabMessage = function() {
     for (var i=0; i < arguments.length; i++) {
         args.push(arguments[i]);
     }
-    var api = chrome.tabs.sendMessage;
-    if (!api) {
-        api = chrome.tabs.sendRequest;
-    }
+    var api = chrome.tabs.sendMessage || chrome.tabs.sendRequest;
     api.apply(this, args);
 }
 
