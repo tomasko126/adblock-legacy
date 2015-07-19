@@ -450,15 +450,16 @@ function CustomFilterListUploadUtil() {};
 // Inputs:
 //   url:string - Url for the custom filter list.
 //   subscribe_to:string - The id of the custom filter list.
-CustomFilterListUploadUtil._performUpload = function(url, subscribe_to) {
-  SubscriptionUtil.subscribe(subscribe_to);
+//   name:string - Name of the filter list (given by user)
+CustomFilterListUploadUtil._performUpload = function(url, subscribe_to, name) {
+  SubscriptionUtil.subscribe(subscribe_to, name);
   var entry = {
     id: subscribe_to,
     url: url,
     subscribed: true,
     unsubscribe: true,
     user_submitted: true,
-    label: ""
+    label: name
   };
   FilterListUtil.cached_subscriptions[entry.id] = entry;
   var custom_filter_list = filterListSections.custom_filter_list;
@@ -515,7 +516,8 @@ CustomFilterListUploadUtil.bindControls = function () {
       CustomFilterListUploadUtil._updateExistingFilterList(existing_filter_list);
     } else {
       if (/^https?\:\/\/[^\<]+$/.test(url)) {
-        CustomFilterListUploadUtil._performUpload(url, subscribe_to);
+        var name = prompt(translate("filterlistprompt"));
+        CustomFilterListUploadUtil._performUpload(url, subscribe_to, name);
       } else {
         alert(translate("failedtofetchfilter"));
       }

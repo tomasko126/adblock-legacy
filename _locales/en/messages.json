@@ -1372,5 +1372,9 @@
   "ad_report_please":{
     "message":"If you're seeing an ad, don't make a bug report, make an <a>ad report<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "filterlistprompt":{
+    "message":"Please enter a name for the filter list you are subscribing to:",
+    "description":"Prompt when adding a new filter list URL, on the Filter lists tab of the Options page"
   }
 }
