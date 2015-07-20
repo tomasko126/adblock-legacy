@@ -41,7 +41,8 @@
         "*://*.e15.cz/*",
         "*://*.sportrevue.cz/*",
         "*://*.autorevue.cz/*",
-        "*://*.youtube.com/*"
+        "*://*.youtube.com/*",
+        "*://*.nova.cz/*"
       ],
       "js": [
         "bandaids.js"

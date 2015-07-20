@@ -96,9 +96,30 @@ var run_bandaids = function() {
 
 };
 
-
 var before_ready_bandaids = function() {
-
+    if (/nova/.test(document.location.hostname)) {
+        apply_bandaid_for = "nova";
+    }
+    
+    var bandaids = {
+        nova: function() {
+            var code = "Object.defineProperty(window.navigator, 'userAgent', {" +
+                           "value: 'Android'," +
+                           "enumerable: true," +
+                           "configurable: true" +
+                       "});";
+            var script = document.createElement("script");
+            script.type = "application/javascript";
+            script.async = false;
+            script.textContent = code;
+            document.documentElement.appendChild(script);
+        },
+    }
+    
+    if (apply_bandaid_for) {
+        log("Running bandaid for " + apply_bandaid_for);
+        bandaids[apply_bandaid_for]();
+    }
 };
 
 //Safari & YouTube only
