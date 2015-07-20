@@ -106,7 +106,7 @@ var before_ready_bandaids = function() {
             var code = "Object.defineProperty(window.navigator, 'userAgent', {" +
                            "value: 'Android'," +
                            "enumerable: true," +
-                           "configurable: true" +
+                           "configurable: false" +
                        "});";
             var script = document.createElement("script");
             script.type = "application/javascript";
@@ -117,7 +117,7 @@ var before_ready_bandaids = function() {
     }
     
     if (apply_bandaid_for) {
-        log("Running bandaid for " + apply_bandaid_for);
+        log("Running early bandaid for " + apply_bandaid_for);
         bandaids[apply_bandaid_for]();
     }
 };
