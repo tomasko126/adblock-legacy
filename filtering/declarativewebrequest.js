@@ -155,10 +155,11 @@ DeclarativeWebRequest = (function() {
 			function (match, prefix, domain) {
 				return prefix + punycode.toASCII(domain);
 			});
-		urlFilter = toRegExp(filter._rule.source);
+		//urlFilter = toRegExp(filter._rule.source);
+		urlFilter = filter._rule.source
   	// make sure to limit rules to to HTTP(S) URLs (if not already limited)
   	if (!/^(\^|http)/i.test(urlFilter)) {
-  		urlFilter = "^https?://" + urlFilter;
+  		urlFilter = HTML_PREFIX + REGEX_WILDCARD + urlFilter;
     }
   	return urlFilter;
   }
@@ -223,7 +224,7 @@ function toRegExp(text) {
 				parsedRegEx += aChar;
 		}
 	}
-//console.log("text", text, "parsedRegEx", parsedRegEx);
+  //console.log("text", text, "parsedRegEx", parsedRegEx);
 	return parsedRegEx;
 }
 
@@ -343,7 +344,7 @@ function toRegExp(text) {
       //step 1, add all of the hiding filters (CSS selectors)
       selectorFilters.forEach(function(filter) {
         if (isSupported(filter)) {
-          //rules.push(createSelectorRule(filter));
+          rules.push(createSelectorRule(filter));
         }
       });
       //step 2, now add only the $elemhide filters
@@ -364,19 +365,14 @@ function toRegExp(text) {
       }
       //step 5, add all $document
       documentWhitelistFilters.forEach(function(filter) {
-        //rules.push(createDocumentIgnoreRule(filter));
+        rules.push(createDocumentIgnoreRule(filter));
       });
       //step 6, add other whitelist rules
       whitelistAnyOtherFilters.forEach(function(filter) {
-        //rules.push(createIgnoreRule(filter));
+        rules.push(createIgnoreRule(filter));
       });
+      return rules;
 
-      try {
-        console.log("about to save rules  ", rules.length);
-        safari.extension.setContentBlocker(rules);
-      } catch(ex) {
-        console.log("exception saving rules", ex);
-      }
     },
   };
 })();

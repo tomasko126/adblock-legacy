@@ -62,6 +62,9 @@ MyFilters.prototype._updateFieldsFromOriginalOptions = function() {
       sub.initialUrl = official.url;
       sub.url = official.url;
     }
+    if (official.safariJSON_URL) {
+      sub.safariJSON_URL = official.safariJSON_URL;
+    }
 
     var isMissingRequiredList = (sub.requiresList !== official.requiresList);
     if (official.requiresList && isMissingRequiredList && sub.subscribed) {
@@ -182,10 +185,27 @@ MyFilters.prototype.getExtensionFilters = function(settings) {
 
 // Rebuild filters based on the current settings and subscriptions.
 MyFilters.prototype.rebuild = function() {
+  if (SAFARI &&
+      safari &&
+      safari.extension &&
+      safari.extension.setContentBlocker) {
+    if (Object.keys(this._fetchTracker).length > 0) {
+      //only process the new JSON rules when all of the outstand AJAX requests have processed
+      return;
+    }
+  }
   var texts = [];
-  for (var id in this._subscriptions)
-    if (this._subscriptions[id].subscribed)
-      texts.push(this._subscriptions[id].text);
+  if (SAFARI &&
+      safari &&
+      safari.extension &&
+      safari.extension.setContentBlocker) {
+        //empty
+  }  else {
+     //only add subscriptions in Chrome, Opera, and older version of Safari...
+    for (var id in this._subscriptions)
+      if (this._subscriptions[id].subscribed)
+        texts.push(this._subscriptions[id].text);
+  }
 
   // Include custom filters.
   var customfilters = get_custom_filters_text(); // from background
@@ -225,33 +245,49 @@ MyFilters.prototype.rebuild = function() {
       safari &&
       safari.extension &&
       safari.extension.setContentBlocker) {
-        log("safari 9 content blocking detected");
+        log("safari 9 content blocking detected...");
     // If Safari 9 content blocking
     // if Safari has just started, don't re-register filters unless none are
     // registered (implying it was just installed).
     // TODO - malware - domains
     //      - add start up / initial install logic (firstRun)
-    var registerTheRules = function() {
-      var malwareDomains = [];
-      if (this._subscriptions &&
-          this._subscriptions.malware &&
-          this._subscriptions.malware.subscribed &&
-          this.getMalwareDomains()) {
-        malwareDomains = this._subscriptions.malware.text.adware;
+    this._filterListRules = [];
+    for (var id in this._subscriptions) {
+      if (this._subscriptions[id].subscribed) {
+        for (var rule in this._subscriptions[id].text)  {
+          this._filterListRules.push(rule);
+        }
       }
-
-      var patternFilters = [];
-      for (var id in filters.pattern)
-        patternFilters.push(filters.pattern[id]);
-      var whitelistFilters = [];
-      for (var id in filters.whitelist)
-        whitelistFilters.push(filters.whitelist[id]);
-      var selectorFilters = [];
-      for (var id in filters.hiding)
-        selectorFilters.push(filters.hiding[id]);
-      DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, malwareDomains);
     }
-    registerTheRules();
+    var malwareDomains = [];
+    if (this._subscriptions &&
+        this._subscriptions.malware &&
+        this._subscriptions.malware.subscribed &&
+        this.getMalwareDomains()) {
+      malwareDomains = this._subscriptions.malware.text.adware;
+    }
+
+    var patternFilters = [];
+    for (var id in filters.pattern) {
+      patternFilters.push(filters.pattern[id]);
+    }
+    var whitelistFilters = [];
+    for (var id in filters.whitelist) {
+      whitelistFilters.push(filters.whitelist[id]);
+    }
+    var selectorFilters = [];
+    for (var id in filters.hiding) {
+      selectorFilters.push(filters.hiding[id]);
+    }
+    var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, malwareDomains);
+    //add the custom rules, with the filter list rules
+    this._filterListRules.push.apply(this._filterListRules, customRules);
+    try {
+        console.log("about to save rules  ", this._filterListRules.length);
+        safari.extension.setContentBlocker(this._filterListRules);
+    } catch(ex) {
+        console.log("exception saving rules", ex);
+    }
   } else {
     this.hiding = FilterSet.fromFilters(filters.hiding);
 
@@ -393,7 +429,22 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
 // isNewList: true when the list is completely new and must succeed or
 //            otherwise it'll be deleted.
 MyFilters.prototype.fetch_and_update = function(id, isNewList) {
+
   var url = this._subscriptions[id].url;
+  if (SAFARI &&
+      safari &&
+      safari.extension &&
+      safari.extension.setContentBlocker) {
+      if (this._subscriptions[id].safariJSON_URL) {
+        url =  this._subscriptions[id].safariJSON_URL;
+        if (!this._fetchTracker) {
+          this._fetchTracker = {};
+        }
+        this._fetchTracker[id] = true;
+      } else {
+        //TODO???
+      }
+  }
   var that = this;
   function onError() {
     that._subscriptions[id].last_update_failed_at = Date.now();
@@ -428,7 +479,11 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
         log("List not modified " + url);
         that._updateSubscriptionText(id, that._subscriptions[id].text);
         that._onSubscriptionChange(true);
-      } else if (text && text.length != 0 && Filter.isComment(text.trim())) {
+      } else if (text && (typeof text === "string") && text.length != 0 && Filter.isComment(text.trim())) {
+        log("Fetched " + url);
+        that._updateSubscriptionText(id, text, xhr);
+        that._onSubscriptionChange(true);
+      } else if (text && (typeof text === "object")) {
         log("Fetched " + url);
         that._updateSubscriptionText(id, text, xhr);
         that._onSubscriptionChange(true);
@@ -451,6 +506,22 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
 MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
   this._subscriptions[id].last_update = Date.now();
   delete this._subscriptions[id].last_update_failed_at;
+  //Safari 9 Content Blocking...
+  if (SAFARI &&
+      safari &&
+      safari.extension &&
+      safari.extension.setContentBlocker) {
+    this._subscriptions[id].expiresAfterHoursHard = this._subscriptions[id].expiresAfterHours * 2;
+    var smear = Math.random() * 0.4 + 0.8;
+    this._subscriptions[id].expiresAfterHours *= smear;
+    this._subscriptions[id].text = text;
+
+    if (this._fetchTracker &&
+        this._fetchTracker[id]) {
+      delete this._fetchTracker[id]
+    }
+    return;
+  }
 
   // In case the resource wasn't modified, there is no need to reparse this.
   // xhr isn't send in this case. Do reparse .text, in case we had some update
@@ -645,8 +716,10 @@ MyFilters.prototype._load_default_subscriptions = function() {
   }
   //Update will be done immediately after this function returns
   //TODO - uncomment!
-  //result["adblock_custom"] = { subscribed: true };
-  //result["easylist"] = { subscribed: true };
+  result["adblock_custom"] = { subscribed: true };
+  result["easylist"] = { subscribed: true };
+  result["sample"] = { subscribed: true };
+  result["easylist_plus_french"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
@@ -661,9 +734,16 @@ MyFilters.prototype._make_subscription_options = function() {
   return {
     "adblock_custom": { // AdBlock custom filters
       url: "https://data.getadblock.com/filters/adblock_custom.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/adblock_custom.json",
+    },
+    //TODO - remove
+    "sample": { // sample for debug
+      url: "https://data.getadblock.com/filters/samplefilterlist.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/sample.json",
     },
     "easylist": { // EasyList
-      url: "https://easylist-downloads.adblockplus.org/easylist.txt"
+      url: "https://easylist-downloads.adblockplus.org/easylist.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist.json",
     },
     "easylist_plus_bulgarian": { // Additional Bulgarian filters
       url: "http://stanev.org/abp/adblock_bg.txt",
@@ -680,6 +760,7 @@ MyFilters.prototype._make_subscription_options = function() {
     "easylist_plus_french": { // Additional French filters
       url: "https://easylist-downloads.adblockplus.org/liste_fr.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_french.json",
     },
     "easylist_plus_german": { // Additional German filters
       url: "https://easylist-downloads.adblockplus.org/easylistgermany.txt",
@@ -742,12 +823,14 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "easyprivacy": { // EasyPrivacy
       url: "https://easylist-downloads.adblockplus.org/easyprivacy.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/easyprivacy.json",
     },
     "antisocial": { // Antisocial
       url: "https://easylist-downloads.adblockplus.org/fanboy-social.txt",
     },
     "malware": { // Malware protection
       url: "https://data.getadblock.com/filters/domains.json",
+      safariJSON_URL: "https://data.getadblock.com/filters/malware.json",
     },
     "annoyances": { // Fanboy's Annoyances
       url: "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt",

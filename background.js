@@ -1191,36 +1191,36 @@
     }
   })();
 //TODO - remove - for testing only
-var myFiltersArray = [];
-myFiltersArray.push("http://example23.com/*");
-myFiltersArray.push("&ad_box_");
-myFiltersArray.push("png$image");
-myFiltersArray.push("||google.com/jsapi?autoload=*%22ads%22$script,domain=youtube.com");
-myFiltersArray.push("||topspin.net/secure/media/$image,domain=youtube.com");
-myFiltersArray.push("/pagead2.");
-myFiltersArray.push("/pubads_");
-myFiltersArray.push("/pagead2.");
-myFiltersArray.push("/pagead/gen_");
-myFiltersArray.push("/googleads.");
-myFiltersArray.push("=300x250,");
-myFiltersArray.push("&ad_type=");
-myFiltersArray.push("&ad_zones=");
-myFiltersArray.push("&adbannerid=");
-myFiltersArray.push("||/banner/");
-myFiltersArray.push("/admatcher.$~object,-subrequest,~xmlhttprequest");
-myFiltersArray.push("/banner.asp?$third-party");
-myFiltersArray.push("||healthaffiliatesnetwork.com^$third-party");
-myFiltersArray.push("|baddomain.example/");
-myFiltersArray.push("||example31.com/banner.gif");
-myFiltersArray.push("^example33.com^");
-myFiltersArray.push("*/ads/*$script,match-case");
-myFiltersArray.push("||milanomoda.info^$domain=uploadlw.com");
-myFiltersArray.push("/mydirtyhobby.$domain=~mydirtyhobby.com|~mydirtyhobby.de");
-myFiltersArray.push("||mydirtyhobby.com^$third-party,domain=~my-dirty-hobby.com|~mydirtyhobby.de");
-myFiltersArray.push("||mydirtyhobby.com/?$popup,third-party");
-myFiltersArray.push("||online.mydirtyhobby.com^*?naff=$popup,third-party");
-myFiltersArray.push("||myhobby.com^$domain=my-hobby.com|~myhobby.de");
-myFiltersArray.push("||123date.me^$third-party");
+//var myFiltersArray = [];
+//myFiltersArray.push("http://example23.com/*");
+//myFiltersArray.push("&ad_box_");
+//myFiltersArray.push("png$image");
+//myFiltersArray.push("||google.com/jsapi?autoload=*%22ads%22$script,domain=youtube.com");
+//myFiltersArray.push("||topspin.net/secure/media/$image,domain=youtube.com");
+//myFiltersArray.push("/pagead2.");
+//myFiltersArray.push("/pubads_");
+//myFiltersArray.push("/pagead2.");
+//myFiltersArray.push("/pagead/gen_");
+//myFiltersArray.push("/googleads.");
+//myFiltersArray.push("=300x250,");
+//myFiltersArray.push("&ad_type=");
+//myFiltersArray.push("&ad_zones=");
+//myFiltersArray.push("&adbannerid=");
+//myFiltersArray.push("||/banner/");
+//myFiltersArray.push("/admatcher.$~object,-subrequest,~xmlhttprequest");
+//myFiltersArray.push("/banner.asp?$third-party");
+//myFiltersArray.push("||healthaffiliatesnetwork.com^$third-party");
+//myFiltersArray.push("|baddomain.example/");
+//myFiltersArray.push("||example31.com/banner.gif");
+//myFiltersArray.push("^example33.com^");
+//myFiltersArray.push("*/ads/*$script,match-case");
+//myFiltersArray.push("||milanomoda.info^$domain=uploadlw.com");
+//myFiltersArray.push("/mydirtyhobby.$domain=~mydirtyhobby.com|~mydirtyhobby.de");
+//myFiltersArray.push("||mydirtyhobby.com^$third-party,domain=~my-dirty-hobby.com|~mydirtyhobby.de");
+//myFiltersArray.push("||mydirtyhobby.com/?$popup,third-party");
+//myFiltersArray.push("||online.mydirtyhobby.com^*?naff=$popup,third-party");
+//myFiltersArray.push("||myhobby.com^$domain=my-hobby.com|~myhobby.de");
+//myFiltersArray.push("||123date.me^$third-party");
 //
 //myFiltersArray.push("||ngohq.com/images/ad.jpg$~collapse");
 //myFiltersArray.push("_ad_layer_");
@@ -1247,8 +1247,8 @@ myFiltersArray.push("||123date.me^$third-party");
 //myFiltersArray.push("splush.org#@#*.AD_banner");
 //myFiltersArray.push("linkshrink.net#@##overlay_ad");
 
-var myFiltersString = myFiltersArray.join('\n');
-storage_set('custom_filters',myFiltersString);
+//var myFiltersString = myFiltersArray.join('\n');
+//storage_set('custom_filters',myFiltersString);
 
 
   // Log an 'error' message on GAB log server.
