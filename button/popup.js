@@ -89,9 +89,11 @@ $(function() {
             $("#block_counts").hide();
         }
 
-        if (chrome.i18n &&
-            chrome.i18n.getUILanguage && 
-            "en-US" === chrome.i18n.getUILanguage()) {
+        if (window &&
+            window.navigator &&
+            window.navigator.language &&
+            (typeof window.navigator.language === "string") &&
+            "en-us" === window.navigator.language.toLowerCase()) {
           $("#link_open").text("Support AdBlock by shopping on Amazon");
         }
     });
@@ -247,9 +249,11 @@ $(function() {
 
     $("#link_open").click(function() {
         var linkHref = "https://getadblock.com/share/";
-        if (chrome.i18n &&
-            chrome.i18n.getUILanguage && 
-            "en-US" === chrome.i18n.getUILanguage()) {
+        if (window &&
+            window.navigator &&
+            window.navigator.language &&
+            (typeof window.navigator.language === "string") &&
+            "en-us" === window.navigator.language.toLowerCase()) {
           linkHref = "http://amazon.com/?_encoding=UTF8&camp=1789&creative=9325&linkCode=ur2&tag=adb09-20";
         }
         BG.openTab(linkHref);
