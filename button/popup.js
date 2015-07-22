@@ -88,6 +88,12 @@ $(function() {
             info.whitelisted) {
             $("#block_counts").hide();
         }
+
+        if (chrome.i18n &&
+            chrome.i18n.getUILanguage && 
+            "en-US" === chrome.i18n.getUILanguage()) {
+          $("#link_open").text("Support AdBlock by shopping on Amazon");
+        }
     });
 
     if (SAFARI) {
@@ -241,6 +247,11 @@ $(function() {
 
     $("#link_open").click(function() {
         var linkHref = "https://getadblock.com/share/";
+        if (chrome.i18n &&
+            chrome.i18n.getUILanguage && 
+            "en-US" === chrome.i18n.getUILanguage()) {
+          linkHref = "http://amazon.com/?_encoding=UTF8&camp=1789&creative=9325&linkCode=ur2&tag=adb09-20";
+        }
         BG.openTab(linkHref);
         closeAndReloadPopup();
         return;
