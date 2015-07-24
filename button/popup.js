@@ -92,7 +92,9 @@ $(function() {
         if (window.navigator.language &&
             window.navigator.language.toLowerCase &&
             "en-us" === window.navigator.language.toLowerCase()) {
+          $("#wrapper").css( "width", "350px");
           $("#link_open").text("Support AdBlock by shopping on Amazon");
+          $("#link_open_why").text("What's this?").css( "display", "inline");
         }
     });
 
@@ -253,6 +255,12 @@ $(function() {
           linkHref = "http://amazon.com/?_encoding=UTF8&camp=1789&creative=9325&linkCode=ur2&tag=adb09-20";
         }
         BG.openTab(linkHref);
+        closeAndReloadPopup();
+        return;
+    });
+
+    $('#link_open_why').click(function() {
+        BG.openTab('http://support.getadblock.com/kb/about-the-project/how-can-i-support-adblock#shop-on-amazon');
         closeAndReloadPopup();
         return;
     });
