@@ -103,7 +103,13 @@ $(function() {
         $(window).load(function() {
             var popupheight = $("body").outerHeight();
             safari.extension.popovers[0].height = popupheight + 5;
-            safari.extension.popovers[0].width = 270;
+            if (window.navigator.language &&
+                window.navigator.language.toLowerCase &&
+                "en-us" === window.navigator.language.toLowerCase()) {
+              safari.extension.popovers[0].width = 330;
+            } else {
+              safari.extension.popovers[0].width = 270;
+            }
         });
 
         // Store info about active tab
