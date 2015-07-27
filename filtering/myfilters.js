@@ -189,7 +189,7 @@ MyFilters.prototype.rebuild = function() {
       safari &&
       safari.extension &&
       safari.extension.setContentBlocker) {
-    if (Object.keys(this._fetchTracker).length > 0) {
+    if (this._fetchTracker && Object.keys(this._fetchTracker).length > 0) {
       //only process the new JSON rules when all of the outstand AJAX requests have processed
       return;
     }
@@ -254,8 +254,8 @@ MyFilters.prototype.rebuild = function() {
     this._filterListRules = [];
     for (var id in this._subscriptions) {
       if (this._subscriptions[id].subscribed) {
-        for (var rule in this._subscriptions[id].text)  {
-          this._filterListRules.push(rule);
+        for (var item in this._subscriptions[id].text)  {
+          this._filterListRules.push(this._subscriptions[id].text[item]);
         }
       }
     }
@@ -283,7 +283,7 @@ MyFilters.prototype.rebuild = function() {
     //add the custom rules, with the filter list rules
     this._filterListRules.push.apply(this._filterListRules, customRules);
     try {
-        console.log("about to save rules  ", this._filterListRules.length);
+        console.log("about to save rules  ", this._filterListRules);
         safari.extension.setContentBlocker(this._filterListRules);
     } catch(ex) {
         console.log("exception saving rules", ex);
@@ -515,7 +515,7 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
     var smear = Math.random() * 0.4 + 0.8;
     this._subscriptions[id].expiresAfterHours *= smear;
     this._subscriptions[id].text = text;
-
+    console.log("fetched data ", text);
     if (this._fetchTracker &&
         this._fetchTracker[id]) {
       delete this._fetchTracker[id]
@@ -716,10 +716,10 @@ MyFilters.prototype._load_default_subscriptions = function() {
   }
   //Update will be done immediately after this function returns
   //TODO - uncomment!
-  result["adblock_custom"] = { subscribed: true };
-  result["easylist"] = { subscribed: true };
+  //result["adblock_custom"] = { subscribed: true };
+  //result["easylist"] = { subscribed: true };
   result["sample"] = { subscribed: true };
-  result["easylist_plus_french"] = { subscribed: true };
+  //result["easylist_plus_french"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
@@ -739,7 +739,8 @@ MyFilters.prototype._make_subscription_options = function() {
     //TODO - remove
     "sample": { // sample for debug
       url: "https://data.getadblock.com/filters/samplefilterlist.txt",
-      safariJSON_URL: "https://data.getadblock.com/filters/sample.json",
+      //safariJSON_URL: "https://data.getadblock.com/filters/sample.json",
+      safariJSON_URL: "https://ping.getadblock.com/qa-stats/sample.json",
     },
     "easylist": { // EasyList
       url: "https://easylist-downloads.adblockplus.org/easylist.txt",
