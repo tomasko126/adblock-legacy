@@ -92,9 +92,10 @@ $(function() {
         if (window.navigator.language &&
             window.navigator.language.toLowerCase &&
             "en-us" === window.navigator.language.toLowerCase()) {
-          $("#wrapper").css( "width", "350px");
+          $("#wrapper").css( "width", "330px");
           $("#link_open").text("Support AdBlock by shopping on Amazon");
-          $("#link_open_why").text("What's this?").css( "display", "inline");
+          $("#link_open_why").text("What's this?");
+          $("#span_open_why").css( "display", "inline");
         }
     });
 
