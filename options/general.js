@@ -9,6 +9,12 @@ $(function() {
     var is_enabled = $(this).is(':checked');
     var name = this.id.substring(7); // TODO: hack
     BGcall("set_setting", name, is_enabled, true);
+    // if the user enables data, collection update the filter lists, so that the 
+    // filter list data is retained.
+    if (name === "enable_data_collection" &&
+        is_enabled) {
+      BGcall("update_subscriptions_now");          
+    }
   });
 
   BGcall("get_settings", function(settings) {

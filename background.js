@@ -357,7 +357,25 @@
 
       // May the URL be loaded by the requesting frame?
       var frameDomain = frameData.get(tabId, requestingFrameId).domain;
-      var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+      if (get_settings().data_collection) {
+        var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain, true);
+        if (blocked) {
+          console.log("blocked", blocked);
+          if (!this._dataCollectionCache) {
+            this._dataCollectionCache = {};
+          }
+          if (this._dataCollectionCache[blocked]) {
+            this._dataCollectionCache[blocked] = this._dataCollectionCache[blocked] + 1;
+          } else {
+            this._dataCollectionCache[blocked] = 1;
+          }
+          //need to convert the filter list text to a boolean true for Chrome API
+          blocked = true;
+          
+        }
+      } else {
+        var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+      }
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
