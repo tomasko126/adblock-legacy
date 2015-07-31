@@ -137,12 +137,17 @@ BlockingFilterSet.prototype = {
   //                             resource
   //   frameDomain:string - domain of the frame on which the element resides
   //   returnFilter?:bool - see Returns
+  //   returnTuple?:bool - see Returns
   // Returns:
   //   if returnFilter is true:
   //       text of matching pattern/whitelist filter, null if no match
   //   if returnFilter is false:
   //       true if the resource should be blocked, false otherwise
-  matches: function(url, elementType, frameDomain, returnFilter) {
+  //   if returnTuple is true and returnFilter is true:
+  //       returns an object containing two properties:
+  //          'blocked' - true or false
+  //          'text' - text of matching pattern/whitelist filter, null if no match 
+  matches: function(url, elementType, frameDomain, returnFilter, returnTuple) {
     var urlDomain = getUnicodeDomain(parseUri(url).hostname);
     var isThirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
 
@@ -154,10 +159,8 @@ BlockingFilterSet.prototype = {
     var match = this.whitelist.matches(url, elementType, frameDomain, isThirdParty);
     if (match) {
       log(frameDomain, ": whitelist rule", match._rule, "exempts url", url);
-      //when data collection is enabled, always return false if whitelisted
-      if ((typeof(get_settings) === "function") &&
-        get_settings().data_collection) {
-        this._matchCache[key] = false;
+      if (returnTuple && returnFilter) {
+        this._matchCache[key] = { blocked: false, text: match._text};
       } else {
         this._matchCache[key] = (returnFilter ? match._text : false);
       }
@@ -166,7 +169,11 @@ BlockingFilterSet.prototype = {
     match = this.pattern.matches(url, elementType, frameDomain, isThirdParty);
     if (match) {
       log(frameDomain, ": matched", match._rule, "to url", url);
-      this._matchCache[key] = (returnFilter ? match._text: true);
+      if (returnTuple && returnFilter) {
+        this._matchCache[key] = { blocked: true, text: match._text};
+      } else {
+        this._matchCache[key] = (returnFilter ? match._text : true);
+      }      
       return this._matchCache[key];
     }
     if (this.malwareDomains &&

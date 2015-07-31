@@ -358,16 +358,15 @@
       // May the URL be loaded by the requesting frame?
       var frameDomain = frameData.get(tabId, requestingFrameId).domain;
       if (get_settings().data_collection) {
-        var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain, true);
-        if (blocked) {
-          DataCollection.addItem(blocked);
+        var blockedData = _myfilters.blocking.matches(details.url, elType, frameDomain, true, true);
+        if (blockedData !== false) {
+          DataCollection.addItem(blockedData.text);
+          var blocked = blockedData.blocked;
+        } else {
+          var blocked = blockedData;
         }
       } else {
         var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
-      }
-      //need to convert the filter list text to a boolean true for Chrome API
-      if (blocked) {
-        blocked = true;
       }
 
       // Issue 7178
@@ -1241,8 +1240,8 @@
                   encodeURIComponent(STATS.userId + " " + msg);
     sendMessageToLogServer(fullUrl, callback);
   };
-  
-  // Log a message on GAB log server.  
+
+  // Log a message on GAB log server.
   // If callback() is specified, call callback() after logging has completed
   var recordAnonymousMessage = function(msg, queryType, callback) {
     if (!msg || !queryType) {
@@ -1254,14 +1253,14 @@
                   '&message=' +
                   encodeURIComponent(msg);
     sendMessageToLogServer(fullUrl, callback);
-  };  
-  
+  };
+
   // Log a message on GAB log server.  The user's userid will be prepended to the message.
   // If callback() is specified, call callback() after logging has completed
   var sendMessageToLogServer = function(fullUrl, callback) {
     if (!fullUrl) {
       return;
-    }    
+    }
     $.ajax({
       type: 'GET',
       url: fullUrl,
@@ -1274,7 +1273,7 @@
         log("message server returned error: ", e.status);
       },
     });
-  };  
+  };
 
   if (get_settings().debug_logging)
     logging(true);

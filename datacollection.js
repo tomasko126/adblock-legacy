@@ -12,15 +12,16 @@
             if (get_settings().data_collection &&
                 dataCollectionCache &&
                 Object.keys(dataCollectionCache).length > 0) {
-              data = JSON.stringify({ locale: determineUserLanguage,
-                      filterStats: dataCollectionCache })
-              recordAnonymousMessage(data, 'general');
+              var data = JSON.stringify({ locale: determineUserLanguage(),
+                                          filterStats: dataCollectionCache });
+              recordAnonymousMessage(data, 'filter_stats');
               //reset memory cache
               dataCollectionCache = {};
             }
         });
       },
-      60 * 60 * 1000
+      //TODO - update to 60
+      1 * 60 * 1000
     );
   }
 
