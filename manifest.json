@@ -18,7 +18,8 @@
       "idlehandler.js",
       "dropbox-datastores.js",
       "gab_question.js",
-      "background.js"
+      "background.js",
+      "datacollection.js"      
     ]
   },
   "browser_action": {
