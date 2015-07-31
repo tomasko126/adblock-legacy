@@ -154,7 +154,13 @@ BlockingFilterSet.prototype = {
     var match = this.whitelist.matches(url, elementType, frameDomain, isThirdParty);
     if (match) {
       log(frameDomain, ": whitelist rule", match._rule, "exempts url", url);
-      this._matchCache[key] = (returnFilter ? match._text : false);
+      //when data collection is enabled, always return false if whitelisted
+      if ((typeof(get_settings) === "function") &&
+        get_settings().data_collection) {
+        this._matchCache[key] = false;
+      } else {
+        this._matchCache[key] = (returnFilter ? match._text : false);
+      }
       return this._matchCache[key];
     }
     match = this.pattern.matches(url, elementType, frameDomain, isThirdParty);
