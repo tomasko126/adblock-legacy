@@ -259,6 +259,7 @@ $(function() {
             window.navigator.language.toLowerCase &&
             "en-us" === window.navigator.language.toLowerCase()) {
           linkHref = "http://amazon.com/?_encoding=UTF8&camp=1789&creative=9325&linkCode=ur2&tag=adb09-20";
+          BG.recordStatusMessage("link click amazon");
         }
         BG.openTab(linkHref);
         closeAndReloadPopup();
