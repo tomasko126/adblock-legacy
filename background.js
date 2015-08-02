@@ -1643,7 +1643,7 @@
               dropbox.initCustomAndExcluded(function(filters) {
                   storage_set("custom_filters", filters.custom);
                   storage_set("exclude_filters", filters.exclude);
-                  writeOrUpdateFile(function() {
+                  getFile(function() {
                       dropbox.setTimer();
                   });
               });
@@ -1732,7 +1732,7 @@
           });
       }
 
-      function getFile() {
+      function getFile(callback) {
           var header = { path: "/adblock.txt" };
           dropbox.getFile({header: header}, function(data) {
               console.log("GET FILE");
@@ -1741,14 +1741,16 @@
                   writeOrUpdateFile();
                   return;
               }
-              console.log(data);
-              var data = { path: "/adblock.txt" };
-              dropbox.getMetadata(data, function(info) {
+              var arg = { path: "/adblock.txt" };
+              dropbox.getMetadata(arg, function(info) {
                   var modified = info.data.server_modified;
                   dropbox._latestModified = modified;
               });
               // Save settings from file to AdBlock
               dropbox.saveSettings(data.data);
+              if (callback) {
+                  callback();
+              }
           });
       }
 

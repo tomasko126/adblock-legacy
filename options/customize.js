@@ -327,9 +327,4 @@ $(function() {
     newFilters = newFilters.replace(/(\n)+$/,'\n'); // Del trailing \n's
     $("#txtFiltersAdvanced").val(newFilters);
   });
-
-  BGcall("sessionstorage_get", "dropboxerror", function(text) {
-    if (text)
-      $("#dbmessagecustom").text(text);
-  });
 });
