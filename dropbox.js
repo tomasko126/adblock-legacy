@@ -1,4 +1,5 @@
 // Dropbox class manages sync of settings, filter lists, custom filters and excluded filters
+// TODO: This library may brake, when Dropbox updates API endpoints
 var Dropbox = function() {};
 
 // Initialize Dropbox

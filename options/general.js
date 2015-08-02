@@ -11,11 +11,7 @@ $(function() {
     BGcall("set_setting", name, is_enabled, true);
   });
   BGcall("get_settings", function(settings) {
-      if (settings.show_advanced_options &&
-          !SAFARI &&
-          chrome &&
-          chrome.runtime &&
-          chrome.runtime.onMessage) {
+      if (settings.show_advanced_options && !SAFARI) {
         $("#dropbox").show();
       } else {
         $("#dropbox").hide();
@@ -68,10 +64,7 @@ $("#dbauthinfo").click(function() {
 
 // Change Dropbox button, when user has been logged in/out
 function update_db_icon() {
-    if (!SAFARI &&
-       chrome &&
-       chrome.runtime &&
-       chrome.runtime.onMessage) {
+    if (!SAFARI) {
         BGcall("dropboxauth", function(status) {
             if (status === true) {
                 $("#dbauth").addClass("authenticated");
@@ -85,11 +78,8 @@ function update_db_icon() {
 }
 
 // Listen for Dropbox sync changes
-if (!SAFARI &&
-   chrome &&
-   chrome.runtime &&
-   chrome.runtime.onMessage) {
-    chrome.runtime.onMessage.addListener(
+if (!SAFARI) {
+    chrome.extension.onRequest.addListener(
         function(request, sender, sendResponse) {
             if (request.message === "update_checkbox") {
                 BGcall("get_settings", function(settings) {

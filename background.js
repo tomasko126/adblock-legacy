@@ -1639,7 +1639,7 @@
                   return;
               }
               set_setting("dropbox_sync", true);
-              chrome.runtime.sendMessage({message: "update_icon"});
+              chrome.extension.sendRequest({message: "update_icon"});
               dropbox.initCustomAndExcluded(function(filters) {
                   storage_set("custom_filters", filters.custom);
                   storage_set("exclude_filters", filters.exclude);
@@ -1655,7 +1655,7 @@
           // check for dropboxauth()
           dropbox.logout(function() {
               set_setting("dropbox_sync", false);
-              chrome.runtime.sendMessage({message: "update_icon"});
+              chrome.extension.sendRequest({message: "update_icon"});
               dropbox.cleanTimer();
           });
       }
@@ -1774,13 +1774,13 @@
                   var advanced = data.settings["show_advanced_options"];
                   var advanced_local = get_settings().show_advanced_options;
                   if (advanced_local !== advanced) {
-                      chrome.runtime.sendMessage({ message: "update_page" });
+                      chrome.extension.sendRequest({ message: "update_page" });
                   }
               }
               set_setting(setting.toString(), data["settings"][setting]);
           }
 
-          chrome.runtime.sendMessage({ message: "update_checkbox" });
+          chrome.extension.sendRequest({ message: "update_checkbox" });
 
           // Subscribe & unsubscribe filter lists
           var filterlists_sync = data.filter_lists;
