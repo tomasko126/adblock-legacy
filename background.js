@@ -524,7 +524,7 @@
     chrome.extension.sendRequest({command: "filters_updated"});
     _myfilters.rebuild();
     if (!SAFARI && dropboxauth()) {
-      writeFile();
+      writeOrUpdateFile();
     }
   }
 
@@ -542,7 +542,7 @@
     FilterNormalizer.setExcludeFilters(filters);
     update_subscriptions_now();
     if (!SAFARI && dropboxauth()) {
-      writeFile();
+      writeOrUpdateFile();
     }
   }
   // Add / concatenate the exclude filter to the existing excluded filters, and
@@ -704,7 +704,7 @@
           title: options.title
       });
       if (!SAFARI && sync !== true && dropboxauth()) {
-          writeFile();
+          writeOrUpdateFile();
       }
   }
 
@@ -718,7 +718,7 @@
           deleteMe: (options.del ? true : undefined)
       });
       if (!SAFARI && sync !== true && dropboxauth()) {
-          writeFile();
+          writeOrUpdateFile();
       }
   }
 
@@ -1595,8 +1595,6 @@
 
   // Sync settings, filter lists & custom filters
   // after authentication with Dropbox
-
-  // TODO: clean up the code
   if (!SAFARI) {
       var dropbox = new Dropbox();
       dropbox.init({ id: "os0lr0aalwz0r9r", redirectURI: "https://getadblock.com/dropbox.html" }, function() {
@@ -1606,7 +1604,7 @@
           }
       });
 
-      dropbox._prepareData = function() {
+      dropbox._getData = function() {
           var data = {};
           data.settings = get_settings();
           data.filter_lists = get_subscribed_filter_lists();
@@ -1616,8 +1614,10 @@
           return data;
       }
 
+      // Contains server time, when DB file has been last updated
       dropbox._latestModified = null;
 
+      // Check for file updates every minute
       dropbox.setTimer = function() {
           dropbox._timer = setInterval(function() {
               getMetadata();
@@ -1628,12 +1628,8 @@
           clearInterval(dropbox._timer);
           delete dropbox._timer;
       }
-      
-      // Returns true, if user is authenticated
-      function dropboxauth() {
-          return dropbox.isAuthenticated();
-      }
 
+      // Log in to Dropbox
       function dropboxlogin() {
           if (dropboxauth()) {
               console.log("already logged in");
@@ -1647,13 +1643,14 @@
               dropbox.initCustomAndExcluded(function(filters) {
                   storage_set("custom_filters", filters.custom);
                   storage_set("exclude_filters", filters.exclude);
-                  writeFile(function() {
+                  writeOrUpdateFile(function() {
                       dropbox.setTimer();
                   });
               });
           });
       }
 
+      // Log out from Dropbox
       function dropboxlogout() {
           // check for dropboxauth()
           dropbox.logout(function() {
@@ -1663,16 +1660,20 @@
           });
       }
 
+      // Returns true, if user is authenticated
+      function dropboxauth() {
+          return dropbox.isAuthenticated();
+      }
+
       // Sync value of changed setting
       dropbox.syncSetting = function(name, is_enabled) {
           if (dropboxauth()) {
-              writeFile();
+              writeOrUpdateFile();
           }
       }
 
+      // Prevent deleting custom & excluded filters in some cases
       dropbox.initCustomAndExcluded = function(callback) {
-          // Custom & excluded filters
-          // Prevent deleting filters in some cases
           var header = { path: "/adblock.txt" };
           dropbox.getFile({header: header}, function(data) {
               // File hasn't been created yet
@@ -1694,11 +1695,11 @@
                       filters = sync;
                   } else if (local && sync && sync !== "") {
                       if (local.charAt(local.length - 1) === '"') {
-                          //remove the ending "
+                          // remove the ending "
                           local = local.substring(0, local.length - 1);
                       }
                       if (sync.charAt(0) === '"') {
-                          //remove the begining "
+                          // remove the begining "
                           sync = sync.substring(1);
                       }
                       filters = local + "\n" + sync;
@@ -1718,9 +1719,9 @@
           });
       }
 
-      function writeFile(callback) {
+      function writeOrUpdateFile(callback) {
           var header = { path: "/adblock.txt", mode: "overwrite", mute: true };
-          var data = dropbox._prepareData();
+          var data = dropbox._getData();
           dropbox.writeFile({header: header, data: data}, function(data) {
               console.log("WRITE FILE");
               console.log(data);
@@ -1737,7 +1738,7 @@
               console.log("GET FILE");
               // File hasn't been created yet
               if (data.status === "error") {
-                  writeFile();
+                  writeOrUpdateFile();
                   return;
               }
               console.log(data);
@@ -1746,7 +1747,7 @@
                   var modified = info.data.server_modified;
                   dropbox._latestModified = modified;
               });
-              // save settings from file to AB
+              // Save settings from file to AdBlock
               dropbox.saveSettings(data.data);
           });
       }
@@ -1800,7 +1801,7 @@
           storage_set("custom_filters", custom);
           chrome.extension.sendRequest({ command: "filters_updated" });
 
-          // Set custom filters
+          // Set excluded filters
           var exFilters = data.exclude_filters;
           // Since the exclude filters may have been updated,
           // rebuild / update the entire filters
