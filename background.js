@@ -1599,7 +1599,12 @@
   // TODO: clean up the code
   if (!SAFARI) {
       var dropbox = new Dropbox();
-      dropbox.init({ id: "os0lr0aalwz0r9r", redirectURI: "https://getadblock.com/dropbox.html" });
+      dropbox.init({ id: "os0lr0aalwz0r9r", redirectURI: "https://getadblock.com/dropbox.html" }, function() {
+          if (dropboxauth()) {
+              console.log("Setting up timer");
+              dropbox.setTimer();
+          }
+      });
 
       dropbox._prepareData = function() {
           var data = {};
@@ -1624,7 +1629,7 @@
           delete dropbox._timer;
       }
       
-      // Return true, if user is authenticated
+      // Returns true, if user is authenticated
       function dropboxauth() {
           return dropbox.isAuthenticated();
       }
@@ -1736,7 +1741,8 @@
                   return;
               }
               console.log(data);
-              dropbox.getMetadata(null, function(info) {
+              var data = { path: "/adblock.txt" };
+              dropbox.getMetadata(data, function(info) {
                   var modified = info.data.server_modified;
                   dropbox._latestModified = modified;
               });
@@ -1745,30 +1751,9 @@
           });
       }
 
-      // don't user latestcursor for now
-      function latestCursor() { 
-          //var data = { "path": "/", "recursive": false };
-          // upgrade to v2 api, change null to data
-          dropbox.latestCursorOld(null, function(info) {
-              /*if (info.status === "error") {
-                  return;
-              }*/
-              //var cursor = info.data.cursor;
-              var cursor = JSON.parse(info.data.responseText);
-              cursor = cursor.cursor;
-              console.log(cursor);
-              /*dropbox.continueCursor({cursor: cursor}, function(data) {
-                  console.log(data);
-              });*/
-              // upgrade to v2 api
-              dropbox.longPoll({cursor: cursor, timeout: 30}, function(data) {
-                  console.log(data);
-              });
-          });
-      }
-
       function getMetadata() {
-          dropbox.getMetadata(null, function(info) {
+          var data = { path: "/adblock.txt" };
+          dropbox.getMetadata(data, function(info) {
               console.log(info);
               var modified = info.data.server_modified;
               console.log("Server modified: ", modified);

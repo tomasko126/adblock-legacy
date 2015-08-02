@@ -2,13 +2,14 @@
 var Dropbox = function() {};
 
 // Initialize Dropbox
-Dropbox.prototype.init = function(args) {
+Dropbox.prototype.init = function(args, callback) {
     this._id = args.id;
     this._redirectURI = encodeURIComponent(args.redirectURI);
     var that = this;
     this.getToken(function(token) {
         if (token) {
             that._token = token;
+            callback();
         }
     });
 }
@@ -56,9 +57,11 @@ Dropbox.prototype.logout = function(callback) {
     });
 }
 
+// Returns true, when user is authenticated
 Dropbox.prototype.isAuthenticated = function() {
     return this._token ? true : false;
 }
+
 
 // GET/SAVE/PARSE TOKEN
 
@@ -89,6 +92,7 @@ Dropbox.prototype.parseToken = function(url) {
     return token;
 }
 
+// Remove token from storage
 Dropbox.prototype.removeToken = function(callback) {
     chrome.storage.local.remove("dropbox_token", function() {
         if (callback) {
@@ -97,33 +101,10 @@ Dropbox.prototype.removeToken = function(callback) {
     });
 }
 
-// UNIVERSAL REQUEST - are we gonna use it anyway?
+// FILE functions
 
-// Make request to Dropbox API
-Dropbox.prototype.makeRequest = function(type, url, data, callback) {
-    var that = this;
-    $.ajax({
-        method: type,
-        url: url,
-        data: data,
-        beforeSend: function(request) {
-            request.setRequestHeader("Authorization", " Bearer " + that._token);
-            request.setRequestHeader("Content-Type", "application/json");
-        },
-        success: function(info) {
-            callback(info);
-        },
-        error: function(info) {
-            callback(info);
-        }
-    });
-}
-
-// GET/WRITE FILE helper functions
-
-// TODO: handle custom filters and excluded filter gracefully - in BG
+// Write file to Dropbox
 Dropbox.prototype.writeFile = function(data, callback) {
-    // data object - data, header
     var that = this;
     $.ajax({
         method: "POST",
@@ -148,8 +129,7 @@ Dropbox.prototype.writeFile = function(data, callback) {
     });
 }
 
-// Gets file
-// Inputs: data - header
+// Get file from Dropbox
 Dropbox.prototype.getFile = function(data, callback) {
     var that = this;
     $.ajax({
@@ -173,56 +153,9 @@ Dropbox.prototype.getFile = function(data, callback) {
     });
 }
 
-Dropbox.prototype.latestCursor = function(data, callback) {
-    var that = this;
-    $.ajax({
-        method: "POST",
-        url: "https://api.dropboxapi.com/2-beta-2/files/list_folder/get_latest_cursor",
-        data: JSON.stringify(data),
-        beforeSend: function(request) {
-            request.setRequestHeader("Authorization", " Bearer " + that._token);
-            request.setRequestHeader("Content-Type", "application/json");
-        },
-        success: function(info) {
-            if (callback) {
-                callback({status: "success", data: info});
-            }
-        },
-        error: function(info) {
-            if (callback) {
-                callback({status: "error", data: info});
-            }
-        }
-    });
-}
-
-Dropbox.prototype.continueCursor = function(data, callback) {
-    var that = this;
-    $.ajax({
-        method: "POST",
-        url: "https://api.dropboxapi.com/2-beta-2/files/list_folder/continue",
-        data: JSON.stringify(data),
-        beforeSend: function(request) {
-            request.setRequestHeader("Authorization", " Bearer " + that._token);
-            request.setRequestHeader("Content-Type", "application/json");
-        },
-        success: function(info) {
-            if (callback) {
-                callback({status: "success", data: info});
-            }
-        },
-        error: function(info) {
-            if (callback) {
-                callback({status: "error", data: info});
-            }
-        }
-    });
-}
-
-// Get metadata of file
+// Get metadata of requested file
 Dropbox.prototype.getMetadata = function(data, callback) {
     var that = this;
-    var data = { path: "/adblock.txt" };
     $.ajax({
         method: "POST",
         url: "https://api.dropboxapi.com/2-beta-2/files/get_metadata",
@@ -230,58 +163,6 @@ Dropbox.prototype.getMetadata = function(data, callback) {
         beforeSend: function(request) {
             request.setRequestHeader("Authorization", " Bearer " + that._token);
             request.setRequestHeader("Content-Type", "application/json");
-        },
-        success: function(info) {
-            if (callback) {
-                callback({status: "success", data: info});
-            }
-        },
-        error: function(info) {
-            if (callback) {
-                callback({status: "error", data: info});
-            }
-        }
-    });
-}
-
-
-
-
-// OLD v1 API
-Dropbox.prototype.longPoll = function(data, callback) {
-    var that = this;
-    $.ajax({
-        method: "GET",
-        url: "https://api-notify.dropbox.com/1/longpoll_delta",
-        data: data,
-        beforeSend: function(request) {
-            //request.setRequestHeader("Authorization", " Bearer " + that._token);
-            //request.setRequestHeader("Content-Type", "application/json");
-        },
-        success: function(info) {
-            if (callback) {
-                callback({status: "success", data: info});
-            }
-        },
-        error: function(info) {
-            if (callback) {
-                callback({status: "error", data: info});
-            }
-        }
-    });
-}
-
-// Old v1 API
-Dropbox.prototype.latestCursorOld = function(data, callback) {
-    var that = this;
-    var data = { path_prefix: "/", include_media_info: false };
-    $.ajax({
-        method: "POST",
-        url: "https://api.dropbox.com/1/delta/latest_cursor",
-        //data: JSON.stringify(data),
-        beforeSend: function(request) {
-            request.setRequestHeader("Authorization", " Bearer " + that._token);
-            //request.setRequestHeader("Content-Type", "application/json");
         },
         success: function(info) {
             if (callback) {
