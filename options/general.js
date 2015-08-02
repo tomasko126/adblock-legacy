@@ -10,7 +10,6 @@ $(function() {
     var name = this.id.substring(7); // TODO: hack
     BGcall("set_setting", name, is_enabled, true);
   });
-
   BGcall("get_settings", function(settings) {
       if (settings.show_advanced_options &&
           !SAFARI &&
@@ -22,9 +21,7 @@ $(function() {
         $("#dropbox").hide();
       }
   });
-
   update_db_icon();
-  getDropboxMessage();
 });
 
 // TODO: This is a dumb race condition, and still has a bug where
@@ -87,14 +84,6 @@ function update_db_icon() {
     }
 }
 
-function getDropboxMessage() {
-  BGcall('sessionstorage_get', 'dropboxerror', function(messagecode) {
-    //if the message exists, it should already be translated.
-    if (messagecode) {
-      $("#dbmessage").text(messagecode);
-    }
-  });
-}
 // Listen for Dropbox sync changes
 if (!SAFARI &&
    chrome &&
@@ -107,6 +96,8 @@ if (!SAFARI &&
                     $("input[id='enable_show_google_search_text_ads']").prop("checked", settings.show_google_search_text_ads);
                     $("input[id='enable_youtube_channel_whitelist']").prop("checked", settings.youtube_channel_whitelist);
                     $("input[id='enable_show_context_menu_items']").prop("checked", settings.show_context_menu_items);
+                    $("input[id='enable_display_stats']").prop("checked", settings.display_stats);
+                    $("input[id='enable_display_menu_stats']").prop("checked", settings.display_menu_stats);
                     $("input[id='enable_show_advanced_options']").prop("checked", settings.show_advanced_options);
                     $("input[id='enable_whitelist_hulu_ads']").prop("checked", settings.whitelist_hulu_ads);
                     $("input[id='enable_debug_logging']").prop("checked", settings.debug_logging);
@@ -120,14 +111,6 @@ if (!SAFARI &&
             if (request.message === "update_page") {
                 document.location.reload();
                 sendResponse({});
-            }
-            if (request.message === "dropboxerror" && request.messagecode) {
-              $("#dbmessage").text(request.messagecode);
-              sendResponse({});
-            }
-            if (request.message === "cleardropboxerror") {
-              $("#dbmessage").text("");
-              sendResponse({});
             }
         }
     );
