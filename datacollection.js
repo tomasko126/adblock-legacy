@@ -10,7 +10,6 @@
       function() {
         idleHandler.scheduleItemOnce(function() {
             if (get_settings().data_collection &&
-                dataCollectionCache &&
                 Object.keys(dataCollectionCache).length > 0) {
               var data = JSON.stringify({ locale: determineUserLanguage(),
                                           filterStats: dataCollectionCache });
