@@ -105,7 +105,7 @@ Dropbox.prototype.removeToken = function(callback) {
 // FILE functions
 
 // Write file to Dropbox
-Dropbox.prototype.writeFile = function(data, callback) {
+Dropbox.prototype._writeOrUpdateFile = function(data, callback) {
     var that = this;
     $.ajax({
         method: "POST",
@@ -131,7 +131,7 @@ Dropbox.prototype.writeFile = function(data, callback) {
 }
 
 // Get file from Dropbox
-Dropbox.prototype.getFile = function(data, callback) {
+Dropbox.prototype._getFile = function(data, callback) {
     var that = this;
     $.ajax({
         method: "POST",
@@ -154,12 +154,37 @@ Dropbox.prototype.getFile = function(data, callback) {
     });
 }
 
-// Get metadata of requested file
-Dropbox.prototype.getMetadata = function(data, callback) {
+// POLLING
+
+// Get delta cursor of folder
+Dropbox.prototype._getCursor = function(data, callback) {
     var that = this;
     $.ajax({
         method: "POST",
-        url: "https://api.dropboxapi.com/2-beta-2/files/get_metadata",
+        url: "https://api.dropboxapi.com/2-beta-2/files/list_folder",
+        data: JSON.stringify(data),
+        beforeSend: function(request) {
+            request.setRequestHeader("Authorization", " Bearer " + that._token);
+            request.setRequestHeader("Content-Type", "application/json");
+        },
+        success: function(info) {
+            if (callback) {
+                callback({status: "success", data: info});
+            }
+        },
+        error: function(info) {
+            if (callback) {
+                callback({status: "error", data: info});
+            }
+        }
+    });
+}
+
+Dropbox.prototype._pollForChanges = function(data, callback) {
+    var that = this;
+    $.ajax({
+        method: "POST",
+        url: "https://api.dropboxapi.com/2-beta-2/files/list_folder/continue",
         data: JSON.stringify(data),
         beforeSend: function(request) {
             request.setRequestHeader("Authorization", " Bearer " + that._token);
