@@ -500,7 +500,7 @@
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock has detected malware.  Your computer may be infected.",
+    "message":"AdBlock has blocked a download from a site known to host malware.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
