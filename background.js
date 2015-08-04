@@ -1321,28 +1321,24 @@
   if (installError && installError.retry_count >= 0 && !SAFARI) {
     //append the retry count to the URL
     installError.retry_count += 1;
-    var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
-    chrome.tabs.create({url: retryInstalledURL}, function(tab) {
-      if (chrome.runtime.lastError) {
-        //if there is an error (again), log a message and re-save.
-        if (chrome.runtime.lastError.message) {
-          recordErrorMessage('/installed open error count: ' +
-                              installError.retry_count +
-                              " error: " +
-                              chrome.runtime.lastError.message);
+    if (installError.retry_count > 10) {
+      //if we've retried 10 or more times, give up...
+      // send a message, and delete the 'installed error'
+      recordErrorMessage("/installed open error count > 10");
+      storage_set("/installed_error");
+    } else {
+      var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
+      chrome.tabs.create({url: retryInstalledURL}, function(tab) {
+        if (chrome.runtime.lastError) {
+          //if there is an error (again) and re-save.
+          storage_set("/installed_error", installError);
         } else {
-          recordErrorMessage('/installed open error count: ' +
-                              installError.retry_count +
-                              " error: " +
-                              JSON.stringify(chrome.runtime.lastError));
+          //if we successfully opened the tab,
+          //delete the 'installed error' so we don't display it again
+          storage_set("/installed_error");
         }
-        storage_set("/installed_error", installError);
-      } else {
-        //if we successfully opened the tab,
-        // delete the 'installed error' so we don't display it again
-        storage_set("/installed_error");
-      }
-    });
+      });
+    }
   }
 
   if (chrome.runtime.setUninstallURL) {
