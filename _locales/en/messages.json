@@ -259,6 +259,10 @@
     "message":"Show debug statements in Console Log (which slows down AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
+  "datacollectionoption":{
+    "message":"Allow AdBlock to collect anonymous filter list usage and data",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },  
   "updatedrightnow":{
     "message":"updated right now",
     "description":"Label for subscription"
