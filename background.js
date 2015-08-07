@@ -645,7 +645,7 @@
     if (name === "debug_logging")
       logging(is_enabled);
 
-    if (!SAFARI && sync) {
+    if (!SAFARI && sync && dropboxauth()) {
         dropbox.syncSetting(name, is_enabled);
     }
   }
@@ -1597,8 +1597,10 @@
   // after authentication with Dropbox
   if (!SAFARI) {
       var dropbox = new Dropbox();
-      dropbox.init({ id: "os0lr0aalwz0r9r", redirectURI: "https://getadblock.com/dropbox.html" }, function() {
-          if (dropboxauth()) {
+
+      // Initialize Dropbox library
+      dropbox.init({id: "os0lr0aalwz0r9r", redirectURI: "https://getadblock.com/dropbox.html"}, function(authenticated) {
+          if (authenticated) {
               dropbox.getCursor();
               dropbox.setTimer();
           }
@@ -1606,8 +1608,8 @@
       
       // Log in to Dropbox
       function dropboxlogin() {
-          dropbox.login(function(info) {
-              if (info.status === "denied") {
+          dropbox.login(function(status) {
+              if (status === "denied") {
                   return;
               }
               set_setting("dropbox_sync", true);
@@ -1625,7 +1627,6 @@
 
       // Log out from Dropbox
       function dropboxlogout() {
-          // check for dropboxauth()
           dropbox.logout(function() {
               set_setting("dropbox_sync", false);
               chrome.extension.sendRequest({message: "update_icon"});
@@ -1637,11 +1638,11 @@
       function dropboxauth() {
           return dropbox.isAuthenticated();
       }
-
+      
       // Cursor used for polling for changes
       dropbox.cursor = null;
 
-      // First, we need to get |cursor| and pass it to pollForChanges
+      // First, we need to get |cursor| and pass it to pollForChanges fn
       dropbox.getCursor = function(callback) {
           var data = { path: "", recursive: true };
           dropbox._getCursor(data, function(info) {
@@ -1654,7 +1655,7 @@
           cursor = { cursor: cursor || dropbox.cursor };
           dropbox._pollForChanges(cursor, function(info) {
                   dropbox.cursor = info.data.cursor;
-                  if (info.data.entries.length > 0) {
+                  if (info.data && info.data.entries && info.data.entries.length > 0) {
                       console.log("newer file on server, downloading...");
                       dropbox.getFile();
                   } else {
@@ -1663,6 +1664,7 @@
           });
       }              
 
+      // Return data, which should be used for file update
       dropbox.getData = function() {
           var data = {};
           data.settings = get_settings();
@@ -1680,16 +1682,15 @@
           }, 1000 * 60);
       }
       
+      // Clean timer for file polling
       dropbox.cleanTimer = function() {
           clearInterval(dropbox._timer);
           delete dropbox._timer;
       }
 
-      // Sync value of changed setting
+      // Sync value of changed setting, 
       dropbox.syncSetting = function(name, is_enabled) {
-          if (dropboxauth()) {
-              dropbox.writeOrUpdateFile();
-          }
+          dropbox.writeOrUpdateFile();
       }
 
       // Prevent deleting custom & excluded filters in some cases
@@ -1742,7 +1743,7 @@
           var header = { path: "/adblock.txt", mode: "overwrite", mute: true };
           var data = dropbox.getData();
           dropbox._writeOrUpdateFile({header: header, data: data}, function(data) {
-              console.log("WRITE FILE");
+              console.log("WRITE FILE", data);
               if (callback) {
                   callback();
               }
@@ -1752,7 +1753,7 @@
       dropbox.getFile = function(callback) {
           var header = { path: "/adblock.txt" };
           dropbox._getFile({header: header}, function(data) {
-              console.log("GET FILE");
+              console.log("GET FILE", data);
               // File hasn't been created yet
               if (data.status === "error") {
                   dropbox.writeOrUpdateFile();
@@ -1776,13 +1777,13 @@
                   var advanced = data.settings["show_advanced_options"];
                   var advanced_local = get_settings().show_advanced_options;
                   if (advanced_local !== advanced) {
-                      chrome.extension.sendRequest({ message: "update_page" });
+                      chrome.extension.sendRequest({message: "update_page"});
                   }
               }
               set_setting(setting.toString(), data["settings"][setting]);
           }
 
-          chrome.extension.sendRequest({ message: "update_checkbox" });
+          chrome.extension.sendRequest({message: "update_checkbox"});
 
           // Subscribe & unsubscribe filter lists
           var filterlists_sync = data.filter_lists;
@@ -1790,28 +1791,28 @@
 
           for (var i = 0; i < filterlists_sync.length; i++) {
               if (filterlists_local.indexOf(filterlists_sync[i]) === -1)
-                  subscribe({ id: filterlists_sync[i] }, true);
+                  subscribe({id: filterlists_sync[i]}, true);
           }
 
           for (var i = 0; i < filterlists_local.length; i++) {
               if (filterlists_sync.indexOf(filterlists_local[i]) === -1)
-                  unsubscribe({ id: filterlists_local[i] }, true);
+                  unsubscribe({id: filterlists_local[i]}, true);
           }
 
-          // Set custom filters
+          // Custom filters processing
           var custom_sync = data.custom_filters;
           var custom_local = storage_get("custom_filters");
           if (custom_local !== custom_sync) {
               storage_set("custom_filters", custom);
-              chrome.extension.sendRequest({ command: "filters_updated" });
+              chrome.extension.sendRequest({command: "filters_updated"});
           }
 
-          // Set excluded filters
+          // Excluded filters processing
           var excluded_sync = data.exclude_filters;
           var excluded_local = storage_get("exclude_filters");
-          // Since the exclude filters may have been updated,
-          // rebuild / update the entire filters
-          if (localStorage.exclude_filters !== excluded_sync) {
+          // Rebuild / update the entire filters,
+          // when excluded filters have been changed on Dropbox
+          if (excluded_local !== excluded_sync) {
               storage_set("exclude_filters", excluded_sync);
               FilterNormalizer.setExcludeFilters(get_exclude_filters_text());
               update_subscriptions_now();
