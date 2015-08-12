@@ -834,10 +834,7 @@
       return true;
     }
     //TODO - temporary fix, need long term fix
-    if (SAFARI &&
-        safari &&
-        safari.extension &&
-        safari.extension.setContentBlocker) {
+    if (get_settings().safari_content_blocking) {
       return false;
     }
     url = getUnicodeUrl(url);
@@ -1473,6 +1470,14 @@
               openTab("https://getadblock.com/beta");
           }
       });
+  }
+
+  //used by the Options pages, since they don't have access to setContentBlocker
+  function isSafariContentAvailable() {
+    return (SAFARI &&
+            safari &&
+            safari.extension &&
+            (typeof safari.extension.setContentBlocker === 'function'));
   }
 
   // DEBUG INFO

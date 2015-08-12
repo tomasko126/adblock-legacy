@@ -185,20 +185,14 @@ MyFilters.prototype.getExtensionFilters = function(settings) {
 
 // Rebuild filters based on the current settings and subscriptions.
 MyFilters.prototype.rebuild = function() {
-  if (SAFARI &&
-      safari &&
-      safari.extension &&
-      safari.extension.setContentBlocker) {
+  if (get_settings().safari_content_blocking) {
     if (this._fetchTracker && Object.keys(this._fetchTracker).length > 0) {
       //only process the new JSON rules when all of the outstand AJAX requests have processed
       return;
     }
   }
   var texts = [];
-  if (SAFARI &&
-      safari &&
-      safari.extension &&
-      safari.extension.setContentBlocker) {
+  if (get_settings().safari_content_blocking) {
         //empty
   }  else {
      //only add subscriptions in Chrome, Opera, and older version of Safari...
@@ -241,11 +235,7 @@ MyFilters.prototype.rebuild = function() {
     filters.hiding[hider.id] = hider;
   }
 
-  if (SAFARI &&
-      safari &&
-      safari.extension &&
-      safari.extension.setContentBlocker) {
-        log("safari 9 content blocking detected...");
+  if (get_settings().safari_content_blocking) {
     // If Safari 9 content blocking
     // if Safari has just started, don't re-register filters unless none are
     // registered (implying it was just installed).
@@ -254,8 +244,8 @@ MyFilters.prototype.rebuild = function() {
     this._filterListRules = [];
     for (var id in this._subscriptions) {
       if (this._subscriptions[id].subscribed) {
-        for (var item in this._subscriptions[id].text)  {
-          this._filterListRules.push(this._subscriptions[id].text[item]);
+        for (var item in this._subscriptions[id].rules)  {
+          this._filterListRules.push(this._subscriptions[id].rules[item]);
         }
       }
     }
@@ -280,13 +270,24 @@ MyFilters.prototype.rebuild = function() {
       selectorFilters.push(filters.hiding[id]);
     }
     var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, malwareDomains);
+    log("customRules  " + customRules.length);
     //add the custom rules, with the filter list rules
     this._filterListRules.push.apply(this._filterListRules, customRules);
+    if (!this._filterListRules ||
+         this._filterListRules.length == 0) {
+       log("no rules to submit to safari  ");
+       return;
+    } else if (this._filterListRules.length > 50000) {
+      //TODO - notify the user
+      log("exceed number of rules: " + this._filterListRules.length);
+      this._filterListRules = this._filterListRules.slice(0, 49999);
+    }
     try {
-        console.log("about to save rules  ", this._filterListRules);
-        safari.extension.setContentBlocker(this._filterListRules);
+       log("about to save rules  ", this._filterListRules);
+       safari.extension.setContentBlocker(this._filterListRules);
+       log(" content blocking rules good");
     } catch(ex) {
-        console.log("exception saving rules", ex);
+       log("exception saving rules", ex);
     }
   } else {
     this.hiding = FilterSet.fromFilters(filters.hiding);
@@ -431,18 +432,13 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
 MyFilters.prototype.fetch_and_update = function(id, isNewList) {
 
   var url = this._subscriptions[id].url;
-  if (SAFARI &&
-      safari &&
-      safari.extension &&
-      safari.extension.setContentBlocker) {
+  if (get_settings().safari_content_blocking) {
       if (this._subscriptions[id].safariJSON_URL) {
         url =  this._subscriptions[id].safariJSON_URL;
         if (!this._fetchTracker) {
           this._fetchTracker = {};
         }
         this._fetchTracker[id] = true;
-      } else {
-        //TODO???
       }
   }
   var that = this;
@@ -492,10 +488,12 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
         onError();
       }
     },
-    error: function() {
+    error: function(xhr, textStatus, errorThrown) {
       if (that._subscriptions[id])
         onError();
       log("Error fetching " + url);
+      log("textStatus " + textStatus);
+      log("errorThrown " + errorThrown);
     }
   });
 }
@@ -507,15 +505,11 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
   this._subscriptions[id].last_update = Date.now();
   delete this._subscriptions[id].last_update_failed_at;
   //Safari 9 Content Blocking...
-  if (SAFARI &&
-      safari &&
-      safari.extension &&
-      safari.extension.setContentBlocker) {
+  if (get_settings().safari_content_blocking) {
     this._subscriptions[id].expiresAfterHoursHard = this._subscriptions[id].expiresAfterHours * 2;
     var smear = Math.random() * 0.4 + 0.8;
     this._subscriptions[id].expiresAfterHours *= smear;
-    this._subscriptions[id].text = text;
-    console.log("fetched data ", text);
+    this._subscriptions[id].rules = text;
     if (this._fetchTracker &&
         this._fetchTracker[id]) {
       delete this._fetchTracker[id]
@@ -715,11 +709,9 @@ MyFilters.prototype._load_default_subscriptions = function() {
     }
   }
   //Update will be done immediately after this function returns
-  //TODO - uncomment!
-  //result["adblock_custom"] = { subscribed: true };
-  //result["easylist"] = { subscribed: true };
-  result["sample"] = { subscribed: true };
-  //result["easylist_plus_french"] = { subscribed: true };
+  result["adblock_custom"] = { subscribed: true };
+  result["easylist"] = { subscribed: true };
+
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
@@ -736,12 +728,6 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "https://data.getadblock.com/filters/adblock_custom.txt",
       safariJSON_URL: "https://data.getadblock.com/filters/adblock_custom.json",
     },
-    //TODO - remove
-    "sample": { // sample for debug
-      url: "https://data.getadblock.com/filters/samplefilterlist.txt",
-      //safariJSON_URL: "https://data.getadblock.com/filters/sample.json",
-      safariJSON_URL: "https://ping.getadblock.com/qa-stats/sample.json",
-    },
     "easylist": { // EasyList
       url: "https://easylist-downloads.adblockplus.org/easylist.txt",
       safariJSON_URL: "https://data.getadblock.com/filters/easylist.json",
@@ -749,78 +735,98 @@ MyFilters.prototype._make_subscription_options = function() {
     "easylist_plus_bulgarian": { // Additional Bulgarian filters
       url: "http://stanev.org/abp/adblock_bg.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_bulgarian.json",
     },
     "dutch": { // Additional Dutch filters
       url: "https://easylist-downloads.adblockplus.org/easylistdutch.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/dutch.json",
     },
     "easylist_plus_finnish": { // Additional Finnish filters
       url: "https://raw.githubusercontent.com/wiltteri/wiltteri.txt/master/wiltteri.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_finnish.json",
     },
     "easylist_plus_french": { // Additional French filters
       url: "https://easylist-downloads.adblockplus.org/liste_fr.txt",
-      requiresList: "easylist",
+      //requiresList: "easylist",
       safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_french.json",
     },
     "easylist_plus_german": { // Additional German filters
       url: "https://easylist-downloads.adblockplus.org/easylistgermany.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_german.json",
     },
     "easylist_plus_greek": { // Additional Greek filters
       url: "https://www.void.gr/kargig/void-gr-filters.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_greek.json",
     },
     "easylist_plus_indonesian": { // Additional Indonesian filters
       url: "https://indonesianadblockrules.googlecode.com/hg/subscriptions/abpindo.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_indonesian.json",
     },
     "easylist_plus_polish": { // Additional Polish filters
       url: "https://raw.githubusercontent.com/adblockpolska/Adblock_PL_List/master/adblock_polska.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_polish.json",
       requiresList: "easylist",
     },
     "easylist_plus_romanian": { // Additional Romanian filters
       url: "http://www.zoso.ro/pages/rolist.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_romanian.json",
     },
     "russian": { // Additional Russian filters
       url: "https://easylist-downloads.adblockplus.org/advblock.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/russian.json",
     },
     "chinese": { // Additional Chinese filters
       url: "https://easylist-downloads.adblockplus.org/easylistchina.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/chinese.json",
     },
     "czech": { // Additional Czech and Slovak filters
       url: "https://raw.github.com/tomasko126/easylistczechandslovak/master/filters.txt",
       requiresList: "easylist",
+      safariJSON_URL: "https://data.getadblock.com/filters/czech.json",
     },
     "danish": { // Danish filters
       url: "http://adblock.schack.dk/block.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/danish.json",
     },
     "hungarian": { // Hungarian filters
       url: "http://pete.teamlupus.hu/hufilter.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/hungarian.json",
     },
     "israeli": { // Israeli filters
       url: "https://easylist-downloads.adblockplus.org/israellist+easylist.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/israeli.json",
     },
     "italian": { // Italian filters
       url: "http://mozilla.gfsolone.com/filtri.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/italian.json",
     },
     "japanese": { // Japanese filters
       url: "https://raw.githubusercontent.com/k2jp/abp-japanese-filters/master/abpjf.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/japanese.json",
     },
     "easylist_plun_korean": {  // Korean filters
       url: "https://secure.fanboy.co.nz/fanboy-korean.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/easylist_plun_korean.json",
     },
     "latvian": {  // Latvian filters
       url: "https://gitorious.org/adblock-latvian/adblock-latvian/blobs/raw/master/lists/latvian-list.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/latvian.json",
     },
     "swedish": {  // Swedish filters
       url: "http://fanboy.co.nz/fanboy-swedish.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/swedish.json",
     },
     "turkish": {  // Turkish filters
       url: "http://fanboy.co.nz/fanboy-turkish.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/turkish.json",
     },
     "easyprivacy": { // EasyPrivacy
       url: "https://easylist-downloads.adblockplus.org/easyprivacy.txt",
@@ -828,6 +834,7 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "antisocial": { // Antisocial
       url: "https://easylist-downloads.adblockplus.org/fanboy-social.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/antisocial.json",
     },
     "malware": { // Malware protection
       url: "https://data.getadblock.com/filters/domains.json",
@@ -835,9 +842,11 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "annoyances": { // Fanboy's Annoyances
       url: "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/annoyances.json",
     },
     "warning_removal": { // AdBlock warning removal
       url: "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/warning_removal.json",
     }
   };
 }
