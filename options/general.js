@@ -9,6 +9,15 @@ $(function() {
     var is_enabled = $(this).is(':checked');
     var name = this.id.substring(7); // TODO: hack
     BGcall("set_setting", name, is_enabled, true);
+    if (name === "safari_content_blocking") {
+      BGcall("update_subscriptions_now");
+    }
+  });
+
+  BGcall("isSafariContentAvailable", function(response) {
+    if (response) {
+      $("#safari_content_blocking").css("display", "block");
+    }
   });
 
   BGcall("get_settings", function(settings) {
