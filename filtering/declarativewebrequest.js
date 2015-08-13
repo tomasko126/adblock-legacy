@@ -141,12 +141,14 @@ DeclarativeWebRequest = (function() {
   //parse and clean up the filter's RegEx to meet WebKit's requirements.
   var getURLFilterFromFilter = function(filter) {
     //remove any whitespace
-    filter._rule = filter._rule.trim()
+    var rule = filter._rule.source
+    rule = rule.trim()
+
     // make sure to limit rules to to HTTP(S) URLs (if not already limited)
-    if (!/^(\^|http|\/http)/.test(filter._rule)) {
-      filter._rule = HTML_PREFIX + REGEX_WILDCARD + filter._rule
+    if (!/^(\^|http|\/http)/.test(rule)) {
+      rule = HTML_PREFIX + REGEX_WILDCARD + filter._rule
     }
-    return filter._rule
+    return rule
   }
 
 
@@ -270,32 +272,32 @@ DeclarativeWebRequest = (function() {
 //      console.log("malwareDomains", malwareDomains);
       var rules = [];
       //step 1a, add all of the generic hiding filters (CSS selectors)
-      GROUPSIZE = 1000
-      for (var i = 0; i < selectorFiltersAll.length; GROUPSIZE) {
-        var start = i;
-        var end = Math.min((i + GROUPSIZE), selectorFiltersAll.length);
-        var selectorText = "";
-        for (var j = start; j < end; j++) {
-          filter = selectorFiltersAll[j];
-          if (isSupported(filter)) {
-            if (selectorText === "") {
-              selectorText = parseSelector(filter.selector);
-            } else {
-              selectorText = selectorText + ", " + parseSelector(filter.selector);
-            }
-          }
-        }
-
-        theRule = createEmptySelectorRule();
-        theRule["action"]["selector"] = selectorText;
-        rules.push(theRule);
-      }
-      //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)
-      selectorFilters.forEach(function(filter) {
-        if (isSupported(filter)) {
-          rules.push(createSelectorRule(filter));
-        }
-      });
+//      GROUPSIZE = 1000
+//      for (var i = 0; i < selectorFiltersAll.length; GROUPSIZE) {
+//        var start = i;
+//        var end = Math.min((i + GROUPSIZE), selectorFiltersAll.length);
+//        var selectorText = "";
+//        for (var j = start; j < end; j++) {
+//          filter = selectorFiltersAll[j];
+//          if (isSupported(filter)) {
+//            if (selectorText === "") {
+//              selectorText = parseSelector(filter.selector);
+//            } else {
+//              selectorText = selectorText + ", " + parseSelector(filter.selector);
+//            }
+//          }
+//        }
+//
+//        theRule = createEmptySelectorRule();
+//        theRule["action"]["selector"] = selectorText;
+//        rules.push(theRule);
+//      }
+//      //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)
+//      selectorFilters.forEach(function(filter) {
+//        if (isSupported(filter)) {
+//          rules.push(createSelectorRule(filter));
+//        }
+//      });
       //step 2, now add only the $elemhide filters
       elementWhitelistFilters.forEach(function(filter) {
         rules.push(createElemhideIgnoreRule(filter));

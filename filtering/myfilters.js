@@ -287,12 +287,11 @@ MyFilters.prototype.rebuild = function() {
     for (var id in selectorsNotAll) {
       selectorFilters.push(selectorsNotAll[id]);
     }
-     selectorFiltersAll = [];
+    selectorFiltersAll = [];
     for (var id in selectorsNotAll) {
        selectorFiltersAll.push(selectorsFull[id]);
     }
     var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
-    log("customRules  " + customRules);
     //add the custom rules, with the filter list rules
     this._filterListRules.push.apply(this._filterListRules, customRules);
     if (!this._filterListRules ||
@@ -305,8 +304,10 @@ MyFilters.prototype.rebuild = function() {
       this._filterListRules = this._filterListRules.slice(0, 49999);
     }
     try {
-       log("about to save rules  ", this._filterListRules);
+       //log("about to save rules  ", this._filterListRules);
        //safari.extension.setContentBlocker(this._filterListRules);
+       log("about to save rules  ", customRules);
+       safari.extension.setContentBlocker(customRules);
        log(" content blocking rules good");
     } catch(ex) {
        log("exception saving rules", ex);
@@ -456,12 +457,16 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
   var url = this._subscriptions[id].url;
   if (get_settings().safari_content_blocking) {
       if (this._subscriptions[id].safariJSON_URL) {
-        url =  this._subscriptions[id].safariJSON_URL;
-        if (!this._fetchTracker) {
-          this._fetchTracker = {};
-        }
-        this._fetchTracker[id] = true;
+        url = this._subscriptions[id].safariJSON_URL;
+      } else if (this._subscriptions[id].user_submitted && url.endsWith(".json")) {
+        url = this._subscriptions[id].url;
+      } else {
+        return;
       }
+      if (!this._fetchTracker) {
+        this._fetchTracker = {};
+      }
+      this._fetchTracker[id] = true;
   }
   var that = this;
   function onError() {
@@ -490,7 +495,21 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
       if (!that._subscriptions[id] ||
           !that._subscriptions[id].subscribed)
         return;
-
+      //if the user enabled or disabled content blocking while a download was in progress, then
+      // the incorrect file was downloaded, re-fetch
+      if ((get_settings().safari_content_blocking) &&
+          (!url.endsWith(".json"))) {
+        window.setTimeout(function() {
+          that.fetch_and_update(id);
+        }, 500);
+        return;
+      } if ((!get_settings().safari_content_blocking) &&
+          (url.endsWith(".json"))) {
+        window.setTimeout(function() {
+          that.fetch_and_update(id);
+        }, 500);
+        return;
+      }
       // Sometimes text is "". Happens sometimes.  Weird, I know.
       // Every legit list starts with a comment.
       if (status == "notmodified") {
