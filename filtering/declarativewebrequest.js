@@ -28,37 +28,31 @@
 
 
 DeclarativeWebRequest = (function() {
-  var HTML_PREFIX = "^https?://";
-  var REGEX_WILDCARD = ".*";
-  //  allowed ASCII characters, except:
-  //  x25 = NAK
-  //  x2D = -
-  //  x2E = .
-  //  x30 - x39 = digits 0 - 9
-  //  x41 - x5A = Upper case alpha
-  //  x5F - _
-  //  x61 - x7A = lower case alpha
-  var allowedASCIIchars = "\\x00-\\x24\\x26-\\x2C\\x2F\\x3A-\\x40\\x5B-\\x5E\\x60\\x7B-\\x7F";
-  whitelistAnyOtherFilters = [];
-  elementWhitelistFilters = [];
-  documentWhitelistFilters = [];
-  elemhideSelectorExceptions = {};
-
-  var createDefaultRule = function() {
-    var rule = {};
-    rule.action = {};
-    rule.action.type = "block";
-    rule.trigger = {};
-    rule.trigger["url-filter"] = HTML_PREFIX + REGEX_WILDCARD;
-    return rule;
-  };
+  var HTML_PREFIX = "https?://"
+  var REGEX_WILDCARD = ".*"
+  var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
+    //  allowed ASCII characters, except:
+    //  x25 = NAK
+    //  x2D = -
+    //  x2E = .
+    //  x30 - x39 = digits 0 - 9
+    //  x41 - x5A = Upper case alpha
+    // x5F - _
+    // x61 - x7A = lower case alpha
+  var ALLOWED_ASCII_CHARS = "\\x00-\\x24\\x26-\\x2C\\x2F\\x3A-\\x40\\x5B-\\x5E\\x60\\x7B-\\x7F";
+  var whitelistAnyOtherFilters = [];
+  var elementWhitelistFilters = [];
+  var documentWhitelistFilters = [];
+  var elemhideSelectorExceptions = {};
 
   // Adds third/first party options to the rule
   var addThirdParty = function(filter, rule) {
-    if (filter._options & FilterOptions.THIRDPARTY)
-      rule.trigger["load-type"] = "third-party";
-    if (filter._options & FilterOptions.FIRSTPARTY)
-      rule.trigger["load-type"] = "first-party";
+    if (filter._options & FilterOptions["THIRDPARTY"]) {
+      rule["trigger"]["load-type"] = "third-party"
+    }
+    if (filter._options & FilterOptions["FIRSTPARTY"]) {
+      rule["trigger"]["load-type"] = "first-party"
+    }
   };
 
   // Add the include / exclude domains to a rule
@@ -102,7 +96,6 @@ DeclarativeWebRequest = (function() {
 
   // Returns true if |filter| is of type $document or $elemhide
   var isPageLevel = function(filter) {
-    var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
     return filter._allowedElementTypes & pageLevelTypes;
   };
 
@@ -147,90 +140,18 @@ DeclarativeWebRequest = (function() {
 
   //parse and clean up the filter's RegEx to meet WebKit's requirements.
   var getURLFilterFromFilter = function(filter) {
-  	var urlFilter;
-    //check if there is any non-ASCII characters in the URL,
-    //if so, convert them to ASCII
-		urlFilter = filter._rule.source.replace(
-			/^(\|\||\|?https?:\/\/)([\w\-.*\u0080-\uFFFF]+)/i,
-			function (match, prefix, domain) {
-				return prefix + punycode.toASCII(domain);
-			});
-		//urlFilter = toRegExp(filter._rule.source);
-		urlFilter = filter._rule.source
-  	// make sure to limit rules to to HTTP(S) URLs (if not already limited)
-  	if (!/^(\^|http)/i.test(urlFilter)) {
-  		urlFilter = HTML_PREFIX + REGEX_WILDCARD + urlFilter;
+    //remove any whitespace
+    filter._rule = filter._rule.trim()
+    // make sure to limit rules to to HTTP(S) URLs (if not already limited)
+    if (!/^(\^|http|\/http)/.test(filter._rule)) {
+      filter._rule = HTML_PREFIX + REGEX_WILDCARD + filter._rule
     }
-  	return urlFilter;
+    return filter._rule
   }
 
-function toRegExp(text) {
-	var parsedRegEx = "";
-	var lastIndex = text.length - 1;
-	for (var inx = 0; inx < text.length; inx++) {
-		var aChar = text.charAt(inx);
-		switch (aChar) {
-			case "*":
-        //for any 'zero or more' quantifiers that occur
-        //in any location but the first or last position, add a match any single character.
-				if (parsedRegEx.length > 0 &&
-				    inx < lastIndex &&
-				    text[inx + 1] != "*") {
-					parsedRegEx += ".*";
-			  }
-				break;
-			case "^":
-			  //convert the separator character (anything but a letter, a digit, or one of the following: _ - . %)
-				if (inx === lastIndex) {
-					parsedRegEx += "(?![^" + allowedASCIIchars + "])";
-				} else {
-					parsedRegEx += "[" + allowedASCIIchars + "]";
-			  }
-				break;
-			case "|":
-			  //if the first character is |,
-			  // add the RegEx begining of line marker
-				if (inx === 0) {
-					parsedRegEx += "^";
-					break;
-				}
-			  //if the last character is |,
-			  // add the RegEx end of line marker
-				if (inx === lastIndex) {
-					parsedRegEx += "$";
-					break;
-				}
-			  //if the first and second character is |,
-			  // add a restriction for |HTTP(S)://|
-				if (inx === 1 && text[0] === "|") {
-					parsedRegEx += HTML_PREFIX;
-					break;
-				}
-			case ".":
-			case "+":
-			case "?":
-			case "$":
-			case "{":
-			case "}":
-			case "(":
-			case ")":
-			case "[":
-			case "]":
-			case "\\":
-			//add RegEx escape for all of the above characters
-				parsedRegEx += "\\";
-			default:
-			  //add the character
-				parsedRegEx += aChar;
-		}
-	}
-  //console.log("text", text, "parsedRegEx", parsedRegEx);
-	return parsedRegEx;
-}
 
 
   var preProcessWhitelistFilters = function(whitelistFilters){
-    console.log("whitelistFilters.length ", whitelistFilters.length);
     for (var inx = 0; inx < whitelistFilters.length; inx++) {
       var filter = whitelistFilters[inx];
       if (isSupported(filter) &&
@@ -257,23 +178,16 @@ function toRegExp(text) {
     console.log("elementWhitelistFilters.length ", elementWhitelistFilters.length);
     console.log("documentWhitelistFilters.length ", documentWhitelistFilters.length);
   }
-//  var preProcessSelectorFilters = function(selectorFilters){
-//    console.log("selectorFilters.length ", selectorFilters.length);
-//    for (var inx = 0; inx < selectorFilters.length; inx++) {
-//      var filter = selectorFilters[inx];
-//      var filterDomains = getDomains(filter);
-//      if (filterDomains.included.length > 0 && filterDomains.included[0] !== undefined) {
-//      	if (!elemhideSelectorExceptions[filter.selector]) {
-//    		  elemhideSelectorExceptions[filter.selector] = [];
-//        }
-//        elemhideSelectorExceptions[filter.selector] = elemhideSelectorExceptions[filter.selector].concat(filterDomains.included);
-//        console.log("filter ", filter, filterDomains );
-//      }
-//    }
-//    console.log("elemhideSelectorExceptions ", elemhideSelectorExceptions);
-//
-//  }
 
+
+  var createDefaultRule = function() {
+    var rule = {};
+    rule.action = {};
+    rule.action.type = "block";
+    rule.trigger = {};
+    rule.trigger["url-filter"] = HTML_PREFIX + REGEX_WILDCARD;
+    return rule;
+  };
 
   // Return the rule required to represent this PatternFilter in Safari blocking syntax.
   var getRule = function(filter) {
@@ -300,6 +214,14 @@ function toRegExp(text) {
     addDomainsToRule(filter, rule);
     return rule;
   };
+
+  // Return the rule (JSON) required to represent this Selector Filter in Safari blocking syntax.
+  var createEmptySelectorRule = function() {
+    rule = createDefaultRule()
+    rule["action"]["type"] = "css-display-none"
+    return rule
+  }
+
   // Return the rule (JSON) required to represent this $document Whitelist Filter in Safari blocking syntax.
   var createDocumentIgnoreRule = function(filter) {
     var rule = createDefaultRule();
@@ -321,9 +243,15 @@ function toRegExp(text) {
 
   // Returns false if the given filter cannot be handled Safari 9 content blocking.
   var isSupported = function(filter) {
-    return !((filter._allowedElementTypes & ElementTypes.SUBDOCUMENT) ||
+    if (!filter) {
+      return false;
+    } else if (!filter.hasOwnProperty('_allowedElementTypes')) {
+      return true;
+    } else {
+      return !((filter._allowedElementTypes & ElementTypes.SUBDOCUMENT) ||
              (filter._allowedElementTypes & ElementTypes.OBJECT) ||
     		     (filter._allowedElementTypes & ElementTypes.OBJECT_SUBREQUEST));
+    }
   };
 
   // Remove any characters from the filter lists that are not needed, such as |##| and |.|
@@ -337,11 +265,32 @@ function toRegExp(text) {
   return {
     // Registers rules for the given list of PatternFilters and SelectorFilters,
     // clearing any existing rules.
-    register: function(patternFilters, whitelistFilters, selectorFilters, malwareDomains) {
+    register: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll, malwareDomains) {
       preProcessWhitelistFilters(whitelistFilters);
 //      console.log("malwareDomains", malwareDomains);
       var rules = [];
-      //step 1, add all of the hiding filters (CSS selectors)
+      //step 1a, add all of the generic hiding filters (CSS selectors)
+      GROUPSIZE = 1000
+      for (var i = 0; i < selectorFiltersAll.length; GROUPSIZE) {
+        var start = i;
+        var end = Math.min((i + GROUPSIZE), selectorFiltersAll.length);
+        var selectorText = "";
+        for (var j = start; j < end; j++) {
+          filter = selectorFiltersAll[j];
+          if (isSupported(filter)) {
+            if (selectorText === "") {
+              selectorText = parseSelector(filter.selector);
+            } else {
+              selectorText = selectorText + ", " + parseSelector(filter.selector);
+            }
+          }
+        }
+
+        theRule = createEmptySelectorRule();
+        theRule["action"]["selector"] = selectorText;
+        rules.push(theRule);
+      }
+      //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)
       selectorFilters.forEach(function(filter) {
         if (isSupported(filter)) {
           rules.push(createSelectorRule(filter));
@@ -354,7 +303,16 @@ function toRegExp(text) {
       //step 3, now add the blocking rules
       patternFilters.forEach(function(filter) {
         if (isSupported(filter)) {
-         rules.push(getRule(filter));
+          var rule = getRule(filter);
+          var is_valid = true;
+          try {
+            new RegExp(rule["trigger"]["url-filter"]);
+          } catch(ex) {
+            is_valid = False
+          }
+          if (is_valid) {
+            rules.push(rule)
+          }
         }
       });
       //step 4, now add malware domains as one blocking rule (if there are malware domains)

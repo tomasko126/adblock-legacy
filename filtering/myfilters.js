@@ -265,12 +265,34 @@ MyFilters.prototype.rebuild = function() {
     for (var id in filters.whitelist) {
       whitelistFilters.push(filters.whitelist[id]);
     }
-    var selectorFilters = [];
+    //SelectorFilters where full() == True are selectors that apply to all domains, no exceptions
+    // these filters can be collapsed into a few large JSON rules
+    //SelectorFilters where full() == False are selectors that either:
+    //    - apply to specific domain(s)
+    //    - or have exceptions domains, where the selectors are not applied
+    selectorsFull = {};
+    selectorsNotAll = {};
     for (var id in filters.hiding) {
-      selectorFilters.push(filters.hiding[id]);
+      var selectorFilter = filters.hiding[id];
+      if (selectorFilter._domains.full() === true) {
+        selectorsFull[id] = selectorFilter;
+      } else {
+        selectorsNotAll[id] = selectorFilter;
+      }
     }
-    var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, malwareDomains);
-    log("customRules  " + customRules.length);
+
+    log(" # of selectorsNotAll: " + selectorsNotAll.length)
+    log(" # of selectorsFull: " + selectorsFull.length)
+    var selectorFilters = [];
+    for (var id in selectorsNotAll) {
+      selectorFilters.push(selectorsNotAll[id]);
+    }
+     selectorFiltersAll = [];
+    for (var id in selectorsNotAll) {
+       selectorFiltersAll.push(selectorsFull[id]);
+    }
+    var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
+    log("customRules  " + customRules);
     //add the custom rules, with the filter list rules
     this._filterListRules.push.apply(this._filterListRules, customRules);
     if (!this._filterListRules ||
@@ -284,7 +306,7 @@ MyFilters.prototype.rebuild = function() {
     }
     try {
        log("about to save rules  ", this._filterListRules);
-       safari.extension.setContentBlocker(this._filterListRules);
+       //safari.extension.setContentBlocker(this._filterListRules);
        log(" content blocking rules good");
     } catch(ex) {
        log("exception saving rules", ex);
@@ -680,6 +702,7 @@ MyFilters.prototype._load_default_subscriptions = function() {
   // Returns the ID of the list appropriate for the user's locale, or ''
   function listIdForThisLocale() {
     var language = determineUserLanguage();
+    //language = 'bg'
     switch(language) {
       case 'bg': return 'easylist_plus_bulgarian';
       case 'cs': return 'czech';
