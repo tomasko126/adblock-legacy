@@ -255,6 +255,10 @@
     "message":"Enable ClickToFlash compatibility mode",
     "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
   },
+  "safaricontentblocking":{
+    "message":"Enable the new Safari 9 Content Blocking",
+    "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
+  },
   "debuginlogoption":{
     "message":"Show debug statements in Console Log (which slows down AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -1066,6 +1070,10 @@
   "pause_adblock":{
     "message":"Pause AdBlock",
     "description":"Menu entry to pause AdBlock"
+  },
+  "safaricontentblockingpausemessage":{
+    "message":"To 'pause' adblocking with content blocking enabled, please select Safari Preferences - Extensions - AdBlock - uncheck 'Enable'",
+    "description":"messesage to users when they click the pause item in the adblock popup menu"
   },
   "undo_last_block":{
     "message":"Undo my blocks on this domain",

@@ -170,7 +170,7 @@ $(function() {
         BG.adblock_is_paused(false);
         BG.handlerBehaviorChanged();
         if (!SAFARI)
-            BG.updateButtonUIAndContextMenus();
+          BG.updateButtonUIAndContextMenus();
         closeAndReloadPopup();
     });
 
@@ -188,10 +188,16 @@ $(function() {
     });
 
     $("#div_pause_adblock").click(function() {
-        BG.adblock_is_paused(true);
-        if (!SAFARI)
-            BG.updateButtonUIAndContextMenus();
-        closeAndReloadPopup();
+        if (BG.get_settings().safari_content_blocking) {
+          alert(translate('safaricontentblockingpausemessage'));
+          closeAndReloadPopup();
+        } else {
+          BG.adblock_is_paused(true);
+          if (!SAFARI) {
+              BG.updateButtonUIAndContextMenus();
+          }
+          closeAndReloadPopup();
+        }
     });
 
     $("#div_blacklist").click(function() {
