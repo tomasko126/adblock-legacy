@@ -1127,11 +1127,6 @@
     })();
   }
 
-  // Open the resource blocker when requested from the Chrome popup.
-  launch_resourceblocker = function(query) {
-    openTab("pages/resourceblock.html" + query, true);
-  }
-
   // Open subscribe popup when new filter list was subscribed from site
   launch_subscribe_popup = function(loc) {
     window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
@@ -1139,8 +1134,8 @@
     'scrollbars=0,location=0,resizable=0,width=460,height=150');
   }
 
-  // Get the framedata for resourceblock
-  resourceblock_get_frameData = function(tabId) {
+  // Get the framedata for the 'Report an Ad' page
+  get_frameData_adreport = function(tabId) {
     return frameData.get(tabId);
   }
 

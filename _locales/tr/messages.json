@@ -55,10 +55,6 @@
     "message":"Reklam düzgün bir şekilde engelleninceye ve engellenen öğe sayfa yapısını bozmayacak şekilde görüntüleninceye kadar kaydırıcıyı ilerletin.",
     "description":"Blacklister slider page message"
   },
-  "block_by_url_instead":{
-    "message":"Gelişmiş: Sayfa URL'sini kullanarak engelleyin",
-    "description":"Link on blacklister slider page"
-  },
   "slidertitle":{
     "message":"İlk Adım: Nelerin engelleneceğini belirle",
     "description":"Blacklister slider page title"
@@ -1109,10 +1105,6 @@
   },
   "report_ad_on_page":{
     "message":"Bu sayfada bir reklam bildir",
-    "description":"Entry in the AdBlock button menu"
-  },
-  "show_resourcelist":{
-    "message":"Kaynak listesini göster",
     "description":"Entry in the AdBlock button menu"
   },
   "advanced_options2":{
