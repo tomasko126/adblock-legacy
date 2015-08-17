@@ -90,6 +90,8 @@ function generateReportURL() {
     body.push("");
     body.push("");
     body.push("-------- Please don't touch below this line. ---------");
+    body.push("");
+    body.push("```");
     if (options.url) {
         body.push("=== URL with ad ===");
         body.push(options.url);
@@ -103,6 +105,7 @@ function generateReportURL() {
     for (var i=0, n=1; i<answers.length, i<text.length; i++, n++) {
         body.push(n+"."+text[i].id+": "+answers[i].getAttribute("chosen"));
     }
+    body.push("```");
     body.push("");
 
     result = result + "&discussion[body]=" + encodeURIComponent(body.join('  \n')); // Two spaces for Markdown newlines
@@ -397,6 +400,7 @@ $("#step_firefox_no").click(function() {
                 chrome.management.getAll(function(result) {
                   var extInfo = [];
                   extInfo.push("");
+                  extInfo.push("```");
                   extInfo.push("==== Extension and App Information ====");
                   for (var i = 0; i < result.length; i++) {
                     extInfo.push("Number " + (i + 1));
@@ -407,6 +411,8 @@ $("#step_firefox_no").click(function() {
                     extInfo.push("  type: " + result[i].type);
                     extInfo.push("");
                   }
+                  extInfo.push("```");
+                  extInfo.push("");
                   currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
                   chrome.permissions.remove({
                     permissions: ['management']
@@ -426,8 +432,10 @@ $("#step_firefox_no").click(function() {
             if (language) {
               var extInfo = [];
               extInfo.push("");
+              extInfo.push("```");
               extInfo.push("Detected language of page: ");
               extInfo.push(language);
+              extInfo.push("```");
               extInfo.push("");
               currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
             }
