@@ -931,14 +931,6 @@
     "message":"İstediğiniz kadar ödeyin!",
     "description":"Text of a payment request link"
   },
-  "removelabel":{
-    "message":"Sil",
-    "description":"Link to remove a filter on the resourceblock page"
-  },
-  "changelabel":{
-    "message":"değiştir",
-    "description":"Link to change resources on the resourceblock page"
-  },
   "translator_credit":{
     "message":"Çeviri:",
     "description":"Will be followed by a list of translator names (separate string)"
@@ -990,32 +982,6 @@
   "safari50_updatenotice":{
     "message":"Safari'nin eski bir sürümünü kullanıyorsunuz. AdBlock araç çubuğu butonunu kullanabilmek, bir web sitesine izin verebilmek ya da reklam bildirebilmek istiyorsanız, son sürüme geçin.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
-  },
-  "searchexplanation":{
-    "message":"Kelimeyi olduğu gibi ve başka harfler ekli şekilleriyle birlikte bulmak için * kullanın.   Örneğin, \"banner*.gif resim\" araması, \"banner.gif\", \"banner123.gif\" ve \"bannerxyz.gif\" gibi sonuçlarla eşleşir.",
-    "description":"Text in resourceblock when you hover your mouse over the search textbox"
-  },
-  "searchplaceholder":{
-    "message":"Kaynaklar içinde ara...",
-    "description":"Text in resourceblock shown in the search textbox before you type something"
-  },
-  "nosearchresults":{
-    "message":"Hiç bir kaynak bulunamadı",
-    "description":"Text in resourceblock shown if no results are found after searching"
-  },
-  "custompattern":{
-    "message":"Özel:",
-    "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
-  },
-  "filterorigin":{
-    "message":"Filtre kaynağı:\n$list$",
-    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
-    "placeholders":{
-      "list":{
-        "content":"$1",
-        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
-      }
-    }
   },
   "firefox_explanation":{
     "message":"Bu sorunun amacı bildiriminizi kimin alacağını belirlemek içindir. Eğer bu soruyu yanlış yanıtlarsanız, bildiriminiz yanlış insanlara ulaşıp, dikkate alınmayabilir.",

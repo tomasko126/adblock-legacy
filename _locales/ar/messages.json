@@ -859,10 +859,6 @@
     "message":"غير معروف",
     "description":"A resource type"
   },
-  "adblock_is_paused":{
-    "message":"AdBlock متوقفة مؤقتاً. لذلك اشتعلت أية موارد، حيث لا يمكن استخدام هذه الصفحة. إلغاء الإيقاف المؤقت AdBlock أولاً ثم حاول مرة أخرى.",
-    "description":"resourceblocking page string"
-  },
   "flashads":{
     "message":"أشرطة الفيديو وفلاش",
     "description":"Title of the final ad report question if the ad didn't appear in Firefox"
@@ -935,14 +931,6 @@
     "message":"ادفع ما تريد!",
     "description":"Text of a payment request link"
   },
-  "removelabel":{
-    "message":"إزالة",
-    "description":"Link to remove a filter on the resourceblock page"
-  },
-  "changelabel":{
-    "message":"تغيير",
-    "description":"Link to change resources on the resourceblock page"
-  },
   "translator_credit":{
     "message":"الائتمان للترجمة يذهب إلى:",
     "description":"Will be followed by a list of translator names (separate string)"
@@ -994,32 +982,6 @@
   "safari50_updatenotice":{
     "message":"أنك تستخدم نسخة قديمة من Safari. الحصول على أحدث إصدار من أجل استخدام زر شريط الأدوات \"AdBlock\" إلى وقفه AdBlock والمواقع القائمة البيضاء، وإعلان التقرير. <a>الترقية الآن<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
-  },
-  "searchexplanation":{
-    "message":"استخدام * لمطابقة أحرف عددها صفر أو أكثر.  على سبيل المثال، يطابق 'شعار*.gif الصورة' الصور 'شعار.gif' و 'شعار123.gif' و 'شعارxyz.gif'.",
-    "description":"Text in resourceblock when you hover your mouse over the search textbox"
-  },
-  "searchplaceholder":{
-    "message":"البحث في الموارد...",
-    "description":"Text in resourceblock shown in the search textbox before you type something"
-  },
-  "nosearchresults":{
-    "message":"الموارد لم يتم العثور على",
-    "description":"Text in resourceblock shown if no results are found after searching"
-  },
-  "custompattern":{
-    "message":"مُخصّص:",
-    "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
-  },
-  "filterorigin":{
-    "message":"تصفية المنشأ: $list$",
-    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
-    "placeholders":{
-      "list":{
-        "content":"$1",
-        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
-      }
-    }
   },
   "firefox_explanation":{
     "message":"والغرض من هذا السؤال لتحديد الذين ينبغي أن تلقي التقرير الخاص بك. إذا كان يمكنك الإجابة على هذا السؤال بشكل غير صحيح، سيتم إرسال التقرير إلى الأشخاص الخطأ، حيث أنها قد تحصل على تجاهلها.",
