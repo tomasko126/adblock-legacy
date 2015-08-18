@@ -86,6 +86,6 @@
 	<key>Update Manifest URL</key>
 	<string>https://data.getadblock.com/safari/update.plist</string>
 	<key>Website</key>
-	<string>http://safariadblock.com</string>
+	<string>https://getadblock.com</string>
 </dict>
 </plist>
