@@ -193,7 +193,15 @@ MyFilters.prototype.rebuild = function() {
   }
   var texts = [];
   if (get_settings().safari_content_blocking) {
-        //empty
+     //only add user_submitted where URL isn't a JSON file
+    for (var id in this._subscriptions) {
+      if (this._subscriptions[id].subscribed &&
+          this._subscriptions[id].user_submitted &&
+          this._subscriptions[id].url &&
+          !this._subscriptions[id].url.endsWith("json")) {
+        texts.push(this._subscriptions[id].text);
+      }
+    }
   }  else {
      //only add subscriptions in Chrome, Opera, and older version of Safari...
     for (var id in this._subscriptions)
@@ -244,11 +252,13 @@ MyFilters.prototype.rebuild = function() {
     this._filterListRules = [];
     for (var id in this._subscriptions) {
       if (this._subscriptions[id].subscribed) {
+        console.log("id", id);
         for (var item in this._subscriptions[id].rules)  {
           this._filterListRules.push(this._subscriptions[id].rules[item]);
         }
       }
     }
+    console.log("this._filterListRules", this._filterListRules);
     var malwareDomains = [];
     if (this._subscriptions &&
         this._subscriptions.malware &&
@@ -303,11 +313,12 @@ MyFilters.prototype.rebuild = function() {
       log("exceed number of rules: " + this._filterListRules.length);
       this._filterListRules = this._filterListRules.slice(0, 49999);
     }
+     console.log("this._filterListRules 2 ", this._filterListRules);
     try {
-       //log("about to save rules  ", this._filterListRules);
-       //safari.extension.setContentBlocker(this._filterListRules);
-       log("about to save rules  ", customRules);
-       safari.extension.setContentBlocker(customRules);
+       log("about to save rules  ", this._filterListRules);
+       safari.extension.setContentBlocker(this._filterListRules);
+//       log("about to save rules  ", customRules);
+//       safari.extension.setContentBlocker(customRules);
        log(" content blocking rules good");
     } catch(ex) {
        log("exception saving rules", ex);
@@ -751,9 +762,8 @@ MyFilters.prototype._load_default_subscriptions = function() {
     }
   }
   //Update will be done immediately after this function returns
-  result["adblock_custom"] = { subscribed: true };
+  //result["adblock_custom"] = { subscribed: true };
   result["easylist"] = { subscribed: true };
-
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
@@ -766,6 +776,10 @@ MyFilters.prototype._load_default_subscriptions = function() {
 MyFilters.prototype._make_subscription_options = function() {
   // When modifying a list, IDs mustn't change!
   return {
+    "sample": {
+      url: "https://data.getadblock.com/filters/samplefilterlist.txt",
+      safariJSON_URL: "https://data.getadblock.com/filters/sample.json",
+    },
     "adblock_custom": { // AdBlock custom filters
       url: "https://data.getadblock.com/filters/adblock_custom.txt",
       safariJSON_URL: "https://data.getadblock.com/filters/adblock_custom.json",

@@ -88,6 +88,10 @@ $(function() {
             info.whitelisted) {
             $("#block_counts").hide();
         }
+        if (SAFARI &&
+            BG.get_settings().safari_content_blocking) {
+          $(".exclude_safari_content_blocking").hide();
+        }
 
         // Secure Search UI
         var shouldShow = false;
