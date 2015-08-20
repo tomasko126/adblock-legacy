@@ -762,9 +762,9 @@ MyFilters.prototype._load_default_subscriptions = function() {
     }
   }
   //Update will be done immediately after this function returns
-  //result["adblock_custom"] = { subscribed: true };
+  result["adblock_custom"] = { subscribed: true };
   result["easylist"] = { subscribed: true };
-  result["malware"] = { subscribed: true }; 
+  result["malware"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
