@@ -192,12 +192,10 @@ MyFilters.prototype.rebuild = function() {
   }
   var texts = [];
   if (get_settings().safari_content_blocking) {
-     //only add user_submitted where URL isn't a JSON file
+     //add texts if there are no rules
     for (var id in this._subscriptions) {
       if (this._subscriptions[id].subscribed &&
-          this._subscriptions[id].user_submitted &&
-          this._subscriptions[id].url &&
-          !this._subscriptions[id].url.endsWith("json")) {
+          !this._subscriptions[id].rules) {
         texts.push(this._subscriptions[id].text);
       }
     }
@@ -252,13 +250,11 @@ MyFilters.prototype.rebuild = function() {
     this._filterListRules = [];
     for (var id in this._subscriptions) {
       if (this._subscriptions[id].subscribed) {
-        console.log("id", id);
         for (var item in this._subscriptions[id].rules)  {
           this._filterListRules.push(this._subscriptions[id].rules[item]);
         }
       }
     }
-    console.log("this._filterListRules", this._filterListRules);
     var malwareDomains = [];
     if (this._subscriptions &&
         this._subscriptions.malware &&
@@ -313,7 +309,6 @@ MyFilters.prototype.rebuild = function() {
       log("exceed number of rules: " + this._filterListRules.length);
       this._filterListRules = this._filterListRules.slice(0, 49999);
     }
-     console.log("this._filterListRules 2 ", this._filterListRules);
     try {
        log("about to save rules  ", this._filterListRules);
        safari.extension.setContentBlocker(this._filterListRules);
@@ -435,10 +430,9 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
     delete this._subscriptions[id].last_modified;
 
   if (this._subscriptions[id].subscribed) {
-
-    if (!this._subscriptions[id].text || out_of_date(this._subscriptions[id]))
+    if (!this._subscriptions[id].text || out_of_date(this._subscriptions[id])) {
       this.fetch_and_update(id, listDidntExistBefore);
-
+    }
   } else {
     // If unsubscribed, remove some properties
     delete this._subscriptions[id].text;
@@ -469,10 +463,8 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
   if (get_settings().safari_content_blocking) {
       if (this._subscriptions[id].safariJSON_URL) {
         url = this._subscriptions[id].safariJSON_URL;
-      } else if (this._subscriptions[id].user_submitted && url.endsWith(".json")) {
-        url = this._subscriptions[id].url;
       } else {
-        return;
+        url = this._subscriptions[id].url;
       }
       if (!this._fetchTracker) {
         this._fetchTracker = {};
@@ -506,21 +498,6 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
       if (!that._subscriptions[id] ||
           !that._subscriptions[id].subscribed)
         return;
-      //if the user enabled or disabled content blocking while a download was in progress, then
-      // the incorrect file was downloaded, re-fetch
-      if ((get_settings().safari_content_blocking) &&
-          (!url.endsWith(".json"))) {
-        window.setTimeout(function() {
-          that.fetch_and_update(id);
-        }, 500);
-        return;
-      } if ((!get_settings().safari_content_blocking) &&
-          (url.endsWith(".json"))) {
-        window.setTimeout(function() {
-          that.fetch_and_update(id);
-        }, 500);
-        return;
-      }
       // Sometimes text is "". Happens sometimes.  Weird, I know.
       // Every legit list starts with a comment.
       if (status == "notmodified") {
@@ -561,12 +538,15 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
     this._subscriptions[id].expiresAfterHoursHard = this._subscriptions[id].expiresAfterHours * 2;
     var smear = Math.random() * 0.4 + 0.8;
     this._subscriptions[id].expiresAfterHours *= smear;
-    this._subscriptions[id].rules = text;
     if (this._fetchTracker &&
         this._fetchTracker[id]) {
       delete this._fetchTracker[id]
     }
-    return;
+    //if the |text| is JSON rules, save them, and return
+    if (text && (typeof text === "object")) {
+      this._subscriptions[id].rules = text;
+      return;
+    }
   }
 
   // In case the resource wasn't modified, there is no need to reparse this.
@@ -777,10 +757,6 @@ MyFilters.prototype._load_default_subscriptions = function() {
 MyFilters.prototype._make_subscription_options = function() {
   // When modifying a list, IDs mustn't change!
   return {
-    "sample": {
-      url: "https://data.getadblock.com/filters/samplefilterlist.txt",
-      safariJSON_URL: "https://data.getadblock.com/filters/sample.json",
-    },
     "adblock_custom": { // AdBlock custom filters
       url: "https://data.getadblock.com/filters/adblock_custom.txt",
       safariJSON_URL: "https://data.getadblock.com/filters/adblock_custom.json",

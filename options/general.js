@@ -4,18 +4,28 @@ $(function() {
   for (var name in optionalSettings) {
     $("#enable_" + name).
       prop("checked", optionalSettings[name]);
-    if (name === "safari_content_blocking" && optionalSettings[name]) {
-      $(".exclude_safari_content_blocking").hide();
-    }
+  }
+  //uncheck any incompatable options with the new safari content blocking, and then hide them
+  if (optionalSettings["safari_content_blocking"]) {
+    $(".exclude_safari_content_blocking > input").each(function( index ) {
+      $(this).prop("checked", false);
+    });
+    $(".exclude_safari_content_blocking").hide();
   }
   $("input.feature[type='checkbox']").change(function() {
     var is_enabled = $(this).is(':checked');
     var name = this.id.substring(7); // TODO: hack
     BGcall("set_setting", name, is_enabled, true);
-    // if the user enables/disable data collection update the filter lists, so that the 
+    // if the user enables/disable data collection update the filter lists, so that the
     // filter list data is retained, and any cached responses are cleared
     if (name === "data_collection") {
-      BGcall("update_subscriptions_now");          
+      BGcall("update_subscriptions_now");
+    }
+  });
+
+  BGcall("isSafariContentAvailable", function(response) {
+    if (response) {
+      $("#safari_content_blocking").css("display", "block");
     }
   });
 
@@ -29,12 +39,6 @@ $(function() {
       } else {
         $("#dropbox").hide();
       }
-      BGcall("isSafariContentAvailable", function(response) {
-        if (settings.show_advanced_options &&
-            response) {
-          $("#safari_content_blocking").css("display", "block");
-        }
-      });
   });
 
   update_db_icon();
@@ -71,6 +75,10 @@ $("#enable_safari_content_blocking").change(function() {
   var is_enabled = $(this).is(':checked');
   BGcall("update_subscriptions_now");
   if (is_enabled) {
+    //uncheck any incompatable options, and then hide them
+    $(".exclude_safari_content_blocking > input").each(function( index ) {
+      $(this).prop("checked", false);
+    });
     $(".exclude_safari_content_blocking").hide();
   } else {
     $(".exclude_safari_content_blocking").show();
