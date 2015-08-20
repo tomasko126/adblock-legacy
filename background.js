@@ -14,8 +14,8 @@
            str += stack;
         }
         //don't send large stack traces
-        if (str.length > 64) {
-          str = str.substr(0,63);
+        if (str.length > 512) {
+          str = str.substr(0,511);
         }
     }
     STATS.msg(str);
@@ -236,9 +236,7 @@
           domain: parseUri(url).hostname,
           resources: {}
         };
-        if (frameId === 0) {
-          fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
-        }
+        fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
       },
 
       // Watch for requests for new tabs and frames, and track their URLs.
@@ -309,9 +307,6 @@
           var pos = url.pathname.lastIndexOf('.');
           if (pos > -1) {
             var ext = url.pathname.slice(pos) + '.';
-            if ('.eot.ttf.otf.svg.woff.woff2.'.indexOf(ext) !== -1) {
-              return 'font';
-            }
             // Still need this because often behind-the-scene requests are wrongly
             // categorized as 'other'
             if ('.ico.png.gif.jpg.jpeg.webp.'.indexOf(ext) !== -1) {
@@ -337,8 +332,17 @@
       var tabId = details.tabId;
       var reqType = normalizeRequestType({url: details.url, type: details.type});
 
-      if (frameData.get(tabId, 0).whitelisted) {
+      var top_frame = frameData.get(tabId, 0);
+      var sub_frame = (details.frameId !== 0 ? frameData.get(tabId, details.frameId) : null);
+
+      // If top frame is whitelisted, don't process anything
+      if (top_frame.whitelisted) {
         log("[DEBUG]", "Ignoring whitelisted tab", tabId, details.url.substring(0, 100));
+        return { cancel: false };
+      // If request comes from whitelisted sub_frame and
+      // top frame is not whitelisted, don't process the request
+      } else if (sub_frame && sub_frame.whitelisted) {
+        log("[DEBUG]", "Ignoring whitelisted frame", tabId, details.url.substring(0, 100));
         return { cancel: false };
       }
 
@@ -353,7 +357,17 @@
 
       // May the URL be loaded by the requesting frame?
       var frameDomain = frameData.get(tabId, requestingFrameId).domain;
-      var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+      if (get_settings().data_collection) {
+        var blockedData = _myfilters.blocking.matches(details.url, elType, frameDomain, true, true);
+        if (blockedData !== false) {
+          DataCollection.addItem(blockedData.text);
+          var blocked = blockedData.blocked;
+        } else {
+          var blocked = blockedData;
+        }
+      } else {
+        var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+      }
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
@@ -402,8 +416,11 @@
         details.url = opener.url;
       var url = getUnicodeUrl(details.url);
       var match = _myfilters.blocking.matches(url, ElementTypes.popup, opener.domain);
-      if (match)
-        chrome.tabs.remove(details.tabId);
+      if (match) {
+          chrome.tabs.remove(details.tabId);
+          blockCounts.recordOneAdBlocked(details.sourceTabId);
+          updateBadge(details.sourceTabId);
+      }
       frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup);
     };
 
@@ -439,11 +456,12 @@
     if (SAFARI) {
         frameData.storeResource(sender.tab.id, selector, "HIDE");
     } else {
-        frameData.storeResource(sender.tab.id, sender.frameId, selector, "HIDE");
+        frameData.storeResource(sender.tab.id, 0, selector, "HIDE");
     }
-    var data = frameData.get(sender.tab.id, sender.frameId || 0);
+    var data = frameData.get(sender.tab.id, 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
+      DataCollection.addItem(selector);
       if (!SAFARI) {
         blockCounts.recordOneAdBlocked(sender.tab.id);
         updateBadge(sender.tab.id);
@@ -1021,9 +1039,17 @@
   //           domain:string the domain of the calling frame.
   get_content_script_data = function(options, sender) {
     var settings = get_settings();
-    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.tab.url);
-    var running = runnable && !page_is_whitelisted(sender.tab.url);
-    var hiding = running && !page_is_whitelisted(sender.tab.url, ElementTypes.elemhide);
+    var runnable = !adblock_is_paused() && !page_is_unblockable(sender.url);
+    var running_top = runnable && !page_is_whitelisted(sender.tab.url);
+    var running = runnable && !page_is_whitelisted(sender.url);
+    var hiding = running && !page_is_whitelisted(sender.url, ElementTypes.elemhide);
+
+    // Don't run in frame, when top frame is whitelisted
+    if (!running_top && running) {
+      running = false;
+      hiding = false;
+    }
+
     var result = {
       settings: settings,
       runnable: runnable,
@@ -1189,85 +1215,25 @@
       }
     }
   })();
-//TODO - remove - for testing only
-//var myFiltersArray = [];
-//myFiltersArray.push("http://example23.com/*");
-//myFiltersArray.push("&ad_box_");
-//myFiltersArray.push("png$image");
-//myFiltersArray.push("||google.com/jsapi?autoload=*%22ads%22$script,domain=youtube.com");
-//myFiltersArray.push("||topspin.net/secure/media/$image,domain=youtube.com");
-//myFiltersArray.push("/pagead2.");
-//myFiltersArray.push("/pubads_");
-//myFiltersArray.push("/pagead2.");
-//myFiltersArray.push("/pagead/gen_");
-//myFiltersArray.push("/googleads.");
-//myFiltersArray.push("=300x250,");
-//myFiltersArray.push("&ad_type=");
-//myFiltersArray.push("&ad_zones=");
-//myFiltersArray.push("&adbannerid=");
-//myFiltersArray.push("||/banner/");
-//myFiltersArray.push("/admatcher.$~object,-subrequest,~xmlhttprequest");
-//myFiltersArray.push("/banner.asp?$third-party");
-//myFiltersArray.push("||healthaffiliatesnetwork.com^$third-party");
-//myFiltersArray.push("|baddomain.example/");
-//myFiltersArray.push("||example31.com/banner.gif");
-//myFiltersArray.push("^example33.com^");
-//myFiltersArray.push("*/ads/*$script,match-case");
-//myFiltersArray.push("||milanomoda.info^$domain=uploadlw.com");
-//myFiltersArray.push("/mydirtyhobby.$domain=~mydirtyhobby.com|~mydirtyhobby.de");
-//myFiltersArray.push("||mydirtyhobby.com^$third-party,domain=~my-dirty-hobby.com|~mydirtyhobby.de");
-//myFiltersArray.push("||mydirtyhobby.com/?$popup,third-party");
-//myFiltersArray.push("||online.mydirtyhobby.com^*?naff=$popup,third-party");
-//myFiltersArray.push("||myhobby.com^$domain=my-hobby.com|~myhobby.de");
-//myFiltersArray.push("||123date.me^$third-party");
-//
-//myFiltersArray.push("||ngohq.com/images/ad.jpg$~collapse");
-//myFiltersArray.push("_ad_layer_");
-//myFiltersArray.push("@@||360haven.com^$elemhide");
-//myFiltersArray.push("@@|http://www.bye.com/|$document");
-//myFiltersArray.push("@@||bye1.com/stores/$document");
-//myFiltersArray.push("@@||vhobbies.com/admgr/*.aspx?ZoneID=$script,domain=vcoins.com");
-//myFiltersArray.push("@@||yahoo.com/combo?$stylesheet");
-//myFiltersArray.push("@@||youtube.com^*_adsense_$xmlhttprequest");
-//myFiltersArray.push("@@|http://example34.com");
-//myFiltersArray.push("@@||replgroup.com/banners/$image,~third-party");
-//
-//myFiltersArray.push('нашбийск.рф##a[href*="/banners/"] > img');
-//myFiltersArray.push('promebelclub.ru,форум-мебельщиков.рф##.tborder[width="165"]');
-//myFiltersArray.push("###ad-21");
-//myFiltersArray.push("##.DeptAd");
-//myFiltersArray.push('##div[id^="YFBMSN"]');
-//myFiltersArray.push("###mn #center_col > div > h2.spon:first-child");
-//myFiltersArray.push("wg-gesucht.de#@#.ad_wrap");
-//myFiltersArray.push("domain1.example,domain2.example,domain3.example##*.sponsor");
-//myFiltersArray.push("domain1.example,domain2.example,domain3.example##*.sponsor");
-//myFiltersArray.push("domain43.example##*.sponsor");
-//myFiltersArray.push("##*.AD_banner");
-//myFiltersArray.push("splush.org#@#*.AD_banner");
-//myFiltersArray.push("linkshrink.net#@##overlay_ad");
-
-//var myFiltersString = myFiltersArray.join('\n');
-//storage_set('custom_filters',myFiltersString);
-
 
   // Log an 'error' message on GAB log server.
   var recordErrorMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'error', callback);
+    recordMessageWithUserID(msg, 'error', callback);
   };
 
   // Log an 'status' related message on GAB log server.
   var recordStatusMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'stats', callback);
+    recordMessageWithUserID(msg, 'stats', callback);
   };
 
   // Log a 'general' message on GAB log server.
   var recordGeneralMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'general', callback);
+    recordMessageWithUserID(msg, 'general', callback);
   };
 
   // Log a message on GAB log server.  The user's userid will be prepended to the message.
   // If callback() is specified, call callback() after logging has completed
-  var recordMessageUrl = function(msg, queryType, callback) {
+  var recordMessageWithUserID = function(msg, queryType, callback) {
     if (!msg || !queryType) {
       return;
     }
@@ -1276,6 +1242,29 @@
                   queryType +
                   '&message=' +
                   encodeURIComponent(STATS.userId + " " + msg);
+    sendMessageToLogServer(fullUrl, callback);
+  };
+
+  // Log a message on GAB log server.
+  // If callback() is specified, call callback() after logging has completed
+  var recordAnonymousMessage = function(msg, queryType, callback) {
+    if (!msg || !queryType) {
+      return;
+    }
+    // Include user ID in message
+    var fullUrl = 'https://log.getadblock.com/record_log.php?type=' +
+                  queryType +
+                  '&message=' +
+                  encodeURIComponent(msg);
+    sendMessageToLogServer(fullUrl, callback);
+  };
+
+  // Log a message on GAB log server.  The user's userid will be prepended to the message.
+  // If callback() is specified, call callback() after logging has completed
+  var sendMessageToLogServer = function(fullUrl, callback) {
+    if (!fullUrl) {
+      return;
+    }
     $.ajax({
       type: 'GET',
       url: fullUrl,
@@ -1307,22 +1296,55 @@
     gabQuestion.removeGABTabListeners(saveState);
   }
 
+  var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
-    var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
     if (SAFARI) {
       openTab(installedURL);
     } else {
-      chrome.tabs.create({url: installedURL}, function(tab) {
-        if (chrome.runtime.lastError) {
-          if (chrome.runtime.lastError.message) {
-            recordErrorMessage('/installed open error ' + chrome.runtime.lastError.message);
-          } else {
-            recordErrorMessage('/installed open error ' + JSON.stringify(chrome.runtime.lastError));
+      var openInstalledTab = function() {
+        chrome.tabs.create({url: installedURL}, function(tab) {
+          //if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
+          if (chrome.runtime.lastError) {
+            storage_set("/installed_error", { retry_count: 0 } );
           }
+        });
+      };
+      if (chrome.management && chrome.management.getSelf) {
+        chrome.management.getSelf(function(info) {
+          if (info && info.installType !== "admin") {
+            openInstalledTab();
+          }
+        });
+      } else {
+        openInstalledTab();
+      }
+    }
+  }
+  //retry logic for '/installed' - retries on browser / AdBlock startup
+  var installError = storage_get("/installed_error");
+  if (installError && installError.retry_count >= 0 && !SAFARI) {
+    //append the retry count to the URL
+    installError.retry_count += 1;
+    if (installError.retry_count > 10) {
+      //if we've retried 10 or more times, give up...
+      // send a message, and delete the 'installed error'
+      recordErrorMessage("/installed open error count > 10");
+      storage_set("/installed_error");
+    } else {
+      var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
+      chrome.tabs.create({url: retryInstalledURL}, function(tab) {
+        if (chrome.runtime.lastError) {
+          //if there is an error (again) and re-save.
+          storage_set("/installed_error", installError);
+        } else {
+          //if we successfully opened the tab,
+          //delete the 'installed error' so we don't display it again
+          storage_set("/installed_error");
         }
       });
     }
   }
+
   if (chrome.runtime.setUninstallURL) {
     var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
     //if the start property of blockCount exists (which is the AdBlock installation timestamp)
@@ -1439,7 +1461,9 @@
   // Script injection logic for Safari is done in safari_bg.js
   if (!SAFARI) {
       var runChannelWhitelist = function(tabUrl, tabId) {
-          if (/youtube.com/.test(tabUrl) && get_settings().youtube_channel_whitelist && !parseUri.parseSearch(tabUrl).ab_channel) {
+          if (parseUri(tabUrl).hostname === "www.youtube.com" &&
+              get_settings().youtube_channel_whitelist &&
+              !parseUri.parseSearch(tabUrl).ab_channel) {
               chrome.tabs.executeScript(tabId, {file: "ytchannel.js", runAt: "document_start"});
           }
       }
@@ -1481,6 +1505,7 @@
             safari.extension &&
             (typeof safari.extension.setContentBlocker === 'function'));
   }
+
 
   // DEBUG INFO
 
@@ -1822,8 +1847,8 @@
             log(ex);
             //since the most likely exception at this point is a size exceeded message,
             //store the message code.
-            sessionstorage_set("dropboxerror", "dropboxerrorforfilters");
-            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: "dropboxerrorforfilters"});
+            sessionstorage_set("dropboxerror", translate("dropboxerrorforfilters"));
+            chrome.runtime.sendMessage({message: "dropboxerror", messagecode: translate("dropboxerrorforfilters") });
           }
           if (!syncError) {
             //sync was successful, remove any previous error messages.
