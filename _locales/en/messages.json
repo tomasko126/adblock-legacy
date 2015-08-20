@@ -266,7 +266,7 @@
   "datacollectionoption":{
     "message":"Allow AdBlock to collect anonymous filter list usage and data",
     "description":"Checkbox on the 'General' tab of the Options page"
-  },  
+  },
   "updatedrightnow":{
     "message":"updated right now",
     "description":"Label for subscription"
@@ -1078,6 +1078,18 @@
   "safaricontentblockingpausemessage":{
     "message":"To 'pause' adblocking with content blocking enabled, please select Safari Preferences - Extensions - AdBlock - uncheck 'Enable'",
     "description":"messesage to users when they click the pause item in the adblock popup menu"
+  },
+  "safaricontentblockinglimitexceeded":{
+    "message":"The number of blocking and hiding rules exceeds the 50,000 limit, and has been automatically reduced. Please reduce the number of subscribed filter lists.",
+    "description":"messesage to users when the number of rules submitted to the Safari via content blocking has exceeded the 50,000 limit"
+  },
+  "safarinotificationtitle":{
+    "message":"Notification",
+    "description":"the title of a notification to user"
+  },
+  "safarinotificationbody":{
+    "message":"Click for more information",
+    "description":"the body of a notification to user"
   },
   "undo_last_block":{
     "message":"Undo my blocks on this domain",

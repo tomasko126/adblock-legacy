@@ -1431,6 +1431,21 @@
     }//end of if
   }//end of createMalwareNotification function
 
+  //create a user notification on Safari
+  // Inputs: msg - a translated string
+  // example call:  createSafariNotification(translate('samplemsg'))
+  //
+  var createRuleLimitExceededSafariNotification = function(msg) {
+    if (SAFARI && ("Notification" in window)) {
+      sessionstorage_set("contentblockingerror", translate("safaricontentblockinglimitexceeded"));
+      chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
+      var note = new Notification(translate("safarinotificationtitle") , { 'body' : translate("safarinotificationbody"), 'tag' : (Math.floor(Math.random() * 3000)).toString() });
+      note.onclick = function() {
+        openTab("options/index.html");
+      };
+    }
+  }
+
   if (!SAFARI) {
     // Chrome blocking code.  Near the end so synchronous request handler
     // doesn't hang Chrome while AdBlock initializes.

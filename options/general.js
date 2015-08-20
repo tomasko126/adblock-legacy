@@ -27,6 +27,13 @@ $(function() {
     if (response) {
       $("#safari_content_blocking").css("display", "block");
     }
+    getSafariContentBlockingMessage();
+    //once the filters have been updated see if there's an update to the message.
+    chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+      if (request.command !== "contentblockingmessageupdated")
+        return;
+      getSafariContentBlockingMessage();
+    });
   });
 
   BGcall("get_settings", function(settings) {
@@ -84,6 +91,19 @@ $("#enable_safari_content_blocking").change(function() {
     $(".exclude_safari_content_blocking").show();
   }
 });
+function getSafariContentBlockingMessage() {
+  BGcall('sessionstorage_get', 'contentblockingerror', function(messagecode) {
+    //if the message exists, it should already be translated.
+    if (messagecode) {
+      $("#safari_content_blocking_bmessage").show();
+      $("#safari_content_blocking_bmessage").text(messagecode);
+    } else {
+      $("#safari_content_blocking_bmessage").text("");
+      $("#safari_content_blocking_bmessage").hide();
+    }
+  });
+}
+
 // Authenticate button for login/logoff with Dropbox
 $("#dbauth").click(function() {
     BGcall("dropboxauth", function(status) {

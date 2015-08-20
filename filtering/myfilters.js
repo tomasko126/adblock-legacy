@@ -246,7 +246,6 @@ MyFilters.prototype.rebuild = function() {
     // if Safari has just started, don't re-register filters unless none are
     // registered (implying it was just installed).
     // TODO - malware - domains
-    //      - add start up / initial install logic (firstRun)
     this._filterListRules = [];
     for (var id in this._subscriptions) {
       if (this._subscriptions[id].subscribed) {
@@ -305,9 +304,13 @@ MyFilters.prototype.rebuild = function() {
        log("no rules to submit to safari  ");
        return;
     } else if (this._filterListRules.length > 50000) {
-      //TODO - notify the user
+      createRuleLimitExceededSafariNotification();
       log("exceed number of rules: " + this._filterListRules.length);
       this._filterListRules = this._filterListRules.slice(0, 49999);
+    } else {
+      //size is less then the limit, remove any previous error messages.
+      sessionstorage_set('contentblockingerror');
+      chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
     }
     try {
        log("about to save rules  ", this._filterListRules);
