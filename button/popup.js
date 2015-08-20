@@ -58,7 +58,7 @@ $(function() {
             !LEGACY_SAFARI_51)
             show(["div_undo", "separator0"]);
 
-        if (!advanced_option || SAFARI)
+        if (!advanced_option)
             hide(["div_show_resourcelist"]);
 
         if (SAFARI && !advanced_option)
@@ -77,6 +77,12 @@ $(function() {
         if (chrome.runtime && chrome.runtime.id === "pljaalgmajnlogcgiohkhdmgpomjcihk")
             show(["div_status_beta"]);
 
+        if (SAFARI &&
+            BG.get_settings().safari_content_blocking) {
+          hide(["div_show_resourcelist", "div_paused_adblock", "div_pause_adblock", "div_whitelist_page"]);
+        }
+
+
         for (var div in shown)
             if (shown[div])
                 $('#' + div).show();
@@ -88,26 +94,6 @@ $(function() {
             info.whitelisted) {
             $("#block_counts").hide();
         }
-        if (SAFARI &&
-            BG.get_settings().safari_content_blocking) {
-          $(".exclude_safari_content_blocking").hide();
-        }
-
-        // Secure Search UI
-        var shouldShow = false;
-        if (!BG.SAFARI) shouldShow = localStorage.search_show_form;
-        if (shouldShow=="true") {
-            $('#search_control').show();
-            $('#search_page').show();
-            $('#search-separator2').show();
-            if (info.disabled_site && !paused) $('#search-separator1').show();
-        } else {
-            $('#search_control').hide();
-            $('#search_page').hide();
-            $('#search-separator2').hide();
-            if (!info.disabled_site || paused) $('#search-separator1').hide();
-        }
-        // End - Secure Search UI
     });
 
     if (SAFARI) {
@@ -174,7 +160,7 @@ $(function() {
         BG.adblock_is_paused(false);
         BG.handlerBehaviorChanged();
         if (!SAFARI)
-          BG.updateButtonUIAndContextMenus();
+            BG.updateButtonUIAndContextMenus();
         closeAndReloadPopup();
     });
 
@@ -191,7 +177,7 @@ $(function() {
         !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
     });
 
-    $("#div_pause_adblock").click(function() {
+     $("#div_pause_adblock").click(function() {
         if (BG.get_settings().safari_content_blocking) {
           alert(translate('safaricontentblockingpausemessage'));
           closeAndReloadPopup();
@@ -202,7 +188,7 @@ $(function() {
           }
           closeAndReloadPopup();
         }
-    });
+     });
 
     $("#div_blacklist").click(function() {
         if (!SAFARI) {
@@ -271,4 +257,6 @@ $(function() {
         closeAndReloadPopup();
         return;
     });
+
+
 });
