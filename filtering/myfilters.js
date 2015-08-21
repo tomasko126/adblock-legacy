@@ -698,7 +698,7 @@ MyFilters.prototype._initializeMalwareDomains = function() {
 //will return undefined, if the user is not subscribed to the Malware 'filter list'.
 MyFilters.prototype.getMalwareDomains = function() {
     //make sure the blocking filter set exists (it may not in Safari 9)
-    if (this.blocking ) {
+    if (this.blocking) {
         return this.blocking.getMalwareDomains();
     } else {
         return this._subscriptions.malware.text
@@ -714,7 +714,6 @@ MyFilters.prototype._load_default_subscriptions = function() {
   // Returns the ID of the list appropriate for the user's locale, or ''
   function listIdForThisLocale() {
     var language = determineUserLanguage();
-    //language = 'bg'
     switch(language) {
       case 'bg': return 'easylist_plus_bulgarian';
       case 'cs': return 'czech';
@@ -784,7 +783,7 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "easylist_plus_french": { // Additional French filters
       url: "https://easylist-downloads.adblockplus.org/liste_fr.txt",
-      //requiresList: "easylist",
+      requiresList: "easylist",
       safariJSON_URL: "https://data.getadblock.com/filters/easylist_plus_french.json",
     },
     "easylist_plus_german": { // Additional German filters
