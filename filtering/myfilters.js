@@ -468,8 +468,6 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
   if (get_settings().safari_content_blocking) {
       if (this._subscriptions[id].safariJSON_URL) {
         url = this._subscriptions[id].safariJSON_URL;
-      } else {
-        url = this._subscriptions[id].url;
       }
       if (!this._fetchTracker) {
         this._fetchTracker = {};
