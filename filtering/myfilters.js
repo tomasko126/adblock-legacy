@@ -200,10 +200,12 @@ MyFilters.prototype.rebuild = function() {
       }
     }
   }  else {
-     //only add subscriptions in Chrome, Opera, and older version of Safari...
-    for (var id in this._subscriptions)
-      if (this._subscriptions[id].subscribed)
+    //only add subscriptions in Chrome, Opera, and older version of Safari...
+    for (var id in this._subscriptions) {
+      if (this._subscriptions[id].subscribed) {
         texts.push(this._subscriptions[id].text);
+      }
+    }
   }
 
   // Include custom filters.
