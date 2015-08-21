@@ -253,7 +253,7 @@ DeclarativeWebRequest = (function() {
 //      log("malwareDomains", malwareDomains);
       var rules = [];
       //step 1a, add all of the generic hiding filters (CSS selectors)
-// TODO - uncomment      
+//TODO
 //      GROUPSIZE = 1000
 //      for (var i = 0; i < selectorFiltersAll.length; GROUPSIZE) {
 //        var start = i;
@@ -274,12 +274,12 @@ DeclarativeWebRequest = (function() {
 //        theRule["action"]["selector"] = selectorText;
 //        rules.push(theRule);
 //      }
-//      //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)
-//      selectorFilters.forEach(function(filter) {
-//        if (isSupported(filter)) {
-//          rules.push(createSelectorRule(filter));
-//        }
-//      });
+      //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)
+      selectorFilters.forEach(function(filter) {
+        if (isSupported(filter)) {
+          rules.push(createSelectorRule(filter));
+        }
+      });
       //step 2, now add only the $elemhide filters
       elementWhitelistFilters.forEach(function(filter) {
         rules.push(createElemhideIgnoreRule(filter));

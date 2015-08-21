@@ -220,7 +220,6 @@ if (!LEGACY_SAFARI) {
 //remove adblock_start_common.js & adblock_start_safari.js when user enables content blocking
 function remove_content_scripts() {
   if (get_settings().safari_content_blocking) {
-     safari.extension.removeContentScript(safari.extension.baseURI + "adblock_start_common.js");
      safari.extension.removeContentScript(safari.extension.baseURI + "adblock_start_safari.js");
   }
 }
@@ -228,11 +227,8 @@ remove_content_scripts();
 
 //re-add adblock_start_common.js & adblock_start_safari.js when user disables content blocking
 function add_content_scripts() {
-  console.log("add_content_scripts");
   if (!get_settings().safari_content_blocking) {
-    console.log("add_content_scripts 2");
     safari.extension.setContentBlocker({});
-    safari.extension.addContentScript(safari.extension.baseURI + "adblock_start_common.js");
     safari.extension.addContentScript(safari.extension.baseURI + "adblock_start_safari.js");
   }
 }

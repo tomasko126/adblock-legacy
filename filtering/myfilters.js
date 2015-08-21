@@ -299,6 +299,7 @@ MyFilters.prototype.rebuild = function() {
        selectorFiltersAll.push(selectorsFull[id]);
     }
     var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
+    log(" customRules: " + customRules.length)
     //add the custom rules, with the filter list rules
     this._filterListRules.push.apply(this._filterListRules, customRules);
     if (!this._filterListRules ||
@@ -316,10 +317,8 @@ MyFilters.prototype.rebuild = function() {
     }
     try {
        log("about to save rules  ", this._filterListRules);
-       safari.extension.setContentBlocker(this._filterListRules);
-//       log("about to save rules  ", customRules);
-//       safari.extension.setContentBlocker(customRules);
-       log(" content blocking rules good");
+       var response = safari.extension.setContentBlocker(this._filterListRules);
+       log(" content blocking rules good", response);
     } catch(ex) {
        log("exception saving rules", ex);
     }
@@ -507,7 +506,7 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
         log("List not modified " + url);
         that._updateSubscriptionText(id, that._subscriptions[id].text);
         that._onSubscriptionChange(true);
-      } else if (text && 
+      } else if (text &&
                  (((typeof text === "string") &&
                    text.length != 0 && Filter.isComment(text.trim())) ||
                   (typeof text === "object"))) {
@@ -545,7 +544,7 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
     if (text && (typeof text === "object")) {
       this._subscriptions[id].expiresAfterHoursHard = this._subscriptions[id].expiresAfterHours * 2;
       var smear = Math.random() * 0.4 + 0.8;
-      this._subscriptions[id].expiresAfterHours *= smear;      
+      this._subscriptions[id].expiresAfterHours *= smear;
       this._subscriptions[id].rules = text;
       return;
     }
