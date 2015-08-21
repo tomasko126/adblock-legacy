@@ -79,7 +79,7 @@ $(function() {
 
         if (SAFARI &&
             BG.get_settings().safari_content_blocking) {
-          hide(["div_show_resourcelist", "div_paused_adblock", "div_pause_adblock", "div_whitelist_page"]);
+          hide(["div_show_resourcelist", "div_paused_adblock", "div_whitelist_page"]);
         }
 
 
