@@ -527,6 +527,10 @@
     "message":"No known malware found.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
+  "malwarenotdone":{
+    "message":"A Malware check was not completed due to Content Blocking being enabled.",
+    "description":"On the ad report page with Safari content blocking enabled, the malware check can't be done."
+  },
   "updateyourlists":{
     "message":"Make sure your filter lists are up to date",
     "description":"Section header on the ad report page"

@@ -185,6 +185,16 @@ var checkAdvanceOptions = function() {
      // Check, if downloaded resources are available,
     // if not, just reload tab with parsed tabId
     BGcall("get_settings", "show_advanced_options", function(status) {
+
+        //we can't do a malware check when content blocking is enable, so skip it.
+        if (status.safari_content_blocking) {
+            $('.gifloader').hide();
+            $("#malwarewarning").html(translate("malwarenotdone"));
+            $('#malwarewarning').show();
+            $('#step_update_filters_DIV').show();
+            return;
+        }
+
         if (status.show_advanced_options) {
             checkmalware();
         } else {
