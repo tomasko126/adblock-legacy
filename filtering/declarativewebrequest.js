@@ -1,28 +1,9 @@
-
-// Safari ToDo:
-// how to clear - submit empty rules
-// re-add all rules on browser start up? No, need to add check if firstRun vs. start up vs. filterList updated.
-// how to add one rule to existing rules, re-submit all rules? Yes
-// how to remove one rule from existing rules, re-submit all rules with the one to delete now removed? Yes
-// expanded - how to whitelist a domain / site - WebKit to provide new API
-// how to pause feature - WebKit to provide new API
-//
-// consideration:
-// sorting/ordering of rules by type (priority) for performance
-//
-// should we support Safari 8-? (no)
-// TypeError: undefined is not an object (evaluating '_myfilters.blocking.whitelist')  page_is_whitelisted in background.js uses _myfilters.blocking
-
 // TODO:
 // - check if pre-roll ads are blocked on YouTube
 // -  if so, remove bandaids.js and the ClickToFlash compatibility mode option
-// - remove 'pause' from popup menu
 // - don't target AdBlock's own requests.
-// - add RegEx cleanup / parsing
 // - add document whitelisting
 // - add resource (other - not document or elemhide) whitelisting
-// - add unit tests
-
 // test scenario
 // in Safari & Chrome - Malware Domains - adding, removing filter list, browser start up with and without subscription
 
@@ -134,22 +115,22 @@ DeclarativeWebRequest = (function() {
 //    if (elementTypes & ElementTypes.OBJECT_SUBREQUEST) {
 //    		result.push("object-subrequest");
 //    }
-//    console.log("elementTypes", elementTypes, "result", result);
+//    log("elementTypes", elementTypes, "result", result);
     return result;
   };
 
   //parse and clean up the filter's RegEx to meet WebKit's requirements.
   var getURLFilterFromFilter = function(filter) {
     //remove any whitespace
-    var rule = filter._rule.source
-    rule = rule.trim()
+    var rule = filter._rule.source;
+    rule = rule.trim();
 
     // make sure to limit rules to to HTTP(S) URLs (if not already limited)
     if (!/^(\^|http|\/http)/.test(rule)) {
-      rule = HTML_PREFIX + REGEX_WILDCARD + filter._rule
+      rule = HTML_PREFIX + REGEX_WILDCARD + filter._rule;
     }
-    return rule
-  }
+    return rule;
+  };
 
 
 
@@ -176,9 +157,9 @@ DeclarativeWebRequest = (function() {
         documentWhitelistFilters.push(filter);
       }
     }
-    console.log("whitelistOnly.length ", whitelistAnyOtherFilters.length);
-    console.log("elementWhitelistFilters.length ", elementWhitelistFilters.length);
-    console.log("documentWhitelistFilters.length ", documentWhitelistFilters.length);
+    log("whitelistOnly.length ", whitelistAnyOtherFilters.length);
+    log("elementWhitelistFilters.length ", elementWhitelistFilters.length);
+    log("documentWhitelistFilters.length ", documentWhitelistFilters.length);
   }
 
 
@@ -219,9 +200,9 @@ DeclarativeWebRequest = (function() {
 
   // Return the rule (JSON) required to represent this Selector Filter in Safari blocking syntax.
   var createEmptySelectorRule = function() {
-    rule = createDefaultRule()
-    rule["action"]["type"] = "css-display-none"
-    return rule
+    rule = createDefaultRule();
+    rule["action"]["type"] = "css-display-none";
+    return rule;
   }
 
   // Return the rule (JSON) required to represent this $document Whitelist Filter in Safari blocking syntax.
@@ -269,9 +250,10 @@ DeclarativeWebRequest = (function() {
     // clearing any existing rules.
     register: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll, malwareDomains) {
       preProcessWhitelistFilters(whitelistFilters);
-//      console.log("malwareDomains", malwareDomains);
+//      log("malwareDomains", malwareDomains);
       var rules = [];
       //step 1a, add all of the generic hiding filters (CSS selectors)
+// TODO - uncomment      
 //      GROUPSIZE = 1000
 //      for (var i = 0; i < selectorFiltersAll.length; GROUPSIZE) {
 //        var start = i;
@@ -310,10 +292,10 @@ DeclarativeWebRequest = (function() {
           try {
             new RegExp(rule["trigger"]["url-filter"]);
           } catch(ex) {
-            is_valid = False
+            is_valid = false;
           }
           if (is_valid) {
-            rules.push(rule)
+            rules.push(rule);
           }
         }
       });
@@ -332,7 +314,6 @@ DeclarativeWebRequest = (function() {
         rules.push(createIgnoreRule(filter));
       });
       return rules;
-
     },
   };
 })();
