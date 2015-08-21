@@ -84,16 +84,19 @@ $("#enable_show_advanced_options").change(function() {
 
 $("#enable_safari_content_blocking").change(function() {
   var is_enabled = $(this).is(':checked');
-  BGcall("update_subscriptions_now");
+
   if (is_enabled) {
+    BGcall("remove_content_scripts");
     //uncheck any incompatable options, and then hide them
     $(".exclude_safari_content_blocking > input").each(function(index) {
       $(this).prop("checked", false);
     });
     $(".exclude_safari_content_blocking").hide();
   } else {
+    BGcall("add_content_scripts");
     $(".exclude_safari_content_blocking").show();
   }
+  BGcall("update_subscriptions_now");
 });
 function getSafariContentBlockingMessage() {
   BGcall('sessionstorage_get', 'contentblockingerror', function(messagecode) {

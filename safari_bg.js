@@ -217,8 +217,29 @@ if (!LEGACY_SAFARI) {
     }, true);
 }
 
+//remove adblock_start_common.js & adblock_start_safari.js when user enables content blocking
+function remove_content_scripts() {
+  if (get_settings().safari_content_blocking) {
+     safari.extension.removeContentScript(safari.extension.baseURI + "adblock_start_common.js");
+     safari.extension.removeContentScript(safari.extension.baseURI + "adblock_start_safari.js");
+  }
+}
+remove_content_scripts();
+
+//re-add adblock_start_common.js & adblock_start_safari.js when user disables content blocking
+function add_content_scripts() {
+  console.log("add_content_scripts");
+  if (!get_settings().safari_content_blocking) {
+    console.log("add_content_scripts 2");
+    safari.extension.setContentBlocker({});
+    safari.extension.addContentScript(safari.extension.baseURI + "adblock_start_common.js");
+    safari.extension.addContentScript(safari.extension.baseURI + "adblock_start_safari.js");
+  }
+}
+
 
 safari.application.addEventListener("beforeNavigate", function(event) {
+
     //remove bandaids.js from YouTube.com when a user pauses AdBlock or if the enabled click to flash compatibility mode
     if (/youtube.com/.test(event.url) && (is_adblock_paused() || (get_settings().clicktoflash_compatibility_mode === true))) {
       safari.extension.removeContentScript(safari.extension.baseURI + "bandaids.js");

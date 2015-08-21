@@ -198,6 +198,11 @@ function adblock_begin(inputs) {
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
 
+    if (data && data.settings && data.safari_content_blocking) {
+      inputs.stopPurger();
+      return;
+    }
+
     inputs.handleHiding(data);
 
     if (!data.running) {
