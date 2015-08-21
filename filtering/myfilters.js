@@ -507,11 +507,10 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
         log("List not modified " + url);
         that._updateSubscriptionText(id, that._subscriptions[id].text);
         that._onSubscriptionChange(true);
-      } else if (text && (typeof text === "string") && text.length != 0 && Filter.isComment(text.trim())) {
-        log("Fetched " + url);
-        that._updateSubscriptionText(id, text, xhr);
-        that._onSubscriptionChange(true);
-      } else if (text && (typeof text === "object")) {
+      } else if (text && 
+                 (((typeof text === "string") &&
+                   text.length != 0 && Filter.isComment(text.trim())) ||
+                  (typeof text === "object"))) {
         log("Fetched " + url);
         that._updateSubscriptionText(id, text, xhr);
         that._onSubscriptionChange(true);
@@ -538,15 +537,15 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
   delete this._subscriptions[id].last_update_failed_at;
   //Safari 9 Content Blocking...
   if (get_settings().safari_content_blocking) {
-    this._subscriptions[id].expiresAfterHoursHard = this._subscriptions[id].expiresAfterHours * 2;
-    var smear = Math.random() * 0.4 + 0.8;
-    this._subscriptions[id].expiresAfterHours *= smear;
     if (this._fetchTracker &&
         this._fetchTracker[id]) {
       delete this._fetchTracker[id]
     }
     //if the |text| is JSON rules, save them, and return
     if (text && (typeof text === "object")) {
+      this._subscriptions[id].expiresAfterHoursHard = this._subscriptions[id].expiresAfterHours * 2;
+      var smear = Math.random() * 0.4 + 0.8;
+      this._subscriptions[id].expiresAfterHours *= smear;      
       this._subscriptions[id].rules = text;
       return;
     }
