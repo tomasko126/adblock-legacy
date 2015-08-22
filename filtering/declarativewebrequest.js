@@ -9,6 +9,7 @@
 
 
 DeclarativeWebRequest = (function() {
+  var domainRegEx = new RegExp("^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$");
   var HTML_PREFIX = "https?://"
   var REGEX_WILDCARD = ".*"
   var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
@@ -245,35 +246,43 @@ DeclarativeWebRequest = (function() {
     return selector;
   };
 
+  var isASCII = function(str) {
+      return /^[\x00-\x7F]*$/.test(str);
+  }
+
   return {
     // Registers rules for the given list of PatternFilters and SelectorFilters,
     // clearing any existing rules.
     register: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll, malwareDomains) {
       preProcessWhitelistFilters(whitelistFilters);
-//      log("malwareDomains", malwareDomains);
+      log("patternFilters",patternFilters);
+      log("whitelistFilters",whitelistFilters);
+      log("selectorFilters",selectorFilters);
+      log("selectorFiltersAll",selectorFiltersAll);
+      log(" malwareDomains", malwareDomains);
       var rules = [];
       //step 1a, add all of the generic hiding filters (CSS selectors)
-//TODO
-//      GROUPSIZE = 1000
-//      for (var i = 0; i < selectorFiltersAll.length; GROUPSIZE) {
-//        var start = i;
-//        var end = Math.min((i + GROUPSIZE), selectorFiltersAll.length);
-//        var selectorText = "";
-//        for (var j = start; j < end; j++) {
-//          filter = selectorFiltersAll[j];
-//          if (isSupported(filter)) {
-//            if (selectorText === "") {
-//              selectorText = parseSelector(filter.selector);
-//            } else {
-//              selectorText = selectorText + ", " + parseSelector(filter.selector);
-//            }
-//          }
-//        }
-//
-//        theRule = createEmptySelectorRule();
-//        theRule["action"]["selector"] = selectorText;
-//        rules.push(theRule);
-//      }
+      var GROUPSIZE = 1000
+      for (var i = 0; i < selectorFiltersAll.length; i += GROUPSIZE) {
+        var start = i;
+        var end = Math.min((i + GROUPSIZE), selectorFiltersAll.length);
+        var selectorText = "";
+        for (var j = start; j < end; j++) {
+          filter = selectorFiltersAll[j];
+          if (isSupported(filter)) {
+            if (selectorText === "") {
+              selectorText = parseSelector(filter.selector);
+            } else {
+              selectorText = selectorText + ", " + parseSelector(filter.selector);
+            }
+          }
+        }
+
+        theRule = createEmptySelectorRule();
+        theRule["action"]["selector"] = selectorText;
+        console.log("selector rule: ", theRule);
+        //rules.push(theRule);
+      }
       //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)
       selectorFilters.forEach(function(filter) {
         if (isSupported(filter)) {
@@ -301,9 +310,19 @@ DeclarativeWebRequest = (function() {
       });
       //step 4, now add malware domains as one blocking rule (if there are malware domains)
       if (malwareDomains && malwareDomains.length > 0) {
-        var rule = createDefaultRule();
-        rule.trigger["if-domain"] = malwareDomains;
-        rules.push(rule);
+        GROUPSIZE = 1000
+        for (var i = 0; i < malwareDomains.length; i += GROUPSIZE) {
+          var start = i;
+          var end = Math.min((i + GROUPSIZE), malwareDomains.length);
+          var rule = createDefaultRule();
+          var unparsedDomainArray = malwareDomains.slice(start, end);
+          var parsedDomainArray = []
+          for (var j = 0; j < unparsedDomainArray.length; j++) {
+             parsedDomainArray.push(unparsedDomainArray[j])
+          }
+          rule.trigger["if-domain"] = parsedDomainArray
+          rules.push(rule);
+        }
       }
       //step 5, add all $document
       documentWhitelistFilters.forEach(function(filter) {
