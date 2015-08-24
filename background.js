@@ -1346,13 +1346,24 @@
     //if the start property of blockCount exists (which is the AdBlock installation timestamp)
     //use it to calculate the approximate length of time that user has AdBlock installed
     if (blockCounts && blockCounts.get().start) {
-      var fiveMinutes = 5 * 60 * 1000;
+      var twoMinutes = 2 * 60 * 1000;
       var updateUninstallURL = function() {
         var installedDuration = (Date.now() - blockCounts.get().start);
-        chrome.runtime.setUninstallURL(uninstallURL + "&t=" + installedDuration);
+        var url = uninstallURL + "&t=" + installedDuration;
+        var bc = blockCounts.get().total;
+        url = url + "&bc=" + bc;
+        if (_myfilters &&
+            _myfilters._subscriptions &&
+            _myfilters._subscriptions.adblock_custom &&
+            _myfilters._subscriptions.adblock_custom.last_update) {
+          url = url + "&abc-lt=" + _myfilters._subscriptions.adblock_custom.last_update;
+        } else {
+          url = url + "&abc-lt=-1"
+        }
+        chrome.runtime.setUninstallURL(url);
       };
-      //start an interval timer that will update the Uninstall URL every 5 minutes
-      setInterval(updateUninstallURL, fiveMinutes);
+      //start an interval timer that will update the Uninstall URL every 2 minutes
+      setInterval(updateUninstallURL, twoMinutes);
       updateUninstallURL();
     } else {
       chrome.runtime.setUninstallURL(uninstallURL + "&t=-1");
