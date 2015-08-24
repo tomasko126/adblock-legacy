@@ -1063,14 +1063,6 @@
     "message":"Zapłać ile zechcesz!",
     "description":"Text of a payment request link"
   },
-  "removelabel":{
-    "message":"Usuń",
-    "description":"Link to remove a filter on the resourceblock page"
-  },
-  "changelabel":{
-    "message":"zmień",
-    "description":"Link to change resources on the resourceblock page"
-  },
   "translator_credit":{
     "message":"Przetłumaczył:",
     "description":"Will be followed by a list of translator names (separate string)"
@@ -1126,32 +1118,6 @@
   "safari50_updatenotice":{
     "message":"Używasz starej wersji Safari. Pobierz najnowszą wersję Safari, aby móc za pomocą przycisku na pasku narzędzi wstrzymać pracę AdBlock'a, dodać stronę do białej listy i zgłosić napotkane reklamy. <a>Aktualizuj teraz<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
-  },
-  "searchexplanation":{
-    "message":"Użyj * aby dopasować zero lub więcej liter.  Dla przykładu 'banner*.gif image' pasuje do obrazów 'banner.gif', 'banner123.gif', i 'bannerxyz.gif'.",
-    "description":"Text in resourceblock when you hover your mouse over the search textbox"
-  },
-  "searchplaceholder":{
-    "message":"Szukanie elementów...",
-    "description":"Text in resourceblock shown in the search textbox before you type something"
-  },
-  "nosearchresults":{
-    "message":"Nie znaleziono elementów",
-    "description":"Text in resourceblock shown if no results are found after searching"
-  },
-  "custompattern":{
-    "message":"Własny:",
-    "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
-  },
-  "filterorigin":{
-    "message":"Źródło filtra:\n$list$",
-    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
-    "placeholders":{
-      "list":{
-        "content":"$1",
-        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
-      }
-    }
   },
   "firefox_explanation":{
     "message":"Celem tego pytania jest ustalenie kto powinien otrzymać twój raport. Jeśli odpowiesz błędnie na to pytanie to raport zostanie wysłany do niewłaściwych osób, więc może zostać zignorowany.",
