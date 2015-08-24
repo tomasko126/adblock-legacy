@@ -1606,9 +1606,9 @@
                 "Developer Mode -> Inspect views: background page -> Console. " +
                 "Paste the contents here:");
       body.push("");
-      body.push("```");
       body.push("====== Do not touch below this line ======");
       body.push("");
+      body.push("```");
       body.push(getDebugInfo());
       body.push("```");
       var out = encodeURIComponent(body.join('  \n'));
