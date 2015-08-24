@@ -154,6 +154,7 @@ var checkmalware = function() {
         // Compare domains of loaded resources with domain.json
         for (var i=0; i < extracted_domains.length; i++) {
             if (malwareDomains &&
+                extracted_domains[i] &&
                 malwareDomains[extracted_domains[i].charAt(0)] &&
                 malwareDomains[extracted_domains[i].charAt(0)].indexOf(extracted_domains[i]) > -1) {
                 // User is probably infected by some kind of malware,
