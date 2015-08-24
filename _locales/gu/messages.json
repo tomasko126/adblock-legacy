@@ -495,10 +495,6 @@
     "message":"AdBlock મૉલવેર શોધે છે ત્યારે તમને જાણ કરી એ?",
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
-  "malwarenotificationmessage":{
-    "message":"AdBlock  એ malware શોધવા આવ્યું છે. તમારા કમ્પ્યુટર ચેપી થઈ શકે છે.",
-    "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
-  },
   "malwarenotificationlearnmore":{
     "message":"malware વિશે વધુ જાણો",
     "description":"Button on the malware notification that opens a page about malware on our website. Message should be under 45 characters!"

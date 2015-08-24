@@ -496,7 +496,7 @@
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock установи злонамерен софтуер. Компютърът може да e заразен с него.",
+    "message":"AdBlock блокира изтегляне от сайт, за който се знае, че хоства злонамерен софтуер.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{

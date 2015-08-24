@@ -495,10 +495,6 @@
     "message":"Da li AdBlock treba da Vas obavesti kada pronađe maliciozni softver?",
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
-  "malwarenotificationmessage":{
-    "message":"AdBlock je otkrio maliciozni softver. Vaš računar je možda zaražen.",
-    "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
-  },
   "malwarenotificationlearnmore":{
     "message":"Naučite više o malicioznom softveru",
     "description":"Button on the malware notification that opens a page about malware on our website. Message should be under 45 characters!"

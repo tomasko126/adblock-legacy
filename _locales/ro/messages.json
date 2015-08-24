@@ -495,10 +495,6 @@
     "message":"Ar trebui să vă notifice AdBlock atunci când detectează malware?",
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
-  "malwarenotificationmessage":{
-    "message":"AdBlock a detectat malware.  Computerul poate fi infectat.",
-    "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
-  },
   "malwarenotificationlearnmore":{
     "message":"Aflaţi mai multe despre malware",
     "description":"Button on the malware notification that opens a page about malware on our website. Message should be under 45 characters!"

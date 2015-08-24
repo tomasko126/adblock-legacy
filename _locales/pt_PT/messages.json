@@ -496,7 +496,7 @@
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"O AdBlock detectou malware.  O seu computador pode estar infectado.",
+    "message":"O AdBlock bloqueou um download de um site conhecido por alojar malware.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{

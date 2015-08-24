@@ -495,10 +495,6 @@
     "message":"Má Vás AdBlock upozorniť, keď zistí malware?",
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
-  "malwarenotificationmessage":{
-    "message":"AdBlock objavil malware. Váš počítač môže byť infikovaný vírusom.",
-    "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
-  },
   "malwarenotificationlearnmore":{
     "message":"Dozvedieť sa viac o malware",
     "description":"Button on the malware notification that opens a page about malware on our website. Message should be under 45 characters!"

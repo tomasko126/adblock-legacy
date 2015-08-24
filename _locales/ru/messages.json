@@ -496,7 +496,7 @@
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock обнаружил вредоносные программы.  Ваш компьютер может быть заражен вредоносными программами.",
+    "message":"AdBlock заблокировал загрузку с сайта, известного как место размещения вредоносного ПО.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{

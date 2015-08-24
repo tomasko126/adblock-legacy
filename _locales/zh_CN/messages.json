@@ -495,10 +495,6 @@
     "message":"AdBlock在检测到恶意软件时是否显示通知？",
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
-  "malwarenotificationmessage":{
-    "message":"AdBlock检测到了恶意软件。您的计算机可能遭受感染。",
-    "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
-  },
   "malwarenotificationlearnmore":{
     "message":"了解更多关于恶意软件的信息",
     "description":"Button on the malware notification that opens a page about malware on our website. Message should be under 45 characters!"

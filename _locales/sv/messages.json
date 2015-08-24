@@ -496,7 +496,7 @@
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock har upptäckt skadlig kod.  Din dator kan vara infekterad med skadlig kod.",
+    "message":"AdBlock har blockerat en nedladdning från en plats, känd för skadlig kod.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{

@@ -496,7 +496,7 @@
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"Az AdBlock kartevőt észlelt. Lehet, hogy a számítógépe megfertőződött.",
+    "message":"Az AdBlock egy olyan oldalról származó letöltést blokkolt, amely közismerten malware-t tartalmaz.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
