@@ -156,7 +156,10 @@ var checkmalware = function() {
 
         // Compare domains of loaded resources with domain.json
         for (var i=0; i < extracted_domains.length; i++) {
-            if (malwareDomains && malwareDomains.adware.indexOf(extracted_domains[i]) > -1) {
+            if (malwareDomains &&
+                extracted_domains[i] &&
+                malwareDomains[extracted_domains[i].charAt(0)] &&
+                malwareDomains[extracted_domains[i].charAt(0)].indexOf(extracted_domains[i]) > -1) {
                 // User is probably infected by some kind of malware,
                 // because resource has been downloaded from malware/adware/spyware site.
                 var infected = true;
@@ -212,7 +215,18 @@ var fetchMalware = function() {
     xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime(), true);
     xhr.onload = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            malwareDomains = JSON.parse(xhr.responseText);
+            var parsedText = JSON.parse(xhr.responseText);
+            var domains = parsedText.adware;
+            var result = {};
+            for (var i=0; i < domains.length; i++) {
+                var domain = domains[i];
+                var char = domain.charAt(0);
+                if (!result[char]) {
+                    result[char] = [];
+                }
+                result[char].push(domain);
+            }
+            malwareDomains = result;
             checkAdvanceOptions();
         }
     };
