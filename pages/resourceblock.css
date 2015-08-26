@@ -1,10 +1,23 @@
 body {
     background-color: white;
+    font-size: 12px;
 }
-#resourceslist {
+.resourceslist:first-of-type {
+    margin: 120px auto 20px auto;
+}
+[data-column="type"] {
+    width: 100px;
+}
+[data-column="filter"] {
+    width: 250px;
+}
+[data-column="thirdparty"] {
+    width: 50px;
+}
+.resourceslist {
     cursor: default;
     position: relative;
-    margin: 120px auto;
+    margin: 0px auto 20px auto;
     padding: 0px 15px 25px;
     min-width: 1020px;
     border-spacing: 0px;
@@ -20,43 +33,14 @@ body {
     padding: 0px;
     margin-left: 7px;
 }
-#resourceslist > thead > tr > th:nth-child(2):hover {
-    color: red;
-}
-#resourceslist > thead > tr > th:nth-child(3):hover {
-    color: red;
-}
-#resourceslist > thead > tr > th:nth-child(4):hover {
-    color: red;
-}
-#resourceslist > thead > tr > th:nth-child(5):hover {
-    color: red;
-}
-.sorter {
-    display: none;
-}
 .blocked {
     color: red;
 }
 .whitelisted {
     color: green;
 }
-#legend {
-    font-size: 12px;
-    position: relative;
-    border: 1px solid #EEE;
-    width: 460px;
-    cursor: move;
-    top: -5px;
-    margin: -20px 52% 0px;
-    padding: 5px;
-    border-radius: 2px;
-}
 .hiding {
     color: blue;
-}
-.clickableRow {
-    cursor: pointer;
 }
 th {
     cursor: pointer;

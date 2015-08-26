@@ -89,19 +89,46 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
     });
 });
 
+function createUI(domain, frameId) {
+    var elem = null;
+    if (frameId === "0") {
+        elem = "#header";
+    } else {
+        var el = document.querySelectorAll(".resourceslist").length;
+        elem = document.querySelectorAll(".resourceslist")[el-1];
+    }
+    $(elem).after(
+        '<table data-href=' + domain + ' class="resourceslist">' +
+            '<thead>' +
+                '<tr>' +
+                    '<th i18n="headerresource" data-column="url"><\/th>' +
+                    '<th i18n="headertype" data-column="type"><\/th>' +
+                    '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
+                    '<th i18n="thirdparty" data-column="thirdparty" style="text-align: center;"><\/th>' +
+                '<\/tr>' +
+            '<\/thead>' +
+            '<tbody>' +
+            '<\/tbody>' +
+        '<\/table>'
+    );
+}
+
 // Now create that table row-by-row
 function createTable(frames) {
-    var rows = [];
+    var data = {};
     for (var frame in frames) {
         var frameObject = frames[frame];
         if (typeof frameObject === "number")
             continue;
-        console.log(frameObject);
+        var length = Object.keys(frameObject.resources).length;
+        if (length === 0)
+            continue;
+        console.log(length);
+        createUI(frameObject.domain, frame);
         for (var resource in frameObject["resources"]) {
             var res = frameObject["resources"][resource];
             // TODO: User better approach
             res.url = resource;
-            console.log(res);
             //var matchingfilter = resources[i].filter;
             //var matchingListID = "", matchingListName = "";
             //var typeName = getTypeName(resources[i].type);
@@ -117,22 +144,16 @@ function createTable(frames) {
             //if (type.name)
             //row.addClass(type.name);
 
-            // Cell 1: Checkbox
-            /*var cell = $("<td><input type='checkbox'/></td>").css("padding-left", "4px");
-        if (disabled)
-            cell.find("input").prop("disabled", true);
-        row.append(cell);*/
-
             function truncateUrl(url) {
                 if (url.length > 90) {
-                    return url.substring(0, 86) + '[...]';
+                    return url.substring(0, 70) + '[...]';
                 }
                 return url;
             }
 
             // Cell 2: URL
             $("<td>").
-            attr("title", res.url).
+            //attr("title", res.url).
             attr("data-column", "url").
             text(truncateUrl(res.url)).
             appendTo(row);
@@ -190,17 +211,27 @@ function createTable(frames) {
         else
             $("<td>").appendTo(row);
         */
-            rows.push(row);
+            if (!data[frames[frame].domain]) {
+                data[frames[frame].domain] = [];
+            }
+            data[frames[frame].domain].push(row);
         }
     }
-    console.log(rows);
+    console.log(data);
+    for (var domain in data) {
+        for (var i=0; i<data[domain].length; i++) {
+            var resource = data[domain][i];
+            $('[data-href="' + domain + '"] tbody').append(resource);
+        }
+        //$("#" + domain).append(rows[i]);
+    }
+    localizePage();
     //$("#loading").remove();
     //$("#resourceslist tbody").empty();
-    for (var i = 0; i < rows.length; i++) {
-        $("#resourceslist tbody").append(rows[i]);
-    }
+    //for (var i = 0; i < rows.length; i++) {
+      //  
+    //}
 }
-
 
 /*
 
