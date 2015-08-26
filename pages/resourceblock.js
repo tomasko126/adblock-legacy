@@ -1,3 +1,209 @@
+"use strict";
+
+localizePage();
+
+// Get tabId from URL
+var tabId = parseUri.parseSearch(document.location.href).tabId;
+tabId = parseInt(tabId);
+
+// Get frameData object
+BGcall("resourceblock_get_frameData", tabId, function(data) {
+    if (!data) {
+        alert(translate('noresourcessend2'));
+        window.close();
+        return;
+    }
+
+    BGcall("storage_get", "filter_lists", function(filterLists) {
+        // TODO: Excluded filters
+        for (var id in filterLists) {
+            if (!filterLists[id].subscribed) {
+                delete filterLists[id];
+            }
+        }
+
+        var opts = {
+            domain: parseUri(document.location.href).hostname
+        };
+
+        BGcall("get_content_script_data", opts, function(arg) {
+
+            filterLists["AdBlock"] = {};
+            filterLists.AdBlock.text = MyFilters.prototype.getExtensionFilters(arg.settings);
+
+            BGcall("storage_get", "custom_filters", function(filters) {
+
+                if (filters) {
+                    filters = filters.split('\n');
+
+                    filterLists["Custom"] = {};
+                    filterLists["Custom"].text = [];
+
+                    // Filter out comments and ignored filters
+                    for (var i=0; i<filters.length; i++) {
+                        try {
+                            var normalized = FilterNormalizer.normalizeLine(filters[i]);
+                            if (normalized) {
+                                filterLists["Custom"].text.push(normalized);
+                            }
+                        } catch(ex) {
+                            // Broken filter
+                        }
+                    }
+                }
+
+                for (var frameId in data) {
+                    var frame = data[frameId];
+                    var frameResources = frame.resources;
+                    var frameDomain = frame.domain;
+
+                    for (var resource in frameResources) {
+                        var res = frameResources[resource];
+                        // Don't process hiding filters
+                        if (res.reqType === "HIDE") {
+                            continue;
+                        }
+                        var urlDomain = parseUri(resource).hostname;
+                        var timeStamp = frameResources[resource].timeStamp;
+                        var thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
+                        res.thirdParty = thirdParty;
+                        if (res.blockedData !== false) {
+                            var filter = res.blockedData.text;
+                            for (var filterList in filterLists) {
+                                if (filterList === "malware") {
+                                    if (filterLists[filterList].text.adware.indexOf(filter) > -1) {
+                                        res.blockedData["filterList"] = filterList;
+                                    }
+                                } else {
+                                    if (filterLists[filterList].text.indexOf(filter) > -1) {
+                                        res.blockedData["filterList"] = filterList;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                createTable(data);
+            });
+        });
+    });
+});
+
+// Now create that table row-by-row
+function createTable(frames) {
+    var rows = [];
+    for (var frame in frames) {
+        var frameObject = frames[frame];
+        if (typeof frameObject === "number")
+            continue;
+        console.log(frameObject);
+        for (var resource in frameObject["resources"]) {
+            var res = frameObject["resources"][resource];
+            // TODO: User better approach
+            res.url = resource;
+            console.log(res);
+            //var matchingfilter = resources[i].filter;
+            //var matchingListID = "", matchingListName = "";
+            //var typeName = getTypeName(resources[i].type);
+
+            // TODO: When crbug 80230 is fixed, allow $other again
+            //var disabled = (typeName === 'other' || typeName === 'unknown');
+
+            // We don't show the page URL unless it's excluded by $document or $elemhide
+            //if (typeName === 'page' && !matchingfilter)
+            //  continue;
+
+            var row = $("<tr>");
+            //if (type.name)
+            //row.addClass(type.name);
+
+            // Cell 1: Checkbox
+            /*var cell = $("<td><input type='checkbox'/></td>").css("padding-left", "4px");
+        if (disabled)
+            cell.find("input").prop("disabled", true);
+        row.append(cell);*/
+
+            function truncateUrl(url) {
+                if (url.length > 90) {
+                    return url.substring(0, 86) + '[...]';
+                }
+                return url;
+            }
+
+            // Cell 2: URL
+            $("<td>").
+            attr("title", res.url).
+            attr("data-column", "url").
+            text(truncateUrl(res.url)).
+            appendTo(row);
+
+            // Cell 3: Type
+            $("<td>").
+            attr("data-column", "type").
+            css("text-align", "center").
+            text(res.reqType).
+            //text(translate('type' + typeName)).
+            appendTo(row);
+
+            // Cell 4: hidden sorting field and matching filter
+            cell = $("<td>").
+            attr("data-column", "filter").
+            css("text-align", "center");
+            $("<span>").
+            addClass("sorter").
+            //text(type.name ? type.sort : 3).
+            appendTo(cell);
+            if (res.blockedData)
+                $("<span>").
+                //text(truncateI(custom_filters[matchingfilter] || matchingfilter)).
+                text(res.blockedData.text).
+                //attr('title', translate("filterorigin", matchingListName)).
+                attr('title', translate("filterorigin", res.blockedData.filterList)).
+                appendTo(cell);
+            row.append(cell);
+            //resources[i].filter = matchingfilter;
+            //resources[i].filterlist = matchingListName;
+
+            // Cell 5: third-party or not
+            /*var resourceDomain = parseUri(i).hostname;
+        var isThirdParty = (type.name === 'hiding' ? false :
+                            BlockingFilterSet.checkThirdParty(resources[i].domain, resourceDomain));*/
+            var cell = $("<td>").
+            text(res.thirdParty ? "Yes" : "No").
+            //attr("title", translate("resourcedomain", resources[i].domain || resourceDomain)).
+            attr("data-column", "thirdparty").
+            css("text-align", "center");
+            row.append(cell);
+            //resources[i].isThirdParty = isThirdParty;
+            //resources[i].resourceDomain = resourceDomain;
+
+            // Cells 2-5 may get class=clickableRow
+            /*if (!disabled)
+            row.find("td:not(:first-child)").addClass("clickableRow");*/
+
+            // Cell 6: delete a custom filter
+            /*if (custom_filters[matchingfilter])
+            $("<td>").
+            addClass("deleterule").
+            attr("title", translate("removelabel")).
+            appendTo(row);
+        else
+            $("<td>").appendTo(row);
+        */
+            rows.push(row);
+        }
+    }
+    console.log(rows);
+    //$("#loading").remove();
+    //$("#resourceslist tbody").empty();
+    for (var i = 0; i < rows.length; i++) {
+        $("#resourceslist tbody").append(rows[i]);
+    }
+}
+
+
+/*
+
 var resources = {};
 var custom_filters = {};
 var chosenResource = {};
@@ -204,11 +410,6 @@ function generateTable() {
   });
 }
 
-// Hide "change" button, when no item has been selected
-$(document).ready(function() {
- $("#choosedifferentresource").css("opacity", "0");
-});
-
 // Converts the ElementTypes number back into an readable string
 // or hiding or 'unknown' if it wasn't in ElementTypes.
 // Inputs: One out of ElementTypes or 'undefined'
@@ -233,177 +434,12 @@ function getTypeName(type) {
   }
 }
 
-//Generate a list of pre-defined url filters
-function generateFilterSuggestions() {
-  var url = chosenResource.resource;
-  url = url.replace(/\s{5}\(.*\)$/, '').replace(/\#.*$/, '');
-  var isBlocked = ($(".selected").hasClass("blocked"));
-  var isHidden = ($(".selected").hasClass("hiding"));
-  var blocksuggestions = [];
-  var strippedUrl = url.replace(/^[a-z\-]+\:\/\/(www\.)?/, '');
-  blocksuggestions.push(strippedUrl);
-  if (strippedUrl.indexOf("?") > 0 || strippedUrl.indexOf("#") > 0) {
-    strippedUrl = strippedUrl.replace(/(\?|\#).*/, '');
-    blocksuggestions.push(strippedUrl);
-  }
-  if (strippedUrl.indexOf("/") > 0 &&
-      strippedUrl.lastIndexOf('/') !== strippedUrl.indexOf('/')) {
-    strippedUrl = strippedUrl.substr(0, strippedUrl.lastIndexOf('/') + 1);
-    blocksuggestions.push(strippedUrl);
-  }
-  if (strippedUrl.indexOf('/') > 0) {
-    strippedUrl = strippedUrl.substr(0, strippedUrl.indexOf('/'));
-    blocksuggestions.push(strippedUrl);
-  }
-
-  var minimumdomain = parseUri.secondLevelDomainOnly(strippedUrl, true);
-  if (minimumdomain !== strippedUrl) {
-    blocksuggestions.push(minimumdomain);
-  }
-
-  var suggestions = [];
-  for (var i in blocksuggestions) {
-    var inputBox = $("<input>").
-      attr("type", "radio").
-      attr("name", "urloption").
-      attr("id", "suggest_" + i).
-      val((isBlocked ? "@@||" : "||") + blocksuggestions[i]);
-    var label = $("<label>").
-      attr("for", "suggest_" + i).
-      text(blocksuggestions[i]);
-    suggestions.push(inputBox);
-    suggestions.push(label);
-    suggestions.push("<br/>");
-  }
-
-  $("#suggestions").empty();
-  for (var i = 0; i < suggestions.length; i++)
-    $("#suggestions").append(suggestions[i]);
-  if (isHidden)
-    $("#disable").find('input').prop('checked', true);
-  else if ($("#suggestions").find('input:first-child').val().indexOf('?') > 0)
-    $($("#suggestions").children('input')[1]).prop('checked', true);
-  else
-    $("#suggestions").find('input:first-child').prop('checked', true);
-
-  if (!isBlocked && !isHidden)
-    $("#status").text(translate("blockeverycontaining"));
-  else if (isHidden)
-    $("#status").text(translate("thisfilterwillbedisabled"));
-  else
-    $("#status").text(translate("whitelisteverycontaining"));
-
-  $("label[for='disablefilter']").text(chosenResource.filter);
-
-  var inputBox = $('<input>').
-    attr("type", "text").
-    attr("id", "customurl").
-    attr("size", "99").
-    attr("title", translate("wildcardhint")).
-    val(url).
-    bind("input", function() {
-      $("#custom").click();
-    });
-  $("#custom + label").append(inputBox);
-}
-
-// Create filtersets for resourceblock and put them in the local_filtersets
-// object. Similar to MyFilters.prototype.rebuild(), but keeps every list
-// separate. Inputs
-//   id: identifier of the list
-//   text: array containing all filters in the list
-function createResourceblockFilterset(id, text) {
-  local_filtersets[id] = {};
-  var w = {}, b = {}, h = {};
-
-  for (var i=0; i<text.length; i++) {
-    var filter = Filter.fromText(text[i]);
-    if (Filter.isSelectorFilter(text[i]))
-      h[filter.id] = filter;
-    else if (Filter.isWhitelistFilter(text[i]))
-      w[filter.id] = filter;
-    else if (text[i])
-      b[filter.id] = filter;
-  }
-  local_filtersets[id].hiding = FilterSet.fromFilters(h);
-  local_filtersets[id].blocking =
-    new BlockingFilterSet(FilterSet.fromFilters(b), FilterSet.fromFilters(w));
-  if (id === "malware") {
-    BGcall('getMalwareDomains', function(domains) {
-        local_filtersets["malware"].blocking.setMalwareDomains(domains);
-    });
-  }
-}
-
 // Check an URL for it's validity
 function validateUrl(url) {
   if (!/^https?:\/\//.test(url)) {
     window.close();
     return;
   }
-}
-
-// Create the filter that will be applied from the chosen options
-// Returns the filter
-function createfilter() {
-  var matchedfilter = $("label[for='disablefilter']").text();
-  var isBlocked = ($(".selected").hasClass("blocked"));
-  var isHidden = ($(".selected").hasClass("hiding"));
-  var filterwithoutdomain = '';
-  var urlfilter = '';
-
-  if ($('#selectblockableurl #customurl').length) {
-    urlfilter = (isBlocked ? '@@' : '') + $('#customurl').val();
-  } else if ($('#selectblockableurl label[for="disablefilter"]').length) {
-    if (isBlocked) {
-      urlfilter = '@@' + matchedfilter;
-    } else if (isHidden) {
-      var chosenfilter = chosenResource.filter.replace('##', '#@#');
-      var domain = chosenfilter.substr(0, chosenfilter.lastIndexOf("#@"));
-      filterwithoutdomain = chosenfilter.replace(domain,"");
-      if (domain === "") {
-        urlfilter = chosenfilter;
-      } else {
-        urlfilter = filterwithoutdomain;
-      }
-    } else {
-      urlfilter = matchedfilter;
-    }
-  } else {
-    urlfilter = $('#selectblockableurl input').val();
-  }
-
-  if ((/^(\@\@)?\/.*\/$/).test(urlfilter))
-    urlfilter += '*';
-
-  var options = [];
-  var selector = "#chooseoptions > input:checked";
-  if ($("#types > input:not(:checked):not(.implicitType)").length ||
-      $("#types > input.implicitType:checked").length)
-    selector += ", #types > input:checked";
-  $(selector).each(function() {
-    if ($(this).val())
-      options.push($(this).val());
-  });
-
-  var option = '';
-  if (options.length && !($("#disablefilter").is(":disabled"))) {
-    option = '$' + options.join(',');
-  } else if (options.length && $("#disablefilter").is(":disabled")) {
-    if (urlfilter.indexOf('$') !== -1 ) {
-      option = ',' + options.join(',')
-    } else if (!isHidden) {
-      option = '$' + options.join(',');
-    }
-    if (isHidden) {
-      var chosenfilter = chosenResource.filter;
-      urlfilter = chosenResource.domain + filterwithoutdomain;
-      option = '';
-    }
-  } else {
-    option = '';
-  }
-  return urlfilter + option;
 }
 
 // Checks if the text in the domain list textbox is valid or not
@@ -419,22 +455,6 @@ function isValidDomainList(text) {
   } catch(ex) {
     return false;
   }
-}
-
-// Checks if a resource matches a filter, and if not, it asks the user if this
-// is correct and returns the answer
-// Inputs: filter: the filter to test the match against
-//         url: the resource URL
-//         type: the resource type
-//         domain: the resource domain
-// Returns: boolean: should it continue?
-function filterMatchesResource(filter, url, type, domain) {
-  var temp_filterset = new BlockingFilterSet(
-                        FilterSet.fromFilters({1: Filter.fromText(filter) }),
-                        FilterSet.fromFilters({}));
-  if (!temp_filterset.matches(url, type, domain))
-    return confirm(translate("doesntmatchoriginal"));
-  return true;
 }
 
 // After getting annoyed by the time it takes to get the required data
@@ -457,273 +477,11 @@ function finally_it_has_loaded_its_stuff() {
       css("-webkit-transition", "all 0.3s ease-out").
       css("background-color", "white");
   });
-
-  // Make legend draggable
-  $(function() {
-    $("#legend").draggable();
-  });
-
-  // Close the legend
-  $(".closelegend").click(function() {
-    $("#legend").remove();
-  });
-
-  // Search a resource
-  $('#search').bind("search", function() {
-    var patterns = $("#search").val().trim().replace(/\s+/g, ' ').split(" ");
-    for (var i=0; i<patterns.length; i++) {
-      patterns[i] = new RegExp(patterns[i]
-                      .replace(/\*+/g, '*')
-                      .replace(/\W/g, '\\$&')
-                      .replace(/\\\*/g, '[^\\t]*'), "i");
-    }
-    $("#resourceslist tbody tr.noSearchMatch").removeClass("noSearchMatch");
-    $("#nosearchresults").remove();
-    if (!$("#search").val().trim()) return;
-    $("#resourceslist tbody tr").each(function(i,el) {
-      var keywords = [];
-      var res = resources[$("[data-column='url']", el).attr('title')];
-      keywords.push(res.domain);
-      keywords.push(res.resource);
-      if (res.filter) {
-        keywords.push(res.filter);
-        if (custom_filters[res.filter] !== res.filter)
-          keywords.push(custom_filters[res.filter]);
-      }
-      if (res.filterlist)
-        keywords.push(res.filterlist);
-      var typeName = getTypeName(res.type);
-      keywords.push(typeName);
-      if (/_/.test(typeName))
-        keywords.push(typeName.replace('_', '-')); // $object-subrequest === $object_subrequest
-      keywords.push(translate("type" + typeName));
-      if (res.isThirdParty) {
-        keywords.push(translate("thirdparty"));
-        keywords.push("third-party");
-        keywords.push("third_party");
-      } else {
-        // There are so many possible ways to call 'first-party' resources, that
-        // I'm not going to worry about those (localized) matches.
-        keywords.push("first-party");
-        keywords.push("first_party");
-      }
-      keywords = keywords.join('\t');
-      for (var j=0; j<patterns.length; j++) {
-        if (!patterns[j].test(keywords)) {
-          // Setting styles directly is terribly slow. Using classes is way faster.
-          $(el).addClass("noSearchMatch");
-          break;
-        }
-      }
-    });
-    if ($("#resourceslist tbody tr:visible").length === 0) {
-      $("#resourceslist tbody").
-        append("<tr id='nosearchresults'>" +
-              "<td colspan='6'>" + translate("nosearchresults") + "</td></tr>");
-    }
-  });
-
-  // Auto-scroll to the bottom of the page
-  $("#confirmUrl").click(function(event) {
-    event.preventDefault();
-    $("html, body").animate({ scrollTop: 15000 }, 50);
-  });
-
-  // An item has been selected
-  $('.clickableRow, input:enabled', '#resourceslist').click(function() {
-    if ($('.selected','#resourceslist').length > 0)
-      return; //already selected a resource
-    $("#choosedifferentresource").css("opacity", "1");
-    $("#choosedifferentresource").click(function() {
-      document.location.reload();
-    });
-    $(this).parents('tr').addClass('selected');
-    $("#resourceslist tr:not(.selected)").remove();
-    $("#resourceslist tr input").
-      prop('checked', true).
-      prop('disabled', true);
-    $('.clickableRow').removeClass('clickableRow');
-    $('#legend').remove();
-    chosenResource = resources[$(".selected td[data-column='url']").prop('title')];
-    $(".selected td[data-column='thirdparty']").text(
-                    chosenResource.isThirdParty ? translate('thirdparty') : '');
-
-    // Show the 'choose url' area
-    $("#selectblockableurl").fadeIn();
-    $("#resourceslist tbody tr td").css("background-color", "white");
-
-    var isBlocked = ($(".selected").hasClass("blocked"));
-    var isHidden = ($(".selected").hasClass("hiding"));
-    var isWhitelisted = ($(".selected").hasClass("whitelisted"));
-    if (isBlocked || isWhitelisted) {
-      $("#disable").css("display","block");
-      $("#confirmUrl").before("<br>");
-    } else if (isHidden) {
-      $("#disable").css("display","block");
-      $("#selectblockableurl br").remove();
-      $("[i18n='ordisablefilter'], #suggestions, #custom, label[for='custom']").remove();
-      $("[i18n='blockeverycontaining']").attr("i18n","thisfilterwillbedisabled");
-      $("#confirmUrl").before("<br>");
-    } else {
-      $("#disable").css("display","none");
-    }
-
-    generateFilterSuggestions();
-    // If the user clicks the 'next' button
-    $("#confirmUrl").click(function() {
-      if ($('#custom').is(':checked') &&
-          $('#customurl').val().trim() === '') {
-        alert(translate('novalidurlpattern'));
-        return;
-      }
-      if ($('#custom').is(':checked')) {
-        var custom_corrected = $('#customurl').val().
-                                 replace(/\s/g, '').replace(/^\@\@/, '');
-        // Check the URL only, therefore type image, so we don't end up with for
-        // example 'popup', a non-default type.
-        if (!filterMatchesResource(custom_corrected, chosenResource.resource,
-                                     ElementTypes.image, chosenResource.domain))
-          return;
-
-        // Remove preceeding @@ and trailing spaces
-        $('#customurl').val(custom_corrected);
-      }
-
-      // Hide unused stuff
-      $("#selectblockableurl input[type='radio']:not(:checked) + label").remove();
-      $("#selectblockableurl input[type='radio']:not(:checked)").remove();
-      $("#confirmUrl").next().remove();
-      $("#confirmUrl").remove();
-      $("#selectblockableurl br").remove();
-      $("#selectblockableurl *:not(br):not(b)").prop("disabled", true);
-      if ($("#disablefilter").is(":disabled")) {
-        $("#status").text(translate("thisfilterwillbedisabled"));
-        $("label[for='domainis']").text(translate("onlypagesonthisdomain"));
-        $("[i18n='appliedwhenbrowsing']").text(translate("disabledwhenbrowsing"));
-        $("[i18n='ordisablefilter'], [i18n='casesensitive'], [i18n='onlyresourcetypes'], [id^='matchcase'], [for^='matchcase'], #chooseoptions br, #suggestions, #thirdparty, #types").remove();
-        $("#onEverySite, #domainis").before("<br>");
-        $("#addthefilter").before("<br><br>");
-      } else {
-        $("[i18n='ordisablefilter'], #suggestions br").remove();
-      }
-
-      // Show the options
-      $("#chooseoptions").fadeIn();
-      var isThirdParty = chosenResource.isThirdParty;
-      if (!isThirdParty) {
-        $("#thirdparty + * + *, #thirdparty + *, #thirdparty").remove();
-      } else {
-        // Use .find().text() so data from query string isn't injected as HTML
-        $("#thirdparty + label").
-          html(translate("thirdpartycheckbox", "<i></i>")).
-          find("i").
-          text(parseUri.secondLevelDomainOnly(chosenResource.resourceDomain, true));
-      }
-
-      $("#domainlist").
-        val(chosenResource.domain.replace(/^www\./, '')).
-        click(function() {
-          $("#domainis").prop("checked", true);
-          $("#filterpreview").text(createfilter());
-        }).
-        bind("input", function() {
-          $("#domainis").prop("checked", true);
-          $(this).trigger("keyup");
-        }).
-        keyup(function() {
-          if (isValidDomainList($(this).val().trim().replace(/(\s|\,|\;)+/g, '|'))){
-            $("#domainis").
-              val('domain=' + $(this).val().trim().replace(/(\s|\,|\;)+/g, '|'));
-            $("#domainlist").css('color', 'black');
-          } else {
-            $("#domainis").val('');
-            $("#domainlist").css('color', 'red');
-          }
-          $("#filterpreview").text(createfilter());
-        });
-      $("#domainis").
-        val('domain=' + chosenResource.domain.replace(/^www\./, ''));
-
-      var selectorForFixedType = '[value="' + getTypeName(chosenResource.type) +  '"]';
-      if (!$(selectorForFixedType).is(":checked")) {
-        // Special non-default type. For example $popup
-        $("#types > input").prop("checked", false);
-      }
-      $(selectorForFixedType).
-          prop('disabled', true).
-          prop('checked', true);
-
-      // Update the preview filter
-      $("#chooseoptions *").change(function() {
-        $("#filterpreview").text(createfilter());
-      });
-      $("#filterpreview").text(createfilter());
-
-      // Add the filter
-      $("#addthefilter").click(function() {
-        var generated_filter = createfilter();
-        if (!isHidden && !filterMatchesResource(generated_filter, chosenResource.resource,
-                                    chosenResource.type, chosenResource.domain))
-          return;
-        if (!isHidden && !isBlocked && isWhitelisted) {
-            BGcall("add_exclude_filter", generated_filter, function(ex) {
-                if (!ex) {
-                    alert(translate("filterhasbeenadded"));
-                    window.close();
-                } else {
-                    alert(translate("blacklistereditinvalid1", ex));
-                }
-            });
-        } else {
-            BGcall('add_custom_filter', generated_filter, function(ex) {
-                if (!ex) {
-                    alert(translate("filterhasbeenadded"));
-                    window.close();
-                } else {
-                    alert(translate("blacklistereditinvalid1", ex));
-                }
-            });
-        }
-      });
-    });
-  });
 }
 
 $(function() {
   // Translation
   localizePage();
-  var url;
-  if (window.location.search) {
-    // Can be of the forms
-    //  ?url=(page url)&itemType=(someElementType)&itemUrl=(item url)
-    //  ?tabId=(tab ID)
-    var qps = parseUri.parseSearch(window.location.search);
-    function validateItemType(itemType) {
-      if (!ElementTypes[itemType]) {
-        window.close();
-        return;
-      }
-    }
-    if (qps.url) {
-      url = qps.url;
-      validateUrl(url);
-    }
-    if (qps.tabId && isNaN(qps.tabId)) {
-      window.close();
-      return;
-    }
-    if (qps.itemType) {
-      var itemUrl = qps.itemUrl;
-      validateUrl(itemUrl);
-      validateItemType(qps.itemType);
-
-      resources[itemUrl] = {
-        type: ElementTypes[qps.itemType],
-        domain: parseUri(url).hostname,
-        resource: itemUrl
-      };
-    }
-  }
 
   var opts = {
     domain: parseUri(url || "x://y/").hostname
@@ -860,3 +618,5 @@ sortTable = function() {
     $("tbody", table).append(rowList[no]);
   });
 };
+
+*/

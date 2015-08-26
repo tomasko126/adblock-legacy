@@ -1,0 +1,63 @@
+body {
+    background-color: white;
+}
+#resourceslist {
+    cursor: default;
+    position: relative;
+    margin: 120px auto;
+    padding: 0px 15px 25px;
+    min-width: 1020px;
+    border-spacing: 0px;
+}
+.gifloader {
+    background-image: url(../img/gifloader.gif);
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+}
+#resourceslist td {
+    font-size: 12px;
+    padding: 0px;
+    margin-left: 7px;
+}
+#resourceslist > thead > tr > th:nth-child(2):hover {
+    color: red;
+}
+#resourceslist > thead > tr > th:nth-child(3):hover {
+    color: red;
+}
+#resourceslist > thead > tr > th:nth-child(4):hover {
+    color: red;
+}
+#resourceslist > thead > tr > th:nth-child(5):hover {
+    color: red;
+}
+.sorter {
+    display: none;
+}
+.blocked {
+    color: red;
+}
+.whitelisted {
+    color: green;
+}
+#legend {
+    font-size: 12px;
+    position: relative;
+    border: 1px solid #EEE;
+    width: 460px;
+    cursor: move;
+    top: -5px;
+    margin: -20px 52% 0px;
+    padding: 5px;
+    border-radius: 2px;
+}
+.hiding {
+    color: blue;
+}
+.clickableRow {
+    cursor: pointer;
+}
+th {
+    cursor: pointer;
+}

@@ -282,12 +282,12 @@
       },
 
       // Record a resource for the resource blocker.
-      storeResource: function(tabId, frameId, url, elType) {
+      storeResource: function(tabId, frameId, url, reqType, timeStamp, blockedData) {
         if (!get_settings().show_advanced_options)
           return;
         var data = frameData.get(tabId, frameId);
         if (data !== undefined) {
-            data.resources[elType + ':|:' + url] = null;
+            data.resources[url] = { reqType: reqType, timeStamp: timeStamp, blockedData: blockedData };
         }
       },
 
@@ -353,21 +353,20 @@
 
       var elType = ElementTypes.fromOnBeforeRequestType(reqType);
 
-      frameData.storeResource(tabId, requestingFrameId, details.url, elType);
-
       // May the URL be loaded by the requesting frame?
       var frameDomain = frameData.get(tabId, requestingFrameId).domain;
-      if (get_settings().data_collection) {
-        var blockedData = _myfilters.blocking.matches(details.url, elType, frameDomain, true, true);
-        if (blockedData !== false) {
-          DataCollection.addItem(blockedData.text);
+      var blockedData = _myfilters.blocking.matches(details.url, elType, frameDomain, true, true);
+
+      if (blockedData !== false) {
           var blocked = blockedData.blocked;
-        } else {
-          var blocked = blockedData;
-        }
+          if (get_settings().data_collection) {
+              DataCollection.addItem(blockedData.text);
+          }
       } else {
-        var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+          var blocked = blockedData;
       }
+      console.log(blockedData);
+      frameData.storeResource(tabId, requestingFrameId, details.url, reqType, details.timeStamp, blockedData);
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
@@ -1142,6 +1141,17 @@
   // Get the framedata for resourceblock
   resourceblock_get_frameData = function(tabId) {
     return frameData.get(tabId);
+  }
+  
+  process_resourceblock_resources = function(frames) {
+      for (var frame in frames) {
+          for (var resource in frames[frame]) {
+              var res = frames[frame][resource];
+              res.matches = _myfilters.blocking.matches(res.url, res.elType, res.frameDomain, true, true);
+              console.info(res.matches);
+          }  
+      }
+      return frames;
   }
 
   // Return chrome.i18n._getL10nData() for content scripts who cannot

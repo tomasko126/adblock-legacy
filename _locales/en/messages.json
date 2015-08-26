@@ -1376,5 +1376,21 @@
   "ad_report_please":{
     "message":"If you're seeing an ad, don't make a bug report, make an <a>ad report<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "resourceblocktitle":{
+    "message":"Block a resource",
+    "description":"resourceblocking page string"
+  },
+  "headerresource":{
+    "message":"Resource",
+    "description":"resourceblocking page string"
+  },
+  "headertype":{
+    "message":"Type",
+    "description":"resourceblocking page string"
+  },
+  "headerfilter":{
+    "message":"Matched filter",
+    "description":"resourceblocking page string"
   }
 }
