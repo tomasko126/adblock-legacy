@@ -64,7 +64,6 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
                             continue;
                         }
                         var urlDomain = parseUri(resource).hostname;
-                        var timeStamp = frameResources[resource].timeStamp;
                         var thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
                         res.thirdParty = thirdParty;
                         if (res.blockedData !== false) {
@@ -120,30 +119,34 @@ function createTable(frames) {
         var frameObject = frames[frame];
         if (typeof frameObject === "number")
             continue;
+        // TODO: Create UI for sub_frames without resources
         var length = Object.keys(frameObject.resources).length;
         if (length === 0)
             continue;
-        console.log(length);
+        // Create table for frame
         createUI(frameObject.domain, frame);
         for (var resource in frameObject["resources"]) {
             var res = frameObject["resources"][resource];
-            // TODO: User better approach
+            // TODO: Use better approach?
             res.url = resource;
-            //var matchingfilter = resources[i].filter;
-            //var matchingListID = "", matchingListName = "";
-            //var typeName = getTypeName(resources[i].type);
-
-            // TODO: When crbug 80230 is fixed, allow $other again
-            //var disabled = (typeName === 'other' || typeName === 'unknown');
-
-            // We don't show the page URL unless it's excluded by $document or $elemhide
-            //if (typeName === 'page' && !matchingfilter)
-            //  continue;
+            
+            // Don't show main_frame resource, unless it's excluded by $document or $elemhide
+            if (res.reqType === "main_frame" && (!res.blockedData || !res.blockedData.blocked))
+                continue;
 
             var row = $("<tr>");
-            //if (type.name)
-            //row.addClass(type.name);
+            
+            if (res.reqType === "HIDE") {
+                row.addClass("hiding");
+            } else if (res.blockedData) {
+                if (res.blockedData.blocked) {
+                    row.addClass("blocked");
+                } else {
+                    row.addClass("whitelisted");
+                }
+            }
 
+            // TODO: Truncating according to other URL elements & length?
             function truncateUrl(url) {
                 if (url.length > 90) {
                     return url.substring(0, 70) + '[...]';
@@ -153,7 +156,7 @@ function createTable(frames) {
 
             // Cell 2: URL
             $("<td>").
-            //attr("title", res.url).
+            attr("title", res.url).
             attr("data-column", "url").
             text(truncateUrl(res.url)).
             appendTo(row);
@@ -163,6 +166,7 @@ function createTable(frames) {
             attr("data-column", "type").
             css("text-align", "center").
             text(res.reqType).
+            // TODO: i18n?
             //text(translate('type' + typeName)).
             appendTo(row);
 
@@ -170,47 +174,23 @@ function createTable(frames) {
             cell = $("<td>").
             attr("data-column", "filter").
             css("text-align", "center");
-            $("<span>").
-            addClass("sorter").
-            //text(type.name ? type.sort : 3).
-            appendTo(cell);
-            if (res.blockedData)
+            if (res.blockedData) {
                 $("<span>").
-                //text(truncateI(custom_filters[matchingfilter] || matchingfilter)).
                 text(res.blockedData.text).
-                //attr('title', translate("filterorigin", matchingListName)).
                 attr('title', translate("filterorigin", res.blockedData.filterList)).
                 appendTo(cell);
+            }
             row.append(cell);
-            //resources[i].filter = matchingfilter;
-            //resources[i].filterlist = matchingListName;
 
             // Cell 5: third-party or not
-            /*var resourceDomain = parseUri(i).hostname;
-        var isThirdParty = (type.name === 'hiding' ? false :
-                            BlockingFilterSet.checkThirdParty(resources[i].domain, resourceDomain));*/
             var cell = $("<td>").
+            // TODO: i18n
             text(res.thirdParty ? "Yes" : "No").
             //attr("title", translate("resourcedomain", resources[i].domain || resourceDomain)).
             attr("data-column", "thirdparty").
             css("text-align", "center");
             row.append(cell);
-            //resources[i].isThirdParty = isThirdParty;
-            //resources[i].resourceDomain = resourceDomain;
 
-            // Cells 2-5 may get class=clickableRow
-            /*if (!disabled)
-            row.find("td:not(:first-child)").addClass("clickableRow");*/
-
-            // Cell 6: delete a custom filter
-            /*if (custom_filters[matchingfilter])
-            $("<td>").
-            addClass("deleterule").
-            attr("title", translate("removelabel")).
-            appendTo(row);
-        else
-            $("<td>").appendTo(row);
-        */
             if (!data[frames[frame].domain]) {
                 data[frames[frame].domain] = [];
             }
@@ -223,14 +203,8 @@ function createTable(frames) {
             var resource = data[domain][i];
             $('[data-href="' + domain + '"] tbody').append(resource);
         }
-        //$("#" + domain).append(rows[i]);
     }
     localizePage();
-    //$("#loading").remove();
-    //$("#resourceslist tbody").empty();
-    //for (var i = 0; i < rows.length; i++) {
-      //  
-    //}
 }
 
 /*

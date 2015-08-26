@@ -282,12 +282,12 @@
       },
 
       // Record a resource for the resource blocker.
-      storeResource: function(tabId, frameId, url, reqType, timeStamp, blockedData) {
+      storeResource: function(tabId, frameId, url, reqType, blockedData) {
         if (!get_settings().show_advanced_options)
           return;
         var data = frameData.get(tabId, frameId);
         if (data !== undefined) {
-            data.resources[url] = { reqType: reqType, timeStamp: timeStamp, blockedData: blockedData };
+            data.resources[url] = { reqType: reqType, blockedData: blockedData };
         }
       },
 
@@ -365,7 +365,7 @@
       } else {
           var blocked = blockedData;
       }
-      frameData.storeResource(tabId, requestingFrameId, details.url, reqType, details.timeStamp, blockedData);
+      frameData.storeResource(tabId, requestingFrameId, details.url, reqType, blockedData);
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
