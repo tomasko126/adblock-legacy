@@ -1,7 +1,5 @@
 "use strict";
 
-localizePage();
-
 // Get tabId from URL
 var tabId = parseUri.parseSearch(document.location.href).tabId;
 tabId = parseInt(tabId);
@@ -15,7 +13,7 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
     }
 
     BGcall("storage_get", "filter_lists", function(filterLists) {
-        // TODO: Excluded filters
+        // TODO: Excluded filters & excluded hiding filters?
         for (var id in filterLists) {
             if (!filterLists[id].subscribed) {
                 delete filterLists[id];
@@ -100,6 +98,9 @@ function createUI(domain, frameId) {
         '<table data-href=' + domain + ' class="resourceslist">' +
             '<thead>' +
                 '<tr>' +
+                    '<th class="frameurl">' + 'Frame: ' + domain + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
                     '<th i18n="headerresource" data-column="url"><\/th>' +
                     '<th i18n="headertype" data-column="type"><\/th>' +
                     '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
@@ -149,7 +150,7 @@ function createTable(frames) {
             // TODO: Truncating according to other URL elements & length?
             function truncateUrl(url) {
                 if (url.length > 90) {
-                    return url.substring(0, 70) + '[...]';
+                    return url.substring(0, 80) + '[...]';
                 }
                 return url;
             }
@@ -165,7 +166,7 @@ function createTable(frames) {
             $("<td>").
             attr("data-column", "type").
             css("text-align", "center").
-            text(res.reqType).
+            text(res.reqType === "HIDE" ? "selector" : res.reqType).
             // TODO: i18n?
             //text(translate('type' + typeName)).
             appendTo(row);
@@ -184,8 +185,8 @@ function createTable(frames) {
 
             // Cell 5: third-party or not
             var cell = $("<td>").
-            // TODO: i18n
-            text(res.thirdParty ? "Yes" : "No").
+            text(res.thirdParty ? translate("yes") : translate("no")).
+            // TODO: Resource domain..
             //attr("title", translate("resourcedomain", resources[i].domain || resourceDomain)).
             attr("data-column", "thirdparty").
             css("text-align", "center");
@@ -205,6 +206,20 @@ function createTable(frames) {
         }
     }
     localizePage();
+    
+    $(".frameurl").click(function(event) {
+        var id = event.currentTarget.offsetParent.dataset.href;
+        var el = $('[data-href="' + id + '"] tbody');
+        var isHidden = el.is(":hidden");
+        if (!isHidden) {
+            el.hide();
+            $('[data-href="' + id + '"] thead tr:nth-child(2)').hide();
+        } else {
+            el.show();
+            $('[data-href="' + id + '"] thead tr:nth-child(2)').show();
+        }
+        
+    });
 }
 
 /*

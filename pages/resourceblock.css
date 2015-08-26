@@ -2,8 +2,21 @@ body {
     background-color: white;
     font-size: 12px;
 }
+.resourceslist {
+    cursor: default;
+    position: relative;
+    margin: 0px auto 20px auto;
+    padding: 0px 15px 25px;
+    min-width: 1020px;
+    border-spacing: 0px;
+}
 .resourceslist:first-of-type {
     margin: 120px auto 20px auto;
+}
+.frameurl {
+    text-align: left;
+    font-size: small;
+    cursor: pointer;
 }
 [data-column="type"] {
     width: 100px;
@@ -14,25 +27,6 @@ body {
 [data-column="thirdparty"] {
     width: 50px;
 }
-.resourceslist {
-    cursor: default;
-    position: relative;
-    margin: 0px auto 20px auto;
-    padding: 0px 15px 25px;
-    min-width: 1020px;
-    border-spacing: 0px;
-}
-.gifloader {
-    background-image: url(../img/gifloader.gif);
-    background-repeat: no-repeat;
-    width: 30px;
-    height: 30px;
-}
-#resourceslist td {
-    font-size: 12px;
-    padding: 0px;
-    margin-left: 7px;
-}
 .blocked {
     color: red;
 }
@@ -41,7 +35,4 @@ body {
 }
 .hiding {
     color: blue;
-}
-th {
-    cursor: pointer;
 }
