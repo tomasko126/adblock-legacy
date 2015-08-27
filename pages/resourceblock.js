@@ -124,6 +124,7 @@ function createTable(frames) {
         var length = Object.keys(frameObject.resources).length;
         if (length === 0)
             continue;
+        console.log(frame);
         // Create table for frame
         createUI(frameObject.domain, frame);
         for (var resource in frameObject["resources"]) {
@@ -148,18 +149,18 @@ function createTable(frames) {
             }
 
             // TODO: Truncating according to other URL elements & length?
-            function truncateUrl(url) {
-                if (url.length > 90) {
-                    return url.substring(0, 80) + '[...]';
+            function truncateURI(uri) {
+                if (uri.length > 90) {
+                    return uri.substring(0, 80) + '[...]';
                 }
-                return url;
+                return uri;
             }
 
             // Cell 2: URL
             $("<td>").
             attr("title", res.url).
             attr("data-column", "url").
-            text(truncateUrl(res.url)).
+            text(truncateURI(res.url)).
             appendTo(row);
 
             // Cell 3: Type
@@ -171,13 +172,13 @@ function createTable(frames) {
             //text(translate('type' + typeName)).
             appendTo(row);
 
-            // Cell 4: hidden sorting field and matching filter
+            // Cell 4: Matching filter
             cell = $("<td>").
             attr("data-column", "filter").
             css("text-align", "center");
             if (res.blockedData) {
                 $("<span>").
-                text(res.blockedData.text).
+                text(truncateURI(res.blockedData.text)).
                 attr('title', translate("filterorigin", res.blockedData.filterList)).
                 appendTo(cell);
             }
@@ -198,7 +199,7 @@ function createTable(frames) {
             data[frames[frame].domain].push(row);
         }
     }
-    console.log(data);
+
     for (var domain in data) {
         for (var i=0; i<data[domain].length; i++) {
             var resource = data[domain][i];
@@ -218,7 +219,6 @@ function createTable(frames) {
             el.show();
             $('[data-href="' + id + '"] thead tr:nth-child(2)').show();
         }
-        
     });
 }
 

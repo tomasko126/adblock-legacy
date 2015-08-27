@@ -7,7 +7,7 @@ body {
     position: relative;
     margin: 0px auto 20px auto;
     padding: 0px 15px 25px;
-    min-width: 1020px;
+    min-width: 1110px;
     border-spacing: 0px;
 }
 .resourceslist:first-of-type {
@@ -22,10 +22,10 @@ body {
     width: 100px;
 }
 [data-column="filter"] {
-    width: 250px;
+    width: 290px;
 }
 [data-column="thirdparty"] {
-    width: 50px;
+    width: 100px;
 }
 .blocked {
     color: red;
