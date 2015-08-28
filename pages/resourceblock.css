@@ -2,12 +2,18 @@ body {
     background-color: white;
     font-size: 12px;
 }
+table {
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, .15);
+    background: #F1F1F1;
+    border-collapse: collapse;
+    border-radius: 5px;
+}
 .resourceslist {
     cursor: default;
     position: relative;
     margin: 0px auto 20px auto;
     padding: 0px 15px 25px;
-    min-width: 1110px;
+    min-width: 1150px;
     border-spacing: 0px;
 }
 .resourceslist:first-of-type {
@@ -16,6 +22,13 @@ body {
 .framedomain, .frameurl, .frametype {
     text-align: left;
     font-size: small;
+    padding-left: 25px;
+}
+.frametype {
+   padding-top: 20px; 
+}
+[data-column="url"] {
+    padding-left: 25px;
 }
 [data-column="type"] {
     width: 100px;

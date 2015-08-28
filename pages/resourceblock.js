@@ -94,7 +94,7 @@ function createUI(domain, url, frameId) {
     } else {
         var el = document.querySelectorAll(".resourceslist").length;
         elem = document.querySelectorAll(".resourceslist")[el-1];
-        frameType = "Sub frame";
+        frameType = "Subframe";
     }
     $(elem).after(
         '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
@@ -126,8 +126,8 @@ function createUI(domain, url, frameId) {
 
 // TODO: Truncating according to other URL elements & length?
 function truncateURI(uri) {
-    if (uri.length > 90) {
-        return uri.substring(0, 80) + '[...]';
+    if (uri.length > 80) {
+        return uri.substring(0, 75) + '[...]';
     }
     return uri;
 }
