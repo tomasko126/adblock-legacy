@@ -57,7 +57,7 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
 
                     for (var resource in frameResources) {
                         var res = frameResources[resource];
-                        // Don't process hiding filters
+                        // TODO: Process hiding filters differently
                         if (res.reqType === "HIDE") {
                             continue;
                         }
@@ -134,7 +134,7 @@ function truncateURI(uri) {
 
 // Now create that table row-by-row
 function createTable(frames) {
-    // TODO: Sometimes, there is topframe and subframe with same URLs, adjust this behaviour
+    // TODO: Sometimes, there is topframe and subframe with same URLs, adjust this behaviour!
     var data = {};
     for (var frame in frames) {
         var frameObject = frames[frame];
@@ -151,13 +151,13 @@ function createTable(frames) {
             var res = frameObject["resources"][resource];
             // TODO: Use better approach?
             res.url = resource;
-            
+
             // Don't show main_frame resource, unless it's excluded by $document or $elemhide
             if (res.reqType === "main_frame" && (!res.blockedData || !res.blockedData.blocked))
                 continue;
 
             var row = $("<tr>");
-            
+
             if (res.reqType === "HIDE") {
                 row.addClass("hiding");
             } else if (res.blockedData) {
@@ -220,7 +220,7 @@ function createTable(frames) {
         }
     }
     localizePage();
-    
+
     $(".framedomain").click(function(event) {
         var id = event.currentTarget.offsetParent.dataset.href;
         var el = $('[data-href="' + id + '"] tbody');
@@ -233,8 +233,10 @@ function createTable(frames) {
             $('[data-href="' + id + '"] thead tr:nth-child(2)').show();
         }
     });
-}
+    // Enable table sorting
+    $(".resourceslist").tablesorter(); 
 
+}
 /*
 
 var resources = {};
