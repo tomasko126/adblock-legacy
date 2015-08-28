@@ -86,19 +86,30 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
     });
 });
 
-function createUI(domain, frameId) {
-    var elem = null;
+function createUI(domain, url, frameId) {
+    var elem = null, frameType = null;
     if (frameId === "0") {
         elem = "#header";
+        frameType = "Top frame";
     } else {
         var el = document.querySelectorAll(".resourceslist").length;
         elem = document.querySelectorAll(".resourceslist")[el-1];
+        frameType = "Sub frame";
     }
     $(elem).after(
-        '<table data-href=' + domain + ' class="resourceslist">' +
+        '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
             '<thead>' +
                 '<tr>' +
-                    '<th class="frameurl">' + 'Frame: ' + domain + '<\/th>' +
+                    '<th class="frametype">' + 'Frame type: ' + frameType + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th class="framedomain">' + 'Frame domain: ' + domain + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th class="frameurl">' + 'Frame url: ' + truncateURI(url) + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th style="height: 10px;"></th>' +
                 '<\/tr>' +
                 '<tr>' +
                     '<th i18n="headerresource" data-column="url"><\/th>' +
@@ -113,8 +124,17 @@ function createUI(domain, frameId) {
     );
 }
 
+// TODO: Truncating according to other URL elements & length?
+function truncateURI(uri) {
+    if (uri.length > 90) {
+        return uri.substring(0, 80) + '[...]';
+    }
+    return uri;
+}
+
 // Now create that table row-by-row
 function createTable(frames) {
+    // TODO: Sometimes, there is topframe and subframe with same URLs, adjust this behaviour
     var data = {};
     for (var frame in frames) {
         var frameObject = frames[frame];
@@ -126,7 +146,7 @@ function createTable(frames) {
             continue;
         console.log(frame);
         // Create table for frame
-        createUI(frameObject.domain, frame);
+        createUI(frameObject.domain, frameObject.url, frame);
         for (var resource in frameObject["resources"]) {
             var res = frameObject["resources"][resource];
             // TODO: Use better approach?
@@ -146,14 +166,6 @@ function createTable(frames) {
                 } else {
                     row.addClass("whitelisted");
                 }
-            }
-
-            // TODO: Truncating according to other URL elements & length?
-            function truncateURI(uri) {
-                if (uri.length > 90) {
-                    return uri.substring(0, 80) + '[...]';
-                }
-                return uri;
             }
 
             // Cell 2: URL
@@ -201,6 +213,7 @@ function createTable(frames) {
     }
 
     for (var domain in data) {
+        console.log(data);
         for (var i=0; i<data[domain].length; i++) {
             var resource = data[domain][i];
             $('[data-href="' + domain + '"] tbody').append(resource);
@@ -208,7 +221,7 @@ function createTable(frames) {
     }
     localizePage();
     
-    $(".frameurl").click(function(event) {
+    $(".framedomain").click(function(event) {
         var id = event.currentTarget.offsetParent.dataset.href;
         var el = $('[data-href="' + id + '"] tbody');
         var isHidden = el.is(":hidden");

@@ -13,10 +13,9 @@ body {
 .resourceslist:first-of-type {
     margin: 120px auto 20px auto;
 }
-.frameurl {
+.framedomain, .frameurl, .frametype {
     text-align: left;
     font-size: small;
-    cursor: pointer;
 }
 [data-column="type"] {
     width: 100px;
