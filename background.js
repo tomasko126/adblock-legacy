@@ -1441,7 +1441,7 @@
       chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
       var note = new Notification(translate("safarinotificationtitle") , { 'body' : translate("safarinotificationbody"), 'tag' : (Math.floor(Math.random() * 3000)).toString() });
       note.onclick = function() {
-        openTab("options/index.html");
+        openTab("options/index.html?tab=0");
       };
     }
   }

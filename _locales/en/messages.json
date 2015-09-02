@@ -1084,7 +1084,7 @@
     "description":"messesage to users when they click the pause item in the adblock popup menu"
   },
   "safaricontentblockinglimitexceeded":{
-    "message":"The number of blocking and hiding rules exceeds the 50,000 limit, and has been automatically reduced. Please reduce the number of subscribed filter lists.",
+    "message":"The number of blocking and hiding rules exceeds the 50,000 limit, and has been automatically reduced. Please reduce the number of subscribed filter lists, or custom filters.",
     "description":"messesage to users when the number of rules submitted to the Safari via content blocking has exceeded the 50,000 limit"
   },
   "safarinotificationtitle":{
