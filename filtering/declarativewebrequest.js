@@ -125,10 +125,13 @@ DeclarativeWebRequest = (function() {
     //remove any whitespace
     var rule = filter._rule.source;
     rule = rule.trim();
-
+    if (rule.endsWith("/i")) {
+      var regexSwitchPos = rule.lastIndexOf("/i");
+      rule = rule.substring(0, regexSwitchPos);
+    }
     // make sure to limit rules to to HTTP(S) URLs (if not already limited)
     if (!/^(\^|http|\/http)/.test(rule)) {
-      rule = HTML_PREFIX + REGEX_WILDCARD + filter._rule;
+      rule = HTML_PREFIX + REGEX_WILDCARD + rule;
     }
     return rule;
   };
@@ -280,7 +283,6 @@ DeclarativeWebRequest = (function() {
 
         theRule = createEmptySelectorRule();
         theRule["action"]["selector"] = selectorText;
-        console.log("selector rule: ", theRule);
         //rules.push(theRule);
       }
       //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)

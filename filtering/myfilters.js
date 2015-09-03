@@ -287,9 +287,6 @@ MyFilters.prototype.rebuild = function() {
         selectorsNotAll[id] = selectorFilter;
       }
     }
-
-    log(" # of selectorsNotAll: " + selectorsNotAll.length)
-    log(" # of selectorsFull: " + selectorsFull.length)
     var selectorFilters = [];
     for (var id in selectorsNotAll) {
       selectorFilters.push(selectorsNotAll[id]);
@@ -299,7 +296,7 @@ MyFilters.prototype.rebuild = function() {
        selectorFiltersAll.push(selectorsFull[id]);
     }
     var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
-    log(" customRules: " + customRules.length)
+    log(" customRules: ", customRules);
     //add the custom rules, with the filter list rules
     this._filterListRules.push.apply(this._filterListRules, customRules);
     if (!this._filterListRules ||
@@ -534,6 +531,7 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
 MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
   this._subscriptions[id].last_update = Date.now();
   delete this._subscriptions[id].last_update_failed_at;
+  console.log("(typeof text === object", (typeof text === "object"));
   //Safari 9 Content Blocking...
   if (get_settings().safari_content_blocking) {
     if (this._fetchTracker &&
@@ -743,8 +741,8 @@ MyFilters.prototype._load_default_subscriptions = function() {
   }
   //Update will be done immediately after this function returns
   result["adblock_custom"] = { subscribed: true };
-  result["easylist"] = { subscribed: true };
-  result["malware"] = { subscribed: true };
+  //result["easylist"] = { subscribed: true };
+  //result["malware"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
