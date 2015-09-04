@@ -133,7 +133,7 @@ function createFrameUI(domain, url, frameId) {
                     '<th class="framedomain">' + 'Frame domain: ' + domain + '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
-                    '<th class="frameurl">' + 'Frame url: ' + truncateURI(url) + '<\/th>' +
+                    '<th class="frameurl" title="' + url + '">' + 'Frame url: ' + truncateURI(url) + '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
                     '<th style="height: 10px;"></th>' +

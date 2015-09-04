@@ -27,8 +27,10 @@ table {
    padding-top: 20px; 
 }
 th[data-column="url"] {
-    padding-left: 25px;
     cursor: pointer;
+}
+[data-column="url"] {
+    padding-left: 25px;
 }
 th[data-column="type"] {
     width: 100px;

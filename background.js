@@ -365,6 +365,7 @@
       } else {
           var blocked = blockedData;
       }
+
       frameData.storeResource(tabId, requestingFrameId, details.url, reqType, blockedData);
 
       // Issue 7178
