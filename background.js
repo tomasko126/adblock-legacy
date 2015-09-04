@@ -1141,26 +1141,6 @@
   resourceblock_get_frameData = function(tabId) {
     return frameData.get(tabId);
   }
-  
-  process_resourceblock_selectors = function(selectors) {
-      for (var i=0; i<selectors.length; i++) {
-          var selector = selectors[i];
-          var domain = selector.frameDomain;
-          var filterset = _myfilters.hiding._viewFor(domain);
-          var items = filterset.items;
-          for (var domain in items) {
-              var domainItems = domain[items];
-              for (var item in domainItems) {
-                  var domainSelector = domainItems[item]._text;
-                  console.log(domainItems);
-                  if (domainSelector.indexOf(selector) > -1) {
-                      console.log(domainSelector);
-                      break;
-                  }
-              }
-          }
-      }
-  }
 
   // Return chrome.i18n._getL10nData() for content scripts who cannot
   // call that function (since it loads extension files from disk.)

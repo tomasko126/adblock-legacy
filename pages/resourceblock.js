@@ -85,9 +85,8 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
                             }
                         } else {
                             var urlDomain = parseUri(resource).hostname;
-                            var thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
-                            res.thirdParty = thirdParty;
                             res.frameDomain = frameDomain;
+                            res.thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
                             if (res.blockedData !== false) {
                                 var filter = res.blockedData.text;
                                 for (var filterList in filterLists) {
@@ -112,8 +111,9 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
 });
 
 // TODO: Better naming
-function createUI(domain, url, frameId) {
+function createFrameUI(domain, url, frameId) {
     var elem = null, frameType = null;
+
     if (frameId === "0") {
         elem = "#header";
         frameType = "Top frame";
@@ -122,6 +122,7 @@ function createUI(domain, url, frameId) {
         elem = document.querySelectorAll(".resourceslist")[el-1];
         frameType = "Subframe";
     }
+
     $(elem).after(
         '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
             '<thead>' +
@@ -150,43 +151,6 @@ function createUI(domain, url, frameId) {
     );
 }
 
-// TODO: Truncating according to other URL elements & length?
-function truncateURI(uri) {
-    if (uri.length > 80) {
-        return uri.substring(0, 75) + '[...]';
-    }
-    return uri;
-}
-
-// Click event for the column titles (<th>) of a table.
-// It'll sort the table upon the contents of that column
-// TODO: Move it
-function sortTable() {
-    var table = $(this).closest('table');
-    if (table.find('[colspan]').length)
-        return; // can't handle the case where some columns have been merged locally
-    var columnNumber = $(this).prevAll().length + 1;
-    if ($(this).attr("data-sortDirection") === "ascending") {
-        $(this).attr("data-sortDirection", "descending"); // Z->A
-    } else {
-        $(this).attr("data-sortDirection", "ascending"); // A->Z
-    }
-    var cellList = [];
-    var rowList = [];
-    $("td:nth-of-type(" + columnNumber + ")", table).each(function(index, element) {
-        cellList.push(element.innerHTML.toLowerCase() + 'ÿÿÿÿÿ' + (index+10000));
-        rowList.push($(element).parent('tr').clone(true));
-    });
-    cellList.sort();
-    if ($(this).attr("data-sortDirection") === "descending")
-        cellList.reverse();
-    $("tbody", table).empty();
-    cellList.forEach(function(item) {
-        var no = Number(item.match(/\d+$/)[0]) - 10000;
-        $("tbody", table).append(rowList[no]);
-    });
-};
-
 // Now create that table row-by-row
 function createTable(frames) {
     // TODO: Sometimes, there is topframe and subframe with same URLs, adjust this behaviour!
@@ -199,8 +163,6 @@ function createTable(frames) {
         var length = Object.keys(frameObject.resources).length;
         if (length === 0)
             continue;
-        // Create table for frame
-        createUI(frameObject.domain, frameObject.url, frame);
         for (var resource in frameObject["resources"]) {
             var res = frameObject["resources"][resource];
             res.url = resource;
@@ -263,8 +225,11 @@ function createTable(frames) {
 
             data[frames[frame].domain].push(row);
         }
+        // Create table for each frame
+        createFrameUI(frameObject.domain, frameObject.url, frame);
     }
 
+    // Append resource to according table
     for (var domain in data) {
         for (var i=0; i<data[domain].length; i++) {
             var resource = data[domain][i];
@@ -272,6 +237,7 @@ function createTable(frames) {
         }
     }
 
+    // Localize page
     localizePage();
 
     // Enable table sorting
@@ -280,3 +246,39 @@ function createTable(frames) {
     $("th[data-column='filter']").click(sortTable);
     $("th[data-column='thirdparty']").click(sortTable);
 }
+
+// Truncate long URIs
+function truncateURI(uri) {
+    if (uri.length > 80) {
+        return uri.substring(0, 75) + '[...]';
+    }
+    return uri;
+}
+
+// Click event for the column titles (<th>) of a table.
+// It'll sort the table upon the contents of that column
+function sortTable() {
+    var table = $(this).closest('table');
+    if (table.find('[colspan]').length)
+        return; // can't handle the case where some columns have been merged locally
+    var columnNumber = $(this).prevAll().length + 1;
+    if ($(this).attr("data-sortDirection") === "ascending") {
+        $(this).attr("data-sortDirection", "descending"); // Z->A
+    } else {
+        $(this).attr("data-sortDirection", "ascending"); // A->Z
+    }
+    var cellList = [];
+    var rowList = [];
+    $("td:nth-of-type(" + columnNumber + ")", table).each(function(index, element) {
+        cellList.push(element.innerHTML.toLowerCase() + 'ÿÿÿÿÿ' + (index+10000));
+        rowList.push($(element).parent('tr').clone(true));
+    });
+    cellList.sort();
+    if ($(this).attr("data-sortDirection") === "descending")
+        cellList.reverse();
+    $("tbody", table).empty();
+    cellList.forEach(function(item) {
+        var no = Number(item.match(/\d+$/)[0]) - 10000;
+        $("tbody", table).append(rowList[no]);
+    });
+};
