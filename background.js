@@ -454,9 +454,9 @@
     if (SAFARI) {
         frameData.storeResource(sender.tab.id, selector, "HIDE");
     } else {
-        frameData.storeResource(sender.tab.id, 0, selector, "HIDE");
+        frameData.storeResource(sender.tab.id, sender.frameId, selector, "HIDE");
     }
-    var data = frameData.get(sender.tab.id, 0);
+    var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
       DataCollection.addItem(selector);
@@ -1142,15 +1142,24 @@
     return frameData.get(tabId);
   }
   
-  process_resourceblock_resources = function(frames) {
-      for (var frame in frames) {
-          for (var resource in frames[frame]) {
-              var res = frames[frame][resource];
-              res.matches = _myfilters.blocking.matches(res.url, res.elType, res.frameDomain, true, true);
-              console.info(res.matches);
-          }  
+  process_resourceblock_selectors = function(selectors) {
+      for (var i=0; i<selectors.length; i++) {
+          var selector = selectors[i];
+          var domain = selector.frameDomain;
+          var filterset = _myfilters.hiding._viewFor(domain);
+          var items = filterset.items;
+          for (var domain in items) {
+              var domainItems = domain[items];
+              for (var item in domainItems) {
+                  var domainSelector = domainItems[item]._text;
+                  console.log(domainItems);
+                  if (domainSelector.indexOf(selector) > -1) {
+                      console.log(domainSelector);
+                      break;
+                  }
+              }
+          }
       }
-      return frames;
   }
 
   // Return chrome.i18n._getL10nData() for content scripts who cannot
