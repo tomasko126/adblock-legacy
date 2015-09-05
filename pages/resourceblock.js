@@ -4,6 +4,26 @@
 var tabId = parseUri.parseSearch(document.location.href).tabId;
 tabId = parseInt(tabId);
 
+// Convert element type to request type
+function reqTypeForElement(elType) {
+    switch (elType) {
+        case 1:    return "script";
+        case 2:    return "image";
+        case 4:    return "background";
+        case 8:    return "stylesheet";
+        case 16:   return "object";
+        case 32:   return "sub_frame";
+        case 64:   return "object_subrequest";
+        case 128:  return "media";
+        case 256:  return "other";
+        case 512:  return "xmlhttprequest";
+        case 1024: return "main_frame";
+        case 2048: return "elemhide";
+        case 4096: return "popup";
+        default:   return "selector";
+    }
+}
+
 // Get frameData object
 BGcall("get_frameData", tabId, function(data) {
     if (!data) {
@@ -68,7 +88,7 @@ BGcall("get_frameData", tabId, function(data) {
                     for (var resource in frameResources) {
                         var res = frameResources[resource];
                         // Selector resource
-                        if (res.reqType === "HIDE") {
+                        if (reqTypeForElement(res.elType) === "selector") {
                             for (var filterList in filterLists) {
                                 // Don't check selector against malware filter list
                                 if (filterList === "malware") {
@@ -192,13 +212,13 @@ function processRequests(frames) {
             res.url = resource;
 
             // Don't show main_frame resource, unless it's excluded by $document or $elemhide
-            if (res.reqType === "main_frame" && (!res.blockedData || !res.blockedData.blocked)) {
+            if ((reqTypeForElement(res.elType) === "main_frame") && (!res.blockedData || !res.blockedData.blocked)) {
                 continue;
             }
 
             var row = $("<tr>");
 
-            if (res.reqType === "HIDE") {
+            if (reqTypeForElement(res.elType) === "selector") {
                 row.addClass("hiding");
             } else if (res.blockedData) {
                 if (res.blockedData.blocked) {
@@ -219,7 +239,7 @@ function processRequests(frames) {
             $("<td>").
                 attr("data-column", "type").
                 css("text-align", "center").
-                text(res.reqType === "HIDE" ? translate("typeselector") : translate("type" + res.reqType)).
+                text(translate("type" + reqTypeForElement(res.elType))).
                 appendTo(row);
 
             // Cell 3: Matching filter
@@ -229,7 +249,7 @@ function processRequests(frames) {
             if (res.blockedData) {
                 $("<span>").
                     text(truncateURI(res.blockedData.text)).
-                    attr('title', translate("filterorigin", res.blockedData.filterList)).
+                    attr('title', translate("filterorigin", translate("filter" + res.blockedData.filterList))).
                     appendTo(cell);
             }
             row.append(cell);

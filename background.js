@@ -212,90 +212,90 @@
   }
 
   // Implement blocking via the Chrome webRequest API.
-  if (!SAFARI) {
-    // Stores url, whitelisting, and blocking info for a tabid+frameid
-    // TODO: can we avoid making this a global?
-    frameData = {
-      // Returns the data object for the frame with ID frameId on the tab with
-      // ID tabId. If frameId is not specified, it'll return the data for all
-      // frames on the tab with ID tabId. Returns undefined if tabId and frameId
-      // are not being tracked.
-      get: function(tabId, frameId) {
-        if (frameId !== undefined)
-          return (frameData[tabId] || {})[frameId];
-        return frameData[tabId];
-      },
+  // Stores url, whitelisting, and blocking info for a tabid+frameid
+  // TODO: can we avoid making this a global?
+  frameData = {
+    // Returns the data object for the frame with ID frameId on the tab with
+    // ID tabId. If frameId is not specified, it'll return the data for all
+    // frames on the tab with ID tabId. Returns undefined if tabId and frameId
+    // are not being tracked.
+    get: function(tabId, frameId) {
+      if (frameId !== undefined)
+        return (frameData[tabId] || {})[frameId];
+      return frameData[tabId];
+    },
 
-      // Record that |tabId|, |frameId| points to |url|.
-      record: function(tabId, frameId, url) {
-        var fd = frameData;
-        if (!fd[tabId]) fd[tabId] = {};
-        fd[tabId][frameId] = {
-          url: url,
-          // Cache these as they'll be needed once per request
-          domain: parseUri(url).hostname,
-          resources: {}
-        };
-        fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
-      },
+    // Record that |tabId|, |frameId| points to |url|.
+    record: function(tabId, frameId, url) {
+      var fd = frameData;
+      if (!fd[tabId]) fd[tabId] = {};
+      fd[tabId][frameId] = {
+        url: url,
+        // Cache these as they'll be needed once per request
+        domain: parseUri(url).hostname,
+        resources: {}
+      };
+      fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
+    },
 
-      // Watch for requests for new tabs and frames, and track their URLs.
-      // Inputs: details: object from onBeforeRequest callback
-      // Returns false if this request's tab+frame are not trackable.
-      track: function(details) {
-        var fd = frameData, tabId = details.tabId;
+    // Watch for requests for new tabs and frames, and track their URLs.
+    // Inputs: details: object from onBeforeRequest callback
+    // Returns false if this request's tab+frame are not trackable.
+    track: function(details) {
+      var fd = frameData, tabId = details.tabId;
 
-        // A hosted app's background page
-        if (tabId === -1) {
-           return false;
-        }
-        if (details.type === 'main_frame') { // New tab
-          delete fd[tabId];
-          fd.record(tabId, 0, details.url);
-          fd[tabId].blockCount = 0;
-          log("\n-------", fd.get(tabId, 0).domain, ": loaded in tab", tabId, "--------\n\n");
-          return true;
-        }
-
-        // Request from a tab opened before AdBlock started, or from a
-        // chrome:// tab containing an http:// iframe
-        if (!fd[tabId]) {
-          log("[DEBUG]", "Ignoring unknown tab:", tabId, details.frameId, details.url);
-          return false;
-        }
-
-        // Some times e.g. Youtube create empty iframes via JavaScript and
-        // inject code into them.  So requests appear from unknown frames.
-        // Treat these frames as having the same URL as the tab.
-        var potentialEmptyFrameId = (details.type === 'sub_frame' ? details.parentFrameId: details.frameId);
-        if (undefined === fd.get(tabId, potentialEmptyFrameId)) {
-          fd.record(tabId, potentialEmptyFrameId, fd.get(tabId, 0).url);
-          log("[DEBUG]", "Null frame", tabId, potentialEmptyFrameId, "found; giving it the tab's URL.");
-        }
-
-        if (details.type === 'sub_frame') { // New frame
-          fd.record(tabId, details.frameId, details.url);
-          log("[DEBUG]", "=========== Tracking frame", tabId, details.parentFrameId, details.frameId, details.url);
-        }
-
-        return true;
-      },
-
-      // Record a resource for the resource blocker.
-      storeResource: function(tabId, frameId, url, reqType, blockedData) {
-        if (!get_settings().show_advanced_options)
-          return;
-        var data = frameData.get(tabId, frameId);
-        if (data !== undefined) {
-            data.resources[url] = { reqType: reqType, blockedData: blockedData };
-        }
-      },
-
-      onTabClosedHandler: function(tabId) {
-        delete frameData[tabId];
+      // A hosted app's background page
+      if (tabId === -1) {
+         return false;
       }
-    };
+      if (details.type === 'main_frame') { // New tab
+        delete fd[tabId];
+        fd.record(tabId, 0, details.url);
+        fd[tabId].blockCount = 0;
+        log("\n-------", fd.get(tabId, 0).domain, ": loaded in tab", tabId, "--------\n\n");
+        return true;
+      }
 
+      // Request from a tab opened before AdBlock started, or from a
+      // chrome:// tab containing an http:// iframe
+      if (!fd[tabId]) {
+        log("[DEBUG]", "Ignoring unknown tab:", tabId, details.frameId, details.url);
+        return false;
+      }
+
+      // Some times e.g. Youtube create empty iframes via JavaScript and
+      // inject code into them.  So requests appear from unknown frames.
+      // Treat these frames as having the same URL as the tab.
+      var potentialEmptyFrameId = (details.type === 'sub_frame' ? details.parentFrameId: details.frameId);
+      if (undefined === fd.get(tabId, potentialEmptyFrameId)) {
+        fd.record(tabId, potentialEmptyFrameId, fd.get(tabId, 0).url);
+        log("[DEBUG]", "Null frame", tabId, potentialEmptyFrameId, "found; giving it the tab's URL.");
+      }
+
+      if (details.type === 'sub_frame') { // New frame
+        fd.record(tabId, details.frameId, details.url);
+        log("[DEBUG]", "=========== Tracking frame", tabId, details.parentFrameId, details.frameId, details.url);
+      }
+
+      return true;
+    },
+
+    // Record a resource for the resource blocker.
+    storeResource: function(tabId, frameId, url, elType, blockedData) {
+      if (!get_settings().show_advanced_options)
+        return;
+      var data = frameData.get(tabId, frameId);
+      if (data !== undefined) {
+          data.resources[url] = { elType: elType, blockedData: blockedData };
+      }
+    },
+
+    onTabClosedHandler: function(tabId) {
+      delete frameData[tabId];
+    }
+  };
+
+  if (!SAFARI) {
     var normalizeRequestType = function(details) {
         // normalize type, because of issue with Chrome 38+
         var type = details.type;
@@ -366,7 +366,7 @@
           var blocked = blockedData;
       }
 
-      frameData.storeResource(tabId, requestingFrameId, details.url, reqType, blockedData);
+      frameData.storeResource(tabId, requestingFrameId, details.url, elType, blockedData);
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
@@ -446,16 +446,11 @@
                 frameData.track(details);
             }
         }
-    })
+    });
   }
 
   debug_report_elemhide = function(selector, matches, sender) {
-    if (!window.frameData)
       return;
-    if (SAFARI) {
-        frameData.storeResource(sender.tab.id, selector, "HIDE");
-    } else {
-        frameData.storeResource(sender.tab.id, sender.frameId, selector, "HIDE");
     }
     var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {

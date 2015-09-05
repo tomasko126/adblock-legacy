@@ -26,11 +26,11 @@ $(function() {
                   "div_options", "div_help_hide_start"]);
         } else if (info.whitelisted) {
             show(["div_status_whitelisted","div_enable_adblock_on_this_page",
-                  "separator0", "div_pause_adblock", "separator1",
+                  "separator0", "div_pause_adblock", "separator1", "div_show_resourcelist",
                   "div_options", "div_help_hide_start"]);
         } else {
             show(["div_pause_adblock", "div_blacklist", "div_whitelist",
-                  "div_whitelist_page",
+                  "div_whitelist_page", "div_show_resourcelist",
                   "div_report_an_ad", "separator1", "div_options",
                   "div_help_hide_start", "separator3", "block_counts"]);
 
@@ -58,8 +58,8 @@ $(function() {
             !LEGACY_SAFARI_51)
             show(["div_undo", "separator0"]);
 
-        if (advanced_option)
-            show(["div_show_resourcelist"]);
+        if (!advanced_option)
+            hide(["div_show_resourcelist"]);
 
         if (SAFARI && !advanced_option)
             hide(["div_report_an_ad", "separator1"]);
