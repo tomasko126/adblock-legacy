@@ -98,7 +98,6 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
                                         var filterListText = filterLists[filterList].text;
                                         for (var i=0; i<filterListText.length; i++) {
                                             var filterls = filterListText[i];
-                                            //console.log(filterls, filter);
                                             if (filterls === filter) {
                                                 res.blockedData["filterList"] = filterList;
                                             }
@@ -157,14 +156,13 @@ function createFrameUI(domain, url, frameId) {
 
 // Now create that table row-by-row
 function createTable(frames) {
-    // TODO: Sometimes, there is topframe and subframe with same URLs, adjust this behaviour!
+    // TODO: Sometimes, there is topframe and subframe with the same URLs, adjust this behaviour!
     var data = {};
     for (var frame in frames) {
         var frameObject = frames[frame];
         if (typeof frameObject === "number") {
             continue;
         }
-        // TODO: Create UI for sub_frames without resources
         var length = Object.keys(frameObject.resources).length;
         if (length === 0) {
             continue;
@@ -243,6 +241,9 @@ function createTable(frames) {
             $('[data-href="' + domain + '"] tbody').append(resource);
         }
     }
+    
+    // Remove loading icon
+    $(".loader").remove();
 
     // Localize page
     localizePage();
@@ -252,6 +253,9 @@ function createTable(frames) {
     $("th[data-column='type']").click(sortTable);
     $("th[data-column='filter']").click(sortTable);
     $("th[data-column='thirdparty']").click(sortTable);
+    
+    // Sort table to see first, what was either blocked or whitelisted
+    $("th[data-column='filter']").click();
 }
 
 // Truncate long URIs
