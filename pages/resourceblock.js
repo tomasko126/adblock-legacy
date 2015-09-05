@@ -64,6 +64,8 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
 
                     for (var resource in frameResources) {
                         var res = frameResources[resource];
+                        // TODO: Getting filter list and selector broken
+                        // URL: http://www.neowin.net/news/hands-on-first-impressions-of-nests-new-3rd-generation-learning-thermostat
                         if (res.reqType === "HIDE") {
                             for (var filterList in filterLists) {
                                 // Don't check selector against malware filter list
@@ -73,13 +75,18 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
                                 var filterListText = filterLists[filterList].text;
                                 for (var i=0; i<filterListText.length; i++) {
                                     var filter = filterListText[i];
+                                    // Don't check selector against non-selector filters
+                                    if (!Filter.isSelectorFilter(filter))
+                                        continue;
                                     if (filter.search(resource+"$") > -1) {
+                                        console.log(filter, resource);
                                         res.blockedData = [];
                                         res.blockedData["filterList"] = filterList;
                                         res.blockedData["text"] = filter;
                                         res.frameUrl = frame.url;
                                         res.frameDomain = frameDomain;
                                         selectors.push(res);
+                                        continue;
                                     }
                                 }
                             }
@@ -115,7 +122,16 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
 });
 
 function createFrameUI(domain, url, frameId) {
-    var elem = null, frameType = null;
+    var elem = null, frameType = null, frameUrls = $(".frameurl");
+
+    // Don't create another table with the same url,
+    // when we've already created one
+    for (var i=0; i<frameUrls.length; i++) {
+        var frameUrl = frameUrls[i].title;
+        if (url === frameUrl) {
+            return;
+        }
+    }
 
     if (frameId === "0") {
         elem = "#header";
@@ -156,7 +172,6 @@ function createFrameUI(domain, url, frameId) {
 
 // Now create that table row-by-row
 function createTable(frames) {
-    // TODO: Sometimes, there is topframe and subframe with the same URLs, adjust this behaviour!
     var data = {};
     for (var frame in frames) {
         var frameObject = frames[frame];

@@ -11,7 +11,7 @@ table {
 .resourceslist {
     position: relative;
     margin: 0px auto 20px auto;
-    min-width: 1150px;
+    min-width: 1195px;
 }
 .resourceslist:first-of-type {
     margin: 120px auto 20px auto;
