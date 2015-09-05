@@ -64,8 +64,6 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
 
                     for (var resource in frameResources) {
                         var res = frameResources[resource];
-                        // TODO: Getting filter list and selector broken
-                        // URL: http://www.neowin.net/news/hands-on-first-impressions-of-nests-new-3rd-generation-learning-thermostat
                         if (res.reqType === "HIDE") {
                             for (var filterList in filterLists) {
                                 // Don't check selector against malware filter list
@@ -78,15 +76,14 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
                                     // Don't check selector against non-selector filters
                                     if (!Filter.isSelectorFilter(filter))
                                         continue;
-                                    if (filter.search(resource+"$") > -1) {
-                                        console.log(filter, resource);
+                                    if (filter.indexOf(resource) > -1) {
                                         res.blockedData = [];
                                         res.blockedData["filterList"] = filterList;
                                         res.blockedData["text"] = filter;
                                         res.frameUrl = frame.url;
                                         res.frameDomain = frameDomain;
                                         selectors.push(res);
-                                        continue;
+                                        break;
                                     }
                                 }
                             }
