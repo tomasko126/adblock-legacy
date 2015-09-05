@@ -115,7 +115,7 @@ function generateReportURL() {
 
 // Check every domain of downloaded resource against malware-known domains
 var checkmalware = function() {
-    BGcall("get_frameData_adreport", tabId, function(tab) {
+    BGcall("get_frameData", tabId, function(tab) {
         if (!tab)
             return;
 

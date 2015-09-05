@@ -58,6 +58,9 @@ $(function() {
             !LEGACY_SAFARI_51)
             show(["div_undo", "separator0"]);
 
+        if (advanced_option)
+            show(["div_show_resourcelist"]);
+
         if (SAFARI && !advanced_option)
             hide(["div_report_an_ad", "separator1"]);
 
@@ -203,6 +206,11 @@ $(function() {
         BG.create_page_whitelist_filter(tab.unicodeUrl);
         closeAndReloadPopup();
         !SAFARI ? chrome.tabs.reload() : activeTab.url = activeTab.url;
+    });
+
+    $("#div_show_resourcelist").click(function() {
+        BG.launch_resourceblocker("?tabId=" + tab.id);
+        closeAndReloadPopup();
     });
 
     $("#div_report_an_ad").click(function() {

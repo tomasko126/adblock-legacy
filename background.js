@@ -1132,9 +1132,14 @@
     "_blank",
     'scrollbars=0,location=0,resizable=0,width=460,height=150');
   }
+  
+  // Open the resource blocker when requested from popup.
+  launch_resourceblocker = function(query) {
+    openTab("pages/resourceblock.html" + query, true);
+  }
 
   // Get the framedata for the 'Report an Ad' page
-  get_frameData_adreport = function(tabId) {
+  get_frameData = function(tabId) {
     return frameData.get(tabId);
   }
 

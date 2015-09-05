@@ -5,7 +5,7 @@ var tabId = parseUri.parseSearch(document.location.href).tabId;
 tabId = parseInt(tabId);
 
 // Get frameData object
-BGcall("resourceblock_get_frameData", tabId, function(data) {
+BGcall("get_frameData", tabId, function(data) {
     if (!data) {
         alert(translate('noresourcessend2'));
         window.close();

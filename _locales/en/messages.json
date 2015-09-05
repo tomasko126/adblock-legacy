@@ -1198,5 +1198,9 @@
   "headerfilter":{
     "message":"Matched filter",
     "description":"resourceblocking page string"
+  },
+  "show_resourcelist":{
+    "message":"Show all requests",
+    "description":"Entry in the AdBlock button menu"
   }
 }
