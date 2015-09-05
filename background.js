@@ -450,8 +450,10 @@
   }
 
   debug_report_elemhide = function(selector, matches, sender) {
+    if (!window.frameData) {
       return;
     }
+    frameData.storeResource(sender.tab.id, sender.frameId || 0, selector, "selector");
     var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
