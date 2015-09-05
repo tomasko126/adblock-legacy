@@ -210,36 +210,36 @@ function processRequests(frames) {
 
             // Cell 1: URL
             $("<td>").
-            attr("title", res.url).
-            attr("data-column", "url").
-            text(truncateURI(res.url)).
-            appendTo(row);
+                attr("title", res.url).
+                attr("data-column", "url").
+                text(truncateURI(res.url)).
+                appendTo(row);
 
             // Cell 2: Type
             $("<td>").
-            attr("data-column", "type").
-            css("text-align", "center").
-            text(res.reqType === "HIDE" ? translate("typeselector") : translate("type" + res.reqType)).
-            appendTo(row);
+                attr("data-column", "type").
+                css("text-align", "center").
+                text(res.reqType === "HIDE" ? translate("typeselector") : translate("type" + res.reqType)).
+                appendTo(row);
 
             // Cell 3: Matching filter
-            cell = $("<td>").
-            attr("data-column", "filter").
-            css("text-align", "center");
+            var cell = $("<td>").
+                attr("data-column", "filter").
+                css("text-align", "center");
             if (res.blockedData) {
                 $("<span>").
-                text(truncateURI(res.blockedData.text)).
-                attr('title', translate("filterorigin", res.blockedData.filterList)).
-                appendTo(cell);
+                    text(truncateURI(res.blockedData.text)).
+                    attr('title', translate("filterorigin", res.blockedData.filterList)).
+                    appendTo(cell);
             }
             row.append(cell);
 
             // Cell 4: third-party or not
             var cell = $("<td>").
-            text(res.thirdParty ? translate("yes") : translate("no")).
-            attr("title", translate("resourcedomain", res.frameDomain)).
-            attr("data-column", "thirdparty").
-            css("text-align", "center");
+                text(res.thirdParty ? translate("yes") : translate("no")).
+                attr("title", translate("resourcedomain", res.frameDomain)).
+                attr("data-column", "thirdparty").
+                css("text-align", "center");
             row.append(cell);
 
             if (!data[frames[frame].domain]) {
