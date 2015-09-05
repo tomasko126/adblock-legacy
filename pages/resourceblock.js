@@ -31,11 +31,13 @@ BGcall("get_frameData", tabId, function(data) {
 
         BGcall("get_content_script_data", opts, function(arg) {
 
+            // Process AdBlock's own filters (if any)
             filterLists["AdBlock"] = {};
             filterLists.AdBlock.text = MyFilters.prototype.getExtensionFilters(arg.settings);
 
             BGcall("storage_get", "custom_filters", function(filters) {
 
+                // Process custom filters (if any)
                 if (filters) {
                     filters = filters.split("\n");
 
@@ -62,8 +64,10 @@ BGcall("get_frameData", tabId, function(data) {
                     var frameResources = frame.resources;
                     var frameDomain = frame.domain;
 
+                    // Process each resource
                     for (var resource in frameResources) {
                         var res = frameResources[resource];
+                        // Selector resource
                         if (res.reqType === "HIDE") {
                             for (var filterList in filterLists) {
                                 // Don't check selector against malware filter list
@@ -88,6 +92,7 @@ BGcall("get_frameData", tabId, function(data) {
                                 }
                             }
                         } else {
+                            // Non-selector resource (blocked/whitelisted/unmodified)
                             var urlDomain = parseUri(resource).hostname;
                             res.frameDomain = frameDomain;
                             res.thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
@@ -112,13 +117,14 @@ BGcall("get_frameData", tabId, function(data) {
                         }
                     }
                 }
-                createTable(data);
+                processRequests(data);
             });
         });
     });
 });
 
-function createFrameUI(domain, url, frameId) {
+// Create a new table for frame
+function createTableUI(domain, url, frameId) {
     var elem = null, frameType = null, frameUrls = $(".frameurl");
 
     // Don't create another table with the same url,
@@ -130,6 +136,7 @@ function createFrameUI(domain, url, frameId) {
         }
     }
 
+    // Sort tables
     if (frameId === "0") {
         elem = "#header";
         frameType = "Top frame";
@@ -141,40 +148,41 @@ function createFrameUI(domain, url, frameId) {
 
     $(elem).after(
         '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
-        '<thead>' +
-        '<tr>' +
-        '<th class="frametype">' + 'Frame type: ' + frameType + '<\/th>' +
-        '<\/tr>' +
-        '<tr>' +
-        '<th class="framedomain">' + 'Frame domain: ' + domain + '<\/th>' +
-        '<\/tr>' +
-        '<tr>' +
-        '<th class="frameurl" title="' + url + '">' + 'Frame url: ' + truncateURI(url) + '<\/th>' +
-        '<\/tr>' +
-        '<tr>' +
-        '<th style="height: 10px;"></th>' +
-        '<\/tr>' +
-        '<tr>' +
-        '<th i18n="headerresource" data-column="url"><\/th>' +
-        '<th i18n="headertype" data-column="type"><\/th>' +
-        '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
-        '<th i18n="thirdparty" data-column="thirdparty" style="text-align: center;"><\/th>' +
-        '<\/tr>' +
-        '<\/thead>' +
-        '<tbody>' +
-        '<\/tbody>' +
+            '<thead>' +
+                '<tr>' +
+                    '<th class="frametype">' + 'Frame type: ' + frameType + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th class="framedomain">' + 'Frame domain: ' + domain + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th class="frameurl" title="' + url + '">' + 'Frame url: ' + truncateURI(url) + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th style="height: 10px;"></th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th i18n="headerresource" data-column="url"><\/th>' +
+                    '<th i18n="headertype" data-column="type"><\/th>' +
+                    '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
+                    '<th i18n="thirdparty" data-column="thirdparty" style="text-align: center;"><\/th>' +
+                '<\/tr>' +
+            '<\/thead>' +
+            '<tbody>' +
+            '<\/tbody>' +
         '<\/table>'
     );
 }
 
-// Now create that table row-by-row
-function createTable(frames) {
+// Process each request and add it to table
+function processRequests(frames) {
     var data = {};
     for (var frame in frames) {
         var frameObject = frames[frame];
         if (typeof frameObject === "number") {
             continue;
         }
+        // Don't process frame with no recources
         var length = Object.keys(frameObject.resources).length;
         if (length === 0) {
             continue;
@@ -242,8 +250,9 @@ function createTable(frames) {
 
             data[frames[frame].domain].push(row);
         }
+
         // Create table for each frame
-        createFrameUI(frameObject.domain, frameObject.url, frame);
+        createTableUI(frameObject.domain, frameObject.url, frame);
     }
 
     // Append resource to according table
@@ -266,7 +275,7 @@ function createTable(frames) {
     $("th[data-column='filter']").click(sortTable);
     $("th[data-column='thirdparty']").click(sortTable);
     
-    // Sort table to see first, what was either blocked or whitelisted
+    // Sort table to see, what was either blocked/whitelisted or hidden
     $("th[data-column='filter']").click();
 }
 

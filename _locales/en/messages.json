@@ -1202,5 +1202,29 @@
   "show_resourcelist":{
     "message":"Show all requests",
     "description":"Entry in the AdBlock button menu"
+  },
+  "noresourcessend2":{
+    "message":"Something went wrong. No resources have been sent through. This page will now close. Try reloading the website.",
+    "description":"resourceblocking page string"
+  },
+  "resourcedomain":{
+    "message":"Loaded on page with domain:\n$domain$",
+    "description":"Text shown when hovering over an item in the third-party column",
+    "placeholders":{
+      "domain":{
+        "content":"$1",
+        "example":"example.com"
+      }
+    }
+  },
+  "filterorigin":{
+    "message":"Filter origin:\n$list$",
+    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
+    "placeholders":{
+      "list":{
+        "content":"$1",
+        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
   }
 }
