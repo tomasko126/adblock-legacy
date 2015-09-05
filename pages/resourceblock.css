@@ -17,9 +17,8 @@ table {
     margin: 120px auto 20px auto;
 }
 .loader {
-    position: absolute;
-    left: 50%;
-    top: 130px;
+    display: block;
+    margin: 120px auto auto;
 }
 .framedomain, .frameurl, .frametype {
     text-align: left;
