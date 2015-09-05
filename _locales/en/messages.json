@@ -1226,5 +1226,69 @@
         "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
       }
     }
+  },
+  "typeselector":{
+    "message":"selector",
+    "description":"A resource type"
+  },
+  "typescript":{
+    "message":"script",
+    "description":"A resource type"
+  },
+  "typeimage":{
+    "message":"image",
+    "description":"A resource type"
+  },
+  "typestylesheet":{
+    "message":"style definition",
+    "description":"A resource type"
+  },
+  "typeobject":{
+    "message":"interactive object",
+    "description":"A resource type"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typeobject_subrequest":{
+    "message":"object_subrequest",
+    "description":"A resource type"
+  },
+  "typexmlhttprequest":{
+    "message":"xmlhttprequest",
+    "description":"A resource type"
+  },
+  "typeother":{
+    "message":"other",
+    "description":"A resource type"
+  },
+  "typepopup":{
+    "message":"popup",
+    "description":"A resource type"
+  },
+  "typemedia":{
+    "message":"audio\/video",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"page",
+    "description":"A resource type"
+  },
+  "headerresource":{
+    "message":"Resource",
+    "description":"resourceblocking page string"
+  },
+  "headertype":{
+    "message":"Type",
+    "description":"resourceblocking page string"
+  },
+  "headerfilter":{
+    "message":"Matched filter",
+    "description":"resourceblocking page string"
+  },
+  "thirdparty":{
+    "message":"Third-party",
+    "description":"Resource list column title telling if the resource originates from a different domain"
   }
 }

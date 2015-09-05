@@ -219,9 +219,7 @@ function processRequests(frames) {
             $("<td>").
             attr("data-column", "type").
             css("text-align", "center").
-            // TODO: i18n?
-            text(res.reqType === "HIDE" ? "selector" : res.reqType).
-            //text(translate('type' + typeName)).
+            text(res.reqType === "HIDE" ? translate("typeselector") : translate("type" + res.reqType)).
             appendTo(row);
 
             // Cell 3: Matching filter
