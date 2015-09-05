@@ -37,7 +37,7 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
             BGcall("storage_get", "custom_filters", function(filters) {
 
                 if (filters) {
-                    filters = filters.split('\n');
+                    filters = filters.split("\n");
 
                     filterLists["Custom"] = {};
                     filterLists["Custom"].text = [];
@@ -95,8 +95,13 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
                                             res.blockedData["filterList"] = filterList;
                                         }
                                     } else {
-                                        if (filterLists[filterList].text.indexOf(filter) > -1) {
-                                            res.blockedData["filterList"] = filterList;
+                                        var filterListText = filterLists[filterList].text;
+                                        for (var i=0; i<filterListText.length; i++) {
+                                            var filterls = filterListText[i];
+                                            //console.log(filterls, filter);
+                                            if (filterls === filter) {
+                                                res.blockedData["filterList"] = filterList;
+                                            }
                                         }
                                     }
                                 }
@@ -110,7 +115,6 @@ BGcall("resourceblock_get_frameData", tabId, function(data) {
     });
 });
 
-// TODO: Better naming
 function createFrameUI(domain, url, frameId) {
     var elem = null, frameType = null;
 
@@ -125,28 +129,28 @@ function createFrameUI(domain, url, frameId) {
 
     $(elem).after(
         '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
-            '<thead>' +
-                '<tr>' +
-                    '<th class="frametype">' + 'Frame type: ' + frameType + '<\/th>' +
-                '<\/tr>' +
-                '<tr>' +
-                    '<th class="framedomain">' + 'Frame domain: ' + domain + '<\/th>' +
-                '<\/tr>' +
-                '<tr>' +
-                    '<th class="frameurl" title="' + url + '">' + 'Frame url: ' + truncateURI(url) + '<\/th>' +
-                '<\/tr>' +
-                '<tr>' +
-                    '<th style="height: 10px;"></th>' +
-                '<\/tr>' +
-                '<tr>' +
-                    '<th i18n="headerresource" data-column="url"><\/th>' +
-                    '<th i18n="headertype" data-column="type"><\/th>' +
-                    '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
-                    '<th i18n="thirdparty" data-column="thirdparty" style="text-align: center;"><\/th>' +
-                '<\/tr>' +
-            '<\/thead>' +
-            '<tbody>' +
-            '<\/tbody>' +
+        '<thead>' +
+        '<tr>' +
+        '<th class="frametype">' + 'Frame type: ' + frameType + '<\/th>' +
+        '<\/tr>' +
+        '<tr>' +
+        '<th class="framedomain">' + 'Frame domain: ' + domain + '<\/th>' +
+        '<\/tr>' +
+        '<tr>' +
+        '<th class="frameurl" title="' + url + '">' + 'Frame url: ' + truncateURI(url) + '<\/th>' +
+        '<\/tr>' +
+        '<tr>' +
+        '<th style="height: 10px;"></th>' +
+        '<\/tr>' +
+        '<tr>' +
+        '<th i18n="headerresource" data-column="url"><\/th>' +
+        '<th i18n="headertype" data-column="type"><\/th>' +
+        '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
+        '<th i18n="thirdparty" data-column="thirdparty" style="text-align: center;"><\/th>' +
+        '<\/tr>' +
+        '<\/thead>' +
+        '<tbody>' +
+        '<\/tbody>' +
         '<\/table>'
     );
 }
@@ -157,19 +161,22 @@ function createTable(frames) {
     var data = {};
     for (var frame in frames) {
         var frameObject = frames[frame];
-        if (typeof frameObject === "number")
+        if (typeof frameObject === "number") {
             continue;
+        }
         // TODO: Create UI for sub_frames without resources
         var length = Object.keys(frameObject.resources).length;
-        if (length === 0)
+        if (length === 0) {
             continue;
+        }
         for (var resource in frameObject["resources"]) {
             var res = frameObject["resources"][resource];
             res.url = resource;
 
             // Don't show main_frame resource, unless it's excluded by $document or $elemhide
-            if (res.reqType === "main_frame" && (!res.blockedData || !res.blockedData.blocked))
+            if (res.reqType === "main_frame" && (!res.blockedData || !res.blockedData.blocked)) {
                 continue;
+            }
 
             var row = $("<tr>");
 
@@ -183,14 +190,14 @@ function createTable(frames) {
                 }
             }
 
-            // Cell 2: URL
+            // Cell 1: URL
             $("<td>").
             attr("title", res.url).
             attr("data-column", "url").
             text(truncateURI(res.url)).
             appendTo(row);
 
-            // Cell 3: Type
+            // Cell 2: Type
             $("<td>").
             attr("data-column", "type").
             css("text-align", "center").
@@ -199,7 +206,7 @@ function createTable(frames) {
             //text(translate('type' + typeName)).
             appendTo(row);
 
-            // Cell 4: Matching filter
+            // Cell 3: Matching filter
             cell = $("<td>").
             attr("data-column", "filter").
             css("text-align", "center");
@@ -211,7 +218,7 @@ function createTable(frames) {
             }
             row.append(cell);
 
-            // Cell 5: third-party or not
+            // Cell 4: third-party or not
             var cell = $("<td>").
             text(res.thirdParty ? translate("yes") : translate("no")).
             attr("title", translate("resourcedomain", res.frameDomain)).

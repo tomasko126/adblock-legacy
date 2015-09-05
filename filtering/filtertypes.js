@@ -141,16 +141,7 @@ PatternFilter.fromText = function(text) {
   result._options = data.options;
   result._rule = data.rule;
   result._key = data.key;
-  // Preserve _text for resourceblock.
-  if (document.location &&
-      document.location.pathname &&
-      document.location.pathname.indexOf('/pages/resourceblock.html') >= 0) {
-    result._text = text;
-  }
-  if ((typeof(get_settings) === "function") &&
-      get_settings().data_collection) {
-    result._text = text;
-  }
+  result._text = text;
   return result;
 }
 
