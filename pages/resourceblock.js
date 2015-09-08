@@ -106,6 +106,10 @@ BGcall("get_frameData", tabId, function(data) {
                                         // If it is not the same as |resource|, keep searching for a right |filter|
                                         if ((filter.split("##")[0] === "" && filter === resource) ||
                                             filter.split("##")[0].indexOf(frameDomain) > -1) {
+                                            // Shorten lengthy selector filters
+                                            if (filter.split("##")[0] !== "") {
+                                                filter = frameDomain + resource;
+                                            }
                                             res.blockedData = [];
                                             res.blockedData["filterList"] = filterList;
                                             res.blockedData["text"] = filter;
