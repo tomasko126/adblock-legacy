@@ -17,7 +17,7 @@ safari.application.addEventListener("message", function(messageEvent) {
             messageEvent.target.url === args[1].tab.url) {
             frameData.record(messageEvent.target.id, frameId, messageEvent.message.frameInfo.url);
         } else if (messageEvent.target.url === frameData.get(messageEvent.target.id, 0).url) {
-            frameData.onTabClosedHandler(messageEvent.target.id);
+            frameData.removeTabId(messageEvent.target.id);
             frameData.record(messageEvent.target.id, frameId, args[1].tab.url);
         }
         return;
@@ -156,7 +156,7 @@ if (!LEGACY_SAFARI) {
     // cached data stored in frameData
     safari.application.addEventListener("close", function(event) {
         // Remove cached data for tab
-        frameData.onTabClosedHandler(event.target.id);
+        frameData.removeTabId(event.target.id);
 
         // Remove the popover when the window closes so we don't leak memory.
         if (event.target instanceof SafariBrowserWindow) { // don't handle tabs
@@ -180,7 +180,7 @@ if (!LEGACY_SAFARI) {
 
 safari.application.addEventListener("beforeNavigate", function(event) {
     // Remove frameData[tab.id] before navigating to another site
-    frameData.onTabClosedHandler(event.target.id);
+    frameData.removeTabId(event.target.id);
     //remove bandaids.js from YouTube.com when a user pauses AdBlock or if the enabled click to flash compatibility mode
     if (/youtube.com/.test(event.url) && (is_adblock_paused() || (get_settings().clicktoflash_compatibility_mode === true))) {
       safari.extension.removeContentScript(safari.extension.baseURI + "bandaids.js");

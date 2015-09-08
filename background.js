@@ -290,7 +290,7 @@
       }
     },
 
-    onTabClosedHandler: function(tabId) {
+    removeTabId: function(tabId) {
       delete frameData[tabId];
     }
   };
@@ -425,7 +425,7 @@
 
     // If tabId has been replaced by Chrome, delete it's data
     chrome.webNavigation.onTabReplaced.addListener(function(details) {
-        frameData.onTabClosedHandler(details.replacedTabId);
+        frameData.removeTabId(details.replacedTabId);
     });
 
     chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
@@ -1438,7 +1438,7 @@
     // Chrome blocking code.  Near the end so synchronous request handler
     // doesn't hang Chrome while AdBlock initializes.
     chrome.webRequest.onBeforeRequest.addListener(onBeforeRequestHandler, {urls: ["http://*/*", "https://*/*"]}, ["blocking"]);
-    chrome.tabs.onRemoved.addListener(frameData.onTabClosedHandler);
+    chrome.tabs.onRemoved.addListener(frameData.removeTabId);
     // Popup blocking
     if (chrome.webNavigation)
       chrome.webNavigation.onCreatedNavigationTarget.addListener(onCreatedNavigationTargetHandler);
