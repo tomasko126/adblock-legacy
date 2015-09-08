@@ -101,13 +101,19 @@ BGcall("get_frameData", tabId, function(data) {
                                     if (!Filter.isSelectorFilter(filter))
                                         continue;
                                     if (filter.indexOf(resource) > -1) {
-                                        res.blockedData = [];
-                                        res.blockedData["filterList"] = filterList;
-                                        res.blockedData["text"] = filter;
-                                        res.frameUrl = frame.url;
-                                        res.frameDomain = frameDomain;
-                                        selectors.push(res);
-                                        break;
+                                        // If |filter| is global selector filter,
+                                        // it needs to be the same as |resource|.
+                                        // If it is not the same as |resource|, keep searching for a right |filter|
+                                        if ((filter.split("##")[0] === "" && filter === resource) ||
+                                            filter.split("##")[0].indexOf(frameDomain) > -1) {
+                                            res.blockedData = [];
+                                            res.blockedData["filterList"] = filterList;
+                                            res.blockedData["text"] = filter;
+                                            res.frameUrl = frame.url;
+                                            res.frameDomain = frameDomain;
+                                            selectors.push(res);
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -161,8 +167,8 @@ function createTableUI(domain, url, frameId) {
         elem = "#header";
         frameType = "Top frame";
     } else {
-        var el = document.querySelectorAll(".resourceslist").length;
-        elem = document.querySelectorAll(".resourceslist")[el-1];
+        var len = document.querySelectorAll(".resourceslist").length;
+        elem = document.querySelectorAll(".resourceslist")[len-1];
         frameType = "Subframe";
     }
 
@@ -176,7 +182,9 @@ function createTableUI(domain, url, frameId) {
                     '<th class="framedomain">' + 'Frame domain: ' + domain + '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
-                    '<th class="frameurl" title="' + url + '">' + 'Frame url: ' + truncateURI(url) + '<\/th>' +
+                    '<th class="frameurl" title="' + decodeURIComponent(url) + '">' +
+                        'Frame url: ' + decodeURIComponent(truncateURI(url)) +
+                    '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
                     '<th style="height: 10px;"></th>' +
@@ -280,7 +288,7 @@ function processRequests(frames) {
             $('[data-href="' + domain + '"] tbody').append(resource);
         }
     }
-    
+
     // Remove loading icon
     $(".loader").remove();
 
@@ -292,7 +300,7 @@ function processRequests(frames) {
     $("th[data-column='type']").click(sortTable);
     $("th[data-column='filter']").click(sortTable);
     $("th[data-column='thirdparty']").click(sortTable);
-    
+
     // Sort table to see, what was either blocked/whitelisted or hidden
     $("th[data-column='filter']").click();
 }
