@@ -371,6 +371,10 @@
     "message":"AdBlock Warning Removal list (removes messages about using AdBlock)",
     "description":"Name of the filter list"
   },
+  "filteracceptable_ads":{
+    "message":"Acceptable Ads (recommended)",
+    "description":"A filter list"
+  },
   "filteradblock_custom":{
     "message":"AdBlock custom filters (recommended)",
     "description":"A filter list"
@@ -950,6 +954,10 @@
   "report_ad_on_page":{
     "message":"Report an ad on this page",
     "description":"Entry in the AdBlock button menu"
+  },
+  "acceptableadsoption":{
+    "message":"Allow some non-intrusive advertising",
+    "description":"option on the 'General' tab"
   },
   "advanced_options2":{
     "message":"I'm an advanced user, show me advanced options",

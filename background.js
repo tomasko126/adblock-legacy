@@ -1336,6 +1336,22 @@
     }
   }
 
+  //show existing users acceptable ads info
+  var acceptableAdsShown = storage_get("acceptableAdsShown");
+  if (!acceptableAdsShown && !STATS.firstRun) {
+    storage_set("acceptableAdsShown", true);
+    var explainURL = "pages/acceptableads/";
+    var language = determineUserLanguage();
+    var supportedlanguages = ["en"];
+    if (supportedlanguages.indexOf(language) >= 0) {
+      explainURL = explainURL + language
+    } else {
+      explainURL = explainURL + "en"
+    }
+    explainURL = explainURL + "/explaination.html"
+    openTab(explainURL);
+  }
+
   if (chrome.runtime.setUninstallURL) {
     var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
     //if the start property of blockCount exists (which is the AdBlock installation timestamp)
@@ -1498,6 +1514,14 @@
               openTab("https://getadblock.com/beta");
           }
       });
+  }
+
+  changeAcceptableAds = function(enabled) {
+    if (enabled) {
+      subscribe({id: "acceptable_ads"});
+    } else {
+      unsubscribe({id:"acceptable_ads", del:false});
+    }
   }
 
   // DEBUG INFO

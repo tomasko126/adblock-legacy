@@ -601,7 +601,8 @@ MyFilters.prototype._load_default_subscriptions = function() {
   //Update will be done immediately after this function returns
   result["adblock_custom"] = { subscribed: true };
   result["easylist"] = { subscribed: true };
-  result["malware"] = { subscribed: true }; 
+  result["malware"] = { subscribed: true };
+  result["acceptable_ads"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
@@ -709,6 +710,9 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "warning_removal": { // AdBlock warning removal
       url: "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
+    },
+    "acceptable_ads": { // Acceptable Ads
+      url: "https://easylist-downloads.adblockplus.org/exceptionrules.txt",
     }
   };
 }

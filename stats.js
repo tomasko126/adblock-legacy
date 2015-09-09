@@ -43,7 +43,7 @@ STATS = (function() {
   })();
 
   var getPingData = function() {
-    var total_pings = storage_get("total_pings") || 0;    
+    var total_pings = storage_get("total_pings") || 0;
     var data = {
       u: userId,
       v: version,
@@ -62,6 +62,12 @@ STATS = (function() {
     }
     if (chrome.runtime.id) {
       data["extid"] = chrome.runtime.id;
+    }
+    var subs = get_subscriptions_minus_text();
+    if (subs["acceptable_ads"]) {
+      data["aa"] = subs["acceptable_ads"].subscribed ? '1': '0';
+    } else {
+      data["aa"] = '0';
     }
     return data;
   };
