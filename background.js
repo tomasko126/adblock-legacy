@@ -1336,7 +1336,7 @@
     }
   }
 
-  //show existing users acceptable ads info
+  //show existing users acceptable ads info once (and only once)
   var acceptableAdsShown = storage_get("acceptableAdsShown");
   if (!acceptableAdsShown && !STATS.firstRun) {
     storage_set("acceptableAdsShown", true);
@@ -1350,6 +1350,9 @@
     }
     explainURL = explainURL + "/explaination.html"
     openTab(explainURL);
+  } else if (STATS.firstRun) {
+    //do not show new users acceptable ads info
+    storage_set("acceptableAdsShown", true);
   }
 
   if (chrome.runtime.setUninstallURL) {
