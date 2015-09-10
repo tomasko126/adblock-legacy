@@ -1145,16 +1145,6 @@
   get_l10n_data = (SAFARI ? chrome.i18n._getL10nData : undefined);
 
 
-  //Helper function to subscribed to Acceptable Ads
-  //invoked from General tab of Options page
-  changeAcceptableAds = function(enabled) {
-    if (enabled) {
-      subscribe({id: "acceptable_ads"});
-    } else {
-      unsubscribe({id:"acceptable_ads", del:false});
-    }
-  }
-
   // BGcall DISPATCH
   (function() {
     chrome.extension.onRequest.addListener(

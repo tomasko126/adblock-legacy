@@ -41,7 +41,11 @@ $(function() {
 
 $("#acceptable_ads").change(function() {
   var is_enabled = $(this).is(':checked');
-  BGcall("changeAcceptableAds", is_enabled);
+  if (is_enabled) {
+    BGcall("subscribe", {id: "acceptable_ads"});
+  } else {
+    BGcall("unsubscribe", {id:"acceptable_ads", del:false});
+  }
 });
 
 // TODO: This is a dumb race condition, and still has a bug where

@@ -24,7 +24,7 @@ AcceptableAds = (function() {
         explainURL = explainURL + "/explaination.html"
         openTab(explainURL);
         storage_set("acceptableAdsShown", true);
-        changeAcceptableAds(true);
+        subscribe({id: "acceptable_ads"});
       }
 
       if (SAFARI) {
