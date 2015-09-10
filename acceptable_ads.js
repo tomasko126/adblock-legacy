@@ -1,7 +1,7 @@
 ﻿//show existing users the acceptable ads info once (and only once)
 AcceptableAds = (function() {
 
-  //open a Tab showing the explaniation
+  //open a Tab showing the explanation
   var processTab = function() {
 
     var waitForUserAction = function() {
