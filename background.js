@@ -665,6 +665,35 @@
       _settings.set(name, false);
   }
 
+  //Acceptable ads set-up
+  changeAcceptableAds = function(enabled) {
+    if (enabled) {
+      subscribe({id: "acceptable_ads"});
+    } else {
+      unsubscribe({id:"acceptable_ads", del:false});
+    }
+  }
+
+  //show existing usersacceptable ads info once (and only once)
+  var acceptableAdsShown = storage_get("acceptableAdsShown");
+  if (!acceptableAdsShown && !STATS.firstRun) {
+    var explainURL = "pages/acceptableads/";
+    var language = determineUserLanguage();
+    var supportedlanguages = { "en": true, "fr": true };
+    if (language in supportedlanguages) {
+      explainURL = explainURL + language;
+    } else {
+      explainURL = explainURL + "en";
+    }
+    explainURL = explainURL + "/explaination.html"
+    openTab(explainURL);
+    storage_set("acceptableAdsShown", true);
+    changeAcceptableAds(true);
+  } else if (STATS.firstRun) {
+    //do not show new users acceptable ads info
+    storage_set("acceptableAdsShown", true);
+  }
+
   // MYFILTERS PASSTHROUGHS
 
   // Rebuild the filterset based on the current settings and subscriptions.
@@ -1336,25 +1365,6 @@
     }
   }
 
-  //show existing users acceptable ads info once (and only once)
-  var acceptableAdsShown = storage_get("acceptableAdsShown");
-  if (!acceptableAdsShown && !STATS.firstRun) {
-    storage_set("acceptableAdsShown", true);
-    var explainURL = "pages/acceptableads/";
-    var language = determineUserLanguage();
-    var supportedlanguages = ["en"];
-    if (supportedlanguages.indexOf(language) >= 0) {
-      explainURL = explainURL + language
-    } else {
-      explainURL = explainURL + "en"
-    }
-    explainURL = explainURL + "/explaination.html"
-    openTab(explainURL);
-  } else if (STATS.firstRun) {
-    //do not show new users acceptable ads info
-    storage_set("acceptableAdsShown", true);
-  }
-
   if (chrome.runtime.setUninstallURL) {
     var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
     //if the start property of blockCount exists (which is the AdBlock installation timestamp)
@@ -1517,14 +1527,6 @@
               openTab("https://getadblock.com/beta");
           }
       });
-  }
-
-  changeAcceptableAds = function(enabled) {
-    if (enabled) {
-      subscribe({id: "acceptable_ads"});
-    } else {
-      unsubscribe({id:"acceptable_ads", del:false});
-    }
   }
 
   // DEBUG INFO
