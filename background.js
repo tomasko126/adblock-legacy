@@ -1144,33 +1144,15 @@
   // Only defined in Safari.
   get_l10n_data = (SAFARI ? chrome.i18n._getL10nData : undefined);
 
-  //Acceptable ads set-up
+
+  //Helper function to subscribed to Acceptable Ads
+  //invoked from General tab of Options page
   changeAcceptableAds = function(enabled) {
     if (enabled) {
       subscribe({id: "acceptable_ads"});
     } else {
       unsubscribe({id:"acceptable_ads", del:false});
     }
-  }
-
-  //show existing usersacceptable ads info once (and only once)
-  var acceptableAdsShown = storage_get("acceptableAdsShown");
-  if (!acceptableAdsShown && !STATS.firstRun) {
-    var explainURL = "pages/acceptableads/";
-    var language = determineUserLanguage();
-    var supportedlanguages = { "en": true, "fr": true };
-    if (language in supportedlanguages) {
-      explainURL = explainURL + language;
-    } else {
-      explainURL = explainURL + "en";
-    }
-    explainURL = explainURL + "/explaination.html"
-    openTab(explainURL);
-    storage_set("acceptableAdsShown", true);
-    changeAcceptableAds(true);
-  } else if (STATS.firstRun) {
-    //do not show new users acceptable ads info
-    storage_set("acceptableAdsShown", true);
   }
 
   // BGcall DISPATCH

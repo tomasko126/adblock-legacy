@@ -17,6 +17,7 @@
       "filtering/filternormalizer.js",
       "idlehandler.js",
       "dropbox-datastores.js",
+      "acceptable_ads.js",
       "gab_question.js",
       "background.js",
       "datacollection.js"      
