@@ -13,16 +13,7 @@ AcceptableAds = (function() {
       }
 
       var openTabIfAllowed = function() {
-        var explainURL = "pages/acceptableads/";
-        var language = determineUserLanguage();
-        var supportedlanguages = { "en": true, "fr": true };
-        if (language in supportedlanguages) {
-          explainURL = explainURL + language;
-        } else {
-          explainURL = explainURL + "en";
-        }
-        explainURL = explainURL + "/explaination.html"
-        openTab(explainURL);
+        openTab("pages/acceptableadsexplaination.html");
         storage_set("acceptableAdsShown", true);
         subscribe({id: "acceptable_ads"});
       }

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  localizePage();
   $("#disableacceptableads").click(function(event){
     event.preventDefault();
     BGcall("openTab",  "options/index.html?tab=0");
