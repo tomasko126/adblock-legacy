@@ -1,14 +1,6 @@
 ﻿//show existing users the acceptable ads info once (and only once)
 AcceptableAds = (function() {
 
-  var acceptableAdsShown = storage_get("acceptableAdsShown");
-  if (!acceptableAdsShown && !STATS.firstRun) {
-    processTab();
-  } else if (STATS.firstRun) {
-    //do not show new users acceptable ads info
-    storage_set("acceptableAdsShown", true);
-  }
-
   //open a Tab showing the explaniation
   var processTab = function() {
 
@@ -58,5 +50,14 @@ AcceptableAds = (function() {
       chrome.tabs.onCreated.addListener(waitForUserAction);
     }
   }; //end of processTab()
+
+  var acceptableAdsShown = storage_get("acceptableAdsShown");
+  //check if we need show the info
+  if (!acceptableAdsShown && !STATS.firstRun) {
+    processTab();
+  } else if (STATS.firstRun) {
+    //do not show new users acceptable ads info
+    storage_set("acceptableAdsShown", true);
+  }
 
 })();
