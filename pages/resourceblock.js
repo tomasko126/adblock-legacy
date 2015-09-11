@@ -25,8 +25,8 @@ function reqTypeForElement(elType) {
 }
 
 // Get frameData object
-BGcall("get_frameData", tabId, function(data) {
-    if (!data) {
+BGcall("get_frameData", tabId, function(frameData) {
+    if (!frameData) {
         alert(translate('noresourcessend2'));
         window.close();
         return;
@@ -59,28 +59,18 @@ BGcall("get_frameData", tabId, function(data) {
 
                 // Process custom filters (if any)
                 if (filters) {
-                    filters = filters.split("\n");
-
                     filterLists["Custom"] = {};
-                    filterLists["Custom"].text = [];
-
-                    // Filter out comments and ignored filters
-                    for (var i=0; i<filters.length; i++) {
-                        try {
-                            var normalized = FilterNormalizer.normalizeLine(filters[i]);
-                            if (normalized) {
-                                filterLists["Custom"].text.push(normalized);
-                            }
-                        } catch(ex) {
-                            // Broken filter
-                        }
-                    }
+                    filterLists["Custom"].text = FilterNormalizer.normalizeList(filters).split("\n");
                 }
 
                 var selectors = [];
 
-                for (var frameId in data) {
-                    var frame = data[frameId];
+                // Loop through every frameId in frameData;
+                // If resource/ad has been blocked/whitelisted/hidden,
+                // get its matching filter/selector and name of the filter list,
+                // where is matching filter/selector coming from
+                for (var frameId in frameData) {
+                    var frame = frameData[frameId];
                     var frameResources = frame.resources;
                     var frameDomain = frame.domain;
 
@@ -110,7 +100,7 @@ BGcall("get_frameData", tabId, function(data) {
                                             if (filter.split("##")[0] !== "") {
                                                 filter = frameDomain + resource;
                                             }
-                                            res.blockedData = [];
+                                            res.blockedData = {};
                                             res.blockedData["filterList"] = filterList;
                                             res.blockedData["text"] = filter;
                                             res.frameUrl = frame.url;
@@ -147,7 +137,7 @@ BGcall("get_frameData", tabId, function(data) {
                         }
                     }
                 }
-                processRequests(data);
+                processRequests(frameData);
             });
         });
     });
@@ -211,12 +201,8 @@ function processRequests(frames) {
     var data = {};
     for (var frame in frames) {
         var frameObject = frames[frame];
+        // Don't process number of blocked ads (blockCount)
         if (typeof frameObject === "number") {
-            continue;
-        }
-        // Don't process frame with no recources
-        var length = Object.keys(frameObject.resources).length;
-        if (length === 0) {
             continue;
         }
         for (var resource in frameObject["resources"]) {
@@ -294,7 +280,7 @@ function processRequests(frames) {
     }
 
     // Remove loading icon
-    $(".loader").remove();
+    $(".loader").fadeOut();
 
     // Localize page
     localizePage();
@@ -307,6 +293,9 @@ function processRequests(frames) {
 
     // Sort table to see, what was either blocked/whitelisted or hidden
     $("th[data-column='filter']").click();
+
+    // Finally, show us the tables!
+    $("table").fadeIn();
 }
 
 // Truncate long URIs

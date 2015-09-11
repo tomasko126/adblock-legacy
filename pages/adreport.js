@@ -158,7 +158,7 @@ var checkmalware = function() {
                 var infected = true;
             }
         }
-        $('.gifloader').hide();
+        $('.loader').hide();
         if (infected) {
             $('#step_update_filters_DIV').hide();
             $("#malwarewarning").html(translate("malwarewarning"));

@@ -7,6 +7,10 @@ table {
     background: #F1F1F1;
     border-collapse: collapse;
     cursor: default;
+    display: none;
+}
+th {
+    font-weight: 500;
 }
 .resourceslist {
     position: relative;
@@ -19,6 +23,7 @@ table {
 .loader {
     display: block;
     margin: 120px auto auto;
+    height: 25px;
 }
 .framedomain, .frameurl, .frametype {
     text-align: left;
