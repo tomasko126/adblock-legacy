@@ -13,9 +13,23 @@ AcceptableAds = (function() {
       }
 
       var openTabIfAllowed = function() {
-        openTab("pages/acceptableadsexplaination.html");
-        storage_set("acceptableAdsShown", true);
-        subscribe({id: "acceptable_ads"});
+        var acceptableadsURL = "pages/acceptableadsexplaination.html";
+        var successfulTabOpen = function() {
+            storage_set("acceptableAdsShown", true);
+            subscribe({id: "acceptable_ads"});
+        }
+        if (SAFARI) {
+          openTab(acceptableadsURL);
+          successfulTabOpen();
+        } else {
+          chrome.tabs.create({url: acceptableadsURL}, function(tab) {
+            //if we couldn't open the tab, don't update persistence storage.
+            if (!tab || chrome.runtime.lastError) {
+              return;
+            }
+            successfulTabOpen();
+          });
+        }
       }
 
       if (SAFARI) {
