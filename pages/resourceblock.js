@@ -283,9 +283,12 @@ function processRequests(frames) {
     // Localize page
     localizePage();
     $(".legendtext").text(translate("legend"));
-    $("span .blocked").text(translate("blockedresource"));
-    $("span .whitelisted").text(translate("whitelistedresource"));
-    $("span .hiding").text(translate("hiddenelement"));
+    $("span.blocked").text(translate("blockedresource"));
+    $("span.whitelisted").text(translate("whitelistedresource"));
+    $("span.hiding").text(translate("hiddenelement"));
+
+    // Show us the legend
+    $("#legend").show();
 
     // Enable table sorting
     $("th[data-column='url']").click(sortTable);
