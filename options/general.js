@@ -9,10 +9,17 @@ $(function() {
     var is_enabled = $(this).is(':checked');
     var name = this.id.substring(7); // TODO: hack
     BGcall("set_setting", name, is_enabled, true);
-    // if the user enables/disable data collection update the filter lists, so that the 
-    // filter list data is retained, and any cached responses are cleared
+    // if the user enables/disables data collection,
+    // update the filter lists, so that the filter list data is retained,
+    // and any cached responses are cleared
     if (name === "data_collection") {
       BGcall("update_subscriptions_now");          
+    }
+    // If the user enables/disables advanced option,
+    // rebuild filter lists, so that matched filter text
+    // is available for resource block page
+    if (name === "show_advanced_options") {
+      BGcall("update_filters");
     }
   });
 

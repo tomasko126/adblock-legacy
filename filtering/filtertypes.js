@@ -78,7 +78,8 @@ var SelectorFilter = function(text) {
   this._domains = Filter._toDomainSet(parts[1], ',');
   this.selector = parts[2];
   if ((typeof(get_settings) === "function") &&
-      get_settings().data_collection) {
+       (get_settings().data_collection ||
+       get_settings().show_advanced_options)) {
     this._text = text;
   }
 };
@@ -135,7 +136,11 @@ PatternFilter.fromText = function(text) {
   result._options = data.options;
   result._rule = data.rule;
   result._key = data.key;
-  result._text = text;
+  if ((typeof(get_settings) === "function") &&
+       (get_settings().data_collection ||
+       get_settings().show_advanced_options)) {
+    result._text = text;
+  }
   return result;
 }
 

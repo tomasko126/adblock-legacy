@@ -1283,6 +1283,42 @@
     "message":"Type",
     "description":"resourceblocking page string"
   },
+  "topframe":{
+    "message":"Top frame",
+    "description":"resourceblocking page string"
+  },
+  "subframe":{
+    "message":"Sub frame",
+    "description":"resourceblocking page string"
+  },
+  "frametype":{
+    "message":"Frame type: ",
+    "description":"resourceblocking page string"
+  },
+  "framedomain":{
+    "message":"Frame domain: ",
+    "description":"resourceblocking page string"
+  },
+  "frameurl":{
+    "message":"Frame url: ",
+    "description":"resourceblocking page string"
+  },
+  "legend":{
+    "message":"Legend: ",
+    "description":"resourceblocking page string"
+  },
+  "blockedresource":{
+    "message":"Blocked resource",
+    "description":"resourceblocking page string"
+  },
+  "whitelistedresource":{
+    "message":"Whitelisted resource",
+    "description":"resourceblocking page string"
+  },
+  "hiddenelement":{
+    "message":"Hidden element",
+    "description":"resourceblocking page string"
+  },
   "headerfilter":{
     "message":"Matched filter",
     "description":"resourceblocking page string"

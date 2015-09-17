@@ -63,8 +63,6 @@ BGcall("get_frameData", tabId, function(frameData) {
                     filterLists["Custom"].text = FilterNormalizer.normalizeList(filters).split("\n");
                 }
 
-                var selectors = [];
-
                 // Loop through every frameId in frameData;
                 // If resource/ad has been blocked/whitelisted/hidden,
                 // get its matching filter/selector and name of the filter list,
@@ -105,7 +103,6 @@ BGcall("get_frameData", tabId, function(frameData) {
                                             res.blockedData["text"] = filter;
                                             res.frameUrl = frame.url;
                                             res.frameDomain = frameDomain;
-                                            selectors.push(res);
                                             break;
                                         }
                                     }
@@ -116,7 +113,7 @@ BGcall("get_frameData", tabId, function(frameData) {
                             var urlDomain = parseUri(resource).hostname;
                             res.frameDomain = frameDomain;
                             res.thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
-                            if (res.blockedData !== false) {
+                            if (res.blockedData && res.blockedData !== false && res.blockedData.text) {
                                 var filter = res.blockedData.text;
                                 for (var filterList in filterLists) {
                                     if (filterList === "malware") {
@@ -137,6 +134,7 @@ BGcall("get_frameData", tabId, function(frameData) {
                         }
                     }
                 }
+                // Process all requests
                 processRequests(frameData);
             });
         });
@@ -158,26 +156,26 @@ function createTableUI(domain, url, frameId) {
 
     // Sort tables
     if (frameId === "0") {
-        elem = "#header";
-        frameType = "Top frame";
+        elem = "#legend";
+        frameType = translate("topframe");
     } else {
         var len = document.querySelectorAll(".resourceslist").length;
         elem = document.querySelectorAll(".resourceslist")[len-1];
-        frameType = "Subframe";
+        frameType = translate("subframe");
     }
 
     $(elem).after(
         '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
             '<thead>' +
                 '<tr>' +
-                    '<th class="frametype">' + 'Frame type: ' + frameType + '<\/th>' +
+                    '<th class="frametype">' + translate("frametype") + frameType + '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
-                    '<th class="framedomain">' + 'Frame domain: ' + domain + '<\/th>' +
+                    '<th class="framedomain">' + translate("framedomain") + domain + '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
                     '<th class="frameurl" title="' + decodeURIComponent(url) + '">' +
-                        'Frame url: ' + decodeURIComponent(truncateURI(url)) +
+                        translate("frameurl") + decodeURIComponent(truncateURI(url)) +
                     '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
@@ -244,7 +242,7 @@ function processRequests(frames) {
             var cell = $("<td>").
                 attr("data-column", "filter").
                 css("text-align", "center");
-            if (res.blockedData) {
+            if (res.blockedData && res.blockedData.text && res.blockedData.filterList) {
                 $("<span>").
                     text(truncateURI(res.blockedData.text)).
                     attr('title', translate("filterorigin", translate("filter" + res.blockedData.filterList))).
@@ -284,6 +282,10 @@ function processRequests(frames) {
 
     // Localize page
     localizePage();
+    $(".legendtext").text(translate("legend"));
+    $("span .blocked").text(translate("blockedresource"));
+    $("span .whitelisted").text(translate("whitelistedresource"));
+    $("span .hiding").text(translate("hiddenelement"));
 
     // Enable table sorting
     $("th[data-column='url']").click(sortTable);

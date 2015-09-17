@@ -12,13 +12,16 @@ table {
 th {
     font-weight: 500;
 }
+#legend {
+    min-width: 1195px;
+    margin: 118px auto 20px auto;
+    text-align: center;
+    display: none;
+}
 .resourceslist {
     position: relative;
     margin: 0px auto 20px auto;
     min-width: 1195px;
-}
-.resourceslist:first-of-type {
-    margin: 120px auto 20px auto;
 }
 .loader {
     display: block;
