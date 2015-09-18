@@ -45,11 +45,11 @@ BGcall("get_frameData", tabId, function(frameData) {
             }
         }
 
-        BGcall("get_settings", function(arg) {
+        BGcall("get_settings", function(settings) {
 
             // Process AdBlock's own filters (if any)
             filterLists["AdBlock"] = {};
-            filterLists.AdBlock.text = MyFilters.prototype.getExtensionFilters(arg.settings);
+            filterLists.AdBlock.text = MyFilters.prototype.getExtensionFilters(settings);
 
             BGcall("storage_get", "custom_filters", function(filters) {
 
