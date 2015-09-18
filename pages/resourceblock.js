@@ -288,7 +288,7 @@ function processRequests(frames) {
     $("span.hiding").text(translate("hiddenelement"));
 
     // Show us the legend
-    $("#legend").show();
+    $("#legend").fadeIn();
 
     // Enable table sorting
     $("th[data-column='url']").click(sortTable);
