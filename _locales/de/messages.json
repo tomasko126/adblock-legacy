@@ -1182,5 +1182,41 @@
   "ad_report_please":{
     "message":"Sollten Sie Werbung angezeigt bekommen, senden Sie bitte keinen Fehlerbericht sondern <a>melden Sie Werbung hier<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
-  }
+  },
+  "filteracceptable_ads":{
+    "message":"Acceptable Ads (empfohlen)",
+    "description":"A filter list"
+  },
+  "acceptableadsoption":{
+    "message":"Einige nicht aufdringliche Werbung zulassen",
+    "description":"Option in den Einstellungen"
+  },
+  "acceptableadsheader1":{
+    "message":"Hiermit geben wir die Teilnahme am Acceptable Ads Programm bekannt",
+    "description":"first H1 on page"
+  },
+  "acceptableadspart1":{
+    "message":"Hi, hier ist Michael, der Entwickler von AdBlock. Bitte entschuldige die Störung!<br\/><br\/> Seit Jahren ist es mein Ziel dir das Surfen so angenehm wie möglich zu machen - indem du interessante Werbung siehst und störende blockierst. Jetzt freue ich mich dir mitteilen zu können, dass es endlich soweit ist. AdBlock wird ab sofort am Acceptable Ads Programm teilnehmen. Die Initiative für akzeptable Anzeigen hat strikte Regeln erstellt, die unaufdringliche Werbung identifiziert, die AdBlock ab jetzt automatisch anzeigt. Dadurch unterstützt du deine Lieblingswebseiten, solltest du allerdings weiterhin jede Art der Werbung blockieren wollen, kannst du dies auch. <a href='#' id='disableacceptableads'> einfach deaktivieren<\/a> <br\/><br\/>",
+    "description":"first paragraph on page"
+  },
+  "acceptableadsmoredetails":{
+    "message":"Mehr Informationen?",
+    "description":"more details question"
+  },
+  "acceptableadsheader2":{
+    "message":"Mehr über Acceptable Ads",
+    "description":"second header (H2) on page"
+  },
+  "acceptableadsdetails":{
+    "message":"Mit Acceptable Ads erlaubst du bestimmte Werbung, die als nicht störend eingestuft worden ist. Dadurch unterstützt du Webseiten, die sich mit Hilfe der Werbung finanzieren, die sich jedoch dafür entschieden haben, unaufdringliche Formate zu wählen.<br\/><br\/>Die Acceptable Ads Initiative ist ein Appell an die Werbeindustrie, Werbeagenturen und Werbenetzwerke endlich mit schlechter Online-Werbung aufzuhören. Damit gemeint sind nervige, störende und behindernde Anzeigen. Die Besonderheiten der Initiative:<br\/><br\/>- Acceptable Ads sind nicht störend. .<br\/>-Acceptable Ads unterbrechen und entstellen nicht den Inhalt, den wir lesen möchten. <br\/>- Acceptable Ads sind transparent und als Werbung gekennzeichnet. <br\/>- Acceptable Ads sind effektiv, ohne, dass sie uns anschreien. <br\/>- Acceptable Ads passen zu der Seite, auf der wir surfen. <br\/><br\/>Erfahre hier mehr über Acceptable Ads<a id='moreinformation' href='#'>here<\/a>. Wie gesagt: AdBlock hat dies nun automatisch in die Voreinstellungen übernommen. Du kannst dies allerdings jederzeit in den AdBlock Optionen <a id='disableacceptableads2' href='#'>deaktivieren<\/a>, wenn du lieber alle Anzeigen blockieren möchtest.",
+    "description":"details div on page"
+  },
+  "acceptableadspart2":{
+    "message":"Ich glaube, dass dir die Änderungen gut gefallen werden. Happy surfing!<br\/><br\/>Michael",
+    "description":"signature"
+  },
+  "acceptableadspartsmallprint":{
+    "message":"PS: Warum gerade jetzt? Ich habe immer schon ähnliche Ziele verfolgt, wie der Werbeblocker Adblock Plus, der das Acceptable Ads Programm initiiert hat. Ich mochte allerdings die Tatsache nicht, dass die Initiative von den Werbern aus dem Programm finanziert werden. Jetzt ändert sich das, da Adblock Plus die Schirmherrschaft über Acceptable Ads einer unparteiischen Gruppe von Experten übergibt. Ich finde diese Idee fantastisch, und das nicht nur weil sie von meiner Frau Katie stammt! Durch diese Änderung freue ich mich zu sagen, dass AdBlock am Programm teilnimmt. Ich werde außerdem meine Firma verkaufen und der neue Inhaber hat ebenfalls entschlossen Acceptable Ads einzuschalten. Mein langjähriger Business Manager wird ebenfalls bei der neuen Firma arbeiten. Ich denke, das ist eine tolle Sache für alle Nutzer. <br\/><br\/> Es war mir ein Vergnügen, das Internet für euch zu einem besseren Ort zu machen! ?",
+    "description":"small print at the bottom of the page"
+  }  
 }
