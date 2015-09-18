@@ -18,6 +18,9 @@ th {
     text-align: center;
     display: none;
 }
+#main_nav li {
+    padding: 11px 24px;
+}
 .resourceslist {
     position: relative;
     margin: 0px auto 20px auto;
