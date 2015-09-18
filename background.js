@@ -280,7 +280,7 @@
       return true;
     },
 
-    // Record a resource for the resource blocker.
+    // Save a resource for the resource blocker.
     storeResource: function(tabId, frameId, url, elType, blockedData) {
       if (!get_settings().show_advanced_options)
         return;

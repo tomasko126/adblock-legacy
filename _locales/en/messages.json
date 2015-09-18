@@ -1184,7 +1184,7 @@
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
   "resourceblocktitle":{
-    "message":"Block a resource",
+    "message":"All Resources",
     "description":"resourceblocking page string"
   },
   "headerresource":{
