@@ -1183,7 +1183,6 @@
     "message":"如果您看到广告，不要在此提交bug报告，请转到<a>报告广告<\/a>！",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
-  {
   "filteracceptable_ads":{
     "message":"可接受广告 (推荐)",
     "description":"A filter list"
@@ -1209,7 +1208,7 @@
     "description":"second header (H2) on page"
   },
   "acceptableadsdetails":{
-    "message":"通过可接受广告,你使一些并非恼人的广告能够显示。这样你便能支持一些网站，他们完全依靠于广告收入但是却选择使用非侵入式的形式。<br\/><br\/>可接受广告项目是对广告商、广告中介、网络广告联盟、以及网站不再制造讨厌的、恼人的和侵入式垃圾广告的一个请愿。具体地说:<br\/><br\/>- 可接受广告是不扰人的。<br\/>- 可接受广告并不会打扰或者扭曲我们正在阅读的页面内容。<br\/>- 可接受广告是完全清晰的标记为广告。<br\/>- 可接受广告是有效的即使它并没有向我们大叫。<br\/>- 可接受广告对于我们在浏览的页面是恰当的。<br\/><br\/>你可以从 <a id='moreinformation' href='#'>这里<\/a>了解更多关于可接受广告。正如我所说，AdBlock已经将这项特性默认开启，但是如果你还是想过滤所有广告的话，你也可以在AdBlock的选项里<a id='disableacceptableads2' href='#'>禁用它<\/a>"，
+    "message":"通过可接受广告,你使一些并非恼人的广告能够显示。这样你便能支持一些网站，他们完全依靠于广告收入但是却选择使用非侵入式的形式。<br\/><br\/>可接受广告项目是对广告商、广告中介、网络广告联盟、以及网站不再制造讨厌的、恼人的和侵入式垃圾广告的一个请愿。具体地说:<br\/><br\/>- 可接受广告是不扰人的。<br\/>- 可接受广告并不会打扰或者扭曲我们正在阅读的页面内容。<br\/>- 可接受广告是完全清晰的标记为广告。<br\/>- 可接受广告是有效的即使它并没有向我们大叫。<br\/>- 可接受广告对于我们在浏览的页面是恰当的。<br\/><br\/>你可以从 <a id='moreinformation' href='#'>这里<\/a>了解更多关于可接受广告。正如我所说，AdBlock已经将这项特性默认开启，但是如果你还是想过滤所有广告的话，你也可以在AdBlock的选项里<a id='disableacceptableads2' href='#'>禁用它<\/a>",
     "description":"details div on page"
   },
   "acceptableadspart2":{
