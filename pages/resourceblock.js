@@ -82,8 +82,9 @@ BGcall("get_frameData", tabId, function(frameData) {
                                 for (var i=0; i<filterListText.length; i++) {
                                     var filter = filterListText[i];
                                     // Don't check selector against non-selector filters
-                                    if (!Filter.isSelectorFilter(filter))
+                                    if (!Filter.isSelectorFilter(filter)) {
                                         continue;
+                                    }
                                     if (filter.indexOf(resource) > -1) {
                                         // If |filter| is global selector filter,
                                         // it needs to be the same as |resource|.
