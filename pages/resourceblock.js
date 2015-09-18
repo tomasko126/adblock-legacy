@@ -45,11 +45,7 @@ BGcall("get_frameData", tabId, function(frameData) {
             }
         }
 
-        var opts = {
-            domain: parseUri(document.location.href).hostname
-        };
-
-        BGcall("get_settings", opts, function(arg) {
+        BGcall("get_settings", function(arg) {
 
             // Process AdBlock's own filters (if any)
             filterLists["AdBlock"] = {};
