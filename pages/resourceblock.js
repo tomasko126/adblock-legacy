@@ -193,13 +193,18 @@ function createTableUI(domain, url, frameId) {
 
 // Process each request and add it to table
 function processRequests(frames) {
-    var processedRequests = {};
     for (var frame in frames) {
         var frameObject = frames[frame];
+
         // Don't process number of blocked ads (blockCount)
         if (typeof frameObject === "number") {
             continue;
         }
+
+        // Create a table for each frame
+        createTableUI(frameObject.domain, frameObject.url, frame);
+
+        // Process each request
         for (var resource in frameObject["resources"]) {
             var res = frameObject["resources"][resource];
             res.url = resource;
@@ -255,25 +260,8 @@ function processRequests(frames) {
                 css("text-align", "center");
             row.append(cell);
 
-            // Create an array, if domain of request cannot be found
-            // in |processedRequests| object
-            if (!processedRequests[frameObject.domain]) {
-                processedRequests[frameObject.domain] = [];
-            }
-
-            // Push processed request to the relevant domain property
-            processedRequests[frameObject.domain].push(row);
-        }
-
-        // Create table for each frame
-        createTableUI(frameObject.domain, frameObject.url, frame);
-    }
-
-    // Append resource to according table
-    for (var domain in data) {
-        for (var i=0; i<data[domain].length; i++) {
-            var resource = data[domain][i];
-            $('[data-href="' + domain + '"] tbody').append(resource);
+            // Finally, append processed resource to the relevant table
+            $('[data-href="' + frameObject.domain + '"] tbody').append(row);
         }
     }
 
