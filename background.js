@@ -1287,7 +1287,7 @@
     gabQuestion.removeGABTabListeners(saveState);
   }
 
-  var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
+  var installedURL = "https://getadblock.com/installed/?aa=true&u=" + STATS.userId;
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
     if (SAFARI) {
       openTab(installedURL);
