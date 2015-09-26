@@ -2,7 +2,27 @@ $(document).ready(function() {
 
     // Get debug info
     var debug_info = BGcall("getDebugInfo", function(info) {
-        debug_info = info;
+		content = []
+		content.push("=== Filter Lists ===");
+		content.push(info.filter_lists);
+		content.push("");
+		if (info.custom_filters){
+			content.push("=== Custom Filters ===");
+			content.push(info.custom_filters);
+			content.push("")
+		}
+		if (info.exclude_filters){
+			content.push("=== Exclude Filters ===");
+			content.push(info.exclude_filters);
+			content.push("");
+		}
+		content.push("=== Settings ===");
+		content.push(info.settings);
+		content.push("");
+		content.push("=== Other Info ===");
+		content.push(info.other_info);
+		
+		debug_info = content.join("\n")
     });
 
     // Make a bug-report

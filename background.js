@@ -1502,7 +1502,7 @@
 
   // DEBUG INFO
 
-  // Get debug info for bug reporting and ad reporting
+  // Get debug info for bug reporting and ad reporting - returns an object
   getDebugInfo = function() {
 
       // Is this installed build of AdBlock the official one?
@@ -1556,32 +1556,27 @@
       // because it isn't included in _settings object, but just in localStorage
       adblock_settings.push("malware-notification: " + storage_get('malware-notification') + "\n");
       adblock_settings = adblock_settings.join('');
+	  
+	  var the_debug_info = {
+		  filter_lists: subscribed_filter_names.join('\n'),
+		  settings: adblock_settings
+	  }
 
-      // Create debug info for a bug report or an ad report
-      var info = [];
-      info.push("==== Filter Lists ====");
-      info.push(subscribed_filter_names.join('  \n'));
-      info.push("");
+      // Handle optional elements
       if (adblock_custom_filters) {
-          info.push("==== Custom Filters ====");
-          info.push(adblock_custom_filters);
-          info.push("");
+          the_debug_info.custom_filters = adblock_custom_filters;
       }
       if (get_exclude_filters_text()) {
-          info.push("==== Exclude Filters ====");
-          info.push(get_exclude_filters_text());
-          info.push("");
+          the_debug_info.exclude_filters = get_exclude_filters_text();
       }
-      info.push("==== Settings ====");
-      info.push(adblock_settings);
-      info.push("==== Other info: ====");
-      info.push("AdBlock version number: " + AdBlockVersion + AdBlockBuild());
+	  var other_info = []
+      other_info.push("AdBlock version number: " + AdBlockVersion + AdBlockBuild());
       if (adblock_error)
-          info.push("Last known error: " + adblock_error);
-      info.push("Total pings: " + adblock_pings);
-      info.push("UserAgent: " + navigator.userAgent.replace(/;/,""));
-
-      return info.join('  \n');
+          other_info.push("Last known error: " + adblock_error);
+      other_info.push("Total pings: " + adblock_pings);
+      other_info.push("UserAgent: " + navigator.userAgent.replace(/;/,""));
+	  the_debug_info.other_info = other_info.join("\n")
+      return the_debug_info
   }
 
   // Code for making a bug report
