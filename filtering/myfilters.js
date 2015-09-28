@@ -151,16 +151,6 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
 MyFilters.prototype.getExtensionFilters = function(settings) {
   //Exclude google search results ads if the user has checked that option
   var texts = [];
-  if (settings.show_google_search_text_ads) {
-    // Standard search
-    texts.push("@@||google.*/search?$elemhide");
-    // Google Instant: go to https://google.com, type 'hotel' and don't press Enter
-    texts.push("@@||www.google.*/|$elemhide");
-    // Google Instant: open a Chrome tab, type 'hotel' and don't press Enter
-    texts.push("@@||google.*/webhp?$elemhide");
-    // Google Search: go to http://google.com, type 'hotel' and press Enter
-    texts.push("@@||google.*/?gws_rd$elemhide");
-  }
   if (settings.whitelist_hulu_ads) {
     // Issue 7178: FilterNormalizer removes EasyList's too-broad Hulu whitelist
     // entries.  If the user enables whitelist_hulu_ads, just add them back.

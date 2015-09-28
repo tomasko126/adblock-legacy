@@ -235,10 +235,6 @@
     "message":"Beta",
     "description":"Label for beta features in AdBlock Options"
   },
-  "googletextads2":{
-    "message":"I like the text ads on Google search results; show me those",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "showcontextmenus2":{
     "message":"Add items to the right click menu",
     "description":"Checkbox on the 'General' tab of the Options page"

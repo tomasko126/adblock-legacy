@@ -48,18 +48,6 @@ $("#acceptable_ads").change(function() {
   }
 });
 
-// TODO: This is a dumb race condition, and still has a bug where
-// if the user reloads/closes the options page within a second
-// of clicking this, the filters aren't rebuilt. Call this inside
-// the feature change handler if it's this checkbox being clicked.
-$("#enable_show_google_search_text_ads").change(function() {
-  // Give the setting a sec to get saved by the other
-  // change handler before recalculating filters.
-  window.setTimeout(function() {
-    BGcall("update_filters");
-  }, 1000);
-});
-
 $("#enable_show_advanced_options").change(function() {
   // Reload the page to show or hide the advanced options on the
   // options page -- after a moment so we have time to save the option.
@@ -125,7 +113,6 @@ if (!SAFARI &&
         function(request, sender, sendResponse) {
             if (request.message === "update_checkbox") {
                 BGcall("get_settings", function(settings) {
-                    $("input[id='enable_show_google_search_text_ads']").prop("checked", settings.show_google_search_text_ads);
                     $("input[id='enable_youtube_channel_whitelist']").prop("checked", settings.youtube_channel_whitelist);
                     $("input[id='enable_show_context_menu_items']").prop("checked", settings.show_context_menu_items);
                     $("input[id='enable_show_advanced_options']").prop("checked", settings.show_advanced_options);
