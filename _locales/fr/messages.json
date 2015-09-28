@@ -1191,32 +1191,32 @@
     "message":"Autoriser certaines publicité non-intrusives",
     "description":"option on the 'General' tab"
   },
-  "acceptableadsheader1":{
-    "message":"Annonce du projet de Publicités Non-Intrusives",
-    "description":"first H1 on page"
-  },
-  "acceptableadspart1":{
-    "message":"Bonjour, c'est Michael, le créateur d'AdBlock. Désolé pour l'interruption !<br\/><br\/>Je voulais depuis des années vous aider à bloquer les publicités qui sont agaçantes, et voir celles qui sont utiles. Je suis heureux de vous dire que cela va enfin devenir possible.<br\/><br\/>AdBlock participe maintenant au programme <b>Publicités Non-Intrusives<\/b>. Les Publicités Non-Intrusives définissent des règles strictes pour identifier les publicités qui ne sont pas gênantes, qu'AdBlock affiche maintenant par défaut. De cette façon, vous pouvez aider à soutenir vos sites préférés – et si vous voulez tout de même bloquer toutes les publicités, vous pouvez <a href='#' id='disableacceptableads'>désactiver cette option<\/a> facilement.<br\/><br\/>",
-    "description":"first paragraph on page"
-  },
-  "acceptableadsmoredetails":{
-    "message":"Voulez-vous en savoir plus ?",
-    "description":"first paragraph on page"
-  },
-  "acceptableadsheader2":{
-    "message":"Plus de détails au sujet des Publicités Non-Intrusives",
-    "description":"second header (H2) on page"
-  },
-  "acceptableadsdetails":{
-    "message":"Avec la Publicité Non-Intrusive, vous autorisez l'affichage de certaines publicités qui ne sont pas considérées comme agaçantes. En faisant cela, vous soutenez les sites web qui dépendent de la publicité, mais qui choisisent de le faire de façon non-intrusive.<br\/><br\/>Le programme Publicité Non-Intrusive est un appel aux annonceurs, leurs agences de publicité, les réseaux de publicité en ligne, et les sites web à cesser de faire de la mauvaise publicité en ligne — des pubs désagréables, ennuyeuses, ou gênantes. Concrètement :<br\/><br\/>- Les Publicités Non-Intrusives ne sont pas embêtantes.<br\/>- Les Publicités Non-Intrusives ne perturbent pas et ne déforment pas le contenu de la page que nous essayons de lire.<br\/>- Les Publicités Non-Intrusives sont efficaces sans \"nous crier dessus\", sans avoir recours à des techniques agaçantes.<br\/>- Les Publicités Non-Intrusives sont appropriées pour le site sur lequel nous sommes.<br\/><br\/>Vous pouvez en savoir plus sur la Publicité Non-Intrusive <a id='moreinformation' href='#'>ici<\/a>. Comme je disais : AdBlock a activé cette fonctionnalité par défaut, mais vous pouvez <a id='disableacceptableads2' href='#'>la désactiver<\/a> dans les Options AdBlock si vous décidez de vouloir bloquer absolument toutes les publicités.",
-    "description":"details div on page"
-  },
-  "acceptableadspart2":{
-    "message":"Je pense que vous allez vraiment aimer cette évolution. <br\/><br\/>Michael",
-    "description":"first paragraph on page"
-  },
-  "acceptableadspartsmallprint":{
-    "message":"PS : Pourquoi maintenant ? Eh bien, j'ai toujours partagé des objectifs semblables au bloqueur de publicité Adblock Plus, qui a créé le programme de Publicité Non-Intrusives. Mais je n'ai pas aimé le fait qu'ils contrôlent aussi ce programme, car ils sont soutenus par certains annonceurs des Publicités Non-Intrusives. Maintenant, Adblock Plus va transférer la garde des Publicités Non-Intrusives à un groupe d'experts impartial. J'adore cette idée — en fait, c'était une suggestion de ma femme Katie ! En raison de ce changement, je suis content qu'AdBlock participe à ce programme. En conséquence, je vends mon entreprise, et l'acheteur active les Publicités Non-Intrusives. Mon directeur général de longue date va continuer à travailler avec cette nouvelle société. Je pense que c'est une très bonne chose pour vous, utilisateurs.<br\/><br\/>Cela a été un honneur de faire du web un meilleur endroit pour vous ! :)",
-    "description":"small print at the bottom of the page"
-  }  
+   "acceptableadsheader1": {
+      "description": "first H1 on page",
+      "message": "Annonce du programme \"Publicité Acceptables\""
+   },
+   "acceptableadsheader2": {
+      "description": "second header (H2) on page",
+      "message": "En savoir plus sur les Publicités Acceptables"
+   },
+   "acceptableadsmoredetails": {
+      "description": "first paragraph on page",
+      "message": "Vous voulez plus de détails?"
+   },
+   "acceptableadsoption": {
+      "description": "option on the 'General' tab",
+      "message": "Autoriser certaines publicité non-intrusives"
+   },
+   "acceptableadspart1": {
+      "description": "first paragraph on page",
+      "message": "Salut,\u003Cbr/>\u003Cbr/>Je suis Michael, le créateur d’AdBlock. Excusez l’interruption!\u003Cbr/>\u003Cbr/>Depuis des années j’ai voulu aider à faciliter le fait que vous puissiez voir des publicités utiles et puissiez bloquer les autres. Je suis excité de vous annoncer que ça arrive enfin.\u003Cbr/>\u003Cbr/>AdBlock participe désormais au programme Publicités Acceptables. Publicités Acceptables définit des directives strictes pour identifier les publicités qui ne sont pas dérangeantes, qu’AdBlock laissera passer par défaut. De cette manière ceux qui souhaitent aider à soutenir leurs sites Internet préférés le peuvent et les autres peuvent toujours bloquer toutes les publicités, en \u003Ca href='#' id='disableacceptableads'>désactivant\u003C/a> facilement cette fonction.\u003Cbr/>\u003Cbr/>"
+   },
+   "acceptableadspart2": {
+      "description": "first paragraph on page",
+      "message": "Je pense que vous aimez déjà ce changement. Joyeux surf!\u003Cbr/>\u003Cbr/>Michael"
+   },
+   "acceptableadspartsmallprint": {
+      "description": "small print at the bottom of the page",
+      "message": "PS: Pourquoi maintenant? Et bien, j’ai toujours partagé une vision similaire de l’Internet avec le bloqueur de publicités Adblock Plus, créateur du programme Publicités Acceptables. Mais je n’ai pas aimé le fait qu’il contrôle aussi le programme. Mais Adblock Plus va transférer la tutelle du programme Publicités Acceptables à un groupe d’experts. J’aime cette idée — en fait, c’est celle de ma femme Katie! Pour finir. Je vends ma société, et l’acheteur active les Publicités Acceptables. Le directeur général qui travaille avec moi depuis des années continuera à travailler avec la nouvelle société. Je pense que c’est super pour vous, les utilisateurs.\u003Cbr/>\u003Cbr/>Ce fut un honneur de faire de l’Internet un endroit meilleur pour vous! :)"
+   }
 }

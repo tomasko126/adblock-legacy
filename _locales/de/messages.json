@@ -1192,15 +1192,15 @@
     "description":"Option in den Einstellungen"
   },
   "acceptableadsheader1":{
-    "message":"Hiermit geben wir die Teilnahme am Acceptable Ads Programm bekannt",
+    "message":"Teilnahme am Acceptable Ads Programm",
     "description":"first H1 on page"
   },
   "acceptableadspart1":{
-    "message":"Hi, hier ist Michael, der Entwickler von AdBlock. Bitte entschuldige die Störung!<br\/><br\/> Seit Jahren ist es mein Ziel dir das Surfen so angenehm wie möglich zu machen - indem du interessante Werbung siehst und störende blockierst. Jetzt freue ich mich dir mitteilen zu können, dass es endlich soweit ist. AdBlock wird ab sofort am Acceptable Ads Programm teilnehmen. Die Initiative für akzeptable Anzeigen hat strikte Regeln erstellt, die unaufdringliche Werbung identifiziert, die AdBlock ab jetzt automatisch anzeigt. Dadurch unterstützt du deine Lieblingswebseiten, solltest du allerdings weiterhin jede Art der Werbung blockieren wollen, kannst du dies auch. <a href='#' id='disableacceptableads'> einfach deaktivieren<\/a> <br\/><br\/>",
+    "message": "Hi, hier ist Michael, der Entwickler von AdBlock. Bitte entschuldige die Störung!\u003Cbr/>\u003Cbr/>Seit Jahren ist es mein Ziel Dir das Surfen so angenehm wie möglich zu machen - idealerweise indem Du die Dich nicht störende Werbung weiterhin siehst und andere Werbung blockierst.\u003Cbr/>\u003Cbr/>Jetzt freue ich mich Dir mitteilen zu können, dass wir dies weiter verbessert haben. Du hast nun die Option unaufdringliche Werbung zuzulassen. AdBlock nimmt dazu ab sofort am Acceptable Ads Programm teil. Die Acceptable Ads Initiative hat strikte Regeln erstellt, die unaufdringliche Werbung identifiziert. Wenn Du diese Option eingeschaltet lässt, kannst Du deine Lieblingswebseiten damit unterstützen. Wenn Du lieber weiter ohne die Option surfen möchtest, so kannst Du sie jederzeit \u003Ca href='#' id='disableacceptableads'>deaktivieren\u003C/a>. \u003Cbr/>\u003Cbr/>",
     "description":"first paragraph on page"
   },
   "acceptableadsmoredetails":{
-    "message":"Mehr Informationen?",
+    "message":"Möchtest Du mehr darüber wissen?",
     "description":"more details question"
   },
   "acceptableadsheader2":{
@@ -1208,15 +1208,15 @@
     "description":"second header (H2) on page"
   },
   "acceptableadsdetails":{
-    "message":"Mit Acceptable Ads erlaubst du bestimmte Werbung, die als nicht störend eingestuft worden ist. Dadurch unterstützt du Webseiten, die sich mit Hilfe der Werbung finanzieren, die sich jedoch dafür entschieden haben, unaufdringliche Formate zu wählen.<br\/><br\/>Die Acceptable Ads Initiative ist ein Appell an die Werbeindustrie, Werbeagenturen und Werbenetzwerke endlich mit schlechter Online-Werbung aufzuhören. Damit gemeint sind nervige, störende und behindernde Anzeigen. Die Besonderheiten der Initiative:<br\/><br\/>- Acceptable Ads sind nicht störend. .<br\/>-Acceptable Ads unterbrechen und entstellen nicht den Inhalt, den wir lesen möchten. <br\/>- Acceptable Ads sind transparent und als Werbung gekennzeichnet. <br\/>- Acceptable Ads sind effektiv, ohne, dass sie uns anschreien. <br\/>- Acceptable Ads passen zu der Seite, auf der wir surfen. <br\/><br\/>Erfahre hier mehr über Acceptable Ads<a id='moreinformation' href='#'>here<\/a>. Wie gesagt: AdBlock hat dies nun automatisch in die Voreinstellungen übernommen. Du kannst dies allerdings jederzeit in den AdBlock Optionen <a id='disableacceptableads2' href='#'>deaktivieren<\/a>, wenn du lieber alle Anzeigen blockieren möchtest.",
+    "message":"Mit Acceptable Ads erlaubst Du weiterhin Werbung, die als nicht störend eingestuft worden ist. Dadurch unterstützt Du Webseiten, die sich mit Hilfe von Werbung finanzieren, die sich jedoch entschieden haben, unaufdringliche Formate zu wählen.\u003Cbr/>\u003Cbr/>Die Acceptable Ads Initiative ist ein Appell an die Werbeindustrie, Werbeagenturen und Werbenetzwerke endlich mit schlechter Online-Werbung aufzuhören. Damit gemeint sind nervige, störende und behindernde Anzeigen. Die Besonderheiten der Initiative:\u003Cbr/>\u003Cbr/>\u003Cbr/>1. Acceptable Ads sind nicht aufdringlich.\u003Cbr/>2. Acceptable Ads stören nicht beim Lesen einer Seite.\u003Cbr/>3. Acceptable Ads sind klar als Werbeanzeige erkennbar.\u003Cbr/>4. Acceptable Ads wirken, ohne uns dabei anzuschreien.\u003Cbr/>5. Acceptable Ads passen zu der Seite, auf der wir uns befinden\u003Cbr/>\u003Cbr/>Erfahre mehr über Acceptable Ads \u003Ca id='moreinformation' href='#'>hier\u003C/a>.\u003Cbr/>\u003Cbr/>Wie gesagt: AdBlock hat dies nun in die Voreinstellungen übernommen. Es bleibt aber deine Wahl was und wo Du Werbung letztlich blocken möchtest. Du kannst jederzeit in den AdBlock Optionen Acceptable Ads \u003Ca id='disableacceptableads2' href='#'>deaktivieren\u003C/a>, wenn du lieber alle Anzeigen blockieren möchtest.\u003Cbr/>\u003Cbr/>",
     "description":"details div on page"
   },
   "acceptableadspart2":{
-    "message":"Ich glaube, dass dir die Änderungen gut gefallen werden. Happy surfing!<br\/><br\/>Michael",
+    "message":"Ich glaube aber, dass Du es testen solltest und Dir die Änderungen gut gefallen werden. Happy surfing!\u003Cbr/>\u003Cbr/>Michael",
     "description":"signature"
   },
   "acceptableadspartsmallprint":{
-    "message":"PS: Warum gerade jetzt? Ich habe immer schon ähnliche Ziele verfolgt, wie der Werbeblocker Adblock Plus, der das Acceptable Ads Programm initiiert hat. Ich mochte allerdings die Tatsache nicht, dass die Initiative von den Werbern aus dem Programm finanziert werden. Jetzt ändert sich das, da Adblock Plus die Schirmherrschaft über Acceptable Ads einer unparteiischen Gruppe von Experten übergibt. Ich finde diese Idee fantastisch, und das nicht nur weil sie von meiner Frau Katie stammt! Durch diese Änderung freue ich mich zu sagen, dass AdBlock am Programm teilnimmt. Ich werde außerdem meine Firma verkaufen und der neue Inhaber hat ebenfalls entschlossen Acceptable Ads einzuschalten. Mein langjähriger Business Manager wird ebenfalls bei der neuen Firma arbeiten. Ich denke, das ist eine tolle Sache für alle Nutzer. <br\/><br\/> Es war mir ein Vergnügen, das Internet für euch zu einem besseren Ort zu machen! ?",
+    "message":"PS: Warum gerade jetzt? Ich habe immer schon ähnliche Ziele verfolgt, wie der Werbeblocker Adblock Plus, der das Acceptable Ads Programm initiiert hat. Ich mochte allerdings die Tatsache nicht, dass Adblock Plus das Programm kontrolliert, denn die Initiative wird teilweise von den Werbern aus dem Programm finanziert. Jetzt aber ändert sich das, denn Adblock Plus wird die Schirmherrschaft über Acceptable Ads einer unparteiischen Gruppe von Experten übergeben. Ich finde diese Idee fantastisch, und das nicht nur weil sie von meiner Frau Katie stammt! Durch diese Änderung freue ich mich sagen zu können, dass auch AdBlock am Programm teilnimmt. Ich verkaufe mein Geschäft und der neue Inhaber führt Acceptable Ads fort. Mein langjähriger Geschäftsführer wird der Firma weiterhin vorstehen. Ich denke, das ist eine tolle Sache für alle Nutzer.\u003Cbr/>\u003Cbr/>Es war mir ein Vergnügen, das Internet für Euch zu einem besseren Ort zu machen!",
     "description":"small print at the bottom of the page"
   }  
 }
