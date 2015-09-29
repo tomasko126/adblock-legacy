@@ -1203,10 +1203,6 @@
       "description": "first paragraph on page",
       "message": "Vous voulez plus de détails?"
    },
-   "acceptableadsoption": {
-      "description": "option on the 'General' tab",
-      "message": "Autoriser certaines publicité non-intrusives"
-   },
    "acceptableadspart1": {
       "description": "first paragraph on page",
       "message": "Salut,\u003Cbr/>\u003Cbr/>Je suis Michael, le créateur d’AdBlock. Excusez l’interruption!\u003Cbr/>\u003Cbr/>Depuis des années j’ai voulu aider à faciliter le fait que vous puissiez voir des publicités utiles et puissiez bloquer les autres. Je suis excité de vous annoncer que ça arrive enfin.\u003Cbr/>\u003Cbr/>AdBlock participe désormais au programme Publicités Acceptables. Publicités Acceptables définit des directives strictes pour identifier les publicités qui ne sont pas dérangeantes, qu’AdBlock laissera passer par défaut. De cette manière ceux qui souhaitent aider à soutenir leurs sites Internet préférés le peuvent et les autres peuvent toujours bloquer toutes les publicités, en \u003Ca href='#' id='disableacceptableads'>désactivant\u003C/a> facilement cette fonction.\u003Cbr/>\u003Cbr/>"
