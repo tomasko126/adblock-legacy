@@ -1,20 +1,22 @@
-﻿    body{
-        padding:50px;
-        font-family:Open Sans;
-        font-weight:400;
-        color:#747474;
-        font-size:15px;
-    }
-    h1{
-        font-size:35px;
-        font-weight:300;
-        color:#2B2B2B;
-        margin:0 0 20px;
-    }
-    a{
-        color:#FC1C1C;
-        text-decoration:none;
-    }
-    a:hover{
-        color:#d41818;
-    }
+﻿   body{
+       line-height: 20px;
+       padding:50px;
+       font-family:Helvetica, Arial, Sans Serif;
+       font-weight:300;
+       color:#747474;
+       font-size:15px;
+   }
+   h1{
+       line-height:60px; 
+       font-size:35px;
+       font-weight:100;
+       color:#4B4B4B;
+       margin:0 0 20px;
+   }
+   a{
+       color:#FC1C1C;
+       text-decoration:none;
+   }
+   a:hover{
+       color:#d41818;
+   }
