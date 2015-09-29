@@ -1192,7 +1192,7 @@
     "description":"first H1 on page"
   },
   "acceptableadspart1":{
-    "message":"Hi, it's Michael, the creator of AdBlock. Pardon the interruption!<br\/><br\/>For years I have wanted to help make it easy for you to see useful ads and block annoying ones.  I am excited to tell you that it's finally happening.<br\/><br\/>AdBlock is now participating in the <b>Acceptable Ads program<\/b>.  Acceptable Ads defines strict guidelines to identify non-annoying ads, which AdBlock now shows by default.  This way, you can help support your favorite websites and if you still want to block every ad, you can <a href='#' id='disableacceptableads'>disable this<\/a> easily.<br\/><br\/>",
+    "message":"Hi, it's Michael, the creator of AdBlock. Pardon the interruption!<br\/><br\/>For years I have wanted to help make it easy for you to see useful ads and block annoying ones.  I am excited to tell you that it's finally happening.<br\/><br\/>AdBlock is now participating in the <b>Acceptable Ads program<\/b>.  Acceptable Ads defines strict guidelines to identify non-annoying ads, which AdBlock now shows by default.  This way, you can help support your favorite websites – and if you still want to block every ad, you can <a href='#' id='disableacceptableads'>disable this<\/a> easily.<br\/><br\/>",
     "description":"first paragraph on page"
   },
   "acceptableadsmoredetails":{
