@@ -149,7 +149,6 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
 
 // get filters that are defined in the extension
 MyFilters.prototype.getExtensionFilters = function(settings) {
-  //Exclude google search results ads if the user has checked that option
   var texts = [];
   if (settings.whitelist_hulu_ads) {
     // Issue 7178: FilterNormalizer removes EasyList's too-broad Hulu whitelist
