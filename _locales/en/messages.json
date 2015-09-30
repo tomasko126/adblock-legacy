@@ -1172,7 +1172,7 @@
     "description":"Users can click this link to provide debug information to AdBlock staff"
   },
   "bugreport":{
-    "message":"Why don't you send us a <a href='#' id='report'>bug report<\/a>?",
+    "message":"Why don't you send us a <a>bug report<\/a>?",
     "description":"Link to send a bug report on the Support tab of the options"
   },
   "supportsite":{
