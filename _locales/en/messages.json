@@ -1214,5 +1214,9 @@
   "acceptableadspartsmallprint":{
     "message":"PS: Why now? Well, I have always shared similar goals for the Web with the ad blocker Adblock Plus, who created the Acceptable Ads program. But I did not like the fact that they also control the program, because they are supported by some Acceptable Ads advertisers. Now, Adblock Plus will be transferring custodianship of Acceptable Ads to an impartial group of experts. I love this idea -- in fact, it was my wife Katie’s suggestion! Due to this change, I'm happy for AdBlock to join the program. As a result, I am selling my company, and the buyer is turning on Acceptable Ads. My long-time managing director will keep working with the new company. I believe this is a great thing for you users.<br\/><br\/>It's been an honor to make the Web a better place for you! :)",
     "description":"small print at the bottom of the page"
-  }
+  },
+  "acceptableadsoptionsinfo":{
+    "message":"This is text where we ask to re-enable.",
+    "description":"option page text"
+  }  
 }

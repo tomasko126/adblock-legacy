@@ -1,9 +1,23 @@
 // Check or uncheck each loaded DOM option checkbox according to the
 // user's saved settings.
 $(function() {
+  var acceptable_ads_subscribed = true;
+  
+  if (window.location && 
+      window.location.search) {
+      var searchQuery = parseUri.parseSearch(window.location.search);
+      if (searchQuery &&
+          searchQuery.unsubscribe-aa === true) {
+           acceptable_ads_subscribed = false;
+           BGcall("unsubscribe", {id:"acceptable_ads", del:false});
+           $("#acceptable_ads").prop("checked", false);
+           $("#acceptable_ads_info").slideDown();
+      }
+  }
 
   BGcall("get_subscriptions_minus_text", function(subs) {
-    if (subs["acceptable_ads"].subscribed) {
+    if (subs["acceptable_ads"].subscribed &&
+        acceptable_ads_subscribed) {
       $("#acceptable_ads").prop("checked", true);
     }
   });
