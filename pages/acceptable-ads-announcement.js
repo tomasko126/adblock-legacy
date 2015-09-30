@@ -10,8 +10,7 @@ $(document).ready(function(){
     event.preventDefault();
     $("#details_section").slideToggle();
   });
-  $("#moreinformation").click(function(event){
-    event.preventDefault();
-    BGcall("openTab",  "https://adblockplus.org/acceptable-ads");
-  });
+  $("#moreinformation").
+    attr("href", "https://adblockplus.org/acceptable-ads").
+    attr("target", "_blank");
 });
