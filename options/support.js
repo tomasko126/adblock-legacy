@@ -1,26 +1,27 @@
 $(document).ready(function() {
 
     // Get debug info
-    var debug_info = BGcall("getDebugInfo", function(info) {
+    var debug_info = BGcall("getDebugInfo", function(the_debug_info) {
+		// the_debug_info is the debug info object
 		content = []
 		content.push("=== Filter Lists ===");
-		content.push(info.filter_lists);
+		content.push(the_debug_info.filter_lists);
 		content.push("");
 		if (info.custom_filters){
 			content.push("=== Custom Filters ===");
-			content.push(info.custom_filters);
+			content.push(the_debug_info.custom_filters);
 			content.push("")
 		}
 		if (info.exclude_filters){
 			content.push("=== Exclude Filters ===");
-			content.push(info.exclude_filters);
+			content.push(the_debug_info.exclude_filters);
 			content.push("");
 		}
 		content.push("=== Settings ===");
-		content.push(info.settings);
+		content.push(the_debug_info.settings);
 		content.push("");
 		content.push("=== Other Info ===");
-		content.push(info.other_info);
+		content.push(the_debug_info.other_info);
 		
 		debug_info = content.join("\n")
     });

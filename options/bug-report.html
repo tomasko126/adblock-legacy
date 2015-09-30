@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+  <head>
+    <title>AdBlock - Report a bug</title>
+    <link rel="stylesheet" href="options.css" />
+    <script src="../jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../port.js" type="text/javascript"></script>
+    <script src="../functions.js" type="text/javascript"></script>
+    <style type="text/css">
+      body {
+        background-color: white;
+      }
+      .white {
+        background-color: white;
+      }
+      h2 {
+        font-size: 1.2em;
+        margin-left: 15px;
+      }
+      label {
+        margin-right: 5px;
+      }
+      div.form {
+        margin-left: 15px;
+      }
+      a {
+        color: #4D7BD6;
+        text-decoration: none;
+      }
+      .section  {
+        padding: 10px;
+        padding-left: 162px;
+        margin: 0px -8px 0px -8px;
+        position: relative;
+        margin: 0px auto;
+        max-width: 1000px;
+        display: none;
+      }
+      .grey{
+        background-color: #f8f8f8;
+      }
+      #info {
+        position: relative;
+        margin: 110px auto 30px;
+        max-width: 990px;
+      }
+      .inputError{
+        border-color: #f00 !important;
+      }
+      .missingInfoMessage{
+        display: none;
+        color: #f00
+      }
+      #name,#email{
+        width: 350px;
+      }
+      #summary{
+        width: 650px
+      }
+      @media screen and (max-width: 1080px) {
+        .social {
+          display: none;
+        }
+        .section   {
+          padding: 20px 20px 20px 0px;
+        }
+        #info {
+          margin: 110px auto 30px 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="header">
+      <div class="wrap">
+        <nav id="main_nav" class="right">
+          <li class="social"><a class="twitter" href="http://twitter.com/getadblock" target="_blank"></a></li>
+          <li class="social"><a class="gplus" href="http://plus.google.com/100807459477993641578" target="_blank" ></a></li>
+          <li class="social"><a class="facebook" href="http://facebook.com/heres.adblock" target="_blank" ></a></li>
+        </nav>
+        <a href="https://www.getadblock.com" class="left adblock-logo"><img src="../img/logo.png"></a>
+      </div>
+    </header>
+
+    <!--STEP 0-->
+    <div id="info">So you've found a bug with AdBlock? Don't worry, we'll help you out! Just answer the questions below:</div>
+    
+    <!--Step 1: Name & Email -->
+    <div class="step grey">
+      <div class="section" style="display:block" id="step_name_email">
+        <span class="missingInfoMessage">You've left some info out of this section! Fill in the questions that have a red border.</span>
+        <p>First, we need some info about yourself. All questions in this section are required.</p>
+        <label for="name">Name (or a screen-name):</label>
+        <input type="text" id="name" /><br />
+        <label for="email">Email Address (so that we can contact you if we need more info):</label><br />
+        <input type="text" id="email" /><br />
+        <button id="step1-next">Next</button>
+      </div>
+    </div>
+    
+    <!-- Step 2: Title and repro info -->
+    <div class="step">
+      <div class="section" id="step_repro_info">
+        <span class="missingInfoMessage">You've left some info out of this section! Fill in the questions that have a red border.</span>
+        <p>Now we need some information about the problem. All questions in this section are required.</p>
+        <label for="summary">Give us a one-sentence overview of the problem:</label><br />
+        <input type="text" id="summary" /><br />
+        <label for="repro-steps">What steps did you take to make the bug happen?<br />Be as clear as possible as we will try to reproduce these steps on our own systems.</label><br />
+        <textarea id="repro-steps" rows="5" cols="50">1. 
+2. 
+3. </textarea><br />
+        <label for="expected-result">When you carry out these steps, what do you expect to happen?</label><br />
+        <textarea id="expected-result"  rows="5" cols="50"></textarea><br />
+        <label for="actual-result">When you carry out these steps, what did happen instead?</label><br />
+        <textarea id="actual-result" rows="5" cols="50"></textarea><br />
+        <button id="step2-next">Next</button>
+      </div>
+    </div>
+    
+    <!-- Step 3: Final Checks -->
+    <div class="step grey">
+      <div class="section" id="step_final_questions">
+        <p>This last section is completely optional, but it mostly concerns the details of the report you are submitting</p>
+        <label for="other-comments">Do you have anything else you would like to mention?</label><br />
+        <textarea id="other-comments" rows="5" cols="50"></textarea><br />
+        <label for="debug-info">The information in the box below will also be submitted with your bug report:</label><br />
+        <textarea id="debug-info" disabled="disabled" rows="25" cols="50"></textarea><br />
+        <button id="submit">Submit</button>
+      </div>
+    </div>
+    <script src="bug-report.js"></script>
+  </body>
+</html>

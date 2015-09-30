@@ -1562,7 +1562,7 @@
 		  settings: adblock_settings
 	  }
 
-      // Handle optional elements
+      // Handle optional properties
       if (adblock_custom_filters) {
           the_debug_info.custom_filters = adblock_custom_filters;
       }
@@ -1594,7 +1594,7 @@
       body.push("2. ");
       body.push("3. ");
       body.push("");
-      body.push("**What should happen when you do the above steps**");
+      body.push("**What is supposed to happen when you do the above steps**");
       body.push("");
       body.push("");
       body.push("**What actually happened?**");
