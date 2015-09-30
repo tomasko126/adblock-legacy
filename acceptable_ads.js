@@ -13,7 +13,7 @@ AcceptableAds = (function() {
       }
 
       var openTabIfAllowed = function() {
-        var acceptableadsURL = "pages/acceptableadsexplaination.html";
+        var acceptableadsURL = "pages/acceptable-ads-announcement.html";
         var successfulTabOpen = function() {
             storage_set("acceptableAdsShown", true);
             subscribe({id: "acceptable_ads"});
