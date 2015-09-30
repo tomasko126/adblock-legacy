@@ -35,7 +35,7 @@ var sendReport = function(){
 			bug_report: JSON.stringify(report_data)
 		},
     success: function(json){
-      console.log(json)
+      // TODO Add a success handler
     },
     error: function(xhrInfo, status, HTTPerror){
       // As backup, send them to the old way of reporting a bug.
@@ -43,32 +43,7 @@ var sendReport = function(){
       errors.ajax.push(status);
       errors.http.push(HTTPerror);
       storage_set("bugreport_errors", errors);
-      // Make manual report in case the server goes down
-      var report_data = [];
-      var summary = $title.val();
-      var name = $name.val();
-      var email = $email.val();
-      var private = $private.prop("checked");
-      report_data.push('Seems like the automatic reporting didn\'t work. Just answer the spam-check question and click "Create" below.');
-      report_data.push("AdBlock Team: please check the error details at the bottom of the debug info");
-      report_data.push("");
-      report_data.push("**Repro Steps:**");
-      report_data.push($repro.val());
-      report_data.push("");
-      report_data.push("**Expected results:**");
-      report_data.push($expect.val());
-      report_data.push("");
-      report_data.push("**Actual results:**");
-      report_data.push($actual.val());
-      report_data.push("");
-      report_data.push("**Debug info:**");
-      report_data.push(debug_info);
-      report_data.push("");
-      report_data.push("==== API Error ====");
-      report_data.push("jQuery status: " + status);
-      report_data.push("HTTP message: " + HTTPerror);
-      report = report_data.join("  \n");
-      var url = "https://support.getadblock.com/support/tickets/new";
+      // We need a backup option in case either the API or the proxy goes down...
 		},
     type: "POST"
   });
