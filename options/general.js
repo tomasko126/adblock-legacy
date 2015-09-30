@@ -2,8 +2,8 @@
 // user's saved settings.
 $(function() {
   var acceptable_ads_subscribed = true;
-  
-  if (window.location && 
+
+  if (window.location &&
       window.location.search) {
       var searchQuery = parseUri.parseSearch(window.location.search);
       if (searchQuery &&
