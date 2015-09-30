@@ -1216,7 +1216,7 @@
     "description":"small print at the bottom of the page"
   },
   "acceptableadsoptionsinfo":{
-    "message":"This is text where we ask to re-enable.",
+    "message":"Enabling Acceptable Ads is a way to <b>support the websites you love<\/b> who promise to only show you <b>tasteful, non-annoying ads<\/b>:",
     "description":"option page text"
   }
 }
