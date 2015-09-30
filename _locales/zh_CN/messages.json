@@ -1218,5 +1218,9 @@
   "acceptableadspartsmallprint":{
     "message":"附言: 为什么是现在？我一直和创造可接受广告项目的广告过滤器Adblock Plus有着一样的目标。但是我并不喜欢他们控制整个项目，因为他们从一些可接受广告的广告商盈利。而现在，Adblock Plus将会把可接受广告的管理权交给一群公正的专家。我非常喜欢这个主意 --  实际上这是我妻子Katie的建议！由于这个改变，我为AdBlock加入这个项目而感到开心！也因此，我准备出售我的公司，这个买方将开启可接受广告。我的长期执行董事将继续和新公司一起工作。我相信这对于用户来说也是一件好事。 <br\/><br\/>非常荣幸能为你们将网络建立成一个更好的环境！:)",
     "description":"small print at the bottom of the page"
-  }  
+  },
+  "acceptableadsoptionsinfo":{
+    "message":"启用可接受广告是一种方式来<b>支持你喜欢的网站<\/b>，它们只展现 <b>有品位的、不烦人的广告<\/b>:",
+    "description":"option page text"
+  }
 }
