@@ -30,3 +30,18 @@ h1 {
   width: 750px;
   margin: 20px auto; /* if we're in a wider window, center us. */
 }
+#details_section {
+  display:none;
+  font-size: 14px;
+  margin-left: 4%;
+}
+[i18n="acceptableadspartsmallprint"] {
+  color: #333333;
+  font-size: 90%;
+  font-style:italic;
+}
+#picture {
+  float: right;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}

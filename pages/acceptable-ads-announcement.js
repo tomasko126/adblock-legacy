@@ -8,7 +8,7 @@ $(document).ready(function(){
   });
   $("#moredetails").click(function(event){
     event.preventDefault();
-    $("#details_section").slideDown();
+    $("#details_section").slideToggle();
   });
   $("#moreinformation").click(function(event){
     event.preventDefault();
