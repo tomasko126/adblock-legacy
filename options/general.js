@@ -1,14 +1,18 @@
 // Check or uncheck each loaded DOM option checkbox according to the
 // user's saved settings.
 $(function() {
-  var acceptable_ads_subscribed = true;
+
+  //temporary variable which is set to false initially,
+  //if the query string contains 'unsubscribeaa=true',
+  //then it will be set to true as well
+  var unsubscribe_acceptable_ads = false;
 
   if (window.location &&
       window.location.search) {
       var searchQuery = parseUri.parseSearch(window.location.search);
       if (searchQuery &&
           searchQuery.unsubscribeaa === "true") {
-           acceptable_ads_subscribed = false;
+           unsubscribe_acceptable_ads = true;
            BGcall("unsubscribe", {id:"acceptable_ads", del:false});
            $("#acceptable_ads").prop("checked", false);
            $("#acceptable_ads_info").slideDown();
@@ -16,8 +20,11 @@ $(function() {
   }
 
   BGcall("get_subscriptions_minus_text", function(subs) {
+    //if the user is currently subscribed to AA and
+    //the options page was not opened with a query string of unsubscribeaa=true
+    //then 'check' the acceptable ads button.
     if (subs["acceptable_ads"].subscribed &&
-        acceptable_ads_subscribed) {
+        !unsubscribe_acceptable_ads) {
       $("#acceptable_ads").prop("checked", true);
     }
   });
