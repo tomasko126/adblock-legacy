@@ -15,7 +15,7 @@ $(function() {
            unsubscribe_acceptable_ads = true;
            BGcall("unsubscribe", {id:"acceptable_ads", del:false});
            $("#acceptable_ads").prop("checked", false);
-           $("#acceptable_ads_info").slideDown();
+           $("#acceptable_ads_info").show();
       }
   }
 
