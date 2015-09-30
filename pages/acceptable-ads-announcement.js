@@ -1,12 +1,10 @@
 $(document).ready(function(){
   localizePage();
-  $("#disableacceptableads").click(function(event){
+  $("#disableacceptableads, #disableacceptableads2").click(function(event){
     event.preventDefault();
-    BGcall("openTab",  "options/index.html?tab=0&unsubscribeaa=true");
-  });
-  $("#disableacceptableads2").click(function(event){
-    event.preventDefault();
-    BGcall("openTab",  "options/index.html?tab=0&unsubscribeaa=true");
+    BGcall("unsubscribe", {id:"acceptable_ads", del:false}, function() {
+      BGcall("openTab",  "options/index.html?tab=0&aadisabled=true");
+    });
   });
   $("#moredetails").click(function(event){
     event.preventDefault();

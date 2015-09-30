@@ -1,30 +1,19 @@
+// Temp code to handle incoming clicks from acceptable-ads-announcement.html
+try {
+  if (parseUri.parseSearch(location.search).aadisabled === "true") {
+    $("#acceptable_ads_info").show();
+  }
+}
+catch(ex) {}
+
 // Check or uncheck each loaded DOM option checkbox according to the
 // user's saved settings.
 $(function() {
 
-  //temporary variable which is set to false initially,
-  //if the query string contains 'unsubscribeaa=true',
-  //then it will be set to true as well
-  var unsubscribe_acceptable_ads = false;
-
-  if (window.location &&
-      window.location.search) {
-      var searchQuery = parseUri.parseSearch(window.location.search);
-      if (searchQuery &&
-          searchQuery.unsubscribeaa === "true") {
-           unsubscribe_acceptable_ads = true;
-           BGcall("unsubscribe", {id:"acceptable_ads", del:false});
-           $("#acceptable_ads").prop("checked", false);
-           $("#acceptable_ads_info").show();
-      }
-  }
-
   BGcall("get_subscriptions_minus_text", function(subs) {
-    //if the user is currently subscribed to AA and
-    //the options page was not opened with a query string of unsubscribeaa=true
+    //if the user is currently subscribed to AA
     //then 'check' the acceptable ads button.
-    if (subs["acceptable_ads"].subscribed &&
-        !unsubscribe_acceptable_ads) {
+    if (subs["acceptable_ads"].subscribed) {
       $("#acceptable_ads").prop("checked", true);
     }
   });
