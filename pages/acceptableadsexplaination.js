@@ -2,11 +2,11 @@ $(document).ready(function(){
   localizePage();
   $("#disableacceptableads").click(function(event){
     event.preventDefault();
-    BGcall("openTab",  "options/index.html?tab=0&unsubscribe-aa=true");
+    BGcall("openTab",  "options/index.html?tab=0&unsubscribeaa=true");
   });
   $("#disableacceptableads2").click(function(event){
     event.preventDefault();
-    BGcall("openTab",  "options/index.html?tab=0&unsubscribe-aa=true");
+    BGcall("openTab",  "options/index.html?tab=0&unsubscribeaa=true");
   });
   $("#moredetails").click(function(event){
     event.preventDefault();

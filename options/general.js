@@ -7,7 +7,7 @@ $(function() {
       window.location.search) {
       var searchQuery = parseUri.parseSearch(window.location.search);
       if (searchQuery &&
-          searchQuery.unsubscribe-aa === true) {
+          searchQuery.unsubscribeaa === "true") {
            acceptable_ads_subscribed = false;
            BGcall("unsubscribe", {id:"acceptable_ads", del:false});
            $("#acceptable_ads").prop("checked", false);
