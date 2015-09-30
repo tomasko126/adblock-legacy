@@ -1215,8 +1215,16 @@
       "description": "small print at the bottom of the page",
       "message": "PS: Pourquoi maintenant? Et bien, j’ai toujours partagé une vision similaire de l’Internet avec le bloqueur de publicités Adblock Plus, créateur du programme Publicités Acceptables. Mais je n’ai pas aimé le fait qu’il contrôle aussi le programme. Mais Adblock Plus va transférer la tutelle du programme Publicités Acceptables à un groupe d’experts. J’aime cette idée — en fait, c’est celle de ma femme Katie! Pour finir. Je vends ma société, et l’acheteur active les Publicités Acceptables. Le directeur général qui travaille avec moi depuis des années continuera à travailler avec la nouvelle société. Je pense que c’est super pour vous, les utilisateurs.\u003Cbr/>\u003Cbr/>Ce fut un honneur de faire de l’Internet un endroit meilleur pour vous! :)"
    },
-   "acceptableadsoptionsinfo":{
-      "message":"Activer les Publicités Acceptables est un moyen de <b>soutenir les sites que vous aimez<\/b> qui promettent de ne vous montrer que <b>des publicités de bon goût, et non-gênantes<\/b>:",
-      "description":"option page text"
-  }
+   "acceptableadsdisable_done": {
+     "message":"Les Publicités Acceptables a été désactivé.",
+     "description": "Message shown to users after disabling Acceptable Ads via update page."
+   },
+   "acceptableadsdisable_how_to_reenable": {
+     "message":"Vous pouvez le réactiver à tout moment en cliquant sur le \"Autoriser certaines publicité non-intrusives\" case ci-dessous.",
+     "description": "Message shown to users after disabling Acceptable Ads via update page."
+   },
+   "acceptableadsdisable_please_reenable": {
+      "message":"Activer les Publicités Acceptables est un moyen de soutenir les sites que vous aimez qui promettent de ne vous montrer que des publicités de bon goût, et non-gênantes.",
+      "description": "Message shown to users after disabling Acceptable Ads via update page."
+   }
 }

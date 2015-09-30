@@ -1219,8 +1219,16 @@
     "message":"P.D.: ¿Por qué ahora? A ver, siempre he compartido los mismos goles para la web que el bloqueador de anuncios Adblock Plus, cuyos creadores crearon la iniciativa Anuncios Aceptables. Sin embargo, no me gustaba el hecho de que también la controlasen, ya que están financiados por algunos anunciantes de Anuncios Aceptables. Ahora, Adblock Plus otorgará la custodia de Anuncios Aceptables a un grupo imparcial de expertos. Me encanta esta idea. De hecho, ¡me lo sugirió mi esposa Katie! Debido a este cambio, estoy contento de que AdBlock se una a la iniciativa y, como resultado, he decidido vender mi compañía y el comprador ha decidido activar Anuncios Aceptables. Mi director ejecutivo durante tanto tiempo seguirá trabajando con la compañía nueva. Estoy seguro de que será algo fantástico para los usuarios.<br\/><br\/>¡Ha sido un honor hacer de la web un lugar mejor para ti! :)",
     "description":"small print at the bottom of the page"
   },
-  "acceptableadsoptionsinfo":{
-    "message":"Activar Anuncios Aceptables es una forma de <b>apoyar a tus webs favoritas<\/b>, las cuales prometen mostrarte solo <b>publicidad con gusto y que no moleste<\/b>:",
-    "description":"option page text"
+  "acceptableadsdisable_done": {
+    "message":"Anuncios Aceptables se ha desactivado.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptableadsdisable_how_to_reenable": {
+    "message":"Puede volver a activar en cualquier momento haciendo clic en el \"Permitir alguna publicidad no molesta\" casilla abajo.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptableadsdisable_please_reenable": {
+    "message":"Activar Anuncios Aceptables es una forma de apoyar a tus webs favoritas, las cuales prometen mostrarte solo publicidad con gusto y que no moleste.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
   }
 }
