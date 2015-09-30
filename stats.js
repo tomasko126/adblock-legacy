@@ -72,7 +72,7 @@ STATS = (function() {
     if (acceptableAdsShown === undefined) {
       data["aas"] = '0';
     } else {
-      data["aas"] = acceptableAdsShown ? '1': '0';;
+      data["aas"] = acceptableAdsShown ? '1': '0';
     }
     return data;
   };
