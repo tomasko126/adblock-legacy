@@ -1208,7 +1208,7 @@
     "description": "first paragraph on page"
   },
   "acceptableadspart1": {
-    "message": "Salut,<br\/><br\/>Je suis Michael, le créateur d'AdBlock. Excusez l'interruption !<br\/><br\/>Depuis des années j'ai voulu aider à faciliter le fait que vous puissiez voir des publicités utiles et puissiez bloquer les autres. Je suis excité de vous annoncer que ça arrive enfin.<br\/><br\/>AdBlock participe désormais au <b>programme Publicités Acceptables<\/b>. Publicités Acceptables définit des directives strictes pour identifier les publicités qui ne sont pas dérangeantes, qu'AdBlock laissera passer par défaut. De cette manière ceux qui souhaitent aider à soutenir leurs sites Internet préférés le peuvent et les autres peuvent toujours bloquer toutes les publicités, en <a href='#' id='disableacceptableads'>désactivant<\/a> facilement cette fonction.<br\/><br\/>",
+    "message": "Salut,<br\/><br\/>Je suis Michael, le créateur d'AdBlock. Excusez l'interruption !<br\/><br\/>Depuis des années, je voulais vous aider à pouvoir voir les publicités utiles, et bloquer celles qui sont agaçantes. Je suis heureux de vous annoncer que cela devient enfin possible.<br\/><br\/>AdBlock participe désormais au <b>programme Publicités Acceptables<\/b>. Publicités Acceptables définit des directives strictes pour identifier les publicités qui ne sont pas dérangeantes, qu'AdBlock laissera passer par défaut. De cette manière, ceux qui souhaitent soutenir leurs sites Internet préférés le peuvent, et les autres peuvent toujours bloquer toutes les publicités, en <a href='#' id='disableacceptableads'>désactivant<\/a> facilement cette fonction.<br\/><br\/>",
     "description": "first paragraph on page"
   },
   "acceptableadspart2": {
@@ -1216,8 +1216,8 @@
     "description": "first paragraph on page"
   },
   "acceptableadspartsmallprint": {
-    "description": "small print at the bottom of the page",
-    "message": "PS : Pourquoi maintenant ? Eh bien, j'ai toujours partagé une vision similaire de l'Internet avec le bloqueur de publicités Adblock Plus, créateur du programme Publicités Acceptables. Mais je n'ai pas aimé le fait qu'il contrôle aussi le programme. Mais Adblock Plus va transférer la tutelle du programme Publicités Acceptables à un groupe d'experts. J'aime cette idée — en fait, c'est celle de ma femme Katie ! Pour finir. Je vends ma société, et l'acheteur active les Publicités Acceptables. Le directeur général qui travaille avec moi depuis des années continuera à travailler avec la nouvelle société. Je pense que c'est super pour vous, les utilisateurs.<br\/><br\/>Ce fut un honneur de faire de l'Internet un endroit meilleur pour vous ! :)"
+    "message": "PS : Pourquoi maintenant ? Eh bien, j'ai toujours partagé une vision similaire d'Internet avec le bloqueur de publicités Adblock Plus, créateur du programme Publicités Acceptables. Mais je n'ai pas aimé le fait qu'ils contrôlent aussi le programme, car ils sont soutenus par certains annonceurs des Publicités Acceptables. Maintenant, Adblock Plus va transférer la tutelle du programme Publicités Acceptables à un groupe d'experts impartiaux. J'aime cette idée — en fait, c'est celle de ma femme Katie ! En raison de ce changement, je suis content qu'AdBlock participe à ce programme. Pour finir, je vends ma société, et l'acheteur active les Publicités Acceptables. Le directeur général qui travaille avec moi depuis des années continuera à travailler avec la nouvelle société. Je pense que c'est super pour vous, les utilisateurs.<br\/><br\/>Ce fut un honneur de faire d'Internet un endroit meilleur pour vous ! :)",
+    "description": "small print at the bottom of the page"
   },
   "acceptableadsdisable_done": {
     "message":"Les Publicités Acceptables ont été désactivées.",
