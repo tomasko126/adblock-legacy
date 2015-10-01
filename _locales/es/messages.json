@@ -1224,7 +1224,7 @@
     "description": "Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_how_to_reenable": {
-    "message":"Puede volver a activar en cualquier momento haciendo clic en el \"Permitir alguna publicidad no molesta\" casilla abajo.",
+    "message":"Puedes volver a activar la opción en cualquier momento haciendo clic en la casilla \"Permitir alguna publicidad no molesta\" que se muestra abajo.",
     "description": "Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_please_reenable": {

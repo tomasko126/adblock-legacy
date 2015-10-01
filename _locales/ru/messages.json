@@ -1220,11 +1220,11 @@
     "description":"small print at the bottom of the page"
   },
   "acceptableadsdisable_done": {
-    "message":"Ненавязчивой Рекламы было отключено.",
+    "message":"Ненавязчивая Реклама была отключена.",
     "description": "Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_how_to_reenable": {
-    "message":"Вы можете снова включить его в любое время, нажав \"Разрешить некоторую ненавязчивую рекламу\" флажок ниже.",
+    "message":"Вы можете снова включить её в любое время, используя флажок \"Разрешить некоторую ненавязчивую рекламу\" ниже.",
     "description": "Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_please_reenable": {

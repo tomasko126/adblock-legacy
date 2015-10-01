@@ -1220,15 +1220,15 @@
     "description":"small print at the bottom of the page"
   },
   "acceptableadsdisable_done": {
-    "message":"Acceptable Ads wurde deaktiviert.",
+    "message":"Acceptable Ads ist ausgeschaltet.",
     "description": "Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_how_to_reenable": {
-    "message":"Sie können wieder aktivieren zu jeder Zeit, indem Sie auf das \"Einige nicht aufdringliche Werbung zulassen\" Kontrollkästchen unten.",
+    "message":"Du kannst dies jederzeit mit einem Klick auf die \"Einige nicht aufdringliche Werbung zulassen\" Checkbox unten wieder einschalten.",
     "description": "Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_please_reenable": {
-    "message":"Wenn Du die Acceptable Ads Option einschaltest, kannst Du Webseiten, die sich verpflichtet haben, Dir weniger aufdringliche Werbung anzuzeigen, unterstützen.",
+    "message":"Die Acceptable Ads Option erlaubt es Dir Webseiten zu unterstützen, welche sich verpflichtet haben Dir weniger aufdringliche Werbung anzuzeigen.",
     "description": "Message shown to users after disabling Acceptable Ads via update page."
   }
 }
