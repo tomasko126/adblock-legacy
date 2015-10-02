@@ -47,70 +47,97 @@ var debug_info = BGcall("getDebugInfo", function(info) {
     debug_info = info;
 });
 
-//generate the URL to the issue tracker
-function generateReportURL() {
-    var result = "https://adblock.tenderapp.com/discussion/new" +
-        "?category_id=ad-report&discussion[private]=1&discussion[title]=";
-
-    var domain = "<enter URL of webpage here>";
-    if (options.url)
-        domain = parseUri(options.url).hostname;
-    result = result + encodeURIComponent("Ad report: " + domain);
-
-    var body = [];
-    var count = 1;
-    body.push("Last step -- point me to the ad so I can fix the bug! " +
-              "Don't leave anything out or I'll probably " +
-              "have to ignore your report. Thanks!");
-    body.push("");
-    body.push("Also, if you can put your name (or a screen name) " +
-              "and a contact email access in the boxes above, that would be great!");
-    body.push("");
-    body.push("We need the email so that we can contact you if we need more information " +
-              "than what you give us in your report. Otherwise, we might not be able to fix it.");
-    body.push("");
-    if (!options.url) {
-        body.push("**" + count + ". Paste the URL of the webpage showing an ad:** ");
-        body.push("");
-        body.push("");
-        count++;
+function sendReport() {
+  
+  
+  var report_data = {
+    title: "Ad Report",
+    name: $("#step_report_name").val(),
+    email: $("#step_report_email").val(),
+    location: $("#step_report_location").val(),
+    filter: $("#step_report_filter").val(),
+    comments: $("#step_report_otherInfo").val(),
+    debug: debug_info,
+    url: ""
+  };
+  
+  var domain = "";
+    if (options.url){
+      domain = parseUri(options.url).hostname;
+      report_data.title = report_data.title + ": " + domain;
+      report_data.url = options.url;
     }
-    body.push("**" + count + ". Exactly where on that page is the ad? What does it " +
-              "look like? Attach a screenshot, with the ad clearly marked, " +
-              "if you can.**");
-    body.push("");
-    body.push("");
-    count++;
-    body.push("**" + count + ". If you have created the filter which removes reported ad, please paste it here:** ");
-    body.push("");
-    body.push("");
-    count++;
-    body.push("**" + count + ". Any other information that would be helpful, besides " +
-              "what is listed below:** ");
-    body.push("");
-    body.push("");
-    body.push("-------- Please don't touch below this line. ---------");
-    body.push("");
-    body.push("```");
-    if (options.url) {
-        body.push("=== URL with ad ===");
-        body.push(options.url);
-        body.push("");
-    }
-    body.push(debug_info);
-    body.push("");
-    body.push("=== Question Responses ===");
-    var answers = $('span[class="answer"]');
+  /*var body = [];
+  var answers = $('span[class="answer"]');
     var text = $('div[class="section"]:visible');
     for (var i=0, n=1; i<answers.length, i<text.length; i++, n++) {
         body.push(n+"."+text[i].id+": "+answers[i].getAttribute("chosen"));
     }
-    body.push("```");
-    body.push("");
-
-    result = result + "&discussion[body]=" + encodeURIComponent(body.join('  \n')); // Two spaces for Markdown newlines
-
-    return result;
+  report_data.answers = body.join("\n");*/
+  
+  
+          // Retrieve extension info
+          var askUserToGatherExtensionInfo = function() {
+            chrome.permissions.request({
+              permissions: ['management']
+            }, function(granted) {
+              // The callback argument will be true if the user granted the permissions.
+              if (granted) {
+                chrome.management.getAll(function(result) {
+                  var extInfo = [];
+                  for (var i = 0; i < result.length; i++) {
+                    extInfo.push("Number " + (i + 1));
+                    extInfo.push("  name: " + result[i].name);
+                    extInfo.push("  id: " + result[i].id);
+                    extInfo.push("  version: " + result[i].version);
+                    extInfo.push("  enabled: " + result[i].enabled)
+                    extInfo.push("  type: " + result[i].type);
+                    extInfo.push("");
+                  }
+                  report_data.extensions = extInfo.join("\n\n");
+                  chrome.permissions.remove({
+                    permissions: ['management']
+                  }, function(removed) {});
+                });
+              } else {
+                //user didn't grant us permission
+                report_data.extensions = "Permission not granted";
+              }
+            });
+        };//end of permission request
+        if (chrome &&
+            chrome.tabs &&
+            chrome.tabs.detectLanguage) {
+          chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
+            if (language) {
+              report_data.language = language;
+            }
+            askUserToGatherExtensionInfo();
+          });//end of detectLanguage
+        } else {
+          report_data.language = "unknown"
+          askUserToGatherExtensionInfo();
+        }
+  
+  $.ajax({
+    url: "http://localhost/freshdesk/adReport.php",
+    data: {
+      ad_report: JSON.stringify(report_data)
+    },
+    success: function(json){
+      // TODO Add a success handler
+      console.log(json);
+    },
+    error: function(xhrInfo, status, HTTPerror){
+      // As backup, send them to the old way of reporting a bug.
+      var errors = storage_get("bugreport_errors");
+      errors.ajax.push(status);
+      errors.http.push(HTTPerror);
+      storage_set("bugreport_errors", errors);
+      // We need a backup option in case either the API or the proxy goes down...
+		},
+    type: "POST"
+  });
 }
 
 // Check every domain of downloaded resource against malware-known domains
@@ -397,70 +424,10 @@ $("#step_firefox_no").click(function() {
         // Safari can't block video ads
         $("#step_flash_DIV").fadeIn().css("display", "block");
     } else {
-        $("#checkupdate").html(translate("reporttous2"));
-        $("#privacy").show();
-        $("a", "#checkupdate").attr("href", generateReportURL());
-        $("a", "#checkupdate").click(function(event) {
-          //we have our own click handler for the anchor tag, so that we
-          //can ask retrieve other extension info.
-          event.preventDefault();
-          var currentHREF = $("a", "#checkupdate").attr("href");
-          var askUserToGatherExtensionInfo = function() {
-            chrome.permissions.request({
-              permissions: ['management']
-            }, function(granted) {
-              // The callback argument will be true if the user granted the permissions.
-              if (granted) {
-                chrome.management.getAll(function(result) {
-                  var extInfo = [];
-                  extInfo.push("");
-                  extInfo.push("```");
-                  extInfo.push("==== Extension and App Information ====");
-                  for (var i = 0; i < result.length; i++) {
-                    extInfo.push("Number " + (i + 1));
-                    extInfo.push("  name: " + result[i].name);
-                    extInfo.push("  id: " + result[i].id);
-                    extInfo.push("  version: " + result[i].version);
-                    extInfo.push("  enabled: " + result[i].enabled)
-                    extInfo.push("  type: " + result[i].type);
-                    extInfo.push("");
-                  }
-                  extInfo.push("```");
-                  extInfo.push("");
-                  currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
-                  chrome.permissions.remove({
-                    permissions: ['management']
-                  }, function(removed) {});
-                  document.location.href = currentHREF;
-                });
-              } else {
-                //user didn't grant us permission, just go to site...
-                document.location.href = currentHREF;
-              }
-            });
-        };//end of permission request
-        if (chrome &&
-            chrome.tabs &&
-            chrome.tabs.detectLanguage) {
-          chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
-            if (language) {
-              var extInfo = [];
-              extInfo.push("");
-              extInfo.push("```");
-              extInfo.push("Detected language of page: ");
-              extInfo.push(language);
-              extInfo.push("```");
-              extInfo.push("");
-              currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
-            }
-            askUserToGatherExtensionInfo();
-          });//end of detectLanguage
-        } else {
-          askUserToGatherExtensionInfo();
-        }
-      });//end of click handler
+        $("#step_report_DIV").fadeIn().css("display", "block");
     }
 });
+
 $("#step_firefox_wontcheck").click(function() {
     if (!SAFARI) {
         // Chrome blocking is good enough to assume the answer is 'yes'
@@ -480,10 +447,12 @@ $("#step_flash_yes").click(function() {
     $("#checkupdate").text(translate("cantblockflash"));
 });
 $("#step_flash_no").click(function() {
-    $("#step_flash").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
-    $("#checkupdate").html(translate("reporttous2"));
-    $("a", "#checkupdate").attr("href", generateReportURL());
-    $("#privacy").show();
+    $("#step_report_DIV").fadeIn().css("display", "block");
+});
+
+// STEP 7: Ad Report
+$("#step_report_submit").click(function(){
+  sendReport();
 });
 
 checkupdates("adreport");
