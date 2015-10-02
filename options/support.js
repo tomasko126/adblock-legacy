@@ -2,11 +2,12 @@ $(document).ready(function() {
 
     // Get debug info
     var debug_info = BGcall("getDebugInfo", function(the_debug_info) {
-		// the_debug_info is the debug info object
-		content = []
+		// the_debug_info is the debug info object from the BG page
+		content = [];
 		content.push("=== Filter Lists ===");
 		content.push(the_debug_info.filter_lists);
 		content.push("");
+    // Custom & Excluded filters might not always be in the object
 		if (info.custom_filters){
 			content.push("=== Custom Filters ===");
 			content.push(the_debug_info.custom_filters);
@@ -22,7 +23,7 @@ $(document).ready(function() {
 		content.push("");
 		content.push("=== Other Info ===");
 		content.push(the_debug_info.other_info);
-		
+		// Put it together to put into the textbox
 		debug_info = content.join("\n")
     });
 
