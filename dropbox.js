@@ -1,8 +1,11 @@
 // Dropbox class manages sync of settings, filter lists, custom filters and excluded filters
 // NOTICE: This library will brake, when Dropbox updates API endpoints
 
-// TODO: When longpoll will be available in API v2 (/longpoll_delta in API v1),
-//       switch to long polling instead of polling every minute
+// TODO: Malware protection issues - when checked/unchecked, the notification option should fade in/fade out
+//                                 - it's not synced anyway
+//       Advanced option - when checked/unchecked, make sure advanced options are/are not shown
+//       Sync AA option?
+                                   
 
 var Dropbox = function() {};
 
@@ -214,10 +217,9 @@ Dropbox.prototype._pollForChanges = function(data, callback) {
     var that = this;
     $.ajax({
         method: "POST",
-        url: "https://api.dropboxapi.com/2-beta-2/files/list_folder/continue",
+        url: "https://notify.dropboxapi.com/2-beta-2/files/list_folder/longpoll",
         data: JSON.stringify(data),
         beforeSend: function(request) {
-            request.setRequestHeader("Authorization", " Bearer " + that._token);
             request.setRequestHeader("Content-Type", "application/json");
         },
         success: function(info) {

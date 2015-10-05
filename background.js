@@ -1602,7 +1602,7 @@
       dropbox.init({id: "os0lr0aalwz0r9r", redirectURI: "https://getadblock.com/dropbox.html"}, function(authenticated) {
           if (authenticated) {
               dropbox.getCursor();
-              dropbox.setTimer();
+              //dropbox.setTimer();
           }
       });
       
@@ -1619,7 +1619,7 @@
                   storage_set("exclude_filters", filters.exclude);
                   dropbox.getFile(function() {
                       dropbox.getCursor();
-                      dropbox.setTimer();
+                      //dropbox.setTimer();
                   });
               });
           });
@@ -1630,7 +1630,7 @@
           dropbox.logout(function() {
               set_setting("dropbox_sync", false);
               chrome.extension.sendRequest({message: "update_icon"});
-              dropbox.cleanTimer();
+              //dropbox.cleanTimer();
           });
       }
 
@@ -1654,13 +1654,18 @@
       dropbox.pollForChanges = function(cursor) {
           cursor = { cursor: cursor || dropbox.cursor };
           dropbox._pollForChanges(cursor, function(info) {
-                  dropbox.cursor = info.data.cursor;
-                  if (info.data && info.data.entries && info.data.entries.length > 0) {
-                      console.log("newer file on server, downloading...");
-                      dropbox.getFile();
-                  } else {
-                      console.log("no change on server, continue polling...");
-                  }
+              if (!dropboxauth()) {
+                  return;
+              }
+              var data = JSON.parse(info.data);
+              if (!data.changes) {
+                  console.log("no change on server, continue polling...");
+              } else {
+                  console.log("newer file on server, downloading...");
+                  console.log(info);
+                  dropbox.getFile();
+              }
+              dropbox.getCursor();
           });
       }              
 
@@ -1803,7 +1808,7 @@
           var custom_sync = data.custom_filters;
           var custom_local = storage_get("custom_filters");
           if (custom_local !== custom_sync) {
-              storage_set("custom_filters", custom);
+              storage_set("custom_filters", custom_sync);
               chrome.extension.sendRequest({command: "filters_updated"});
           }
 
