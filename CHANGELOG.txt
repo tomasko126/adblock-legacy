@@ -2,6 +2,24 @@
 
 UNRELEASED:
 
+2.41.2:
+ - Updated the style attributes of the Acceptable Ads message to better fit the page / tab. (#635)
+ - Updated the ping data to send a 'u' when the Acceptable Ads is undefined. (#635)
+
+2.41.1:
+ - Added missing image file for Safari.
+ 
+2.41:
+ - Added Acceptable Ads filter list. (#627)
+
+2.40.1:
+ - Remove the timestamp query string from the Malware filter list URL
+ 
+2.40:
+ - Updated Translations
+ - Updated Malware filter list URL
+ - For Safari users, the 'Author' field was changed from Michael Gundlach to BetaFish, Inc
+
 2.39.1:
  - Removed the cache parameter for AdBlock CDN AJAX requests. (#626)
 

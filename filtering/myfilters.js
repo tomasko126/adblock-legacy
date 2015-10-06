@@ -149,18 +149,7 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
 
 // get filters that are defined in the extension
 MyFilters.prototype.getExtensionFilters = function(settings) {
-  //Exclude google search results ads if the user has checked that option
   var texts = [];
-  if (settings.show_google_search_text_ads) {
-    // Standard search
-    texts.push("@@||google.*/search?$elemhide");
-    // Google Instant: go to https://google.com, type 'hotel' and don't press Enter
-    texts.push("@@||www.google.*/|$elemhide");
-    // Google Instant: open a Chrome tab, type 'hotel' and don't press Enter
-    texts.push("@@||google.*/webhp?$elemhide");
-    // Google Search: go to http://google.com, type 'hotel' and press Enter
-    texts.push("@@||google.*/?gws_rd$elemhide");
-  }
   if (settings.whitelist_hulu_ads) {
     // Issue 7178: FilterNormalizer removes EasyList's too-broad Hulu whitelist
     // entries.  If the user enables whitelist_hulu_ads, just add them back.
@@ -521,8 +510,7 @@ MyFilters.prototype._loadMalwareDomains = function() {
     if (!this._subscriptions.malware.text ||
         !this.getMalwareDomains() ||
         out_of_date(this._subscriptions.malware)) {
-        //the timestamp is add to the URL to prevent caching by the browser
-        var url = this._subscriptions.malware.url + "?timestamp=" + new Date().getTime();
+        var url = this._subscriptions.malware.url;
         // Fetch file with malware-known domains
         var xhr = new XMLHttpRequest();
         var that = this;
@@ -606,6 +594,7 @@ MyFilters.prototype._load_default_subscriptions = function() {
   result["adblock_custom"] = { subscribed: true };
   result["easylist"] = { subscribed: true };
   result["malware"] = { subscribed: true };
+  result["acceptable_ads"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
@@ -706,13 +695,16 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "https://easylist-downloads.adblockplus.org/fanboy-social.txt",
     },
     "malware": { // Malware protection
-      url: "https://data.getadblock.com/filters/domains.json",
+      url: "https://adblockcdn.com/filters/domains.json",
     },
     "annoyances": { // Fanboy's Annoyances
       url: "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt",
     },
     "warning_removal": { // AdBlock warning removal
       url: "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
+    },
+    "acceptable_ads": { // Acceptable Ads
+      url: "https://easylist-downloads.adblockplus.org/exceptionrules.txt",
     }
   };
 }
