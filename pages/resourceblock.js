@@ -45,23 +45,19 @@ BGcall("get_frameData", tabId, function(frameData) {
         }
 
         BGcall("get_settings", function(settings) {
-
             // Process AdBlock's own filters (if any)
             filterLists["AdBlock"] = {};
             filterLists.AdBlock.text = MyFilters.prototype.getExtensionFilters(settings);
 
             BGcall("storage_get", "custom_filters", function(filters) {
-
                 // Process custom filters (if any)
                 if (filters) {
                     filterLists["Custom"] = {};
                     filterLists["Custom"].text = FilterNormalizer.normalizeList(filters).split("\n");
                 }
 
-                // Loop through every frameId in frameData;
-                // If resource/ad has been blocked/whitelisted/hidden,
-                // get its matching filter/selector and name of the filter list,
-                // where is matching filter/selector coming from
+                // Pre-process each resource - extract data from its name
+                // and add them into resource's object
                 for (var frameId in frameData) {
                     var frame = frameData[frameId];
                     var frameResources = frame.resources;
@@ -72,69 +68,71 @@ BGcall("get_frameData", tabId, function(frameData) {
                         var res = frameResources[resource];
 
                         res.elType = resource.split(":|:")[0];
-                        res.frameDomain = resource.split(":|:")[2];
                         res.url = resource.split(":|:")[1];
+                        res.frameDomain = resource.split(":|:")[2];
 
-                        // Selector resource
-                        if (reqTypeForElement(res.elType) === "selector") {
-                            for (var filterList in filterLists) {
-                                // Don't check selector against malware filter list
-                                if (filterList === "malware") {
-                                    continue;
-                                }
-                                var filterListText = filterLists[filterList].text;
-                                for (var i=0; i<filterListText.length; i++) {
-                                    var filter = filterListText[i];
-                                    // Don't check selector against non-selector filters
-                                    if (!Filter.isSelectorFilter(filter)) {
-                                        continue;
-                                    }
-                                    if (filter.indexOf(res.url) > -1) {
-                                        // If |filter| is global selector filter,
-                                        // it needs to be the same as |resource|.
-                                        // If it is not the same as |resource|, keep searching for a right |filter|
-                                        if ((filter.split("##")[0] === "" && filter === res.url) ||
-                                            filter.split("##")[0].indexOf(res.frameDomain) > -1) {
-                                            // Shorten lengthy selector filters
-                                            if (filter.split("##")[0] !== "") {
-                                                filter = res.frameDomain + res.url;
-                                            }
-                                            res.blockedData = {};
-                                            res.blockedData["filterList"] = filterList;
-                                            res.blockedData["text"] = filter;
-                                            res.frameUrl = frame.url;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            // Non-selector resource (blocked/whitelisted/unmodified)
-                            var urlDomain = parseUri(res.url).hostname;
-                            res.thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, res.frameDomain);
+                        if (res.elType !== "selector") {
+                            res.thirdParty = BlockingFilterSet.checkThirdParty(parseUri(res.url).hostname, res.frameDomain);
                         }
                     }
                 }
+                // Find out, whether resource has been blocked/whitelisted,
+                // if so, get the matching filter and filter list,
+                // where is the matching filter coming from
                 BGcall("process_frameData", frameData, function(processedData) {
                     for (var frameId in processedData) {
                         var frame = processedData[frameId];
                         var frameResources = frame.resources;
-                        
+
                         for (var resource in frameResources) {
                             var res = frameResources[resource];
-                            if (res.blockedData && res.blockedData !== false && res.blockedData.text) {
-                                var filter = res.blockedData.text;
-                                for (var filterList in filterLists) {
-                                    if (filterList === "malware") {
-                                        if (filterLists[filterList].text.adware.indexOf(filter) > -1) {
-                                            res.blockedData["filterList"] = filterList;
-                                        }
-                                    } else {
-                                        var filterListText = filterLists[filterList].text;
-                                        for (var i=0; i<filterListText.length; i++) {
-                                            var filterls = filterListText[i];
-                                            if (filterls === filter) {
+                            if (res.elType !== "selector") {
+                                if (res.blockedData && res.blockedData !== false && res.blockedData.text) {
+                                    var filter = res.blockedData.text;
+                                    for (var filterList in filterLists) {
+                                        if (filterList === "malware") {
+                                            if (filterLists[filterList].text.adware.indexOf(filter) > -1) {
                                                 res.blockedData["filterList"] = filterList;
+                                            }
+                                        } else {
+                                            var filterListText = filterLists[filterList].text;
+                                            for (var i=0; i<filterListText.length; i++) {
+                                                var filterls = filterListText[i];
+                                                if (filterls === filter) {
+                                                    res.blockedData["filterList"] = filterList;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                for (var filterList in filterLists) {
+                                    // Don't check selector against malware filter list
+                                    if (filterList === "malware") {
+                                        continue;
+                                    }
+                                    var filterListText = filterLists[filterList].text;
+                                    for (var i=0; i<filterListText.length; i++) {
+                                        var filter = filterListText[i];
+                                        // Don't check selector against non-selector filters
+                                        if (!Filter.isSelectorFilter(filter)) {
+                                            continue;
+                                        }
+                                        if (filter.indexOf(res.url) > -1) {
+                                            // If |filter| is global selector filter,
+                                            // it needs to be the same as |resource|.
+                                            // If it is not the same as |resource|, keep searching for a right |filter|
+                                            if ((filter.split("##")[0] === "" && filter === res.url) ||
+                                                filter.split("##")[0].indexOf(res.frameDomain) > -1) {
+                                                // Shorten lengthy selector filters
+                                                if (filter.split("##")[0] !== "") {
+                                                    filter = res.frameDomain + res.url;
+                                                }
+                                                res.blockedData = {};
+                                                res.blockedData["filterList"] = filterList;
+                                                res.blockedData["text"] = filter;
+                                                res.frameUrl = frame.url;
+                                                break;
                                             }
                                         }
                                     }
@@ -145,15 +143,13 @@ BGcall("get_frameData", tabId, function(frameData) {
                     console.log(processedData);
                     processRequests(processedData);
                 });
-                // Process all requests
-                //processRequests(frameData);
             });
         });
     });
 });
 
 // Create a new table for frame
-function createTableUI(domain, url, frameId) {
+function createTable(domain, url, frameId) {
     var elem = null, frameType = null, frameUrls = $(".frameurl");
 
     // Don't create another table with the same url,
@@ -216,7 +212,7 @@ function processRequests(frames) {
         }
 
         // Create a table for each frame
-        createTableUI(frameObject.domain, frameObject.url, frame);
+        createTable(frameObject.domain, frameObject.url, frame);
 
         // Process each request
         for (var resource in frameObject["resources"]) {

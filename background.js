@@ -453,9 +453,8 @@
     if (!window.frameData) {
       return;
     }
-    //console.log(sender);
-    // TODO: Frame domain
-    frameData.storeResource(sender.tab.id, sender.frameId || 0, selector, "selector");
+    var frameDomain = parseUri(sender.url).hostname;
+    frameData.storeResource(sender.tab.id, sender.frameId || 0, selector, "selector", frameDomain);
     var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
