@@ -281,12 +281,12 @@
     },
 
     // Save a resource for the resource blocker.
-    storeResource: function(tabId, frameId, url, elType, blockedData) {
+    storeResource: function(tabId, frameId, url, elType, frameDomain) {
       if (!get_settings().show_advanced_options)
         return;
       var data = frameData.get(tabId, frameId);
       if (data !== undefined) {
-          data.resources[url] = { elType: elType, blockedData: blockedData };
+          data.resources[elType + ":|:" + url + ":|:" + frameDomain] = {};
       }
     },
 
@@ -355,18 +355,19 @@
 
       // May the URL be loaded by the requesting frame?
       var frameDomain = frameData.get(tabId, requestingFrameId).domain;
-      var blockedData = _myfilters.blocking.matches(details.url, elType, frameDomain, true, true);
-
-      if (blockedData !== false) {
-          var blocked = blockedData.blocked;
-          if (get_settings().data_collection) {
+      if (get_settings().data_collection) {
+          var blockedData = _myfilters.blocking.matches(details.url, elType, frameDomain, true, true);
+          if (blockedData !== false) {
               DataCollection.addItem(blockedData.text);
+              var blocked = blockedData.blocked;
+          } else {
+              var blocked = blockedData;
           }
       } else {
-          var blocked = blockedData;
+          var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
       }
 
-      frameData.storeResource(tabId, requestingFrameId, details.url, elType, blockedData);
+      frameData.storeResource(tabId, requestingFrameId, details.url, elType, frameDomain);
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
@@ -420,7 +421,7 @@
           blockCounts.recordOneAdBlocked(details.sourceTabId);
           updateBadge(details.sourceTabId);
       }
-      frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup);
+      frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup, opener.domain);
     };
 
     // If tabId has been replaced by Chrome, delete it's data
@@ -453,6 +454,8 @@
     if (!window.frameData) {
       return;
     }
+    //console.log(sender);
+    // TODO: Frame domain
     frameData.storeResource(sender.tab.id, sender.frameId || 0, selector, "selector");
     var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {
@@ -1137,7 +1140,25 @@
 
   // Get the framedata for the 'Report an Ad' page
   get_frameData = function(tabId) {
-    return frameData.get(tabId);
+      return frameData.get(tabId);
+  }
+
+  process_frameData = function(fd) {
+      for (var frameId in fd) {
+          var frame = fd[frameId];
+          var frameResources = frame.resources; 
+          for (var resource in frameResources) {
+              var res = frameResources[resource];
+              // We are processing selectors in resource viewer page
+              if (res.elType === "selector") {
+                  continue;
+              }
+              console.log(res);
+              res.blockedData = _myfilters.blocking.matches(res.url, res.elType, res.frameDomain, true, true);
+          }
+      }
+      console.log(fd);
+      return fd;
   }
 
   // Return chrome.i18n._getL10nData() for content scripts who cannot

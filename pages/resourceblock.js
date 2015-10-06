@@ -6,7 +6,7 @@ tabId = parseInt(tabId);
 
 // Convert element type to request type
 function reqTypeForElement(elType) {
-    switch (elType) {
+    switch (parseInt(elType)) {
         case 1:    return "script";
         case 2:    return "image";
         case 4:    return "background";
@@ -31,7 +31,6 @@ BGcall("get_frameData", tabId, function(frameData) {
         window.close();
         return;
     }
-
     BGcall("storage_get", "filter_lists", function(filterLists) {
         // TODO: Excluded filters & excluded hiding filters?
         for (var id in filterLists) {
@@ -71,6 +70,11 @@ BGcall("get_frameData", tabId, function(frameData) {
                     // Process each resource
                     for (var resource in frameResources) {
                         var res = frameResources[resource];
+
+                        res.elType = resource.split(":|:")[0];
+                        res.frameDomain = resource.split(":|:")[2];
+                        res.url = resource.split(":|:")[1];
+
                         // Selector resource
                         if (reqTypeForElement(res.elType) === "selector") {
                             for (var filterList in filterLists) {
@@ -85,21 +89,20 @@ BGcall("get_frameData", tabId, function(frameData) {
                                     if (!Filter.isSelectorFilter(filter)) {
                                         continue;
                                     }
-                                    if (filter.indexOf(resource) > -1) {
+                                    if (filter.indexOf(res.url) > -1) {
                                         // If |filter| is global selector filter,
                                         // it needs to be the same as |resource|.
                                         // If it is not the same as |resource|, keep searching for a right |filter|
-                                        if ((filter.split("##")[0] === "" && filter === resource) ||
-                                            filter.split("##")[0].indexOf(frameDomain) > -1) {
+                                        if ((filter.split("##")[0] === "" && filter === res.url) ||
+                                            filter.split("##")[0].indexOf(res.frameDomain) > -1) {
                                             // Shorten lengthy selector filters
                                             if (filter.split("##")[0] !== "") {
-                                                filter = frameDomain + resource;
+                                                filter = res.frameDomain + res.url;
                                             }
                                             res.blockedData = {};
                                             res.blockedData["filterList"] = filterList;
                                             res.blockedData["text"] = filter;
                                             res.frameUrl = frame.url;
-                                            res.frameDomain = frameDomain;
                                             break;
                                         }
                                     }
@@ -107,9 +110,18 @@ BGcall("get_frameData", tabId, function(frameData) {
                             }
                         } else {
                             // Non-selector resource (blocked/whitelisted/unmodified)
-                            var urlDomain = parseUri(resource).hostname;
-                            res.frameDomain = frameDomain;
-                            res.thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, frameDomain);
+                            var urlDomain = parseUri(res.url).hostname;
+                            res.thirdParty = BlockingFilterSet.checkThirdParty(urlDomain, res.frameDomain);
+                        }
+                    }
+                }
+                BGcall("process_frameData", frameData, function(processedData) {
+                    for (var frameId in processedData) {
+                        var frame = processedData[frameId];
+                        var frameResources = frame.resources;
+                        
+                        for (var resource in frameResources) {
+                            var res = frameResources[resource];
                             if (res.blockedData && res.blockedData !== false && res.blockedData.text) {
                                 var filter = res.blockedData.text;
                                 for (var filterList in filterLists) {
@@ -130,9 +142,11 @@ BGcall("get_frameData", tabId, function(frameData) {
                             }
                         }
                     }
-                }
+                    console.log(processedData);
+                    processRequests(processedData);
+                });
                 // Process all requests
-                processRequests(frameData);
+                //processRequests(frameData);
             });
         });
     });
@@ -207,7 +221,6 @@ function processRequests(frames) {
         // Process each request
         for (var resource in frameObject["resources"]) {
             var res = frameObject["resources"][resource];
-            res.url = resource;
 
             // Don't show main_frame resource, unless it's excluded by $document or $elemhide
             if ((reqTypeForElement(res.elType) === "main_frame") && (!res.blockedData || !res.blockedData.blocked)) {
