@@ -285,7 +285,7 @@
         return;
       var data = frameData.get(tabId, frameId);
       if (data !== undefined) {
-          data.resources[elType + ":|:" + url + ":|:" + frameDomain] = {};
+          data.resources[elType + ":|:" + url + ":|:" + frameDomain] = null;
       }
     },
 
@@ -1130,7 +1130,7 @@
     "_blank",
     'scrollbars=0,location=0,resizable=0,width=460,height=150');
   }
-  
+
   // Open the resource blocker when requested from popup.
   launch_resourceblocker = function(query) {
     openTab("pages/resourceblock.html" + query, true);
@@ -1144,7 +1144,7 @@
   process_frameData = function(fd) {
       for (var frameId in fd) {
           var frame = fd[frameId];
-          var frameResources = frame.resources; 
+          var frameResources = frame.resources;
           for (var resource in frameResources) {
               var res = frameResources[resource];
               // We are processing selectors in resource viewer page

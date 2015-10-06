@@ -31,6 +31,7 @@ BGcall("get_frameData", tabId, function(frameData) {
         window.close();
         return;
     }
+
     BGcall("storage_get", "filter_lists", function(filterLists) {
         // TODO: Excluded filters & excluded hiding filters?
         for (var id in filterLists) {
@@ -57,7 +58,7 @@ BGcall("get_frameData", tabId, function(frameData) {
                 }
 
                 // Pre-process each resource - extract data from its name
-                // and add them into resource's object
+                // and add them into resource's object for easier manipulation
                 for (var frameId in frameData) {
                     var frame = frameData[frameId];
                     var frameResources = frame.resources;
@@ -65,7 +66,7 @@ BGcall("get_frameData", tabId, function(frameData) {
 
                     // Process each resource
                     for (var resource in frameResources) {
-                        var res = frameResources[resource];
+                        var res = frameResources[resource] = {};
 
                         res.elType = resource.split(":|:")[0];
                         res.url = resource.split(":|:")[1];
@@ -76,6 +77,7 @@ BGcall("get_frameData", tabId, function(frameData) {
                         }
                     }
                 }
+
                 // Find out, whether resource has been blocked/whitelisted,
                 // if so, get the matching filter and filter list,
                 // where is the matching filter coming from
@@ -141,68 +143,15 @@ BGcall("get_frameData", tabId, function(frameData) {
                         }
                     }
                     console.log(processedData);
-                    processRequests(processedData);
+                    addRequestsToTables(processedData);
                 });
             });
         });
     });
 });
 
-// Create a new table for frame
-function createTable(domain, url, frameId) {
-    var elem = null, frameType = null, frameUrls = $(".frameurl");
-
-    // Don't create another table with the same url,
-    // when we've already created one
-    for (var i=0; i<frameUrls.length; i++) {
-        var frameUrl = frameUrls[i].title;
-        if (url === frameUrl) {
-            return;
-        }
-    }
-
-    // Sort tables
-    if (frameId === "0") {
-        elem = "#legend";
-        frameType = translate("topframe");
-    } else {
-        var len = document.querySelectorAll(".resourceslist").length;
-        elem = document.querySelectorAll(".resourceslist")[len-1];
-        frameType = translate("subframe");
-    }
-
-    $(elem).after(
-        '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
-            '<thead>' +
-                '<tr>' +
-                    '<th class="frametype">' + translate("frametype") + frameType + '<\/th>' +
-                '<\/tr>' +
-                '<tr>' +
-                    '<th class="framedomain">' + translate("framedomain") + domain + '<\/th>' +
-                '<\/tr>' +
-                '<tr>' +
-                    '<th class="frameurl" title="' + decodeURIComponent(url) + '">' +
-                        translate("frameurl") + decodeURIComponent(truncateURI(url)) +
-                    '<\/th>' +
-                '<\/tr>' +
-                '<tr>' +
-                    '<th style="height: 10px;"></th>' +
-                '<\/tr>' +
-                '<tr>' +
-                    '<th i18n="headerresource" data-column="url"><\/th>' +
-                    '<th i18n="headertype" data-column="type"><\/th>' +
-                    '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
-                    '<th i18n="thirdparty" data-column="thirdparty" style="text-align: center;"><\/th>' +
-                '<\/tr>' +
-            '<\/thead>' +
-            '<tbody>' +
-            '<\/tbody>' +
-        '<\/table>'
-    );
-}
-
 // Process each request and add it to table
-function processRequests(frames) {
+function addRequestsToTables(frames) {
     for (var frame in frames) {
         var frameObject = frames[frame];
 
@@ -298,14 +247,59 @@ function processRequests(frames) {
 
     // Finally, show us the tables!
     $("table").fadeIn();
-}
+};
 
-// Truncate long URIs
-function truncateURI(uri) {
-    if (uri.length > 80) {
-        return uri.substring(0, 75) + '[...]';
+// Create a new table for frame
+function createTable(domain, url, frameId) {
+    var elem = null, frameType = null, frameUrls = $(".frameurl");
+
+    // Don't create another table with the same url,
+    // when we've already created one
+    for (var i=0; i<frameUrls.length; i++) {
+        var frameUrl = frameUrls[i].title;
+        if (url === frameUrl) {
+            return;
+        }
     }
-    return uri;
+
+    // Sort tables
+    if (frameId === "0") {
+        elem = "#legend";
+        frameType = translate("topframe");
+    } else {
+        var len = document.querySelectorAll(".resourceslist").length;
+        elem = document.querySelectorAll(".resourceslist")[len-1];
+        frameType = translate("subframe");
+    }
+
+    $(elem).after(
+        '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
+            '<thead>' +
+                '<tr>' +
+                    '<th class="frametype">' + translate("frametype") + frameType + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th class="framedomain">' + translate("framedomain") + domain + '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th class="frameurl" title="' + decodeURIComponent(url) + '">' +
+                        translate("frameurl") + decodeURIComponent(truncateURI(url)) +
+                    '<\/th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th style="height: 10px;"></th>' +
+                '<\/tr>' +
+                '<tr>' +
+                    '<th i18n="headerresource" data-column="url"><\/th>' +
+                    '<th i18n="headertype" data-column="type"><\/th>' +
+                    '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
+                    '<th i18n="thirdparty" data-column="thirdparty" style="text-align: center;"><\/th>' +
+                '<\/tr>' +
+            '<\/thead>' +
+            '<tbody>' +
+            '<\/tbody>' +
+        '<\/table>'
+    );
 }
 
 // Click event for the column titles (<th>) of a table.
@@ -334,4 +328,12 @@ function sortTable() {
         var no = Number(item.match(/\d+$/)[0]) - 10000;
         $("tbody", table).append(rowList[no]);
     });
+};
+
+// Truncate long URIs
+function truncateURI(uri) {
+    if (uri.length > 80) {
+        return uri.substring(0, 75) + '[...]';
+    }
+    return uri;
 };
