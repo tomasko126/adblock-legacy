@@ -453,8 +453,9 @@
     if (!window.frameData) {
       return;
     }
-    var frameDomain = parseUri(sender.url).hostname;
+    var frameDomain = parseUri(sender.url || sender.tab.url).hostname;
     frameData.storeResource(sender.tab.id, sender.frameId || 0, selector, "selector", frameDomain);
+
     var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
@@ -1141,6 +1142,7 @@
       return frameData.get(tabId);
   }
 
+  // Add blocking data to each resource
   process_frameData = function(fd) {
       for (var frameId in fd) {
           var frame = fd[frameId];
@@ -1151,11 +1153,9 @@
               if (res.elType === "selector") {
                   continue;
               }
-              console.log(res);
               res.blockedData = _myfilters.blocking.matches(res.url, res.elType, res.frameDomain, true, true);
           }
       }
-      console.log(fd);
       return fd;
   }
 

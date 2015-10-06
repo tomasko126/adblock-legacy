@@ -142,7 +142,6 @@ BGcall("get_frameData", tabId, function(frameData) {
                             }
                         }
                     }
-                    console.log(processedData);
                     addRequestsToTables(processedData);
                 });
             });
