@@ -67,13 +67,13 @@ function sendReport() {
       report_data.title = report_data.title + ": " + domain;
       report_data.url = options.url;
     }
-  /*var body = [];
+  var the_answers = [];
   var answers = $('span[class="answer"]');
     var text = $('div[class="section"]:visible');
     for (var i=0, n=1; i<answers.length, i<text.length; i++, n++) {
-        body.push(n+"."+text[i].id+": "+answers[i].getAttribute("chosen"));
+        the_answers.push(n+"."+text[i].id+": "+answers[i].getAttribute("chosen"));
     }
-  report_data.answers = body.join("\n");*/
+  report_data.answers = the_answers.join("\n");
   
   
           // Retrieve extension info
