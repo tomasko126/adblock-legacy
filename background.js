@@ -1569,7 +1569,7 @@
       if (get_exclude_filters_text()) {
           the_debug_info.exclude_filters = get_exclude_filters_text();
       }
-	  var other_info = []
+	  var other_info = [];
       other_info.push("AdBlock version number: " + AdBlockVersion + AdBlockBuild());
       if (adblock_error)
           other_info.push("Last known error: " + adblock_error);
