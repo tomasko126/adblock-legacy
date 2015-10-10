@@ -272,10 +272,6 @@
     </div>
     </div>
 
-    <div class="result">
-     <div id="checkupdate"></div>
-     <div id="privacy" i18n="reportpubliclyavailable"></div>
-    </div>
     
     <div class="step">
       <div id="step_report_DIV" style="background-color: #f8f8f8;">
@@ -295,6 +291,24 @@
           <button id="step_report_submit" i18n="buttonsubmit"></button>
         </div>
       </div>
+    </div>
+    
+    <div class="result">
+     <div id="checkupdate"></div>
+     <div id="privacy" i18n="reportpubliclyavailable"></div>
+    </div>
+    
+    <div class="result">
+      <div class="step">
+      <div id="step_error">
+        <h2 i18n="adreport_error_heading"></h2>
+        <p i18n="adreport_error_1"></p>
+        <p i18n="adreport_error_2" i18n_replacement_el="newTicket"></p>
+        <a id="newTicket" href="http://support.getadblock.com/support/tickets/new"></a>
+        <p i18n="adreport_error_3"></p>
+        <textarea id="manual_submission"></textarea>
+      </div>
+    </div>
     </div>
 
     <script src="adreport.js"></script>

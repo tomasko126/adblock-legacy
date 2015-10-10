@@ -129,15 +129,69 @@ function sendReport() {
       console.log(json);
     },
     error: function(xhrInfo, status, HTTPerror){
-      // As backup, send them to the old way of reporting a bug.
+      // We'll need to get them to manually report this
       var errors = storage_get("bugreport_errors");
       errors.ajax.push(status);
       errors.http.push(HTTPerror);
       storage_set("bugreport_errors", errors);
-      // We need a backup option in case either the API or the proxy goes down...
+      prepareManualReport(report_data, status, HTTPerror);
 		},
     type: "POST"
   });
+}
+
+// Manual Report preparation in case of error
+var prepareManualReport = function(data, status, HTTPerror){
+  var body = [];
+  body.push("This bug report failed to send. See bottom of debug info for details.");
+  body.push("");
+  body.push("* Location of ad *");
+  body.push(data.location);
+  body.push("");
+  body.push("* Working Filter? *");
+  body.push(data.expect);
+  body.push("");
+  body.push("* Other comments *");
+  body.push(data.comments);
+  body.push("");
+  
+    // Get written debug info
+      // data.debug is the debug info object
+      content = [];
+      content.push("* Debug Info *");
+      content.push("");
+      content.push("");
+      content.push("=== Filter Lists ===");
+      content.push(data.debug.filter_lists);
+      content.push("");
+      // Custom & Excluded filters might not always be in the object
+      if (info.custom_filters){
+        content.push("=== Custom Filters ===");
+        content.push(data.debug.custom_filters);
+        content.push("")
+      }
+      if (info.exclude_filters){
+        content.push("=== Exclude Filters ===");
+        content.push(data.debug.exclude_filters);
+        content.push("");
+      }
+      content.push("=== Settings ===");
+      content.push(data.debug.settings);
+      content.push("");
+      content.push("=== Other Info ===");
+      content.push(data.debug.other_info);
+      // Put it together to put into the textbox
+      var text_debug_info = content.join("\n");
+      });
+  
+  body.push("* Debug Info *");
+  body.push(text_debug_info);
+  body.push("");
+  body.push("=== API ERROR DETAILS ===");
+  body.push("jQuery error: " + status);
+  body.push("HTTP Error code: " + HTTPerror);
+
+  $("#manual_submission").val(body.join("\n"));
 }
 
 // Check every domain of downloaded resource against malware-known domains
@@ -447,7 +501,8 @@ $("#step_flash_yes").click(function() {
     $("#checkupdate").text(translate("cantblockflash"));
 });
 $("#step_flash_no").click(function() {
-    $("#step_report_DIV").fadeIn().css("display", "block");
+  $("#step_flash").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");  
+  $("#step_report_DIV").fadeIn().css("display", "block");
 });
 
 // STEP 7: Ad Report

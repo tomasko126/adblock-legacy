@@ -1210,5 +1210,21 @@
   "buttonsubmit":{
     "message":"Submit",
     "description":"Shown at the end of a bug or ad report wizard. When the user clicks the button, their report is sent to us."
+  },
+  "adreport_error_heading":{
+    "message":"ERROR!",
+    "description":"Subheading for the section of the ad report page shown when the connection to the support site for reporting ads breaks."
+  },
+  "adreport_error_1":{
+    "message":"Oops. The ad report didn't submit properly.",
+    "description":"This is shown when the user tries to report an ad but the connection breaks."
+  },
+  "adreport_error_2":{
+    "message":"Please go to <a>our support website<\/a> then copy &amp; paste this into the \"Fill in any details you think will help us understand your issue\" section.",
+    "description":"Shown when the connection to the support site for reporting an ad breaks."
+  },
+  "adreport_error_3":{
+    "message":"You will also need to add your name &amp; email again.",
+    "description":"Shown when the connection to the support site for reporting an ad breaks."
   }
 }
