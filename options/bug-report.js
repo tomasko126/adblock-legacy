@@ -50,6 +50,7 @@ var sendReport = function(){
   });
 }
 
+// Preparation for manual report in case of error.
 var prepareManualReport = function(data, status, HTTPerror){
   var body = [];
   body.push("This bug report failed to send. See bottom of debug info for details.");
@@ -70,6 +71,9 @@ var prepareManualReport = function(data, status, HTTPerror){
     // Get written debug info
       // data.debug is the debug info object
       content = [];
+      content.push("* Debug Info *");
+      content.push("");
+      content.push("");
       content.push("=== Filter Lists ===");
       content.push(data.debug.filter_lists);
       content.push("");
