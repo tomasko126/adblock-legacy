@@ -1,6 +1,6 @@
 {
   "description2":{
-    "message":"AdBlock. The #1 ad blocker with over 200 million downloads. Blocks YouTube, Facebook and ALL ads by default (unlike Adblock Plus).",
+    "message":"The most popular Chrome extension, with over 40 million users! Blocks ads all over the web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -31,10 +31,6 @@
     "message":"AdBlock Options",
     "description":"Title for the options page"
   },
-  "thirdparty":{
-    "message":"Third-party",
-    "description":"Resource list column title telling if the resource originates from a different domain"
-  },
   "chromebutton_how_to_hide2":{
     "message":"To hide the button, right click it and choose Hide Button.  You can show it again under chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -54,10 +50,6 @@
   "sliderexplanation":{
     "message":"Slide the slider until the ad is blocked correctly on the page, and the blocked element looks useful.",
     "description":"Blacklister slider page message"
-  },
-  "block_by_url_instead":{
-    "message":"Advanced: block by URL instead",
-    "description":"Link on blacklister slider page"
   },
   "slidertitle":{
     "message":"Step 1: Figure out what to block",
@@ -243,10 +235,6 @@
     "message":"Beta",
     "description":"Label for beta features in AdBlock Options"
   },
-  "googletextads2":{
-    "message":"I like the text ads on Google search results; show me those",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "showcontextmenus2":{
     "message":"Add items to the right click menu",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -257,6 +245,10 @@
   },
   "debuginlogoption":{
     "message":"Show debug statements in Console Log (which slows down AdBlock)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption":{
+    "message":"Allow AdBlock to collect anonymous filter list usage and data",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
@@ -374,6 +366,10 @@
   "filterwarning_removal":{
     "message":"AdBlock Warning Removal list (removes messages about using AdBlock)",
     "description":"Name of the filter list"
+  },
+  "filteracceptable_ads":{
+    "message":"Acceptable Ads (recommended)",
+    "description":"A filter list"
   },
   "filteradblock_custom":{
     "message":"AdBlock custom filters (recommended)",
@@ -496,7 +492,7 @@
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock has detected malware.  Your computer may be infected.",
+    "message":"AdBlock has blocked a download from a site known to host malware.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
@@ -863,161 +859,13 @@
     "message":"unknown",
     "description":"A resource type"
   },
-  "blockeverycontaining":{
-    "message":"Block every resource containing:",
-    "description":"resourceblocking page string"
-  },
-  "whitelisteverycontaining":{
-    "message":"Whitelist every resource containing:",
-    "description":"resourceblocking page string"
-  },
-  "wildcardhint":{
-    "message":"Note: you can use * as wildcard here",
-    "description":"resourceblocking page string"
-  },
-  "novalidurlpattern":{
-    "message":"Please enter a valid URL pattern to match!",
-    "description":"resourceblocking page string"
-  },
-  "doesntmatchoriginal":{
-    "message":"The pattern you entered doesn't match the resource you tried to block! Continue anyway?",
-    "description":"resourceblocking page string"
-  },
-  "thirdpartycheckbox":{
-    "message":"Any website EXCEPT websites on domain $domain$",
-    "description":"resourceblocking page string",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
-  },
-  "filterhasbeenadded":{
-    "message":"The filter was succesfully added!\nReload the page to see the result!",
-    "description":"resourceblocking page string"
-  },
-  "adblock_is_paused":{
-    "message":"AdBlock is paused. Therefore no resources are caught, so this page cannot be used. Unpause AdBlock first and try again.",
-    "description":"resourceblocking page string"
-  },
-  "excludefilterremoved":{
-    "message":"The filter was removed. Please reload the original page to generate the list with resources.",
-    "description":"Warning when a page exclusion rule was removed in resourceblock.html"
-  },
-  "noresourcessend2":{
-    "message":"Something went wrong. No resources have been sent through. This page will now close. Try reloading the website.",
-    "description":"resourceblocking page string"
-  },
-  "resourcedomain":{
-    "message":"Loaded on page with domain:\n$domain$",
-    "description":"Text shown when hovering over an item in the third-party column",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
-  },
-  "resourceiswhitelisted":{
-    "message":"The selected resource has been whitelisted. Therefore you cannot block it.",
-    "description":"resourceblocking page string"
-  },
-  "selectresources":{
-    "message":"Select the resource you would like to block or unblock",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocktitle":{
-    "message":"Block a resource",
-    "description":"resourceblocking page string"
-  },
-  "headerresource":{
-    "message":"Resource",
-    "description":"resourceblocking page string"
-  },
-  "headertype":{
-    "message":"Type",
-    "description":"resourceblocking page string"
-  },
-  "headerfilter":{
-    "message":"Matched filter",
-    "description":"resourceblocking page string"
-  },
   "close":{
     "message":"Close",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend1":{
-    "message":"Legend:",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend2":{
-    "message":"blocked resources",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend3":{
-    "message":"whitelisted resources",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend4":{
-    "message":"blockable resources",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend5":{
-    "message":"hiding rules applied",
-    "description":"resourceblocking page string"
+    "description":"Generic message for buttons that close a view or window"
   },
   "loading":{
     "message":"LOADING...",
-    "description":"resourceblocking page string"
-  },
-  "nextstep":{
-    "message":"Next step",
-    "description":"resourceblocking page string"
-  },
-  "appliedwhenbrowsing":{
-    "message":"This filter will be applied when you are browsing:",
-    "description":"resourceblocking page string"
-  },
-  "anysite":{
-    "message":"Any website",
-    "description":"resourceblocking page string"
-  },
-  "onlyondomains":{
-    "message":"ONLY pages on these domains: ",
-    "description":"resourceblocking page string"
-  },
-  "multipledomainshint":{
-    "message":"Seperate multiple domains with commas or spaces",
-    "description":"resourceblocking page string"
-  },
-  "casesensitive":{
-    "message":"This filter is case sensitive:",
-    "description":"resourceblocking page string"
-  },
-  "onlyresourcetypes":{
-    "message":"This filter applies to resources of these types:",
-    "description":"resourceblocking page string"
-  },
-  "addthisfilter":{
-    "message":"Add this filter",
-    "description":"resourceblocking page string"
-  },
-  "ordisablefilter":{
-    "message":"... or disable filter:",
-    "description":"On the resourceblocking page, choice to disable a filter instead of allowing or blocking a specific resource"
-  },
-  "thisfilterwillbedisabled":{
-    "message":"This filter will be disabled:",
-    "description":"On the resourceblocking page, followed by the filter the user chose to disable"
-  },
-  "disabledwhenbrowsing":{
-    "message":"This filter will be disabled when you are browsing:",
-    "description":"On the resourceblocking page, choose on which sites the filter should be disabled"
-  },
-  "onlypagesonthisdomain":{
-    "message":"ONLY pages on this domain:",
-    "description":"On the resourceblocking page, option to disable a filter only on a specific domain"
+    "description":"Generic message displayed during processes that take some time"
   },
   "flashads":{
     "message":"Videos and Flash",
@@ -1091,14 +939,6 @@
     "message":"Pay what you want!",
     "description":"Text of a payment request link"
   },
-  "removelabel":{
-    "message":"Remove",
-    "description":"Link to remove a filter on the resourceblock page"
-  },
-  "changelabel":{
-    "message":"change",
-    "description":"Link to change resources on the resourceblock page"
-  },
   "translator_credit":{
     "message":"Credit for translation goes to:",
     "description":"Will be followed by a list of translator names (separate string)"
@@ -1111,9 +951,9 @@
     "message":"Report an ad on this page",
     "description":"Entry in the AdBlock button menu"
   },
-  "show_resourcelist":{
-    "message":"Show the resource list",
-    "description":"Entry in the AdBlock button menu"
+  "acceptableadsoption":{
+    "message":"Allow some non-intrusive advertising",
+    "description":"option on the 'General' tab"
   },
   "advanced_options2":{
     "message":"I'm an advanced user, show me advanced options",
@@ -1154,32 +994,6 @@
   "safari50_updatenotice":{
     "message":"You are using an old version of Safari. Get the latest version in order to use the AdBlock toolbar button to pause AdBlock, whitelist websites, and report ads. <a>Upgrade now<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
-  },
-  "searchexplanation":{
-    "message":"Use * to match zero or more letters.  For example, 'banner*.gif image' matches the images 'banner.gif', 'banner123.gif', and 'bannerxyz.gif'.",
-    "description":"Text in resourceblock when you hover your mouse over the search textbox"
-  },
-  "searchplaceholder":{
-    "message":"Search resources...",
-    "description":"Text in resourceblock shown in the search textbox before you type something"
-  },
-  "nosearchresults":{
-    "message":"No resources found",
-    "description":"Text in resourceblock shown if no results are found after searching"
-  },
-  "custompattern":{
-    "message":"Custom:",
-    "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
-  },
-  "filterorigin":{
-    "message":"Filter origin:\n$list$",
-    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
-    "placeholders":{
-      "list":{
-        "content":"$1",
-        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
-      }
-    }
   },
   "firefox_explanation":{
     "message":"The purpose of this question is to determine who should receive your report. If you answer this question incorrectly, the report will be sent to the wrong people, so it may get ignored.",
@@ -1368,5 +1182,45 @@
   "ad_report_please":{
     "message":"If you're seeing an ad, don't make a bug report, make an <a>ad report<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "acceptableadsheader1":{
+    "message":"Announcing the Acceptable Ads program",
+    "description":"first H1 on page"
+  },
+  "acceptableadspart1":{
+    "message":"Hi, it's Michael, the creator of AdBlock. Pardon the interruption!<br\/><br\/>For years I have wanted to help make it easy for you to see useful ads and block annoying ones.  I am excited to tell you that it's finally happening.<br\/><br\/>AdBlock is now participating in the <b>Acceptable Ads program<\/b>.  Acceptable Ads defines strict guidelines to identify non-annoying ads, which AdBlock now shows by default.  This way, you can help support your favorite websites -- and if you still want to block every ad, you can <a href='#' id='disableacceptableads'>disable this<\/a> easily.<br\/><br\/>",
+    "description":"first paragraph on page"
+  },
+  "acceptableadsmoredetails":{
+    "message":"Want more details?",
+    "description":"more details question"
+  },
+  "acceptableadsheader2":{
+    "message":"More about Acceptable Ads",
+    "description":"second header (H2) on page"
+  },
+  "acceptableadsdetails":{
+    "message":"With Acceptable Ads, you are allowing some advertising that’s not considered annoying to be shown. By doing this you support websites that rely on advertising but who choose to do it in a non-intrusive way.<br\/><br\/>The Acceptable Ads program is a plea to advertisers, their ad agencies, online ad networks and websites to stop making bad online advertising -- ads that are obnoxious, annoying and obtrusive. Specifically:<br\/><br\/>- Acceptable Ads are not annoying.<br\/>- Acceptable Ads do not disrupt or distort the page content we’re trying to read.<br\/>- Acceptable Ads are transparent with us about being an ad.<br\/>- Acceptable Ads are effective without shouting at us.<br\/>- Acceptable Ads are appropriate to the site that we are on.<br\/><br\/>You can learn more about Acceptable Ads <a id='moreinformation' href='#'>here<\/a>. Like I said: AdBlock has enabled this feature by default, but you can can <a id='disableacceptableads2' href='#'>disable it<\/a> in AdBlock’s Options if you ever want to block every ad.",
+    "description":"details div on page"
+  },
+  "acceptableadspart2":{
+    "message":"I think you'll really like the change. Happy surfing!<br\/><br\/>Michael",
+    "description":"signature"
+  },
+  "acceptableadspartsmallprint":{
+    "message":"PS: Why now? Well, I have always shared similar goals for the Web with the ad blocker Adblock Plus, who created the Acceptable Ads program. But I did not like the fact that they also control the program, because they are supported by some Acceptable Ads advertisers. Now, Adblock Plus will be transferring custodianship of Acceptable Ads to an impartial group of experts. I love this idea -- in fact, it was my wife Katie’s suggestion! Due to this change, I'm happy for AdBlock to join the program. As a result, I am selling my company, and the buyer is turning on Acceptable Ads. My long-time managing director will keep working with the new company. I believe this is a great thing for you users.<br\/><br\/>It's been an honor to make the Web a better place for you! :)",
+    "description":"small print at the bottom of the page"
+  },
+  "acceptableadsdisable_done": {
+    "message":"Acceptable Ads has been disabled.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptableadsdisable_how_to_reenable": {
+    "message":"You can re-enable it at any time by clicking the \"Allow some non-intrusive advertising\" checkbox below.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptableadsdisable_please_reenable": {
+    "message":"Enabling Acceptable Ads is a way to support the websites you love who promise to only show you tasteful, non-annoying ads.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
   }
 }

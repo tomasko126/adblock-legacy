@@ -230,6 +230,19 @@
         font-weight: bold;
         margin: 5px 0px 5px 3px;
       }
+      #acceptable_ads_info {
+        display: none;
+        line-height: 1;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding: 7px 2em;
+        background-color: #FFD966;
+        border: 1px solid black;
+        width: 65%;
+      }
+      span[i18n="acceptableadsdisable_done"] {
+        font-size: 110%;
+      }
 
       /* Filters tab */
       #btnShowLinks {

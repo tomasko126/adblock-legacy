@@ -378,7 +378,7 @@
       {
         "credit": "Erling Stangnes",
         "username": "erlingstangnes",
-        "proofreader": true,
+        "proofreader": false,
         "joined": "2013-08"
       }
     ]
@@ -462,7 +462,7 @@
       {
         "credit": "tsippert",
         "username": "tsippert",
-        "proofreader": false,
+        "proofreader": true,
         "joined": "2014-10"
       },
       {
@@ -644,6 +644,18 @@
         "username": "tuitioner",
         "proofreader": false,
         "joined": "2015-06"
+      },
+      {
+        "credit": "Павло Тимошенко",
+        "username": "poru",
+        "proofreader": false,
+        "joined": "2015-06"
+      },
+      {
+        "credit": "cutepenguin",
+        "username": "cutepenguin",
+        "proofreader": false,
+        "joined": "2015-08"
       }
     ]
   },

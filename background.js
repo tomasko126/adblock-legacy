@@ -14,8 +14,8 @@
            str += stack;
         }
         //don't send large stack traces
-        if (str.length > 64) {
-          str = str.substr(0,63);
+        if (str.length > 512) {
+          str = str.substr(0,511);
         }
     }
     STATS.msg(str);
@@ -88,7 +88,6 @@
     var defaults = {
       debug_logging: false,
       youtube_channel_whitelist: false,
-      show_google_search_text_ads: false,
       whitelist_hulu_ads: false, // Issue 7178
       show_context_menu_items: true,
       show_advanced_options: false,
@@ -357,7 +356,17 @@
 
       // May the URL be loaded by the requesting frame?
       var frameDomain = frameData.get(tabId, requestingFrameId).domain;
-      var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+      if (get_settings().data_collection) {
+        var blockedData = _myfilters.blocking.matches(details.url, elType, frameDomain, true, true);
+        if (blockedData !== false) {
+          DataCollection.addItem(blockedData.text);
+          var blocked = blockedData.blocked;
+        } else {
+          var blocked = blockedData;
+        }
+      } else {
+        var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+      }
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
@@ -451,6 +460,7 @@
     var data = frameData.get(sender.tab.id, 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
+      DataCollection.addItem(selector);
       if (!SAFARI) {
         blockCounts.recordOneAdBlocked(sender.tab.id);
         updateBadge(sender.tab.id);
@@ -1116,11 +1126,6 @@
     })();
   }
 
-  // Open the resource blocker when requested from the Chrome popup.
-  launch_resourceblocker = function(query) {
-    openTab("pages/resourceblock.html" + query, true);
-  }
-
   // Open subscribe popup when new filter list was subscribed from site
   launch_subscribe_popup = function(loc) {
     window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
@@ -1128,8 +1133,8 @@
     'scrollbars=0,location=0,resizable=0,width=460,height=150');
   }
 
-  // Get the framedata for resourceblock
-  resourceblock_get_frameData = function(tabId) {
+  // Get the framedata for the 'Report an Ad' page
+  get_frameData_adreport = function(tabId) {
     return frameData.get(tabId);
   }
 
@@ -1203,22 +1208,22 @@
 
   // Log an 'error' message on GAB log server.
   var recordErrorMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'error', callback);
+    recordMessageWithUserID(msg, 'error', callback);
   };
 
   // Log an 'status' related message on GAB log server.
   var recordStatusMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'stats', callback);
+    recordMessageWithUserID(msg, 'stats', callback);
   };
 
   // Log a 'general' message on GAB log server.
   var recordGeneralMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'general', callback);
+    recordMessageWithUserID(msg, 'general', callback);
   };
 
   // Log a message on GAB log server.  The user's userid will be prepended to the message.
   // If callback() is specified, call callback() after logging has completed
-  var recordMessageUrl = function(msg, queryType, callback) {
+  var recordMessageWithUserID = function(msg, queryType, callback) {
     if (!msg || !queryType) {
       return;
     }
@@ -1227,6 +1232,29 @@
                   queryType +
                   '&message=' +
                   encodeURIComponent(STATS.userId + " " + msg);
+    sendMessageToLogServer(fullUrl, callback);
+  };
+
+  // Log a message on GAB log server.
+  // If callback() is specified, call callback() after logging has completed
+  var recordAnonymousMessage = function(msg, queryType, callback) {
+    if (!msg || !queryType) {
+      return;
+    }
+    // Include user ID in message
+    var fullUrl = 'https://log.getadblock.com/record_log.php?type=' +
+                  queryType +
+                  '&message=' +
+                  encodeURIComponent(msg);
+    sendMessageToLogServer(fullUrl, callback);
+  };
+
+  // Log a message on GAB log server.  The user's userid will be prepended to the message.
+  // If callback() is specified, call callback() after logging has completed
+  var sendMessageToLogServer = function(fullUrl, callback) {
+    if (!fullUrl) {
+      return;
+    }
     $.ajax({
       type: 'GET',
       url: fullUrl,
@@ -1258,7 +1286,7 @@
     gabQuestion.removeGABTabListeners(saveState);
   }
 
-  var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
+  var installedURL = "https://getadblock.com/installed/?aa=true&u=" + STATS.userId;
   if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
     if (SAFARI) {
       openTab(installedURL);
@@ -1287,28 +1315,24 @@
   if (installError && installError.retry_count >= 0 && !SAFARI) {
     //append the retry count to the URL
     installError.retry_count += 1;
-    var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
-    chrome.tabs.create({url: retryInstalledURL}, function(tab) {
-      if (chrome.runtime.lastError) {
-        //if there is an error (again), log a message and re-save.
-        if (chrome.runtime.lastError.message) {
-          recordErrorMessage('/installed open error count: ' +
-                              installError.retry_count +
-                              " error: " +
-                              chrome.runtime.lastError.message);
+    if (installError.retry_count > 10) {
+      //if we've retried 10 or more times, give up...
+      // send a message, and delete the 'installed error'
+      recordErrorMessage("/installed open error count > 10");
+      storage_set("/installed_error");
+    } else {
+      var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
+      chrome.tabs.create({url: retryInstalledURL}, function(tab) {
+        if (chrome.runtime.lastError) {
+          //if there is an error (again) and re-save.
+          storage_set("/installed_error", installError);
         } else {
-          recordErrorMessage('/installed open error count: ' +
-                              installError.retry_count +
-                              " error: " +
-                              JSON.stringify(chrome.runtime.lastError));
+          //if we successfully opened the tab,
+          //delete the 'installed error' so we don't display it again
+          storage_set("/installed_error");
         }
-        storage_set("/installed_error", installError);
-      } else {
-        //if we successfully opened the tab,
-        // delete the 'installed error' so we don't display it again
-        storage_set("/installed_error");
-      }
-    });
+      });
+    }
   }
 
   if (chrome.runtime.setUninstallURL) {
@@ -1316,13 +1340,24 @@
     //if the start property of blockCount exists (which is the AdBlock installation timestamp)
     //use it to calculate the approximate length of time that user has AdBlock installed
     if (blockCounts && blockCounts.get().start) {
-      var fiveMinutes = 5 * 60 * 1000;
+      var twoMinutes = 2 * 60 * 1000;
       var updateUninstallURL = function() {
         var installedDuration = (Date.now() - blockCounts.get().start);
-        chrome.runtime.setUninstallURL(uninstallURL + "&t=" + installedDuration);
+        var url = uninstallURL + "&t=" + installedDuration;
+        var bc = blockCounts.get().total;
+        url = url + "&bc=" + bc;
+        if (_myfilters &&
+            _myfilters._subscriptions &&
+            _myfilters._subscriptions.adblock_custom &&
+            _myfilters._subscriptions.adblock_custom.last_update) {
+          url = url + "&abc-lt=" + _myfilters._subscriptions.adblock_custom.last_update;
+        } else {
+          url = url + "&abc-lt=-1"
+        }
+        chrome.runtime.setUninstallURL(url);
       };
-      //start an interval timer that will update the Uninstall URL every 5 minutes
-      setInterval(updateUninstallURL, fiveMinutes);
+      //start an interval timer that will update the Uninstall URL every 2 minutes
+      setInterval(updateUninstallURL, twoMinutes);
       updateUninstallURL();
     } else {
       chrome.runtime.setUninstallURL(uninstallURL + "&t=-1");
@@ -1581,9 +1616,9 @@
                 "Developer Mode -> Inspect views: background page -> Console. " +
                 "Paste the contents here:");
       body.push("");
-      body.push("```");
       body.push("====== Do not touch below this line ======");
       body.push("");
+      body.push("```");
       body.push(getDebugInfo());
       body.push("```");
       var out = encodeURIComponent(body.join('  \n'));
@@ -1727,6 +1762,7 @@
           });
       }
 
+<<<<<<< HEAD
       // Create/update file on Dropbox
       dropbox.writeOrUpdateFile = function(callback) {
           var header = { path: "/adblock.txt", mode: "overwrite", mute: true };
