@@ -93,7 +93,7 @@
         <label for="name">Name (or a screen-name):</label>
         <input type="text" id="name" /><br />
         <label for="email">Email Address (so that we can contact you if we need more info):</label><br />
-        <input type="text" id="email" /><br />
+        <input type="email" id="email" /><br />
         <button id="step1-next">Next</button>
       </div>
     </div>
@@ -126,6 +126,16 @@
         <label for="debug-info">The information in the box below will also be submitted with your bug report:</label><br />
         <textarea id="debug-info" disabled="disabled" rows="25" cols="50"></textarea><br />
         <button id="submit">Submit</button>
+      </div>
+    </div>
+    
+    <!-- Only show if error with submission -->
+    <div class="step">
+      <div class="section" id="step_error">
+        <h2>ERROR!</h2>
+        <p>There was an error submitting your bug report.</p>
+        <p>Please go to <a href="http://support.getadblock.com/support/tickets/new">our support website</a> and copy &amp; paste this into the "Fill in any details you think will help us understand your issue" section.</p>
+        <textarea id="manual_submission"></textarea>
       </div>
     </div>
     <script src="bug-report.js"></script>
