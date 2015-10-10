@@ -1602,10 +1602,9 @@
       dropbox.init({id: "os0lr0aalwz0r9r", redirectURI: "https://getadblock.com/dropbox.html"}, function(authenticated) {
           if (authenticated) {
               dropbox.getCursor();
-              //dropbox.setTimer();
           }
       });
-      
+
       // Log in to Dropbox
       function dropboxlogin() {
           dropbox.login(function(status) {
@@ -1619,7 +1618,6 @@
                   storage_set("exclude_filters", filters.exclude);
                   dropbox.getFile(function() {
                       dropbox.getCursor();
-                      //dropbox.setTimer();
                   });
               });
           });
@@ -1630,7 +1628,6 @@
           dropbox.logout(function() {
               set_setting("dropbox_sync", false);
               chrome.extension.sendRequest({message: "update_icon"});
-              //dropbox.cleanTimer();
           });
       }
 
@@ -1638,7 +1635,7 @@
       function dropboxauth() {
           return dropbox.isAuthenticated();
       }
-      
+
       // Cursor used for polling for changes
       dropbox.cursor = null;
 
@@ -1650,24 +1647,24 @@
               dropbox.pollForChanges(dropbox.cursor);
           });
       }
-      
+
+      // Long-poll for file changes
       dropbox.pollForChanges = function(cursor) {
-          cursor = { cursor: cursor || dropbox.cursor };
-          dropbox._pollForChanges(cursor, function(info) {
+          var args = { cursor: cursor || dropbox.cursor, timeout: 480 };
+          dropbox._pollForChanges(args, function(info) {
               if (!dropboxauth()) {
                   return;
               }
               var data = JSON.parse(info.data);
               if (!data.changes) {
-                  console.log("no change on server, continue polling...");
+                  log("no change on server, continue polling...");
               } else {
-                  console.log("newer file on server, downloading...");
-                  console.log(info);
+                  log("newer file on server, downloading...");
                   dropbox.getFile();
               }
               dropbox.getCursor();
           });
-      }              
+      }
 
       // Return data, which should be used for file update
       dropbox.getData = function() {
@@ -1680,20 +1677,7 @@
           return data;
       }
 
-      // Check for file updates every minute
-      dropbox.setTimer = function() {
-          dropbox._timer = setInterval(function() {
-              dropbox.pollForChanges();
-          }, 1000 * 60);
-      }
-      
-      // Clean timer for file polling
-      dropbox.cleanTimer = function() {
-          clearInterval(dropbox._timer);
-          delete dropbox._timer;
-      }
-
-      // Sync value of changed setting, 
+      // Sync value of changed setting,
       dropbox.syncSetting = function(name, is_enabled) {
           dropbox.writeOrUpdateFile();
       }
@@ -1701,7 +1685,7 @@
       // Prevent deleting custom & excluded filters in some cases
       dropbox.initCustomAndExcluded = function(callback) {
           var header = { path: "/adblock.txt" };
-          dropbox._getFile({header: header}, function(data) {
+          dropbox._getFile({ header: header }, function(data) {
               // File hasn't been created yet
               if (data.status === "error") {
                   callback({ custom: storage_get("custom_filters"), exclude: storage_get("exclude_filters") });
@@ -1739,32 +1723,32 @@
                       filtersToCall[filtertypes[i]] = local;
                   }
               }
-              console.log("Filters to call: ", filtersToCall);
               callback(filtersToCall);
           });
       }
 
+      // Create/update file on Dropbox
       dropbox.writeOrUpdateFile = function(callback) {
           var header = { path: "/adblock.txt", mode: "overwrite", mute: true };
           var data = dropbox.getData();
-          dropbox._writeOrUpdateFile({header: header, data: data}, function(data) {
-              console.log("WRITE FILE", data);
+          dropbox._writeOrUpdateFile({ header: header, data: data }, function(data) {
+              log("WRITE FILE", data);
               if (callback) {
                   callback();
               }
           });
       }
 
+      // Get AdBlock's file from Dropbox
       dropbox.getFile = function(callback) {
           var header = { path: "/adblock.txt" };
           dropbox._getFile({header: header}, function(data) {
-              console.log("GET FILE", data);
+              log("GET FILE", data);
               // File hasn't been created yet
               if (data.status === "error") {
                   dropbox.writeOrUpdateFile();
                   return;
               }
-              var arg = { path: "/adblock.txt" };
               // Save settings from file to AdBlock
               dropbox.saveSettings(data.data);
               if (callback) {
@@ -1773,6 +1757,8 @@
           });
       }
 
+      // Parse settings from file and update settings,
+      // filter lists, custom filters & excluded filters
       dropbox.saveSettings = function(data) {
           data = JSON.parse(data);
 

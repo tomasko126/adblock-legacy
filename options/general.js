@@ -67,11 +67,9 @@ function update_db_icon() {
     if (!SAFARI) {
         BGcall("dropboxauth", function(status) {
             if (status === true) {
-                $("#dbauth").addClass("authenticated");
-                $("#dbauth").removeClass("not-authenticated");
+                $("#dbauth").addClass("authenticated").removeClass("not-authenticated");
             } else {
-                $("#dbauth").addClass("not-authenticated");
-                $("#dbauth").removeClass("authenticated");
+                $("#dbauth").addClass("not-authenticated").removeClass("authenticated");
             }
         });
     }
