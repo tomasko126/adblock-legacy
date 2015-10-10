@@ -1762,7 +1762,6 @@
           });
       }
 
-<<<<<<< HEAD
       // Create/update file on Dropbox
       dropbox.writeOrUpdateFile = function(callback) {
           var header = { path: "/adblock.txt", mode: "overwrite", mute: true };
