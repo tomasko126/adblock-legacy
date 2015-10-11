@@ -120,7 +120,7 @@ function sendReport() {
         }
   
   $.ajax({
-    url: "http://localhost/freshdesk/adReport.php",
+    url: "http://dev.getadblock.com/freshdesk/adReport.php",
     data: {
       ad_report: JSON.stringify(report_data)
     },

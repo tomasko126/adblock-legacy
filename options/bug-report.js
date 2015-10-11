@@ -30,7 +30,7 @@ var sendReport = function(){
 			comments: $comments.val()
   };
 	$.ajax({
-    url: "http://localhost/freshdesk/bugReport.php",
+    url: "http://dev.getadblock.com/freshdesk/bugReport.php",
     data: {
 			bug_report: JSON.stringify(report_data)
 		},
