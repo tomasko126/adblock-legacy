@@ -141,7 +141,7 @@ parseUri.secondLevelDomainOnly = function(domain, keepDot) {
   }
 };
 
-// Return |domain| encoded in Unicode
+// Returns |domain| encoded in Unicode
 getUnicodeDomain = function(domain) {
     if (domain) {
         return punycode.toUnicode(domain);
@@ -150,7 +150,7 @@ getUnicodeDomain = function(domain) {
     }
 }
 
-// Return |url| encoded in Unicode
+// Returns |url| encoded in Unicode
 getUnicodeUrl = function(url) {
     // URLs encoded in Punycode contain xn-- prefix
     if (url && url.indexOf("xn--") > 0) {
@@ -161,6 +161,12 @@ getUnicodeUrl = function(url) {
     }
     return url;
 };
+
+// Returns false, when URL is not valid
+validateURL = function(url) {
+    var regex = /^HTTP|HTTP|http(s)?:\/\/(www\.)?[A-Za-z0-9]+([\-\.]{1}[A-Za-z0-9]+)*\.[A-Za-z]{2,40}(:[0-9]{1,40})?(\/.*)?$/;
+    return regex.test(url);
+}
 
 // TODO: move back into background.js since Safari can't use this
 // anywhere but in the background.  Do it after merging 6101 and 6238

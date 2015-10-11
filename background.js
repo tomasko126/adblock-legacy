@@ -322,6 +322,11 @@
       if (adblock_is_paused())
         return { cancel: false };
 
+      // Don't process invalid URLs
+      if ((details.type === "main_frame" || details.type === "sub_frame") && !validateURL(details.url)) {
+          return { cancel: false };
+      }
+
       // Convert punycode domain to Unicode - GH #472
       details.url = getUnicodeUrl(details.url);
 
