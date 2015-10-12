@@ -389,6 +389,15 @@
         updateBadge(tabId);
       }
       log("[DEBUG]", "Block result", blocked, reqType, frameDomain, details.url.substring(0, 100));
+      if (blocked && elType === ElementTypes.image) {
+        //block the AA gif instead of a redirect.  See PR #638 & issues #6993,
+        if (details.url && details.url.indexOf("/images/phd/px.gif") > 0) {
+          return { cancel: blocked };
+        }
+        // 1x1 px transparant image.
+        // Same URL as ABP and Ghostery to prevent conflict warnings (issue 7042)
+        return {redirectUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="};
+      }
       if (blocked && elType === ElementTypes.subdocument) {
         return { redirectUrl: "about:blank" };
       }
