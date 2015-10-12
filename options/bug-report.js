@@ -1,7 +1,3 @@
-$(function() {
-    localizePage();
-});
-
 // Get debug info
 var debug_info;
 BGcall("getDebugInfo", function(info) {
