@@ -156,7 +156,7 @@ $("#step2-next").click(function(){
   else {
     // They made a mistake - let the user know
     s2_problems = 0
-    $("#step_repro_info > .missingInfoMessage").show().css("display", "block");
+    $("#step_repro_info > .missingInfoMessage").show();
   }
 });
 
