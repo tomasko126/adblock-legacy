@@ -182,7 +182,6 @@ var prepareManualReport = function(data, status, HTTPerror){
       content.push(data.debug.other_info);
       // Put it together to put into the textbox
       var text_debug_info = content.join("\n");
-      });
   
   body.push("* Debug Info *");
   body.push(text_debug_info);
