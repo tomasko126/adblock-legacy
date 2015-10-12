@@ -390,7 +390,7 @@
       }
       log("[DEBUG]", "Block result", blocked, reqType, frameDomain, details.url.substring(0, 100));
       if (blocked && elType === ElementTypes.image) {
-        //block the AA gif instead of a redirect.  See PR #638 & issues #6993,
+        // Block the AA gif instead of a redirect.  See PR #638 & issue #6993
         if (details.url && details.url.indexOf("/images/phd/px.gif") > 0) {
           return { cancel: blocked };
         }
