@@ -64,9 +64,6 @@ var prepareManualReport = function(data, status, HTTPerror){
     // Get written debug info
       // data.debug is the debug info object
       content = [];
-      content.push("* Debug Info *");
-      content.push("");
-      content.push("");
       content.push("=== Filter Lists ===");
       content.push(data.debug.filter_lists);
       content.push("");
@@ -88,11 +85,11 @@ var prepareManualReport = function(data, status, HTTPerror){
       content.push(data.debug.other_info);
       // Put it together to put into the textbox
       var text_debug_info = content.join("\n");
-      });
   
-  body.push("* Debug Info *");
-  body.push(text_debug_info);
   body.push("");
+  body.push("");
+  body.push("===== Debug Info =====");
+  body.push(text_debug_info);
   body.push("=== API ERROR DETAILS ===");
   body.push("jQuery error: " + status);
   body.push("HTTP Error code: " + HTTPerror);
