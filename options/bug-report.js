@@ -71,12 +71,12 @@ var prepareManualReport = function(data, status, HTTPerror){
       content.push(data.debug.filter_lists);
       content.push("");
       // Custom & Excluded filters might not always be in the object
-      if (info.custom_filters){
+      if (data.debug.custom_filters){
         content.push("=== Custom Filters ===");
         content.push(data.debug.custom_filters);
         content.push("")
       }
-      if (info.exclude_filters){
+      if (data.debug.exclude_filters){
         content.push("=== Exclude Filters ===");
         content.push(data.debug.exclude_filters);
         content.push("");
