@@ -37,6 +37,7 @@ var sendReport = function(){
       // As backup, have them report the bug manually
       prepareManualReport(report_data, status, HTTPerror);
       $("#step_error").fadeIn();
+      $("html, body").animate({ scrollTop: 15000 }, 50);  
 		},
     type: "POST"
   });
