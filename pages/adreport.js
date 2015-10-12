@@ -130,11 +130,9 @@ function sendReport() {
     },
     error: function(xhrInfo, status, HTTPerror){
       // We'll need to get them to manually report this
-      var errors = storage_get("bugreport_errors");
-      errors.ajax.push(status);
-      errors.http.push(HTTPerror);
-      storage_set("bugreport_errors", errors);
       prepareManualReport(report_data, status, HTTPerror);
+      $("#manual_report_DIV").show();
+      $("html, body").animate({ scrollTop: 15000 }, 50)
 		},
     type: "POST"
   });
