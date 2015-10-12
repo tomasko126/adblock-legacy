@@ -35,10 +35,6 @@ var sendReport = function(){
     },
     error: function(xhrInfo, status, HTTPerror){
       // As backup, have them report the bug manually
-      var errors = storage_get("bugreport_errors");
-      errors.ajax.push(status);
-      errors.http.push(HTTPerror);
-      storage_set("bugreport_errors", errors);
       prepareManualReport(report_data, status, HTTPerror);
       $("#step_error").fadeIn();
 		},
