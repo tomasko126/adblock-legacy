@@ -9,15 +9,6 @@ catch(ex) {}
 // Check or uncheck each loaded DOM option checkbox according to the
 // user's saved settings.
 $(function() {
-
-  BGcall("get_subscriptions_minus_text", function(subs) {
-    //if the user is currently subscribed to AA
-    //then 'check' the acceptable ads button.
-    if (subs["acceptable_ads"].subscribed) {
-      $("#acceptable_ads").prop("checked", true);
-    }
-  });
-
   for (var name in optionalSettings) {
     $("#enable_" + name).
       prop("checked", optionalSettings[name]);
@@ -40,6 +31,7 @@ $(function() {
       }
   });
   update_db_icon();
+  update_acceptableads_option();
 });
 
 $("#acceptable_ads").change(function() {
@@ -96,19 +88,25 @@ function update_db_icon() {
     }
 }
 
+function update_acceptableads_option() {
+    BGcall("get_subscriptions_minus_text", function(subs) {
+        // If the user is currently subscribed to AA
+        // then 'check' the acceptable ads button.
+        if (subs["acceptable_ads"].subscribed) {
+            $("#acceptable_ads").prop("checked", true);
+        }
+    });
+}
+
 // Listen for Dropbox sync changes
 if (!SAFARI) {
     chrome.extension.onRequest.addListener(
         function(request, sender, sendResponse) {
             if (request.message === "update_checkbox") {
                 BGcall("get_settings", function(settings) {
-                    $("input[id='enable_youtube_channel_whitelist']").prop("checked", settings.youtube_channel_whitelist);
-                    $("input[id='enable_show_context_menu_items']").prop("checked", settings.show_context_menu_items);
-                    $("input[id='enable_display_stats']").prop("checked", settings.display_stats);
-                    $("input[id='enable_display_menu_stats']").prop("checked", settings.display_menu_stats);
-                    $("input[id='enable_show_advanced_options']").prop("checked", settings.show_advanced_options);
-                    $("input[id='enable_whitelist_hulu_ads']").prop("checked", settings.whitelist_hulu_ads);
-                    $("input[id='enable_debug_logging']").prop("checked", settings.debug_logging);
+                    for (var setting in settings) {
+                        $("input[id='" + setting + "']").prop("checked", settings[setting]);
+                    }
                 });
                 sendResponse({});
             }

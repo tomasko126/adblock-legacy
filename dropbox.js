@@ -1,17 +1,16 @@
 // Dropbox class manages sync of settings, filter lists, custom filters and excluded filters
-// NOTICE: This library will brake, when Dropbox updates API endpoints
 
 // TODO: Malware protection issues - when checked/unchecked, the notification option should fade in/fade out
 //                                 - it's not synced anyway
 //       Advanced option - when checked/unchecked, make sure advanced options are/are not shown
 //       Sync AA option?
-                                   
+
 
 var Dropbox = function() {};
 
 // Initialize Dropbox library
 // Inputs: args (object) - contains ID of Dropbox app and redirect URI
-// Callback must be specified
+// Callback must be specified - returns status of authentication
 Dropbox.prototype.init = function(args, callback) {
     var that = this;
     if (!callback) {
@@ -71,7 +70,7 @@ Dropbox.prototype.login = function(callback) {
 Dropbox.prototype.logout = function(callback) {
     this.removeToken(function() {
        if (callback)
-           callback(); 
+           callback();
     });
 }
 
@@ -132,13 +131,13 @@ Dropbox.prototype.removeToken = function(callback) {
 // Input: data (object):
 //          header (object): |path| to the file, which should be created or updated
 //                           |mode| string - optional
-//                           |mute| bool - optional   
+//                           |mute| bool - optional
 // Callback is optional
 Dropbox.prototype._writeOrUpdateFile = function(data, callback) {
     var that = this;
     $.ajax({
         method: "POST",
-        url: "https://content.dropboxapi.com/2-beta-2/files/upload",
+        url: "https://content.dropboxapi.com/2/files/upload",
         data: data.data,
         beforeSend: function(request) {
             var header = data.header;
@@ -165,7 +164,7 @@ Dropbox.prototype._getFile = function(data, callback) {
     var that = this;
     $.ajax({
         method: "POST",
-        url: "https://content.dropboxapi.com/2-beta-2/files/download",
+        url: "https://content.dropboxapi.com/2/files/download",
         beforeSend: function(request) {
             var header = data.header;
             request.setRequestHeader("Authorization", " Bearer " + that._token);
@@ -192,7 +191,7 @@ Dropbox.prototype._getCursor = function(data, callback) {
     var that = this;
     $.ajax({
         method: "POST",
-        url: "https://api.dropboxapi.com/2-beta-2/files/list_folder",
+        url: "https://api.dropboxapi.com/2/files/list_folder",
         data: JSON.stringify(data),
         beforeSend: function(request) {
             request.setRequestHeader("Authorization", " Bearer " + that._token);
@@ -217,7 +216,7 @@ Dropbox.prototype._pollForChanges = function(data, callback) {
     var that = this;
     $.ajax({
         method: "POST",
-        url: "https://notify.dropboxapi.com/2-beta-2/files/list_folder/longpoll",
+        url: "https://notify.dropboxapi.com/2/files/list_folder/longpoll",
         data: JSON.stringify(data),
         beforeSend: function(request) {
             request.setRequestHeader("Content-Type", "application/json");
