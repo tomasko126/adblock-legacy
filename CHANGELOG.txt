@@ -2,6 +2,16 @@
 
 UNRELEASED:
 
+2.42.1:
+  - Modified the block image logic to not redirect any images, but rather cancel the request.  (#642)
+
+2.42:
+ - Modified the block image logic to not redirect certain images, but rather cancel the request.  (#638)
+ - Added logic to log a message when user clicks the disable acceptable ads link on the '/installed'. (#639)
+
+2.41.3:
+ - Added required property for Safari 9 to info.plist file. (#636)
+
 2.41.2:
  - Updated the style attributes of the Acceptable Ads message to better fit the page / tab. (#635)
  - Updated the ping data to send a 'u' when the Acceptable Ads is undefined. (#635)
