@@ -1159,6 +1159,11 @@
       return fd;
   }
 
+  // Reset matchCache helper
+  reset_matchCache = function() {
+      _myfilters.blocking._matchCache = {};
+  }
+
   // Return chrome.i18n._getL10nData() for content scripts who cannot
   // call that function (since it loads extension files from disk.)
   // Only defined in Safari.

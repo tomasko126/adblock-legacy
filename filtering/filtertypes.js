@@ -77,11 +77,7 @@ var SelectorFilter = function(text) {
   var parts = text.match(/(^.*?)\#\@?\#(.+$)/);
   this._domains = Filter._toDomainSet(parts[1], ',');
   this.selector = parts[2];
-  if ((typeof(get_settings) === "function") &&
-       (get_settings().data_collection ||
-       get_settings().show_advanced_options)) {
-    this._text = text;
-  }
+  this._text = text;
 };
 
 // If !|excludeFilters|, returns filter.
@@ -136,11 +132,7 @@ PatternFilter.fromText = function(text) {
   result._options = data.options;
   result._rule = data.rule;
   result._key = data.key;
-  if ((typeof(get_settings) === "function") &&
-       (get_settings().data_collection ||
-       get_settings().show_advanced_options)) {
-    result._text = text;
-  }
+  result._text = text;
   return result;
 }
 

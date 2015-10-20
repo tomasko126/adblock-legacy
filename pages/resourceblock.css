@@ -37,7 +37,7 @@ th {
     padding-left: 25px;
 }
 .frametype {
-    padding-top: 20px; 
+    padding-top: 20px;
 }
 th[data-column="url"] {
     cursor: pointer;
