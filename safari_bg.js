@@ -39,10 +39,9 @@ safari.application.addEventListener("message", function(messageEvent) {
     }
 
     // Get frameId
-    var frameId = null;
-    if (frameInfo.top_level) {
-        frameId = 0;
-    } else {
+    // TODO: Match against URL
+    var frameId = 0;
+    if (!frameInfo.top_level) {
         var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
         for (var i=0; i<Object.keys(frameData[tab.id]).length; i++) {
             if (frameData[tab.id][i].domain === frameDomain) {
@@ -56,32 +55,21 @@ safari.application.addEventListener("message", function(messageEvent) {
         var url = getUnicodeUrl(messageEvent.message.url);
         var elType = messageEvent.message.elType;
         var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
-        var blockedData = _myfilters.blocking.matches(url, elType, frameDomain, true, true);
-        if (blockedData !== false) {
-            var blocked = blockedData.blocked;
-        } else {
-            var blocked = blockedData;
-        }
+        var blocked = _myfilters.blocking.matches(url, elType, frameDomain);
         var isMatched = url && blocked;
         if (isMatched) {
             log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
         }
-        frameData.storeResource(tab.id, frameId, url, elType, blockedData);
+        frameData.storeResource(tab.id, frameId, url, elType, frameDomain);
     } else {
         // Popup blocking support
         if (messageEvent.message.referrer) {
-            var blockedData = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup,
-                                                          parseUri(getUnicodeUrl(messageEvent.message.referrer)).hostname,
-                                                          true, true);
-            if (blockedData !== false) {
-                var blocked = blockedData.blocked;
-            } else {
-                var blocked = blockedData;
-            }
+            var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
+            var blocked = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup, frameDomain);
             if (blocked) {
                 tab.close();
             }
-            frameData.storeResource(tab.id, frameId, url, elType, blockedData);
+            frameData.storeResource(tab.id, frameId, url, elType, frameDomain);
         }
     }
 

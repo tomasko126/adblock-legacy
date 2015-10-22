@@ -77,7 +77,9 @@ var SelectorFilter = function(text) {
   var parts = text.match(/(^.*?)\#\@?\#(.+$)/);
   this._domains = Filter._toDomainSet(parts[1], ',');
   this.selector = parts[2];
-  this._text = text;
+  if (storage_get("settings").show_advanced_options) {
+      this._text = text;
+  }
 };
 
 // If !|excludeFilters|, returns filter.
@@ -132,7 +134,9 @@ PatternFilter.fromText = function(text) {
   result._options = data.options;
   result._rule = data.rule;
   result._key = data.key;
-  result._text = text;
+  if (storage_get("settings").show_advanced_options) {
+      result._text = text;
+  }
   return result;
 }
 

@@ -44,7 +44,7 @@ BGcall("reset_matchCache", function() {
                     continue;
                 }
                 if (id !== "malware") {
-                    filterLists[id].text = FilterNormalizer.normalizeList(filterLists[id].text).split("\n");
+                    filterLists[id].text = filterLists[id].text.split("\n");
                 }
             }
 

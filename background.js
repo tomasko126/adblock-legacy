@@ -649,6 +649,12 @@
     if (name === "debug_logging")
       logging(is_enabled);
 
+    // Rebuild filters, so matched filter text is returned
+    // when using resource viewer page
+    if (name === "show_advanced_options") {
+      update_filters();
+    }
+
     if (!SAFARI && sync) {
         sync_setting(name, is_enabled);
     }
