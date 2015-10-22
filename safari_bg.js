@@ -39,12 +39,11 @@ safari.application.addEventListener("message", function(messageEvent) {
     }
 
     // Get frameId
-    // TODO: Match against URL
     var frameId = 0;
     if (!frameInfo.top_level) {
         var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
         for (var i=0; i<Object.keys(frameData[tab.id]).length; i++) {
-            if (frameData[tab.id][i].domain === frameDomain) {
+            if (frameData[tab.id][i].url === frameInfo.url) {
                 frameId = i;
                 break;
             }
