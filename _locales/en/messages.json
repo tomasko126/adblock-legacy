@@ -1187,34 +1187,6 @@
     "message":"If you're seeing an ad, don't make a bug report, make an <a>ad report<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
-  "acceptableadsheader1":{
-    "message":"Announcing the Acceptable Ads program",
-    "description":"first H1 on page"
-  },
-  "acceptableadspart1":{
-    "message":"Hi, it's Michael, the creator of AdBlock. Pardon the interruption!<br\/><br\/>For years I have wanted to help make it easy for you to see useful ads and block annoying ones.  I am excited to tell you that it's finally happening.<br\/><br\/>AdBlock is now participating in the <b>Acceptable Ads program<\/b>.  Acceptable Ads defines strict guidelines to identify non-annoying ads, which AdBlock now shows by default.  This way, you can help support your favorite websites -- and if you still want to block every ad, you can <a href='#' id='disableacceptableads'>disable this<\/a> easily.<br\/><br\/>",
-    "description":"first paragraph on page"
-  },
-  "acceptableadsmoredetails":{
-    "message":"Want more details?",
-    "description":"more details question"
-  },
-  "acceptableadsheader2":{
-    "message":"More about Acceptable Ads",
-    "description":"second header (H2) on page"
-  },
-  "acceptableadsdetails":{
-    "message":"With Acceptable Ads, you are allowing some advertising that’s not considered annoying to be shown. By doing this you support websites that rely on advertising but who choose to do it in a non-intrusive way.<br\/><br\/>The Acceptable Ads program is a plea to advertisers, their ad agencies, online ad networks and websites to stop making bad online advertising -- ads that are obnoxious, annoying and obtrusive. Specifically:<br\/><br\/>- Acceptable Ads are not annoying.<br\/>- Acceptable Ads do not disrupt or distort the page content we’re trying to read.<br\/>- Acceptable Ads are transparent with us about being an ad.<br\/>- Acceptable Ads are effective without shouting at us.<br\/>- Acceptable Ads are appropriate to the site that we are on.<br\/><br\/>You can learn more about Acceptable Ads <a id='moreinformation' href='#'>here<\/a>. Like I said: AdBlock has enabled this feature by default, but you can can <a id='disableacceptableads2' href='#'>disable it<\/a> in AdBlock’s Options if you ever want to block every ad.",
-    "description":"details div on page"
-  },
-  "acceptableadspart2":{
-    "message":"I think you'll really like the change. Happy surfing!<br\/><br\/>Michael",
-    "description":"signature"
-  },
-  "acceptableadspartsmallprint":{
-    "message":"PS: Why now? Well, I have always shared similar goals for the Web with the ad blocker Adblock Plus, who created the Acceptable Ads program. But I did not like the fact that they also control the program, because they are supported by some Acceptable Ads advertisers. Now, Adblock Plus will be transferring custodianship of Acceptable Ads to an impartial group of experts. I love this idea -- in fact, it was my wife Katie’s suggestion! Due to this change, I'm happy for AdBlock to join the program. As a result, I am selling my company, and the buyer is turning on Acceptable Ads. My long-time managing director will keep working with the new company. I believe this is a great thing for you users.<br\/><br\/>It's been an honor to make the Web a better place for you! :)",
-    "description":"small print at the bottom of the page"
-  },
   "acceptableadsdisable_done": {
     "message":"Acceptable Ads has been disabled.",
     "description": "Message shown to users after disabling Acceptable Ads via update page."
