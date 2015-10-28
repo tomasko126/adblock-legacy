@@ -259,20 +259,9 @@ var tabId = options.tabId.replace(/[^0-9]/g,'');
 $("#DisableAA").click(function() {
     $(this).prop("disabled", true);
     BGcall("unsubscribe", {id:"acceptable_ads", del:false}, function() {
-        var unsubscribeAlertDisplayed = false;
-        chrome.extension.onRequest.addListener(
-            function(message, sender, sendResponse) {
-                if (!unsubscribeAlertDisplayed && message.command  === "reloadcomplete") {
-                    unsubscribeAlertDisplayed = true;
-                    alert(translate('tabreloadcomplete'));
-                    //we're done, redisplay the Yes/No buttons
-                    $(".afterDisableAA input").prop('disabled', false);
-                    $(".afterDisableAA").removeClass('afterDisableAA');
-                    sendResponse({});
-                }
-            }
-        );
-        BGcall("reloadTab", parseInt(tabId));
+        // display the Yes/No buttons
+        $(".afterDisableAA input").prop('disabled', false);
+        $(".afterDisableAA").removeClass('afterDisableAA');
     });
 });
 
