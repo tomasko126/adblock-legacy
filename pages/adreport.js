@@ -176,8 +176,10 @@ var checkmalware = function() {
                 //if the user is subscribed to Acceptable-Ads, ask them to disable it
                 if (subs && subs["acceptable_ads"] && subs["acceptable_ads"].subscribed) {
                   $('#step_update_aa_DIV').show();
+                  $(".odd").css("background-color", "#f8f8f8");
                 } else {
                   $('#step_update_filters_DIV').show();
+                  $(".even").css("background-color", "#f8f8f8");
                 }
                 $("#malwarewarning").html(translate("malwarenotfound"));
             });

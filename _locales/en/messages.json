@@ -526,11 +526,11 @@
   "aamessageadreport":{
     "message":"If you’d rather not see ads like this one, you may want to leave the Acceptable Ads filter list turned off.",
     "description":"Acceptable Ads message on ad report page"
-  },  
+  },
   "aalinkadreport":{
     "message":"Find out more about the Acceptable Ads program.",
     "description":"Acceptable Ads link message on ad report page"
-  },  
+  },
   "updateyourlists":{
     "message":"Make sure your filter lists are up to date",
     "description":"Section header on the ad report page"
