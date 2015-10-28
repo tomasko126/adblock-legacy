@@ -167,12 +167,20 @@ var checkmalware = function() {
         }
         $('.gifloader').hide();
         if (infected) {
-            $('#step_update_filters_DIV').hide();
+            $('#step_update_aa_DIV').hide();
             $("#malwarewarning").html(translate("malwarewarning"));
             $("a", "#malwarewarning").attr("href", "http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/");
         } else {
-            $('#step_update_filters_DIV').show();
-            $("#malwarewarning").html(translate("malwarenotfound"));
+            // If the user is subscribed to Acceptable Ads, ask them to unsubscribe, and recheck the page
+            BGcall('get_subscriptions_minus_text', function(subs) {
+                //if the user is subscribed to Acceptable-Ads, ask them to disable it
+                if (subs && subs["acceptable_ads"] && subs["acceptable_ads"].subscribed) {
+                  $('#step_update_aa_DIV').show();
+                } else {
+                  $('#step_update_filters_DIV').show();
+                }
+                $("#malwarewarning").html(translate("malwarenotfound"));
+            });
         }
         $('#malwarewarning').show();
     });
@@ -246,7 +254,41 @@ BGcall('getMalwareDomains', function(domains) {
 var domain = parseUri(options.url).hostname.replace(/((http|https):\/\/)?(www.)?/g, "");
 var tabId = options.tabId.replace(/[^0-9]/g,'');
 
-// STEP 2: update filters
+// STEP 2: disable AA - IF enabled...
+
+$("#DisableAA").click(function() {
+    $(this).prop("disabled", true);
+    BGcall("unsubscribe", {id:"acceptable_ads", del:false}, function() {
+        var unsubscribeAlertDisplayed = false;
+        chrome.extension.onRequest.addListener(
+            function(message, sender, sendResponse) {
+                if (!unsubscribeAlertDisplayed && message.command  === "reloadcomplete") {
+                    unsubscribeAlertDisplayed = true;
+                    alert(translate('tabreloadcomplete'));
+                    //we're done, redisplay the Yes/No buttons
+                    $(".afterDisableAA input").prop('disabled', false);
+                    $(".afterDisableAA").removeClass('afterDisableAA');
+                    sendResponse({});
+                }
+            }
+        );
+        BGcall("reloadTab", parseInt(tabId));
+    });
+});
+
+//if the user clicks a radio button
+$("#step_update_aa_no").click(function() {
+    $("#step_update_aa").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
+    $("#checkupdate").text(translate("aamessageadreport"));
+    $("#checkupdatelink").text(translate("aalinkadreport"));
+    $("#checkupdatelink_DIV").fadeIn().css("display", "block");
+});
+$("#step_update_aa_yes").click(function() {
+    $("#step_update_aa").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
+    $("#step_update_filters_DIV").fadeIn().css("display", "block");
+});
+
+// STEP 3: update filters
 
 //Updating the users filters
 $("#UpdateFilters").click(function() {
@@ -266,7 +308,7 @@ $("#step_update_filters_yes").click(function() {
     $("#step_disable_extensions_DIV").fadeIn().css("display", "block");
 });
 
-// STEP 3: disable all extensions
+// STEP 4: disable all extensions
 
 //Code for displaying the div is in the $function() that contains localizePage()
 //after user disables all extensions except for AdBlock
@@ -347,7 +389,7 @@ $("#OtherExtensions").click(function() {
     }
 });
 
-// STEP 4: language
+// STEP 5: language
 
 //if the user clicks an item
 var contact = "";
@@ -380,7 +422,7 @@ $("#step_language_lang").change(function() {
     }
 });
 
-// STEP 5: also in Firefox
+// STEP 6: also in Firefox
 
 //If the user clicks a radio button
 $("#step_firefox_yes").click(function() {
@@ -472,7 +514,7 @@ $("#step_firefox_wontcheck").click(function() {
     $("#step_firefox").html("<span class='answer' chosen='wont_check'>" + translate("refusetocheck") + "</span>");
 });
 
-// STEP 6: video/flash ad (Safari-only)
+// STEP 7: video/flash ad (Safari-only)
 
 //If the user clicks a radio button
 $("#step_flash_yes").click(function() {

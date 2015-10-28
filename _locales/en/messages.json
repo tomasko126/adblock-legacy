@@ -515,6 +515,22 @@
     "message":"No known malware found.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
+  "disableaa":{
+    "message":"Check the Acceptable Ads filters:",
+    "description":"Section header on the ad report page"
+  },
+  "clickdisableaa":{
+    "message":"Click this: <a>Disable Acceptable Ads<\/a>",
+    "description":"Instruction on ad report page"
+  },
+  "aamessageadreport":{
+    "message":"If you’d rather not see ads like this one, you may want to leave the Acceptable Ads filter list turned off.",
+    "description":"Acceptable Ads message on ad report page"
+  },  
+  "aalinkadreport":{
+    "message":"Find out more about the Acceptable Ads program.",
+    "description":"Acceptable Ads link message on ad report page"
+  },  
   "updateyourlists":{
     "message":"Make sure your filter lists are up to date",
     "description":"Section header on the ad report page"
