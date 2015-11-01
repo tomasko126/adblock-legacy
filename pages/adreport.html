@@ -97,11 +97,9 @@
         padding: 20px 20px 20px 0px;
       }
       .loader {
-          background-image: url(../img/loader.svg);
-          background-repeat: no-repeat;
-          width: 30px;
-          height: 30px;
-          display: inline-block;
+          width: 20px;
+          height: 20px;
+          padding-top: 4px;
           position: absolute;
         }
       @media screen and (max-width: 1080px) {
@@ -139,7 +137,7 @@
     <div class="step" style="background-color: #f8f8f8;">
       <div id="step_malware_checking_DIV">
         <h2 i18n="malwarecheck" style="display: inline-block;"></h2>
-        <div class="loader"></div>
+        <img class="loader" src=../img/loader.gif />
         <br/>
         <span id="malwarewarning" style="display: none; margin: 15px 0px 15px 19px;" i18n="malwarewarning" ></span>
       </div>
@@ -171,7 +169,7 @@
       <div class="chrome_only">
       <ol>
         <li i18n="disableforchromestepone"></li>
-        <li i18n="disableforchromeandsafaristeptwo"></li>        
+        <li i18n="disableforchromeandsafaristeptwo"></li>
         <li i18n="reloadadpage"></li>
       </ol>
       <div style="margin: 15px 0px 15px 19px;">
