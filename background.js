@@ -1132,12 +1132,13 @@
     openTab("pages/resourceblock.html" + query, true);
   }
 
-  // Get the framedata for the 'Report an Ad' page
+  // Get the frameData for the 'Report an Ad' & 'Resource' page
   get_frameData = function(tabId) {
       return frameData.get(tabId);
   }
 
-  // Add blocking data to each resource
+  // Process requests from 'Resource' page
+  // Determine, whether requests have been whitelisted/blocked
   process_frameData = function(fd) {
       for (var frameId in fd) {
           var frame = fd[frameId];
