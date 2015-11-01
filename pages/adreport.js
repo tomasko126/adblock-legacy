@@ -115,8 +115,8 @@ function generateReportURL() {
 
 // Check every domain of downloaded resource against malware-known domains
 var checkmalware = function() {
-    BGcall("get_frameData", tabId, function(tab) {
-        if (!tab)
+    BGcall("get_frameData", tabId, function(frameData) {
+        if (!frameData)
             return;
 
         var frames = [];
@@ -125,15 +125,15 @@ var checkmalware = function() {
         var infected = null;
 
         // Get all loaded frames
-        for (var object in tab) {
+        for (var object in frameData) {
             if (!isNaN(object)) {
                 frames.push(object);
             }
         }
         // Push loaded resources from each frame into an array
         for (var i=0; i < frames.length; i++) {
-            if (Object.keys(tab[frames[i]].resources).length !== 0) {
-                loaded_resources.push(tab[frames[i]].resources);
+            if (Object.keys(frameData[frames[i]].resources).length !== 0) {
+                loaded_resources.push(frameData[frames[i]].resources);
             }
         }
 
