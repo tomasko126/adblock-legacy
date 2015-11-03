@@ -288,7 +288,7 @@ function createTable(domain, url, frameId) {
                 '<\/tr>' +
                 '<tr>' +
                     '<th class="frameurl" title="' + decodeURIComponent(url) + '">' +
-                        translate("frameurl") + decodeURIComponent(truncateURI(url)) +
+                        translate("frameurl") + truncateURI(url) +
                     '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
