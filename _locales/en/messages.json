@@ -744,7 +744,7 @@
     }
   },
   "checkinfirefox_2":{
-    "message":"Install AdBlock for Firefox $chrome$ if you don't have it.",
+    "message":"Install AdBlock Plus $chrome$ if you don't have it.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad.",
     "placeholders":{
       "chrome":{

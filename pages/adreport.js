@@ -167,22 +167,12 @@ var checkmalware = function() {
         }
         $('.gifloader').hide();
         if (infected) {
-            $('#step_update_aa_DIV').hide();
+            $('#step_update_filters_DIV').hide();
             $("#malwarewarning").html(translate("malwarewarning"));
             $("a", "#malwarewarning").attr("href", "http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/");
         } else {
-            // If the user is subscribed to Acceptable Ads, ask them to unsubscribe, and recheck the page
-            BGcall('get_subscriptions_minus_text', function(subs) {
-                //if the user is subscribed to Acceptable-Ads, ask them to disable it
-                if (subs && subs["acceptable_ads"] && subs["acceptable_ads"].subscribed) {
-                  $('#step_update_aa_DIV').show();
-                  $(".odd").css("background-color", "#f8f8f8");
-                } else {
-                  $('#step_update_filters_DIV').show();
-                  $(".even").css("background-color", "#f8f8f8");
-                }
-                $("#malwarewarning").html(translate("malwarenotfound"));
-            });
+            $('#step_update_filters_DIV').show();
+            $("#malwarewarning").html(translate("malwarenotfound"));
         }
         $('#malwarewarning').show();
     });
@@ -256,30 +246,7 @@ BGcall('getMalwareDomains', function(domains) {
 var domain = parseUri(options.url).hostname.replace(/((http|https):\/\/)?(www.)?/g, "");
 var tabId = options.tabId.replace(/[^0-9]/g,'');
 
-// STEP 2: disable AA - IF enabled...
-
-$("#DisableAA").click(function() {
-    $(this).prop("disabled", true);
-    BGcall("unsubscribe", {id:"acceptable_ads", del:false}, function() {
-        // display the Yes/No buttons
-        $(".afterDisableAA input").prop('disabled', false);
-        $(".afterDisableAA").removeClass('afterDisableAA');
-    });
-});
-
-//if the user clicks a radio button
-$("#step_update_aa_no").click(function() {
-    $("#step_update_aa").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
-    $("#checkupdate").text(translate("aamessageadreport"));
-    $("#checkupdatelink").text(translate("aalinkadreport"));
-    $("#checkupdatelink_DIV").fadeIn().css("display", "block");
-});
-$("#step_update_aa_yes").click(function() {
-    $("#step_update_aa").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
-    $("#step_update_filters_DIV").fadeIn().css("display", "block");
-});
-
-// STEP 3: update filters
+// STEP 2: update filters
 
 //Updating the users filters
 $("#UpdateFilters").click(function() {
@@ -296,6 +263,41 @@ $("#step_update_filters_no").click(function() {
 });
 $("#step_update_filters_yes").click(function() {
     $("#step_update_filters").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
+    // If the user is subscribed to Acceptable Ads, ask them to unsubscribe, and recheck the page
+    BGcall('get_subscriptions_minus_text', function(subs) {
+        //if the user is subscribed to Acceptable-Ads, ask them to disable it
+        if (subs && subs["acceptable_ads"] && subs["acceptable_ads"].subscribed) {
+          $('#step_update_aa_DIV').show();
+          $(".odd").css("background-color", "#f8f8f8");
+        } else {
+          $("#step_disable_extensions_DIV").fadeIn().css("display", "block");
+          $(".even").css("background-color", "#f8f8f8");
+        }
+        $("#malwarewarning").html(translate("malwarenotfound"));
+    });    
+});
+
+// STEP 3: disable AA - IF enabled...
+
+$("#DisableAA").click(function() {
+    $(this).prop("disabled", true);
+    BGcall("unsubscribe", {id:"acceptable_ads", del:false}, function() {
+        // display the Yes/No buttons
+        $(".afterDisableAA input").prop('disabled', false);
+        $(".afterDisableAA").removeClass('afterDisableAA');
+    });
+});
+
+//if the user clicks a radio button
+$("#step_update_aa_no").click(function() {
+    $("#step_update_aa").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
+    $("#checkupdate").text(translate("aamessageadreport"));
+    $("#checkupdatelink").text(translate("aalinkadreport"));
+    $("#checkupdatelink_DIV").fadeIn().css("display", "block");
+    
+});
+$("#step_update_aa_yes").click(function() {
+    $("#step_update_aa").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
     $("#step_disable_extensions_DIV").fadeIn().css("display", "block");
 });
 
