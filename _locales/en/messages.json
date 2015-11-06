@@ -675,6 +675,22 @@
     "message":"Ukrainian",
     "description":"language"
   },
+  "filtereasylist_plus_arabic":{
+    "message":"Arabic",
+    "description":"language"
+  },
+  "filtereasylist_plus_estonian":{
+    "message":"Estonian",
+    "description":"language"
+  },
+  "filtericelandic":{
+    "message":"Icelandic",
+    "description":"language"
+  },
+  "filtereasylist_plus_lithuania":{
+    "message":"Lithuania",
+    "description":"language"
+  },
   "other":{
     "message":"Other",
     "description":"Multiple choice option"
