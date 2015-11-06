@@ -676,6 +676,7 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "italian": { // Italian filters
       url: "https://easylist-downloads.adblockplus.org/easylistitaly.txt",
+      requiresList: "easylist",
     },
     "japanese": { // Japanese filters
       url: "https://raw.githubusercontent.com/k2jp/abp-japanese-filters/master/abpjf.txt",
