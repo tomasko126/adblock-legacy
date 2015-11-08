@@ -483,8 +483,12 @@
     "message":"AdBlock - Reporting an ad",
     "description":"Title of the ad report page"
   },
-  "adreport2":{
-    "message":"Found an ad on a web page? We'll help you find the right place to report it!<br\/><br\/>Reporting ads is voluntary. It helps other people by enabling the filter list maintainers to block the ad for everyone. If you're not feeling altruistic right now, that's okay. Just close this page and block the ad only for yourself by adding its filter in the \"CUSTOMIZE\" tab in AdBlock's options.",
+  "adreportintro":{
+    "message":"Found an ad on a web page? We'll help you find the right place to report it!",
+    "description":"Introduction of the ad reporting page"
+  },
+  "adreportvoluntary":{
+    "message":"Reporting ads is voluntary. It helps other people by enabling the filter list maintainers to block the ad for everyone. If you're not feeling altruistic right now, that's okay. Just close this page and block the ad only for yourself by adding its filter in the \"CUSTOMIZE\" tab in AdBlock's options.",
     "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
   },
   "malwarenotificationcheckboxmessage":{
