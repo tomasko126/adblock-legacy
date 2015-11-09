@@ -608,7 +608,7 @@ MyFilters.prototype._make_subscription_options = function() {
   // When modifying a list, IDs mustn't change!
   return {
     "adblock_custom": { // AdBlock custom filters
-      url: "https://adblockcdn.com/filters/adblock_custom.txt",
+      url: "https://cdn.adblockcdn.com/filters/adblock_custom.txt",
     },
     "easylist": { // EasyList
       url: "https://easylist-downloads.adblockplus.org/easylist.txt"
@@ -695,7 +695,7 @@ MyFilters.prototype._make_subscription_options = function() {
       url: "https://easylist-downloads.adblockplus.org/fanboy-social.txt",
     },
     "malware": { // Malware protection
-      url: "https://adblockcdn.com/filters/domains.json",
+      url: "https://cdn.adblockcdn.com/filters/domains.json",
     },
     "annoyances": { // Fanboy's Annoyances
       url: "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt",
