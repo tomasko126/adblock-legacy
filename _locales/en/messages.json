@@ -564,7 +564,7 @@
     "description":"Instruction on ad report page"
   },
   "disableforchromestepone":{
-    "message":"Open <a href='#'>the extensions page<\/a>",
+    "message":"Open the <a href='#'>extensions page<\/a>",
     "description":"Step 1 for disabling Chrome extensions"
   },
   "clickdisableotherextensions":{
@@ -1152,7 +1152,7 @@
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs"
   },
   "checkinternetconnection":{
-    "message":"To report an ad, you must be connected to the internet.",
+    "message":"To report an ad, you must be connected to the Internet.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
   "whatsnew":{
