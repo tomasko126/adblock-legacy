@@ -29,6 +29,11 @@ $(function() {
     });
     $("#step_language_lang").empty().append(languageOptions);
     languageOptions[0].selected = true;
+
+    // add the link to the anchor in "adreport2"
+    $("a", "#info").
+      attr("href", "http://support.getadblock.com/kb/im-seeing-an-ad/how-do-i-block-an-ad").
+      attr("target", "_blank");
 });
 
 // Fetching the options...
@@ -274,7 +279,7 @@ $("#step_update_filters_yes").click(function() {
           $(".even").css("background-color", "#f8f8f8");
         }
         $("#malwarewarning").html(translate("malwarenotfound"));
-    });    
+    });
 });
 
 // STEP 3: disable AA - IF enabled...
@@ -294,7 +299,7 @@ $("#step_update_aa_no").click(function() {
     $("#checkupdate").text(translate("aamessageadreport"));
     $("#checkupdatelink").text(translate("aalinkadreport"));
     $("#checkupdatelink_DIV").fadeIn().css("display", "block");
-    
+
 });
 $("#step_update_aa_yes").click(function() {
     $("#step_update_aa").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
