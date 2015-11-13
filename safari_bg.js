@@ -12,12 +12,14 @@ safari.application.addEventListener("message", function(messageEvent) {
       messageEvent.message.data.args[1].tab &&
       messageEvent.message.data.args[1].tab.url) {
         var args = messageEvent.message.data.args;
-        var frameId = (messageEvent.message.frameInfo.top_level ? 0 : Object.keys(frameData.get(messageEvent.target.id)).length);
         // Create a new frameData[tab.id], if it hasn't been created yet
         if (!frameData.get(messageEvent.target.id) && messageEvent.message.frameInfo.top_level) {
-            frameData.record(messageEvent.target.id, frameId, messageEvent.message.frameInfo.url);
-        } else if (!messageEvent.target.url ||
-                   messageEvent.target.url === args[1].tab.url) {
+            frameData.record(messageEvent.target.id, 0, messageEvent.message.frameInfo.url);
+            return;
+        }
+        var frameId = (messageEvent.message.frameInfo.top_level ? 0 : Object.keys(frameData.get(messageEvent.target.id)).length);
+        if (!messageEvent.target.url ||
+            messageEvent.target.url === args[1].tab.url) {
             frameData.record(messageEvent.target.id, frameId, messageEvent.message.frameInfo.url);
         } else if (messageEvent.target.url === frameData.get(messageEvent.target.id, 0).url) {
             frameData.removeTabId(messageEvent.target.id);
