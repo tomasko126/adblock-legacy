@@ -12,8 +12,12 @@ safari.application.addEventListener("message", function(messageEvent) {
       messageEvent.message.data.args[1].tab &&
       messageEvent.message.data.args[1].tab.url) {
         var args = messageEvent.message.data.args;
-        // Create a new frameData[tab.id], if it hasn't been created yet
-        if (!frameData.get(messageEvent.target.id) && messageEvent.message.frameInfo.top_level) {
+        // Create a new frameData[tab.id], if it hasn't been created yet or
+        // if main frame URL is different than the main frame URL stored in frameData[tab.id].url
+        if ((!frameData.get(messageEvent.target.id) ||
+             frameData.get(messageEvent.target.id, 0).url !== messageEvent.message.frameInfo.url) &&
+             messageEvent.message.frameInfo.top_level) {
+            frameData.removeTabId(messageEvent.target.id);
             frameData.record(messageEvent.target.id, 0, messageEvent.message.frameInfo.url);
             return;
         }
@@ -28,8 +32,9 @@ safari.application.addEventListener("message", function(messageEvent) {
         return;
     }
 
-    if (messageEvent.name != "canLoad")
+    if (messageEvent.name != "canLoad") {
         return;
+    }
 
     var tab = messageEvent.target;
     var isPopup = messageEvent.message.isPopup;
@@ -171,9 +176,7 @@ if (!LEGACY_SAFARI) {
 
 
 safari.application.addEventListener("beforeNavigate", function(event) {
-    // Remove frameData[tab.id] before navigating to another site
-    frameData.removeTabId(event.target.id);
-    //remove bandaids.js from YouTube.com when a user pauses AdBlock or if the enabled click to flash compatibility mode
+    // Remove bandaids.js from YouTube.com when a user pauses AdBlock or if the enabled click to flash compatibility mode
     if (/youtube.com/.test(event.url) && (is_adblock_paused() || (get_settings().clicktoflash_compatibility_mode === true))) {
       safari.extension.removeContentScript(safari.extension.baseURI + "bandaids.js");
     }
