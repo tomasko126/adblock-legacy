@@ -847,7 +847,8 @@
     if (!url) { // Safari empty/bookmarks/top sites page
       return true;
     }
-    //TODO - temporary fix, need long term fix
+    // In Safari with content blocking enabled, 
+    // whitelisting of domains is not currently supported.
     if (get_settings().safari_content_blocking) {
       return false;
     }
