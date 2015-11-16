@@ -45,7 +45,7 @@ $(function() {
   //  - display option to user
   //  - check if any messages need to be displayed
   //  - add a listener to process any messages
-  BGcall("isSafariContentAvailable", function(response) {
+  BGcall("isSafariContentBlockingAvailable", function(response) {
     if (response) {
       $("#safari_content_blocking").css("display", "block");
       getSafariContentBlockingMessage();
