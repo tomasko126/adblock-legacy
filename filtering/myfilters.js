@@ -96,11 +96,6 @@ MyFilters.prototype._updateDefaultSubscriptions = function() {
     // Convert subscribed ex-official lists into user-submitted lists.
     // Convert subscribed ex-user-submitted lists into official lists.
     else {
-      // TODO: Remove this logic after a few releases
-      if (id === "easylist_plus_spanish" || id === "norwegian") {
-          delete this._subscriptions[id];
-          continue;
-      }
       // Cache subscription that needs to be checked.
       var sub_to_check = this._subscriptions[id];
       var is_user_submitted = true;
@@ -157,18 +152,7 @@ MyFilters.prototype._onSubscriptionChange = function(rebuild) {
 
 // get filters that are defined in the extension
 MyFilters.prototype.getExtensionFilters = function(settings) {
-  //Exclude google search results ads if the user has checked that option
   var texts = [];
-  if (settings.show_google_search_text_ads) {
-    // Standard search
-    texts.push("@@||google.*/search?$elemhide");
-    // Google Instant: go to https://google.com, type 'hotel' and don't press Enter
-    texts.push("@@||www.google.*/|$elemhide");
-    // Google Instant: open a Chrome tab, type 'hotel' and don't press Enter
-    texts.push("@@||google.*/webhp?$elemhide");
-    // Google Search: go to http://google.com, type 'hotel' and press Enter
-    texts.push("@@||google.*/?gws_rd$elemhide");
-  }
   if (settings.whitelist_hulu_ads) {
     // Issue 7178: FilterNormalizer removes EasyList's too-broad Hulu whitelist
     // entries.  If the user enables whitelist_hulu_ads, just add them back.
@@ -484,9 +468,8 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
       }, 500);
     }
   }
-  $.ajax({
+  var ajaxRequest = {
     url: url,
-    cache: false,
     headers: {
       "Accept": "text/plain",
       "X-Client-ID": "AdBlock/" + STATS.version,
@@ -522,7 +505,12 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
       log("textStatus " + textStatus);
       log("errorThrown " + errorThrown);
     }
-  });
+  };
+  //add the cache option for items NOT coming from the AdBlock CDN
+  if (url.indexOf("adblockcdn.com") === -1) {
+    ajaxRequest["cache"] = false;
+  }
+  $.ajax(ajaxRequest);
 }
 
 // Record that subscription_id is subscribed, was updated now, and has
@@ -650,8 +638,7 @@ MyFilters.prototype._loadMalwareDomains = function() {
     if (!this._subscriptions.malware.text ||
         !this.getMalwareDomains() ||
         out_of_date(this._subscriptions.malware)) {
-        //the timestamp is add to the URL to prevent caching by the browser
-        var url = this._subscriptions.malware.url + "?timestamp=" + new Date().getTime();
+        var url = this._subscriptions.malware.url;
         // Fetch file with malware-known domains
         var xhr = new XMLHttpRequest();
         var that = this;
@@ -712,20 +699,24 @@ MyFilters.prototype._load_default_subscriptions = function() {
   function listIdForThisLocale() {
     var language = determineUserLanguage();
     switch(language) {
+      case 'ar': return 'easylist_plus_arabic';
       case 'bg': return 'easylist_plus_bulgarian';
       case 'cs': return 'czech';
       case 'cu': return 'easylist_plus_bulgarian';
       case 'da': return 'danish';
       case 'de': return 'easylist_plus_german';
       case 'el': return 'easylist_plus_greek';
+      case 'et': return 'easylist_plus_estonian';
       case 'fi': return 'easylist_plus_finnish';
       case 'fr': return 'easylist_plus_french';
       case 'he': return 'israeli';
       case 'hu': return 'hungarian';
+      case 'is': return 'icelandic';
       case 'it': return 'italian';
       case 'id': return 'easylist_plus_indonesian';
       case 'ja': return 'japanese';
       case 'ko': return 'easylist_plun_korean';
+      case 'lt': return 'easylist_plus_lithuania';
       case 'lv': return 'latvian';
       case 'nl': return 'dutch';
       case 'pl': return 'easylist_plus_polish';
@@ -741,8 +732,9 @@ MyFilters.prototype._load_default_subscriptions = function() {
   }
   //Update will be done immediately after this function returns
   result["adblock_custom"] = { subscribed: true };
-  //result["easylist"] = { subscribed: true };
-  //result["malware"] = { subscribed: true };
+  result["easylist"] = { subscribed: true };
+  result["malware"] = { subscribed: true }; 
+  result["acceptable_ads"] = { subscribed: true };
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
@@ -758,6 +750,7 @@ MyFilters.prototype._make_subscription_options = function() {
     "adblock_custom": { // AdBlock custom filters
       url: "https://data.getadblock.com/filters/adblock_custom.txt",
       safariJSON_URL: "https://adblockcdn.com/filters/adblock_custom.json",
+      url: "https://data.getadblock.com/filters/adblock_custom.txt",
     },
     "easylist": { // EasyList
       url: "https://easylist-downloads.adblockplus.org/easylist.txt",
@@ -774,7 +767,7 @@ MyFilters.prototype._make_subscription_options = function() {
       safariJSON_URL: "https://adblockcdn.com/filters/dutch.json",
     },
     "easylist_plus_finnish": { // Additional Finnish filters
-      url: "https://raw.githubusercontent.com/wiltteri/wiltteri.txt/master/wiltteri.txt",
+      url: "http://adb.juvander.net/Finland_adb.txt",
       requiresList: "easylist",
       safariJSON_URL: "https://adblockcdn.com/filters/easylist_plus_finnish.json",
     },
@@ -836,8 +829,9 @@ MyFilters.prototype._make_subscription_options = function() {
       safariJSON_URL: "https://adblockcdn.com/filters/israeli.json",
     },
     "italian": { // Italian filters
-      url: "http://mozilla.gfsolone.com/filtri.txt",
+      url: "https://easylist-downloads.adblockplus.org/easylistitaly.txt",      
       safariJSON_URL: "https://adblockcdn.com/filters/italian.json",
+      requiresList: "easylist",
     },
     "japanese": { // Japanese filters
       url: "https://raw.githubusercontent.com/k2jp/abp-japanese-filters/master/abpjf.txt",
@@ -868,8 +862,7 @@ MyFilters.prototype._make_subscription_options = function() {
       safariJSON_URL: "https://adblockcdn.com/filters/antisocial.json",
     },
     "malware": { // Malware protection
-      url: "https://data.getadblock.com/filters/domains.json",
-      safariJSON_URL: "https://adblockcdn.com/filters/malware.json",
+      url: "https://adblockcdn.com/filters/domains.json",
     },
     "annoyances": { // Fanboy's Annoyances
       url: "https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt",
@@ -878,6 +871,24 @@ MyFilters.prototype._make_subscription_options = function() {
     "warning_removal": { // AdBlock warning removal
       url: "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt",
       safariJSON_URL: "https://adblockcdn.com/filters/warning_removal.json",
+    },
+    "acceptable_ads": { // Acceptable Ads
+      url: "https://easylist-downloads.adblockplus.org/exceptionrules.txt",
+    },
+    "easylist_plus_estonian": { // Estonian filters
+      url: "http://gurud.ee/ab.txt",
+      requiresList: "easylist"
+    },
+    "easylist_plus_lithuania": { // Lithuania filters
+      url: "http://margevicius.lt/easylistlithuania.txt",
+      requiresList: "easylist"
+    },
+    "easylist_plus_arabic": { // Arabic filters
+      url: "https://easylist-downloads.adblockplus.org/Liste_AR.txt",
+      requiresList: "easylist"
+    },
+    "icelandic": { // Icelandic filters
+      url: "http://adblock.gardar.net/is.abp.txt"
     }
   };
 }

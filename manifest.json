@@ -1,6 +1,6 @@
 {
   "name": "AdBlock",
-  "version": "2.37.3",
+  "version": "2.43",
   "background": {
     "scripts": [
       "punycode.min.js",
@@ -19,7 +19,7 @@
       "dropbox-datastores.js",
       "gab_question.js",
       "background.js",
-      "datacollection.js"      
+      "datacollection.js"
     ]
   },
   "browser_action": {

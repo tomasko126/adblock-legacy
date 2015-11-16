@@ -31,10 +31,6 @@
     "message":"Tùy chọn AdBlock",
     "description":"Title for the options page"
   },
-  "thirdparty":{
-    "message":"Bên thứ ba",
-    "description":"Resource list column title telling if the resource originates from a different domain"
-  },
   "chromebutton_how_to_hide2":{
     "message":"Để ẩn nút này, nhấp chuột phải và chọn 'Nút ẩn'. Để hiển thị trở lại bạn bấm vào 'Nút hiển thị' ở đây chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -54,10 +50,6 @@
   "sliderexplanation":{
     "message":"Trượt thanh trượt cho đến khi chọn đúng quảng cáo cần chặn, và các phần tử bị chặn sẽ trở nên hữu ích.",
     "description":"Blacklister slider page message"
-  },
-  "block_by_url_instead":{
-    "message":"Nâng cao: chặn bằng URL",
-    "description":"Link on blacklister slider page"
   },
   "slidertitle":{
     "message":"Bước 1: Chọn phần tử để chặn",
@@ -257,6 +249,10 @@
   },
   "debuginlogoption":{
     "message":"Hiển thị báo cáo gỡ lỗi trong Console Log (sẽ làm AdBlock chậm đi)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption":{
+    "message":"Cho phép AdBlock thu thập dữ liệu và cách sử dụng danh sách bộ lọc ẩn danh",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
@@ -496,7 +492,7 @@
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock đã phát hiện ra malware. Máy tính của bạn có thể đã bị lây nhiễm.",
+    "message":"AdBlock đã chặn tải xuống từ một trang được biết có chứa mã độc.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
@@ -863,161 +859,13 @@
     "message":"không rõ",
     "description":"A resource type"
   },
-  "blockeverycontaining":{
-    "message":"Chặn tất cả các nguồn bao gồm:",
-    "description":"resourceblocking page string"
-  },
-  "whitelisteverycontaining":{
-    "message":"Cho phép tất cả các nguồn bao gồm:",
-    "description":"resourceblocking page string"
-  },
-  "wildcardhint":{
-    "message":"Lưu ý: bạn có thể sử dụng * như là một ký tự đặc biệt ở đây",
-    "description":"resourceblocking page string"
-  },
-  "novalidurlpattern":{
-    "message":"Vui lòng điền môt mẫu URL hợp lệ để AdBlock làm theo!",
-    "description":"resourceblocking page string"
-  },
-  "doesntmatchoriginal":{
-    "message":"Mẫu bạn điền không khớp với nguồn mà bạn đang muốn chặn! Vẫn tiếp tục?",
-    "description":"resourceblocking page string"
-  },
-  "thirdpartycheckbox":{
-    "message":"Tất cả các trang web ngoại trừ trên tên miền $domain$",
-    "description":"resourceblocking page string",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
-  },
-  "filterhasbeenadded":{
-    "message":"Bộ lọc đã được thêm vào thành công!\nTải lại trang để xem kết quả!",
-    "description":"resourceblocking page string"
-  },
-  "adblock_is_paused":{
-    "message":"AdBlock đã bị tạm dừng. Do đó trang này không thể sử dụng được. Đầu tiên hãy bật lại AdBlock và thử lại.",
-    "description":"resourceblocking page string"
-  },
-  "excludefilterremoved":{
-    "message":"Bộ lọc đã bị gỡ bỏ. Vui lòng tải lại trang gốc để tạo ra danh sách cùng với nguồn.",
-    "description":"Warning when a page exclusion rule was removed in resourceblock.html"
-  },
-  "noresourcessend2":{
-    "message":"Đã xảy ra chuyện gì đó . Không có nguồn nào được gửi đi. Trang này sẽ bị đóng lại. Hãy thử tải lại trang web này.",
-    "description":"resourceblocking page string"
-  },
-  "resourcedomain":{
-    "message":"Tải trên trang với tên miền:\n$domain$",
-    "description":"Text shown when hovering over an item in the third-party column",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
-  },
-  "resourceiswhitelisted":{
-    "message":"Các nguồn được chọn đã ở trong danh sách trắng. Vì vậy ban không thể chặn nó.",
-    "description":"resourceblocking page string"
-  },
-  "selectresources":{
-    "message":"Chọn nguồn mà bạn muốn chặn hoặc bỏ chặn",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocktitle":{
-    "message":"Chặn nguồn cấp",
-    "description":"resourceblocking page string"
-  },
-  "headerresource":{
-    "message":"Nguồn cấp",
-    "description":"resourceblocking page string"
-  },
-  "headertype":{
-    "message":"Loại",
-    "description":"resourceblocking page string"
-  },
-  "headerfilter":{
-    "message":"Bộ lọc đã khớp",
-    "description":"resourceblocking page string"
-  },
   "close":{
     "message":"Đóng",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend1":{
-    "message":"Chú thích:",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend2":{
-    "message":"nguồn đã bị chặn",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend3":{
-    "message":"nguồn được cho phép",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend4":{
-    "message":"nguồn có thể chặn được",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend5":{
-    "message":"quy tắc ẩn đã được áp dụng",
-    "description":"resourceblocking page string"
+    "description":"Generic message for buttons that close a view or window"
   },
   "loading":{
     "message":"ĐANG TẢI...",
-    "description":"resourceblocking page string"
-  },
-  "nextstep":{
-    "message":"Bước tiếp theo",
-    "description":"resourceblocking page string"
-  },
-  "appliedwhenbrowsing":{
-    "message":"Bộ lọc này sẽ được áp dụng khi bạn đang xem:",
-    "description":"resourceblocking page string"
-  },
-  "anysite":{
-    "message":"Bất cứ website nào",
-    "description":"resourceblocking page string"
-  },
-  "onlyondomains":{
-    "message":"CHỈ trong trang trên các tên miền: ",
-    "description":"resourceblocking page string"
-  },
-  "multipledomainshint":{
-    "message":"Phân cách nhiều tên miền bằng dấu chấm hoặc dấu cách",
-    "description":"resourceblocking page string"
-  },
-  "casesensitive":{
-    "message":"Bộ lọc này phân biệt chữ hoa chữ thường:",
-    "description":"resourceblocking page string"
-  },
-  "onlyresourcetypes":{
-    "message":"Bộ lọc nay được áp dụng cho nguồn của những loại này:",
-    "description":"resourceblocking page string"
-  },
-  "addthisfilter":{
-    "message":"Thêm bộ lọc này",
-    "description":"resourceblocking page string"
-  },
-  "ordisablefilter":{
-    "message":"... hoặc vô hiệu hóa bộ lọc:",
-    "description":"On the resourceblocking page, choice to disable a filter instead of allowing or blocking a specific resource"
-  },
-  "thisfilterwillbedisabled":{
-    "message":"Bộ lọc này sẽ bị vô hiệu hóa:",
-    "description":"On the resourceblocking page, followed by the filter the user chose to disable"
-  },
-  "disabledwhenbrowsing":{
-    "message":"Bộ lọc này sẽ bị vô hiệu hóa khi bạn đang duyệt:",
-    "description":"On the resourceblocking page, choose on which sites the filter should be disabled"
-  },
-  "onlypagesonthisdomain":{
-    "message":"CHỈ trên trang của các tên miền này:",
-    "description":"On the resourceblocking page, option to disable a filter only on a specific domain"
+    "description":"Generic message displayed during processes that take some time"
   },
   "flashads":{
     "message":"Video và Flash",
@@ -1091,14 +939,6 @@
     "message":"Trả bất cứ thứ gì bạn muốn!",
     "description":"Text of a payment request link"
   },
-  "removelabel":{
-    "message":"Gỡ bỏ",
-    "description":"Link to remove a filter on the resourceblock page"
-  },
-  "changelabel":{
-    "message":"thay đổi",
-    "description":"Link to change resources on the resourceblock page"
-  },
   "translator_credit":{
     "message":"Dịch sang Tiếng Việt bởi:",
     "description":"Will be followed by a list of translator names (separate string)"
@@ -1109,10 +949,6 @@
   },
   "report_ad_on_page":{
     "message":"Báo cáo một quảng cáo trên trang này",
-    "description":"Entry in the AdBlock button menu"
-  },
-  "show_resourcelist":{
-    "message":"Hiển thị danh sách nguồn",
     "description":"Entry in the AdBlock button menu"
   },
   "advanced_options2":{
@@ -1154,32 +990,6 @@
   "safari50_updatenotice":{
     "message":"Bạn đang sử dụng phiên bản cũ của Safari. Hãy cài đặt phiên bản mới nhất để sử dụng nút AdBlock trên thanh công cụ để tạm dừng AdBlock, tạo danh sách trắng, và báo cáo quảng cáo. <a>Nâng cấp ngay<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
-  },
-  "searchexplanation":{
-    "message":"Sử dụng dấu * để thay cho ký tự trống hoặc nhiều ký tự hơn. Ví dụ, ảnh 'banner*.gif' sẽ khớp với ảnh 'banner.gif', 'banner123.gif', và 'bannerxyz.gif'.",
-    "description":"Text in resourceblock when you hover your mouse over the search textbox"
-  },
-  "searchplaceholder":{
-    "message":"Tìm kiếm nguồn...",
-    "description":"Text in resourceblock shown in the search textbox before you type something"
-  },
-  "nosearchresults":{
-    "message":"Nguồn không tìm thấy",
-    "description":"Text in resourceblock shown if no results are found after searching"
-  },
-  "custompattern":{
-    "message":"Tùy chỉnh:",
-    "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
-  },
-  "filterorigin":{
-    "message":"Bộ lọc gốc:\n$list$",
-    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
-    "placeholders":{
-      "list":{
-        "content":"$1",
-        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
-      }
-    }
   },
   "firefox_explanation":{
     "message":"Mục đích của câu hỏi này là để xác định ai sẽ nhận được báo cáo của bạn. Nếu bạn trả lời câu hỏi này không chính xác, báo cáo sẽ được gửi đến nhầm người. do đó nó có thể bị bỏ qua.",

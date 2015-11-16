@@ -29,6 +29,11 @@ $(function() {
     });
     $("#step_language_lang").empty().append(languageOptions);
     languageOptions[0].selected = true;
+
+    // add the link to the anchor in "adreport2"
+    $("a", "#info").
+      attr("href", "http://support.getadblock.com/kb/im-seeing-an-ad/how-do-i-block-an-ad").
+      attr("target", "_blank");
 });
 
 // Fetching the options...
@@ -90,6 +95,8 @@ function generateReportURL() {
     body.push("");
     body.push("");
     body.push("-------- Please don't touch below this line. ---------");
+    body.push("");
+    body.push("```");
     if (options.url) {
         body.push("=== URL with ad ===");
         body.push(options.url);
@@ -103,6 +110,7 @@ function generateReportURL() {
     for (var i=0, n=1; i<answers.length, i<text.length; i++, n++) {
         body.push(n+"."+text[i].id+": "+answers[i].getAttribute("chosen"));
     }
+    body.push("```");
     body.push("");
 
     result = result + "&discussion[body]=" + encodeURIComponent(body.join('  \n')); // Two spaces for Markdown newlines
@@ -112,7 +120,7 @@ function generateReportURL() {
 
 // Check every domain of downloaded resource against malware-known domains
 var checkmalware = function() {
-    BGcall("resourceblock_get_frameData", tabId, function(tab) {
+    BGcall("get_frameData_adreport", tabId, function(tab) {
         if (!tab)
             return;
 
@@ -153,7 +161,10 @@ var checkmalware = function() {
 
         // Compare domains of loaded resources with domain.json
         for (var i=0; i < extracted_domains.length; i++) {
-            if (malwareDomains && malwareDomains.adware.indexOf(extracted_domains[i]) > -1) {
+            if (malwareDomains &&
+                extracted_domains[i] &&
+                malwareDomains[extracted_domains[i].charAt(0)] &&
+                malwareDomains[extracted_domains[i].charAt(0)].indexOf(extracted_domains[i]) > -1) {
                 // User is probably infected by some kind of malware,
                 // because resource has been downloaded from malware/adware/spyware site.
                 var infected = true;
@@ -219,7 +230,18 @@ var fetchMalware = function() {
     xhr.open("GET", "https://data.getadblock.com/filters/domains.json?timestamp=" + new Date().getTime(), true);
     xhr.onload = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            malwareDomains = JSON.parse(xhr.responseText);
+            var parsedText = JSON.parse(xhr.responseText);
+            var domains = parsedText.adware;
+            var result = {};
+            for (var i=0; i < domains.length; i++) {
+                var domain = domains[i];
+                var char = domain.charAt(0);
+                if (!result[char]) {
+                    result[char] = [];
+                }
+                result[char].push(domain);
+            }
+            malwareDomains = result;
             checkAdvanceOptions();
         }
     };
@@ -256,10 +278,45 @@ $("#step_update_filters_no").click(function() {
 });
 $("#step_update_filters_yes").click(function() {
     $("#step_update_filters").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
+    // If the user is subscribed to Acceptable Ads, ask them to unsubscribe, and recheck the page
+    BGcall('get_subscriptions_minus_text', function(subs) {
+        //if the user is subscribed to Acceptable-Ads, ask them to disable it
+        if (subs && subs["acceptable_ads"] && subs["acceptable_ads"].subscribed) {
+          $('#step_update_aa_DIV').show();
+          $(".odd").css("background-color", "#f8f8f8");
+        } else {
+          $("#step_disable_extensions_DIV").fadeIn().css("display", "block");
+          $(".even").css("background-color", "#f8f8f8");
+        }
+        $("#malwarewarning").html(translate("malwarenotfound"));
+    });
+});
+
+// STEP 3: disable AA - IF enabled...
+
+$("#DisableAA").click(function() {
+    $(this).prop("disabled", true);
+    BGcall("unsubscribe", {id:"acceptable_ads", del:false}, function() {
+        // display the Yes/No buttons
+        $(".afterDisableAA input").prop('disabled', false);
+        $(".afterDisableAA").removeClass('afterDisableAA');
+    });
+});
+
+//if the user clicks a radio button
+$("#step_update_aa_no").click(function() {
+    $("#step_update_aa").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
+    $("#checkupdate").text(translate("aamessageadreport"));
+    $("#checkupdatelink").text(translate("aalinkadreport"));
+    $("#checkupdatelink_DIV").fadeIn().css("display", "block");
+
+});
+$("#step_update_aa_yes").click(function() {
+    $("#step_update_aa").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
     $("#step_disable_extensions_DIV").fadeIn().css("display", "block");
 });
 
-// STEP 3: disable all extensions
+// STEP 4: disable all extensions
 
 //Code for displaying the div is in the $function() that contains localizePage()
 //after user disables all extensions except for AdBlock
@@ -340,7 +397,7 @@ $("#OtherExtensions").click(function() {
     }
 });
 
-// STEP 4: language
+// STEP 5: language
 
 //if the user clicks an item
 var contact = "";
@@ -373,7 +430,7 @@ $("#step_language_lang").change(function() {
     }
 });
 
-// STEP 5: also in Firefox
+// STEP 6: also in Firefox
 
 //If the user clicks a radio button
 $("#step_firefox_yes").click(function() {
@@ -407,6 +464,7 @@ $("#step_firefox_no").click(function() {
                 chrome.management.getAll(function(result) {
                   var extInfo = [];
                   extInfo.push("");
+                  extInfo.push("```");
                   extInfo.push("==== Extension and App Information ====");
                   for (var i = 0; i < result.length; i++) {
                     extInfo.push("Number " + (i + 1));
@@ -417,6 +475,8 @@ $("#step_firefox_no").click(function() {
                     extInfo.push("  type: " + result[i].type);
                     extInfo.push("");
                   }
+                  extInfo.push("```");
+                  extInfo.push("");
                   currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
                   chrome.permissions.remove({
                     permissions: ['management']
@@ -436,8 +496,10 @@ $("#step_firefox_no").click(function() {
             if (language) {
               var extInfo = [];
               extInfo.push("");
+              extInfo.push("```");
               extInfo.push("Detected language of page: ");
               extInfo.push(language);
+              extInfo.push("```");
               extInfo.push("");
               currentHREF = currentHREF + encodeURIComponent(extInfo.join('  \n'));
             }
@@ -460,7 +522,7 @@ $("#step_firefox_wontcheck").click(function() {
     $("#step_firefox").html("<span class='answer' chosen='wont_check'>" + translate("refusetocheck") + "</span>");
 });
 
-// STEP 6: video/flash ad (Safari-only)
+// STEP 7: video/flash ad (Safari-only)
 
 //If the user clicks a radio button
 $("#step_flash_yes").click(function() {

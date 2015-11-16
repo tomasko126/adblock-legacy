@@ -1,6 +1,6 @@
 {
   "description2":{
-    "message":"AdBlock. The #1 ad blocker with over 200 million downloads. Blocks YouTube, Facebook and ALL ads by default (unlike Adblock Plus).",
+    "message":"The most popular Chrome extension, with over 40 million users! Blocks ads all over the web.",
     "description":"Extension description in manifest. Should not exceed 132 characters."
   },
   "adblock_click_for_details":{
@@ -31,10 +31,6 @@
     "message":"AdBlock Options",
     "description":"Title for the options page"
   },
-  "thirdparty":{
-    "message":"Third-party",
-    "description":"Resource list column title telling if the resource originates from a different domain"
-  },
   "chromebutton_how_to_hide2":{
     "message":"To hide the button, right click it and choose Hide Button.  You can show it again under chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -54,10 +50,6 @@
   "sliderexplanation":{
     "message":"Slide the slider until the ad is blocked correctly on the page, and the blocked element looks useful.",
     "description":"Blacklister slider page message"
-  },
-  "block_by_url_instead":{
-    "message":"Advanced: block by URL instead",
-    "description":"Link on blacklister slider page"
   },
   "slidertitle":{
     "message":"Step 1: Figure out what to block",
@@ -243,10 +235,6 @@
     "message":"Beta",
     "description":"Label for beta features in AdBlock Options"
   },
-  "googletextads2":{
-    "message":"I like the text ads on Google search results; show me those",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "showcontextmenus2":{
     "message":"Add items to the right click menu",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -258,7 +246,7 @@
   "safaricontentblocking":{
     "message":"Enable the new Safari 9 Content Blocking",
     "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
-  },
+  },  
   "debuginlogoption":{
     "message":"Show debug statements in Console Log (which slows down AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -383,6 +371,10 @@
     "message":"AdBlock Warning Removal list (removes messages about using AdBlock)",
     "description":"Name of the filter list"
   },
+  "filteracceptable_ads":{
+    "message":"Acceptable Ads (recommended)",
+    "description":"A filter list"
+  },
   "filteradblock_custom":{
     "message":"AdBlock custom filters (recommended)",
     "description":"A filter list"
@@ -495,9 +487,13 @@
     "message":"AdBlock - Reporting an ad",
     "description":"Title of the ad report page"
   },
-  "adreport2":{
-    "message":"So you just found an ad on a web page? Well, I'll help you to find the correct place to report it!<br\/> Remember: reporting ads is voluntary. If you don't wish to do this you can just close this window and block it only for yourself by adding its filter in the 'Customize' tab of the options page!",
-    "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
+  "adreportintro":{
+    "message":"Found an ad on a web page? We'll help you find the right place to report it!",
+    "description":"Introduction of the ad reporting page"
+  },
+  "adreportvoluntary":{
+    "message":"Reporting ads is voluntary. It helps other people by enabling the filter list maintainers to block the ad for everyone. If you're not feeling altruistic right now, that's okay. Close this page and <a>block the ad<\/a> just for yourself.",
+    "description":"Introduction of the ad reporting page"
   },
   "malwarenotificationcheckboxmessage":{
     "message":"Should AdBlock notify you when it detects malware?",
@@ -516,7 +512,7 @@
     "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
   "malwarecheck":{
-    "message":"Malware check",
+    "message":"Check for malware that could be injecting ads:",
     "description":"Section header on the ad report page"
   },
   "malwarewarning":{
@@ -530,9 +526,25 @@
   "malwarenotdone":{
     "message":"A Malware check was not completed due to Content Blocking being enabled.",
     "description":"On the ad report page with Safari content blocking enabled, the malware check can't be done."
+  },  
+  "disableaa":{
+    "message":"Check the Acceptable Ads filters:",
+    "description":"Section header on the ad report page"
+  },
+  "clickdisableaa":{
+    "message":"Click this: <a>Disable Acceptable Ads<\/a>",
+    "description":"Instruction on ad report page"
+  },
+  "aamessageadreport":{
+    "message":"If you'd rather not see ads like this one, you may want to leave the Acceptable Ads filter list turned off.",
+    "description":"Acceptable Ads message on ad report page"
+  },
+  "aalinkadreport":{
+    "message":"Find out more about the Acceptable Ads program.",
+    "description":"Acceptable Ads link message on ad report page"
   },
   "updateyourlists":{
-    "message":"Make sure your filter lists are up to date",
+    "message":"Make sure your filter lists are up to date:",
     "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
@@ -556,15 +568,15 @@
     "description":"A negative response to a question"
   },
   "adalreadyblocked":{
-    "message":"You don't have to do anything as the ad is already blocked",
+    "message":"Great! You're all set.",
     "description":"On the ad report page, telling a user there is nothing to do"
   },
   "disableallextensions":{
-    "message":"Disable all extensions except for AdBlock.",
+    "message":"Disable all extensions except for AdBlock:",
     "description":"Instruction on ad report page"
   },
   "disableforchromestepone":{
-    "message":"Open <a href='#'>the extensions page<\/a>",
+    "message":"Open the <a href='#'>extensions page<\/a>",
     "description":"Step 1 for disabling Chrome extensions"
   },
   "clickdisableotherextensions":{
@@ -572,7 +584,7 @@
     "description":"On the ad report page, an alternative way to disable other extensions"
   },
   "disableotherextensionscomplete":{
-    "message":"All other extensions have been disabled.  We'll now reload the tab.",
+    "message":"We've disabled all other extensions. Now we'll reload the page with the ad. One second, please.",
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "enableotherextensionscomplete":{
@@ -584,7 +596,7 @@
     "description":"On the ad report page, alert notifying users that they will need to manually reenable the extensions"
   },
   "tabreloadcomplete":{
-    "message":"The tab with the ad has been reloaded, please check that tab to see if the ad is still displayed.  Then answer the Yes or No question below.",
+    "message":"Done! We reloaded the page with the ad. Please check that page to see whether the ad is gone. Then come back to this page and answer the question below.",
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "disableforchromeandsafaristeptwo":{
@@ -596,11 +608,11 @@
     "description":"Step 1 for disabling Safari extensions"
   },
   "reenableadsonebyone":{
-    "message":"Now that the ads are gone, you must find out which extension is the cause. Go through and enable each extension one by one. The extension that brings back the ad(s) is the one that you must delete to get rid of the ads.",
+    "message":"Great! Now let's find out which extension is the cause. Go through and enable each extension one by one. The extension that brings back the ad(s) is the one you need to uninstall to get rid of the ads.",
     "description":"Tells the user to reenable the extensions one by one"
   },
   "correctfilters":{
-    "message":"Correct filters",
+    "message":"Make sure you're using the right language filter(s):",
     "description":"On the ad report page, label describing having the right set of filters"
   },
   "pagelanguagecheck":{
@@ -691,6 +703,22 @@
     "message":"Ukrainian",
     "description":"language"
   },
+  "filtereasylist_plus_arabic":{
+    "message":"Arabic",
+    "description":"language"
+  },
+  "filtereasylist_plus_estonian":{
+    "message":"Estonian",
+    "description":"language"
+  },
+  "filtericelandic":{
+    "message":"Icelandic",
+    "description":"language"
+  },
+  "filtereasylist_plus_lithuania":{
+    "message":"Lithuanian",
+    "description":"language"
+  },
   "other":{
     "message":"Other",
     "description":"Multiple choice option"
@@ -744,7 +772,7 @@
     }
   },
   "checkinfirefox_2":{
-    "message":"Install AdBlock for Firefox $chrome$ if you don't have it.",
+    "message":"Install Adblock Plus $chrome$ if you don't have it.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad.",
     "placeholders":{
       "chrome":{
@@ -875,161 +903,13 @@
     "message":"unknown",
     "description":"A resource type"
   },
-  "blockeverycontaining":{
-    "message":"Block every resource containing:",
-    "description":"resourceblocking page string"
-  },
-  "whitelisteverycontaining":{
-    "message":"Whitelist every resource containing:",
-    "description":"resourceblocking page string"
-  },
-  "wildcardhint":{
-    "message":"Note: you can use * as wildcard here",
-    "description":"resourceblocking page string"
-  },
-  "novalidurlpattern":{
-    "message":"Please enter a valid URL pattern to match!",
-    "description":"resourceblocking page string"
-  },
-  "doesntmatchoriginal":{
-    "message":"The pattern you entered doesn't match the resource you tried to block! Continue anyway?",
-    "description":"resourceblocking page string"
-  },
-  "thirdpartycheckbox":{
-    "message":"Any website EXCEPT websites on domain $domain$",
-    "description":"resourceblocking page string",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
-  },
-  "filterhasbeenadded":{
-    "message":"The filter was succesfully added!\nReload the page to see the result!",
-    "description":"resourceblocking page string"
-  },
-  "adblock_is_paused":{
-    "message":"AdBlock is paused. Therefore no resources are caught, so this page cannot be used. Unpause AdBlock first and try again.",
-    "description":"resourceblocking page string"
-  },
-  "excludefilterremoved":{
-    "message":"The filter was removed. Please reload the original page to generate the list with resources.",
-    "description":"Warning when a page exclusion rule was removed in resourceblock.html"
-  },
-  "noresourcessend2":{
-    "message":"Something went wrong. No resources have been sent through. This page will now close. Try reloading the website.",
-    "description":"resourceblocking page string"
-  },
-  "resourcedomain":{
-    "message":"Loaded on page with domain:\n$domain$",
-    "description":"Text shown when hovering over an item in the third-party column",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
-  },
-  "resourceiswhitelisted":{
-    "message":"The selected resource has been whitelisted. Therefore you cannot block it.",
-    "description":"resourceblocking page string"
-  },
-  "selectresources":{
-    "message":"Select the resource you would like to block or unblock",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocktitle":{
-    "message":"Block a resource",
-    "description":"resourceblocking page string"
-  },
-  "headerresource":{
-    "message":"Resource",
-    "description":"resourceblocking page string"
-  },
-  "headertype":{
-    "message":"Type",
-    "description":"resourceblocking page string"
-  },
-  "headerfilter":{
-    "message":"Matched filter",
-    "description":"resourceblocking page string"
-  },
   "close":{
     "message":"Close",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend1":{
-    "message":"Legend:",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend2":{
-    "message":"blocked resources",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend3":{
-    "message":"whitelisted resources",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend4":{
-    "message":"blockable resources",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend5":{
-    "message":"hiding rules applied",
-    "description":"resourceblocking page string"
+    "description":"Generic message for buttons that close a view or window"
   },
   "loading":{
     "message":"LOADING...",
-    "description":"resourceblocking page string"
-  },
-  "nextstep":{
-    "message":"Next step",
-    "description":"resourceblocking page string"
-  },
-  "appliedwhenbrowsing":{
-    "message":"This filter will be applied when you are browsing:",
-    "description":"resourceblocking page string"
-  },
-  "anysite":{
-    "message":"Any website",
-    "description":"resourceblocking page string"
-  },
-  "onlyondomains":{
-    "message":"ONLY pages on these domains: ",
-    "description":"resourceblocking page string"
-  },
-  "multipledomainshint":{
-    "message":"Seperate multiple domains with commas or spaces",
-    "description":"resourceblocking page string"
-  },
-  "casesensitive":{
-    "message":"This filter is case sensitive:",
-    "description":"resourceblocking page string"
-  },
-  "onlyresourcetypes":{
-    "message":"This filter applies to resources of these types:",
-    "description":"resourceblocking page string"
-  },
-  "addthisfilter":{
-    "message":"Add this filter",
-    "description":"resourceblocking page string"
-  },
-  "ordisablefilter":{
-    "message":"... or disable filter:",
-    "description":"On the resourceblocking page, choice to disable a filter instead of allowing or blocking a specific resource"
-  },
-  "thisfilterwillbedisabled":{
-    "message":"This filter will be disabled:",
-    "description":"On the resourceblocking page, followed by the filter the user chose to disable"
-  },
-  "disabledwhenbrowsing":{
-    "message":"This filter will be disabled when you are browsing:",
-    "description":"On the resourceblocking page, choose on which sites the filter should be disabled"
-  },
-  "onlypagesonthisdomain":{
-    "message":"ONLY pages on this domain:",
-    "description":"On the resourceblocking page, option to disable a filter only on a specific domain"
+    "description":"Generic message displayed during processes that take some time"
   },
   "flashads":{
     "message":"Videos and Flash",
@@ -1094,7 +974,7 @@
   "safarinotificationbody":{
     "message":"Click for more information",
     "description":"the body of a notification to user"
-  },
+  },    
   "undo_last_block":{
     "message":"Undo my blocks on this domain",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard"
@@ -1119,14 +999,6 @@
     "message":"Pay what you want!",
     "description":"Text of a payment request link"
   },
-  "removelabel":{
-    "message":"Remove",
-    "description":"Link to remove a filter on the resourceblock page"
-  },
-  "changelabel":{
-    "message":"change",
-    "description":"Link to change resources on the resourceblock page"
-  },
   "translator_credit":{
     "message":"Credit for translation goes to:",
     "description":"Will be followed by a list of translator names (separate string)"
@@ -1139,9 +1011,9 @@
     "message":"Report an ad on this page",
     "description":"Entry in the AdBlock button menu"
   },
-  "show_resourcelist":{
-    "message":"Show the resource list",
-    "description":"Entry in the AdBlock button menu"
+  "acceptableadsoption":{
+    "message":"Allow some non-intrusive advertising",
+    "description":"option on the 'General' tab"
   },
   "advanced_options2":{
     "message":"I'm an advanced user, show me advanced options",
@@ -1182,32 +1054,6 @@
   "safari50_updatenotice":{
     "message":"You are using an old version of Safari. Get the latest version in order to use the AdBlock toolbar button to pause AdBlock, whitelist websites, and report ads. <a>Upgrade now<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
-  },
-  "searchexplanation":{
-    "message":"Use * to match zero or more letters.  For example, 'banner*.gif image' matches the images 'banner.gif', 'banner123.gif', and 'bannerxyz.gif'.",
-    "description":"Text in resourceblock when you hover your mouse over the search textbox"
-  },
-  "searchplaceholder":{
-    "message":"Search resources...",
-    "description":"Text in resourceblock shown in the search textbox before you type something"
-  },
-  "nosearchresults":{
-    "message":"No resources found",
-    "description":"Text in resourceblock shown if no results are found after searching"
-  },
-  "custompattern":{
-    "message":"Custom:",
-    "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
-  },
-  "filterorigin":{
-    "message":"Filter origin:\n$list$",
-    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
-    "placeholders":{
-      "list":{
-        "content":"$1",
-        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
-      }
-    }
   },
   "firefox_explanation":{
     "message":"The purpose of this question is to determine who should receive your report. If you answer this question incorrectly, the report will be sent to the wrong people, so it may get ignored.",
@@ -1350,7 +1196,7 @@
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs"
   },
   "checkinternetconnection":{
-    "message":"To report an ad, you must be connected to the internet.",
+    "message":"To report an ad, you must be connected to the Internet.",
     "description":"Displayed when AdBlock is checking the newest available version and an error occurs while reporting an ad on adreport page"
   },
   "whatsnew":{
@@ -1400,5 +1246,17 @@
   "ad_report_please":{
     "message":"If you're seeing an ad, don't make a bug report, make an <a>ad report<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "acceptableadsdisable_done": {
+    "message":"Acceptable Ads has been disabled.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptableadsdisable_how_to_reenable": {
+    "message":"You can re-enable it at any time by clicking the \"Allow some non-intrusive advertising\" checkbox below.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptableadsdisable_please_reenable": {
+    "message":"Enabling Acceptable Ads is a way to support the websites you love who promise to only show you tasteful, non-annoying ads.",
+    "description": "Message shown to users after disabling Acceptable Ads via update page."
   }
 }
