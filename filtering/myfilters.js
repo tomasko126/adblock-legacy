@@ -821,7 +821,7 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "acceptable_ads": { // Acceptable Ads
       url: "https://easylist-downloads.adblockplus.org/exceptionrules.txt",
-      safariJSON_URL: "https://adblockcdn.com/filters/exceptionrules.json"
+      safariJSON_URL: "https://adblockcdn.com/filters/acceptable_ads.json"
     },
     "easylist_plus_estonian": { // Estonian filters
       url: "http://gurud.ee/ab.txt",
