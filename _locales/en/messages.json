@@ -483,9 +483,13 @@
     "message":"AdBlock - Reporting an ad",
     "description":"Title of the ad report page"
   },
-  "adreport2":{
-    "message":"Found an ad on a web page? We’ll help you find the right place to report it!<br\/><br\/>Reporting ads is voluntary. It helps other people by enabling the filter list maintainers to block the ad for everyone. If you’re not feeling altruistic right now, that’s okay. Close this page and <a>block the ad<\/a> just for yourself.",
-    "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
+  "adreportintro":{
+    "message":"Found an ad on a web page? We'll help you find the right place to report it!",
+    "description":"Introduction of the ad reporting page"
+  },
+  "adreportvoluntary":{
+    "message":"Reporting ads is voluntary. It helps other people by enabling the filter list maintainers to block the ad for everyone. If you're not feeling altruistic right now, that's okay. Close this page and <a>block the ad<\/a> just for yourself.",
+    "description":"Introduction of the ad reporting page"
   },
   "malwarenotificationcheckboxmessage":{
     "message":"Should AdBlock notify you when it detects malware?",
@@ -524,7 +528,7 @@
     "description":"Instruction on ad report page"
   },
   "aamessageadreport":{
-    "message":"If you’d rather not see ads like this one, you may want to leave the Acceptable Ads filter list turned off.",
+    "message":"If you'd rather not see ads like this one, you may want to leave the Acceptable Ads filter list turned off.",
     "description":"Acceptable Ads message on ad report page"
   },
   "aalinkadreport":{
@@ -556,7 +560,7 @@
     "description":"A negative response to a question"
   },
   "adalreadyblocked":{
-    "message":"Great! You’re all set.",
+    "message":"Great! You're all set.",
     "description":"On the ad report page, telling a user there is nothing to do"
   },
   "disableallextensions":{
@@ -572,7 +576,7 @@
     "description":"On the ad report page, an alternative way to disable other extensions"
   },
   "disableotherextensionscomplete":{
-    "message":"We’ve disabled all other extensions. Now we’ll reload the page with the ad. One second, please.",
+    "message":"We've disabled all other extensions. Now we'll reload the page with the ad. One second, please.",
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "enableotherextensionscomplete":{
@@ -596,11 +600,11 @@
     "description":"Step 1 for disabling Safari extensions"
   },
   "reenableadsonebyone":{
-    "message":"Great! Now let’s find out which extension is the cause. Go through and enable each extension one by one. The extension that brings back the ad(s) is the one you need to uninstall to get rid of the ads.",
+    "message":"Great! Now let's find out which extension is the cause. Go through and enable each extension one by one. The extension that brings back the ad(s) is the one you need to uninstall to get rid of the ads.",
     "description":"Tells the user to reenable the extensions one by one"
   },
   "correctfilters":{
-    "message":"Make sure you’re using the right language filter(s):",
+    "message":"Make sure you're using the right language filter(s):",
     "description":"On the ad report page, label describing having the right set of filters"
   },
   "pagelanguagecheck":{
@@ -744,7 +748,7 @@
     }
   },
   "checkinfirefox_2":{
-    "message":"Install AdBlock Plus $chrome$ if you don't have it.",
+    "message":"Install Adblock Plus $chrome$ if you don't have it.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad.",
     "placeholders":{
       "chrome":{
