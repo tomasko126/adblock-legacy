@@ -42,7 +42,6 @@
         }
       #checkupdate {
         font-weight: bold;
-        color: red;
       }
       .result {
         position: relative;
@@ -64,6 +63,10 @@
         display: none;
       }
       .afterFilterUpdate, .afterFilterUpdate * {
+        color: #CCC;
+        cursor: auto;
+      }
+      .afterDisableAA, .afterDisableAA * {
         color: #CCC;
         cursor: auto;
       }
@@ -90,7 +93,7 @@
         max-width: 1000px;
         padding: 20px 20px 20px 0px;
       }
-      #step_language_DIV, #step_update_filters_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_DIV, #step_malware_checking_DIV  {
+      #step_update_aa_DIV, #step_language_DIV, #step_update_filters_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_DIV, #step_malware_checking_DIV  {
         position: relative;
         margin: 0px auto;
         max-width: 1000px;
@@ -108,7 +111,7 @@
         .social {
           display: none;
         }
-        #step_update_filters_DIV, #step_disable_extensions_DIV, #step_language_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_div, #step_malware_checking_DIV   {
+        #step_update_aa_DIV, #step_update_filters_DIV, #step_disable_extensions_DIV, #step_language_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_div, #step_malware_checking_DIV   {
           padding: 20px 20px 20px 0px;
         }
         #info {
@@ -133,7 +136,10 @@
     </header>
 
     <!--STEP 0-->
-    <div id="info" i18n="adreport2"></div>
+    <div id="info">
+      <p i18n="adreportintro"></p>
+      <p i18n="adreportvoluntary"></p>
+    </div>
 
     <!--STEP 1: malware check-->
     <div class="step" style="background-color: #f8f8f8;">
@@ -146,7 +152,7 @@
     </div>
 
     <!--STEP 2: update filters-->
-    <div class="step">
+    <div class="step" >
     <div class="section" id="step_update_filters_DIV">
       <h2 i18n="updateyourlists"></h2>
       <ol>
@@ -164,8 +170,27 @@
     </div>
     </div>
 
-  <!--STEP 3: disable all extension except AdBlock-->
-    <div class="step" style="background-color: #f8f8f8;">
+    <!--STEP 3: acceptable ads check-->
+    <div class="step odd">
+    <div class="section" id="step_update_aa_DIV">
+      <h2 i18n="disableaa"></h2>
+      <ol>
+        <li i18n="clickdisableaa" i18n_replacement_el="DisableAA"></li>
+        <li i18n="reloadadpage" class="afterDisableAA"></li>
+      </ol>
+      <input type="button" value="Unsubscribe to Acceptable Ads" id="DisableAA" />
+      <span i18n="adstillappear" class="afterDisableAA" style="margin-left: 19px;"></span><br/>
+      <div id="step_update_aa" class="form afterDisableAA">
+        <input type="radio" id="step_update_aa_yes" name="step_update_aa" disabled="disabled" />
+        <label for="step_update_aa_yes" i18n="yes"></label>
+        <input type="radio" id="step_update_aa_no" name="step_update_aa" disabled="disabled" />
+        <label for="step_update_aa_no" i18n="no"></label>
+      </div>
+    </div>
+    </div>
+
+  <!--STEP 4: disable all extension except AdBlock-->
+    <div class="step even" >
     <div class="section" id="step_disable_extensions_DIV">
       <h2 i18n="disableallextensions"></h2>
       <div class="chrome_only">
@@ -197,8 +222,8 @@
     </div>
     </div>
 
-    <!--STEP 4: language-->
-    <div class="step">
+    <!--STEP 5: language-->
+    <div class="step odd" >
     <div class="section" id="step_language_DIV">
       <h2 i18n="correctfilters" style="margin-bottom: 15px;"></h2>
       <span i18n="pagelanguagecheck" style="margin-left: 20px;"></span>
@@ -239,8 +264,8 @@
     </div>
     </div>
 
-    <!--STEP 5: also in Firefox-->
-    <div class="step" style="background-color: #f8f8f8;">
+    <!--STEP 6: also in Firefox-->
+    <div class="step even" >
     <div class="section" id="step_firefox_DIV">
       <h2 id="checkinfirefox"></h2>
       <abbr id="whyFireFox" i18n_title="firefox_explanation">?</abbr>
@@ -262,8 +287,8 @@
     </div>
     </div>
 
-    <!--STEP 6: video/flash ads-->
-    <div class="step">
+    <!--STEP 7: video/flash ads-->
+    <div class="step odd" >
     <div class="section" id="step_flash_DIV">
       <h2 i18n="flashads"></h2>
       <span i18n="cantblockflashwarning" style="margin-left: 19px;"></span>
@@ -278,6 +303,9 @@
 
     <div class="result">
      <div id="checkupdate"></div>
+     <div id="checkupdatelink_DIV">
+        <a id="checkupdatelink" href="https://adblockplus.org/acceptable-ads" target="_blank"></a>
+     </div>
      <div id="privacy" i18n="reportpubliclyavailable"></div>
     </div>
 
