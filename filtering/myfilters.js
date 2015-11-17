@@ -466,7 +466,6 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
 MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
   this._subscriptions[id].last_update = Date.now();
   delete this._subscriptions[id].last_update_failed_at;
-  console.log("(typeof text === object", (typeof text === "object"));
   //Safari 9 Content Blocking...
   if (get_settings().safari_content_blocking) {
     if (this._fetchTracker &&

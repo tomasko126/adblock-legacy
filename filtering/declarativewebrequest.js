@@ -1,11 +1,3 @@
-// TODO:
-// - check if pre-roll ads are blocked on YouTube
-// -  if so, remove bandaids.js and the ClickToFlash compatibility mode option
-// - don't target AdBlock's own requests.
-// - add document whitelisting
-// - add resource (other - not document or elemhide) whitelisting
-// test scenario
-// in Safari & Chrome - Malware Domains - adding, removing filter list, browser start up with and without subscription
 
 
 DeclarativeWebRequest = (function() {
