@@ -190,32 +190,8 @@ MyFilters.prototype.rebuild = function() {
 
     texts = texts.concat(this.getExtensionFilters(get_settings()));
     texts = texts.join('\n').split('\n');
+		var filters = splitByType(texts);
 
-    // Remove duplicates and empties.
-    var unique = {};
-    for (var i = 0; i < texts.length; i++)
-      unique[texts[i]] = 1;
-    delete unique[''];
-
-    var filters = { hidingUnmerged: [], hiding: {}, exclude: {},
-                    pattern: {}, whitelist: {} };
-    for (var text in unique) {
-      var filter = Filter.fromText(text);
-      if (Filter.isSelectorExcludeFilter(text)) {
-        setDefault(filters.exclude, filter.selector, []).push(filter);
-      } else if (Filter.isSelectorFilter(text)) {
-        filters.hidingUnmerged.push(filter);
-      } else if (Filter.isWhitelistFilter(text)) {
-        filters.whitelist[filter.id] = filter;
-      } else {
-        filters.pattern[filter.id] = filter;
-      }
-    }
-    for (var i = 0; i < filters.hidingUnmerged.length; i++) {
-      filter = filters.hidingUnmerged[i];
-      var hider = SelectorFilter.merge(filter, filters.exclude[filter.selector]);
-      filters.hiding[hider.id] = hider;
-    }
     this.hiding = FilterSet.fromFilters(filters.hiding);
 
     this.blocking = new BlockingFilterSet(
@@ -249,6 +225,49 @@ MyFilters.prototype.rebuild = function() {
       malwareDomains = this._subscriptions.malware.text.adware;
     }
 
+    // Include custom filters.
+    var customfilters = get_custom_filters_text(); // from background
+    if (customfilters) {
+      texts.push(FilterNormalizer.normalizeList(customfilters));
+    	texts = texts.join('\n').split('\n');
+			var filters = splitByType(texts);
+    	var patternFilters = [];
+    	for (var id in filters.pattern) {
+      	patternFilters.push(filters.pattern[id]);
+    	}
+    	var whitelistFilters = [];
+    	for (var id in filters.whitelist) {
+      	whitelistFilters.push(filters.whitelist[id]);
+    	}
+    	//SelectorFilters where full() == True are selectors that apply to all domains, no exceptions
+    	// these filters can be collapsed into a few large JSON rules
+    	//SelectorFilters where full() == False are selectors that either:
+    	//    - apply to specific domain(s)
+    	//    - or have exceptions domains, where the selectors are not applied
+    	selectorsFull = {};
+    	selectorsNotAll = {};
+    	for (var id in filters.hiding) {
+      	var selectorFilter = filters.hiding[id];
+      	if (selectorFilter._domains.full() === true) {
+        	selectorsFull[id] = selectorFilter;
+      	} else {
+        	selectorsNotAll[id] = selectorFilter;
+      	}
+    	}
+    	var selectorFilters = [];
+    	for (var id in selectorsNotAll) {
+      	selectorFilters.push(selectorsNotAll[id]);
+    	}
+    	selectorFiltersAll = [];
+    	for (var id in selectorsNotAll) {
+       	selectorFiltersAll.push(selectorsFull[id]);
+    	}
+    	var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
+    	log(" customRules: ", customRules);
+    	//add the custom rules, with the filter list rules
+    	this._filterListRules.push.apply(this._filterListRules, customRules);
+    }
+
     if (!this._filterListRules ||
          this._filterListRules.length == 0) {
        log("no rules to submit to safari  ");
@@ -275,6 +294,36 @@ MyFilters.prototype.rebuild = function() {
   window.setTimeout(function() {
     Filter._cache = {};
   }, 90000);
+}
+
+
+MyFilters.prototype.splitByType = function(force) {
+    // Remove duplicates and empties.
+    var unique = {};
+    for (var i = 0; i < texts.length; i++)
+      unique[texts[i]] = 1;
+    delete unique[''];
+
+    var filters = { hidingUnmerged: [], hiding: {}, exclude: {},
+                    pattern: {}, whitelist: {} };
+    for (var text in unique) {
+      var filter = Filter.fromText(text);
+      if (Filter.isSelectorExcludeFilter(text)) {
+        setDefault(filters.exclude, filter.selector, []).push(filter);
+      } else if (Filter.isSelectorFilter(text)) {
+        filters.hidingUnmerged.push(filter);
+      } else if (Filter.isWhitelistFilter(text)) {
+        filters.whitelist[filter.id] = filter;
+      } else {
+        filters.pattern[filter.id] = filter;
+      }
+    }
+    for (var i = 0; i < filters.hidingUnmerged.length; i++) {
+      filter = filters.hidingUnmerged[i];
+      var hider = SelectorFilter.merge(filter, filters.exclude[filter.selector]);
+      filters.hiding[hider.id] = hider;
+    }
+    return filters;
 }
 
 // Change a property of a subscription or check if it has to be updated

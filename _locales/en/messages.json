@@ -246,7 +246,7 @@
   "safaricontentblocking":{
     "message":"Enable the new Safari 9 Content Blocking",
     "description":"Checkbox on the 'General' tab of the Options page."
-  },  
+  },
   "debuginlogoption":{
     "message":"Show debug statements in Console Log (which slows down AdBlock)",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -526,7 +526,7 @@
   "malwarenotdone":{
     "message":"A Malware check was not completed due to Content Blocking being enabled.",
     "description":"On the ad report page with Safari content blocking enabled, the malware check can't be done."
-  },  
+  },
   "disableaa":{
     "message":"Check the Acceptable Ads filters:",
     "description":"Section header on the ad report page"
@@ -974,7 +974,7 @@
   "safarinotificationbody":{
     "message":"Click for more information",
     "description":"the body of a notification to user"
-  },    
+  },
   "undo_last_block":{
     "message":"Undo my blocks on this domain",
     "description":"Menu entry to let the user cancel the result of running the blacklist wizard"
