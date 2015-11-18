@@ -5,15 +5,6 @@ DeclarativeWebRequest = (function() {
   var HTML_PREFIX = "https?://"
   var REGEX_WILDCARD = ".*"
   var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
-    //  allowed ASCII characters, except:
-    //  x25 = NAK
-    //  x2D = -
-    //  x2E = .
-    //  x30 - x39 = digits 0 - 9
-    //  x41 - x5A = Upper case alpha
-    // x5F - _
-    // x61 - x7A = lower case alpha
-  var ALLOWED_ASCII_CHARS = "\\x00-\\x24\\x26-\\x2C\\x2F\\x3A-\\x40\\x5B-\\x5E\\x60\\x7B-\\x7F";
   var whitelistAnyOtherFilters = [];
   var elementWhitelistFilters = [];
   var documentWhitelistFilters = [];
@@ -248,13 +239,12 @@ DeclarativeWebRequest = (function() {
   return {
     // Registers rules for the given list of PatternFilters and SelectorFilters,
     // clearing any existing rules.
-    register: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll, malwareDomains) {
+    convertFilterLists: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll) {
       preProcessWhitelistFilters(whitelistFilters);
       log("patternFilters",patternFilters);
       log("whitelistFilters",whitelistFilters);
       log("selectorFilters",selectorFilters);
       log("selectorFiltersAll",selectorFiltersAll);
-      log(" malwareDomains", malwareDomains);
       var rules = [];
       //step 1a, add all of the generic hiding filters (CSS selectors)
       var GROUPSIZE = 1000
@@ -302,22 +292,7 @@ DeclarativeWebRequest = (function() {
           }
         }
       });
-      //step 4, now add malware domains as one blocking rule (if there are malware domains)
-      if (malwareDomains && malwareDomains.length > 0) {
-        GROUPSIZE = 1000
-        for (var i = 0; i < malwareDomains.length; i += GROUPSIZE) {
-          var start = i;
-          var end = Math.min((i + GROUPSIZE), malwareDomains.length);
-          var rule = createDefaultRule();
-          var unparsedDomainArray = malwareDomains.slice(start, end);
-          var parsedDomainArray = []
-          for (var j = 0; j < unparsedDomainArray.length; j++) {
-             parsedDomainArray.push(unparsedDomainArray[j])
-          }
-          rule.trigger["if-domain"] = parsedDomainArray
-          rules.push(rule);
-        }
-      }
+
       //step 5, add all $document
       documentWhitelistFilters.forEach(function(filter) {
         rules.push(createDocumentIgnoreRule(filter));
@@ -328,5 +303,25 @@ DeclarativeWebRequest = (function() {
       });
       return rules;
     },
+    convertMalware: function(malwareDomains) {
+			// Add malware domains as one blocking rule
+			var rules = [];
+      if (malwareDomains && malwareDomains.length > 0) {
+        GROUPSIZE = 1000
+        for (var i = 0; i < malwareDomains.length; i += GROUPSIZE) {
+          var start = i;
+          var end = Math.min((i + GROUPSIZE), malwareDomains.length);
+          var rule = createDefaultRule();
+          var unparsedDomainArray = malwareDomains.slice(start, end);
+          var parsedDomainArray = [];
+          for (var j = 0; j < unparsedDomainArray.length; j++) {
+             parsedDomainArray.push(punycode.toASCII(unparsedDomainArray[j]).toLowerCase());
+          }
+          rule.trigger["if-domain"] = parsedDomainArray;
+          rules.push(rule);
+        }
+      }
+      return rules;
+    }
   };
 })();

@@ -190,7 +190,7 @@ MyFilters.prototype.rebuild = function() {
 
     texts = texts.concat(this.getExtensionFilters(get_settings()));
     texts = texts.join('\n').split('\n');
-		var filters = this.splitByType(texts);
+		var filters = this._splitByType(texts);
 
     this.hiding = FilterSet.fromFilters(filters.hiding);
 
@@ -224,23 +224,27 @@ MyFilters.prototype.rebuild = function() {
         this._subscriptions.acceptable_ads.rules) {
         for (var item in this._subscriptions.acceptable_ads.rules)  {
           this._filterListRules.push(this._subscriptions.acceptable_ads.rules[item]);
-        }      
-    }    
-    
-//    var malwareDomains = [];
-//    if (this._subscriptions &&
-//        this._subscriptions.malware &&
-//        this._subscriptions.malware.subscribed &&
-//        this.getMalwareDomains()) {
-//      malwareDomains = this._subscriptions.malware.text.adware;
-//    }
+        }
+    }
+
+    if (this._subscriptions &&
+        this._subscriptions.malware &&
+        this._subscriptions.malware.subscribed &&
+        this.getMalwareDomains()) {
+      var malwareDomains = this._subscriptions.malware.text.adware;
+    	var malwareRules = DeclarativeWebRequest.convertMalware(malwareDomains);
+    	//add the custom rules, with the filter list rules
+      for (var i = 0; i < malwareRules.length; i++) {
+    		this._filterListRules.push(malwareRules[i]);
+    	}
+    }
 
     // Include custom filters.
     var customfilters = get_custom_filters_text(); // from background
     if (customfilters) {
       texts.push(FilterNormalizer.normalizeList(customfilters));
     	texts = texts.join('\n').split('\n');
-			var filters = this.splitByType(texts);
+			var filters = this._splitByType(texts);
     	var patternFilters = [];
     	for (var id in filters.pattern) {
       	patternFilters.push(filters.pattern[id]);
@@ -272,7 +276,7 @@ MyFilters.prototype.rebuild = function() {
     	for (var id in selectorsNotAll) {
        	selectorFiltersAll.push(selectorsFull[id]);
     	}
-    	var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
+    	var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll, malwareDomains);
     	log(" customRules: ", customRules);
     	//add the custom rules, with the filter list rules
     	this._filterListRules.push.apply(this._filterListRules, customRules);
@@ -292,6 +296,7 @@ MyFilters.prototype.rebuild = function() {
       chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
     }
     try {
+    	log("submitting rules to safari: # of rules: ",this._filterListRules.length);
        var response = safari.extension.setContentBlocker(this._filterListRules);
     } catch(ex) {
        log("exception saving rules", ex);
@@ -307,7 +312,7 @@ MyFilters.prototype.rebuild = function() {
 }
 
 
-MyFilters.prototype.splitByType = function(texts) {
+MyFilters.prototype._splitByType = function(texts) {
     // Remove duplicates and empties.
     var unique = {};
     for (var i = 0; i < texts.length; i++)
@@ -376,7 +381,9 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
         //load the malware domains
         this._loadMalwareDomains();
     } else {
-        this.blocking.setMalwareDomains(null);
+    		if (this.blocking) {
+        	this.blocking.setMalwareDomains(null);
+        }
         // If unsubscribed, remove properties
         delete this._subscriptions[id].text;
         delete this._subscriptions[id].last_update;

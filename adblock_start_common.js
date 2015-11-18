@@ -182,7 +182,6 @@ function adblock_begin(inputs) {
   if (document.location.href === 'favorites://') // Safari does this
     return;
 
-
   if (!(document.documentElement instanceof HTMLElement))
     return; // Only run on HTML pages
 
@@ -193,15 +192,10 @@ function adblock_begin(inputs) {
   inputs.startPurger();
 
   var opts = { domain: document.location.hostname };
-
   BGcall('get_content_script_data', opts, function(data) {
+
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
-
-    if (data && data.settings && data.safari_content_blocking) {
-      inputs.stopPurger();
-      return;
-    }
 
     inputs.handleHiding(data);
 
@@ -223,7 +217,6 @@ function adblock_begin(inputs) {
 
       handleABPLinkClicks();
     });
-
     if (inputs.success) inputs.success();
   });
 }

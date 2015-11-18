@@ -92,6 +92,11 @@ safari.application.addEventListener("message", function(messageEvent) {
     if (messageEvent.name != "canLoad")
         return;
 
+    // In theory, this code shouldn't be needed...
+    if (get_settings().safari_content_blocking) {
+    		return;
+    }
+
     var tab = messageEvent.target;
     var isPopup = messageEvent.message.isPopup;
     var frameInfo = messageEvent.message.frameInfo;
@@ -217,22 +222,17 @@ if (!LEGACY_SAFARI) {
     }, true);
 }
 
-//remove adblock_start_safari.js when user enables content blocking
-function remove_content_scripts() {
+// Add and remove the specific content script based on the safari_content_blocking setting
+function set_content_scripts() {
   if (get_settings().safari_content_blocking) {
-     safari.extension.removeContentScript(safari.extension.baseURI + "adblock_start_safari.js");
+  	 safari.extension.addContentScriptFromURL(safari.extension.baseURI + "adblock_safari_contentblocking.js", [], [], false);
+  	 safari.extension.removeContentScript(safari.extension.baseURI + "adblock_safari_beforeload.js");
+  } else {
+  	 safari.extension.addContentScriptFromURL(safari.extension.baseURI + "adblock_safari_beforeload.js", [], [], false);
+  	 safari.extension.removeContentScript(safari.extension.baseURI + "adblock_safari_contentblocking.js");
   }
 }
-remove_content_scripts();
-
-//re-add adblock_start_safari.js when user disables content blocking
-function add_content_scripts() {
-  if (!get_settings().safari_content_blocking) {
-    safari.extension.setContentBlocker({});
-    safari.extension.addContentScript(safari.extension.baseURI + "adblock_start_safari.js");
-  }
-}
-
+set_content_scripts();
 
 safari.application.addEventListener("beforeNavigate", function(event) {
 

@@ -824,7 +824,6 @@
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
       tab.unicodeUrl = getUnicodeUrl(tab.url); // GH #472
-
       var disabled_site = page_is_unblockable(tab.unicodeUrl);
 
       var result = {
@@ -847,7 +846,7 @@
     if (!url) { // Safari empty/bookmarks/top sites page
       return true;
     }
-    // In Safari with content blocking enabled, 
+    // In Safari with content blocking enabled,
     // whitelisting of domains is not currently supported.
     if (get_settings().safari_content_blocking) {
       return false;
@@ -1052,7 +1051,11 @@
       hiding: hiding
     };
 
-    if (hiding) {
+    if (hiding &&
+        _myfilters &&
+        _myfilters.hiding &&
+        settings &&
+        !settings.safari_content_blocking) {
       result.selectors = _myfilters.hiding.filtersFor(options.domain);
     }
     return result;
@@ -1436,21 +1439,6 @@
         });//end of chrome.tabs.query
     }//end of if
   }//end of createMalwareNotification function
-
-  //create a user notification on Safari
-  // Inputs: msg - a translated string
-  // example call:  createSafariNotification(translate('samplemsg'))
-  //
-  var createRuleLimitExceededSafariNotification = function(msg) {
-    if (SAFARI && ("Notification" in window)) {
-      sessionstorage_set("contentblockingerror", translate("safaricontentblockinglimitexceeded"));
-      chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
-      var note = new Notification(translate("safarinotificationtitle") , { 'body' : translate("safarinotificationbody"), 'tag' : (Math.floor(Math.random() * 3000)).toString() });
-      note.onclick = function() {
-        openTab("options/index.html?tab=0");
-      };
-    }
-  }
 
   if (!SAFARI) {
     // Chrome blocking code.  Near the end so synchronous request handler
