@@ -10,16 +10,6 @@ DeclarativeWebRequest = (function() {
   var documentWhitelistFilters = [];
   var elemhideSelectorExceptions = {};
 
-  // Adds third/first party options to the rule
-  var addThirdParty = function(filter, rule) {
-    if (filter._options & FilterOptions["THIRDPARTY"]) {
-      rule["trigger"]["load-type"] = "third-party"
-    }
-    if (filter._options & FilterOptions["FIRSTPARTY"]) {
-      rule["trigger"]["load-type"] = "first-party"
-    }
-  };
-
   // Add the include / exclude domains to a rule
   // Note:  some filters will have both include and exclude domains, which the content blocking API doesn't allow,
   //        so we only add the exclude domains when there isn't any include domains.
@@ -162,6 +152,9 @@ DeclarativeWebRequest = (function() {
     rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
     rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
     addDomainsToRule(filter, rule);
+    if (filter._options & FilterOptions["THIRDPARTY"]) {
+      rule["trigger"]["load-type"] = ["third-party"]
+    }    
     return rule;
   };
   // Return the rule (JSON) required to represent this Selector Filter in Safari blocking syntax.
