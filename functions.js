@@ -40,8 +40,7 @@ logging = function(enabled) {
     log = logGroup = logGroupEnd = function() {};
   }
 };
-// TODO - change back to false;
-logging(true); // disabled by default
+logging(false); // disabled by default
 
 // Behaves very similarly to $.ready() but does not require jQuery.
 onReady = function(callback) {
