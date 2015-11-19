@@ -54,7 +54,7 @@ DeclarativeWebRequest = (function() {
       if (d === DomainSet.ALL) {
         continue;
       }
-      result[ has[d] ? 'included' : 'excluded' ].push(d.toLowerCase());
+      result[ has[d] ? 'included' : 'excluded' ].push(punycode.toASCII(d).toLowerCase());
     }
     return result;
   };
@@ -144,9 +144,6 @@ DeclarativeWebRequest = (function() {
         documentWhitelistFilters.push(filter);
       }
     }
-    log("whitelistOnly.length ", whitelistAnyOtherFilters.length);
-    log("elementWhitelistFilters.length ", elementWhitelistFilters.length);
-    log("documentWhitelistFilters.length ", documentWhitelistFilters.length);
   }
 
 
@@ -220,6 +217,7 @@ DeclarativeWebRequest = (function() {
     } else {
       return !((filter._allowedElementTypes & ElementTypes.SUBDOCUMENT) ||
              (filter._allowedElementTypes & ElementTypes.OBJECT) ||
+             (filter._allowedElementTypes & ElementTypes.FONT) ||
     		     (filter._allowedElementTypes & ElementTypes.OBJECT_SUBREQUEST));
     }
   };
@@ -232,19 +230,11 @@ DeclarativeWebRequest = (function() {
     return selector;
   };
 
-  var isASCII = function(str) {
-      return /^[\x00-\x7F]*$/.test(str);
-  }
-
   return {
     // Registers rules for the given list of PatternFilters and SelectorFilters,
     // clearing any existing rules.
     convertFilterLists: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll) {
       preProcessWhitelistFilters(whitelistFilters);
-      log("patternFilters",patternFilters);
-      log("whitelistFilters",whitelistFilters);
-      log("selectorFilters",selectorFilters);
-      log("selectorFiltersAll",selectorFiltersAll);
       var rules = [];
       //step 1a, add all of the generic hiding filters (CSS selectors)
       var GROUPSIZE = 1000
@@ -293,11 +283,11 @@ DeclarativeWebRequest = (function() {
         }
       });
 
-      //step 5, add all $document
+      //step 4, add all $document
       documentWhitelistFilters.forEach(function(filter) {
         rules.push(createDocumentIgnoreRule(filter));
       });
-      //step 6, add other whitelist rules
+      //step 5, add other whitelist rules
       whitelistAnyOtherFilters.forEach(function(filter) {
         rules.push(createIgnoreRule(filter));
       });

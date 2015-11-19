@@ -276,7 +276,7 @@ MyFilters.prototype.rebuild = function() {
     	for (var id in selectorsNotAll) {
        	selectorFiltersAll.push(selectorsFull[id]);
     	}
-    	var customRules = DeclarativeWebRequest.register(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll, malwareDomains);
+    	var customRules = DeclarativeWebRequest.convertFilterLists(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll, malwareDomains);
     	log(" customRules: ", customRules);
     	//add the custom rules, with the filter list rules
     	this._filterListRules.push.apply(this._filterListRules, customRules);
