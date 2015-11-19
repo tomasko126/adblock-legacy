@@ -103,7 +103,7 @@ DeclarativeWebRequest = (function() {
     return result;
   };
 
-  //parse and clean up the filter's RegEx to meet WebKit's requirements.
+  // Parse and clean up the filter's RegEx to meet WebKit's requirements.
   var getURLFilterFromFilter = function(filter) {
     //remove any whitespace
     var rule = filter._rule.source;
@@ -119,8 +119,8 @@ DeclarativeWebRequest = (function() {
     return rule;
   };
 
-
-
+	// Separates the different white list filters so they are added
+	// to the final rule array in the correct order (for performance reasons)
   var preProcessWhitelistFilters = function(whitelistFilters){
     for (var inx = 0; inx < whitelistFilters.length; inx++) {
       var filter = whitelistFilters[inx];
@@ -146,7 +146,7 @@ DeclarativeWebRequest = (function() {
     }
   }
 
-
+	// Create and return a default JavaScript rule object
   var createDefaultRule = function() {
     var rule = {};
     rule.action = {};
@@ -208,7 +208,7 @@ DeclarativeWebRequest = (function() {
     return rule;
   };
 
-  // Returns false if the given filter cannot be handled Safari 9 content blocking.
+  // Returns false if the given filter cannot be handled by Safari 9 content blocking.
   var isSupported = function(filter) {
     if (!filter) {
       return false;
@@ -231,8 +231,8 @@ DeclarativeWebRequest = (function() {
   };
 
   return {
-    // Registers rules for the given list of PatternFilters and SelectorFilters,
-    // clearing any existing rules.
+    // Converts the various Filters into Safari specific JSON entries.
+    // Returns an array of the JSON rules
     convertFilterLists: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll) {
       preProcessWhitelistFilters(whitelistFilters);
       var rules = [];
@@ -293,8 +293,10 @@ DeclarativeWebRequest = (function() {
       });
       return rules;
     },
+    // Converts an array of Malware domains into blocking rules
+    // Returns an array of the JSON rules
     convertMalware: function(malwareDomains) {
-			// Add malware domains as one blocking rule
+			// Add malware domains into blocking rules
 			var rules = [];
       if (malwareDomains && malwareDomains.length > 0) {
         GROUPSIZE = 1000
