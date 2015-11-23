@@ -1276,7 +1276,7 @@
     logging(true);
 
   // Enable content blocking by default for new installations
-  if (STATS.firstRun && SAFARI && isSafariContentBlockingAvailable()) {
+  if (STATS.firstRun && isSafariContentBlockingAvailable()) {
     set_setting("safari_content_blocking", true);
   }
 
