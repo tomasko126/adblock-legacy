@@ -1,7 +1,7 @@
 DeclarativeWebRequest = (function() {
   if (!safari ||
       !safari.extension ||
-      (typeof safari.extension.setContentBlocker !== 'function') {
+      (typeof safari.extension.setContentBlocker !== 'function')) {
     return;
   }
   var HTML_PREFIX = "https?://";
