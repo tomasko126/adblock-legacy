@@ -1,9 +1,8 @@
 
 
 DeclarativeWebRequest = (function() {
-  var domainRegEx = new RegExp("^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$");
-  var HTML_PREFIX = "https?://"
-  var REGEX_WILDCARD = ".*"
+  var HTML_PREFIX = "https?://";
+  var REGEX_WILDCARD = ".*";
   var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
   var whitelistAnyOtherFilters = [];
   var elementWhitelistFilters = [];
@@ -154,7 +153,7 @@ DeclarativeWebRequest = (function() {
     addDomainsToRule(filter, rule);
     if (filter._options & FilterOptions["THIRDPARTY"]) {
       rule["trigger"]["load-type"] = ["third-party"]
-    }    
+    }
     return rule;
   };
   // Return the rule (JSON) required to represent this Selector Filter in Safari blocking syntax.
