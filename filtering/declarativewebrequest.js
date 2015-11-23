@@ -1,5 +1,3 @@
-
-
 DeclarativeWebRequest = (function() {
   var HTML_PREFIX = "https?://";
   var REGEX_WILDCARD = ".*";
@@ -57,38 +55,37 @@ DeclarativeWebRequest = (function() {
   // filters with the given allowedElementTypes.
   var getResourceTypesByElementType = function(elementTypes) {
     var result = [];
-  	if (elementTypes & ElementTypes.image) {
-  		result.push("image");
+    if (elementTypes & ElementTypes.image) {
+      result.push("image");
     }
-  	if (elementTypes & ElementTypes.stylesheet) {
-  		result.push("style-sheet");
+    if (elementTypes & ElementTypes.stylesheet) {
+      result.push("style-sheet");
     }
-  	if (elementTypes & ElementTypes.script) {
-  		result.push("script");
+    if (elementTypes & ElementTypes.script) {
+      result.push("script");
     }
-  	if (elementTypes & ElementTypes.media) {
-  		result.push("media");
-  	}
-  	if (elementTypes & ElementTypes.popup) {
-  		result.push("popup");
-  	}
-  	if (elementTypes & (ElementTypes.xmlhttprequest | ElementTypes.other)) {
-  		result.push("raw");
-  	}
-//    TODO-what to do about these types
-//  	if (elementTypes & ElementTypes.FONT) {
-//  		result.push("font");
-//    }
-//    if (elementTypes & ElementTypes.SUBDOCUMENT) {
-//    		result.push("subdocument");
-//    }
-//    if (elementTypes & ElementTypes.OBJECT) {
-//    		result.push("object");
-//    }
-//    if (elementTypes & ElementTypes.OBJECT_SUBREQUEST) {
-//    		result.push("object-subrequest");
-//    }
-//    log("elementTypes", elementTypes, "result", result);
+    if (elementTypes & ElementTypes.media) {
+      result.push("media");
+    }
+    if (elementTypes & ElementTypes.popup) {
+      result.push("popup");
+    }
+    if (elementTypes & (ElementTypes.xmlhttprequest | ElementTypes.other)) {
+      result.push("raw");
+    }
+    // TODO-what to do about these types
+    // if (elementTypes & ElementTypes.FONT) {
+    //    result.push("font");
+    // }
+    // if (elementTypes & ElementTypes.SUBDOCUMENT) {
+    //    result.push("subdocument");
+    // }
+    // if (elementTypes & ElementTypes.OBJECT) {
+    //    result.push("object");
+    // }
+    // if (elementTypes & ElementTypes.OBJECT_SUBREQUEST) {
+    //    result.push("object-subrequest");
+    // }
     return result;
   };
 
@@ -108,8 +105,8 @@ DeclarativeWebRequest = (function() {
     return rule;
   };
 
-	// Separates the different white list filters so they are added
-	// to the final rule array in the correct order (for performance reasons)
+  // Separates the different white list filters so they are added
+  // to the final rule array in the correct order (for performance reasons)
   var preProcessWhitelistFilters = function(whitelistFilters){
     for (var inx = 0; inx < whitelistFilters.length; inx++) {
       var filter = whitelistFilters[inx];
@@ -135,7 +132,7 @@ DeclarativeWebRequest = (function() {
     }
   }
 
-	// Create and return a default JavaScript rule object
+  // Create and return a default JavaScript rule object
   var createDefaultRule = function() {
     var rule = {};
     rule.action = {};
@@ -156,6 +153,7 @@ DeclarativeWebRequest = (function() {
     }
     return rule;
   };
+
   // Return the rule (JSON) required to represent this Selector Filter in Safari blocking syntax.
   var createSelectorRule = function(filter) {
     var rule = createDefaultRule();
@@ -164,6 +162,7 @@ DeclarativeWebRequest = (function() {
     addDomainsToRule(filter, rule);
     return rule;
   };
+
   // Return the rule (JSON) required to represent this $elemhide Whitelist Filter in Safari blocking syntax.
   var createElemhideIgnoreRule = function(filter) {
     var rule = createDefaultRule();
@@ -190,6 +189,7 @@ DeclarativeWebRequest = (function() {
     addDomainsToRule(filter, rule);
     return rule;
   };
+
   // Return the rule (JSON) required to represent this Whitelist Filter in Safari blocking syntax.
   var createIgnoreRule = function(filter) {
     var rule = createDefaultRule();
@@ -210,7 +210,7 @@ DeclarativeWebRequest = (function() {
       return !((filter._allowedElementTypes & ElementTypes.SUBDOCUMENT) ||
              (filter._allowedElementTypes & ElementTypes.OBJECT) ||
              (filter._allowedElementTypes & ElementTypes.FONT) ||
-    		     (filter._allowedElementTypes & ElementTypes.OBJECT_SUBREQUEST));
+             (filter._allowedElementTypes & ElementTypes.OBJECT_SUBREQUEST));
     }
   };
 
@@ -247,7 +247,7 @@ DeclarativeWebRequest = (function() {
 
         theRule = createEmptySelectorRule();
         theRule["action"]["selector"] = selectorText;
-        //rules.push(theRule);
+        rules.push(theRule);
       }
       //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)
       selectorFilters.forEach(function(filter) {
@@ -288,8 +288,8 @@ DeclarativeWebRequest = (function() {
     // Converts an array of Malware domains into blocking rules
     // Returns an array of the JSON rules
     convertMalware: function(malwareDomains) {
-			// Add malware domains into blocking rules
-			var rules = [];
+      // Add malware domains into blocking rules
+      var rules = [];
       if (malwareDomains && malwareDomains.length > 0) {
         GROUPSIZE = 1000
         for (var i = 0; i < malwareDomains.length; i += GROUPSIZE) {
