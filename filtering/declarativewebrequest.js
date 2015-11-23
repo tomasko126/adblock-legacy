@@ -1,4 +1,9 @@
 DeclarativeWebRequest = (function() {
+  if (!safari ||
+      !safari.extension ||
+      (typeof safari.extension.setContentBlocker !== 'function') {
+    return;
+  }
   var HTML_PREFIX = "https?://";
   var REGEX_WILDCARD = ".*";
   var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
