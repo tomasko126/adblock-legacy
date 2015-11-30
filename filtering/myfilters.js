@@ -212,8 +212,8 @@ MyFilters.prototype.rebuild = function() {
     this._filterListRules = [];
     for (var id in this._subscriptions) {
       if (id != "acceptable_ads" && this._subscriptions[id].subscribed) {
-        for (var item in this._subscriptions[id].rules)  {
-          this._filterListRules.push(this._subscriptions[id].rules[item]);
+        for (var rule of this._subscriptions[id].rules)  {
+          this._filterListRules.push(rule);
         }
       }
     }
@@ -222,8 +222,8 @@ MyFilters.prototype.rebuild = function() {
         this._subscriptions.acceptable_ads &&
         this._subscriptions.acceptable_ads.subscribed &&
         this._subscriptions.acceptable_ads.rules) {
-        for (var item in this._subscriptions.acceptable_ads.rules)  {
-          this._filterListRules.push(this._subscriptions.acceptable_ads.rules[item]);
+        for (var rule of this._subscriptions.acceptable_ads.rules)  {
+          this._filterListRules.push(rule);
         }
     }
 
