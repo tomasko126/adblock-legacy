@@ -89,7 +89,7 @@ STATS = (function() {
           document.dispatchEvent(event);
         });
       } else {
-        console.log("new id created, stored in localstorage");
+        console.log("new id created, stored in localstorage", firstRun);
         storage_set("userid", userId);
         var event = new Event('firstrun');
         event.userid = userId;
