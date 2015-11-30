@@ -252,6 +252,7 @@ STATS = (function() {
   };
 
   return {
+    firstRun: firstRun,
     getUserId: function() {
       return userId;
     },

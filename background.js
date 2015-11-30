@@ -1270,7 +1270,8 @@
   var removeGABTabListeners = function(saveState) {
     gabQuestion.removeGABTabListeners(saveState);
   }
-  document.addEventListener('firstrun', function (args) { 
+  
+  var openInstalledURL = function(args) {
     var installedURL = "https://getadblock.com/installed/?aa=true&u=" + args.userid;
     if (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk") {
       if (SAFARI) {
@@ -1295,8 +1296,14 @@
         }
       }
     }    
-  }, false);
-
+  };
+  if (STATS.firstRun && STATS.getUserId()) {
+    console.log("open /installed now");
+    openInstalledURL({userid:  STATS.getUserId()});
+  } else {
+    console.log("open /installed if first run even fires");
+    document.addEventListener('firstrun', openInstalledURL, false);
+  }
   //retry logic for '/installed' - retries on browser / AdBlock startup
   var installError = storage_get("/installed_error");
   if (installError && installError.retry_count >= 0 && !SAFARI) {
