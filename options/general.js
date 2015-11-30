@@ -111,7 +111,7 @@ $("#enable_safari_content_blocking").change(function() {
     $(".exclude_safari_content_blocking").hide();
   } else {
     $(".exclude_safari_content_blocking").show();
-    $("#safari_content_blocking_bmessage").show().text(translate("browserestartrequired"));
+    $("#safari_content_blocking_bmessage").text(translate("browserestartrequired")).show();
   }
   BGcall("set_content_scripts");
   BGcall("update_subscriptions_now");
@@ -120,11 +120,9 @@ function getSafariContentBlockingMessage() {
   BGcall('sessionstorage_get', 'contentblockingerror', function(messagecode) {
     //if the message exists, it should already be translated.
     if (messagecode) {
-      $("#safari_content_blocking_bmessage").show();
-      $("#safari_content_blocking_bmessage").text(messagecode);
+      $("#safari_content_blocking_bmessage").text(messagecode).show();
     } else {
-      $("#safari_content_blocking_bmessage").text("");
-      $("#safari_content_blocking_bmessage").hide();
+      $("#safari_content_blocking_bmessage").text("").hide();
     }
   });
 }

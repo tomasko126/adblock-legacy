@@ -21,7 +21,8 @@ var ElementTypes = {
 // The types that are implied by a filter that doesn't explicitly specify types
 ElementTypes.DEFAULTTYPES = 1023;
 // Add here any types that Safari does not support.
-ElementTypes.CHROMEONLY = (ElementTypes.NONE);
+ElementTypes.CHROMEONLY = (ElementTypes.object_subrequest | ElementTypes.other 
+                           | ElementTypes.xmlhttprequest);
 
 // Convert a webRequest.onBeforeRequest type to an ElementType.
 ElementTypes.fromOnBeforeRequestType = function(type) {
