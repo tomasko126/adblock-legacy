@@ -697,7 +697,7 @@ MyFilters.prototype.getMalwareDomains = function() {
     if (this.blocking) {
         return this.blocking.getMalwareDomains();
     } else {
-        return this._subscriptions.malware.text
+        return this._subscriptions.malware.text;
     }
 }
 
@@ -762,7 +762,6 @@ MyFilters.prototype._make_subscription_options = function() {
     "adblock_custom": { // AdBlock custom filters
       url: "https://data.getadblock.com/filters/adblock_custom.txt",
       safariJSON_URL: "https://adblockcdn.com/filters/adblock_custom.json",
-      url: "https://data.getadblock.com/filters/adblock_custom.txt",
     },
     "easylist": { // EasyList
       url: "https://easylist-downloads.adblockplus.org/easylist.txt",

@@ -29,7 +29,7 @@ $(function() {
     });
     $(".exclude_safari_content_blocking").hide();
   }
-  
+
   $("input.feature[type='checkbox']").change(function() {
     var is_enabled = $(this).is(':checked');
     var name = this.id.substring(7); // TODO: hack
