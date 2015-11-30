@@ -323,7 +323,8 @@
         return { cancel: false };
 
       // Don't process invalid URLs
-      if ((details.type === "main_frame" || details.type === "sub_frame") && !validateURL(details.url)) {
+      if (!validateURL(details.url)) {
+          console.log(details.url);
           return { cancel: false };
       }
 
