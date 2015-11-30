@@ -300,7 +300,7 @@ DeclarativeWebRequest	=	(function()	{
 					var	end	=	Math.min((i	+	GROUPSIZE),	malwareDomains.length);
 					var	rule = createDefaultRule();
 					var	unparsedDomainArray	=	malwareDomains.slice(start,	end);
-					var arsedDomainArray	=	[];
+					var parsedDomainArray	=	[];
 					for	(var j = 0;	j	<	unparsedDomainArray.length;	j++) {
 						 parsedDomainArray.push(punycode.toASCII(unparsedDomainArray[j]).toLowerCase());
 					}
