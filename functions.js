@@ -164,7 +164,7 @@ getUnicodeUrl = function(url) {
 
 // Returns false, when URL is not valid
 validateURL = function(url) {
-    var regex = /^HTTP|HTTP|http(s)?:\/\/(www\.)?[A-Za-z0-9]+([\-\.]{1}[A-Za-z0-9]+)*\.[A-Za-z]{2,40}(:[0-9]{1,40})?(\/.*)?$/;
+    var regex = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
     return regex.test(url);
 }
 
