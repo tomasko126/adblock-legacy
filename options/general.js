@@ -54,6 +54,7 @@ $(function() {
         if (request.command !== "contentblockingmessageupdated")
           return;
         getSafariContentBlockingMessage();
+        sendResponse({});
       });
       BGcall("update_subscriptions_now");
     }
