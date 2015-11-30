@@ -34,16 +34,6 @@ BGcall("reset_matchCache", function() {
             alert(translate('noresourcessend2'));
             window.close();
             return;
-        // Handle a situation, when resource page has been opened from a cached site
-        } else if (SAFARI && frameData["0"].url !== tabUrl) {
-            BGcall("reloadTab", tabId);
-            chrome.extension.onRequest.addListener(
-                function(message, sender, sendResponse) {
-                    if (message.command  === "reloadcomplete") {
-                        document.location.reload();
-                    }
-                }
-            );
         } else {
             BGcall("storage_get", "filter_lists", function(filterLists) {
                 // TODO: Excluded filters & excluded hiding filters?

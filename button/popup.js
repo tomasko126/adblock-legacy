@@ -58,7 +58,7 @@ $(function() {
             !LEGACY_SAFARI_51)
             show(["div_undo", "separator0"]);
 
-        if (!advanced_option)
+        if (SAFARI || !advanced_option)
             hide(["div_show_resourcelist"]);
 
         if (SAFARI && !advanced_option)

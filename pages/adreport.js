@@ -130,24 +130,38 @@ var checkmalware = function() {
         var infected = null;
 
         // Get all loaded frames
-        for (var object in frameData) {
-            if (!isNaN(object)) {
-                frames.push(object);
+        if (!SAFARI) {
+            // Get all loaded frames
+            for (var object in frameData) {
+                if (!isNaN(object))
+                    frames.push(object);
             }
-        }
-        // Push loaded resources from each frame into an array
-        for (var i=0; i < frames.length; i++) {
-            if (Object.keys(frameData[frames[i]].resources).length !== 0) {
-                loaded_resources.push(frameData[frames[i]].resources);
+            // Push loaded resources from each frame into an array
+            for (var i=0; i < frames.length; i++) {
+                if (Object.keys(frameData[frames[i]].resources).length !== 0)
+                    loaded_resources.push(frameData[frames[i]].resources);
             }
+        } else {
+            // Push loaded resources into an array
+            if (Object.keys(frameData.resources).length !== 0)
+                loaded_resources.push(frameData.resources);
         }
 
         // Extract domains from loaded resources
         for (var i=0; i < loaded_resources.length; i++) {
             for (var key in loaded_resources[i]) {
                 // Push just domains, which are not already in extracted_domains array
-                if (extracted_domains.indexOf(parseUri(key).hostname) === -1) {
-                    extracted_domains.push(parseUri(key).hostname);
+                if (SAFARI) {
+                    var resource = key.split(':|:');
+                    if (resource &&
+                        resource.length === 2 &&
+                        extracted_domains.indexOf(parseUri(resource[1]).hostname) === -1) {
+                        extracted_domains.push(parseUri(resource[1]).hostname);
+                    }
+                } else {
+                    if (extracted_domains.indexOf(parseUri(key).hostname) === -1) {
+                        extracted_domains.push(parseUri(key).hostname);
+                    }
                 }
             }
         }

@@ -2,6 +2,74 @@ emit_page_broadcast = function(request) {
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage('page-broadcast', request);
 };
 
+//frameData object for Safari
+frameData = (function() {
+    return {
+        // Get frameData for the tab.
+        // Input:
+        //   tabId: Integer - id of the tab you want to get
+        get: function(tabId) {
+            return frameData[tabId] || {};
+        },
+
+        // Create a new frameData
+        // Input:
+        //   tabId: Integerc - id of the tab you want to add in the frameData
+        create: function(tabId, url, domain) {
+            return frameData._initializeMap(tabId, url, domain);
+        },
+        // Reset a frameData
+        // Inputs:
+        //   tabId: Integer - id of the tab you want to add in the frameData
+        //   url: new URL for the tab
+        reset: function(tabId, url) {
+            var domain = parseUri(url).hostname;
+            return frameData._initializeMap(tabId, url, domain);
+        },
+        // Initialize map
+        // Inputs:
+        //   tabId: Integer - id of the tab you want to add in the frameData
+        //   url: new URL for the tab
+        //   domain: domain of the request
+        _initializeMap: function(tabId, url, domain) {
+            var tracker = frameData[tabId];
+
+            // We need to handle IDN URLs properly
+            url = getUnicodeUrl(url);
+            domain = getUnicodeDomain(domain);
+
+            var shouldTrack = !tracker || tracker.url !== url;
+            if (shouldTrack) {
+                frameData[tabId] = {
+                    resources: {},
+                    domain: domain,
+                    url: url,
+                };
+            }
+            return tracker;
+        },
+        // Store resource
+        // Inputs:
+        //   tabId: Numeric - id of the tab you want to delete in the frameData
+        //   url: url of the resource
+        storeResource: function(tabId, url, elType) {
+            if (!get_settings().show_advanced_options)
+                return;
+            var data = this.get(tabId);
+            if (data !== undefined &&
+                data.resources !== undefined) {
+                data.resources[elType + ':|:' + url] = null;
+            }
+        },
+        // Delete tabId from frameData
+        // Input:
+        //   tabId: Numeric - id of the tab you want to delete in the frameData
+        close: function(tabId) {
+            delete frameData[tabId];
+        }
+    }
+})();
+
 // True blocking support.
 safari.application.addEventListener("message", function(messageEvent) {
 
@@ -12,18 +80,11 @@ safari.application.addEventListener("message", function(messageEvent) {
       messageEvent.message.data.args[1].tab &&
       messageEvent.message.data.args[1].tab.url) {
         var args = messageEvent.message.data.args;
-        // Create a new frameData[tab.id], if it hasn't been created yet
-        if (!frameData.get(messageEvent.target.id) && messageEvent.message.frameInfo.top_level) {
-            frameData.record(messageEvent.target.id, 0, messageEvent.message.frameInfo.url);
-        } else {
-            var frameId = (messageEvent.message.frameInfo.top_level ? 0 : Object.keys(frameData.get(messageEvent.target.id)).length);
-            if (!messageEvent.target.url ||
-                messageEvent.target.url === args[1].tab.url) {
-                frameData.record(messageEvent.target.id, frameId, messageEvent.message.frameInfo.url);
-            } else if (messageEvent.target.url === frameData.get(messageEvent.target.id, 0).url) {
-                frameData.removeTabId(messageEvent.target.id);
-                frameData.record(messageEvent.target.id, frameId, args[1].tab.url);
-            }
+        if (!messageEvent.target.url ||
+            messageEvent.target.url === args[1].tab.url) {
+            frameData.create(messageEvent.target.id, args[1].tab.url, args[0].domain);
+        } else if (messageEvent.target.url === frameData.get(messageEvent.target.id).url) {
+            frameData.reset(messageEvent.target.id, args[1].tab.url);
         }
         return;
     }
@@ -43,39 +104,26 @@ safari.application.addEventListener("message", function(messageEvent) {
         return;
     }
 
-    // Get frameId
-    var frameId = 0;
-    if (!frameInfo.top_level) {
-        var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
-        for (var i=0; i<Object.keys(frameData[tab.id]).length; i++) {
-            if (frameData[tab.id][i].url === frameInfo.url) {
-                frameId = i;
-                break;
-            }
-        }
-    }
-
     if (!isPopup) {
         var url = getUnicodeUrl(messageEvent.message.url);
         var elType = messageEvent.message.elType;
         var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
-        var blocked = _myfilters.blocking.matches(url, elType, frameDomain);
-        var isMatched = url && blocked;
+        var isMatched = url && (_myfilters.blocking.matches(url, elType, frameDomain));
         if (isMatched) {
             log("SAFARI TRUE BLOCK " + url + ": " + isMatched);
         }
-        frameData.storeResource(tab.id, frameId, url, elType, frameDomain);
     } else {
         // Popup blocking support
         if (messageEvent.message.referrer) {
-            var frameDomain = getUnicodeDomain(messageEvent.message.frameDomain);
-            var blocked = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup, frameDomain);
-            if (blocked) {
-                tab.close();
-            }
-            frameData.storeResource(tab.id, frameId, url, elType, frameDomain);
+          var isMatched = _myfilters.blocking.matches(sendingTab.url, ElementTypes.popup,
+                                                      parseUri(getUnicodeUrl(messageEvent.message.referrer)).hostname);
+          if (isMatched) {
+              tab.close();
+          }
         }
     }
+
+    frameData.storeResource(tab.id, url, elType);
 
     messageEvent.message = !isMatched;
 }, false);
@@ -148,7 +196,7 @@ if (!LEGACY_SAFARI) {
     // cached data stored in frameData
     safari.application.addEventListener("close", function(event) {
         // Remove cached data for tab
-        frameData.removeTabId(event.target.id);
+        frameData.close(event.target.id);
 
         // Remove the popover when the window closes so we don't leak memory.
         if (event.target instanceof SafariBrowserWindow) { // don't handle tabs
@@ -171,8 +219,6 @@ if (!LEGACY_SAFARI) {
 
 
 safari.application.addEventListener("beforeNavigate", function(event) {
-    // Remove frameData[tab.id] before navigating to another site
-    frameData.removeTabId(event.target.id);
     //remove bandaids.js from YouTube.com when a user pauses AdBlock or if the enabled click to flash compatibility mode
     if (/youtube.com/.test(event.url) && (is_adblock_paused() || (get_settings().clicktoflash_compatibility_mode === true))) {
       safari.extension.removeContentScript(safari.extension.baseURI + "bandaids.js");
