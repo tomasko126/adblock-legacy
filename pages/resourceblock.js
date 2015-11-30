@@ -4,6 +4,8 @@
 var tabId = parseUri.parseSearch(document.location.href).tabId;
 tabId = parseInt(tabId);
 
+var tabUrl = parseUri.parseSearch(document.location.href).url;
+
 // Convert element type to request type
 function reqTypeForElement(elType) {
     switch (parseInt(elType)) {
@@ -26,130 +28,139 @@ function reqTypeForElement(elType) {
 
 // Reset cache for getting matched filter text properly
 BGcall("reset_matchCache", function() {
-
     // Get frameData object
     BGcall("get_frameData", tabId, function(frameData) {
         if (!frameData || Object.keys(frameData["0"].resources).length === 0) {
             alert(translate('noresourcessend2'));
             window.close();
             return;
-        }
-
-        BGcall("storage_get", "filter_lists", function(filterLists) {
-            // TODO: Excluded filters & excluded hiding filters?
-            for (var id in filterLists) {
-                // Delete every filter list, which is not in use
-                if (!filterLists[id].subscribed) {
-                    delete filterLists[id];
-                    continue;
-                }
-                if (id !== "malware") {
-                    filterLists[id].text = filterLists[id].text.split("\n");
-                }
-            }
-
-            BGcall("get_settings", function(settings) {
-                // Process AdBlock's own filters (if any)
-                filterLists["AdBlock"] = {};
-                filterLists.AdBlock.text = MyFilters.prototype.getExtensionFilters(settings);
-
-                BGcall("storage_get", "custom_filters", function(filters) {
-                    // Process custom filters (if any)
-                    if (filters) {
-                        filterLists["Custom"] = {};
-                        filterLists["Custom"].text = FilterNormalizer.normalizeList(filters).split("\n");
+        // Handle a situation, when resource page has been opened from a cached site
+        } else if (SAFARI && frameData["0"].url !== tabUrl) {
+            BGcall("reloadTab", tabId);
+            chrome.extension.onRequest.addListener(
+                function(message, sender, sendResponse) {
+                    if (message.command  === "reloadcomplete") {
+                        document.location.reload();
                     }
+                }
+            );
+        } else {
+            BGcall("storage_get", "filter_lists", function(filterLists) {
+                // TODO: Excluded filters & excluded hiding filters?
+                for (var id in filterLists) {
+                    // Delete every filter list, which is not in use
+                    if (!filterLists[id].subscribed) {
+                        delete filterLists[id];
+                        continue;
+                    }
+                    if (id !== "malware") {
+                        filterLists[id].text = filterLists[id].text.split("\n");
+                    }
+                }
 
-                    // Pre-process each resource - extract data from its name
-                    // and add them into resource's object for easier manipulation
-                    for (var frameId in frameData) {
-                        var frame = frameData[frameId];
-                        var frameResources = frame.resources;
-                        var frameDomain = frame.domain;
+                BGcall("get_settings", function(settings) {
+                    // Process AdBlock's own filters (if any)
+                    filterLists["AdBlock"] = {};
+                    filterLists.AdBlock.text = MyFilters.prototype.getExtensionFilters(settings);
 
-                        // Process each resource
-                        for (var resource in frameResources) {
-                            var res = frameResources[resource] = {};
+                    BGcall("storage_get", "custom_filters", function(filters) {
+                        // Process custom filters (if any)
+                        if (filters) {
+                            filterLists["Custom"] = {};
+                            filterLists["Custom"].text = FilterNormalizer.normalizeList(filters).split("\n");
+                        }
 
-                            res.elType = resource.split(":|:")[0];
-                            res.url = resource.split(":|:")[1];
-                            res.frameDomain = resource.split(":|:")[2];
+                        // Pre-process each resource - extract data from its name
+                        // and add them into resource's object for easier manipulation
+                        for (var frameId in frameData) {
+                            var frame = frameData[frameId];
+                            var frameResources = frame.resources;
+                            var frameDomain = frame.domain;
 
-                            if (res.elType !== "selector") {
-                                res.thirdParty = BlockingFilterSet.checkThirdParty(parseUri(res.url).hostname, res.frameDomain);
+                            // Process each resource
+                            for (var resource in frameResources) {
+                                var res = frameResources[resource] = {};
+
+                                res.elType = resource.split(":|:")[0];
+                                res.url = resource.split(":|:")[1];
+                                res.frameDomain = resource.split(":|:")[2];
+
+                                if (res.elType !== "selector") {
+                                    res.thirdParty = BlockingFilterSet.checkThirdParty(parseUri(res.url).hostname, res.frameDomain);
+                                }
                             }
                         }
-                    }
 
-                    // Find out, whether resource has been blocked/whitelisted,
-                    // if so, get the matching filter and filter list,
-                    // where is the matching filter coming from
-                    BGcall("process_frameData", frameData, function(processedData) {
-                        for (var frameId in processedData) {
-                            var frame = processedData[frameId];
-                            var frameResources = frame.resources;
+                        // Find out, whether resource has been blocked/whitelisted,
+                        // if so, get the matching filter and filter list,
+                        // where is the matching filter coming from
+                        BGcall("process_frameData", frameData, function(processedData) {
+                            for (var frameId in processedData) {
+                                var frame = processedData[frameId];
+                                var frameResources = frame.resources;
 
-                            for (var resource in frameResources) {
-                                var res = frameResources[resource];
-                                if (res.elType !== "selector") {
-                                    if (res.blockedData && res.blockedData !== false && res.blockedData.text) {
-                                        var filter = res.blockedData.text;
-                                        for (var filterList in filterLists) {
-                                            if (filterList === "malware") {
-                                                if (filterLists[filterList].text.adware.indexOf(filter) > -1) {
-                                                    res.blockedData["filterList"] = filterList;
-                                                }
-                                            } else {
-                                                var filterListText = filterLists[filterList].text;
-                                                for (var i=0; i<filterListText.length; i++) {
-                                                    var filterls = filterListText[i];
-                                                    if (filterls === filter) {
+                                for (var resource in frameResources) {
+                                    var res = frameResources[resource];
+                                    if (res.elType !== "selector") {
+                                        if (res.blockedData && res.blockedData !== false && res.blockedData.text) {
+                                            var filter = res.blockedData.text;
+                                            for (var filterList in filterLists) {
+                                                if (filterList === "malware") {
+                                                    if (filterLists[filterList].text.adware.indexOf(filter) > -1) {
                                                         res.blockedData["filterList"] = filterList;
                                                     }
+                                                } else {
+                                                    var filterListText = filterLists[filterList].text;
+                                                    for (var i=0; i<filterListText.length; i++) {
+                                                        var filterls = filterListText[i];
+                                                        if (filterls === filter) {
+                                                            res.blockedData["filterList"] = filterList;
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                } else {
-                                    for (var filterList in filterLists) {
-                                        // Don't check selector against malware filter list
-                                        if (filterList === "malware") {
-                                            continue;
-                                        }
-                                        var filterListText = filterLists[filterList].text;
-                                        for (var i=0; i<filterListText.length; i++) {
-                                            var filter = filterListText[i];
-                                            // Don't check selector against non-selector filters
-                                            if (!Filter.isSelectorFilter(filter)) {
+                                    } else {
+                                        for (var filterList in filterLists) {
+                                            // Don't check selector against malware filter list
+                                            if (filterList === "malware") {
                                                 continue;
                                             }
-                                            if (filter.indexOf(res.url) > -1) {
-                                                // If |filter| is global selector filter,
-                                                // it needs to be the same as |resource|.
-                                                // If it is not the same as |resource|, keep searching for a right |filter|
-                                                if ((filter.split("##")[0] === "" && filter === res.url) ||
-                                                    filter.split("##")[0].indexOf(res.frameDomain) > -1) {
-                                                    // Shorten lengthy selector filters
-                                                    if (filter.split("##")[0] !== "") {
-                                                        filter = res.frameDomain + res.url;
+                                            var filterListText = filterLists[filterList].text;
+                                            for (var i=0; i<filterListText.length; i++) {
+                                                var filter = filterListText[i];
+                                                // Don't check selector against non-selector filters
+                                                if (!Filter.isSelectorFilter(filter)) {
+                                                    continue;
+                                                }
+                                                if (filter.indexOf(res.url) > -1) {
+                                                    // If |filter| is global selector filter,
+                                                    // it needs to be the same as |resource|.
+                                                    // If it is not the same as |resource|, keep searching for a right |filter|
+                                                    if ((filter.split("##")[0] === "" && filter === res.url) ||
+                                                        filter.split("##")[0].indexOf(res.frameDomain) > -1) {
+                                                        // Shorten lengthy selector filters
+                                                        if (filter.split("##")[0] !== "") {
+                                                            filter = res.frameDomain + res.url;
+                                                        }
+                                                        res.blockedData = {};
+                                                        res.blockedData["filterList"] = filterList;
+                                                        res.blockedData["text"] = filter;
+                                                        res.frameUrl = frame.url;
+                                                        break;
                                                     }
-                                                    res.blockedData = {};
-                                                    res.blockedData["filterList"] = filterList;
-                                                    res.blockedData["text"] = filter;
-                                                    res.frameUrl = frame.url;
-                                                    break;
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                        addRequestsToTables(processedData);
+                            addRequestsToTables(processedData);
+                        });
                     });
                 });
             });
-        });
+        }
     });
 });
 

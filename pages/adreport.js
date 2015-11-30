@@ -196,7 +196,8 @@ var checkAdvanceOptions = function() {
                         checkmalware();
                         sendResponse({});
                     }
-             });
+                }
+            );
         }
     });
 }

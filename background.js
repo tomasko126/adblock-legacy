@@ -196,18 +196,31 @@
   // Input:
   //   tabId: integer - id of the tab which should be reloaded
   reloadTab = function(tabId) {
+      var listener;
       if (!SAFARI) {
-          chrome.tabs.reload(tabId, {bypassCache: true}, function() {
-              chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-                  if (changeInfo.status === "complete" &&
-                      tab.status === "complete") {
-                      setTimeout(function() {
-                          chrome.extension.sendRequest({command: "reloadcomplete"});
-                      }, 2000);
-                  }
-              });
-          });
+          listener = function(tabId, changeInfo, tab) {
+              if (changeInfo.status === "complete" &&
+                  tab.status === "complete") {
+                  setTimeout(function() {
+                      chrome.extension.sendRequest({command: "reloadcomplete"});
+                      chrome.tabs.onUpdated.removeListener(listener);
+                  }, 2000);
+              }
+          }
+      } else {
+          listener = function(event) {
+              if (event.type === "navigate") {
+                  setTimeout(function() {
+                      chrome.extension.sendRequest({command: "reloadcomplete"});
+                      chrome.tabs.onUpdated.removeListener(listener);
+                  }, 2000);
+              }
+          }
       }
+
+      chrome.tabs.reload(tabId, { bypassCache: true }, function() {
+          chrome.tabs.onUpdated.addListener(listener);
+      });
   }
 
   // Implement blocking via the Chrome webRequest API.
