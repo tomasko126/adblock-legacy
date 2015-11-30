@@ -6,17 +6,17 @@ DeclarativeWebRequest	=	(function()	{
 	}
 	const	HTML_PREFIX	=	"https?://";
 	const	REGEX_WILDCARD = ".*";
-	const	pageLevelTypes = (ElementTypes.elemhide	|	ElementTypes.document);
-	let	whitelistAnyOtherFilters = [];
-	let	elementWhitelistFilters	=	[];
-	let	documentWhitelistFilters = [];
-	let	elemhideSelectorExceptions = {};
+	var	pageLevelTypes = (ElementTypes.elemhide	|	ElementTypes.document);
+	var	whitelistAnyOtherFilters = [];
+	var	elementWhitelistFilters	=	[];
+	var	documentWhitelistFilters = [];
+	var	elemhideSelectorExceptions = {};
 
 	// Add the include / exclude domains to	a	rule
 	// Note:	some filters will	have both	include	and	exclude	domains, which the content blocking	API	doesn't	allow,
 	//				so we	only add the exclude domains when	there	isn't	any	include	domains.
 	var	addDomainsToRule = function(filter,	rule)	{
-		let	domains	=	getDomains(filter);
+		var	domains	=	getDomains(filter);
 		//since	the	global / ALL domain	is included	in the 'included'	array, check for something other than	undefined	in the zero	element
 		if (domains.included.length	>	0	&& domains.included[0] !== undefined)	{
 			rule.trigger["if-domain"]	=	domains.included;
@@ -30,7 +30,7 @@ DeclarativeWebRequest	=	(function()	{
 	// add |undefined| to	the	.included	list to	represent	the	implied	global
 	// domain	matched	by the filter.
 	var	getDomains = function(filter)	{
-		let	result = {
+		var	result = {
 			included:	[],
 			excluded:	[]
 		};
@@ -59,7 +59,7 @@ DeclarativeWebRequest	=	(function()	{
 	// Returns an	array	of resource	types	that should	be checked by	rules	for
 	// filters with	the	given	allowedElementTypes.
 	var	getResourceTypesByElementType	=	function(elementTypes) {
-		let	result = [];
+		var	result = [];
 		if (elementTypes & ElementTypes.image) {
 			result.push("image");
 		}
@@ -97,10 +97,10 @@ DeclarativeWebRequest	=	(function()	{
 	// Parse and clean up	the	filter's RegEx to	meet WebKit's	requirements.
 	var	getURLFilterFromFilter = function(filter)	{
 		//remove any whitespace
-		let	rule = filter._rule.source;
+		var	rule = filter._rule.source;
 		rule = rule.trim();
 		if (rule.endsWith("/i")) {
-			let	regexSwitchPos = rule.lastIndexOf("/i");
+			var	regexSwitchPos = rule.lastIndexOf("/i");
 			rule = rule.substring(0, regexSwitchPos);
 		}
 		// make	sure to	limit	rules	to to	HTTP(S)	URLs (if not already limited)
@@ -114,7 +114,7 @@ DeclarativeWebRequest	=	(function()	{
 	// to	the	final	rule array in	the	correct	order	(for performance reasons)
 	var	preProcessWhitelistFilters = function(whitelistFilters){
 		for	(var inx = 0;	inx	<	whitelistFilters.length; inx++)	{
-			let	filter = whitelistFilters[inx];
+			var	filter = whitelistFilters[inx];
 			if (isSupported(filter)	&&
 					(filter._allowedElementTypes &
 					 (ElementTypes.script	|
@@ -139,7 +139,7 @@ DeclarativeWebRequest	=	(function()	{
 
 	// Create	and	return a default JavaScript	rule object
 	var	createDefaultRule	=	function() {
-		let	rule = {};
+		var	rule = {};
 		rule.action	=	{};
 		rule.action.type = "block";
 		rule.trigger = {};
@@ -149,7 +149,7 @@ DeclarativeWebRequest	=	(function()	{
 
 	// Return	the	rule required	to represent this	PatternFilter	in Safari	blocking syntax.
 	var	getRule	=	function(filter) {
-		let	rule = createDefaultRule();
+		var	rule = createDefaultRule();
 		rule.trigger["url-filter"]	=	 getURLFilterFromFilter(filter);
 		rule.trigger["resource-type"]	=	getResourceTypesByElementType(filter._allowedElementTypes);
 		addDomainsToRule(filter, rule);
@@ -161,7 +161,7 @@ DeclarativeWebRequest	=	(function()	{
 
 	// Return	the	rule (JSON)	required to	represent	this Selector	Filter in	Safari blocking	syntax.
 	var	createSelectorRule = function(filter)	{
-		let	rule = createDefaultRule();
+		var	rule = createDefaultRule();
 		rule.action.selector = parseSelector(filter.selector);
 		rule.action.type = "css-display-none";
 		addDomainsToRule(filter, rule);
@@ -170,7 +170,7 @@ DeclarativeWebRequest	=	(function()	{
 
 	// Return	the	rule (JSON)	required to	represent	this $elemhide Whitelist Filter	in Safari	blocking syntax.
 	var	createElemhideIgnoreRule = function(filter)	{
-		let	rule = createDefaultRule();
+		var	rule = createDefaultRule();
 		rule.action.type = "ignore-previous-rules";
 		rule.trigger["url-filter"]	=	 getURLFilterFromFilter(filter);
 		rule.trigger["resource-type"]	=	getResourceTypesByElementType(filter._allowedElementTypes);
@@ -180,14 +180,14 @@ DeclarativeWebRequest	=	(function()	{
 
 	// Return	the	rule (JSON)	required to	represent	this Selector	Filter in	Safari blocking	syntax.
 	var	createEmptySelectorRule	=	function() {
-		let	rule = createDefaultRule();
+		var	rule = createDefaultRule();
 		rule["action"]["type"] = "css-display-none";
 		return rule;
 	}
 
 	// Return	the	rule (JSON)	required to	represent	this $document Whitelist Filter	in Safari	blocking syntax.
 	var	createDocumentIgnoreRule = function(filter)	{
-		let	rule = createDefaultRule();
+		var	rule = createDefaultRule();
 		rule.action	=	{"type": "ignore-previous-rules"};
 		rule.trigger["url-filter"]	=	 getURLFilterFromFilter(filter);
 		rule.trigger["resource-type"]	=	getResourceTypesByElementType(filter._allowedElementTypes);
@@ -197,7 +197,7 @@ DeclarativeWebRequest	=	(function()	{
 
 	// Return	the	rule (JSON)	required to	represent	this Whitelist Filter	in Safari	blocking syntax.
 	var	createIgnoreRule = function(filter)	{
-		let	rule = createDefaultRule();
+		var rule = createDefaultRule();
 		rule.action	=	{"type": "ignore-previous-rules"};
 		rule.trigger["url-filter"]	=	 getURLFilterFromFilter(filter);
 		rule.trigger["resource-type"]	=	getResourceTypesByElementType(filter._allowedElementTypes);
@@ -230,15 +230,15 @@ DeclarativeWebRequest	=	(function()	{
 		// Returns an	array	of the JSON	rules
 		convertFilterLists:	function(	patternFilters,	whitelistFilters,	selectorFilters, selectorFiltersAll) {
 			preProcessWhitelistFilters(whitelistFilters);
-			let	rules	=	[];
+			var	rules	=	[];
 			//step 1a, add all of	the	generic	hiding filters (CSS	selectors)
 			const	GROUPSIZE	=	1000;
 			for	(var i = 0;	i	<	selectorFiltersAll.length; i +=	GROUPSIZE) {
-				let	start	=	i;
-				let	end	=	Math.min((i	+	GROUPSIZE),	selectorFiltersAll.length);
-				let	selectorText = "";
+				var	start	=	i;
+				var	end	=	Math.min((i	+	GROUPSIZE),	selectorFiltersAll.length);
+				var	selectorText = "";
 				for	(var j = start;	j	<	end; j++)	{
-					let	filter = selectorFiltersAll[j];
+					var	filter = selectorFiltersAll[j];
 					if (isSupported(filter)) {
 						if (selectorText === "") {
 							selectorText = parseSelector(filter.selector);
@@ -248,7 +248,7 @@ DeclarativeWebRequest	=	(function()	{
 					}
 				}
 
-				let	theRule	=	createEmptySelectorRule();
+				var	theRule	=	createEmptySelectorRule();
 				theRule["action"]["selector"]	=	selectorText;
 				rules.push(theRule);
 			}
@@ -265,8 +265,8 @@ DeclarativeWebRequest	=	(function()	{
 			//step 3,	now	add	the	blocking rules
 			patternFilters.forEach(function(filter)	{
 				if (isSupported(filter)) {
-					let	rule = getRule(filter);
-					let	is_valid = true;
+					var	rule = getRule(filter);
+					var	is_valid = true;
 					try	{
 						new	RegExp(rule["trigger"]["url-filter"]);
 					}	catch(ex)	{
@@ -292,16 +292,16 @@ DeclarativeWebRequest	=	(function()	{
 		// Returns an	array	of the JSON	rules
 		convertMalware:	function(malwareDomains) {
 			// Add malware domains into	blocking rules
-			let	rules	=	[];
+			var	rules	=	[];
 			if (malwareDomains &&	malwareDomains.length	>	0) {
 				const	GROUPSIZE	=	1000;
-				for	(let i = 0;	i	<	malwareDomains.length; i +=	GROUPSIZE) {
-					let	start	=	i;
-					let	end	=	Math.min((i	+	GROUPSIZE),	malwareDomains.length);
-					let	rule = createDefaultRule();
-					let	unparsedDomainArray	=	malwareDomains.slice(start,	end);
-					let	parsedDomainArray	=	[];
-					for	(let j = 0;	j	<	unparsedDomainArray.length;	j++) {
+				for	(var i = 0;	i	<	malwareDomains.length; i +=	GROUPSIZE) {
+					var	start	=	i;
+					var	end	=	Math.min((i	+	GROUPSIZE),	malwareDomains.length);
+					var	rule = createDefaultRule();
+					var	unparsedDomainArray	=	malwareDomains.slice(start,	end);
+					var arsedDomainArray	=	[];
+					for	(var j = 0;	j	<	unparsedDomainArray.length;	j++) {
 						 parsedDomainArray.push(punycode.toASCII(unparsedDomainArray[j]).toLowerCase());
 					}
 					rule.trigger["if-domain"]	=	parsedDomainArray;
