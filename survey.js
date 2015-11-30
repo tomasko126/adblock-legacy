@@ -122,7 +122,7 @@ SURVEY = (function() {
     // Check if we should show survey only if it can actually be shown
     // based on surveyAllowed.
     if (surveyAllowed) {
-        var data = { cmd: "survey", u: STATS.userId, sid: surveyData.survey_id };
+        var data = { cmd: "survey", u: STATS.getUserId(), sid: surveyData.survey_id };
         $.post(STATS.statsUrl, data, function(responseData) {
           try {
             var data = JSON.parse(responseData);

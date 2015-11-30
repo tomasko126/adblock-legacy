@@ -105,7 +105,7 @@ gabQuestion = (function() {
     }
     if (!questionURL) {
       var tempURLObj = parseUri(sender.url || sender.tab.url);
-      questionURL = tempURLObj.origin + tempURLObj.pathname + "?u=" + STATS.userId;
+      questionURL = tempURLObj.origin + tempURLObj.pathname + "?u=" + STATS.getUserId();
     }
     questionTab = undefined;
     if (chrome.tabs && chrome.tabs.onRemoved && chrome.tabs.onUpdated) {
@@ -127,7 +127,7 @@ gabQuestion = (function() {
       }
     }
   };
-  //removes the listeners when a user navigates away, closes the tab, 
+  //removes the listeners when a user navigates away, closes the tab,
   //the user clicks a button on the page in question, or the number of retries were exceeded
   // Inputs: saveState:boolean if true (should only be true or undefined), save (persist)
   //         to storage the user answerred, or the number of retries were exceeded

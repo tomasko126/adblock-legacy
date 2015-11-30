@@ -72,16 +72,6 @@
     return storage_get("userid");
   };
 
-  //called from bandaids, for use on our getadblock.com site
-  var get_first_run = function() {
-    return STATS.firstRun;
-  };
-
-  //called from bandaids, for use on our getadblock.com site
-  var set_first_run_to_false = function() {
-    STATS.firstRun = false;
-  };
-
   // OPTIONAL SETTINGS
 
   function Settings() {
@@ -1226,7 +1216,7 @@
     var fullUrl = 'https://log.getadblock.com/record_log.php?type=' +
                   queryType +
                   '&message=' +
-                  encodeURIComponent(STATS.userId + " " + msg);
+                  encodeURIComponent(STATS.getUserId() + " " + msg);
     sendMessageToLogServer(fullUrl, callback);
   };
 
@@ -1280,31 +1270,33 @@
   var removeGABTabListeners = function(saveState) {
     gabQuestion.removeGABTabListeners(saveState);
   }
-
-  var installedURL = "https://getadblock.com/installed/?aa=true&u=" + STATS.userId;
-  if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
-    if (SAFARI) {
-      openTab(installedURL);
-    } else {
-      var openInstalledTab = function() {
-        chrome.tabs.create({url: installedURL}, function(tab) {
-          //if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
-          if (chrome.runtime.lastError) {
-            storage_set("/installed_error", { retry_count: 0 } );
-          }
-        });
-      };
-      if (chrome.management && chrome.management.getSelf) {
-        chrome.management.getSelf(function(info) {
-          if (info && info.installType !== "admin") {
-            openInstalledTab();
-          }
-        });
+  document.addEventListener('firstrun', function (args) { 
+    var installedURL = "https://getadblock.com/installed/?aa=true&u=" + args.userid;
+    if (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk") {
+      if (SAFARI) {
+        openTab(installedURL);
       } else {
-        openInstalledTab();
+        var openInstalledTab = function() {
+          chrome.tabs.create({url: installedURL}, function(tab) {
+            //if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
+            if (chrome.runtime.lastError) {
+              storage_set("/installed_error", { retry_count: 0 } );
+            }
+          });
+        };
+        if (chrome.management && chrome.management.getSelf) {
+          chrome.management.getSelf(function(info) {
+            if (info && info.installType !== "admin") {
+              openInstalledTab();
+            }
+          });
+        } else {
+          openInstalledTab();
+        }
       }
-    }
-  }
+    }    
+  }, false);
+
   //retry logic for '/installed' - retries on browser / AdBlock startup
   var installError = storage_get("/installed_error");
   if (installError && installError.retry_count >= 0 && !SAFARI) {
@@ -1331,12 +1323,21 @@
   }
 
   if (chrome.runtime.setUninstallURL) {
-    var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
+    var uninstallURL = "https://getadblock.com/uninstall/?";
+    var userIdNeeded = true;
+    if (STATS.getUserId()) {
+      userIdNeeded = false;
+      uninstallURL = uninstallURL + "u=" + STATS.getUserId();
+    }
     //if the start property of blockCount exists (which is the AdBlock installation timestamp)
     //use it to calculate the approximate length of time that user has AdBlock installed
     if (blockCounts && blockCounts.get().start) {
       var twoMinutes = 2 * 60 * 1000;
       var updateUninstallURL = function() {
+        if (STATS.getUserId() && userIdNeeded) {
+          userIdNeeded = false;
+          uninstallURL = uninstallURL + "u=" + STATS.getUserId();
+        }        
         var installedDuration = (Date.now() - blockCounts.get().start);
         var url = uninstallURL + "&t=" + installedDuration;
         var bc = blockCounts.get().total;
@@ -1357,22 +1358,6 @@
     } else {
       chrome.runtime.setUninstallURL(uninstallURL + "&t=-1");
     }
-  }
-
-  //validate STATS.firstRun against Chrome's Runtime API onInstalled
-  if (chrome.runtime.onInstalled) {
-    var validInstall = false;
-    chrome.runtime.onInstalled.addListener(function(details) {
-      validInstall = (details.reason === "install");
-    });
-    //wait 10 seconds, then check
-    //if extension and Chrome don't agree that this is a new installation send a message.
-    //we only check if 'firstRun' is true because that is when the extension creates a new user id and opens /installed
-    setTimeout(function() {
-      if (STATS.firstRun && !validInstall) {
-        recordErrorMessage('invalid install - firstRun = ' + STATS.firstRun + ' valid install = ' + validInstall);
-      }
-    }, 10000);
   }
 
   createMalwareNotification = function() {

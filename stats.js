@@ -21,25 +21,106 @@ STATS = (function() {
     match = navigator.userAgent.match(/(?:Chrome|Version)\/([\d\.]+)/);
   var browserVersion = (match || [])[1] || "Unknown";
 
-  var firstRun = !storage_get("userid");
-
+//  var firstRun = (function() {
+//    if (chrome.storage &&
+//        chrome.storage.local) {
+//      // Temporary code to move user id
+//      // If the user id exists in the localstorage, move it to chrome storage
+//      if (storage_get("userid")) {
+//        chrome.storage.local.get("userid", function(obj) {
+//          if (obj &&
+//              obj.userid) {
+//                console.log("user id already there");
+//                // Do nothing, since the id is already there
+//          } else {
+//            console.log("moved user id");
+//            var userid = storage_get("userid");
+//            chrome.storage.local.set({"userid": userid}, function() {
+//              localStorage.removeItem("userid");
+//            });
+//          }
+//        });
+//        return;
+//      }
+//      if (!storage_get("userid")) {
+//        chrome.storage.local.get("userid", function(obj) {
+//          console.log("obj", obj);
+//          if (obj &&
+//              obj.userid) {
+//            console.log("not first run");
+//          } else {
+//
+//            console.log("first run!");
+//          }
+//        });
+//      }
+//    } else {
+//      // Safari, or older versions of Chrome
+//      var firstRun = !storage_get("userid");
+//      console.log("old way, firstRun", firstRun);
+//      if (firstRun) {
+//        console.log("old way, firing event");
+//        document.dispatchEvent(new Event('firstrun'));
+//      }
+//    }
+//  })();
+  var firstRun = false;
+  var userId;
   // Give the user a userid if they don't have one yet.
-  var userId = (function() {
+  var userIdCheck = (function() {
     var time_suffix = (Date.now()) % 1e8; // 8 digits from end of timestamp
 
-    if (!storage_get("userid")) {
+    var createUserId = function() {
       var alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
       var result = [];
       for (var i = 0; i < 8; i++) {
         var choice = Math.floor(Math.random() * alphabet.length);
         result.push(alphabet[choice]);
       }
-      var theId = result.join('') + time_suffix;
-
-      storage_set("userid", theId);
+      userId = result.join('') + time_suffix;
+      firstRun = true;
+      if (chrome.storage &&
+          chrome.storage.local) {
+        chrome.storage.local.set({"userid": userId}, function() {
+          // Do nothing...
+          console.log("new id created, stored in chrome.storage");
+          var event = new Event('firstrun');
+          event.userid = userId;
+          document.dispatchEvent(event);
+        });
+      } else {
+        console.log("new id created, stored in localstorage");
+        storage_set("userid", userId);
+        var event = new Event('firstrun');
+        event.userid = userId;
+        document.dispatchEvent(event);
+      }
+    };
+    if (storage_get("userid")) {
+        userId = storage_get("userid");
+    } else if (chrome.storage &&
+               chrome.storage.local) {
+        chrome.storage.local.get("userid", function(obj) {
+          console.log("obj", obj);
+          if (obj &&
+              obj.userid) {
+            console.log("user id found");
+            userId = obj.userid;
+            console.log("userId",userId);
+          } else {
+            createUserId();
+          }
+        });
+    } else {
+      // Safari, or older versions of Chrome
+      var firstRun = !storage_get("userid");
+      if (firstRun) {
+        console.log("old way, creating id");
+        createUserId();
+      } else {
+        userId = storage_get("userid");
+      }
     }
-
-    return storage_get("userid");
   })();
 
   var getPingData = function() {
@@ -171,9 +252,9 @@ STATS = (function() {
   };
 
   return {
-    // True if AdBlock was just installed.
-    firstRun: firstRun,
-    userId: userId,
+    getUserId: function() {
+      return userId;
+    },
     version: version,
     flavor: flavor,
     browser: ({O:"Opera", S:"Safari", E:"Chrome"})[flavor],

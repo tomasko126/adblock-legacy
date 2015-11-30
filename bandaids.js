@@ -60,13 +60,32 @@ var run_bandaids = function() {
       }
     },
     getadblock: function() {
-      BGcall('get_adblock_user_id', function(adblock_user_id) {
-        var elemDiv = document.createElement("div");
-        elemDiv.id = "adblock_user_id";
-        elemDiv.innerText = adblock_user_id;
-        elemDiv.style.display = "none";
-        document.body.appendChild(elemDiv);
-      });
+      var getAdBlockUserID = function() {
+        BGcall('get_adblock_user_id', function(adblock_user_id) {
+          var elemDiv = document.createElement("div");
+          elemDiv.id = "adblock_user_id";
+          elemDiv.innerText = adblock_user_id;
+          elemDiv.style.display = "none";
+          document.body.appendChild(elemDiv);
+        });
+      }
+      if (chrome.storage &&
+          chrome.storage.local) {
+          chrome.storage.local.get("userid", function(obj) {
+            if (obj &&
+                obj.userid) {
+              var elemDiv = document.createElement("div");
+              elemDiv.id = "adblock_user_id";
+              elemDiv.innerText = obj.userid;
+              elemDiv.style.display = "none";
+              document.body.appendChild(elemDiv);
+            } else {
+              getAdBlockUserID();
+            }
+        });
+      } else {
+        getAdBlockUserID();
+      }
       if (document.getElementById("enable_show_survey")) {
         document.getElementById("enable_show_survey").onclick = function(event) {
             BGcall("set_setting", "show_survey", !document.getElementById("enable_show_survey").checked, true);
