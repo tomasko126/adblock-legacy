@@ -210,6 +210,7 @@ if (SAFARI) {
                     var tabs = windows[i].tabs;
                     for (var j=0; j<tabs.length; j++) {
                         if (tabs[j].id === tabId) {
+                            // Reload a tab
                             tabs[j].url = tabs[j].url;
                             if (callback) callback();
                             break;
@@ -218,6 +219,7 @@ if (SAFARI) {
                 }
             } else {
                 var activeTab = safari.application.activeBrowserWindow.activeTab;
+                // Reload a tab
                 activeTab.url = activeTab.url;
                 if (callback) callback();
             }
