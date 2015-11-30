@@ -193,12 +193,12 @@ $("input, select").change(function(event) {
 
 // STEP 1: Malware/adware detection
 var checkAdvanceOptions = function() {
-     // Check, if downloaded resources are available,
+    // Check, if downloaded resources are available,
     // if not, just reload tab with parsed tabId
-    BGcall("get_settings", "show_advanced_options", function(status) {
+    BGcall("get_settings", function(settings) {
 
-        //we can't do a malware check when content blocking is enable, so skip it.
-        if (status.safari_content_blocking) {
+        // We can't do a malware check when content blocking is enabled, so skip it.
+        if (settings.safari_content_blocking) {
             $('.gifloader').hide();
             $("#malwarewarning").html(translate("malwarenotdone"));
             $('#malwarewarning').show();
@@ -206,7 +206,7 @@ var checkAdvanceOptions = function() {
             return;
         }
 
-        if (status.show_advanced_options) {
+        if (settings.show_advanced_options) {
             checkmalware();
         } else {
             BGcall("set_setting", "show_advanced_options");
