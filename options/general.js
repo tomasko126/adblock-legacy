@@ -22,7 +22,7 @@ $(function() {
     $("#enable_" + name).
       prop("checked", optionalSettings[name]);
   }
-  //uncheck any incompatable options with the new safari content blocking, and then hide them
+  //uncheck any incompatible options with the new safari content blocking, and then hide them
   if (optionalSettings["safari_content_blocking"]) {
     $(".exclude_safari_content_blocking > input").each(function(index) {
       $(this).prop("checked", false);
@@ -47,7 +47,7 @@ $(function() {
   //  - add a listener to process any messages
   BGcall("isSafariContentBlockingAvailable", function(response) {
     if (response) {
-      $("#safari_content_blocking").css("display", "block");
+      $("#safari_content_blocking").show();
       getSafariContentBlockingMessage();
       //once the filters have been updated see if there's an update to the message.
       chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {

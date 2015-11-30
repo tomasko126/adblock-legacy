@@ -536,7 +536,7 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
   if (get_settings().safari_content_blocking) {
     if (this._fetchTracker &&
         this._fetchTracker[id]) {
-      delete this._fetchTracker[id]
+      delete this._fetchTracker[id];
     }
     //if the |text| is JSON rules, save them, and return
     if (text && (typeof text === "object")) {
