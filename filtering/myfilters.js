@@ -222,21 +222,21 @@ MyFilters.prototype.rebuild = function() {
         this._subscriptions.acceptable_ads &&
         this._subscriptions.acceptable_ads.subscribed &&
         this._subscriptions.acceptable_ads.rules) {
-        for (var rule of this._subscriptions.acceptable_ads.rules)  {
-          this._filterListRules.push(rule);
-        }
+      for (var rule of this._subscriptions.acceptable_ads.rules)  {
+        this._filterListRules.push(rule);
+      }
     }
 
     if (this._subscriptions &&
         this._subscriptions.malware &&
         this._subscriptions.malware.subscribed &&
         this.getMalwareDomains()) {
-      var malwareDomains = this._subscriptions.malware.text.adware;
-    	var malwareRules = DeclarativeWebRequest.convertMalware(malwareDomains);
-    	//add the custom rules, with the filter list rules
-      for (var i = 0; i < malwareRules.length; i++) {
-    		this._filterListRules.push(malwareRules[i]);
-    	}
+      	var malwareDomains = this._subscriptions.malware.text.adware;
+    		var malwareRules = DeclarativeWebRequest.convertMalware(malwareDomains);
+  		//add the custom rules, with the filter list rules
+    	for (var i = 0; i < malwareRules.length; i++) {
+  			this._filterListRules.push(malwareRules[i]);
+  		}
     }
 
     // Include custom filters.
