@@ -315,8 +315,9 @@ MyFilters.prototype.rebuild = function() {
 MyFilters.prototype._splitByType = function(texts) {
     // Remove duplicates and empties.
     var unique = {};
-    for (var i = 0; i < texts.length; i++)
+    for (var i = 0; i < texts.length; i++) {
       unique[texts[i]] = 1;
+    }
     delete unique[''];
 
     var filters = { hidingUnmerged: [], hiding: {}, exclude: {},
