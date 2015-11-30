@@ -1297,7 +1297,7 @@
       }
     }    
   };
-  if (STATS.firstRun && STATS.getUserId()) {
+  if (STATS.getFirstRun() && STATS.getUserId()) {
     console.log("open /installed now");
     openInstalledURL({userid:  STATS.getUserId()});
   } else {

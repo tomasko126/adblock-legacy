@@ -252,7 +252,9 @@ STATS = (function() {
   };
 
   return {
-    firstRun: firstRun,
+    getFirstRun: function() {
+      return firstRun;
+    },
     getUserId: function() {
       return userId;
     },
