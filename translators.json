@@ -26,6 +26,12 @@
         "username": "uhoj999",
         "proofreader": false,
         "joined": "2013-08"
+      },
+      {
+        "credit": "2B-4G10",
+        "username": "2B-4G10",
+        "proofreader": false,
+        "joined": "2015-10"
       }
     ]
   },
@@ -344,6 +350,12 @@
         "username": null,
         "proofreader": false,
         "joined": "2010-08"
+      },
+      {
+        "credit": "Hongjoo Lee",
+        "username": "mamadontgodaddycomehome",
+        "proofreader": false,
+        "joined": "2014-08"
       }
     ]
   },
@@ -512,6 +524,30 @@
         "username": "marinab",
         "proofreader": false,
         "joined": "2015-02"
+      },
+      {
+        "credit": "Silviu Iacob",
+        "username": "Sylvester08",
+        "proofreader": false,
+        "joined": "2015-07"
+      },
+      {
+        "credit": "pompierul31",
+        "username": "pompierul31",
+        "proofreader": false,
+        "joined": "2015-08"
+      },
+      {
+        "credit": "Diana Zlotea",
+        "username": "zloteadiana",
+        "proofreader": false,
+        "joined": "2015-09"
+      },
+      {
+        "credit": "gotaioan16",
+        "username": "gotaioan16",
+        "proofreader": false,
+        "joined": "2015-10"
       }
     ]
   },
@@ -612,7 +648,7 @@
       {
         "credit": "Necip Ateş",
         "username": "NightWatch",
-        "proofreader": true,
+        "proofreader": false,
         "joined": "2012-06"
       }
     ]
@@ -640,6 +676,12 @@
         "joined": "2015-01"
       },
       {
+        "credit": "Євген Гіль",
+        "username": "IevgenGil",
+        "proofreader": false,
+        "joined": "2015-03"
+      },
+      {
         "credit": "Александр Степанов",
         "username": "tuitioner",
         "proofreader": false,
@@ -656,6 +698,12 @@
         "username": "cutepenguin",
         "proofreader": false,
         "joined": "2015-08"
+      },
+      {
+        "credit": "Александр Невидомский",
+        "username": "neviksasha",
+        "proofreader": false,
+        "joined": "2015-11"
       }
     ]
   },
@@ -734,6 +782,12 @@
         "username": "smartPG",
         "proofreader": false,
         "joined": "2015-06"
+      },
+      {
+        "credit": "iF Chen",
+        "username": "ifchen0",
+        "proofreader": false,
+        "joined": "2015-07"
       }
     ]
   }
