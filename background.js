@@ -1156,9 +1156,19 @@
       return fd;
   }
 
-  // Reset matchCache helper
+  // Add previously cached requests to matchCache
+  // Used by 'Resource' page
+  add_to_matchCache = function(cache) {
+     _myfilters.blocking._matchCache = cache;
+  }
+
+  // Reset matchCache
+  // Used by 'Resource' page
+  // Returns: object with cached requests
   reset_matchCache = function() {
+      var matchCache = _myfilters.blocking._matchCache;
       _myfilters.blocking._matchCache = {};
+      return matchCache;
   }
 
   // Return chrome.i18n._getL10nData() for content scripts who cannot

@@ -27,7 +27,7 @@ function reqTypeForElement(elType) {
 }
 
 // Reset cache for getting matched filter text properly
-BGcall("reset_matchCache", function() {
+BGcall("reset_matchCache", function(matchCache) {
     // Get frameData object
     BGcall("get_frameData", tabId, function(frameData) {
         if (!frameData || Object.keys(frameData["0"].resources).length === 0) {
@@ -38,11 +38,12 @@ BGcall("reset_matchCache", function() {
             BGcall("storage_get", "filter_lists", function(filterLists) {
                 // TODO: Excluded filters & excluded hiding filters?
                 for (var id in filterLists) {
-                    // Delete every filter list, which is not in use
+                    // Delete every filter list we are not subscribed to
                     if (!filterLists[id].subscribed) {
                         delete filterLists[id];
                         continue;
                     }
+                    // Process malware filter list separately
                     if (id !== "malware") {
                         filterLists[id].text = filterLists[id].text.split("\n");
                     }
@@ -145,7 +146,10 @@ BGcall("reset_matchCache", function() {
                                     }
                                 }
                             }
-                            addRequestsToTables(processedData);
+                            // Add previously cached requests to matchCache
+                            BGcall("add_to_matchCache", matchCache, function() {
+                                addRequestsToTables(processedData);
+                            });
                         });
                     });
                 });
@@ -177,6 +181,7 @@ function addRequestsToTables(frames) {
                 continue;
             }
 
+            // Create a row for each request
             var row = $("<tr>");
 
             if (reqTypeForElement(res.elType) === "selector") {
