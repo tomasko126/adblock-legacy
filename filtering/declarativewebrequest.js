@@ -208,9 +208,7 @@ DeclarativeWebRequest = (function() {
 
   // Returns false if the given filter cannot be handled by Safari 9 content blocking.
   var isSupported = function(filter) {
-    if (!filter) {
-      return false;
-    } else if (!filter.hasOwnProperty('_allowedElementTypes'))  {
+    if (!filter.hasOwnProperty('_allowedElementTypes'))  {
       return true;
     } else {
       return !((filter._allowedElementTypes & ElementTypes.SUBDOCUMENT) ||
