@@ -258,19 +258,19 @@ MyFilters.prototype.rebuild = function() {
       //SelectorFilters where full() == False are selectors that either:
       //    - apply to specific domain(s)
       //    - or have exceptions domains, where the selectors are not applied
-      selectorsFull = {};
-      selectorsNotAll = {};
+      var selectorsFull = {};
+      var selectorsNotFull = {};
       for (var id in filters.hiding) {
         var selectorFilter = filters.hiding[id];
         if (selectorFilter._domains.full() === true) {
           selectorsFull[id] = selectorFilter;
         } else {
-          selectorsNotAll[id] = selectorFilter;
+          selectorsNotFull[id] = selectorFilter;
         }
       }
       var selectorFilters = [];
-      for (var id in selectorsNotAll) {
-        selectorFilters.push(selectorsNotAll[id]);
+      for (var id in selectorsNotFull) {
+        selectorFilters.push(selectorsNotFull[id]);
       }
       selectorFiltersAll = [];
       for (var id in selectorsFull) {
