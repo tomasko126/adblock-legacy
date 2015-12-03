@@ -69,28 +69,18 @@ DeclarativeWebRequest = (function() {
     if (elementTypes & ElementTypes.script) {
       result.push("script");
     }
-    if (elementTypes & ElementTypes.media) {
+    if (elementTypes & (ElementTypes.media | ElementTypes.object) {
       result.push("media");
     }
     if (elementTypes & ElementTypes.popup) {
       result.push("popup");
     }
-    if (elementTypes & (ElementTypes.xmlhttprequest | ElementTypes.other)) {
+    if (elementTypes & (ElementTypes.xmlhttprequest | ElementTypes.other | ElementTypes.object_subrequest)) {
       result.push("raw");
     }
-    // TODO-what to do about these types
-    // if (elementTypes & ElementTypes.FONT) {
-    //    result.push("font");
-    // }
-    // if (elementTypes & ElementTypes.SUBDOCUMENT) {
-    //    result.push("subdocument");
-    // }
-    // if (elementTypes & ElementTypes.OBJECT) {
-    //    result.push("object");
-    // }
-    // if (elementTypes & ElementTypes.OBJECT_SUBREQUEST) {
-    //    result.push("object-subrequest");
-    // }
+    if (elementTypes & ElementTypes.subdocument) {
+       result.push("document");
+    }
     return result;
   };
 
