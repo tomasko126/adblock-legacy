@@ -152,6 +152,7 @@ DeclarativeWebRequest = (function() {
     var rule = createDefaultRule();
     rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
     rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
+    rule.trigger["url-filter-is-case-sensitive"] = true;
     addDomainsToRule(filter, rule);
     if (filter._options & FilterOptions["THIRDPARTY"]) {
       rule["trigger"]["load-type"] = ["third-party"];
