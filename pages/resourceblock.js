@@ -74,7 +74,7 @@ BGcall("reset_matchCache", function(matchCache) {
 
                                 res.elType = resource.split(":|:")[0];
                                 res.url = resource.split(":|:")[1];
-                                res.frameDomain = resource.split(":|:")[2];
+                                res.frameDomain = resource.split(":|:")[2].replace("www.", "");
 
                                 if (res.elType !== "selector") {
                                     res.thirdParty = BlockingFilterSet.checkThirdParty(parseUri(res.url).hostname, res.frameDomain);
