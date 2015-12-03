@@ -69,7 +69,7 @@ DeclarativeWebRequest = (function() {
     if (elementTypes & ElementTypes.script) {
       result.push("script");
     }
-    if (elementTypes & (ElementTypes.media | ElementTypes.object) {
+    if (elementTypes & (ElementTypes.media | ElementTypes.object)) {
       result.push("media");
     }
     if (elementTypes & ElementTypes.popup) {
