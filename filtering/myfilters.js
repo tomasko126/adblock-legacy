@@ -190,7 +190,7 @@ MyFilters.prototype.rebuild = function() {
 
     texts = texts.concat(this.getExtensionFilters(get_settings()));
     texts = texts.join('\n').split('\n');
-		var filters = this._splitByType(texts);
+    var filters = this._splitByType(texts);
 
     this.hiding = FilterSet.fromFilters(filters.hiding);
 
@@ -217,7 +217,7 @@ MyFilters.prototype.rebuild = function() {
         }
       }
     }
-		// add Acceptable Ads last, since they contain exception rules
+    // add Acceptable Ads last, since they contain exception rules
     if (this._subscriptions &&
         this._subscriptions.acceptable_ads &&
         this._subscriptions.acceptable_ads.subscribed &&
@@ -231,55 +231,55 @@ MyFilters.prototype.rebuild = function() {
         this._subscriptions.malware &&
         this._subscriptions.malware.subscribed &&
         this.getMalwareDomains()) {
-      	var malwareDomains = this._subscriptions.malware.text.adware;
-    		var malwareRules = DeclarativeWebRequest.convertMalware(malwareDomains);
-  		//add the custom rules, with the filter list rules
-    	for (var i = 0; i < malwareRules.length; i++) {
-  			this._filterListRules.push(malwareRules[i]);
-  		}
+        var malwareDomains = this._subscriptions.malware.text.adware;
+        var malwareRules = DeclarativeWebRequest.convertMalware(malwareDomains);
+      //add the custom rules, with the filter list rules
+      for (var i = 0; i < malwareRules.length; i++) {
+        this._filterListRules.push(malwareRules[i]);
+      }
     }
 
     // Include custom filters.
     var customfilters = get_custom_filters_text(); // from background
     if (customfilters) {
       texts.push(FilterNormalizer.normalizeList(customfilters));
-    	texts = texts.join('\n').split('\n');
-			var filters = this._splitByType(texts);
-    	var patternFilters = [];
-    	for (var id in filters.pattern) {
-      	patternFilters.push(filters.pattern[id]);
-    	}
-    	var whitelistFilters = [];
-    	for (var id in filters.whitelist) {
-      	whitelistFilters.push(filters.whitelist[id]);
-    	}
-    	//SelectorFilters where full() == True are selectors that apply to all domains, no exceptions
-    	// these filters can be collapsed into a few large JSON rules
-    	//SelectorFilters where full() == False are selectors that either:
-    	//    - apply to specific domain(s)
-    	//    - or have exceptions domains, where the selectors are not applied
-    	selectorsFull = {};
-    	selectorsNotAll = {};
-    	for (var id in filters.hiding) {
-      	var selectorFilter = filters.hiding[id];
-      	if (selectorFilter._domains.full() === true) {
-        	selectorsFull[id] = selectorFilter;
-      	} else {
-        	selectorsNotAll[id] = selectorFilter;
-      	}
-    	}
-    	var selectorFilters = [];
-    	for (var id in selectorsNotAll) {
-      	selectorFilters.push(selectorsNotAll[id]);
-    	}
-    	selectorFiltersAll = [];
-    	for (var id in selectorsFull) {
-       	selectorFiltersAll.push(selectorsFull[id]);
-    	}
-    	var customRules = DeclarativeWebRequest.convertFilterLists(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
-    	log(" customRules: ", customRules);
-    	//add the custom rules, with the filter list rules
-    	this._filterListRules.push.apply(this._filterListRules, customRules);
+      texts = texts.join('\n').split('\n');
+      var filters = this._splitByType(texts);
+      var patternFilters = [];
+      for (var id in filters.pattern) {
+        patternFilters.push(filters.pattern[id]);
+      }
+      var whitelistFilters = [];
+      for (var id in filters.whitelist) {
+        whitelistFilters.push(filters.whitelist[id]);
+      }
+      //SelectorFilters where full() == True are selectors that apply to all domains, no exceptions
+      // these filters can be collapsed into a few large JSON rules
+      //SelectorFilters where full() == False are selectors that either:
+      //    - apply to specific domain(s)
+      //    - or have exceptions domains, where the selectors are not applied
+      selectorsFull = {};
+      selectorsNotAll = {};
+      for (var id in filters.hiding) {
+        var selectorFilter = filters.hiding[id];
+        if (selectorFilter._domains.full() === true) {
+          selectorsFull[id] = selectorFilter;
+        } else {
+          selectorsNotAll[id] = selectorFilter;
+        }
+      }
+      var selectorFilters = [];
+      for (var id in selectorsNotAll) {
+        selectorFilters.push(selectorsNotAll[id]);
+      }
+      selectorFiltersAll = [];
+      for (var id in selectorsFull) {
+        selectorFiltersAll.push(selectorsFull[id]);
+      }
+      var customRules = DeclarativeWebRequest.convertFilterLists(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
+      log(" customRules: ", customRules);
+      //add the custom rules, with the filter list rules
+      this._filterListRules.push.apply(this._filterListRules, customRules);
     }
 
     if (!this._filterListRules ||
@@ -296,7 +296,7 @@ MyFilters.prototype.rebuild = function() {
       chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
     }
     try {
-    	log("submitting rules to safari: # of rules: ",this._filterListRules.length);
+      log("submitting rules to safari: # of rules: ",this._filterListRules.length);
        var response = safari.extension.setContentBlocker(this._filterListRules);
     } catch(ex) {
        log("exception saving rules", ex);
@@ -382,8 +382,8 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
         //load the malware domains
         this._loadMalwareDomains();
     } else {
-    		if (this.blocking) {
-        	this.blocking.setMalwareDomains(null);
+        if (this.blocking) {
+          this.blocking.setMalwareDomains(null);
         }
         // If unsubscribed, remove properties
         delete this._subscriptions[id].text;
