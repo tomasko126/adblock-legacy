@@ -4,8 +4,6 @@
 var tabId = parseUri.parseSearch(document.location.href).tabId;
 tabId = parseInt(tabId);
 
-var tabUrl = parseUri.parseSearch(document.location.href).url;
-
 // Convert element type to request type
 function reqTypeForElement(elType) {
     switch (parseInt(elType)) {

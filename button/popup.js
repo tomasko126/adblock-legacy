@@ -209,7 +209,7 @@ $(function() {
     });
 
     $("#div_show_resourcelist").click(function() {
-        BG.launch_resourceblocker("?tabId=" + tab.id + "&url=" + encodeURIComponent(tab.unicodeUrl));
+        BG.launch_resourceblocker("?tabId=" + tab.id);
         closeAndReloadPopup();
     });
 
