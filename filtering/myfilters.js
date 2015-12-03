@@ -209,11 +209,11 @@ MyFilters.prototype.rebuild = function() {
     }
   } else {
     // If Safari 9 content blocking
-    this._filterListRules = [];
+    var filterListRules = [];
     for (var id in this._subscriptions) {
       if (id != "acceptable_ads" && this._subscriptions[id].subscribed) {
         for (var item in this._subscriptions[id].rules)  {
-          this._filterListRules.push(this._subscriptions[id].rules[item]);
+          filterListRules.push(this._subscriptions[id].rules[item]);
         }
       }
     }
@@ -223,7 +223,7 @@ MyFilters.prototype.rebuild = function() {
         this._subscriptions.acceptable_ads.subscribed &&
         this._subscriptions.acceptable_ads.rules) {
       for (var item in this._subscriptions.acceptable_ads.rules)  {
-        this._filterListRules.push(this._subscriptions.acceptable_ads.rules[item]);
+        filterListRules.push(this._subscriptions.acceptable_ads.rules[item]);
       }
     }
 
@@ -235,7 +235,7 @@ MyFilters.prototype.rebuild = function() {
         var malwareRules = DeclarativeWebRequest.convertMalware(malwareDomains);
       //add the custom rules, with the filter list rules
       for (var i = 0; i < malwareRules.length; i++) {
-        this._filterListRules.push(malwareRules[i]);
+        filterListRules.push(malwareRules[i]);
       }
     }
 
@@ -279,25 +279,25 @@ MyFilters.prototype.rebuild = function() {
       var customRules = DeclarativeWebRequest.convertFilterLists(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
       log(" customRules: ", customRules);
       //add the custom rules, with the filter list rules
-      this._filterListRules.push.apply(this._filterListRules, customRules);
+      filterListRules.push.apply(filterListRules, customRules);
     }
 
-    if (!this._filterListRules ||
-         this._filterListRules.length == 0) {
+    if (!filterListRules ||
+         filterListRules.length == 0) {
        log("no rules to submit to safari  ");
        return;
-    } else if (this._filterListRules.length > 50000) {
+    } else if (filterListRules.length > 50000) {
       createRuleLimitExceededSafariNotification();
-      log("exceed number of rules: " + this._filterListRules.length);
-      this._filterListRules = this._filterListRules.slice(0, 49999);
+      log("exceed number of rules: " + filterListRules.length);
+      filterListRules = filterListRules.slice(0, 49999);
     } else {
       //size is less then the limit, remove any previous error messages.
       sessionstorage_set('contentblockingerror');
       chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
     }
     try {
-      log("submitting rules to safari: # of rules: ",this._filterListRules.length);
-       var response = safari.extension.setContentBlocker(this._filterListRules);
+      log("submitting rules to safari: # of rules: ",filterListRules.length);
+       safari.extension.setContentBlocker(filterListRules);
     } catch(ex) {
        log("exception saving rules", ex);
     }
