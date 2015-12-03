@@ -281,26 +281,41 @@ MyFilters.prototype.rebuild = function() {
       //add the custom rules, with the filter list rules
       filterListRules.push.apply(filterListRules, customRules);
     }
-
     if (!filterListRules ||
          filterListRules.length == 0) {
        log("no rules to submit to safari  ");
        return;
-    } else if (filterListRules.length > 50000) {
+    }
+    // Sort the rules for better performance
+    var cssRules = [];
+    var blockingRules = [];
+    var igoreRules = [];
+		for (var i = 0; i < filterListRules.length; i += 1) {
+			var filter = filterListRules[i];
+			var filterType = filterListRules[i].action.type;
+			if (filterType === "css-display-none") {
+				cssRules.push(filter);
+			} else if (filterType === "ignore-previous-rules") {
+				igoreRules.push(filter);
+			} else if (filterType === "block") {
+				blockingRules.push(filter);
+			} 
+		}
+		var sortedFilterListRules = [];
+		sortedFilterListRules.push.apply(sortedFilterListRules, cssRules);
+		sortedFilterListRules.push.apply(sortedFilterListRules, blockingRules);
+		sortedFilterListRules.push.apply(sortedFilterListRules, igoreRules);
+		if (sortedFilterListRules.length > 50000) {
       createRuleLimitExceededSafariNotification();
-      log("exceed number of rules: " + filterListRules.length);
-      filterListRules = filterListRules.slice(0, 49999);
+      log("exceed number of rules: " + sortedFilterListRules.length);
+      sortedFilterListRules = sortedFilterListRules.slice(0, 49999);
     } else {
       //size is less then the limit, remove any previous error messages.
       sessionstorage_set('contentblockingerror');
       chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
     }
-    try {
-      log("submitting rules to safari: # of rules: ",filterListRules.length);
-       safari.extension.setContentBlocker(filterListRules);
-    } catch(ex) {
-       log("exception saving rules", ex);
-    }
+    log("submitting rules to safari: # of rules: ",sortedFilterListRules.length);
+    safari.extension.setContentBlocker(sortedFilterListRules);
   }
 
   // After 90 seconds, delete the cache. That way the cache is available when
