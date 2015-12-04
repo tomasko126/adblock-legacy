@@ -678,7 +678,7 @@
     for (var id in _myfilters._subscriptions) {
       result[id] = {};
       for (var attr in _myfilters._subscriptions[id]) {
-        if (attr === "text") continue;
+        if ((attr === "text") || (attr === "rules")) continue;
         result[id][attr] = _myfilters._subscriptions[id][attr];
       }
     }
