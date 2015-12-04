@@ -290,22 +290,22 @@ MyFilters.prototype.rebuild = function() {
     var cssRules = [];
     var blockingRules = [];
     var igoreRules = [];
-		for (var i = 0; i < filterListRules.length; i += 1) {
-			var filter = filterListRules[i];
-			var filterType = filterListRules[i].action.type;
-			if (filterType === "css-display-none") {
-				cssRules.push(filter);
-			} else if (filterType === "ignore-previous-rules") {
-				igoreRules.push(filter);
-			} else if (filterType === "block") {
-				blockingRules.push(filter);
-			} 
-		}
-		var sortedFilterListRules = [];
-		sortedFilterListRules.push.apply(sortedFilterListRules, cssRules);
-		sortedFilterListRules.push.apply(sortedFilterListRules, blockingRules);
-		sortedFilterListRules.push.apply(sortedFilterListRules, igoreRules);
-		if (sortedFilterListRules.length > 50000) {
+    for (var i = 0; i < filterListRules.length; i += 1) {
+      var filter = filterListRules[i];
+      var filterType = filterListRules[i].action.type;
+      if (filterType === "css-display-none") {
+        cssRules.push(filter);
+      } else if (filterType === "ignore-previous-rules") {
+        igoreRules.push(filter);
+      } else if (filterType === "block") {
+        blockingRules.push(filter);
+      }
+    }
+    var sortedFilterListRules = [];
+    sortedFilterListRules.push.apply(sortedFilterListRules, cssRules);
+    sortedFilterListRules.push.apply(sortedFilterListRules, blockingRules);
+    sortedFilterListRules.push.apply(sortedFilterListRules, igoreRules);
+    if (sortedFilterListRules.length > 50000) {
       createRuleLimitExceededSafariNotification();
       log("exceed number of rules: " + sortedFilterListRules.length);
       sortedFilterListRules = sortedFilterListRules.slice(0, 49999);
@@ -362,6 +362,7 @@ MyFilters.prototype._splitByType = function(texts) {
 //         subData: object containing all data that should be changed
 //         forceFetch: if the subscriptions have to be fetched again forced
 MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
+
   var subscribeRequiredListToo = false;
   var listDidntExistBefore = false;
 
@@ -445,7 +446,7 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
 
   if (this._subscriptions[id].subscribed) {
     if ((!get_settings().safari_content_blocking && !this._subscriptions[id].text) ||
-    		(get_settings().safari_content_blocking && !this._subscriptions[id].rules) ||
+        (get_settings().safari_content_blocking && !this._subscriptions[id].rules) ||
          out_of_date(this._subscriptions[id])) {
       this.fetch_and_update(id, listDidntExistBefore);
     }
@@ -474,7 +475,6 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
 // isNewList: true when the list is completely new and must succeed or
 //            otherwise it'll be deleted.
 MyFilters.prototype.fetch_and_update = function(id, isNewList) {
-
   var url = this._subscriptions[id].url;
   if (get_settings().safari_content_blocking) {
       if (this._subscriptions[id].safariJSON_URL) {
@@ -555,6 +555,8 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
     }
     //if the |text| is JSON rules, save them, and return
     if (text && (typeof text === "object")) {
+      // Record how many hours until we need to update the subscription text. Defaults to 120.
+      this._subscriptions[id].expiresAfterHours = 120;
       this._subscriptions[id].expiresAfterHoursHard = this._subscriptions[id].expiresAfterHours * 2;
       var smear = Math.random() * 0.4 + 0.8;
       this._subscriptions[id].expiresAfterHours *= smear;
