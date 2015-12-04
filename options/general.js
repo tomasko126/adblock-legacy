@@ -61,7 +61,6 @@ $(function() {
         getSafariContentBlockingMessage();
         sendResponse({});
       });
-      BGcall("update_subscriptions_now");
     }
   });
 
