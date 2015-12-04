@@ -444,7 +444,9 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
     delete this._subscriptions[id].last_modified;
 
   if (this._subscriptions[id].subscribed) {
-    if (!this._subscriptions[id].text || out_of_date(this._subscriptions[id])) {
+    if ((!get_settings().safari_content_blocking && !this._subscriptions[id].text) ||
+    		(get_settings().safari_content_blocking && !this._subscriptions[id].rules) ||
+         out_of_date(this._subscriptions[id])) {
       this.fetch_and_update(id, listDidntExistBefore);
     }
   } else {
