@@ -277,7 +277,6 @@ MyFilters.prototype.rebuild = function() {
         selectorFiltersAll.push(selectorsFull[id]);
       }
       var customRules = DeclarativeWebRequest.convertFilterLists(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
-      log(" customRules: ", customRules);
       //add the custom rules, with the filter list rules
       filterListRules.push.apply(filterListRules, customRules);
     }
