@@ -39,6 +39,9 @@ th {
 .frametype {
     padding-top: 20px;
 }
+tbody > tr:hover {
+    background-color: #E6E5E5;
+}
 th[data-column="url"] {
     cursor: pointer;
 }
