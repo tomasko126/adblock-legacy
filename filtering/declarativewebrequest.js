@@ -216,10 +216,18 @@ DeclarativeWebRequest = (function() {
     return selector;
   };
 
+  var resetInternalArrays = function() {
+    whitelistAnyOtherFilters = [];
+    elementWhitelistFilters = [];
+    documentWhitelistFilters = [];
+    elemhideSelectorExceptions = {};
+  }
+
   return {
     // Converts the various Filters into Safari specific JSON entries.
     // Returns an array of the JSON rules
     convertFilterLists: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll) {
+    	resetInternalArrays();
       preProcessWhitelistFilters(whitelistFilters);
       var rules = [];
       //step 1a, add all of the generic hiding filters (CSS selectors)
