@@ -168,7 +168,7 @@ function addRequestsToTables(frames) {
         }
 
         // Create a table for each frame
-        createTable(frameObject.domain, frameObject.url, frame);
+        createTable(frameObject, frame);
 
         // Process each request
         for (var resource in frameObject["resources"]) {
@@ -258,17 +258,11 @@ function addRequestsToTables(frames) {
 };
 
 // Create a new table for frame
-function createTable(domain, url, frameId) {
-    var elem = null, frameType = null, frameUrls = $(".frameurl");
-
-    // Don't create another table with the same url,
-    // when we've already created one
-    for (var i=0; i<frameUrls.length; i++) {
-        var frameUrl = frameUrls[i].title;
-        if (url === frameUrl) {
-            return;
-        }
-    }
+function createTable(frame, frameId) {
+    var elem = null,
+        frameType = null,
+        domain = frame.domain,
+        url = frame.url;
 
     // Main frame table is always on top of the page
     if (frameId === "0") {
@@ -281,6 +275,7 @@ function createTable(domain, url, frameId) {
     }
 
     // Insert table to page
+    // TODO: l10n and css of #noadditionalresources
     $(elem).after(
         '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
             '<thead>' +
@@ -295,10 +290,10 @@ function createTable(domain, url, frameId) {
                         translate("frameurl") + truncateURI(url) +
                     '<\/th>' +
                 '<\/tr>' +
-                '<tr>' +
-                    '<th style="height: 10px;"></th>' +
+                '<tr id="noadditionalresources" style="display:none;">' +
+                    '<th style="height: 10px;">No additional resources have been requested by this frame.</th>' +
                 '<\/tr>' +
-                '<tr>' +
+                '<tr id="headers">' +
                     '<th i18n="headerresource" data-column="url"><\/th>' +
                     '<th i18n="headertype" data-column="type"><\/th>' +
                     '<th i18n="headerfilter" data-column="filter" style="text-align: center;"><\/th>' +
@@ -309,6 +304,14 @@ function createTable(domain, url, frameId) {
             '<\/tbody>' +
         '<\/table>'
     );
+
+    // Show a message, that no resources
+    // have been requested by this frame
+    var resourcesLength = Object.keys(frame.resources).length;
+    if (resourcesLength === 0) {
+        $('[data-frameid="' + frameId + '"] > thead > #headers').hide();
+        $('[data-frameid="' + frameId + '"] > thead > #noadditionalresources').show();
+    }
 }
 
 // Click event for the column titles (<th>) of a table.
