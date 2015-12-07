@@ -287,8 +287,8 @@ function createTable(frame, frameId) {
                         translate("frameurl") + truncateURI(frame.url) +
                     '<\/th>' +
                 '<\/tr>' +
-                '<tr id="noadditionalresources" style="display:none;">' +
-                    '<th style="height: 10px;padding-bottom:5px;">No additional resources have been requested by this frame.</th>' +
+                '<tr id="noadditionalresources">' +
+                    '<th>No additional resources have been requested by this frame.</th>' +
                 '<\/tr>' +
                 '<tr id="headers">' +
                     '<th i18n="headerresource" data-column="url"><\/th>' +

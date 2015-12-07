@@ -42,6 +42,13 @@ th {
 tbody > tr:hover {
     background-color: #E6E5E5;
 }
+#noadditionalresources {
+    display: none;
+}
+#noadditionalresources > th {
+    height: 10px;
+    padding-bottom: 5px;
+}
 th[data-column="url"] {
     cursor: pointer;
 }
