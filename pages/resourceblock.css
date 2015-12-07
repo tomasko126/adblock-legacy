@@ -14,7 +14,7 @@ th {
 }
 #legend {
     min-width: 1195px;
-    margin: 118px auto 20px auto;
+    margin: 110px auto 20px auto;
     text-align: center;
     display: none;
 }
@@ -37,7 +37,7 @@ th {
     padding-left: 25px;
 }
 .frametype {
-    padding-top: 20px;
+    padding-top: 10px;
 }
 tbody > tr:hover {
     background-color: #E6E5E5;

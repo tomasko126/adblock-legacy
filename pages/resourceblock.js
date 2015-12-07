@@ -259,10 +259,7 @@ function addRequestsToTables(frames) {
 
 // Create a new table for frame
 function createTable(frame, frameId) {
-    var elem = null,
-        frameType = null,
-        domain = frame.domain,
-        url = frame.url;
+    var elem = null, frameType = null;
 
     // Main frame table is always on top of the page
     if (frameId === "0") {
@@ -277,21 +274,21 @@ function createTable(frame, frameId) {
     // Insert table to page
     // TODO: l10n and css of #noadditionalresources
     $(elem).after(
-        '<table data-href=' + domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
+        '<table data-href=' + frame.domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
             '<thead>' +
                 '<tr>' +
                     '<th class="frametype">' + translate("frametype") + frameType + '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
-                    '<th class="framedomain">' + translate("framedomain") + domain + '<\/th>' +
+                    '<th class="framedomain">' + translate("framedomain") + frame.domain + '<\/th>' +
                 '<\/tr>' +
                 '<tr>' +
-                    '<th class="frameurl" title="' + decodeURIComponent(url) + '">' +
-                        translate("frameurl") + truncateURI(url) +
+                    '<th class="frameurl" title="' + decodeURIComponent(frame.url) + '">' +
+                        translate("frameurl") + truncateURI(frame.url) +
                     '<\/th>' +
                 '<\/tr>' +
                 '<tr id="noadditionalresources" style="display:none;">' +
-                    '<th style="height: 10px;">No additional resources have been requested by this frame.</th>' +
+                    '<th style="height: 10px;padding-bottom:5px;">No additional resources have been requested by this frame.</th>' +
                 '<\/tr>' +
                 '<tr id="headers">' +
                     '<th i18n="headerresource" data-column="url"><\/th>' +
