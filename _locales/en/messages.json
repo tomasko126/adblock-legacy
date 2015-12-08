@@ -523,10 +523,6 @@
     "message":"No known malware found.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
-  "malwarenotdone":{
-    "message":"A malware check cannot be performed when Content Blocking is enabled.",
-    "description":"On the ad report page, displayed when Safari Content Blocking is enabled in the Options page"
-  },
   "disableaa":{
     "message":"Check the Acceptable Ads filters:",
     "description":"Section header on the ad report page"

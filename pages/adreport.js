@@ -206,11 +206,11 @@ var checkAdvanceOptions = function() {
 
         // We can't do a malware check when content blocking is enabled, so skip it.
         if (settings.safari_content_blocking) {
-            $('.gifloader').hide();
-            $("#malwarewarning").html(translate("malwarenotdone"));
-            $('#malwarewarning').show();
+            $("#step_malware_checking_DIV").hide();
             $('#step_update_filters_DIV').show();
             return;
+        } else if (SAFARI) {
+            $("#step_malware_checking_DIV").show();
         }
 
         if (settings.show_advanced_options) {
