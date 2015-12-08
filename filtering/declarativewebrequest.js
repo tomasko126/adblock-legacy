@@ -4,7 +4,7 @@ DeclarativeWebRequest = (function() {
       (typeof safari.extension.setContentBlocker !== 'function')) {
     return;
   }
-  const HTML_PREFIX = "^https?://";
+  const HTML_PREFIX = "^https?://.*";
   var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
   var whitelistAnyOtherFilters = [];
   var elementWhitelistFilters = [];
