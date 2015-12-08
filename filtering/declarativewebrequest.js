@@ -4,8 +4,7 @@ DeclarativeWebRequest = (function() {
       (typeof safari.extension.setContentBlocker !== 'function')) {
     return;
   }
-  const HTML_PREFIX = "^https?://+";
-  const REGEX_WILDCARD = ".*";
+  const HTML_PREFIX = "^https?://";
   var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
   var whitelistAnyOtherFilters = [];
   var elementWhitelistFilters = [];
@@ -95,7 +94,7 @@ DeclarativeWebRequest = (function() {
     }
     // make sure to limit rules to to HTTP(S) URLs (if not already limited)
     if (!/^(\^|http|\/http)/.test(rule)) {
-      rule = HTML_PREFIX + REGEX_WILDCARD + rule;
+      rule = HTML_PREFIX + rule;
     }
     return rule;
   };
@@ -133,7 +132,7 @@ DeclarativeWebRequest = (function() {
     rule.action = {};
     rule.action.type = "block";
     rule.trigger = {};
-    rule.trigger["url-filter"] = HTML_PREFIX + REGEX_WILDCARD;
+    rule.trigger["url-filter"] = HTML_PREFIX;
     return rule;
   };
 
@@ -141,11 +140,16 @@ DeclarativeWebRequest = (function() {
   var getRule = function(filter) {
     var rule = createDefaultRule();
     rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
-    rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
+    var resourceArray = getResourceTypesByElementType(filter._allowedElementTypes);
+    if (resourceArray && resourceArray.length > 0) {
+      rule.trigger["resource-type"] = resourceArray;
+    }
     rule.trigger["url-filter-is-case-sensitive"] = true;
     addDomainsToRule(filter, rule);
     if (filter._options & FilterOptions["THIRDPARTY"]) {
       rule["trigger"]["load-type"] = ["third-party"];
+    } else {
+      rule["trigger"]["load-type"] = ["first-party"];
     }
     return rule;
   };
@@ -164,7 +168,15 @@ DeclarativeWebRequest = (function() {
     var rule = createDefaultRule();
     rule.action.type = "ignore-previous-rules";
     rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
-    rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
+    var resourceArray = getResourceTypesByElementType(filter._allowedElementTypes);
+    if (resourceArray && resourceArray.length > 0) {
+      rule.trigger["resource-type"] = resourceArray;
+    }
+    if (filter._options & FilterOptions["THIRDPARTY"]) {
+      rule["trigger"]["load-type"] = ["third-party"];
+    } else {
+      rule["trigger"]["load-type"] = ["first-party"];
+    }
     addDomainsToRule(filter, rule);
     return rule;
   };
@@ -181,7 +193,10 @@ DeclarativeWebRequest = (function() {
     var rule = createDefaultRule();
     rule.action = {"type": "ignore-previous-rules"};
     rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
-    rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
+    var resourceArray = getResourceTypesByElementType(filter._allowedElementTypes);
+    if (resourceArray && resourceArray.length > 0) {
+      rule.trigger["resource-type"] = resourceArray;
+    }
     addDomainsToRule(filter, rule);
     return rule;
   };
@@ -191,7 +206,10 @@ DeclarativeWebRequest = (function() {
     var rule = createDefaultRule();
     rule.action = {"type": "ignore-previous-rules"};
     rule.trigger["url-filter"]  =  getURLFilterFromFilter(filter);
-    rule.trigger["resource-type"] = getResourceTypesByElementType(filter._allowedElementTypes);
+    var resourceArray = getResourceTypesByElementType(filter._allowedElementTypes);
+    if (resourceArray && resourceArray.length > 0) {
+      rule.trigger["resource-type"] = resourceArray;
+    }
     addDomainsToRule(filter, rule);
     return rule;
   };
@@ -259,7 +277,8 @@ DeclarativeWebRequest = (function() {
       });
       //step 2, now add only the $elemhide filters
       elementWhitelistFilters.forEach(function(filter) {
-        rules.push(createElemhideIgnoreRule(filter));
+        var rule = createElemhideIgnoreRule(filter);
+        rules.push(rule);
       });
       //step 3, now add the blocking rules
       patternFilters.forEach(function(filter) {
@@ -279,11 +298,13 @@ DeclarativeWebRequest = (function() {
 
       //step 4, add all $document
       documentWhitelistFilters.forEach(function(filter) {
-        rules.push(createDocumentIgnoreRule(filter));
+        var rule = createDocumentIgnoreRule(filter);
+        rules.push(rule);
       });
       //step 5, add other whitelist rules
       whitelistAnyOtherFilters.forEach(function(filter) {
-        rules.push(createIgnoreRule(filter));
+        var rule = createIgnoreRule(filter);
+        rules.push(rule);
       });
       return rules;
     },
