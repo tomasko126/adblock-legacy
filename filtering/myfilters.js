@@ -171,12 +171,6 @@ MyFilters.prototype.getExtensionFilters = function(settings) {
 
 // Rebuild filters based on the current settings and subscriptions.
 MyFilters.prototype.rebuild = function() {
-//  if (get_settings().safari_content_blocking) {
-//    if (this._fetchTracker && Object.keys(this._fetchTracker).length > 0) {
-//      // Only process the new JSON rules when all of the outstand AJAX requests have processed
-//      return;
-//    }
-//  }
   var texts = [];
   if (!get_settings().safari_content_blocking) {
     // Only add subscriptions in Chrome, Opera, and older version of Safari...
@@ -495,10 +489,6 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
         // If subscribed to Acceptable Ads use the URL that includes the exception rules
         url = this._subscriptions[id].safariJSON_URL_AA;
       }
-//      if (!this._fetchTracker) {
-//        this._fetchTracker = {};
-//      }
-//      this._fetchTracker[id] = true;
   }
   var that = this;
   function onError() {
@@ -564,10 +554,6 @@ MyFilters.prototype._updateSubscriptionText = function(id, text, xhr) {
   delete this._subscriptions[id].last_update_failed_at;
   //Safari 9 Content Blocking...
   if (get_settings().safari_content_blocking) {
-//    if (this._fetchTracker &&
-//        this._fetchTracker[id]) {
-//      delete this._fetchTracker[id];
-//    }
     //if the |text| is JSON rules, save them, and return
     if (text && (typeof text === "object")) {
       // Record how many hours until we need to update the subscription text. Defaults to 120.
