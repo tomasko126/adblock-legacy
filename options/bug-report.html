@@ -94,6 +94,8 @@
         <input type="text" id="name" /><br />
         <label for="email">Email Address (so that we can contact you if we need more info):</label><br />
         <input type="email" id="email" /><br />
+        <input type="checkbox" value="true" id="rememberDetails" />
+        <label for="rememberDetails">Remember my name &amp; for next time!</label><br />
         <button id="step1-next">Next</button>
       </div>
     </div>
@@ -113,6 +115,7 @@
         <textarea id="expected-result"  rows="5" cols="50"></textarea><br />
         <label for="actual-result">When you carry out these steps, what did happen instead?</label><br />
         <textarea id="actual-result" rows="5" cols="50"></textarea><br />
+        <button id="step2-back">Back</button>
         <button id="step2-next">Next</button>
       </div>
     </div>
@@ -122,8 +125,10 @@
       <div class="section" id="step_final_questions">
         <p>This last question is completely optional, but it mostly concerns the details of the report you are submitting</p>
         <label for="other-comments">Do you have anything else you would like to mention?</label><br />
-        <p>Basic information such as your AdBlock settings and version number will be included in the bug report.</p>
         <textarea id="other-comments" rows="5" cols="50"></textarea><br />
+        <p>The following information will be included in the bug report.</p>
+        <textarea id="debug-info" rows="5" cols="75" disabled></textarea>
+        <button id="step3-back">Back</button>
         <button id="submit">Submit</button>
       </div>
     </div>
