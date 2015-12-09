@@ -480,12 +480,11 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
   var url = this._subscriptions[id].url;
   if (get_settings().safari_content_blocking) {
     if (!this._subscriptions[id].safariJSON_URL){
-      if (id === "acceptable_ads") {
-        // Since the Acceptable Ads filter list is embedded with the other filter lists (when enabled)
-        // we won't process it.  Update the last_update timestamp.
-        this._subscriptions[id].last_update = Date.now();
-        chrome.extension.sendRequest({command: "filters_updated"});
-      }
+      // Since the certain filter lists (Acceptable Ads, AdBlock Custom) are embedded with the other filter lists 
+      // (when content blocking enabled)
+      // we don't need to process it, just update the last_update timestamp.
+      this._subscriptions[id].last_update = Date.now();
+      chrome.extension.sendRequest({command: "filters_updated"});
       return;
     }
     url = this._subscriptions[id].safariJSON_URL;
