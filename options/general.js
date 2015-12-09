@@ -89,6 +89,14 @@ $("#acceptable_ads").change(function() {
     $("#acceptable_ads_info").slideDown();
     BGcall("unsubscribe", {id:"acceptable_ads", del:false});
   }
+  // If the user has Safari content blocking enabled, then update the filter lists when
+  // a user subscribes to AA
+  BGcall("get_settings", function(settings) {
+    if (settings &&
+        settings.safari_content_blocking) {
+      BGcall("update_subscriptions_now");
+    }
+  });
 });
 
 $("#enable_show_advanced_options").change(function() {

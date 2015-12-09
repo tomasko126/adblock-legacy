@@ -429,6 +429,14 @@ SubscriptionUtil.subscribe = function(id, title) {
   if (id === "acceptable_ads") {
     $("#acceptable_ads_info").slideUp();
     $("#acceptable_ads").prop("checked", true);
+    // If the user has Safari content blocking enabled, then update the filter lists when
+    // a user subscribes to AA
+    BGcall("get_settings", function(settings) {
+      if (settings &&
+          settings.safari_content_blocking) {
+        BGcall("update_subscriptions_now");
+      }
+    });
   }
 };
 // Unsubscribe to the filter list with the given |id|.
@@ -441,6 +449,14 @@ SubscriptionUtil.unsubscribe = function(id, del) {
   if (id === "acceptable_ads") {
     $("#acceptable_ads_info").slideDown();
     $("#acceptable_ads").prop("checked", false);
+    // If the user has Safari content blocking enabled, then update the filter lists when
+    // a user subscribes to AA
+    BGcall("get_settings", function(settings) {
+      if (settings &&
+          settings.safari_content_blocking) {
+        BGcall("update_subscriptions_now");
+      }
+    });
   }
 };
 // Update the given filter list in the cached list.
