@@ -53,7 +53,8 @@ STATS = (function() {
       ov: osVersion,
       l: determineUserLanguage(),
       st: SURVEY.types(),
-      pc: total_pings
+      pc: total_pings,
+      cb: get_settings().safari_content_blocking ? '1': '0',
     };
     //only on Chrome
     if (flavor === "E" && blockCounts) {
