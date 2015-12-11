@@ -474,7 +474,7 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
   var url = this._subscriptions[id].url;
   if (get_settings().safari_content_blocking) {
     if (!this._subscriptions[id].safariJSON_URL){
-      // Since the certain filter lists (Acceptable Ads, AdBlock Custom) are embedded with the other filter lists 
+      // Since the certain filter lists (Acceptable Ads, AdBlock Custom) are embedded with the other filter lists
       // (when content blocking enabled)
       // we don't need to process it, just update the last_update timestamp.
       this._subscriptions[id].last_update = Date.now();
@@ -486,7 +486,7 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
         this._subscriptions.acceptable_ads &&
         this._subscriptions.acceptable_ads.subscribed &&
         this._subscriptions[id].safariJSON_URL_AA) {
-        // If the user is subscribed to Acceptable Ads, and the filter list has a 
+        // If the user is subscribed to Acceptable Ads, and the filter list has a
         // special URL that includes the exception rules, then use it (currently only easylist)
         url = this._subscriptions[id].safariJSON_URL_AA;
       }
@@ -854,7 +854,6 @@ MyFilters.prototype._make_subscription_options = function() {
     },
     "hungarian": { // Hungarian filters
       url: "http://pete.teamlupus.hu/hufilter.txt",
-
       safariJSON_URL: "https://adblockcdn.com/filters/hungarian.json",
     },
     "israeli": { // Israeli filters
