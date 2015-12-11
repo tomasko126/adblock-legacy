@@ -273,36 +273,17 @@ MyFilters.prototype.rebuild = function() {
        log("no rules to submit to safari");
        return;
     }
-    // Sort the rules for better performance
-    var cssRules = [];
-    var blockingRules = [];
-    var igoreRules = [];
-    for (var i = 0; i < filterListRules.length; i += 1) {
-      var filter = filterListRules[i];
-      var filterType = filterListRules[i].action.type;
-      if (filterType === "css-display-none") {
-        cssRules.push(filter);
-      } else if (filterType === "ignore-previous-rules") {
-        igoreRules.push(filter);
-      } else if (filterType === "block") {
-        blockingRules.push(filter);
-      }
-    }
-    var sortedFilterListRules = [];
-    sortedFilterListRules.push.apply(sortedFilterListRules, cssRules);
-    sortedFilterListRules.push.apply(sortedFilterListRules, blockingRules);
-    sortedFilterListRules.push.apply(sortedFilterListRules, igoreRules);
-    if (sortedFilterListRules.length > 50000) {
+    if (filterListRules.length > 50000) {
       createRuleLimitExceededSafariNotification();
-      log("exceed number of rules: " + sortedFilterListRules.length);
-      sortedFilterListRules = sortedFilterListRules.slice(0, 49999);
+      log("exceed number of rules: " + filterListRules.length);
+      filterListRules = filterListRules.slice(0, 49999);
     } else {
       //size is less then the limit, remove any previous error messages.
       sessionstorage_set('contentblockingerror');
       chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
     }
-    log("submitting rules to safari: # of rules: ",sortedFilterListRules.length);
-    safari.extension.setContentBlocker(sortedFilterListRules);
+    log("submitting rules to safari: # of rules: ",filterListRules.length);
+    safari.extension.setContentBlocker(filterListRules);
   }
 
   // After 90 seconds, delete the cache. That way the cache is available when
@@ -473,7 +454,6 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
       return;
     }
     url = this._subscriptions[id].safariJSON_URL;
-    console.log("URL", url, id);
     if (this._subscriptions &&
         this._subscriptions.acceptable_ads &&
         this._subscriptions.acceptable_ads.subscribed &&
@@ -481,7 +461,6 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
         // If the user is subscribed to Acceptable Ads, and the filter list has a
         // special URL that includes the exception rules, then use it (currently only easylist)
         url = this._subscriptions[id].safariJSON_URL_AA;
-        console.log("  updated URL", url, id);
       }
   }
   var that = this;
