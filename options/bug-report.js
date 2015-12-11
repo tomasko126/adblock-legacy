@@ -1,7 +1,32 @@
 // Get debug info
 var debug_info;
+var text_debug_info;
 BGcall("getDebugInfo", function(info) {
   debug_info = info;
+  // Get written debug info
+  // info is the debug info object
+  content = [];
+  content.push("=== Filter Lists ===");
+  content.push(debug_info.filter_lists);
+  content.push("");
+  // Custom & Excluded filters might not always be in the object
+  if (data.debug.custom_filters){
+    content.push("=== Custom Filters ===");
+    content.push(debug_info.custom_filters);
+    content.push("")
+  }
+  if (data.debug.exclude_filters){
+    content.push("=== Exclude Filters ===");
+    content.push(debug_info.exclude_filters);
+    content.push("");
+  }
+  content.push("=== Settings ===");
+  content.push(debug_info.settings);
+  content.push("");
+  content.push("=== Other Info ===");
+  content.push(debug_info.other_info);
+  // Put it together to put into the textbox
+  var text_debug_info = content.join("\n");
 });
 
 // Allow easier access to input boxes
@@ -50,31 +75,7 @@ var sendReport = function(){
   });
 }
 
-var text_debug_info = "";
-// Get written debug info
-// data.debug is the debug info object
-content = [];
-content.push("=== Filter Lists ===");
-content.push(data.debug.filter_lists);
-content.push("");
-// Custom & Excluded filters might not always be in the object
-if (data.debug.custom_filters){
-  content.push("=== Custom Filters ===");
-  content.push(data.debug.custom_filters);
-  content.push("")
-}
-if (data.debug.exclude_filters){
-  content.push("=== Exclude Filters ===");
-  content.push(data.debug.exclude_filters);
-  content.push("");
-}
-content.push("=== Settings ===");
-content.push(data.debug.settings);
-content.push("");
-content.push("=== Other Info ===");
-content.push(data.debug.other_info);
-// Put it together to put into the textbox
-var text_debug_info = content.join("\n");
+
 
 // Preparation for manual report in case of error.
 var prepareManualReport = function(data, status, HTTPerror){
@@ -157,6 +158,7 @@ $("#step2-next").click(function(){
   }
   if (s2_problems === 0){
     $(this).prop("disabled", true);
+    $("#step2-back").prop("disabled", true);
     $("#summary, #repro-steps, #expected-result, #actual-result").prop("disabled",true);
     $("#step_final_questions").fadeIn();
     $(".missingInfoMessage").hide();
@@ -170,7 +172,21 @@ $("#step2-next").click(function(){
     $("#step_repro_info > .missingInfoMessage").show();
   }
 });
+$("#step2-back").click(function(){
+  $("#step1-next").prop("disabled", false);
+  $("#email, #name").prop("disabled", false);
+  $("#step_repro_info").fadeOut();
+  // Auto-scroll to bottom of the page
+  $("html, body").animate({ scrollTop: 15000 }, 50);
+});
 
 // Step 3: Final Questions
 $("#debug-info").val(text_debug_info);
+$("#step3-back").click(function(){
+  $("#step2-next, #step2-back").prop("disabled", false);
+  $("#summary, #repro-steps, #expected-result, #actual-result").prop("disabled",false);
+  $("#step_final_questions").fadeOut();
+  // Auto-scroll to bottom of the page
+  $("html, body").animate({ scrollTop: 15000 }, 50);
+});
 $("#submit").click(sendReport);
