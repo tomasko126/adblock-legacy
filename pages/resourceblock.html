@@ -28,11 +28,29 @@
                 <a href="https://www.getadblock.com" class="left adblock-logo"><img src="../img/logo.png"></a>
             </div>
         </header>
-        <div id="legend">
-            <span class="legendtext"></span>
-            <span class="blocked"></span>,
-            <span class="whitelisted"></span>,
-            <span class="hiding"></span>
+        <div id="cover"></div>
+        <div id="underlay">
+            <div id="legend">
+                <span class="legendtext"></span>
+                <span class="blocked"></span>,
+                <span class="whitelisted"></span>,
+                <span class="hiding"></span>
+            </div>
+        </div>
+        <div id="overlay">
+            <div id="selectblockableurl">
+                <h3>Block every resource containing:</h3>
+                <div id="suggestions"></div>
+                <input type="radio" name="urloption" id="custom"></input>
+                <label for="custom">Own filter:
+                    <input type="text" id="customurl" size="80"></input>
+                </label>
+            </div>
+            <div id="disablefilter" style="display: block;">
+                <h3>... or disable filter:</h3>
+                <input type="radio" name="urloption" id="disablefilterbtn"></input>
+                <label for="disablefilterbtn"></label>
+            </div>
         </div>
         <img class="loader" src=../img/loader.gif />
         <script src="resourceblock.js"></script>
