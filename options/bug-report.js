@@ -43,6 +43,7 @@ if (storage_get("user_name") !== undefined){
 }
 if (storage_get("user_email") !== undefined){
   $email.val(storage_get("user_email"));
+  $("#rememberDetails").prop("checked",true);
 }
 
 var sendReport = function(){
@@ -120,7 +121,7 @@ $("#step1-next").click(function(){
   if (s1_problems === 0){
     // Success - go to next step
     $(this).prop("disabled", true);
-    $("#email, #name").prop("disabled", true);
+    $("#email, #name, #rememberDetails").prop("disabled", true);
     $(".inputError").removeClass("inputError");
     $("#step_repro_info").fadeIn();
     $(".missingInfoMessage").hide();
