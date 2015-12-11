@@ -214,15 +214,6 @@ MyFilters.prototype.rebuild = function() {
         }
       }
     }
-    // add Acceptable Ads last, since they contain exception rules
-    if (this._subscriptions &&
-        this._subscriptions.acceptable_ads &&
-        this._subscriptions.acceptable_ads.subscribed &&
-        this._subscriptions.acceptable_ads.rules) {
-      for (var item in this._subscriptions.acceptable_ads.rules)  {
-        filterListRules.push(this._subscriptions.acceptable_ads.rules[item]);
-      }
-    }
 
     if (this._subscriptions &&
         this._subscriptions.malware &&
@@ -482,6 +473,7 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
       return;
     }
     url = this._subscriptions[id].safariJSON_URL;
+    console.log("URL", url, id);
     if (this._subscriptions &&
         this._subscriptions.acceptable_ads &&
         this._subscriptions.acceptable_ads.subscribed &&
@@ -489,6 +481,7 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
         // If the user is subscribed to Acceptable Ads, and the filter list has a
         // special URL that includes the exception rules, then use it (currently only easylist)
         url = this._subscriptions[id].safariJSON_URL_AA;
+        console.log("  updated URL", url, id);
       }
   }
   var that = this;
