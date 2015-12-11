@@ -10,12 +10,12 @@ BGcall("getDebugInfo", function(info) {
   content.push(debug_info.filter_lists);
   content.push("");
   // Custom & Excluded filters might not always be in the object
-  if (data.debug.custom_filters){
+  if (debug_info.custom_filters){
     content.push("=== Custom Filters ===");
     content.push(debug_info.custom_filters);
     content.push("")
   }
-  if (data.debug.exclude_filters){
+  if (debug_info.exclude_filters){
     content.push("=== Exclude Filters ===");
     content.push(debug_info.exclude_filters);
     content.push("");
