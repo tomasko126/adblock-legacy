@@ -255,7 +255,93 @@ function addRequestsToTables(frames) {
 
     // Finally, show us the tables!
     $("table").fadeIn();
+
+    initClickHandler();
 };
+
+function initClickHandler() {
+
+    $("td[data-column='url']").click(function(event) {
+        var url = event.target.title;
+        var filter = event.target.parentNode.childNodes[2].innerText;
+        // Remove protocols from URL
+        url = url.replace(/^[a-z\-]+\:\/\/(www\.)?/, '');
+        url = truncateURI(url, true);
+
+        // Make up suggestions
+        var suggestions = [];
+        $("#customurl").val(url);
+        suggestions.push(url);
+
+        if (url.indexOf("#") > 0) {
+            var index = url.indexOf("#");
+            url = url.substring(0, index);
+            suggestions.push(url);
+        }
+        if (url.indexOf("?") > 0) {
+            var index = url.indexOf("?");
+            url = url.substring(0, index);
+            suggestions.push(url);
+        }
+        var splitted = url.split("/");
+        for (var i=1; i<splitted.length; i++) {
+            var index = url.lastIndexOf("/");
+            url = url.substring(0, index);
+            if (suggestions.indexOf(url + "/") === -1) {
+                suggestions.push(url + "/");
+            }
+        }
+        var rootDomain = parseUri.secondLevelDomainOnly(url, true);
+        if (rootDomain !== url) {
+            suggestions.push("*." + rootDomain);
+        }
+        // Sort suggested URLs
+        suggestions = suggestions.sort(function(a, b) {
+            return b.length - a.length;
+        });
+
+        var options = [];
+        for (var i in suggestions) {
+            var input = $("<input>").
+            attr("type", "radio").
+            attr("name", "urloption").
+            attr("id", "suggest_" + i).
+            // add (isBlocked ? "@@||" : "||") +
+            val(suggestions[i]);
+            var label = $("<label>").
+            attr("for", "suggest_" + i).
+            text(suggestions[i]);
+            options.push(input);
+            options.push(label);
+            options.push("<br/>");
+        }
+
+        $("#suggestions").empty();
+        for (var i = 0; i < options.length; i++)
+            $("#suggestions").append(options[i]);
+
+        console.log(suggestions, filter);
+        if (filter === "") {
+            $("#disablefilter").hide();
+        } else {
+            $("label[for='disablefilterbtn']").text(filter);
+        }
+        //$("#overlay").fadeIn();
+        //$("#underlay").css("-webkit-filter","blur(2px)");
+        $("#overlay").addClass("show");
+        $("#cover").fadeIn();
+
+        $("#cover").click(function() {
+            //$("#overlay").fadeOut();
+            //$("#underlay").css("-webkit-filter","initial");
+            $("#overlay").removeClass("show");
+            $("#cover").fadeOut(function() {
+                $("#disablefilter").show();
+            });
+        });
+
+    });
+}
 
 // Create a new table for frame
 function createTable(frame, frameId) {
@@ -272,7 +358,7 @@ function createTable(frame, frameId) {
     }
 
     // Insert table to page
-    // TODO: l10n and css of #noadditionalresources
+    // TODO: l10n of #noadditionalresources
     $(elem).after(
         '<table data-href=' + frame.domain + ' data-frameid=' + frameId + ' class="resourceslist">' +
             '<thead>' +
@@ -340,8 +426,10 @@ function sortTable() {
 };
 
 // Truncate long URIs
-function truncateURI(uri) {
-    if (uri.length > 80) {
+function truncateURI(uri, longer) {
+    if (longer && uri.length > 115) {
+        return uri.substring(0, 120) + '[...]';
+    } else if (uri.length > 80) {
         return uri.substring(0, 75) + '[...]';
     }
     return uri;

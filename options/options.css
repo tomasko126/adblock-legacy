@@ -348,7 +348,7 @@
 
       /* Support tab */
       #ui-tabs-4 h3, #ui-tabs-4 p, #checkupdate {
-	    margin-bottom: 5px;
+        margin-bottom: 5px;
       }
       #ui-tabs-4 p {
         margin-top: 0;
@@ -494,10 +494,10 @@
       }
       input[type="radio"]:checked:before {
         display: block;
-        height: 0.38em;
+        height: 0.37em;
         width: 0.37em;
         position: relative;
-        left: 0.38em;
+        left: 0.37em;
         top: 0.35em;
         background: rgba(0, 0, 0, 0.7);
         border-radius: 100%;
