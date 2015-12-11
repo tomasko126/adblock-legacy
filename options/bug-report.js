@@ -26,7 +26,7 @@ BGcall("getDebugInfo", function(info) {
   content.push("=== Other Info ===");
   content.push(debug_info.other_info);
   // Put it together to put into the textbox
-  var text_debug_info = content.join("\n");
+  text_debug_info = content.join("\n");
 });
 
 // Allow easier access to input boxes
@@ -157,6 +157,7 @@ $("#step2-next").click(function(){
     $actual.addClass("inputError");
   }
   if (s2_problems === 0){
+    $("#debug-info").val(text_debug_info);
     $(this).prop("disabled", true);
     $("#step2-back").prop("disabled", true);
     $("#summary, #repro-steps, #expected-result, #actual-result").prop("disabled",true);
@@ -181,7 +182,6 @@ $("#step2-back").click(function(){
 });
 
 // Step 3: Final Questions
-$("#debug-info").val(text_debug_info);
 $("#step3-back").click(function(){
   $("#step2-next, #step2-back").prop("disabled", false);
   $("#summary, #repro-steps, #expected-result, #actual-result").prop("disabled",false);
