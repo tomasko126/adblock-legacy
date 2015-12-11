@@ -263,6 +263,5 @@ var createRuleLimitExceededSafariNotification = function() {
     note.onerror = function() {
       console.log("onerror  handler");
     };
-      
   }
 };

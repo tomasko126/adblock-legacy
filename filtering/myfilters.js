@@ -777,9 +777,7 @@ MyFilters.prototype._make_subscription_options = function() {
     "easylist": { // EasyList
       url: "https://easylist-downloads.adblockplus.org/easylist.txt",
       safariJSON_URL: "https://adblockcdn.com/filters/easylist.json",
-      //TODO - fix
-      //safariJSON_URL_AA: "https://adblockcdn.com/filters/easylist_aa.json",
-      safariJSON_URL_AA: "https://ping.getadblock.com/qa-stats/easylist.json",
+      safariJSON_URL_AA: "https://adblockcdn.com/filters/easylist_aa.json",
     },
     "easylist_plus_bulgarian": { // Additional Bulgarian filters
       url: "http://stanev.org/abp/adblock_bg.txt",
