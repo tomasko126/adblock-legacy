@@ -259,84 +259,148 @@ function addRequestsToTables(frames) {
     initClickHandler();
 };
 
+function generateSuggestions(url) {
+    // Make up suggestions
+    var suggestions = [];
+    suggestions.push(url);
+
+    if (url.indexOf("#") > 0) {
+        var index = url.indexOf("#");
+        url = url.substring(0, index);
+        suggestions.push(url);
+    }
+
+    if (url.indexOf("?") > 0) {
+        var index = url.indexOf("?");
+        url = url.substring(0, index);
+        suggestions.push(url);
+    }
+
+    var splitted = url.split("/");
+    for (var i=1; i<splitted.length; i++) {
+        var index = url.lastIndexOf("/");
+        url = url.substring(0, index);
+        if (suggestions.indexOf(url + "/") === -1) {
+            suggestions.push(url + "/");
+        }
+    }
+
+    var rootDomain = parseUri.secondLevelDomainOnly(url, true);
+    if (rootDomain !== url) {
+        suggestions.push("*." + rootDomain);
+    }
+
+    // Sort suggested URLs
+    suggestions = suggestions.sort(function(a, b) {
+        return b.length - a.length;
+    });
+
+    // Reverse suggestions
+    suggestions.reverse();
+
+    return suggestions;
+}
+
 function initClickHandler() {
 
     $("td[data-column='url']").click(function(event) {
+        // Contains URL of selected resource
         var url = event.target.title;
+
+        // Get blocking/whitelisting/hiding filter
         var filter = event.target.parentNode.childNodes[2].innerText;
+
+        // Has this resource been whitelisted/blocked/hidden?
+        var isSelector = Filter.isSelectorFilter(filter);
+        var isWhitelisted = Filter.isWhitelistFilter(filter);
+        var isBlocked = !isWhitelisted && !isSelector && filter !== "";
+        var isUntouched = !isSelector && !isWhitelisted && !isBlocked;
+
         // Remove protocols from URL
         url = url.replace(/^[a-z\-]+\:\/\/(www\.)?/, '');
         url = truncateURI(url, true);
 
-        // Make up suggestions
-        var suggestions = [];
-        $("#customurl").val(url);
-        suggestions.push(url);
+        // TODO: ID?
+        $("#customfilter").val(url);
 
-        if (url.indexOf("#") > 0) {
-            var index = url.indexOf("#");
-            url = url.substring(0, index);
-            suggestions.push(url);
-        }
-        if (url.indexOf("?") > 0) {
-            var index = url.indexOf("?");
-            url = url.substring(0, index);
-            suggestions.push(url);
-        }
-        var splitted = url.split("/");
-        for (var i=1; i<splitted.length; i++) {
-            var index = url.lastIndexOf("/");
-            url = url.substring(0, index);
-            if (suggestions.indexOf(url + "/") === -1) {
-                suggestions.push(url + "/");
-            }
-        }
-        var rootDomain = parseUri.secondLevelDomainOnly(url, true);
-        if (rootDomain !== url) {
-            suggestions.push("*." + rootDomain);
-        }
-        // Sort suggested URLs
-        suggestions = suggestions.sort(function(a, b) {
-            return b.length - a.length;
-        });
+        // Generate suggestions
+        var suggestions = generateSuggestions(url);
 
-        var options = [];
-        for (var i in suggestions) {
-            var input = $("<input>").
-            attr("type", "radio").
-            attr("name", "urloption").
-            attr("id", "suggest_" + i).
-            // add (isBlocked ? "@@||" : "||") +
-            val(suggestions[i]);
-            var label = $("<label>").
-            attr("for", "suggest_" + i).
-            text(suggestions[i]);
-            options.push(input);
-            options.push(label);
-            options.push("<br/>");
-        }
-
+        // Remove any suggestion created before
         $("#suggestions").empty();
-        for (var i = 0; i < options.length; i++)
-            $("#suggestions").append(options[i]);
 
-        console.log(suggestions, filter);
+        // If selected resource hasn't been blocked,
+        // hide section for disabling filter
         if (filter === "") {
             $("#disablefilter").hide();
         } else {
             $("label[for='disablefilterbtn']").text(filter);
         }
-        //$("#overlay").fadeIn();
-        //$("#underlay").css("-webkit-filter","blur(2px)");
-        $("#overlay").addClass("show");
+
+        if (isSelector) {
+            $("#selectblockableurl, #createownfilter").hide();
+        }
+
+        if (isBlocked) {
+            $("#selectblockableurlheader").text("Whitelist every resource containing:");
+            $("#disablefilterheader").text("... or disable following blocking filter:");
+        } else if (isWhitelisted) {
+            $("#selectblockableurlheader").text("Block every resource containing:");
+        } else if (isSelector) {
+            $("#disablefilterheader").text("Disable following hiding filter:");
+        } else if (isUntouched) {
+            $("#selectblockableurlheader").text("Block every resource containing:");
+        }
+
+        // Check first option automatically
+        $("#sliderbtn").prop("checked", true);
+
+        // Show first overlay
+        $("#overlay1").addClass("show");
         $("#cover").fadeIn();
 
+        // Set up slider
+        $("#slider").
+        attr("max", suggestions.length - 1).
+        attr("step", "1").
+        val(suggestions.length);
+
+        // TODO: ID
+        $("#test").text(suggestions[suggestions.length - 1]);
+
+        // Change suggestions according to position of slider
+        $("#slider").on("input change", function(event) {
+            $("#test").text(suggestions[this.valueAsNumber]);
+        });
+
+        // Uncheck previously checked radio buttons
+        $("input[type='radio']").click(function() {
+            var clicked = $(this).attr("id");
+            $("input[type='radio']:checked", "#options1").each(function() {
+                var uncheck = $(this).attr("id");
+                if (clicked !== uncheck) {
+                    $(this).prop("checked", false);
+                }
+            });
+        });
+
+        $("#next").click(function() {
+            var checked = $("input[type='radio']:checked", "#options1").attr("id");
+            $("#overlay1").removeClass("show");
+            $("#overlay2").addClass("show");
+        });
+
+        $("#back").click(function() {
+            $("#overlay2").removeClass("show");
+            $("#overlay1").addClass("show");
+        });
+
         $("#cover").click(function() {
-            //$("#overlay").fadeOut();
-            //$("#underlay").css("-webkit-filter","initial");
-            $("#overlay").removeClass("show");
+            $("#overlay1, #overlay2").removeClass("show");
             $("#cover").fadeOut(function() {
                 $("#disablefilter").show();
+                $("#test").text("");
+                $("#selectblockableurl, #createownfilter").show();
             });
         });
 

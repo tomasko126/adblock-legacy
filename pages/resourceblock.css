@@ -49,7 +49,7 @@ th[data-column="thirdparty"] {
     height: 100%;
     display: none;
 }
-#customurl {
+#customfilter {
     margin-bottom: 15px;
 }
 #disablefilter {
@@ -67,6 +67,10 @@ th[data-column="thirdparty"] {
 #main_nav li {
     padding: 11px 24px;
 }
+#next {
+    margin-bottom: 15px;
+    margin-left: 15px;
+}
 #noadditionalresources {
     display: none;
 }
@@ -74,11 +78,11 @@ th[data-column="thirdparty"] {
     height: 10px;
     padding-bottom: 5px;
 }
-#overlay {
+#overlay1, #overlay2 {
     z-index: 0;
     width: 900px;
     background-color: #F1F1F1;
-    top: 200px;
+    top: 100px;
     left: 0;
     right: 0;
     margin: auto;
@@ -91,8 +95,14 @@ th[data-column="thirdparty"] {
     transition: all 0.3s;
     position: fixed;
 }
-#selectblockableurl, #disablefilter {
+#selectblockableurl, #disablefilter, #options2, #createownfilter {
     padding-left: 15px;
+}
+#sliderbtn {
+    vertical-align: sub;
+}
+#test {
+    margin-left: 5px;
 }
 #underlay {
     transition: 0.5s;

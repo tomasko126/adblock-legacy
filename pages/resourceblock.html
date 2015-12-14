@@ -37,20 +37,77 @@
                 <span class="hiding"></span>
             </div>
         </div>
-        <div id="overlay">
-            <div id="selectblockableurl">
-                <h3>Block every resource containing:</h3>
-                <div id="suggestions"></div>
-                <input type="radio" name="urloption" id="custom"></input>
-                <label for="custom">Own filter:
-                    <input type="text" id="customurl" size="80"></input>
-                </label>
+        <div id="overlay1">
+            <div id="options1">
+                <div id="selectblockableurl">
+                    <h3 id="selectblockableurlheader"></h3>
+                    <div id="suggestions"></div>
+                    <p id="test"></p>
+                    <input type="radio" name="slideroptions" id="sliderbtn"></input>
+                    <label for="sliderbtn">
+                        <input id="slider" type="range" min="0" />
+                    </label>
+                </div>
+                <div id="createownfilter">
+                    <h3 id="createownfilterheader">... or make an own filter:</h3>
+                    <input type="radio" name="urloption" id="custombtn"></input>
+                    <label for="custombtn">
+                        <input type="text" id="customfilter" size="100"></input>
+                    </label>
+                </div>
+                <div id="disablefilter" style="display: block;">
+                    <h3 id="disablefilterheader"></h3>
+                    <input type="radio" name="urloption" id="disablefilterbtn"></input>
+                    <label for="disablefilterbtn"></label>
+                </div>
+                <input type="button" id="next" value="Next"></input>
             </div>
-            <div id="disablefilter" style="display: block;">
-                <h3>... or disable filter:</h3>
-                <input type="radio" name="urloption" id="disablefilterbtn"></input>
-                <label for="disablefilterbtn"></label>
+        </div>
+        <div id="overlay2">
+            <div id="options2">
+                <h3>Tento filter sa použije pri prehliadaní:</h3>
+                <input type="radio" name="domainoptions" value="" checked="checked" id="onEverySite">
+                <label>Akákoľvek webová stránka</label><br>
+                <input type="radio" name="domainoptions" id="thirdparty" value="third-party">
+                <label for="thirdparty">Akékoľvek webové stránky, s výnimkou stránok na doméne <i>doubleclick.net</i></label><br>
+                <input type="radio" name="domainoptions" id="domainis" value="domain=azet.sk">
+                <label for="domainis">LEN stránky na týchto doménách:</label>
+                <input type="text" size="30" id="domainlist" title="Oddeľte viac domén čiarkami alebo medzerami"><br>
+                <h3>Tento filter rozlišuje malé a veľké písmená:</h3>
+                <input type="radio" name="caseoption" value="match-case" id="matchcaseYes">
+                <label for="matchcaseYes" i18n="yes"></label>
+                <input type="radio" name="caseoption" value="" checked="checked" id="matchcaseNo">
+                <label for="matchcaseNo" i18n="no"></label><br>
+                <h3>Tento filter sa vzťahuje na prvky týchto typov:</h3>
+                <div id="types">
+                    <input type="checkbox" value="media" checked="checked" id="typemed">
+                    <label for="typemed" i18n="typemedia"></label>
+                    <input type="checkbox" value="subdocument" checked="checked" id="typesub">
+                    <label for="typesub" i18n="typesubdocument"></label>
+                    <input type="checkbox" value="object" checked="checked" id="typeobj">
+                    <label for="typeobj" i18n="typeobject"></label>
+                    <input type="checkbox" value="image" checked="checked" id="typeimg">
+                    <label for="typeimg" i18n="typeimage"></label><br>
+                    <input type="checkbox" value="script" checked="checked" id="typescr">
+                    <label for="typescr" i18n="typescript"></label>
+                    <input type="checkbox" value="stylesheet" checked="checked" id="typesty">
+                    <label for="typesty" i18n="typestylesheet"></label>
+                    <input type="checkbox" value="xmlhttprequest" checked="checked" id="typexml">
+                    <label for="typexml" i18n="typexmlhttprequest"></label>
+                    <!--TODO: when crbug 93542 is fixed, uncomment this-->
+                    <!--input type="checkbox" value="object_subrequest" checked="checked" id='typesubreq'/>
+                    <label for='typesubreq' i18n="typeobject_subrequest"></label-->
+                    <!--TODO: when crbug 80230 is fixed, uncomment this-->
+                    <!--input type="checkbox" value="other" checked="checked" id='typeother'/>
+                    <label for='typeother' i18n="typeother"></label-->
+                    <input type="checkbox" value="popup" id="typepopup" class="implicitType">
+                    <label for="typepopup" i18n="typepopup"></label><br>
+                </div>
+                <input type="button" id="addthefilter" value="Pridať tento filter" style="margin-bottom: 15px;"></input>
+                <span id="filterpreview">@@||googleads.g.doubleclick.net/pagead/viewthroughconversion/986308317/</span>
+                <input type="button" id="back" value="Back" style="margin-bottom: 15px;margin-left: 15px;"></input>
             </div>
+        </div>
         </div>
         <img class="loader" src=../img/loader.gif />
         <script src="resourceblock.js"></script>
