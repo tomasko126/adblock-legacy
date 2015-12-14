@@ -219,10 +219,9 @@ DeclarativeWebRequest = (function() {
     if (!filter.hasOwnProperty('_allowedElementTypes'))  {
       return true;
     } else {
-      return !((filter._allowedElementTypes & ElementTypes.SUBDOCUMENT) ||
-             (filter._allowedElementTypes & ElementTypes.OBJECT) ||
-             (filter._allowedElementTypes & ElementTypes.FONT) ||
-             (filter._allowedElementTypes & ElementTypes.OBJECT_SUBREQUEST));
+      return !((filter._allowedElementTypes & ElementTypes.subdocument) ||
+             (filter._allowedElementTypes & ElementTypes.object) ||
+             (filter._allowedElementTypes & ElementTypes.object_subrequest));
     }
   };
 
