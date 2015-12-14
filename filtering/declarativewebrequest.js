@@ -124,7 +124,7 @@ DeclarativeWebRequest = (function() {
         documentWhitelistFilters.push(filter);
       }
     }
-  }
+  };
 
   // Create and return a default JavaScript rule object
   var createDefaultRule = function() {
@@ -186,7 +186,7 @@ DeclarativeWebRequest = (function() {
     var rule = createDefaultRule();
     rule["action"]["type"] = "css-display-none";
     return rule;
-  }
+  };
 
   // Return the rule (JSON) required to represent this $document Whitelist Filter in Safari blocking syntax.
   var createDocumentIgnoreRule = function(filter) {
@@ -238,7 +238,7 @@ DeclarativeWebRequest = (function() {
     elementWhitelistFilters = [];
     documentWhitelistFilters = [];
     elemhideSelectorExceptions = {};
-  }
+  };
 
   return {
     // Converts the various Filters into Safari specific JSON entries.
