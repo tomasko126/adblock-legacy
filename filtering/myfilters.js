@@ -208,7 +208,7 @@ MyFilters.prototype.rebuild = function() {
     // If Safari 9 content blocking
     var filterListRules = [];
     for (var id in this._subscriptions) {
-      if (id != "acceptable_ads" && this._subscriptions[id].subscribed) {
+      if (id !== "acceptable_ads" && this._subscriptions[id].subscribed) {
         for (var item in this._subscriptions[id].rules)  {
           filterListRules.push(this._subscriptions[id].rules[item]);
         }
@@ -269,7 +269,7 @@ MyFilters.prototype.rebuild = function() {
       filterListRules.push.apply(filterListRules, customRules);
     }
     if (!filterListRules ||
-         filterListRules.length == 0) {
+         filterListRules.length === 0) {
        log("no rules to submit to safari");
        return;
     }
