@@ -1374,9 +1374,5 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"You can turn this back on and support the websites you love by selecting \"Allow some non-intrusive advertising\" below.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
-  },
-  "acceptableadsdisable_please_reenable":{
-    "message":"Enabling Acceptable Ads is a way to support the websites you love who promise to only show you tasteful, non-annoying ads.",
-    "description":"Message shown to users after disabling Acceptable Ads via update page."
   }
 }

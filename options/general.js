@@ -24,6 +24,16 @@ $(function() {
   }
   $("input.feature[type='checkbox']").change(function() {
     var is_enabled = $(this).is(':checked');
+    if (this.id === "acceptable_ads") {
+      if (is_enabled) {
+        $("#acceptable_ads_info").slideUp();
+        BGcall("subscribe", {id: "acceptable_ads"});
+      } else {
+        $("#acceptable_ads_info").slideDown();
+        BGcall("unsubscribe", {id:"acceptable_ads", del:false});
+      }
+      return;
+    }
     var name = this.id.substring(7); // TODO: hack
     BGcall("set_setting", name, is_enabled, true);
     // Rebuild filters, so matched filter text is returned
@@ -52,17 +62,6 @@ $(function() {
 
   update_db_icon();
   getDropboxMessage();
-});
-
-$("#acceptable_ads").change(function() {
-  var is_enabled = $(this).is(':checked');
-  if (is_enabled) {
-    $("#acceptable_ads_info").slideUp();
-    BGcall("subscribe", {id: "acceptable_ads"});
-  } else {
-    $("#acceptable_ads_info").slideDown();
-    BGcall("unsubscribe", {id:"acceptable_ads", del:false});
-  }
 });
 
 $("#enable_show_advanced_options").change(function() {
