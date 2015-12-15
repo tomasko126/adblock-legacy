@@ -643,7 +643,7 @@ MyFilters.prototype._make_subscription_options = function() {
       requiresList: "easylist",
     },
     "easylist_plus_polish": { // Additional Polish filters
-      url: "https://raw.githubusercontent.com/adblockpolska/Adblock_PL_List/master/adblock_polska.txt",
+      url: "https://www.certyficate.it/adblock/adblock.txt",
       requiresList: "easylist",
     },
     "easylist_plus_romanian": { // Additional Romanian filters
