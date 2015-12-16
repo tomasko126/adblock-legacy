@@ -741,11 +741,6 @@ MyFilters.prototype._load_default_subscriptions = function() {
   result["easylist"] = { subscribed: true };
   result["malware"] = { subscribed: true };
   result["acceptable_ads"] = { subscribed: true };
-  // If users have content blocking enabled, subscribe them to
-  // EasyPrivacy as well.
-  if (get_settings().safari_content_blocking) {
-    result["easyprivacy"] = { subscribed: true };
-  }
   var list_for_lang = listIdForThisLocale();
   if (list_for_lang)
     result[list_for_lang] = { subscribed: true };
