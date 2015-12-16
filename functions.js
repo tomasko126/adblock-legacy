@@ -248,20 +248,9 @@ var createRuleLimitExceededSafariNotification = function() {
   if (SAFARI && ("Notification" in window)) {
     sessionstorage_set("contentblockingerror", translate("safaricontentblockinglimitexceeded"));
     chrome.extension.sendRequest({command: "contentblockingmessageupdated"});
-    console.log("Notification permission status: " , Notification.permission);
     var note = new Notification(translate("safarinotificationtitle") , { 'body' : translate("safarinotificationbody"), 'tag' : (Math.floor(Math.random() * 3000)).toString() });
     note.onclick = function() {
-      console.log("clicked 1 notification");
       openTab("options/index.html?tab=0");
-    };
-    note.addEventListener('click', function () {
-      console.log("clicked 2 notification");
-    });
-    note.onshow = function() {
-      console.log("onshow handler");
-    };
-    note.onerror = function() {
-      console.log("onerror  handler");
     };
   }
 };
