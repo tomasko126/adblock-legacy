@@ -246,7 +246,12 @@ DeclarativeWebRequest = (function() {
     convertFilterLists: function( patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll) {
     	resetInternalArrays();
       preProcessWhitelistFilters(whitelistFilters);
+
+      var hasUpperCase = function(str) {
+        return str.toLowerCase() != str;
+      };
       var rules = [];
+      //step 1a, add all of the generic hiding filters (CSS selectors)
       //step 1a, add all of the generic hiding filters (CSS selectors)
       const GROUPSIZE = 1000;
       for (var i = 0; i < selectorFiltersAll.length; i += GROUPSIZE) {
@@ -256,10 +261,17 @@ DeclarativeWebRequest = (function() {
         for (var j = start; j < end; j++) {
           var filter = selectorFiltersAll[j];
           if (isSupported(filter)) {
+            // If the selector is an ID selector and contains an upper case character
+            // also add an all lower case version due to a webkit bug (#23616574)
+            var tempSelector = parseSelector(filter.selector);
+            if ((tempSelector.charAt(0) === '#') &&
+                 hasUpperCase(tempSelector)) {
+               tempSelector = tempSelector + ", " + tempSelector.toLowerCase();
+            }
             if (selectorText === "") {
-              selectorText = parseSelector(filter.selector);
+              selectorText = tempSelector;
             } else {
-              selectorText = selectorText + ", " + parseSelector(filter.selector);
+              selectorText = selectorText + ", " + tempSelector;
             }
           }
         }
@@ -268,6 +280,7 @@ DeclarativeWebRequest = (function() {
         theRule["action"]["selector"] = selectorText;
         rules.push(theRule);
       }
+
       //step 1b, add all of the domain inclusive / exclusive hiding filters (CSS selectors)
       selectorFilters.forEach(function(filter) {
         if (isSupported(filter)) {
