@@ -265,6 +265,7 @@ MyFilters.prototype.rebuild = function() {
         selectorFiltersAll.push(selectorsFull[id]);
       }
       var customRules = DeclarativeWebRequest.convertFilterLists(patternFilters, whitelistFilters, selectorFilters, selectorFiltersAll);
+      log("customRules: " , customRules);
       //add the custom rules, with the filter list rules
       filterListRules.push.apply(filterListRules, customRules);
     }
@@ -371,6 +372,7 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
         }
         // If unsubscribed, remove properties
         delete this._subscriptions[id].text;
+        delete this._subscriptions[id].rules;
         delete this._subscriptions[id].last_update;
         delete this._subscriptions[id].expiresAfterHours;
         delete this._subscriptions[id].last_update_failed_at;
@@ -421,6 +423,7 @@ MyFilters.prototype.changeSubscription = function(id, subData, forceFetch) {
   } else {
     // If unsubscribed, remove some properties
     delete this._subscriptions[id].text;
+    delete this._subscriptions[id].rules;
     delete this._subscriptions[id].last_update;
     delete this._subscriptions[id].expiresAfterHours;
     delete this._subscriptions[id].last_update_failed_at;
