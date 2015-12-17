@@ -51,6 +51,7 @@ STATS = (function() {
       o: os,
       bv: browserVersion,
       ov: osVersion,
+      ad: get_settings().show_advanced_options ? '1': '0',
       l: determineUserLanguage(),
       st: SURVEY.types(),
       pc: total_pings
