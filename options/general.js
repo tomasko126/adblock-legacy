@@ -44,6 +44,9 @@ $(function() {
     if (name === "data_collection") {
       BGcall("update_subscriptions_now");
     }
+    BGcall("get_settings", function(settings) {
+        optionalSettings = settings;
+    });
   });
 
   //if safari content blocking is available...
