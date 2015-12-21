@@ -150,7 +150,6 @@ DeclarativeWebRequest = (function() {
     if (resourceArray && resourceArray.length > 0) {
       rule.trigger["resource-type"] = resourceArray;
     }
-    rule.trigger["url-filter-is-case-sensitive"] = true;
     addDomainsToRule(filter, rule);
     if (filter._options & FilterOptions["THIRDPARTY"]) {
       rule["trigger"]["load-type"] = ["third-party"];
@@ -299,6 +298,7 @@ DeclarativeWebRequest = (function() {
       //step 3, now add the blocking rules
       patternFilters.forEach(function(filter) {
         if (isSupported(filter)) {
+          
           var rule = getRule(filter);
           var is_valid = true;
           try {
