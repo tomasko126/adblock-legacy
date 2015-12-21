@@ -6,6 +6,7 @@ DeclarativeWebRequest = (function() {
   }
   const HTML_PREFIX = "^https?://.*";
   var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
+  var UNSUPPORTED_TYPES = (ElementTypes.subdocument | ElementTypes.object | ElementTypes.object_subrequest);
   var whitelistAnyOtherFilters = [];
   var elementWhitelistFilters = [];
   var documentWhitelistFilters = [];
@@ -219,9 +220,7 @@ DeclarativeWebRequest = (function() {
     if (!filter.hasOwnProperty('_allowedElementTypes'))  {
       return true;
     } else {
-      return !((filter._allowedElementTypes & ElementTypes.subdocument) ||
-             (filter._allowedElementTypes & ElementTypes.object) ||
-             (filter._allowedElementTypes & ElementTypes.object_subrequest));
+      return !(filter._allowedElementTypes === (filter._allowedElementTypes & UNSUPPORTED_TYPES));
     }
   };
 
