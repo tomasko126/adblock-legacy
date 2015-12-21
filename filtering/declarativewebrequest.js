@@ -5,7 +5,7 @@ DeclarativeWebRequest = (function() {
     return;
   }
   const HTML_PREFIX = "^https?://.*";
-  var pageLevelTypes = (ElementTypes.elemhide | ElementTypes.document);
+  var PAGELEVEL_TYPES = (ElementTypes.elemhide | ElementTypes.document);
   var UNSUPPORTED_TYPES = (ElementTypes.subdocument | ElementTypes.object | ElementTypes.object_subrequest);
   var whitelistAnyOtherFilters = [];
   var elementWhitelistFilters = [];
@@ -53,7 +53,7 @@ DeclarativeWebRequest = (function() {
 
   // Returns true if |filter| is of type $document or $elemhide
   var isPageLevel = function(filter) {
-    return filter._allowedElementTypes & pageLevelTypes;
+    return filter._allowedElementTypes & PAGELEVEL_TYPES;
   };
 
   // Returns an array of resource types that should be checked by rules for
