@@ -46,7 +46,12 @@ DeclarativeWebRequest = (function() {
       if (d === DomainSet.ALL) {
         continue;
       }
-      result[ has[d] ? 'included' : 'excluded' ].push(punycode.toASCII(d).toLowerCase());
+      var parsedDomain = punycode.toASCII(d).toLowerCase();
+      if (has[d] === 'included') {
+        result['included'].push("*" + parsedDomain);
+      } else {
+        result['excluded'].push(parsedDomain);
+      }
     }
     return result;
   };
