@@ -47,7 +47,7 @@ DeclarativeWebRequest = (function() {
         continue;
       }
       var parsedDomain = punycode.toASCII(d).toLowerCase();
-      if (has[d] === 'included') {
+      if (has[d]) {
         result['included'].push("*" + parsedDomain);
       } else {
         result['excluded'].push(parsedDomain);
