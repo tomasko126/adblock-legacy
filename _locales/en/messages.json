@@ -968,11 +968,11 @@
     "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
   },
   "safarinotificationtitle":{
-    "message":"AdBlock Notification",
+    "message":"Content Blocking rule limit exceeded",
     "description":"Title of a notification to user"
   },
   "safarinotificationbody":{
-    "message":"Open AdBlock Options for more information",
+    "message":"Please disable some filter lists. More information in AdBlock's Options.",
     "description":"Body of a notification to user"
   },
   "undo_last_block":{
