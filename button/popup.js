@@ -81,7 +81,7 @@ $(function() {
         // whitelisting of domains is not currently supported.
         if (SAFARI &&
             BG.get_settings().safari_content_blocking) {
-          hide(["div_paused_adblock", "div_whitelist_page"]);
+          hide(["div_paused_adblock", "div_whitelist_page", "div_whitelist"]);
         }
 
 

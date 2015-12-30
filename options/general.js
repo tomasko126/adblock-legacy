@@ -121,13 +121,17 @@ $("#enable_safari_content_blocking").change(function() {
   if (is_enabled) {
     $(".exclude_safari_content_blocking").hide();
     $("#safari_content_blocking_bmessage").text("");
-    //uncheck any incompatable options, and then hide them
+    // message to users on the Custom tab
+    $("#safariwarning").text(translate("contentblockingwarning")).show();
+    // uncheck any incompatable options, and then hide them
     $(".exclude_safari_content_blocking > input").each(function(index) {
       $(this).prop("checked", false);
     });
   } else {
     $(".exclude_safari_content_blocking").show();
     $("#safari_content_blocking_bmessage").text(translate("browserestartrequired")).show();
+    // message to users on the Custom tab
+    $("#safariwarning").text("").hide();
   }
   BGcall("set_content_scripts");
   BGcall("update_subscriptions_now");
