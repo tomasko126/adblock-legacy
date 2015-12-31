@@ -476,7 +476,7 @@
     "description":"Warning when blacklisting manually"
   },
   "contentblockingwarning":{
-    "message":"Note:  whitelisting (allow ads on) a page or site is not supported with Safari Content Blocking enabled.",
+    "message":"Note:  Whitelisting (allowing ads on) a page or site is not supported with Safari Content Blocking enabled.",
     "description":"message to Safari content blocking users on Custom tab"
   },
   "savebutton":{
