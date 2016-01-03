@@ -364,7 +364,7 @@
     "description":"Name of the filter list"
   },
   "filterwarning_removal":{
-    "message":"AdBlock Warning Removal list (removes messages about using AdBlock)",
+    "message":"Adblock Warning Removal list (removes messages about using AdBlock)",
     "description":"Name of the filter list"
   },
   "filteracceptable_ads":{
