@@ -46,6 +46,7 @@ these have to be hard-coded too...
 +filtermalware
 +filterannoyances
 +filterwarning_removal
++filteracceptable_ads
 
 Firefox strings (the code is in a separate repo)
 +ff_checkinchrometitle
