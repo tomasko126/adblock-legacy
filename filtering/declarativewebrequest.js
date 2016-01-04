@@ -47,11 +47,12 @@ DeclarativeWebRequest = (function() {
         continue;
       }
       var parsedDomain = punycode.toASCII(d).toLowerCase();
+      // Remove the leading 'www'
+      if (parsedDomain.indexOf("www.") === 0) {
+        parsedDomain = parsedDomain.substr(4);
+      }
       if (has[d]) {
         result['included'].push("*" + parsedDomain);
-        if (parsedDomain.indexOf("www.") === 0) {
-          result['included'].push("*" + parsedDomain.substr(4));
-        }
       } else {
         result['excluded'].push(parsedDomain);
       }
