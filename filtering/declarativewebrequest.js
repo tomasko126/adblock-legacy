@@ -49,6 +49,9 @@ DeclarativeWebRequest = (function() {
       var parsedDomain = punycode.toASCII(d).toLowerCase();
       if (has[d]) {
         result['included'].push("*" + parsedDomain);
+        if (parsedDomain.indexOf("www.") === 0) {
+          result['included'].push("*" + parsedDomain.substr(4));
+        }
       } else {
         result['excluded'].push(parsedDomain);
       }
@@ -298,7 +301,7 @@ DeclarativeWebRequest = (function() {
       //step 3, now add the blocking rules
       patternFilters.forEach(function(filter) {
         if (isSupported(filter)) {
-          
+
           var rule = getRule(filter);
           var is_valid = true;
           try {
