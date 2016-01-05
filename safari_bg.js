@@ -245,6 +245,10 @@ safari.application.addEventListener("command", function(event) {
 
     if (command === "AdBlockOptions") {
         openTab("options/index.html", false, browserWindow);
+    } else if (command === "undo-last-block") {
+        var tab = browserWindow.activeTab;
+        var host = parseUri(tab.url).host;
+        confirm_removal_of_custom_filters_on_host(host, tab);
     } else if (command in {"show-whitelist-wizard": 1, "show-blacklist-wizard": 1, "show-clickwatcher-ui": 1 }) {
         browserWindow.activeTab.page.dispatchMessage(command);
     }
