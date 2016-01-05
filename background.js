@@ -681,7 +681,7 @@
     for (var id in _myfilters._subscriptions) {
       result[id] = {};
       for (var attr in _myfilters._subscriptions[id]) {
-        if (attr === "text") continue;
+        if ((attr === "text") || (attr === "rules")) continue;
         result[id][attr] = _myfilters._subscriptions[id][attr];
       }
     }
@@ -827,7 +827,6 @@
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
       tab.unicodeUrl = getUnicodeUrl(tab.url); // GH #472
-
       var disabled_site = page_is_unblockable(tab.unicodeUrl);
 
       var result = {
@@ -849,6 +848,11 @@
   page_is_whitelisted = function(url, type) {
     if (!url) { // Safari empty/bookmarks/top sites page
       return true;
+    }
+    // In Safari with content blocking enabled,
+    // whitelisting of domains is not currently supported.
+    if (get_settings().safari_content_blocking) {
+      return false;
     }
     url = getUnicodeUrl(url);
     url = url.replace(/\#.*$/, ''); // Remove anchors
@@ -1050,7 +1054,11 @@
       hiding: hiding
     };
 
-    if (hiding) {
+    if (hiding &&
+        _myfilters &&
+        _myfilters.hiding &&
+        settings &&
+        !settings.safari_content_blocking) {
       result.selectors = _myfilters.hiding.filtersFor(options.domain);
     }
     return result;
@@ -1308,6 +1316,11 @@
   if (get_settings().debug_logging)
     logging(true);
 
+  // Enable content blocking by default for new installations
+  if (STATS.firstRun && isSafariContentBlockingAvailable()) {
+    set_setting("safari_content_blocking", true);
+  }
+
   _myfilters = new MyFilters();
   _myfilters.init();
   // Record that we exist.
@@ -1515,6 +1528,15 @@
           }
       });
   }
+
+  //used by the Options pages, since they don't have access to setContentBlocker
+  function isSafariContentBlockingAvailable() {
+    return (SAFARI &&
+            safari &&
+            safari.extension &&
+            (typeof safari.extension.setContentBlocker === 'function'));
+  }
+
 
   // DEBUG INFO
 
