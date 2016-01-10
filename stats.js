@@ -43,6 +43,7 @@ STATS = (function() {
   })();
 
   var getPingData = function() {
+    var total_pings = storage_get("total_pings") || 0;
     var data = {
       u: userId,
       v: version,
@@ -50,9 +51,11 @@ STATS = (function() {
       o: os,
       bv: browserVersion,
       ov: osVersion,
-      g: get_settings().show_google_search_text_ads ? '1': '0',
+      ad: get_settings().show_advanced_options ? '1': '0',
       l: determineUserLanguage(),
-      st: SURVEY.types()
+      st: SURVEY.types(),
+      pc: total_pings,
+      cb: get_settings().safari_content_blocking ? '1': '0',
     };
     //only on Chrome
     if (flavor === "E" && blockCounts) {
@@ -60,6 +63,12 @@ STATS = (function() {
     }
     if (chrome.runtime.id) {
       data["extid"] = chrome.runtime.id;
+    }
+    var subs = get_subscriptions_minus_text();
+    if (subs["acceptable_ads"]) {
+      data["aa"] = subs["acceptable_ads"].subscribed ? '1': '0';
+    } else {
+      data["aa"] = 'u';
     }
     return data;
   };

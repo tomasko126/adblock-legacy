@@ -31,10 +31,6 @@
     "message":"Настройки AdBlock",
     "description":"Title for the options page"
   },
-  "thirdparty":{
-    "message":"Третіх сторін",
-    "description":"Resource list column title telling if the resource originates from a different domain"
-  },
   "chromebutton_how_to_hide2":{
     "message":"Щоб сховати цю кнопку, клацніть на ній правою кнопкою миші та оберіть «Сховати кнопку». Її можна будет повернути на сторінці chrome:\/\/chrome\/extensions.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Hide Button' should match the text that Chrome displays when you right click a toolbar button."
@@ -54,10 +50,6 @@
   "sliderexplanation":{
     "message":"Перетягуйте повзунок доти, доки реклама не зникне, проте не переборщіть.",
     "description":"Blacklister slider page message"
-  },
-  "block_by_url_instead":{
-    "message":"Просунуте: натомість заблокувати URL",
-    "description":"Link on blacklister slider page"
   },
   "slidertitle":{
     "message":"Крок 1: З’ясуймо, що слід заблокувати",
@@ -243,10 +235,6 @@
     "message":"Бета",
     "description":"Label for beta features in AdBlock Options"
   },
-  "googletextads2":{
-    "message":"Я не проти текстової реклами у результатах пошуку Google; нехай лишається",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "showcontextmenus2":{
     "message":"Керувати AdBlock за допомогою контекстного меню",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -257,6 +245,10 @@
   },
   "debuginlogoption":{
     "message":"Показувати інформацію для налагодження у Консольному лозі (уповільнює роботу AdBlock)",
+    "description":"Checkbox on the 'General' tab of the Options page"
+  },
+  "datacollectionoption":{
+    "message":"Дозволити AdBlock збирати інформацію про використання списку анонімного фільтра та дані",
     "description":"Checkbox on the 'General' tab of the Options page"
   },
   "updatedrightnow":{
@@ -487,16 +479,12 @@
     "message":"AdBlock — скарга на рекламу",
     "description":"Title of the ad report page"
   },
-  "adreport2":{
-    "message":"Тож ви щойно побачили рекламу на веб-сторінці? Ну, то я допоможу вам поскаржитись на неї куди треба!<br\/> Пам’ятайте: подача скарги — справа добровільна. Якщо ви не хочете цього робити, просто закрийте це вікно та заблокуйте рекламу лише для себе, додавши відповідний фільтр на вкладці «Налаштувати» сторінки параметрів!",
-    "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
-  },
   "malwarenotificationcheckboxmessage":{
     "message":"Чи показувати сповіщення AdBlock при виявленні шкідливих програм?",
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
   },
   "malwarenotificationmessage":{
-    "message":"AdBlock виявив шкідливу програму. Ваш комп'ютер може бути заражено.",
+    "message":"AdBlock заблокував завантаження з сайту, який містить шкідливі програми.",
     "description":"Notification when a malware request has been blocked. This message should be under 90 characters!"
   },
   "malwarenotificationlearnmore":{
@@ -507,10 +495,6 @@
     "message":"Відключити ці сповіщення",
     "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
-  "malwarecheck":{
-    "message":"Перевірка на наявність шкідливих програм",
-    "description":"Section header on the ad report page"
-  },
   "malwarewarning":{
     "message":"Ваш комп'ютер може бути заражений шкідливими програмами. Натисніть <a>тут<\/a> для отримання додаткової інформації.",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
@@ -518,10 +502,6 @@
   "malwarenotfound":{
     "message":"Не знайдено жодної відомої шкідливої програми.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
-  },
-  "updateyourlists":{
-    "message":"Переконайтеся, що списки фільтрів свіжі",
-    "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
     "message":"Натисніть: <a>Оновити мої списки фільтрів!<\/a>",
@@ -543,14 +523,6 @@
     "message":"Ні",
     "description":"A negative response to a question"
   },
-  "adalreadyblocked":{
-    "message":"Нічого не треба робити, адже рекламу вже заблоковано",
-    "description":"On the ad report page, telling a user there is nothing to do"
-  },
-  "disableallextensions":{
-    "message":"Вимкніть усі розширення, окрім AdBlock.",
-    "description":"Instruction on ad report page"
-  },
   "disableforchromestepone":{
     "message":"Відкрити <a href='#'>сторінку розширень<\/a>",
     "description":"Step 1 for disabling Chrome extensions"
@@ -558,10 +530,6 @@
   "clickdisableotherextensions":{
     "message":"<b>ЧИ<\/b>, просто натисніть цю кнопку щоб ми зробили все що вище: <a>Вимкнути всі інші розширення<\/a>",
     "description":"On the ad report page, an alternative way to disable other extensions"
-  },
-  "disableotherextensionscomplete":{
-    "message":"Усі інші розширення було вимкнено. Зараз ми перезавантажимо вкладку.",
-    "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "enableotherextensionscomplete":{
     "message":"Розширення, які були раніше вимкнуті були повторно увімкнено.",
@@ -571,10 +539,6 @@
     "message":"Відкрийте сторінку розширень, щоб увімкнути розширення, які раніше були відключені.",
     "description":"On the ad report page, alert notifying users that they will need to manually reenable the extensions"
   },
-  "tabreloadcomplete":{
-    "message":"Вкладку з рекламою було перезавантажено, будь ласка перевірте її, щоб побачити, чи реклама все ще відображається, та дайте відповідь \"Так\" чи \"Ні\" на питання нижче.",
-    "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
-  },
   "disableforchromeandsafaristeptwo":{
     "message":"Зніміть позначку «Увімкнено» навпроти кожного розширення <b>за виключенням<\/b> AdBlock. <b>Залиште AdBlock увімкненим<\/b>.",
     "description":"Step 2 for disabling Chrome and Safari extensions"
@@ -582,14 +546,6 @@
   "disableforsafaristepone":{
     "message":"Клацніть на меню «Safari» &rarr; «Налаштування» &rarr; «Розширення».",
     "description":"Step 1 for disabling Safari extensions"
-  },
-  "reenableadsonebyone":{
-    "message":"Тепер, коли реклама зникла, вам слід з’ясувати, яке розширення спричиняло її появу. Пройдіться по списку, вмикаючи розширення одне за одним. Щоб позбутися реклами, видаліть розширення, після увімкнення якого реклама з’являється знов.",
-    "description":"Tells the user to reenable the extensions one by one"
-  },
-  "correctfilters":{
-    "message":"Правильні фільтри",
-    "description":"On the ad report page, label describing having the right set of filters"
   },
   "pagelanguagecheck":{
     "message":"Якою мовою складено цю сторінку?",
@@ -731,16 +687,6 @@
       }
     }
   },
-  "checkinfirefox_2":{
-    "message":"Встановіть AdBlock для Firefox $chrome$, якщо він не встановлений.",
-    "description":"Instruction for how to check Firefox\/Chrome for a reported ad.",
-    "placeholders":{
-      "chrome":{
-        "content":"<span id='adblockforchrome'><\/span>",
-        "example":"'or AdBlock for Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
-      }
-    }
-  },
   "checkinfirefox_3":{
     "message":"У цьому браузері підпишіться на той же список фільтрів, як у вас тут.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
@@ -863,161 +809,13 @@
     "message":"невідомо",
     "description":"A resource type"
   },
-  "blockeverycontaining":{
-    "message":"Заблокувати всі ресурси, що містять:",
-    "description":"resourceblocking page string"
-  },
-  "whitelisteverycontaining":{
-    "message":"Заносити до білого списку всі ресурси, що містять:",
-    "description":"resourceblocking page string"
-  },
-  "wildcardhint":{
-    "message":"Зауважте: ви можете використовувати тут оператор * для позначення послідовності будь-яких символів",
-    "description":"resourceblocking page string"
-  },
-  "novalidurlpattern":{
-    "message":"Будь ласка, уведіть правильну послідовність фільтрування URL!",
-    "description":"resourceblocking page string"
-  },
-  "doesntmatchoriginal":{
-    "message":"Уведена вами послідовність не захоплює ресурси, який ви намагалися заблокувати! Все одно продовжити?",
-    "description":"resourceblocking page string"
-  },
-  "thirdpartycheckbox":{
-    "message":"Будь-який веб-сайт ЗА ВИКЛЮЧЕННЯМ сайтів на домені $domain$",
-    "description":"resourceblocking page string",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
-  },
-  "filterhasbeenadded":{
-    "message":"Фільтр додано успішно!\nПерезавантажте сторінку, щоб побачити його вплив!",
-    "description":"resourceblocking page string"
-  },
-  "adblock_is_paused":{
-    "message":"AdBlock призупинено. Оскільки жодні ресурси не використовуються, користування цією сторінкою неможливе. Запустіть AdBlock та спробуйте знову.",
-    "description":"resourceblocking page string"
-  },
-  "excludefilterremoved":{
-    "message":"Фільтр видалено. Будь ласка, перезавантажте вихідну сторінку, щоб згенерувати список ресурсів.",
-    "description":"Warning when a page exclusion rule was removed in resourceblock.html"
-  },
-  "noresourcessend2":{
-    "message":"Щось зламалося. Не було передано жодних ресурсів. Цю сторінку буде закрито. Спробуйте перезавантажити сайт.",
-    "description":"resourceblocking page string"
-  },
-  "resourcedomain":{
-    "message":"Завантажено зі сторінки із доменом:\n$domain$",
-    "description":"Text shown when hovering over an item in the third-party column",
-    "placeholders":{
-      "domain":{
-        "content":"$1",
-        "example":"example.com"
-      }
-    }
-  },
-  "resourceiswhitelisted":{
-    "message":"Обраний ресурс додано до білого списку. Тож його неможливо заблокувати.",
-    "description":"resourceblocking page string"
-  },
-  "selectresources":{
-    "message":"Виберіть ресурс, який слід заблокувати або розблокувати",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocktitle":{
-    "message":"Заблокувати ресурс",
-    "description":"resourceblocking page string"
-  },
-  "headerresource":{
-    "message":"Ресурс",
-    "description":"resourceblocking page string"
-  },
-  "headertype":{
-    "message":"Тип",
-    "description":"resourceblocking page string"
-  },
-  "headerfilter":{
-    "message":"Підпадає під фільтр",
-    "description":"resourceblocking page string"
-  },
   "close":{
     "message":"Закрити",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend1":{
-    "message":"Легенда:",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend2":{
-    "message":"заблоковані ресурси",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend3":{
-    "message":"дозволені ресурси",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend4":{
-    "message":"ресурси, що підлягають блокуванню",
-    "description":"resourceblocking page string"
-  },
-  "resourceblocklegend5":{
-    "message":"застосовано правила приховування",
-    "description":"resourceblocking page string"
+    "description":"Generic message for buttons that close a view or window"
   },
   "loading":{
     "message":"ЗАВАНТАЖЕННЯ...",
-    "description":"resourceblocking page string"
-  },
-  "nextstep":{
-    "message":"Наступний крок",
-    "description":"resourceblocking page string"
-  },
-  "appliedwhenbrowsing":{
-    "message":"Цей фільтр буде застосовано під час перегляду:",
-    "description":"resourceblocking page string"
-  },
-  "anysite":{
-    "message":"Усіх веб-сайтів",
-    "description":"resourceblocking page string"
-  },
-  "onlyondomains":{
-    "message":"ЛИШЕ сторінок на таких доменах:",
-    "description":"resourceblocking page string"
-  },
-  "multipledomainshint":{
-    "message":"Відділяйте різні домени комами або пробілами",
-    "description":"resourceblocking page string"
-  },
-  "casesensitive":{
-    "message":"Цей фільтр чутливий до регістру:",
-    "description":"resourceblocking page string"
-  },
-  "onlyresourcetypes":{
-    "message":"Цей фільтр застосовується до ресурсів таких типів:",
-    "description":"resourceblocking page string"
-  },
-  "addthisfilter":{
-    "message":"Додати цей фільтр",
-    "description":"resourceblocking page string"
-  },
-  "ordisablefilter":{
-    "message":"... або відключіть такий фільтр:",
-    "description":"On the resourceblocking page, choice to disable a filter instead of allowing or blocking a specific resource"
-  },
-  "thisfilterwillbedisabled":{
-    "message":"Цей фільтр буде відключено:",
-    "description":"On the resourceblocking page, followed by the filter the user chose to disable"
-  },
-  "disabledwhenbrowsing":{
-    "message":"Цей фільтр буде відключено, коли ви переглядатимите:",
-    "description":"On the resourceblocking page, choose on which sites the filter should be disabled"
-  },
-  "onlypagesonthisdomain":{
-    "message":"ЛИШЕ сторінки із цього домену:",
-    "description":"On the resourceblocking page, option to disable a filter only on a specific domain"
+    "description":"Generic message displayed during processes that take some time"
   },
   "flashads":{
     "message":"Відео та Flash",
@@ -1091,14 +889,6 @@
     "message":"Заплатіть стільки, скільки готові!",
     "description":"Text of a payment request link"
   },
-  "removelabel":{
-    "message":"Видалити",
-    "description":"Link to remove a filter on the resourceblock page"
-  },
-  "changelabel":{
-    "message":"змінити",
-    "description":"Link to change resources on the resourceblock page"
-  },
   "translator_credit":{
     "message":"Переклад українською:",
     "description":"Will be followed by a list of translator names (separate string)"
@@ -1109,10 +899,6 @@
   },
   "report_ad_on_page":{
     "message":"Поскаржитись на рекламу на цій сторінці",
-    "description":"Entry in the AdBlock button menu"
-  },
-  "show_resourcelist":{
-    "message":"Показати список ресурсів",
     "description":"Entry in the AdBlock button menu"
   },
   "advanced_options2":{
@@ -1154,32 +940,6 @@
   "safari50_updatenotice":{
     "message":"Ви користуєтесь застарілою версією Safari. Встановіть найновішу версію, аби користуватися кнопкою на панелі інструментів для призупинки AdBlock, занесення сайтів у білий список, та подання скарг на рекламу. <a>Оновити зараз<\/a>.",
     "description":"A message shown to Safari 5.0 users urging them to upgrade"
-  },
-  "searchexplanation":{
-    "message":"Вживайте * щоб позначити нуль чи більше знаків. Приміром 'banner*.gif image' знайде зображення 'banner.gif', 'banner123.gif', та 'bannerxyz.gif'.",
-    "description":"Text in resourceblock when you hover your mouse over the search textbox"
-  },
-  "searchplaceholder":{
-    "message":"Шукати у ресурсах...",
-    "description":"Text in resourceblock shown in the search textbox before you type something"
-  },
-  "nosearchresults":{
-    "message":"Ресурси не знайдено",
-    "description":"Text in resourceblock shown if no results are found after searching"
-  },
-  "custompattern":{
-    "message":"Власний:",
-    "description":"Label in front of the 'custom block pattern' textbox in resourceblock, after clicking a resource"
-  },
-  "filterorigin":{
-    "message":"Походить з фільтру:\n«$list$»",
-    "description":"Tooltip of matching filter in resources list, telling which filter list contains the filter",
-    "placeholders":{
-      "list":{
-        "content":"$1",
-        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
-      }
-    }
   },
   "firefox_explanation":{
     "message":"Мета цього питання визначити, хто має отримати вашу скаргу. Якщо ви дасте хибну відповідь, скарга потрапить не у ті руки і, у такому випадку, може бути проігнорована.",

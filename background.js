@@ -14,8 +14,8 @@
            str += stack;
         }
         //don't send large stack traces
-        if (str.length > 64) {
-          str = str.substr(0,63);
+        if (str.length > 512) {
+          str = str.substr(0,511);
         }
     }
     STATS.msg(str);
@@ -88,7 +88,6 @@
     var defaults = {
       debug_logging: false,
       youtube_channel_whitelist: false,
-      show_google_search_text_ads: false,
       whitelist_hulu_ads: false, // Issue 7178
       show_context_menu_items: true,
       show_advanced_options: false,
@@ -197,103 +196,104 @@
   // Input:
   //   tabId: integer - id of the tab which should be reloaded
   reloadTab = function(tabId) {
-      if (!SAFARI) {
-          chrome.tabs.reload(tabId, {bypassCache: true}, function() {
-              chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-                  if (changeInfo.status === "complete" &&
-                      tab.status === "complete") {
-                      setTimeout(function() {
-                          chrome.extension.sendRequest({command: "reloadcomplete"});
-                      }, 2000);
-                  }
-              });
-          });
+      var listener = function(tabId, changeInfo, tab) {
+          if (changeInfo.status === "complete" &&
+              tab.status === "complete") {
+              setTimeout(function() {
+                  chrome.extension.sendRequest({command: "reloadcomplete"});
+                  chrome.tabs.onUpdated.removeListener(listener);
+              }, 2000);
+          }
       }
+      chrome.tabs.reload(tabId, { bypassCache: true }, function() {
+          chrome.tabs.onUpdated.addListener(listener);
+      });
   }
 
   // Implement blocking via the Chrome webRequest API.
+  // Stores url, whitelisting, and blocking info for a tabid+frameid
+  // TODO: can we avoid making this a global?
   if (!SAFARI) {
-    // Stores url, whitelisting, and blocking info for a tabid+frameid
-    // TODO: can we avoid making this a global?
     frameData = {
-      // Returns the data object for the frame with ID frameId on the tab with
-      // ID tabId. If frameId is not specified, it'll return the data for all
-      // frames on the tab with ID tabId. Returns undefined if tabId and frameId
-      // are not being tracked.
-      get: function(tabId, frameId) {
-        if (frameId !== undefined)
-          return (frameData[tabId] || {})[frameId];
-        return frameData[tabId];
-      },
+        // Returns the data object for the frame with ID frameId on the tab with
+        // ID tabId. If frameId is not specified, it'll return the data for all
+        // frames on the tab with ID tabId. Returns undefined if tabId and frameId
+        // are not being tracked.
+        get: function(tabId, frameId) {
+            if (frameId !== undefined)
+                return (frameData[tabId] || {})[frameId];
+            return frameData[tabId];
+        },
 
-      // Record that |tabId|, |frameId| points to |url|.
-      record: function(tabId, frameId, url) {
-        var fd = frameData;
-        if (!fd[tabId]) fd[tabId] = {};
-        fd[tabId][frameId] = {
-          url: url,
-          // Cache these as they'll be needed once per request
-          domain: parseUri(url).hostname,
-          resources: {}
-        };
-        fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
-      },
+        // Record that |tabId|, |frameId| points to |url|.
+        record: function(tabId, frameId, url) {
+            var fd = frameData;
+            if (!fd[tabId]) fd[tabId] = {};
+            fd[tabId][frameId] = {
+                url: url,
+                // Cache these as they'll be needed once per request
+                domain: parseUri(url).hostname,
+                resources: {}
+            };
+            fd[tabId][frameId].whitelisted = page_is_whitelisted(url);
+        },
 
-      // Watch for requests for new tabs and frames, and track their URLs.
-      // Inputs: details: object from onBeforeRequest callback
-      // Returns false if this request's tab+frame are not trackable.
-      track: function(details) {
-        var fd = frameData, tabId = details.tabId;
+        // Watch for requests for new tabs and frames, and track their URLs.
+        // Inputs: details: object from onBeforeRequest callback
+        // Returns false if this request's tab+frame are not trackable.
+        track: function(details) {
+            var fd = frameData, tabId = details.tabId;
 
-        // A hosted app's background page
-        if (tabId === -1) {
-           return false;
+            // A hosted app's background page
+            if (tabId === -1) {
+                return false;
+            }
+
+            if (details.type === 'main_frame') { // New tab
+                delete fd[tabId];
+                fd.record(tabId, 0, details.url);
+                fd[tabId].blockCount = 0;
+                log("\n-------", fd.get(tabId, 0).domain, ": loaded in tab", tabId, "--------\n\n");
+                return true;
+            }
+
+            // Request from a tab opened before AdBlock started, or from a
+            // chrome:// tab containing an http:// iframe
+            if (!fd[tabId]) {
+                log("[DEBUG]", "Ignoring unknown tab:", tabId, details.frameId, details.url);
+                return false;
+            }
+
+            // Some times e.g. Youtube create empty iframes via JavaScript and
+            // inject code into them.  So requests appear from unknown frames.
+            // Treat these frames as having the same URL as the tab.
+            var potentialEmptyFrameId = (details.type === 'sub_frame' ? details.parentFrameId: details.frameId);
+            if (undefined === fd.get(tabId, potentialEmptyFrameId)) {
+                fd.record(tabId, potentialEmptyFrameId, fd.get(tabId, 0).url);
+                log("[DEBUG]", "Null frame", tabId, potentialEmptyFrameId, "found; giving it the tab's URL.");
+            }
+
+            if (details.type === 'sub_frame') { // New frame
+                fd.record(tabId, details.frameId, details.url);
+                log("[DEBUG]", "=========== Tracking frame", tabId, details.parentFrameId, details.frameId, details.url);
+            }
+
+            return true;
+        },
+
+        // Save a resource for the resource blocker.
+        storeResource: function(tabId, frameId, url, elType, frameDomain) {
+            if (!get_settings().show_advanced_options)
+                return;
+            var data = frameData.get(tabId, frameId);
+            if (data !== undefined) {
+                data.resources[elType + ":|:" + url + ":|:" + frameDomain] = null;
+            }
+        },
+
+        removeTabId: function(tabId) {
+            delete frameData[tabId];
         }
-        if (details.type === 'main_frame') { // New tab
-          delete fd[tabId];
-          fd.record(tabId, 0, details.url);
-          fd[tabId].blockCount = 0;
-          log("\n-------", fd.get(tabId, 0).domain, ": loaded in tab", tabId, "--------\n\n");
-          return true;
-        }
-
-        // Request from a tab opened before AdBlock started, or from a
-        // chrome:// tab containing an http:// iframe
-        if (!fd[tabId]) {
-          log("[DEBUG]", "Ignoring unknown tab:", tabId, details.frameId, details.url);
-          return false;
-        }
-
-        // Some times e.g. Youtube create empty iframes via JavaScript and
-        // inject code into them.  So requests appear from unknown frames.
-        // Treat these frames as having the same URL as the tab.
-        var potentialEmptyFrameId = (details.type === 'sub_frame' ? details.parentFrameId: details.frameId);
-        if (undefined === fd.get(tabId, potentialEmptyFrameId)) {
-          fd.record(tabId, potentialEmptyFrameId, fd.get(tabId, 0).url);
-          log("[DEBUG]", "Null frame", tabId, potentialEmptyFrameId, "found; giving it the tab's URL.");
-        }
-
-        if (details.type === 'sub_frame') { // New frame
-          fd.record(tabId, details.frameId, details.url);
-          log("[DEBUG]", "=========== Tracking frame", tabId, details.parentFrameId, details.frameId, details.url);
-        }
-
-        return true;
-      },
-
-      // Record a resource for the resource blocker.
-      storeResource: function(tabId, frameId, url, elType) {
-        if (!get_settings().show_advanced_options)
-          return;
-        var data = frameData.get(tabId, frameId);
-        if (data !== undefined) {
-            data.resources[elType + ':|:' + url] = null;
-        }
-      },
-
-      onTabClosedHandler: function(tabId) {
-        delete frameData[tabId];
-      }
     };
 
     var normalizeRequestType = function(details) {
@@ -353,11 +353,21 @@
 
       var elType = ElementTypes.fromOnBeforeRequestType(reqType);
 
-      frameData.storeResource(tabId, requestingFrameId, details.url, elType);
-
       // May the URL be loaded by the requesting frame?
       var frameDomain = frameData.get(tabId, requestingFrameId).domain;
-      var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+      if (get_settings().data_collection) {
+          var blockedData = _myfilters.blocking.matches(details.url, elType, frameDomain, true, true);
+          if (blockedData !== false) {
+              DataCollection.addItem(blockedData.text);
+              var blocked = blockedData.blocked;
+          } else {
+              var blocked = blockedData;
+          }
+      } else {
+          var blocked = _myfilters.blocking.matches(details.url, elType, frameDomain);
+      }
+
+      frameData.storeResource(tabId, requestingFrameId, details.url, elType, frameDomain);
 
       // Issue 7178
       if (blocked && frameDomain === "www.hulu.com") {
@@ -380,11 +390,6 @@
         updateBadge(tabId);
       }
       log("[DEBUG]", "Block result", blocked, reqType, frameDomain, details.url.substring(0, 100));
-      if (blocked && elType === ElementTypes.image) {
-        // 1x1 px transparant image.
-        // Same URL as ABP and Ghostery to prevent conflict warnings (issue 7042)
-        return {redirectUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="};
-      }
       if (blocked && elType === ElementTypes.subdocument) {
         return { redirectUrl: "about:blank" };
       }
@@ -411,12 +416,12 @@
           blockCounts.recordOneAdBlocked(details.sourceTabId);
           updateBadge(details.sourceTabId);
       }
-      frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup);
+      frameData.storeResource(details.sourceTabId, details.sourceFrameId, url, ElementTypes.popup, opener.domain);
     };
 
     // If tabId has been replaced by Chrome, delete it's data
     chrome.webNavigation.onTabReplaced.addListener(function(details) {
-        frameData.onTabClosedHandler(details.replacedTabId);
+        frameData.removeTabId(details.replacedTabId);
     });
 
     chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
@@ -437,20 +442,20 @@
                 frameData.track(details);
             }
         }
-    })
+    });
   }
 
   debug_report_elemhide = function(selector, matches, sender) {
-    if (!window.frameData)
+    if (!window.frameData) {
       return;
-    if (SAFARI) {
-        frameData.storeResource(sender.tab.id, selector, "HIDE");
-    } else {
-        frameData.storeResource(sender.tab.id, 0, selector, "HIDE");
     }
-    var data = frameData.get(sender.tab.id, 0);
+    var frameDomain = parseUri(sender.url || sender.tab.url).hostname;
+    frameData.storeResource(sender.tab.id, sender.frameId || 0, selector, "selector", frameDomain);
+
+    var data = frameData.get(sender.tab.id, sender.frameId || 0);
     if (data) {
       log(data.domain, ": hiding rule", selector, "matched:\n", matches);
+      DataCollection.addItem(selector);
       if (!SAFARI) {
         blockCounts.recordOneAdBlocked(sender.tab.id);
         updateBadge(sender.tab.id);
@@ -620,19 +625,22 @@
   }
 
   remove_custom_filter_for_host = function(host) {
-    if(count_cache.getCustomFilterCount(host)) {
+    if (count_cache.getCustomFilterCount(host)) {
       remove_custom_filter(host);
       count_cache.removeCustomFilterCount(host);
     }
   }
 
-  confirm_removal_of_custom_filters_on_host = function(host) {
+  confirm_removal_of_custom_filters_on_host = function(host, activeTab) {
     var custom_filter_count = count_cache.getCustomFilterCount(host);
     var confirmation_text   = translate("confirm_undo_custom_filters", [custom_filter_count, host]);
     if (!confirm(confirmation_text)) { return; }
     remove_custom_filter_for_host(host);
-    if (!SAFARI)
+    if (!SAFARI) {
         chrome.tabs.reload();
+    } else {
+        activeTab.url = activeTab.url;
+    }
   };
 
   get_settings = function() {
@@ -673,7 +681,7 @@
     for (var id in _myfilters._subscriptions) {
       result[id] = {};
       for (var attr in _myfilters._subscriptions[id]) {
-        if (attr === "text") continue;
+        if ((attr === "text") || (attr === "rules")) continue;
         result[id][attr] = _myfilters._subscriptions[id][attr];
       }
     }
@@ -819,7 +827,6 @@
       var browserWindow = safari.application.activeBrowserWindow;
       var tab = browserWindow.activeTab;
       tab.unicodeUrl = getUnicodeUrl(tab.url); // GH #472
-
       var disabled_site = page_is_unblockable(tab.unicodeUrl);
 
       var result = {
@@ -841,6 +848,11 @@
   page_is_whitelisted = function(url, type) {
     if (!url) { // Safari empty/bookmarks/top sites page
       return true;
+    }
+    // In Safari with content blocking enabled,
+    // whitelisting of domains is not currently supported.
+    if (get_settings().safari_content_blocking) {
+      return false;
     }
     url = getUnicodeUrl(url);
     url = url.replace(/\#.*$/, ''); // Remove anchors
@@ -1042,7 +1054,11 @@
       hiding: hiding
     };
 
-    if (hiding) {
+    if (hiding &&
+        _myfilters &&
+        _myfilters.hiding &&
+        settings &&
+        !settings.safari_content_blocking) {
       result.selectors = _myfilters.hiding.filtersFor(options.domain);
     }
     return result;
@@ -1116,11 +1132,6 @@
     })();
   }
 
-  // Open the resource blocker when requested from the Chrome popup.
-  launch_resourceblocker = function(query) {
-    openTab("pages/resourceblock.html" + query, true);
-  }
-
   // Open subscribe popup when new filter list was subscribed from site
   launch_subscribe_popup = function(loc) {
     window.open(chrome.extension.getURL('pages/subscribe.html?' + loc),
@@ -1128,9 +1139,47 @@
     'scrollbars=0,location=0,resizable=0,width=460,height=150');
   }
 
-  // Get the framedata for resourceblock
-  resourceblock_get_frameData = function(tabId) {
-    return frameData.get(tabId);
+  // Open the resource blocker when requested from popup.
+  launch_resourceblocker = function(query) {
+    openTab("pages/resourceblock.html" + query, true);
+  }
+
+  // Get the frameData for the 'Report an Ad' & 'Resource' page
+  get_frameData = function(tabId) {
+      return frameData.get(tabId);
+  }
+
+  // Process requests from 'Resource' page
+  // Determine, whether requests have been whitelisted/blocked
+  process_frameData = function(fd) {
+      for (var frameId in fd) {
+          var frame = fd[frameId];
+          var frameResources = frame.resources;
+          for (var resource in frameResources) {
+              var res = frameResources[resource];
+              // We are processing selectors in resource viewer page
+              if (res.elType === "selector") {
+                  continue;
+              }
+              res.blockedData = _myfilters.blocking.matches(res.url, res.elType, res.frameDomain, true, true);
+          }
+      }
+      return fd;
+  }
+
+  // Add previously cached requests to matchCache
+  // Used by 'Resource' page
+  add_to_matchCache = function(cache) {
+     _myfilters.blocking._matchCache = cache;
+  }
+
+  // Reset matchCache
+  // Used by 'Resource' page
+  // Returns: object with cached requests
+  reset_matchCache = function() {
+      var matchCache = _myfilters.blocking._matchCache;
+      _myfilters.blocking._matchCache = {};
+      return matchCache;
   }
 
   // Return chrome.i18n._getL10nData() for content scripts who cannot
@@ -1203,22 +1252,22 @@
 
   // Log an 'error' message on GAB log server.
   var recordErrorMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'error', callback);
+    recordMessageWithUserID(msg, 'error', callback);
   };
 
   // Log an 'status' related message on GAB log server.
   var recordStatusMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'stats', callback);
+    recordMessageWithUserID(msg, 'stats', callback);
   };
 
   // Log a 'general' message on GAB log server.
   var recordGeneralMessage = function(msg, callback) {
-    recordMessageUrl(msg, 'general', callback);
+    recordMessageWithUserID(msg, 'general', callback);
   };
 
   // Log a message on GAB log server.  The user's userid will be prepended to the message.
   // If callback() is specified, call callback() after logging has completed
-  var recordMessageUrl = function(msg, queryType, callback) {
+  var recordMessageWithUserID = function(msg, queryType, callback) {
     if (!msg || !queryType) {
       return;
     }
@@ -1227,6 +1276,29 @@
                   queryType +
                   '&message=' +
                   encodeURIComponent(STATS.userId + " " + msg);
+    sendMessageToLogServer(fullUrl, callback);
+  };
+
+  // Log a message on GAB log server.
+  // If callback() is specified, call callback() after logging has completed
+  var recordAnonymousMessage = function(msg, queryType, callback) {
+    if (!msg || !queryType) {
+      return;
+    }
+    // Include user ID in message
+    var fullUrl = 'https://log.getadblock.com/record_log.php?type=' +
+                  queryType +
+                  '&message=' +
+                  encodeURIComponent(msg);
+    sendMessageToLogServer(fullUrl, callback);
+  };
+
+  // Log a message on GAB log server.  The user's userid will be prepended to the message.
+  // If callback() is specified, call callback() after logging has completed
+  var sendMessageToLogServer = function(fullUrl, callback) {
+    if (!fullUrl) {
+      return;
+    }
     $.ajax({
       type: 'GET',
       url: fullUrl,
@@ -1244,6 +1316,11 @@
   if (get_settings().debug_logging)
     logging(true);
 
+  // Enable content blocking by default for new installations
+  if (STATS.firstRun && isSafariContentBlockingAvailable()) {
+    set_setting("safari_content_blocking", true);
+  }
+
   _myfilters = new MyFilters();
   _myfilters.init();
   // Record that we exist.
@@ -1259,18 +1336,39 @@
   }
 
   var installedURL = "https://getadblock.com/installed/?u=" + STATS.userId;
-  if (STATS.firstRun && (SAFARI || OPERA || chrome.runtime.id !== "pljaalgmajnlogcgiohkhdmgpomjcihk")) {
+  var openInstalledTab = function() {
+    chrome.tabs.create({url: installedURL}, function(tab) {
+      // if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
+      if (chrome.runtime.lastError) {
+        storage_set("/installed_error", { retry_count: 0 } );
+      }
+    });
+  };
+  // If the Chrome API 'onInstalled' is available, and
+  // reason is 'install' and
+  // AdBlock wasn't installed using an 'admin' group policy then
+  // Open the install tab.
+  if (chrome.runtime.onInstalled) {
+    chrome.runtime.onInstalled.addListener(function(details) {
+      if (details.reason === "install") {
+        if (chrome.management && chrome.management.getSelf) {
+          chrome.management.getSelf(function(info) {
+            if (info && info.installType !== "admin") {
+              openInstalledTab();
+            }
+          });
+        } else {
+          openInstalledTab();
+        }
+      }
+    });
+  } else if (STATS.firstRun) {
+    // If the Chrome API 'onInstalled' is not available, and
+    // it's AdBlock's firstRun
+    // Open the install tab.
     if (SAFARI) {
       openTab(installedURL);
     } else {
-      var openInstalledTab = function() {
-        chrome.tabs.create({url: installedURL}, function(tab) {
-          //if we couldn't open a tab to '/installed', save that fact, so we can retry later at startup
-          if (chrome.runtime.lastError) {
-            storage_set("/installed_error", { retry_count: 0 } );
-          }
-        });
-      };
       if (chrome.management && chrome.management.getSelf) {
         chrome.management.getSelf(function(info) {
           if (info && info.installType !== "admin") {
@@ -1282,67 +1380,34 @@
       }
     }
   }
-  //retry logic for '/installed' - retries on browser / AdBlock startup
-  var installError = storage_get("/installed_error");
-  if (installError && installError.retry_count >= 0 && !SAFARI) {
-    //append the retry count to the URL
-    installError.retry_count += 1;
-    var retryInstalledURL = installedURL + "&r=" + installError.retry_count;
-    chrome.tabs.create({url: retryInstalledURL}, function(tab) {
-      if (chrome.runtime.lastError) {
-        //if there is an error (again), log a message and re-save.
-        if (chrome.runtime.lastError.message) {
-          recordErrorMessage('/installed open error count: ' +
-                              installError.retry_count +
-                              " error: " +
-                              chrome.runtime.lastError.message);
-        } else {
-          recordErrorMessage('/installed open error count: ' +
-                              installError.retry_count +
-                              " error: " +
-                              JSON.stringify(chrome.runtime.lastError));
-        }
-        storage_set("/installed_error", installError);
-      } else {
-        //if we successfully opened the tab,
-        // delete the 'installed error' so we don't display it again
-        storage_set("/installed_error");
-      }
-    });
-  }
 
   if (chrome.runtime.setUninstallURL) {
     var uninstallURL = "https://getadblock.com/uninstall/?u=" + STATS.userId;
     //if the start property of blockCount exists (which is the AdBlock installation timestamp)
     //use it to calculate the approximate length of time that user has AdBlock installed
     if (blockCounts && blockCounts.get().start) {
-      var fiveMinutes = 5 * 60 * 1000;
+      var twoMinutes = 2 * 60 * 1000;
       var updateUninstallURL = function() {
         var installedDuration = (Date.now() - blockCounts.get().start);
-        chrome.runtime.setUninstallURL(uninstallURL + "&t=" + installedDuration);
+        var url = uninstallURL + "&t=" + installedDuration;
+        var bc = blockCounts.get().total;
+        url = url + "&bc=" + bc;
+        if (_myfilters &&
+            _myfilters._subscriptions &&
+            _myfilters._subscriptions.adblock_custom &&
+            _myfilters._subscriptions.adblock_custom.last_update) {
+          url = url + "&abc-lt=" + _myfilters._subscriptions.adblock_custom.last_update;
+        } else {
+          url = url + "&abc-lt=-1"
+        }
+        chrome.runtime.setUninstallURL(url);
       };
-      //start an interval timer that will update the Uninstall URL every 5 minutes
-      setInterval(updateUninstallURL, fiveMinutes);
+      //start an interval timer that will update the Uninstall URL every 2 minutes
+      setInterval(updateUninstallURL, twoMinutes);
       updateUninstallURL();
     } else {
       chrome.runtime.setUninstallURL(uninstallURL + "&t=-1");
     }
-  }
-
-  //validate STATS.firstRun against Chrome's Runtime API onInstalled
-  if (chrome.runtime.onInstalled) {
-    var validInstall = false;
-    chrome.runtime.onInstalled.addListener(function(details) {
-      validInstall = (details.reason === "install");
-    });
-    //wait 10 seconds, then check
-    //if extension and Chrome don't agree that this is a new installation send a message.
-    //we only check if 'firstRun' is true because that is when the extension creates a new user id and opens /installed
-    setTimeout(function() {
-      if (STATS.firstRun && !validInstall) {
-        recordErrorMessage('invalid install - firstRun = ' + STATS.firstRun + ' valid install = ' + validInstall);
-      }
-    }, 10000);
   }
 
   createMalwareNotification = function() {
@@ -1401,7 +1466,7 @@
     // Chrome blocking code.  Near the end so synchronous request handler
     // doesn't hang Chrome while AdBlock initializes.
     chrome.webRequest.onBeforeRequest.addListener(onBeforeRequestHandler, {urls: ["http://*/*", "https://*/*"]}, ["blocking"]);
-    chrome.tabs.onRemoved.addListener(frameData.onTabClosedHandler);
+    chrome.tabs.onRemoved.addListener(frameData.removeTabId);
     // Popup blocking
     if (chrome.webNavigation)
       chrome.webNavigation.onCreatedNavigationTarget.addListener(onCreatedNavigationTargetHandler);
@@ -1463,6 +1528,15 @@
           }
       });
   }
+
+  //used by the Options pages, since they don't have access to setContentBlocker
+  function isSafariContentBlockingAvailable() {
+    return (SAFARI &&
+            safari &&
+            safari.extension &&
+            (typeof safari.extension.setContentBlocker === 'function'));
+  }
+
 
   // DEBUG INFO
 
@@ -1581,9 +1655,9 @@
                 "Developer Mode -> Inspect views: background page -> Console. " +
                 "Paste the contents here:");
       body.push("");
-      body.push("```");
       body.push("====== Do not touch below this line ======");
       body.push("");
+      body.push("```");
       body.push(getDebugInfo());
       body.push("```");
       var out = encodeURIComponent(body.join('  \n'));
@@ -1639,7 +1713,6 @@
                   filter_lists: get_subscribed_filter_lists().toString(),
                   debug_logging: get_settings().debug_logging,
                   youtube_channel_whitelist: get_settings().youtube_channel_whitelist,
-                  show_google_search_text_ads: get_settings().show_google_search_text_ads,
                   whitelist_hulu_ads: get_settings().whitelist_hulu_ads,
                   show_context_menu_items: get_settings().show_context_menu_items,
                   show_advanced_options: get_settings().show_advanced_options,
@@ -1743,8 +1816,6 @@
                   set_setting("debug_logging", debug);
                   var ytchannel = settingstable.get("youtube_channel_whitelist");
                   set_setting("youtube_channel_whitelist", ytchannel);
-                  var googleads = settingstable.get("show_google_search_text_ads");
-                  set_setting("show_google_search_text_ads", googleads);
                   var huluads = settingstable.get("whitelist_hulu_ads");
                   set_setting("whitelist_hulu_ads", huluads);
                   var showcontextmenu = settingstable.get("show_context_menu_items");
