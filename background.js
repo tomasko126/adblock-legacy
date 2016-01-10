@@ -883,14 +883,15 @@
 
       var isBlockable = !page_is_unblockable(main_frame.url) && !page_is_whitelisted(main_frame.url) && !/chrome\/newtab/.test(main_frame.url);
 
-      if (display && (main_frame && isBlockable) && !adblock_is_paused()) {
+      if ((main_frame && isBlockable) && !adblock_is_paused()) {
         var browsersBadgeOptions = {};
         browsersBadgeOptions.tabId = tabId;
         browsersBadgeOptions.color = "#555";
         var badge_text = blockCounts.getTotalAdsBlocked(tabId).toString();
-        if (badge_text === "0")
+        if (badge_text === "0") {
             badge_text = ""; // Only show the user when we've done something useful
-        browsersBadgeOptions.badge_text = badge_text;
+        }
+        browsersBadgeOptions.badge_text = display ? badge_text : "";
         browsersBadgeOptions.iconPaths = {'19': 'img/icon19.png', '38': 'img/icon38.png'};
         //see for more details - https://code.google.com/p/chromium/issues/detail?id=410868#c8
         setBrowserActions(browsersBadgeOptions);
