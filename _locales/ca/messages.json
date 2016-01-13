@@ -1136,5 +1136,17 @@
   "ad_report_please":{
     "message":"Si veieu un anunci, no feu un informe d'errors, feu un <a>Informe d'anunci<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "headertype":{
+    "message":"Tipus",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"marc",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"pàgina",
+    "description":"A resource type"
   }
 }

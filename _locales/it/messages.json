@@ -1223,6 +1223,18 @@
     "message":"Se visualizzi una pubblicità, non riportare un bug, fai una <a>segnalazione di pubblicità<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
+  "headertype":{
+    "message":"Tipo",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"pagina",
+    "description":"A resource type"
+  },
   "acceptableadsdisable_done":{
     "message":"Annunci Accettabili è stato disattivato.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."

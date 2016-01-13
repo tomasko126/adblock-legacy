@@ -1223,6 +1223,18 @@
     "message":"Sollten Sie Werbung angezeigt bekommen, senden Sie bitte keinen Fehlerbericht sondern <a>melden Sie Werbung hier<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
+  "headertype":{
+    "message":"Typ",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"seite",
+    "description":"A resource type"
+  },
   "acceptableadsdisable_done":{
     "message":"Acceptable Ads ist ausgeschaltet.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."

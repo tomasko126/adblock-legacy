@@ -1128,5 +1128,17 @@
   "ad_report_please":{
     "message":"Jos näet mainoksen, ethän tee virheilmoitusta, vaan tee <a>ilmoitus mainoksesta<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "headertype":{
+    "message":"Tyyppi",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"kehys",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"sivu",
+    "description":"A resource type"
   }
 }

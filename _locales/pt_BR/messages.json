@@ -1223,6 +1223,18 @@
     "message":"Se você está vendo um anúncio, não faça um relatório de erro, faça um <a>relatório de anúncio<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
   },
+  "headertype":{
+    "message":"Tipo",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"moldura",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"página",
+    "description":"A resource type"
+  },
   "acceptableadsdisable_done":{
     "message":"Os Anúncios Aceitáveis foram desativados.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
