@@ -360,11 +360,11 @@
     "description":"Name of the filter list"
   },
   "filterannoyances":{
-    "message":"Разреши Fanboy's Annoyances (премахва досадните неща)",
+    "message":"Разреши Fanboy Annoyances (премахва досадните неща)",
     "description":"Name of the filter list"
   },
   "filterwarning_removal":{
-    "message":"Разреши анти-AdBlock пакета (чисти съобщенията за ползване на AdBlock)",
+    "message":"Разреши противопремахващия пакет (чисти съобщенията за ползване на AdBlock)",
     "description":"Name of the filter list"
   },
   "filteracceptable_ads":{
@@ -372,7 +372,7 @@
     "description":"A filter list"
   },
   "filteradblock_custom":{
-    "message":"Разреши собствен пакет на AdBlock (препоръчително)",
+    "message":"Разреши фабричния пакет на AdBlock (препоръчително)",
     "description":"A filter list"
   },
   "filtereasylist":{
