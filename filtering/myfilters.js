@@ -644,7 +644,7 @@ MyFilters.prototype._loadMalwareDomains = function() {
     if (!this._subscriptions.malware.text ||
         !this.getMalwareDomains() ||
         out_of_date(this._subscriptions.malware)) {
-        var url = this._subscriptions.malware.url;
+        var url = this._subscriptions.malware.url + "?_=" + new Date().getTime();
         // Fetch file with malware-known domains
         var xhr = new XMLHttpRequest();
         var that = this;
