@@ -797,7 +797,7 @@ MyFilters.prototype._make_subscription_options = function() {
       safariJSON_URL: "https://cdn.adblockcdn.com/filters/easylist_plus_indonesian.json",
     },
     "easylist_plus_polish": { // Additional Polish filters
-      url: "https://raw.githubusercontent.com/adblockpolska/Adblock_PL_List/master/adblock_polska.txt",
+      url: "https://www.certyficate.it/adblock/adblock.txt",
       safariJSON_URL: "https://cdn.adblockcdn.com/filters/easylist_plus_polish.json",
       requiresList: "easylist",
     },
