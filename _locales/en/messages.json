@@ -1348,15 +1348,11 @@
     "description":"Resource list page: column title telling if the resource originates from a different domain"
   },
   "acceptableadsdisable_done":{
-    "message":"Acceptable Ads has been disabled.",
+    "message":"You're no longer subscribed to the Acceptable Ads filter list.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
   "acceptableadsdisable_how_to_reenable":{
-    "message":"You can re-enable it at any time by clicking the \"Allow some non-intrusive advertising\" checkbox below.",
-    "description":"Message shown to users after disabling Acceptable Ads via update page."
-  },
-  "acceptableadsdisable_please_reenable":{
-    "message":"Enabling Acceptable Ads is a way to support the websites you love who promise to only show you tasteful, non-annoying ads.",
+    "message":"You can turn this back on and support the websites you love by selecting \"Allow some non-intrusive advertising\" below.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   }
 }
