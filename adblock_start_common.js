@@ -129,7 +129,7 @@ function debug_print_selector_matches(selectors) {
         var el = elems[i];
         matches += "        " + el.nodeName + "#" + el.id + "." + el.className + "\n";
       }
-      BGcall("debug_report_elemhide", selector, matches);
+      BGcall("debug_report_elemhide", "##" + selector, matches);
     });
 }
 
@@ -182,7 +182,6 @@ function adblock_begin(inputs) {
   if (document.location.href === 'favorites://') // Safari does this
     return;
 
-
   if (!(document.documentElement instanceof HTMLElement))
     return; // Only run on HTML pages
 
@@ -193,8 +192,8 @@ function adblock_begin(inputs) {
   inputs.startPurger();
 
   var opts = { domain: document.location.hostname };
-
   BGcall('get_content_script_data', opts, function(data) {
+
     if (data && data.settings && data.settings.debug_logging)
       logging(true);
 
@@ -206,8 +205,6 @@ function adblock_begin(inputs) {
     }
 
     onReady(function() {
-      // TODO: ResourceList could pull html.innerText from page instead: we
-      // could axe this (and Safari's .selectors calculation in debug mode)
       if (data && data.settings && (data.settings.debug_logging || data.settings.data_collection)) {
         debug_print_selector_matches(data.selectors || []);
       }
@@ -218,7 +215,6 @@ function adblock_begin(inputs) {
 
       handleABPLinkClicks();
     });
-
     if (inputs.success) inputs.success();
   });
 }

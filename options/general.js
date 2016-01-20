@@ -1,4 +1,4 @@
-// Temp code to handle incoming clicks from acceptable-ads-announcement.html
+// Handle incoming clicks from bandaids.js & '/installed'
 try {
   if (parseUri.parseSearch(location.search).aadisabled === "true") {
     $("#acceptable_ads_info").show();
@@ -22,14 +22,58 @@ $(function() {
     $("#enable_" + name).
       prop("checked", optionalSettings[name]);
   }
+  //uncheck any incompatible options with the new safari content blocking, and then hide them
+  if (optionalSettings["safari_content_blocking"]) {
+    $(".exclude_safari_content_blocking > input").each(function(index) {
+      $(this).prop("checked", false);
+    });
+    $(".exclude_safari_content_blocking").hide();
+  }
+
   $("input.feature[type='checkbox']").change(function() {
     var is_enabled = $(this).is(':checked');
+    if (this.id === "acceptable_ads") {
+      if (is_enabled) {
+        $("#acceptable_ads_info").slideUp();
+        BGcall("subscribe", {id: "acceptable_ads"});
+      } else {
+        $("#acceptable_ads_info").slideDown();
+        BGcall("unsubscribe", {id:"acceptable_ads", del:false});
+      }
+      return;
+    }
     var name = this.id.substring(7); // TODO: hack
     BGcall("set_setting", name, is_enabled, true);
+    // Rebuild filters, so matched filter text is returned
+    // when using resource viewer page
+    if (name === "show_advanced_options") {
+      BGcall("update_filters");
+    }
     // if the user enables/disable data collection update the filter lists, so that the
     // filter list data is retained, and any cached responses are cleared
     if (name === "data_collection") {
       BGcall("update_subscriptions_now");
+    }
+    BGcall("get_settings", function(settings) {
+        optionalSettings = settings;
+    });
+  });
+
+  //if safari content blocking is available...
+  //  - display option to user
+  //  - check if any messages need to be displayed
+  //  - add a listener to process any messages
+  BGcall("isSafariContentBlockingAvailable", function(response) {
+    if (response) {
+      $("#safari_content_blocking").show();
+      getSafariContentBlockingMessage();
+      //once the filters have been updated see if there's an update to the message.
+      chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+        if (request.command !== "contentblockingmessageupdated")
+          return;
+        getSafariContentBlockingMessage();
+        sendResponse({});
+      });
     }
   });
 
@@ -58,7 +102,16 @@ $("#acceptable_ads").change(function() {
     $("#acceptable_ads_info").slideDown();
     BGcall("unsubscribe", {id:"acceptable_ads", del:false});
   }
+  // If the user has Safari content blocking enabled, then update the filter lists when
+  // a user subscribes to AA
+  BGcall("get_settings", function(settings) {
+    if (settings &&
+        settings.safari_content_blocking) {
+      BGcall("update_subscriptions_now");
+    }
+  });
 });
+
 
 $("#enable_show_advanced_options").change(function() {
   // Reload the page to show or hide the advanced options on the
@@ -73,6 +126,37 @@ $("#enable_show_advanced_options").change(function() {
     window.location.reload();
   }, 50);
 });
+
+$("#enable_safari_content_blocking").change(function() {
+  var is_enabled = $(this).is(':checked');
+  if (is_enabled) {
+    $(".exclude_safari_content_blocking").hide();
+    $("#safari_content_blocking_bmessage").text("");
+    // message to users on the Custom tab
+    $("#safariwarning").text(translate("contentblockingwarning")).show();
+    // uncheck any incompatable options, and then hide them
+    $(".exclude_safari_content_blocking > input").each(function(index) {
+      $(this).prop("checked", false);
+    });
+  } else {
+    $(".exclude_safari_content_blocking").show();
+    $("#safari_content_blocking_bmessage").text(translate("browserestartrequired")).show();
+    // message to users on the Custom tab
+    $("#safariwarning").text("").hide();
+  }
+  BGcall("set_content_scripts");
+  BGcall("update_subscriptions_now");
+});
+function getSafariContentBlockingMessage() {
+  BGcall('sessionstorage_get', 'contentblockingerror', function(messagecode) {
+    //if the message exists, it should already be translated.
+    if (messagecode) {
+      $("#safari_content_blocking_bmessage").text(messagecode).show();
+    } else {
+      $("#safari_content_blocking_bmessage").text("").hide();
+    }
+  });
+}
 
 // Authenticate button for login/logoff with Dropbox
 $("#dbauth").click(function() {

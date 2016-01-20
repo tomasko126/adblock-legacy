@@ -235,10 +235,6 @@
     "message":"Beta",
     "description":"Label for beta features in AdBlock Options"
   },
-  "googletextads2":{
-    "message":"Jag gillar texttilläggen i Googles sökresultat... visa dom",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "showcontextmenus2":{
     "message":"Lägg till AdBlock i högerklickmenyn",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -483,10 +479,6 @@
     "message":"AdBlock - Rapportera ett reklamtillägg",
     "description":"Title of the ad report page"
   },
-  "adreport2":{
-    "message":"Har du hittat ett reklamtillägg? Då skall vi försöka hitta rätt ställe att rapportera till!<br\/> Kom ihåg! Rapportera reklam är frivilligt! Om du inte vill göra detta, kan du bara stänga det här fönstret och istället blockera reklamen genom att lägga till ett eget filter under fliken 'Anpassa' i AdBlock-alternativ!",
-    "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
-  },
   "malwarenotificationcheckboxmessage":{
     "message":"Vill du att AdBlock skall meddela dig när den upptäcker skadlig kod?",
     "description":"Checkbox displayed when subscribing to the Malware filter list on the Filter lists tab of the Options page"
@@ -503,10 +495,6 @@
     "message":"Inaktivera dessa meddelanden",
     "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
-  "malwarecheck":{
-    "message":"Malware-kontroll",
-    "description":"Section header on the ad report page"
-  },
   "malwarewarning":{
     "message":"Din dator kan vara infekterad av skadlig kod. Klicka <a>här<\/a> för mer information.",
     "description":"On the ad report page, the ads the user is seeing might be caused by malware\/adware"
@@ -514,10 +502,6 @@
   "malwarenotfound":{
     "message":"Ingen känd, skadlig kod hittades.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
-  },
-  "updateyourlists":{
-    "message":"Kontrollera att dina filterlistor är uppdaterade",
-    "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
     "message":"Klick här: <a>Uppdatera mina filter!<\/a>",
@@ -539,14 +523,6 @@
     "message":"Nej",
     "description":"A negative response to a question"
   },
-  "adalreadyblocked":{
-    "message":"Du behöver inte göra något, eftersom reklamen redan är blockerad",
-    "description":"On the ad report page, telling a user there is nothing to do"
-  },
-  "disableallextensions":{
-    "message":"Inaktivera alla tillägg utom AdBlock",
-    "description":"Instruction on ad report page"
-  },
   "disableforchromestepone":{
     "message":"Öppna <a href='#'>Tillägg<\/a>",
     "description":"Step 1 for disabling Chrome extensions"
@@ -554,10 +530,6 @@
   "clickdisableotherextensions":{
     "message":"<b>ELLER<\/b>klicka bara på denna knapp, så sköter vi allt ovanstående: <a>Inaktivera alla andra tillägg<\/a>",
     "description":"On the ad report page, an alternative way to disable other extensions"
-  },
-  "disableotherextensionscomplete":{
-    "message":"Alla andra tillägg har inaktiverats. Nu uppdaterar vi fliken.",
-    "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "enableotherextensionscomplete":{
     "message":"Tilläggen som tidigare inaktiverades, har nu återaktiverats.",
@@ -567,10 +539,6 @@
     "message":"Öppna tilläggssidan för att aktivera de tillägg som tidigare inaktiverats.",
     "description":"On the ad report page, alert notifying users that they will need to manually reenable the extensions"
   },
-  "tabreloadcomplete":{
-    "message":"Fliken med reklamtillägget har uppdaterats, kontrollera om reklamtillägget fortfarande visas. Svara sedan på nedanstående Ja\/Nej-fråga.",
-    "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
-  },
   "disableforchromeandsafaristeptwo":{
     "message":"Avaktivera alla tillägg <b>utom<\/b> AdBlock. <b>Lämna AdBlock aktiverat<\/b>.",
     "description":"Step 2 for disabling Chrome and Safari extensions"
@@ -578,14 +546,6 @@
   "disableforsafaristepone":{
     "message":"Klicka på Safari-menyn &rarr; Alternativ &rarr; Tillägg.",
     "description":"Step 1 for disabling Safari extensions"
-  },
-  "reenableadsonebyone":{
-    "message":"Nu när alla tillägg är avaktiverade, måste du undersöka vilket tillägg som är orsakar felet. Aktivera nu tilläggen ett och ett. Det tillägg som får reklamen att visas igen, är det tillägg som du måste avinstallera för att bli av med reklamen.",
-    "description":"Tells the user to reenable the extensions one by one"
-  },
-  "correctfilters":{
-    "message":"Korrekt filter",
-    "description":"On the ad report page, label describing having the right set of filters"
   },
   "pagelanguagecheck":{
     "message":"På vilket språk är sidan skriven?",
@@ -724,16 +684,6 @@
       "chrome":{
         "content":"<span id='chrome2'><\/span>",
         "example":"'or Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
-      }
-    }
-  },
-  "checkinfirefox_2":{
-    "message":"Installera AdBlock för Firefox $chrome$, om du inte redan har det.",
-    "description":"Instruction for how to check Firefox\/Chrome for a reported ad.",
-    "placeholders":{
-      "chrome":{
-        "content":"<span id='adblockforchrome'><\/span>",
-        "example":"'or AdBlock for Chrome' (This will only be shown in Safari. Chrome users will not see this.)"
       }
     }
   },
@@ -1182,5 +1132,17 @@
   "ad_report_please":{
     "message":"Om du ser en annons, skicka inte en felrapport. Rapportera ett <a>reklamtillägg<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "headertype":{
+    "message":"Typ",
+    "description":"Resource list page: title of a column"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"sida",
+    "description":"A resource type"
   }
 }

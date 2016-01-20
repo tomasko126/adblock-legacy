@@ -2,6 +2,35 @@
 
 UNRELEASED:
 
+2.47:
+- Updated Translations
+- Removed duplicate strings from the translation (message) files (#666).
+- Added a timestamp query string to the Malware URL to prevent caching by the browser (#668).
+- For Safari users, content blocking will not be enabled by default (#665).
+- Updated the Polish filter list URL (#651).
+- Updated the Acceptable Ads un-subscribe message on Options page, General tab (#657).
+- Updated the AdBlock image files (#654).
+
+2.46:
+ - Fixed a typo in the description of the AdBlock Warning Removal list, it should be a lowercased 'b' (#658).
+ - Added a new parameter to the ping data to indicate if the advance setting is enabled (#660).
+ - Fixed an issue with the blocking assistant on some sites (#644). 
+ - For Chrome users, modified the "/installed" logic to use the Chrome specific chrome.runtime.onInstalled API (#656).
+ - For Safari users, AdBlock will now use the WebKit content blocking feature on new installations. (#619).
+ - For Safari users, fix a bug with the "Undo my blocks on this domain" feature (#570).
+
+2.45:
+- Added a new, advanced feature to view all HTTP Requests for a tab (#653).
+
+2.44:
+ - Updated the URL of filter lists hosted on AdBlock's servers.  (#652)
+ - Updated translations.
+
+2.43:
+ - Removed Michael's message. (#645)
+ - Added logic to the 'Report an Ad' page to check if Acceptable Ads is enabled.  (#646).
+ - Added language specific filter lists for Arabic, Estonian, Icelandic and Lithuanian.  (#647)
+
 2.42.1:
   - Modified the block image logic to not redirect any images, but rather cancel the request.  (#642)
 
@@ -18,13 +47,13 @@ UNRELEASED:
 
 2.41.1:
  - Added missing image file for Safari.
- 
+
 2.41:
  - Added Acceptable Ads filter list. (#627)
 
 2.40.1:
  - Remove the timestamp query string from the Malware filter list URL
- 
+
 2.40:
  - Updated Translations
  - Updated Malware filter list URL

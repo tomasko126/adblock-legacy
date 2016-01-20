@@ -29,6 +29,11 @@ $(function() {
     });
     $("#step_language_lang").empty().append(languageOptions);
     languageOptions[0].selected = true;
+
+    // add the link to the anchor in "adreport2"
+    $("a", "#info").
+      attr("href", "http://support.getadblock.com/kb/im-seeing-an-ad/how-do-i-block-an-ad").
+      attr("target", "_blank");
 });
 
 // Fetching the options...
@@ -193,8 +198,8 @@ var prepareManualReport = function(data, status, HTTPerror){
 
 // Check every domain of downloaded resource against malware-known domains
 var checkmalware = function() {
-    BGcall("get_frameData_adreport", tabId, function(tab) {
-        if (!tab)
+    BGcall("get_frameData", tabId, function(frameData) {
+        if (!frameData)
             return;
 
         var frames = [];
@@ -202,32 +207,39 @@ var checkmalware = function() {
         var extracted_domains = [];
         var infected = null;
 
+        // Get all loaded frames
         if (!SAFARI) {
             // Get all loaded frames
-            for (var object in tab) {
+            for (var object in frameData) {
                 if (!isNaN(object))
                     frames.push(object);
             }
             // Push loaded resources from each frame into an array
             for (var i=0; i < frames.length; i++) {
-                if (Object.keys(tab[frames[i]].resources).length !== 0)
-                    loaded_resources.push(tab[frames[i]].resources);
+                if (Object.keys(frameData[frames[i]].resources).length !== 0)
+                    loaded_resources.push(frameData[frames[i]].resources);
             }
         } else {
             // Push loaded resources into an array
-            if (Object.keys(tab.resources).length !== 0)
-                loaded_resources.push(tab.resources);
+            if (Object.keys(frameData.resources).length !== 0)
+                loaded_resources.push(frameData.resources);
         }
 
         // Extract domains from loaded resources
         for (var i=0; i < loaded_resources.length; i++) {
             for (var key in loaded_resources[i]) {
                 // Push just domains, which are not already in extracted_domains array
-                var resource = key.split(':|:');
-                if (resource &&
-                    resource.length == 2 &&
-                    extracted_domains.indexOf(parseUri(resource[1]).hostname) === -1) {
-                    extracted_domains.push(parseUri(resource[1]).hostname);
+                if (SAFARI) {
+                    var resource = key.split(':|:');
+                    if (resource &&
+                        resource.length === 2 &&
+                        extracted_domains.indexOf(parseUri(resource[1]).hostname) === -1) {
+                        extracted_domains.push(parseUri(resource[1]).hostname);
+                    }
+                } else {
+                    if (extracted_domains.indexOf(parseUri(key).hostname) === -1) {
+                        extracted_domains.push(parseUri(key).hostname);
+                    }
                 }
             }
         }
@@ -243,7 +255,7 @@ var checkmalware = function() {
                 var infected = true;
             }
         }
-        $('.gifloader').hide();
+        $('.loader').hide();
         if (infected) {
             $('#step_update_filters_DIV').hide();
             $("#malwarewarning").html(translate("malwarewarning"));
@@ -266,10 +278,20 @@ $("input, select").change(function(event) {
 
 // STEP 1: Malware/adware detection
 var checkAdvanceOptions = function() {
-     // Check, if downloaded resources are available,
+    // Check, if downloaded resources are available,
     // if not, just reload tab with parsed tabId
-    BGcall("get_settings", "show_advanced_options", function(status) {
-        if (status.show_advanced_options) {
+    BGcall("get_settings", function(settings) {
+
+        // We can't do a malware check when content blocking is enabled, so skip it.
+        if (settings.safari_content_blocking) {
+            $("#step_malware_checking_DIV").hide();
+            $('#step_update_filters_DIV').show();
+            return;
+        } else if (SAFARI) {
+            $("#step_malware_checking_DIV").show();
+        }
+
+        if (settings.show_advanced_options) {
             checkmalware();
         } else {
             BGcall("set_setting", "show_advanced_options");
@@ -281,7 +303,8 @@ var checkAdvanceOptions = function() {
                         checkmalware();
                         sendResponse({});
                     }
-             });
+                }
+            );
         }
     });
 }
@@ -341,10 +364,45 @@ $("#step_update_filters_no").click(function() {
 });
 $("#step_update_filters_yes").click(function() {
     $("#step_update_filters").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
+    // If the user is subscribed to Acceptable Ads, ask them to unsubscribe, and recheck the page
+    BGcall('get_subscriptions_minus_text', function(subs) {
+        //if the user is subscribed to Acceptable-Ads, ask them to disable it
+        if (subs && subs["acceptable_ads"] && subs["acceptable_ads"].subscribed) {
+          $('#step_update_aa_DIV').show();
+          $(".odd").css("background-color", "#f8f8f8");
+        } else {
+          $("#step_disable_extensions_DIV").fadeIn().css("display", "block");
+          $(".even").css("background-color", "#f8f8f8");
+        }
+        $("#malwarewarning").html(translate("malwarenotfound"));
+    });
+});
+
+// STEP 3: disable AA - IF enabled...
+
+$("#DisableAA").click(function() {
+    $(this).prop("disabled", true);
+    BGcall("unsubscribe", {id:"acceptable_ads", del:false}, function() {
+        // display the Yes/No buttons
+        $(".afterDisableAA input").prop('disabled', false);
+        $(".afterDisableAA").removeClass('afterDisableAA');
+    });
+});
+
+//if the user clicks a radio button
+$("#step_update_aa_no").click(function() {
+    $("#step_update_aa").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
+    $("#checkupdate").text(translate("aamessageadreport"));
+    $("#checkupdatelink").text(translate("aalinkadreport"));
+    $("#checkupdatelink_DIV").fadeIn().css("display", "block");
+
+});
+$("#step_update_aa_yes").click(function() {
+    $("#step_update_aa").html("<span class='answer' chosen='yes'>" + translate("yes") + "</span>");
     $("#step_disable_extensions_DIV").fadeIn().css("display", "block");
 });
 
-// STEP 3: disable all extensions
+// STEP 4: disable all extensions
 
 //Code for displaying the div is in the $function() that contains localizePage()
 //after user disables all extensions except for AdBlock
@@ -425,7 +483,7 @@ $("#OtherExtensions").click(function() {
     }
 });
 
-// STEP 4: language
+// STEP 5: language
 
 //if the user clicks an item
 var contact = "";
@@ -458,7 +516,7 @@ $("#step_language_lang").change(function() {
     }
 });
 
-// STEP 5: also in Firefox
+// STEP 6: also in Firefox
 
 //If the user clicks a radio button
 $("#step_firefox_yes").click(function() {
@@ -490,7 +548,7 @@ $("#step_firefox_wontcheck").click(function() {
     $("#step_firefox").html("<span class='answer' chosen='wont_check'>" + translate("refusetocheck") + "</span>");
 });
 
-// STEP 6: video/flash ad (Safari-only)
+// STEP 7: video/flash ad (Safari-only)
 
 //If the user clicks a radio button
 $("#step_flash_yes").click(function() {

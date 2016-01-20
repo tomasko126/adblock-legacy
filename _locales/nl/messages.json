@@ -8,7 +8,7 @@
     "description":"Tooltip on the AdBlock button, to help users understand that they can click the button, and that they can control the number badge that appears on the button."
   },
   "buttoncancel":{
-    "message":"Annuleer",
+    "message":"Annuleren",
     "description":"Cancel button"
   },
   "buttonok":{
@@ -235,10 +235,6 @@
     "message":"Beta",
     "description":"Label for beta features in AdBlock Options"
   },
-  "googletextads2":{
-    "message":"Ik vind de tekstadvertenties op de zoekresultaten van Google interessant, laat me deze zien",
-    "description":"Checkbox on the 'General' tab of the Options page"
-  },
   "showcontextmenus2":{
     "message":"Voeg items toe aan het rechterklik menu",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -371,6 +367,10 @@
     "message":"AdBlock Waarschuwing Verwijderende lijst (verwijdert meldingen over het gebruik van AdBlock)",
     "description":"Name of the filter list"
   },
+  "filteracceptable_ads":{
+    "message":"Aanvaardbare Advertenties (aanbevolen)",
+    "description":"A filter list"
+  },
   "filteradblock_custom":{
     "message":"AdBlock custom filters (aanbevolen)",
     "description":"A filter list"
@@ -483,9 +483,13 @@
     "message":"AdBlock - Advertentie rapporteren",
     "description":"Title of the ad report page"
   },
-  "adreport2":{
-    "message":"Dus je hebt een advertentie gevonden op een webpagina? We zullen je helpen om deze op de juiste plek te rapporteren!<br\/> Dit is vrijwillig. Als je dit niet wilt, kan je deze pagina gewoon sluiten en de advertentie voor jezelf blokkeren in het 'Personaliseren' menu van de opties pagina!",
-    "description":"Instructions on ad reporting page. 'Customize' should be the same text as the name of the 'Customize' tab."
+  "adreportintro":{
+    "message":"Heb je een advertentie gevonden op een webpagina? We zullen je helpen om de juiste plaats te vinden om deze te melden!",
+    "description":"Introduction of the ad reporting page"
+  },
+  "adreportvoluntary":{
+    "message":"Het melden van advertenties is vrijwillig. Het helpt andere mensen doordat de onderhouders van de filters deze advertentie dan kunnen blokkeren voor iedereen. Als je niet het gevoel hebt dat je iemand wil helpen, is dat ok. Sluit deze pagina en <a>blokkeer de advertentie<\/a> dan gewoon voor jezelf.",
+    "description":"Introduction of the ad reporting page"
   },
   "malwarenotificationcheckboxmessage":{
     "message":"Moet AdBlock je waarschuwen als het malware detecteert?",
@@ -504,7 +508,7 @@
     "description":"Button on the malware notification to disable future notifications. Message should be under 45 characters!"
   },
   "malwarecheck":{
-    "message":"Malware controle",
+    "message":"Controleren op malware die advertenties zou kunnen injecteren:",
     "description":"Section header on the ad report page"
   },
   "malwarewarning":{
@@ -515,8 +519,24 @@
     "message":"Geen gekende malware gevonden.",
     "description":"On the ad report page, the ads the user is seeing are probably not caused by malware\/adware"
   },
+  "disableaa":{
+    "message":"Controleer de Aanvaardbare Advertenties filters:",
+    "description":"Section header on the ad report page"
+  },
+  "clickdisableaa":{
+    "message":"Klik hierop: <a>Aanvaardbare Advertenties uitschakelen<\/a>",
+    "description":"Instruction on ad report page"
+  },
+  "aamessageadreport":{
+    "message":"Indien je deze advertenties liever niet ziet, kan je de Aanvaardbare Advertenties filter uitzetten.",
+    "description":"Acceptable Ads message on ad report page"
+  },
+  "aalinkadreport":{
+    "message":"Lees meer over ons aanvaardbare advertenties programma.",
+    "description":"Acceptable Ads link message on ad report page"
+  },
   "updateyourlists":{
-    "message":"Zorg ervoor dat je filters bijgewerkt zijn",
+    "message":"Zorg ervoor dat je filters bijgewerkt zijn:",
     "description":"Section header on the ad report page"
   },
   "clickupdatefilters":{
@@ -540,11 +560,11 @@
     "description":"A negative response to a question"
   },
   "adalreadyblocked":{
-    "message":"Je hoeft niets te doen aangezien deze advertentie al geblokkeerd is",
+    "message":"Geweldig! Je bent helemaal klaar.",
     "description":"On the ad report page, telling a user there is nothing to do"
   },
   "disableallextensions":{
-    "message":"Schakel alle extensies uit behalve AdBlock",
+    "message":"Schakel alle extensies behalve AdBlock uit:",
     "description":"Instruction on ad report page"
   },
   "disableforchromestepone":{
@@ -556,7 +576,7 @@
     "description":"On the ad report page, an alternative way to disable other extensions"
   },
   "disableotherextensionscomplete":{
-    "message":"Alle andere extensies zijn nu uitgeschakeld. We zullen het tabblad nu herladen.",
+    "message":"We hebben alle andere extensies uitgeschakeld. We zullen nu de pagina met de advertentie herladen. Eventjes geduld aub.",
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "enableotherextensionscomplete":{
@@ -568,7 +588,7 @@
     "description":"On the ad report page, alert notifying users that they will need to manually reenable the extensions"
   },
   "tabreloadcomplete":{
-    "message":"Het tabblad met de advertentie is herladen, kijk in dit tabblad of je de advertentie nog steeds ziet. Antwoordt daarna met ja of nee op de vraag hieronder.",
+    "message":"Klaar! We hebben de pagina met de advertentie herladen. Controleer deze pagina om te zien of de advertentie verdwenen is. Kom daarna terug naar deze pagina en beantwoordt de vraag hieronder.",
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "disableforchromeandsafaristeptwo":{
@@ -580,11 +600,11 @@
     "description":"Step 1 for disabling Safari extensions"
   },
   "reenableadsonebyone":{
-    "message":"Nu dat de advertenties weg zijn moet je uitzoeken welke extensie de oorzaak is. Activeer alle extensies 1 per 1. De extensie die de advertentie(s) terug laat verschijnen is degene die je moet verwijderen om van de advertentie af te geraken.",
+    "message":"Geweldig! Laten we nu op zoek gaan naar welke extensie de oorzaak is. Ga door elke extensie en schakel deze een voor een in. De extensie die de advertentie(s) terugbrengt is degene die je moet verwijderen om van de advertenties af te geraken.",
     "description":"Tells the user to reenable the extensions one by one"
   },
   "correctfilters":{
-    "message":"Juiste filters",
+    "message":"Zorg ervoor dat je de juiste taalfilter(s) gebruikt:",
     "description":"On the ad report page, label describing having the right set of filters"
   },
   "pagelanguagecheck":{
@@ -675,6 +695,22 @@
     "message":"Oekraïens",
     "description":"language"
   },
+  "filtereasylist_plus_arabic":{
+    "message":"Arabisch",
+    "description":"language"
+  },
+  "filtereasylist_plus_estonian":{
+    "message":"Estlands",
+    "description":"language"
+  },
+  "filtericelandic":{
+    "message":"Ijslands",
+    "description":"language"
+  },
+  "filtereasylist_plus_lithuania":{
+    "message":"Litouws",
+    "description":"language"
+  },
   "other":{
     "message":"Anders",
     "description":"Multiple choice option"
@@ -728,8 +764,8 @@
     }
   },
   "checkinfirefox_2":{
-    "message":"Installeer AdBlock voor Firefox $chrome$ als je dit nog niet hebt.",
-    "description":"Instruction for how to check Firefox\/Chrome for a reported ad.",
+    "message":"Installeer AdBlock Plus voor Firefox $chrome$ als je dit niet hebt.",
+    "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'.",
     "placeholders":{
       "chrome":{
         "content":"<span id='adblockforchrome'><\/span>",
@@ -951,6 +987,10 @@
     "message":"Rapporteer een advertentie op deze pagina",
     "description":"Entry in the AdBlock button menu"
   },
+  "acceptableadsoption":{
+    "message":"Laat sommige, niet-opdringerige advertenties toe",
+    "description":"option on the 'General' tab"
+  },
   "advanced_options2":{
     "message":"Ik ben een gevorderd gebruiker, toon me de geavanceerde opties",
     "description":"Checkbox on the 'General' tab of the Options page"
@@ -1116,7 +1156,7 @@
     }
   },
   "ff_adblock_outdated":{
-    "message":"Je gebruikt een verouderde versie van AdBlock. Klik op de Firefox menu knop en kies Add-ons. Klik dan op het tandwiel ( Hulpmiddelen voor alle add-ons ) en kies 'Controleren op updates'.",
+    "message":"Je gebruikt een verouderde versie van AdBlock. Klik op de Firefox menu knop en kies Add-ons. Klik daarna op het tandwiel (Hulpmiddelen voor alle add-ons) en kies 'Controleren op updates'.",
     "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
@@ -1182,5 +1222,113 @@
   "ad_report_please":{
     "message":"Als je een advertentie ziet, maak dan geen foutenrapport, maar een <a>advertentierapport<\/a>!",
     "description":"Link to the ad report page on our support site. This is found on the Support tab of the options."
+  },
+  "resourceblocktitle":{
+    "message":"Alle Bronnen",
+    "description":"Resource list page name"
+  },
+  "headerresource":{
+    "message":"Bron",
+    "description":"Resource list page: title of a column"
+  },
+  "headertype":{
+    "message":"Type",
+    "description":"Resource list page: title of a column"
+  },
+  "headerfilter":{
+    "message":"Geschikte filter",
+    "description":"Resource list page: title of a column"
+  },
+  "show_resourcelist":{
+    "message":"Toon alle verzoeken",
+    "description":"Menu entry to open the resource list page"
+  },
+  "noresourcessend2":{
+    "message":"Er is iets fout gegaan. De geladen items zijn niet doorgestuurd. Deze pagina zal nu sluiten. Probeer de website opnieuw te laden.",
+    "description":"Resource list page: error message"
+  },
+  "resourcedomain":{
+    "message":"Geladen op een pagina van het domein: \n$domain$",
+    "description":"Resource list page: text shown when hovering over an item in the third-party column",
+    "placeholders":{
+      "domain":{
+        "content":"$1",
+        "example":"example.com"
+      }
+    }
+  },
+  "filterorigin":{
+    "message":"Oorsprong van de filter:\n$list$",
+    "description":"Resource list page: tooltip of matching filter, telling which filter list contains the filter",
+    "placeholders":{
+      "list":{
+        "content":"$1",
+        "example":"A filter list name OR AdBlock OR the translation of 'tabcustomize'"
+      }
+    }
+  },
+  "typeselector":{
+    "message":"selectieschakelaar",
+    "description":"A resource type"
+  },
+  "typesub_frame":{
+    "message":"frame",
+    "description":"A resource type"
+  },
+  "typemain_frame":{
+    "message":"pagina",
+    "description":"A resource type"
+  },
+  "topframe":{
+    "message":"Bovenste frame",
+    "description":"Resource list page: frame type"
+  },
+  "subframe":{
+    "message":"Subframe",
+    "description":"Resource list page: frame type"
+  },
+  "frametype":{
+    "message":"Frame type: ",
+    "description":"Resource list page: followed by frame type (e.g. top frame, subframe)"
+  },
+  "framedomain":{
+    "message":"Frame domein: ",
+    "description":"Resource list page: domain name of the frame"
+  },
+  "frameurl":{
+    "message":"Frame URL: ",
+    "description":"Resource list page: full URL of the frame"
+  },
+  "legend":{
+    "message":"Legende: ",
+    "description":"Resource list page: followed by color codes for various resource statuses (e.g. blocked, whitelisted, hidden)"
+  },
+  "blockedresource":{
+    "message":"Geblokkeerde bronnen",
+    "description":"Resource list page: resource status"
+  },
+  "whitelistedresource":{
+    "message":"Uitgesloten bronnen",
+    "description":"Resource list page: resource status"
+  },
+  "hiddenelement":{
+    "message":"Verborgen element",
+    "description":"Resource list page: resource status"
+  },
+  "thirdparty":{
+    "message":"Derde partij",
+    "description":"Resource list page: column title telling if the resource originates from a different domain"
+  },
+  "acceptableadsdisable_done":{
+    "message":"Aanvaardbare advertenties zijn uitgeschakeld.",
+    "description":"Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptableadsdisable_how_to_reenable":{
+    "message":"Je kan dit op elk moment terug activeren door te klikken op het \"Laat sommige, niet-opdringerige advertenties toe\" selectievakje onderaan.",
+    "description":"Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptableadsdisable_please_reenable":{
+    "message":"Het inschakelen van de Aanvaardbare Advertenties is een manier om de websites te helpen die je wilt ondersteunen door enkel stijlvolle, niet vervelende advertenties te tonen.",
+    "description":"Message shown to users after disabling Acceptable Ads via update page."
   }
 }
