@@ -64,9 +64,9 @@ $(document).ready(function() {
         data: {
     			  bug_report: JSON.stringify(report_data)
     		},
-        success: function(json){
+        success: function(text, status, xhr) {
             // TODO Add a success handler
-            console.log(json);
+            console.log("succes", text, status, xhr);
         },
         error: function(xhrInfo, status, HTTPerror){
             // As backup, have them report the bug manually

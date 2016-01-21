@@ -132,9 +132,9 @@ function sendReport() {
         data: {
             ad_report: JSON.stringify(report_data)
         },
-        success: function(json){
-          // TODO Add a success handler
-    
+        success: function(text, status, xhr) {
+            // TODO Add a success handler
+            console.log("succes", text, status, xhr);
         },
         error: function(xhrInfo, status, HTTPerror){
             // We'll need to get them to manually report this
