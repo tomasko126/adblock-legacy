@@ -47,8 +47,14 @@ $(document).ready(function() {
         $email.val(storage_get("user_email"));
         $("#rememberDetails").prop("checked",true);
     }
-
-  var sendReport = function() {
+    var handleResponseError = function() {
+        $("#step_response_error").fadeIn();
+        $('html, body').animate({
+            scrollTop: $("#step_response_error").offset().top
+        }, 2000);      
+    }    
+    
+    var sendReport = function() {
       var report_data = {
             title: $title.val(),
             repro: $repro.val(),
@@ -64,9 +70,31 @@ $(document).ready(function() {
         data: {
     			  bug_report: JSON.stringify(report_data)
     		},
-        success: function(text, status, xhr) {
-            // TODO Add a success handler
-            console.log("succes", text, status, xhr);
+        success: function(text) {
+            if (text) {
+              try {
+                var respText = JSON.parse(text);
+                if (respText &&
+                    respText.hasOwnProperty("helpdesk_ticket") &&
+                    respText["helpdesk_ticket"].hasOwnProperty("display_id")) {
+                  var ticketID = respText["helpdesk_ticket"]["display_id"];
+                  $("#step_response_success_link").text(ticketID);
+                  var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
+                  $("#step_response_success_link").attr("href", URL);
+                  $("#step_response_success").fadeIn();
+                  $('html, body').animate({
+                      scrollTop: $("#step_response_success").offset().top
+                  }, 2000);                  
+                  
+                } else {
+                  handleResponseError();
+                }
+              } catch(e) {
+                handleResponseError();
+              }
+            } else {
+              handleResponseError();
+            }
         },
         error: function(xhrInfo, status, HTTPerror){
             // As backup, have them report the bug manually

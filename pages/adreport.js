@@ -134,7 +134,7 @@ function sendReport() {
         },
         success: function(text, status, xhr) {
             // TODO Add a success handler
-            console.log("succes", text, status, xhr);
+            console.log("succes", text);
         },
         error: function(xhrInfo, status, HTTPerror){
             // We'll need to get them to manually report this

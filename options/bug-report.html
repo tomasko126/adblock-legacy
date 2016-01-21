@@ -2,14 +2,24 @@
 <html>
   <head>
     <title>AdBlock - Report a bug</title>
-    <link rel="stylesheet" href="options.css" />
+    <link rel="stylesheet" href="../options/options.css" />
     <script src="../jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../punycode.min.js" type="text/javascript"></script>
     <script src="../port.js" type="text/javascript"></script>
     <script src="../functions.js" type="text/javascript"></script>
     <script src="bug-report.js" type="text/javascript"></script>
     <style type="text/css">
       body {
         background-color: white;
+      }
+      .section  {
+        padding: 10px;
+        padding-left: 162px;
+        margin: 0px -8px 0px -8px;
+        position: relative;
+        margin: 0px auto;
+        max-width: 1000px;
+        display: none;
       }
       .white {
         background-color: white;
@@ -21,33 +31,28 @@
       label {
         margin-right: 5px;
       }
-      div.form {
-        margin-left: 15px;
-      }
       a {
         color: #4D7BD6;
         text-decoration: none;
       }
-      .section  {
-        padding: 10px;
-        padding-left: 162px;
-        margin: 0px -8px 0px -8px;
+      .grey{
+         background-color: #f8f8f8;
+      }      
+      .inputError{
+        border-color: #f00 !important;
+      }      
+      .step {
         position: relative;
         margin: 0px auto;
         max-width: 1000px;
-        display: none;
-      }
-      .grey{
-        background-color: #f8f8f8;
-      }
-      #info {
+        padding: 20px 20px 20px 0px;
+      }     
+      #info  {
         position: relative;
         margin: 110px auto 30px;
         max-width: 990px;
-      }
-      .inputError{
-        border-color: #f00 !important;
-      }
+        padding: 20px 20px 20px 0px;
+      }      
       .missingInfoMessage{
         display: none;
         color: #f00
@@ -57,12 +62,12 @@
       }
       #summary{
         width: 650px
-      }
+      }              
       @media screen and (max-width: 1080px) {
         .social {
           display: none;
         }
-        .section   {
+        .step {
           padding: 20px 20px 20px 0px;
         }
         #info {
@@ -79,10 +84,9 @@
           <li class="social"><a class="gplus" href="http://plus.google.com/100807459477993641578" target="_blank" ></a></li>
           <li class="social"><a class="facebook" href="http://facebook.com/heres.adblock" target="_blank" ></a></li>
         </nav>
-        <a href="https://www.getadblock.com" class="left adblock-logo"><img src="../img/logo.png"></a>
+        <a href="https://www.getadblock.com" class="left adblock-logo"><img src="../img/logo.png" width="240" height="64"></a>
       </div>
     </header>
-
     <!--STEP 0-->
     <div id="info">So you've found a bug with AdBlock? Don't worry, we'll help you out! Just answer the questions below:</div>
 
@@ -91,12 +95,12 @@
       <div class="section" style="display:block" id="step_name_email">
         <span class="missingInfoMessage">You've left some info out of this section! Fill in the questions that have a red border.</span>
         <p>First, we need some info about yourself. All questions in this section are required.</p>
-        <label for="name">Name (or a screen-name):</label>
-        <input type="text" id="name" /><br />
-        <label for="email">Email Address (so that we can contact you if we need more info):</label><br />
-        <input type="email" id="email" /><br />
-        <input type="checkbox" value="true" id="rememberDetails" />
-        <label for="rememberDetails">Remember my name &amp; email for next time!</label><br />
+        <label for="name">Name (or a screen-name):</label><br/>
+        <input type="text" id="name" /><br/><br/>
+        <label for="email">Email Address (so that we can contact you if we need more info):</label><br/>
+        <input type="email" id="email" /><br/><br/>
+        <input type="checkbox" checked="true" id="rememberDetails" />
+        <label for="rememberDetails">Remember my name &amp; email for next time!</label><br/>
         <button id="step1-next">Next</button>
       </div>
     </div>
@@ -106,16 +110,16 @@
       <div class="section" id="step_repro_info">
         <span class="missingInfoMessage">You've left some info out of this section! Fill in the questions that have a red border.</span>
         <p>Now we need some information about the problem. All questions in this section are required.</p>
-        <label for="summary">Give us a one-sentence overview of the problem:</label><br />
-        <input type="text" id="summary" /><br />
-        <label for="repro-steps">What steps did you take to make the bug happen?<br />Be as clear as possible as we will try to reproduce these steps on our own systems.</label><br />
+        <label for="summary">Give us a one-sentence overview of the problem:</label><br/>
+        <input type="text" id="summary" /><br/>
+        <label for="repro-steps">What steps did you take to make the bug happen?<br/>Be as clear as possible as we will try to reproduce these steps on our own systems.</label><br/>
         <textarea id="repro-steps" rows="5" cols="50">1.
 2.
-3. </textarea><br />
-        <label for="expected-result">When you carry out these steps, what do you expect to happen?</label><br />
-        <textarea id="expected-result"  rows="5" cols="50"></textarea><br />
-        <label for="actual-result">When you carry out these steps, what did happen instead?</label><br />
-        <textarea id="actual-result" rows="5" cols="50"></textarea><br />
+3. </textarea><br/>
+        <label for="expected-result">When you carry out these steps, what do you expect to happen?</label><br/>
+        <textarea id="expected-result"  rows="5" cols="50"></textarea><br/>
+        <label for="actual-result">When you carry out these steps, what did happen instead?</label><br/>
+        <textarea id="actual-result" rows="5" cols="50"></textarea><br/>
         <button id="step2-back">Back</button>
         <button id="step2-next">Next</button>
       </div>
@@ -125,15 +129,29 @@
     <div class="step grey">
       <div class="section" id="step_final_questions">
         <p>This last question is completely optional, but it mostly concerns the details of the report you are submitting</p>
-        <label for="other-comments">Do you have anything else you would like to mention?</label><br />
-        <textarea id="other-comments" rows="5" cols="50"></textarea><br />
+        <label for="other-comments">Do you have anything else you would like to mention?</label><br/>
+        <textarea id="other-comments" rows="5" cols="50"></textarea><br/>
         <label for="debug-info">The following information will be included in the bug report.</label>
-        <textarea id="debug-info" rows="25" cols="75" disabled></textarea><br />
+        <textarea id="debug-info" rows="25" cols="75" disabled></textarea><br/>
         <button id="step3-back">Back</button>
         <button id="submit">Submit</button>
       </div>
     </div>
 
+    <!-- Only show if error with response -->
+    <div class="step">
+      <div class="section" id="step_response_success">
+        <p>Thank you.  Your bug report was created, and you should recieve an email.</p>
+        <p>You may click here to view the ticket.<a id="step_response_success_link" ></a>.</p>
+      </div>
+    </div>
+    <!-- Only show if error with response -->
+    <div class="step">
+      <div class="section" id="step_response_error">
+        <p>Thank you.  Your bug report was created, and you should recieve an email.</p>
+        <p>If not, please go to <a href="https://adblocksupport.freshdesk.com/support/tickets/new">our support website</a>.</p>
+      </div>
+    </div>
     <!-- Only show if error with submission -->
     <div class="step">
       <div class="section" id="step_error">
