@@ -32,7 +32,7 @@ $(function() {
 
     // add the link to the anchor in "adreport2"
     $("a", "#info").
-      attr("href", "http://support.getadblock.com/kb/im-seeing-an-ad/how-do-i-block-an-ad").
+      attr("href", "http://help.getadblock.com/support/solutions/articles/6000061202-i-found-an-ad-adblock-doesn-t-block-how-can-i-block-it-").
       attr("target", "_blank");
 });
 
@@ -265,7 +265,7 @@ var checkmalware = function() {
         if (infected) {
             $('#step_update_filters_DIV').hide();
             $("#malwarewarning").html(translate("malwarewarning"));
-            $("a", "#malwarewarning").attr("href", "http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/");
+            $("a", "#malwarewarning").attr("href", "http://help.getadblock.com/support/solutions/articles/6000055822-i-m-seeing-similar-ads-on-every-website-");
         } else {
             $('#step_update_filters_DIV').show();
             $("#malwarewarning").html(translate("malwarenotfound"));

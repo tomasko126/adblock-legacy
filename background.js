@@ -1442,7 +1442,7 @@
             //But, Chrome does, so add button click handlers to process the button click events
                 chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex) {
                     if (buttonIndex === 0) {
-                        openTab("http://support.getadblock.com/kb/im-seeing-an-ad/im-seeing-similar-ads-on-every-website/");
+                        openTab("http://help.getadblock.com/support/solutions/articles/6000055822-i-m-seeing-similar-ads-on-every-website-");
                     }
                     if (buttonIndex === 1) {
                         storage_set('malware-notification', false);
