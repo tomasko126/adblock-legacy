@@ -83,13 +83,6 @@ $(document).ready(function() {
         }
     });
 
-    // Report us the bug
-    $("#report").click(function(){
-        var result = "http://support.getadblock.com/discussion/new" +
-        "?category_id=problems&discussion[body]=" + report;
-        document.location.href = result;
-    });
-
     // Show the changelog
     $("#whatsnew a").click(function() {
         var xhr = new XMLHttpRequest();
