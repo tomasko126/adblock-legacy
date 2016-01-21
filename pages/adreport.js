@@ -42,55 +42,56 @@ var options = parseUri.parseSearch(document.location.search);
 // Get the list of all unsubscribed default filters
 var unsubscribed_default_filters = [];
 BGcall("get_subscriptions_minus_text", function(subs) {
-    for (var id in subs)
-        if (!subs[id].subscribed && !subs[id].user_submitted)
+    for (var id in subs) {
+        if (!subs[id].subscribed && !subs[id].user_submitted) {
             unsubscribed_default_filters[id] = subs[id];
+        }
+    }
 });
 
 // Get debug info
-var debug_info = BGcall("getDebugInfo", function(info) {
+BGcall("getDebugInfo", function(info) {
     debug_info = info;
 });
 
 function sendReport() {
-  
-  
-  var report_data = {
-    title: "Ad Report",
-    name: $("#step_report_name").val(),
-    email: $("#step_report_email").val(),
-    location: $("#step_report_location").val(),
-    filter: $("#step_report_filter").val(),
-    comments: $("#step_report_otherInfo").val(),
-    debug: debug_info,
-    url: ""
-  };
-  
-  var domain = "";
-    if (options.url){
-      domain = parseUri(options.url).hostname;
-      report_data.title = report_data.title + ": " + domain;
-      report_data.url = options.url;
+
+    var report_data = {
+        title: "Ad Report",
+        name: $("#step_report_name").val(),
+        email: $("#step_report_email").val(),
+        location: $("#step_report_location").val(),
+        filter: $("#step_report_filter").val(),
+        comments: $("#step_report_otherInfo").val(),
+        debug: debug_info,
+        url: ""
+    };
+
+    var domain = "";
+    if (options.url) {
+        domain = parseUri(options.url).hostname;
+        report_data.title = report_data.title + ": " + domain;
+        report_data.url = options.url;
     }
-  var the_answers = [];
-  var answers = $('span[class="answer"]');
+    var the_answers = [];
+    var answers = $('span[class="answer"]');
     var text = $('div[class="section"]:visible');
-    for (var i=0, n=1; i<answers.length, i<text.length; i++, n++) {
-        the_answers.push(n+"."+text[i].id+": "+answers[i].getAttribute("chosen"));
+    var arrayLength = Math.min(answers.length, text.length);
+    for (var i=0; i<arrayLength; i++) {
+        the_answers.push((i+1) + "." + text[i].id + ": " + answers[i].getAttribute("chosen"));
     }
-  report_data.answers = the_answers.join("\n");
-  
-  
-          // Retrieve extension info
-          var askUserToGatherExtensionInfo = function() {
-            chrome.permissions.request({
-              permissions: ['management']
-            }, function(granted) {
-              // The callback argument will be true if the user granted the permissions.
-              if (granted) {
-                chrome.management.getAll(function(result) {
-                  var extInfo = [];
-                  for (var i = 0; i < result.length; i++) {
+    report_data.answers = the_answers.join("\n");
+
+    // Retrieve extension info
+    var askUserToGatherExtensionInfo = function() {
+      chrome.permissions.request({
+          permissions: ['management']
+      }, function(granted) {
+          // The callback argument will be true if the user granted the permissions.
+          if (granted) {
+            chrome.management.getAll(function(result) {
+                var extInfo = [];
+                for (var i = 0; i < result.length; i++) {
                     extInfo.push("Number " + (i + 1));
                     extInfo.push("  name: " + result[i].name);
                     extInfo.push("  id: " + result[i].id);
@@ -98,102 +99,104 @@ function sendReport() {
                     extInfo.push("  enabled: " + result[i].enabled)
                     extInfo.push("  type: " + result[i].type);
                     extInfo.push("");
-                  }
-                  report_data.extensions = extInfo.join("\n\n");
-                  chrome.permissions.remove({
+                }
+                report_data.extensions = extInfo.join("\n\n");
+                chrome.permissions.remove({
                     permissions: ['management']
-                  }, function(removed) {});
-                });
-              } else {
-                //user didn't grant us permission
-                report_data.extensions = "Permission not granted";
-              }
+                }, function(removed) {});
             });
-        };//end of permission request
-        if (chrome &&
-            chrome.tabs &&
-            chrome.tabs.detectLanguage) {
-          chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
-            if (language) {
-              report_data.language = language;
-            }
-            askUserToGatherExtensionInfo();
-          });//end of detectLanguage
         } else {
-          report_data.language = "unknown"
-          askUserToGatherExtensionInfo();
+            //user didn't grant us permission
+            report_data.extensions = "Permission not granted";
         }
-  
-  $.ajax({
-    url: "http://dev.getadblock.com/freshdesk/adReport.php",
-    data: {
-      ad_report: JSON.stringify(report_data)
-    },
-    success: function(json){
-      // TODO Add a success handler
-      console.log(json);
-    },
-    error: function(xhrInfo, status, HTTPerror){
-      // We'll need to get them to manually report this
-      prepareManualReport(report_data, status, HTTPerror);
-      $("#manual_report_DIV").show();
-      $("html, body").animate({ scrollTop: 15000 }, 50)
-		},
-    type: "POST"
-  });
-}
+      });
+    };//end of permission request
+
+    if (chrome &&
+      chrome.tabs &&
+      chrome.tabs.detectLanguage) {
+      chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
+          if (language) {
+              report_data.language = language;
+          }
+          askUserToGatherExtensionInfo();
+      });//end of detectLanguage
+    } else {
+        report_data.language = "unknown"
+        askUserToGatherExtensionInfo();
+    }
+    // Send the data to FreshDesk
+    // TODO - Update URL
+    $.ajax({
+        url: "http://dev.getadblock.com/freshdesk/adReport.php",
+        data: {
+            ad_report: JSON.stringify(report_data)
+        },
+        success: function(json){
+          // TODO Add a success handler
+    
+        },
+        error: function(xhrInfo, status, HTTPerror){
+            // We'll need to get them to manually report this
+            prepareManualReport(report_data, status, HTTPerror);
+            $("#manual_report_DIV").show();
+            $("html, body").animate({ scrollTop: 15000 }, 50)
+    		},
+        type: "POST"
+    });
+}// end of sendReport()
 
 // Manual Report preparation in case of error
 var prepareManualReport = function(data, status, HTTPerror){
-  var body = [];
-  body.push("This bug report failed to send. See bottom of debug info for details.");
-  body.push("");
-  body.push("* Location of ad *");
-  body.push(data.location);
-  body.push("");
-  body.push("* Working Filter? *");
-  body.push(data.expect);
-  body.push("");
-  body.push("* Other comments *");
-  body.push(data.comments);
-  body.push("");
-  
+    var body = [];
+    body.push("This bug report failed to send. See bottom of debug info for details.");
+    body.push("");
+    body.push("* Location of ad *");
+    body.push(data.location);
+    body.push("");
+    body.push("* Working Filter? *");
+    body.push(data.expect);
+    body.push("");
+    body.push("* Other comments *");
+    body.push(data.comments);
+    body.push("");
+
     // Get written debug info
-      // data.debug is the debug info object
-      content = [];
-      content.push("* Debug Info *");
-      content.push("");
-      content.push("");
-      content.push("=== Filter Lists ===");
-      content.push(data.debug.filter_lists);
-      content.push("");
-      // Custom & Excluded filters might not always be in the object
-      if (info.custom_filters){
+    // data.debug is the debug info object
+    content = [];
+    content.push("* Debug Info *");
+    content.push("");
+    content.push("");
+    content.push("=== Filter Lists ===");
+    content.push(data.debug.filter_lists);
+    content.push("");
+    // Custom & Excluded filters might not always be in the object
+    if (info.custom_filters){
         content.push("=== Custom Filters ===");
         content.push(data.debug.custom_filters);
         content.push("")
-      }
-      if (info.exclude_filters){
+    }
+    if (info.exclude_filters){
         content.push("=== Exclude Filters ===");
         content.push(data.debug.exclude_filters);
         content.push("");
-      }
-      content.push("=== Settings ===");
-      content.push(data.debug.settings);
-      content.push("");
-      content.push("=== Other Info ===");
-      content.push(data.debug.other_info);
-      // Put it together to put into the textbox
-      var text_debug_info = content.join("\n");
-  
-  body.push("* Debug Info *");
-  body.push(text_debug_info);
-  body.push("");
-  body.push("=== API ERROR DETAILS ===");
-  body.push("jQuery error: " + status);
-  body.push("HTTP Error code: " + HTTPerror);
+    }
+    content.push("=== Settings ===");
+    content.push(data.debug.settings);
+    content.push("");
+    content.push("=== Other Info ===");
+    content.push(data.debug.other_info);
+    // Put it together to put into the textbox
+    var text_debug_info = content.join("\n");
 
-  $("#manual_submission").val(body.join("\n"));
+    body.push("* Debug Info *");
+    body.push(text_debug_info);
+    body.push("");
+    body.push("=== API ERROR DETAILS ===");
+    body.push("jQuery error: " + status);
+    body.push("HTTP Error code: " + HTTPerror);
+  
+    $("#manual_submission").val(body.join("\n"));
 }
 
 // Check every domain of downloaded resource against malware-known domains
@@ -211,18 +214,21 @@ var checkmalware = function() {
         if (!SAFARI) {
             // Get all loaded frames
             for (var object in frameData) {
-                if (!isNaN(object))
+                if (!isNaN(object)) {
                     frames.push(object);
+                }
             }
             // Push loaded resources from each frame into an array
             for (var i=0; i < frames.length; i++) {
-                if (Object.keys(frameData[frames[i]].resources).length !== 0)
+                if (Object.keys(frameData[frames[i]].resources).length !== 0) {
                     loaded_resources.push(frameData[frames[i]].resources);
+                }
             }
         } else {
             // Push loaded resources into an array
-            if (Object.keys(frameData.resources).length !== 0)
+            if (Object.keys(frameData.resources).length !== 0) {
                 loaded_resources.push(frameData.resources);
+            }
         }
 
         // Extract domains from loaded resources
@@ -273,8 +279,6 @@ $("input, select").change(function(event) {
     event.preventDefault();
     $("html, body").animate({ scrollTop: 15000 }, 50);
 });
-
-
 
 // STEP 1: Malware/adware detection
 var checkAdvanceOptions = function() {
@@ -556,7 +560,7 @@ $("#step_flash_yes").click(function() {
     $("#checkupdate").text(translate("cantblockflash"));
 });
 $("#step_flash_no").click(function() {
-  $("#step_flash").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");  
+  $("#step_flash").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
   $("#step_report_DIV").fadeIn().css("display", "block");
 });
 
