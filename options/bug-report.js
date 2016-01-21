@@ -39,7 +39,7 @@ $(document).ready(function() {
     var $expect = $("#expected-result");
     var $actual = $("#actual-result");
     var $comments = $("#other-comments");
-  
+
     if (storage_get("user_name") !== undefined){
         $name.val(storage_get("user_name"));
     }
@@ -72,7 +72,7 @@ $(document).ready(function() {
             // As backup, have them report the bug manually
             prepareManualReport(report_data, status, HTTPerror);
             $("#step_error").fadeIn();
-            $("html, body").animate({ scrollTop: 15000 }, 50);  
+            $("html, body").animate({ scrollTop: 15000 }, 50);
     		},
         type: "POST"
       });
@@ -102,7 +102,7 @@ $(document).ready(function() {
       body.push("=== API ERROR DETAILS ===");
       body.push("jQuery error: " + status);
       body.push("HTTP Error code: " + HTTPerror);
-    
+
       $("#manual_submission").val(body.join("\n"));
   }
 
@@ -143,7 +143,7 @@ $(document).ready(function() {
     var s2_problems = 0
     if ($title.val() === ""){
         s2_problems++;
-        $title.addClass("inputError");    
+        $title.addClass("inputError");
     }
     if ($repro.val() === "1. \n2. \n3. "){
         s2_problems++;
@@ -174,7 +174,7 @@ $(document).ready(function() {
         $("#step_repro_info > .missingInfoMessage").show();
     }
   });
-  
+
   $("#step2-back").click(function(){
       $("#step1-next").prop("disabled", false);
       $("#email, #name").prop("disabled", false);
@@ -182,7 +182,7 @@ $(document).ready(function() {
       // Auto-scroll to bottom of the page
       $("html, body").animate({ scrollTop: 15000 }, 50);
   });
-  
+
   // Step 3: Final Questions
   $("#step3-back").click(function(){
       $("#step2-next, #step2-back").prop("disabled", false);
@@ -192,4 +192,4 @@ $(document).ready(function() {
       $("html, body").animate({ scrollTop: 15000 }, 50);
   });
   $("#submit").click(sendReport);
-});  
+});
