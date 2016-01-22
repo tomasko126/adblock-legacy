@@ -116,33 +116,38 @@ function sendReport() {
 
       // Retrieve extension info
       var askUserToGatherExtensionInfo = function() {
-        chrome.permissions.request({
-            permissions: ['management']
-        }, function(granted) {
-          // The callback argument will be true if the user granted the permissions.
-          if (granted) {
-              chrome.management.getAll(function(result) {
-                var extInfo = [];
-                for (var i = 0; i < result.length; i++) {
-                    extInfo.push("Number " + (i + 1));
-                    extInfo.push("  name: " + result[i].name);
-                    extInfo.push("  id: " + result[i].id);
-                    extInfo.push("  version: " + result[i].version);
-                    extInfo.push("  enabled: " + result[i].enabled)
-                    extInfo.push("  type: " + result[i].type);
-                    extInfo.push("");
+          if (chrome &&
+              chrome.permissions &&
+              chrome.permissions.request) {        
+              chrome.permissions.request({
+                  permissions: ['management']
+              }, function(granted) {
+                // The callback argument will be true if the user granted the permissions.
+                if (granted) {
+                    chrome.management.getAll(function(result) {
+                      var extInfo = [];
+                      for (var i = 0; i < result.length; i++) {
+                          extInfo.push("Number " + (i + 1));
+                          extInfo.push("  name: " + result[i].name);
+                          extInfo.push("  id: " + result[i].id);
+                          extInfo.push("  version: " + result[i].version);
+                          extInfo.push("  enabled: " + result[i].enabled)
+                          extInfo.push("  type: " + result[i].type);
+                          extInfo.push("");
+                      }
+                      report_data.extensions = extInfo.join("\n\n");
+                      chrome.permissions.remove({
+                          permissions: ['management']
+                      }, function(removed) {});
+                    });
+                } else {
+                  //user didn't grant us permission
+                  report_data.extensions = "Permission not granted";
                 }
-                report_data.extensions = extInfo.join("\n\n");
-                chrome.permissions.remove({
-                    permissions: ['management']
-                }, function(removed) {});
               });
-          } else {
-            //user didn't grant us permission
-            report_data.extensions = "Permission not granted";
           }
-        });
-    };//end of permission request
+    };//end of askUserToGatherExtensionInfo
+    
     if (chrome &&
         chrome.tabs &&
         chrome.tabs.detectLanguage) {
