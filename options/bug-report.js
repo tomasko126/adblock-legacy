@@ -140,11 +140,15 @@ $(document).ready(function() {
     var s1_problems = 0;
     if ($name.val() === ""){
         s1_problems++;
-       $name.addClass("inputError");
+        $name.addClass("inputError");
+    } else {
+        $name.removeClass("inputError");
     }
     if ($email.val() === "" || $email.val().search(/^.+@.+\..+$/) === -1){
        s1_problems++;
-       $email.addClass("inputError");
+        $email.addClass("inputError");
+    } else {
+        $email.removeClass("inputError");
     }
     if (s1_problems === 0){
         // Success - go to next step
@@ -172,18 +176,26 @@ $(document).ready(function() {
     if ($title.val() === ""){
         s2_problems++;
         $title.addClass("inputError");
+    } else {
+        $title.removeClass("inputError");
     }
     if ($repro.val() === "1. \n2. \n3. "){
         s2_problems++;
         $repro.addClass("inputError");
+    } else {
+        $repro.removeClass("inputError");
     }
     if ($expect.val() === ""){
         s2_problems++;
         $expect.addClass("inputError");
+    } else {
+        $expect.removeClass("inputError");
     }
     if ($actual.val() === ""){
         s2_problems++;
         $actual.addClass("inputError");
+    } else {
+        $actual.removeClass("inputError");
     }
     if (s2_problems === 0){
         $("#debug-info").val(text_debug_info);
