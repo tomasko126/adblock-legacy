@@ -361,15 +361,15 @@
   },
   "filterantisocial":{
     "message":"Antisocial filter list (removes social media buttons)",
-    "description":"Name of the filter list"
+    "description":"A filter list"
   },
   "filterannoyances":{
     "message":"Fanboy's Annoyances (removes annoyances on the Web)",
-    "description":"Name of the filter list"
+    "description":"A filter list"
   },
   "filterwarning_removal":{
     "message":"Adblock Warning Removal list (removes warnings about using ad blockers)",
-    "description":"Name of the filter list"
+    "description":"A filter list. \"Adblock\" is written with a lowercase B in this string as it refers to ad blocking extensions in general, not just AdBlock specifically."
   },
   "filteracceptable_ads":{
     "message":"Acceptable Ads (recommended)",
@@ -477,7 +477,7 @@
   },
   "contentblockingwarning":{
     "message":"Note:  Whitelisting (allowing ads on) a page or site is not supported with Safari Content Blocking enabled.",
-    "description":"message to Safari content blocking users on Custom tab"
+    "description":"Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
   },
   "savebutton":{
     "message":"Save",
@@ -973,11 +973,11 @@
   },
   "safarinotificationtitle":{
     "message":"Content Blocking rule limit exceeded",
-    "description":"Title of a notification to user"
+    "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules"
   },
   "safarinotificationbody":{
     "message":"Please disable some filter lists. More information in AdBlock's Options.",
-    "description":"Body of a notification to user"
+    "description":"Body of a notification shown to Safari Content Blocking users with too many filter list rules"
   },
   "undo_last_block":{
     "message":"Undo my blocks on this domain",
