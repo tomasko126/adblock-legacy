@@ -45,13 +45,13 @@
         position: relative;
         margin: 0px auto;
         max-width: 1000px;
-        padding: 20px 20px 20px 0px;
+        padding: 10px 20px 10px 0px;
       }     
       #info  {
         position: relative;
         margin: 110px auto 30px;
         max-width: 990px;
-        padding: 20px 20px 20px 0px;
+        padding: 10px 20px 10px 0px;
       }      
       .missingInfoMessage{
         display: none;
@@ -68,7 +68,7 @@
           display: none;
         }
         .step {
-          padding: 20px 20px 20px 0px;
+          padding: 10px 20px 10px 0px;
         }
         #info {
           margin: 110px auto 30px 15px;
@@ -93,7 +93,7 @@
     <!--Step 1: Name & Email -->
     <div class="step grey">
       <div class="section" style="display:block" id="step_name_email">
-        <span class="missingInfoMessage">You've left some info out of this section! Fill in the questions that have a red border.</span>
+        <span class="missingInfoMessage">Required information is missing or invalid.  Please fill in the questions that have a red border.</span>
         <p>First, we need some info about yourself. All questions in this section are required.</p>
         <label for="name">Name (or a screen-name):</label><br/>
         <input type="text" id="name" /><br/><br/>
@@ -101,14 +101,6 @@
         <input type="email" id="email" /><br/><br/>
         <input type="checkbox" checked="true" id="rememberDetails" />
         <label for="rememberDetails">Remember my name &amp; email for next time!</label><br/>
-        <button id="step1-next">Next</button>
-      </div>
-    </div>
-
-    <!-- Step 2: Title and repro info -->
-    <div class="step">
-      <div class="section" id="step_repro_info">
-        <span class="missingInfoMessage">Required information is missing or invalid.  Please fill in the questions that have a red border.</span>
         <p>Now we need some information about the problem. All questions in this section are required.</p>
         <label for="summary">Give us a one-sentence overview of the problem:</label><br/>
         <input type="text" id="summary" /><br/>
@@ -120,17 +112,16 @@
         <textarea id="expected-result"  rows="5" cols="50"></textarea><br/>
         <label for="actual-result">When you carry out these steps, what did happen instead?</label><br/>
         <textarea id="actual-result" rows="5" cols="50"></textarea><br/>
-        <button id="step2-back">Back</button>
-        <button id="step2-next">Next</button>
+        <button id="step1-next">Next</button>
       </div>
     </div>
 
-    <!-- Step 3: Final Checks -->
+    <!-- Step 2: Final Checks -->
     <div class="step grey">
       <div class="section" id="step_final_questions">
         <label for="debug-info">The following information will be included in the bug report.</label>
         <textarea id="debug-info" rows="15" cols="80" disabled></textarea><br/>
-        <button id="step3-back">Back</button>
+        <button id="step2-back">Back</button>
         <button id="submit">Submit</button>
       </div>
     </div>

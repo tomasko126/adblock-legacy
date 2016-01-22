@@ -1,8 +1,42 @@
-
+var debug_info;
+var text_debug_info = "";
+var ext_info = "";
 $(document).ready(function() {
+
+      // Retrieve extension info
+      var askUserToGatherExtensionInfo = function() {
+        chrome.permissions.request({
+            permissions: ['management']
+        }, function(granted) {
+          // The callback argument will be true if the user granted the permissions.
+          if (granted) {
+              chrome.management.getAll(function(result) {
+                var extInfo = [];
+                for (var i = 0; i < result.length; i++) {
+                    extInfo.push("Number " + (i + 1));
+                    extInfo.push("  name: " + result[i].name);
+                    extInfo.push("  id: " + result[i].id);
+                    extInfo.push("  version: " + result[i].version);
+                    extInfo.push("  enabled: " + result[i].enabled)
+                    extInfo.push("  type: " + result[i].type);
+                    extInfo.push("");
+                }
+                ext_info = "\nExtensions:\n" + extInfo.join("\n");
+                console.log("2", ext_info);
+                chrome.permissions.remove({
+                    permissions: ['management']
+                }, function(removed) {});
+                continueProcessing();
+              });
+          } else {
+            //user didn't grant us permission
+            ext_info = "Permission not granted";
+            continueProcessing();
+          }
+        });
+    };//end of permission request
+
     // Get debug info
-    var debug_info;
-    var text_debug_info;
     BGcall("getDebugInfo", function(info) {
         debug_info = info;
         // Get written debug info
@@ -29,6 +63,7 @@ $(document).ready(function() {
         content.push(debug_info.other_info);
         // Put it together to put into the textbox
         text_debug_info = content.join("\n");
+        console.log("1", ext_info);
     });
 
     // Cache access to input boxes
@@ -51,9 +86,9 @@ $(document).ready(function() {
         $("#step_response_error").fadeIn();
         $('html, body').animate({
             scrollTop: $("#step_response_error").offset().top
-        }, 2000);      
-    }    
-    
+        }, 2000);
+    }
+
     var sendReport = function() {
       var report_data = {
             title: $title.val(),
@@ -84,8 +119,8 @@ $(document).ready(function() {
                   $("#step_response_success").fadeIn();
                   $('html, body').animate({
                       scrollTop: $("#step_response_success").offset().top
-                  }, 2000);                  
-                  
+                  }, 2000);
+
                 } else {
                   handleResponseError();
                 }
@@ -133,104 +168,92 @@ $(document).ready(function() {
 
       $("#manual_submission").val(body.join("\n"));
   }
+  
+  var continueProcessing = function() {
+        if (ext_info) {
+            text_debug_info = text_debug_info + "\n" + ext_info; 
+        }
+        $("#debug-info").val(text_debug_info);
+        $("#step2-back").prop("disabled", false);
+        $("#step_final_questions").fadeIn();
+        // Auto-scroll to bottom of the page
+        $("html, body").animate({ scrollTop: 15000 }, 50);
+        if($("#rememberDetails").is(":checked")) {
+            storage_set("user_name", $name.val());
+            storage_set("user_email", $email.val());
+        }  
+   }
 
   // Step 1: Name & Email
   $("#step1-next").click(function() {
     // Check for errors
-    var s1_problems = 0;
+    var problems = 0;
     if ($name.val() === ""){
-        s1_problems++;
+        problems++;
         $name.addClass("inputError");
     } else {
         $name.removeClass("inputError");
     }
-    if ($email.val() === "" || 
+    if ($email.val() === "" ||
         $email.val().search(/^.+@.+\..+$/) === -1){
-        s1_problems++;
+        problems++;
         $email.addClass("inputError");
     } else {
         $email.removeClass("inputError");
     }
-    if (s1_problems === 0){
-        // Success - go to next step
-        $(this).prop("disabled", true);
-        $("#email, #name, #rememberDetails").prop("disabled", true);
-        $(".inputError").removeClass("inputError");
-        $("#step_repro_info").fadeIn();
-        $(".missingInfoMessage").hide();
-        // Auto-scroll to bottom of the page
-        $("html, body").animate({ scrollTop: 15000 }, 50);
-        if($("#rememberDetails").is(":checked")){
-            storage_set("user_name", $name.val());
-            storage_set("user_email", $email.val());
-        }
-    }
-    else{
-        // Failure - let them know there's an issue
-        $("#step_name_email > .missingInfoMessage").show();
-    }
-  });
-
-  // Step 2: Title and repro info
-  $("#step2-next").click(function(){
-    var s2_problems = 0
     if ($title.val() === ""){
-        s2_problems++;
+        problems++;
         $title.addClass("inputError");
     } else {
         $title.removeClass("inputError");
     }
     if ($repro.val() === "1. \n2. \n3. "){
-        s2_problems++;
+        problems++;
         $repro.addClass("inputError");
     } else {
         $repro.removeClass("inputError");
     }
     if ($expect.val() === ""){
-        s2_problems++;
+        problems++;
         $expect.addClass("inputError");
     } else {
         $expect.removeClass("inputError");
     }
     if ($actual.val() === ""){
-        s2_problems++;
+        problems++;
         $actual.addClass("inputError");
     } else {
         $actual.removeClass("inputError");
     }
-    if (s2_problems === 0){
-        $("#debug-info").val(text_debug_info);
+    if (problems === 0){
+        // Success - go to next step
         $(this).prop("disabled", true);
-        $("#step2-back").prop("disabled", true);
+        $("#email, #name, #rememberDetails").prop("disabled", true);
         $("#summary, #repro-steps, #expected-result, #actual-result").prop("disabled",true);
-        $("#step_final_questions").fadeIn();
         $(".missingInfoMessage").hide();
-        $(".inputError").removeClass("inputError");
-        // Auto-scroll to bottom of the page
-        $("html, body").animate({ scrollTop: 15000 }, 50);
+        askUserToGatherExtensionInfo();
     }
     else {
-        // They made a mistake - let the user know
-        s2_problems = 0
-        $("#step_repro_info > .missingInfoMessage").show();
+        // Failure - let them know there's an issue
+        $("#step_name_email > .missingInfoMessage").show();
     }
   });
 
   $("#step2-back").click(function(){
-      $("#step1-next").prop("disabled", false);
-      $("#email, #name").prop("disabled", false);
+      $("#email, #name, #rememberDetails").prop("disabled", false);
+      $("#summary, #repro-steps, #expected-result, #actual-result").prop("disabled", false);
       $("#step_repro_info").fadeOut();
-      // Auto-scroll to bottom of the page
-      $("html, body").animate({ scrollTop: 15000 }, 50);
+      $("#step_final_questions").fadeOut();
+      $('html, body').animate({
+          scrollTop: $("#step_name_email").parent().parent().offset().top
+      }, 2000);
+      $("#step2-back").prop("disabled", true);
+      $("#step1-next").prop("disabled", false);
   });
 
-  // Step 3: Final Questions
-  $("#step3-back").click(function(){
-      $("#step2-next, #step2-back").prop("disabled", false);
-      $("#summary, #repro-steps, #expected-result, #actual-result").prop("disabled",false);
-      $("#step_final_questions").fadeOut();
-      // Auto-scroll to bottom of the page
-      $("html, body").animate({ scrollTop: 15000 }, 50);
+  $("#submit").click(function(){
+    sendReport();
+    $("#submit").prop("disabled", true);
+    $("#step2-back").prop("disabled", true);
   });
-  $("#submit").click(sendReport);
 });
