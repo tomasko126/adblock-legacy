@@ -144,8 +144,9 @@ $(document).ready(function() {
     } else {
         $name.removeClass("inputError");
     }
-    if ($email.val() === "" || $email.val().search(/^.+@.+\..+$/) === -1){
-       s1_problems++;
+    if ($email.val() === "" || 
+        $email.val().search(/^.+@.+\..+$/) === -1){
+        s1_problems++;
         $email.addClass("inputError");
     } else {
         $email.removeClass("inputError");

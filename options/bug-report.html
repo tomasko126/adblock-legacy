@@ -108,7 +108,7 @@
     <!-- Step 2: Title and repro info -->
     <div class="step">
       <div class="section" id="step_repro_info">
-        <span class="missingInfoMessage">You've left some info out of this section! Fill in the questions that have a red border.</span>
+        <span class="missingInfoMessage">Required information is missing or invalid.  Please fill in the questions that have a red border.</span>
         <p>Now we need some information about the problem. All questions in this section are required.</p>
         <label for="summary">Give us a one-sentence overview of the problem:</label><br/>
         <input type="text" id="summary" /><br/>
@@ -128,11 +128,8 @@
     <!-- Step 3: Final Checks -->
     <div class="step grey">
       <div class="section" id="step_final_questions">
-        <p>This last question is completely optional, but it mostly concerns the details of the report you are submitting</p>
-        <label for="other-comments">Do you have anything else you would like to mention?</label><br/>
-        <textarea id="other-comments" rows="5" cols="50"></textarea><br/>
         <label for="debug-info">The following information will be included in the bug report.</label>
-        <textarea id="debug-info" rows="25" cols="75" disabled></textarea><br/>
+        <textarea id="debug-info" rows="15" cols="80" disabled></textarea><br/>
         <button id="step3-back">Back</button>
         <button id="submit">Submit</button>
       </div>
