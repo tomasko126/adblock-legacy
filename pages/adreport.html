@@ -319,9 +319,12 @@
           <textarea id="step_report_location" cols="80" rows="8"></textarea><br/>
           <label for="screen_capture_file" i18n="adreport_screen_cap_upload" id="screen_capture_file_label"></label><br/>
           <input type="file" id="screen_capture_file" /><br/>
+          <div>For more information about how to scr</div>
           <label for="step_report_filter" i18n="adreport_filter"></label><br/>
           <textarea id="step_report_filter" cols="80" rows="2"></textarea><br/>
-          <button id="step_report_submit" i18n="buttonsubmit"></button>
+          <button id="step_report_submit" i18n="buttonsubmit"></button><br/>
+          <label for="debug-info">The following information will be included in the bug report.</label><br/>
+          <textarea id="debug-info" cols="80" rows="5" disabled></textarea><br/>          
         </div>
       </div>
     </div>
@@ -350,7 +353,7 @@
       <div id="privacy" i18n="reportpubliclyavailable"></div>
     </div>
 
-    <div class="result">
+    <div class="result section">
       <div class="step odd" id="manual_report_DIV">
         <div id="step_error" class="section">
           <h2 i18n="adreport_error_heading"></h2>

@@ -169,17 +169,19 @@ function sendReport() {
     }
     var formdata = new FormData();
     formdata.append('ad_report', JSON.stringify(report_data));
+
     if ($('#screen_capture_file')[0].files.length > 0) {
       formdata.append('screencapturefile', $('#screen_capture_file')[0].files[0]);
     }
+    $("#debug-info").val(prepareManualReport(report_data));
     $.ajax({
         url: "http://dev.getadblock.com/freshdesk/adReport.php",
         data: formdata,
         contentType: false,
         processData: false,
         success: function(text) {
-          console.log(text)
             $("#step_report_submit").prop("disabled",true);
+            console.log(text);
             if (text) {
               try {
                 var respObj = JSON.parse(text);
@@ -205,9 +207,10 @@ function sendReport() {
             }
         },
         error: function(xhrInfo, status, HTTPerror){
+          console.log(xhrInfo, status, HTTPerror);
             $("#step_report_submit").prop("disabled",true);
             // We'll need to get them to manually report this
-            prepareManualReport(report_data, status, HTTPerror);
+            showManualReport(report_data, status, HTTPerror);
             $("#manual_report_DIV").show();
             $("html, body").animate({ scrollTop: 15000 }, 50)
     		},
@@ -216,18 +219,24 @@ function sendReport() {
 }
 
 // Manual Report preparation in case of error
+var showManualReport = function(data, status, HTTPerror) {
+    var displayText = "This bug report failed to send. See bottom of debug info for details.\n\n" +
+                      prepareManualReport(data, status, HTTPerror);
+    $("#manual_submission").val(displayText);
+}
+
+// Pretty Print the data
 var prepareManualReport = function(data, status, HTTPerror){
     var body = [];
-    body.push("This bug report failed to send. See bottom of debug info for details.");
-    body.push("");
-    body.push("* Location of ad *");
-    body.push(data.location);
-    body.push("");
-    body.push("* Working Filter? *");
-    body.push(data.expect);
-    body.push("");
-    body.push("* Other comments *");
-    body.push(data.comments);
+    if (data.location) {
+      body.push("* Location of ad *");
+      body.push(data.location);
+    }
+    if (data.expect) {
+      body.push("");
+      body.push("* Working Filter? *");
+      body.push(data.expect);
+    }
     body.push("");
 
     // Get written debug info
@@ -235,37 +244,43 @@ var prepareManualReport = function(data, status, HTTPerror){
     content = [];
     content.push("* Debug Info *");
     content.push("");
-    content.push("");
-    content.push("=== Filter Lists ===");
-    content.push(data.debug.filter_lists);
+    if (data.debug &&
+        data.debug.filter_lists){
+      content.push("=== Filter Lists ===");
+      content.push(data.debug.filter_lists);
+    }
     content.push("");
     // Custom & Excluded filters might not always be in the object
-    if (info.custom_filters){
+    if (data.custom_filters){
         content.push("=== Custom Filters ===");
         content.push(data.debug.custom_filters);
         content.push("")
     }
-    if (info.exclude_filters){
+    if (data.exclude_filters){
         content.push("=== Exclude Filters ===");
         content.push(data.debug.exclude_filters);
         content.push("");
     }
-    content.push("=== Settings ===");
-    content.push(data.debug.settings);
+    if (data.debug &&
+        data.debug.settings){
+        content.push("=== Settings ===");
+        content.push(data.debug.settings);
+    }
     content.push("");
-    content.push("=== Other Info ===");
-    content.push(data.debug.other_info);
-    // Put it together to put into the textbox
-    var text_debug_info = content.join("\n");
-
-    body.push("* Debug Info *");
-    body.push(text_debug_info);
+    if (data.debug &&
+        data.debug.other_info) {
+        content.push("=== Other Info ===");
+        content.push(data.debug.other_info);
+    }
+    body.push(content.join("\n"));
     body.push("");
-    body.push("=== API ERROR DETAILS ===");
-    body.push("jQuery error: " + status);
-    body.push("HTTP Error code: " + HTTPerror);
-
-    $("#manual_submission").val(body.join("\n"));
+    if (status) {
+      body.push("jQuery error: " + status);
+    }
+    if (HTTPerror) {
+      body.push("HTTP Error code: " + HTTPerror);
+    }
+    return body.join("\n");
 }
 
 // Check every domain of downloaded resource against malware-known domains
@@ -607,6 +622,9 @@ $("#step_firefox_no").click(function() {
         $("#step_flash_DIV").fadeIn().css("display", "block");
     } else {
         $("#step_report_DIV").fadeIn().css("display", "block");
+        if (debug_info) {
+            $("#debug-info").val(prepareManualReport({ "debug": debug_info }));
+        }
         $('html, body').animate({
             scrollTop: $("#step_report_DIV").offset().top
         }, 2000);
@@ -634,9 +652,12 @@ $("#step_flash_yes").click(function() {
 $("#step_flash_no").click(function() {
   $("#step_flash").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
   $("#step_report_DIV").fadeIn().css("display", "block");
+  if (debug_info) {
+    $("#debug-info").val(prepareManualReport({ "debug": debug_info }));
+  }
   $('html, body').animate({
       scrollTop: $("#step_report_DIV").offset().top
-  }, 2000);  
+  }, 2000);
 });
 
 // STEP 7: Ad Report
