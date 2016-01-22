@@ -47,7 +47,7 @@
       }
       .inputError{
         border-color: #f00 !important;
-      }      
+      }
       #checkupdate {
         font-weight: bold;
       }
@@ -310,7 +310,7 @@
         <h2 i18n="adreport_laststep"></h2>
         <h2 i18n="englishonly"></h2>
         <div class="form" id="step_report">
-          <span class="missingInfoMessage">Required information is missing.  Please fill in the questions that have a red border.</span><br/>
+          <span class="missingInfoMessage">Required information is missing or invalid.  Please fill in the questions that have a red border.</span><br/>
           <label for="step_report_name" i18n="adreport_name"></label><br/>
           <input type="text" id="step_report_name" size="35" /><br/>
           <label for="step_report_email" i18n="adreport_email"></label><br/>
@@ -319,12 +319,12 @@
           <textarea id="step_report_location" cols="80" rows="8"></textarea><br/>
           <label for="screen_capture_file" i18n="adreport_screen_cap_upload" id="screen_capture_file_label"></label><br/>
           <input type="file" id="screen_capture_file" /><br/>
-          <div>For more information about how to scr</div>
+          <a href="http://www.take-a-screenshot.org/">How do I take a screen shot?</a><br/>
           <label for="step_report_filter" i18n="adreport_filter"></label><br/>
           <textarea id="step_report_filter" cols="80" rows="2"></textarea><br/>
           <button id="step_report_submit" i18n="buttonsubmit"></button><br/>
-          <label for="debug-info">The following information will be included in the bug report.</label><br/>
-          <textarea id="debug-info" cols="80" rows="5" disabled></textarea><br/>          
+          <label for="debug-info">The following information will also be included in the ad report.</label><br/>
+          <textarea id="debug-info" cols="80" rows="5" disabled></textarea><br/>
         </div>
       </div>
     </div>
@@ -341,7 +341,7 @@
       <div id="step_response_error">
         <p>There was an error processing your request.</p>
         <p id="step_response_error_msg"></p>
-        <p>If not, please go to <a href="https://adblocksupport.freshdesk.com/support/tickets/new">our support website</a>.</p>
+        <p>Please go to <a href="https://adblocksupport.freshdesk.com/support/tickets/new">our support website</a>.</p>
       </div>
     </div>
 

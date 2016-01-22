@@ -72,7 +72,8 @@ function sendReport() {
         problems++;
         $name.addClass("inputError");
     }
-    if ($email.val() === ""){
+    if ($email.val() === "" || 
+        $email.val().search(/^.+@.+\..+$/) === -1){
         problems++;
         $email.addClass("inputError");
     }
@@ -160,9 +161,8 @@ function sendReport() {
         if (respObj &&
             respObj.hasOwnProperty("error_msg")) {
             $("#step_response_error_msg").text(respObj["error_msg"]);
-            console.log("error", respObj);
         }
-        $("#step_response_error").fadeIn();
+        $("#step_response_error").parent().fadeIn();
         $('html, body').animate({
             scrollTop: $("#step_response_error").offset().top
         }, 2000);
@@ -181,7 +181,6 @@ function sendReport() {
         processData: false,
         success: function(text) {
             $("#step_report_submit").prop("disabled",true);
-            console.log(text);
             if (text) {
               try {
                 var respObj = JSON.parse(text);
@@ -207,7 +206,6 @@ function sendReport() {
             }
         },
         error: function(xhrInfo, status, HTTPerror){
-          console.log(xhrInfo, status, HTTPerror);
             $("#step_report_submit").prop("disabled",true);
             // We'll need to get them to manually report this
             showManualReport(report_data, status, HTTPerror);
