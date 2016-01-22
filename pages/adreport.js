@@ -56,19 +56,47 @@ BGcall("getDebugInfo", function(info) {
 
 function sendReport() {
 
+    // Cache access to input boxes
+    var $name = $("#step_report_name");
+    var $email = $("#step_report_email");
+    var $location = $("#step_report_location");
+    var $filter = $("#step_report_filter");
+    var problems = 0;
+    // Reset any error messages
+    $('#screen_capture_file_label').css("color", "black");
+    $email.removeClass("inputError");
+    $name.removeClass("inputError");
+    $(".missingInfoMessage").hide();
+    // Validate user entered info
+    if ($name.val() === ""){
+        problems++;
+        $name.addClass("inputError");
+    }
+    if ($email.val() === ""){
+        problems++;
+        $email.addClass("inputError");
+    }
+    if ($('#screen_capture_file')[0].files.length === 0) {
+        problems++;
+        $('#screen_capture_file_label').css("color", "#f00");
+    }
+    if (problems) {
+      $(".missingInfoMessage").show();
+      return;
+    }
+
     var report_data = {
         title: "Ad Report",
-        name: $("#step_report_name").val(),
-        email: $("#step_report_email").val(),
-        location: $("#step_report_location").val(),
-        filter: $("#step_report_filter").val(),
-        comments: $("#step_report_otherInfo").val(),
+        name: $name.val(),
+        email: $email.val(),
+        location: $location.val(),
+        filter: $filter.val(),
         debug: debug_info,
         url: ""
     };
 
     var domain = "";
-    if (options.url) {
+    if (options.url){
         domain = parseUri(options.url).hostname;
         report_data.title = report_data.title + ": " + domain;
         report_data.url = options.url;
@@ -76,20 +104,20 @@ function sendReport() {
     var the_answers = [];
     var answers = $('span[class="answer"]');
     var text = $('div[class="section"]:visible');
-    var arrayLength = Math.min(answers.length, text.length);
-    for (var i=0; i<arrayLength; i++) {
+    var minArrayLength = Math.min(answers.length, text.length);
+    for (var i=0; i < minArrayLength; i++) {
         the_answers.push((i+1) + "." + text[i].id + ": " + answers[i].getAttribute("chosen"));
     }
     report_data.answers = the_answers.join("\n");
 
-    // Retrieve extension info
-    var askUserToGatherExtensionInfo = function() {
-      chrome.permissions.request({
-          permissions: ['management']
-      }, function(granted) {
+      // Retrieve extension info
+      var askUserToGatherExtensionInfo = function() {
+        chrome.permissions.request({
+            permissions: ['management']
+        }, function(granted) {
           // The callback argument will be true if the user granted the permissions.
           if (granted) {
-            chrome.management.getAll(function(result) {
+              chrome.management.getAll(function(result) {
                 var extInfo = [];
                 for (var i = 0; i < result.length; i++) {
                     extInfo.push("Number " + (i + 1));
@@ -104,39 +132,71 @@ function sendReport() {
                 chrome.permissions.remove({
                     permissions: ['management']
                 }, function(removed) {});
-            });
-        } else {
+              });
+          } else {
             //user didn't grant us permission
             report_data.extensions = "Permission not granted";
-        }
-      });
+          }
+        });
     };//end of permission request
-
     if (chrome &&
-      chrome.tabs &&
-      chrome.tabs.detectLanguage) {
+        chrome.tabs &&
+        chrome.tabs.detectLanguage) {
       chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
           if (language) {
               report_data.language = language;
           }
           askUserToGatherExtensionInfo();
-      });//end of detectLanguage
+        });//end of detectLanguage
     } else {
         report_data.language = "unknown"
         askUserToGatherExtensionInfo();
     }
-    // Send the data to FreshDesk
-    // TODO - Update URL
+
+    var handleResponseError = function() {
+        $("#step_response_error").fadeIn();
+        $('html, body').animate({
+            scrollTop: $("#step_response_error").offset().top
+        }, 2000);
+    }
+    var formdata = new FormData();
+    formdata.append('ad_report', JSON.stringify(report_data));
+    if ($('#screen_capture_file')[0].files.length > 0) {
+      formdata.append('imageattachment', $('#screen_capture_file')[0].files[0]);
+    }
     $.ajax({
         url: "http://dev.getadblock.com/freshdesk/adReport.php",
-        data: {
-            ad_report: JSON.stringify(report_data)
-        },
-        success: function(text, status, xhr) {
-            // TODO Add a success handler
-            console.log("succes", text);
+        data: formdata,
+        contentType: false,
+        processData: false,
+        success: function(text) {
+            $("#step_report_submit").prop("disabled",true);
+            if (text) {
+              try {
+                var respText = JSON.parse(text);
+                if (respText &&
+                    respText.hasOwnProperty("helpdesk_ticket") &&
+                    respText["helpdesk_ticket"].hasOwnProperty("display_id")) {
+                  var ticketID = respText["helpdesk_ticket"]["display_id"];
+                  $("#step_response_success_link").text(ticketID);
+                  var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
+                  $("#step_response_success_link").attr("href", URL);
+                  $("#step_response_success").parent().fadeIn();
+                  $('html, body').animate({
+                      scrollTop: $("#step_response_success").offset().top
+                  }, 2000);
+                } else {
+                  handleResponseError();
+                }
+              } catch(e) {
+                handleResponseError();
+              }
+            } else {
+              handleResponseError();
+            }
         },
         error: function(xhrInfo, status, HTTPerror){
+            $("#step_report_submit").prop("disabled",true);
             // We'll need to get them to manually report this
             prepareManualReport(report_data, status, HTTPerror);
             $("#manual_report_DIV").show();
@@ -144,7 +204,7 @@ function sendReport() {
     		},
         type: "POST"
     });
-}// end of sendReport()
+}
 
 // Manual Report preparation in case of error
 var prepareManualReport = function(data, status, HTTPerror){
@@ -195,7 +255,7 @@ var prepareManualReport = function(data, status, HTTPerror){
     body.push("=== API ERROR DETAILS ===");
     body.push("jQuery error: " + status);
     body.push("HTTP Error code: " + HTTPerror);
-  
+
     $("#manual_submission").val(body.join("\n"));
 }
 

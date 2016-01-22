@@ -1356,7 +1356,7 @@
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
   "adreport_laststep":{
-    "message":"Last step: report this to us!",
+    "message":"Last step: report the issue to us.",
     "description":"Heading on the ad report page for the last step when the user needs to send us an ad report."
   },
   "adreport_name":{
@@ -1368,9 +1368,13 @@
     "description":"When we ask the user for their email address so that we can respond to their ad report."
   },
   "adreport_location":{
-    "message":"Exactly where on that page is the ad? What does it look like? Attach a screenshot, with the ad clearly marked, if you can.",
+    "message":"Exactly where on that page is the ad? What does it look like?",
     "description":"This is a question on the ad report page shown when the user has to report the ad to us. This helps us find where on the page the ad is located"
   },
+  "adreport_screen_cap_upload":{
+    "message":"File Upload",
+    "description":"This is a file upload button on the ad report page shown when the user has to report the ad to us. This helps us find where on the page the ad is located"
+  },  
   "adreport_filter":{
     "message":"If you have created a working filter using the \"block an ad\" wizard, paste it in the box below:",
     "description":"This is a question on the report an ad page shown when the user has to report an ad to us. This question lets us know what ad blocking rule might block the ad."
