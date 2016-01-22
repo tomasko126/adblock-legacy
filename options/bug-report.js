@@ -5,36 +5,43 @@ $(document).ready(function() {
 
       // Retrieve extension info
       var askUserToGatherExtensionInfo = function() {
-        chrome.permissions.request({
-            permissions: ['management']
-        }, function(granted) {
-          // The callback argument will be true if the user granted the permissions.
-          if (granted) {
-              chrome.management.getAll(function(result) {
-                var extInfo = [];
-                for (var i = 0; i < result.length; i++) {
-                    extInfo.push("Number " + (i + 1));
-                    extInfo.push("  name: " + result[i].name);
-                    extInfo.push("  id: " + result[i].id);
-                    extInfo.push("  version: " + result[i].version);
-                    extInfo.push("  enabled: " + result[i].enabled)
-                    extInfo.push("  type: " + result[i].type);
-                    extInfo.push("");
+          if (chrome &&
+              chrome.permissions &&
+              chrome.permissions.request) {
+              chrome.permissions.request({
+                  permissions: ['management']
+              }, function(granted) {
+                // The callback argument will be true if the user granted the permissions.
+                if (granted) {
+                    chrome.management.getAll(function(result) {
+                      var extInfo = [];
+                      for (var i = 0; i < result.length; i++) {
+                          extInfo.push("Number " + (i + 1));
+                          extInfo.push("  name: " + result[i].name);
+                          extInfo.push("  id: " + result[i].id);
+                          extInfo.push("  version: " + result[i].version);
+                          extInfo.push("  enabled: " + result[i].enabled)
+                          extInfo.push("  type: " + result[i].type);
+                          extInfo.push("");
+                      }
+                      ext_info = "\nExtensions:\n" + extInfo.join("\n");
+                      chrome.permissions.remove({
+                          permissions: ['management']
+                      }, function(removed) {});
+                      continueProcessing();
+                    });
+                } else {
+                  //user didn't grant us permission
+                  ext_info = "Permission not granted";
+                  continueProcessing();
                 }
-                ext_info = "\nExtensions:\n" + extInfo.join("\n");
-                console.log("2", ext_info);
-                chrome.permissions.remove({
-                    permissions: ['management']
-                }, function(removed) {});
-                continueProcessing();
-              });
+              });//end of permission request
           } else {
-            //user didn't grant us permission
-            ext_info = "Permission not granted";
-            continueProcessing();
+              //not supported in this browser
+              ext_info = "no extension information";
+              continueProcessing();
           }
-        });
-    };//end of permission request
+      }
 
     // Get debug info
     BGcall("getDebugInfo", function(info) {
@@ -168,10 +175,10 @@ $(document).ready(function() {
 
       $("#manual_submission").val(body.join("\n"));
   }
-  
+
   var continueProcessing = function() {
         if (ext_info) {
-            text_debug_info = text_debug_info + "\n" + ext_info; 
+            text_debug_info = text_debug_info + "\n" + ext_info;
         }
         $("#debug-info").val(text_debug_info);
         $("#step2-back").prop("disabled", false);
@@ -181,7 +188,7 @@ $(document).ready(function() {
         if($("#rememberDetails").is(":checked")) {
             storage_set("user_name", $name.val());
             storage_set("user_email", $email.val());
-        }  
+        }
    }
 
   // Step 1: Name & Email
