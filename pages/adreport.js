@@ -82,6 +82,9 @@ function sendReport() {
     }
     if (problems) {
       $(".missingInfoMessage").show();
+      $('html, body').animate({
+          scrollTop: $(".missingInfoMessage").offset().top
+      }, 2000);
       return;
     }
 
@@ -153,7 +156,12 @@ function sendReport() {
         askUserToGatherExtensionInfo();
     }
 
-    var handleResponseError = function() {
+    var handleResponseError = function(respObj) {
+        if (respObj &&
+            respObj.hasOwnProperty("error_msg")) {
+            $("#step_response_error_msg").text(respObj["error_msg"]);
+            console.log("error", respObj);
+        }
         $("#step_response_error").fadeIn();
         $('html, body').animate({
             scrollTop: $("#step_response_error").offset().top
@@ -162,7 +170,7 @@ function sendReport() {
     var formdata = new FormData();
     formdata.append('ad_report', JSON.stringify(report_data));
     if ($('#screen_capture_file')[0].files.length > 0) {
-      formdata.append('imageattachment', $('#screen_capture_file')[0].files[0]);
+      formdata.append('screencapturefile', $('#screen_capture_file')[0].files[0]);
     }
     $.ajax({
         url: "http://dev.getadblock.com/freshdesk/adReport.php",
@@ -170,14 +178,15 @@ function sendReport() {
         contentType: false,
         processData: false,
         success: function(text) {
+          console.log(text)
             $("#step_report_submit").prop("disabled",true);
             if (text) {
               try {
-                var respText = JSON.parse(text);
-                if (respText &&
-                    respText.hasOwnProperty("helpdesk_ticket") &&
-                    respText["helpdesk_ticket"].hasOwnProperty("display_id")) {
-                  var ticketID = respText["helpdesk_ticket"]["display_id"];
+                var respObj = JSON.parse(text);
+                if (respObj &&
+                    respObj.hasOwnProperty("helpdesk_ticket") &&
+                    respObj["helpdesk_ticket"].hasOwnProperty("display_id")) {
+                  var ticketID = respObj["helpdesk_ticket"]["display_id"];
                   $("#step_response_success_link").text(ticketID);
                   var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
                   $("#step_response_success_link").attr("href", URL);
@@ -186,7 +195,7 @@ function sendReport() {
                       scrollTop: $("#step_response_success").offset().top
                   }, 2000);
                 } else {
-                  handleResponseError();
+                  handleResponseError(respObj);
                 }
               } catch(e) {
                 handleResponseError();
@@ -598,6 +607,9 @@ $("#step_firefox_no").click(function() {
         $("#step_flash_DIV").fadeIn().css("display", "block");
     } else {
         $("#step_report_DIV").fadeIn().css("display", "block");
+        $('html, body').animate({
+            scrollTop: $("#step_report_DIV").offset().top
+        }, 2000);
     }
 });
 
@@ -622,6 +634,9 @@ $("#step_flash_yes").click(function() {
 $("#step_flash_no").click(function() {
   $("#step_flash").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
   $("#step_report_DIV").fadeIn().css("display", "block");
+  $('html, body').animate({
+      scrollTop: $("#step_report_DIV").offset().top
+  }, 2000);  
 });
 
 // STEP 7: Ad Report
