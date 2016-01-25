@@ -1402,5 +1402,13 @@
   "adreport_error_3":{
     "message":"You will also need to add your name &amp; email again.",
     "description":"Shown when the connection to the support site for reporting an ad breaks."
-  }
+  },
+  "adreport_missing_info":{
+    "message":"Required information is missing or invalid.  Please fill in the questions that have a red border.",
+    "description":"Shown when the user does enter all of the required information."
+  },
+  "adreport_all_debug_info":{
+    "message":"The following information will also be included in the ad report.",
+    "description":"Shown when the user does enter all of the required information."
+  }    
 }
