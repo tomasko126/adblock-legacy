@@ -1208,7 +1208,7 @@
     "description":"Link to display the changelog on the Support tab of the options"
   },
   "englishonly":{
-    "message":"English only",
+    "message":"(English only, please!)",
     "description":"Lets the user know that a link\/page is available in English only"
   },
   "foundbug":{
