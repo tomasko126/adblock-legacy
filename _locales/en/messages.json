@@ -1372,8 +1372,8 @@
     "description":"This is a question on the ad report page shown when the user has to report the ad to us. This helps us find where on the page the ad is located"
   },
   "adreport_screen_cap_upload":{
-    "message":"File Upload",
-    "description":"This is a file upload button on the ad report page shown when the user has to report the ad to us. This helps us find where on the page the ad is located"
+    "message":"Attach a Screenshot",
+    "description":"This is a screen capture (image) file upload button on the ad report page shown when the user has to report the ad to us. This helps us find where on the page the ad is located"
   },  
   "adreport_filter":{
     "message":"If you have created a working filter using the \"block an ad\" wizard, paste it in the box below:",
