@@ -46,6 +46,7 @@ $(document).ready(function() {
     // Get debug info
     BGcall("getDebugInfo", function(info) {
         debug_info = info;
+        debug_info.language = determineUserLanguage();       
         // Get written debug info
         // info is the debug info object
         content = [];
@@ -70,7 +71,6 @@ $(document).ready(function() {
         content.push(debug_info.other_info);
         // Put it together to put into the textbox
         text_debug_info = content.join("\n");
-        console.log("1", ext_info);
     });
 
     // Cache access to input boxes
@@ -105,8 +105,11 @@ $(document).ready(function() {
             debug: debug_info,
             name: $name.val(),
             email: $email.val(),
-      			comments: $comments.val()
+      			comments: $comments.val(),
       };
+      if (ext_info) {
+          report_data.debug.extensions = ext_info;
+      }
     	$.ajax({
         url: "http://dev.getadblock.com/freshdesk/bugReport.php",
         data: {
@@ -177,9 +180,6 @@ $(document).ready(function() {
   }
 
   var continueProcessing = function() {
-        if (ext_info) {
-            text_debug_info = text_debug_info + "\n" + ext_info;
-        }
         $("#debug-info").val(text_debug_info);
         $("#step2-back").prop("disabled", false);
         $("#step_final_questions").fadeIn();
@@ -258,7 +258,7 @@ $(document).ready(function() {
       $("#step1-next").prop("disabled", false);
   });
 
-  $("#submit").click(function(){
+  $("#submit").click(function() {
     sendReport();
     $("#submit").prop("disabled", true);
     $("#step2-back").prop("disabled", true);
