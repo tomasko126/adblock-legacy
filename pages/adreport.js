@@ -72,7 +72,7 @@ function sendReport() {
         problems++;
         $name.addClass("inputError");
     }
-    if ($email.val() === "" || 
+    if ($email.val() === "" ||
         $email.val().search(/^.+@.+\..+$/) === -1){
         problems++;
         $email.addClass("inputError");
@@ -114,11 +114,11 @@ function sendReport() {
     }
     report_data.answers = the_answers.join("\n");
 
-      // Retrieve extension info
-      var askUserToGatherExtensionInfo = function() {
+    // Retrieve extension info
+    var askUserToGatherExtensionInfo = function() {
           if (chrome &&
               chrome.permissions &&
-              chrome.permissions.request) {        
+              chrome.permissions.request) {
               chrome.permissions.request({
                   permissions: ['management']
               }, function(granted) {
@@ -139,15 +139,72 @@ function sendReport() {
                       chrome.permissions.remove({
                           permissions: ['management']
                       }, function(removed) {});
+                      sendData();
+                      return;
                     });
                 } else {
                   //user didn't grant us permission
                   report_data.extensions = "Permission not granted";
+                  sendData();
+                  return;
                 }
               });
+          } else {
+            sendData();
           }
     };//end of askUserToGatherExtensionInfo
-    
+
+    var sendData = function() {
+      var formdata = new FormData();
+      formdata.append('ad_report', JSON.stringify(report_data));
+
+      if ($('#screen_capture_file')[0].files.length > 0) {
+        formdata.append('screencapturefile', $('#screen_capture_file')[0].files[0]);
+      }
+
+      $("#debug-info").val(prepareManualReport(report_data));
+      $.ajax({
+          url: "http://dev.getadblock.com/freshdesk/adReport.php",
+          data: formdata,
+          contentType: false,
+          processData: false,
+          success: function(text) {
+              $("#step_report_submit").prop("disabled",true);
+              if (text) {
+                try {
+                  var respObj = JSON.parse(text);
+                  if (respObj &&
+                      respObj.hasOwnProperty("helpdesk_ticket") &&
+                      respObj["helpdesk_ticket"].hasOwnProperty("display_id")) {
+                    var ticketID = respObj["helpdesk_ticket"]["display_id"];
+                    $("#step_response_success_link").text(ticketID);
+                    var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
+                    $("#step_response_success_link").attr("href", URL);
+                    $("#step_response_success").parent().fadeIn();
+                    $('html, body').animate({
+                        scrollTop: $("#step_response_success").offset().top
+                    }, 2000);
+                  } else {
+                    handleResponseError(respObj);
+                  }
+                } catch(e) {
+                  handleResponseError();
+                }
+              } else {
+                handleResponseError();
+              }
+          },
+          error: function(xhrInfo, status, HTTPerror){
+              $("#step_report_submit").prop("disabled",true);
+              // We'll need to get them to manually report this
+              showManualReport(report_data, status, HTTPerror);
+              $("#manual_report_DIV").show();
+              $("html, body").animate({ scrollTop: 15000 }, 50)
+      		},
+          type: "POST"
+      });
+    };
+
     if (chrome &&
         chrome.tabs &&
         chrome.tabs.detectLanguage) {
@@ -172,53 +229,6 @@ function sendReport() {
             scrollTop: $("#step_response_error").offset().top
         }, 2000);
     }
-    var formdata = new FormData();
-    formdata.append('ad_report', JSON.stringify(report_data));
-
-    if ($('#screen_capture_file')[0].files.length > 0) {
-      formdata.append('screencapturefile', $('#screen_capture_file')[0].files[0]);
-    }
-    $("#debug-info").val(prepareManualReport(report_data));
-    $.ajax({
-        url: "http://dev.getadblock.com/freshdesk/adReport.php",
-        data: formdata,
-        contentType: false,
-        processData: false,
-        success: function(text) {
-            $("#step_report_submit").prop("disabled",true);
-            if (text) {
-              try {
-                var respObj = JSON.parse(text);
-                if (respObj &&
-                    respObj.hasOwnProperty("helpdesk_ticket") &&
-                    respObj["helpdesk_ticket"].hasOwnProperty("display_id")) {
-                  var ticketID = respObj["helpdesk_ticket"]["display_id"];
-                  $("#step_response_success_link").text(ticketID);
-                  var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
-                  $("#step_response_success_link").attr("href", URL);
-                  $("#step_response_success").parent().fadeIn();
-                  $('html, body').animate({
-                      scrollTop: $("#step_response_success").offset().top
-                  }, 2000);
-                } else {
-                  handleResponseError(respObj);
-                }
-              } catch(e) {
-                handleResponseError();
-              }
-            } else {
-              handleResponseError();
-            }
-        },
-        error: function(xhrInfo, status, HTTPerror){
-            $("#step_report_submit").prop("disabled",true);
-            // We'll need to get them to manually report this
-            showManualReport(report_data, status, HTTPerror);
-            $("#manual_report_DIV").show();
-            $("html, body").animate({ scrollTop: 15000 }, 50)
-    		},
-        type: "POST"
-    });
 }
 
 // Manual Report preparation in case of error
