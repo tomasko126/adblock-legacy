@@ -468,6 +468,14 @@ MyFilters.prototype.fetch_and_update = function(id, isNewList) {
   }
   var that = this;
   function onError() {
+    if (id === "easylist" &&
+        !that._subscriptions["easylist"].text) {
+        var easyListTxt = readfile("easylist.txt");
+        that._updateSubscriptionText(id, easyListTxt);
+        that._onSubscriptionChange(true);
+        recordErrorMessage("initial easylist download failed, using included file");
+        return;
+    }
     that._subscriptions[id].last_update_failed_at = Date.now();
     that._onSubscriptionChange();
     if (isNewList) {
