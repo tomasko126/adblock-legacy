@@ -57,6 +57,9 @@
         display: none;
         color: #f00
       }
+      .redText{
+        color: #f00
+      }
       #name,#email{
         width: 350px;
       }
@@ -88,29 +91,28 @@
       </div>
     </header>
     <!--STEP 0-->
-    <div id="info">So you've found a bug with AdBlock? Don't worry, we'll help you out! Just answer the questions below:</div>
+    <div id="info">Found a bug in AdBlock? Tell us about it and we'll investigate!</div>
 
     <!--Step 1: Name & Email -->
     <div class="step grey">
       <div class="section" style="display:block" id="step_name_email">
         <span class="missingInfoMessage">Required information is missing or invalid.  Please fill in the questions that have a red border.</span>
-        <p>First, we need some info about yourself. All questions in this section are required.</p>
-        <label for="name">Name (or a screen-name):</label><br/>
+        <p class="redText">* Required</p>
+        <label for="name">What's your name?<span class="redText">&nbsp;*</span></label><br/>
         <input type="text" id="name" /><br/><br/>
-        <label for="email">Email Address (so that we can contact you if we need more info):</label><br/>
+        <label for="email">What's your email address? (We'll only use this to contact you if we need more information)<span class="redText">&nbsp;*</span></label><br/>
         <input type="email" id="email" /><br/><br/>
         <input type="checkbox" checked="true" id="rememberDetails" />
-        <label for="rememberDetails">Remember my name &amp; email for next time!</label><br/>
-        <p>Now we need some information about the problem. All questions in this section are required.</p>
-        <label for="summary">Give us a one-sentence overview of the problem:</label><br/>
+        <label for="rememberDetails">Remember my name and email for next time!</label><br/>
+        <label for="summary">Briefly describe the bug:<span class="redText">&nbsp;*</span></label><br/>
         <input type="text" id="summary" /><br/>
-        <label for="repro-steps">What steps did you take to make the bug happen?<br/>Be as clear as possible as we will try to reproduce these steps on our own systems.</label><br/>
+        <label for="repro-steps">What steps did you take to make the bug happen?  (Be specific, because we'll try to reproduce the bug on our systems)<span class="redText">&nbsp;*</span></label><br/>
         <textarea id="repro-steps" rows="5" cols="50">1.
 2.
 3. </textarea><br/>
-        <label for="expected-result">When you carry out these steps, what do you expect to happen?</label><br/>
+        <label for="expected-result"> When you do this, what should happen?<span class="redText">&nbsp;*</span></label><br/>
         <textarea id="expected-result"  rows="5" cols="50"></textarea><br/>
-        <label for="actual-result">When you carry out these steps, what did happen instead?</label><br/>
+        <label for="actual-result">What's happening instead?<span class="redText">&nbsp;*</span></label><br/>
         <textarea id="actual-result" rows="5" cols="50"></textarea><br/>
         <button id="step1-next">Next</button>
       </div>
