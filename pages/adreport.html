@@ -308,18 +308,19 @@
     <div class="step even" >
       <div id="step_report_DIV" class="section">
         <h2 i18n="adreport_laststep"></h2>
-        <h2 i18n="englishonly"></h2>
         <div class="form" id="step_report">
           <span class="missingInfoMessage" i18n="adreport_missing_info"></span><br/>
           <label for="step_report_name" i18n="adreport_name"></label><br/>
           <input type="text" id="step_report_name" size="35" /><br/>
-          <label for="step_report_email" i18n="adreport_email"></label><br/>
+          <label for="step_report_email"><span i18n="adreport_email"></span> (<span i18n="adreport_email_privacy"></span>)</label><br/>
           <input type="email" id="step_report_email" size="35"/> <!-- Use email type for browser to verify for us --><br/>
           <label for="step_report_location" i18n="adreport_location"></label><br/>
           <textarea id="step_report_location" cols="80" rows="8"></textarea><br/>
-          <label for="screen_capture_file" i18n="adreport_screen_cap_upload" id="screen_capture_file_label"></label><br/>
+          <label for="screen_capture_file" i18n="adreport_screen_cap_upload" id="screen_capture_file_label"></label>
+          <sup>
+              [<a id="data_collection_help" i18n="how" href="http://help.getadblock.com/solution/articles/6000107188" target="_blank"></a>]
+          </sup><br/>
           <input type="file" id="screen_capture_file" /><br/>
-          <a href="http://help.getadblock.com/support/solutions/articles/6000107188" target="_blank">How?</a><br/>
           <label for="step_report_filter" i18n="adreport_filter"></label><br/>
           <textarea id="step_report_filter" cols="80" rows="2"></textarea><br/>
           <button id="step_report_submit" i18n="buttonsubmit"></button><br/>

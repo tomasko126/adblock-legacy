@@ -1133,6 +1133,10 @@
     "message":"What's this?",
     "description":"Text of a link pointing to the explanation of a new feature"
   },
+  "how":{
+    "message":"How?",
+    "description":"Text of a link pointing to instructions on how to do something"
+  },
   "selectlanguage":{
     "message":" -- Select Language -- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
@@ -1360,11 +1364,15 @@
     "description":"Heading on the ad report page for the last step when the user needs to send us an ad report."
   },
   "adreport_name":{
-    "message":"We're likely going to need to respond to you for more info. What's your name?",
+    "message":"What's your name?",
     "description":"On the ad report page, when we need to ask the user for their name to submit a report."
   },
   "adreport_email":{
-    "message":"And we'll need an email to contact you with:",
+    "message":"What's your email address?",
+    "description":"When we ask the user for their email address so that we can respond to their ad report."
+  },
+  "adreport_email_privacy":{
+    "message":"We'll only use this to contact you if we need more information.",
     "description":"When we ask the user for their email address so that we can respond to their ad report."
   },
   "adreport_location":{
@@ -1372,7 +1380,7 @@
     "description":"This is a question on the ad report page shown when the user has to report the ad to us. This helps us find where on the page the ad is located"
   },
   "adreport_screen_cap_upload":{
-    "message":"File Upload",
+    "message":"Attach a screenshot:",
     "description":"This is a file upload button on the ad report page shown when the user has to report the ad to us. This helps us find where on the page the ad is located"
   },  
   "adreport_filter":{
