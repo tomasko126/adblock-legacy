@@ -66,25 +66,28 @@ function sendReport() {
     $('#screen_capture_file_label').css("color", "black");
     $email.removeClass("inputError");
     $name.removeClass("inputError");
-    $(".missingInfoMessage").hide();
+    $("#adreport_missing_info").hide();
+    $("#adreport_missing_screenshot").hide();
     // Validate user entered info
     if ($name.val() === ""){
         problems++;
         $name.addClass("inputError");
+        $("#adreport_missing_info").show();
     }
     if ($email.val() === "" ||
         $email.val().search(/^.+@.+\..+$/) === -1){
         problems++;
         $email.addClass("inputError");
+        $("#adreport_missing_info").show();
     }
     if ($('#screen_capture_file')[0].files.length === 0) {
+        $("#adreport_missing_screenshot").show();
         problems++;
         $('#screen_capture_file_label').css("color", "#f00");
     }
     if (problems) {
-      $(".missingInfoMessage").show();
       $('html, body').animate({
-          scrollTop: $(".missingInfoMessage").offset().top
+          scrollTop: $("#adreport_missing_info").offset().top
       }, 2000);
       return;
     }
@@ -178,7 +181,8 @@ function sendReport() {
                       respObj["helpdesk_ticket"].hasOwnProperty("display_id")) {
                     var ticketID = respObj["helpdesk_ticket"]["display_id"];
                     var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
-                    $("#step_response_success_link").attr("href", URL);
+                    $("#step_response_success a").attr("href", URL);
+                    $("#step_response_success a").attr("target", "_blank");
                     $("#step_response_success").parent().fadeIn();
                     $('html, body').animate({
                         scrollTop: $("#step_response_success").offset().top
@@ -637,9 +641,6 @@ $("#step_firefox_no").click(function() {
         if (debug_info) {
             $("#debug-info").val(prepareManualReport({ "debug": debug_info }));
         }
-        $('html, body').animate({
-            scrollTop: $("#step_report_DIV").offset().top
-        }, 2000);
     }
 });
 
@@ -667,9 +668,6 @@ $("#step_flash_no").click(function() {
   if (debug_info) {
     $("#debug-info").val(prepareManualReport({ "debug": debug_info }));
   }
-  $('html, body').animate({
-      scrollTop: $("#step_report_DIV").offset().top
-  }, 2000);
 });
 
 // STEP 7: Ad Report
