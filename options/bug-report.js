@@ -46,7 +46,7 @@ $(document).ready(function() {
     // Get debug info
     BGcall("getDebugInfo", function(info) {
         debug_info = info;
-        debug_info.language = determineUserLanguage();       
+        debug_info.language = determineUserLanguage();
         // Get written debug info
         // info is the debug info object
         content = [];
