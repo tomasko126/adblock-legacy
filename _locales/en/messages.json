@@ -1423,6 +1423,22 @@
     "message":"All set! We'll be in touch soon, most likely within a day, two if it's a holiday. If you can't wait to see your name in print (we're totally the same way), you can check out <a>your ticket<\/a> on our help site.",
     "description":"Shown when the user does enter all of the required information."
   },
+  "adreport_response_invalid_file":{
+    "message":"Invalid file type, file does contain not an image",
+    "description":"Shown when the user uploads an invalid file type (not an image file)."
+  },  
+  "adreport_response_large_file":{
+    "message":"Uploaded file is too large (great than 10 MB), please reduce the size of the file.",
+    "description":"Shown when the user uploads a large image file."
+  },   
+  "adreport_response_save_error":{
+    "message":"Error saving the uploaded file.",
+    "description":"Shown when the server could not save the file on the server."
+  },  
+  "adreport_response_file_name":{
+    "message":"Invalid file name.  The file name is greater than 255 characters.",
+    "description":"Shown when the image file name is greater than 255 characters."
+  },  
   "adreport_all_debug_info":{
     "message":"The following information will also be included in the ad report.",
     "description":"Shown when the user does enter all of the required information."

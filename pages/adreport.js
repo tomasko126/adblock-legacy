@@ -227,7 +227,7 @@ function sendReport() {
         $("#manual_report_DIV").show();
         if (respObj &&
             respObj.hasOwnProperty("error_msg")) {
-            $("#step_response_error_msg").text(respObj["error_msg"]);
+            $("#step_response_error_msg").text(translate(respObj["error_msg"]));
         }
         $("#step_response_error").parent().fadeIn();
         $('html, body').animate({

@@ -92,7 +92,7 @@ $(document).ready(function() {
     var handleResponseError = function(respObj) {
         if (respObj &&
             respObj.hasOwnProperty("error_msg")) {
-            $("#step_response_error_msg").text(respObj["error_msg"]);
+            $("#step_response_error_msg").text(translate(respObj["error_msg"]));
         }      
         $("#manual_report_DIV").show();
         $("#step_response_error").fadeIn();
