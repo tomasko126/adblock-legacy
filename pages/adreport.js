@@ -642,7 +642,7 @@ $("#step_firefox_no").click(function() {
     } else {
         $("#step_report_DIV").fadeIn().css("display", "block");
         if (debug_info) {
-            $("#debug-info").val(prepareManualReport({ "debug": debug_info }));
+            $("#debug-info").val(createReadableReport({ "debug": debug_info }));
         }
     }
 });
@@ -669,7 +669,7 @@ $("#step_flash_no").click(function() {
   $("#step_flash").html("<span class='answer' chosen='no'>" + translate("no") + "</span>");
   $("#step_report_DIV").fadeIn().css("display", "block");
   if (debug_info) {
-    $("#debug-info").val(prepareManualReport({ "debug": debug_info }));
+    $("#debug-info").val(createReadableReport({ "debug": debug_info }));
   }
 });
 
