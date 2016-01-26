@@ -89,7 +89,12 @@ $(document).ready(function() {
         $email.val(storage_get("user_email"));
         $("#rememberDetails").prop("checked",true);
     }
-    var handleResponseError = function() {
+    var handleResponseError = function(respObj) {
+        if (respObj &&
+            respObj.hasOwnProperty("error_msg")) {
+            $("#step_response_error_msg").text(respObj["error_msg"]);
+        }      
+        $("#manual_report_DIV").show();
         $("#step_response_error").fadeIn();
         $('html, body').animate({
             scrollTop: $("#step_response_error").offset().top
@@ -118,33 +123,33 @@ $(document).ready(function() {
         success: function(text) {
             if (text) {
               try {
-                var respText = JSON.parse(text);
-                if (respText &&
-                    respText.hasOwnProperty("helpdesk_ticket") &&
-                    respText["helpdesk_ticket"].hasOwnProperty("display_id")) {
-                  var ticketID = respText["helpdesk_ticket"]["display_id"];
+                var respObj = JSON.parse(text);
+                if (respObj &&
+                    respObj.hasOwnProperty("helpdesk_ticket") &&
+                    respObj["helpdesk_ticket"].hasOwnProperty("display_id")) {
+                  var ticketID = respObj["helpdesk_ticket"]["display_id"];
                   var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
                   $("#step_response_success_link").attr("href", URL);
                   $("#step_response_success").fadeIn();
                   $('html, body').animate({
                       scrollTop: $("#step_response_success").offset().top
                   }, 2000);
-
                 } else {
-                  handleResponseError();
+                  prepareManualReport(report_data);
+                  handleResponseError(respObj);
                 }
               } catch(e) {
+                prepareManualReport(report_data);
                 handleResponseError();
               }
             } else {
+              prepareManualReport(report_data);
               handleResponseError();
             }
         },
-        error: function(xhrInfo, status, HTTPerror){
-            // As backup, have them report the bug manually
+        error: function(xhrInfo, status, HTTPerror) {
             prepareManualReport(report_data, status, HTTPerror);
-            $("#step_error").fadeIn();
-            $("html, body").animate({ scrollTop: 15000 }, 50);
+            handleResponseError();
     		},
         type: "POST"
       });
@@ -153,7 +158,7 @@ $(document).ready(function() {
   // Preparation for manual report in case of error.
   var prepareManualReport = function(data, status, HTTPerror){
       var body = [];
-      body.push("This bug report failed to send. See bottom of debug info for details.");
+      body.push("This bug report failed to send.");
       body.push("");
       body.push("* Repro Steps *");
       body.push(data.repro);
@@ -171,10 +176,8 @@ $(document).ready(function() {
       body.push("");
       body.push("===== Debug Info =====");
       body.push(text_debug_info);
-      body.push("=== API ERROR DETAILS ===");
-      body.push("jQuery error: " + status);
-      body.push("HTTP Error code: " + HTTPerror);
-
+      body.push("Status: " + status);
+      body.push("HTTP error code: " + HTTPerror);
       $("#manual_submission").val(body.join("\n"));
   }
 

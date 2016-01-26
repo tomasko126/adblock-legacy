@@ -137,18 +137,11 @@
     <!-- Only show if response error -->
     <div class="step">
       <div class="section" id="step_response_error">
-        <p>Thank you.  Your bug report was created, and you should recieve an email.</p>
-        <p>If not, please go to <a href="https://adblocksupport.freshdesk.com/support/tickets/new">our support website</a>.</p>
-      </div>
-    </div>
-    <!-- Only show if error with submission -->
-    <div class="step">
-      <div class="section" id="step_error">
-        <h2>ERROR!</h2>
-        <p>There was an error submitting your bug report.</p>
-        <p>Please go to <a href="https://adblocksupport.freshdesk.com/support/tickets/new">our support website</a> then copy &amp; paste this into the "Fill in any details you think will help us understand your issue" section.</p>
-        <p>You will also need to add your name &amp; email again.</p>
-        <textarea id="manual_submission" rows="25" cols="50"></textarea>
+        <p>There was an error processing your request.</p>
+        <p id="step_response_error_msg"></p>        
+        <p>Please go to <a href="https://adblocksupport.freshdesk.com/support/tickets/new">our support website</a>.</p>
+        <p>And manually create a ticket, and copy and paste the information below into the "Fill in any details you think will help us understand your issue" section</p>
+        <textarea id="manual_submission" rows="25" cols="80"></textarea>
       </div>
     </div>
   </body>

@@ -165,7 +165,7 @@ function sendReport() {
         formdata.append('screencapturefile', $('#screen_capture_file')[0].files[0]);
       }
 
-      $("#debug-info").val(prepareManualReport(report_data));
+      $("#debug-info").val(createReadableReport(report_data));
       $.ajax({
           url: "http://dev.getadblock.com/freshdesk/adReport.php",
           data: formdata,
@@ -188,21 +188,21 @@ function sendReport() {
                         scrollTop: $("#step_response_success").offset().top
                     }, 2000);
                   } else {
+                    prepareManualReport(report_data);
                     handleResponseError(respObj);
                   }
                 } catch(e) {
+                  prepareManualReport(report_data);
                   handleResponseError();
                 }
               } else {
+                prepareManualReport(report_data);
                 handleResponseError();
               }
           },
           error: function(xhrInfo, status, HTTPerror){
-              $("#step_report_submit").prop("disabled",true);
-              // We'll need to get them to manually report this
-              showManualReport(report_data, status, HTTPerror);
-              $("#manual_report_DIV").show();
-              $("html, body").animate({ scrollTop: 15000 }, 50)
+            prepareManualReport(report_data, status, HTTPerror);
+            handleResponseError();
       		},
           type: "POST"
       });
@@ -223,6 +223,8 @@ function sendReport() {
     }
 
     var handleResponseError = function(respObj) {
+        $("#step_report_submit").prop("disabled",true);
+        $("#manual_report_DIV").show();
         if (respObj &&
             respObj.hasOwnProperty("error_msg")) {
             $("#step_response_error_msg").text(respObj["error_msg"]);
@@ -234,15 +236,7 @@ function sendReport() {
     }
 }
 
-// Manual Report preparation in case of error
-var showManualReport = function(data, status, HTTPerror) {
-    var displayText = "This bug report failed to send. See bottom of debug info for details.\n\n" +
-                      prepareManualReport(data, status, HTTPerror);
-    $("#manual_submission").val(displayText);
-}
-
-// Pretty Print the data
-var prepareManualReport = function(data, status, HTTPerror){
+var createReadableReport = function(data) {
     var body = [];
     if (data.location) {
       body.push("* Location of ad *");
@@ -290,13 +284,15 @@ var prepareManualReport = function(data, status, HTTPerror){
     }
     body.push(content.join("\n"));
     body.push("");
-    if (status) {
-      body.push("jQuery error: " + status);
-    }
-    if (HTTPerror) {
-      body.push("HTTP Error code: " + HTTPerror);
-    }
     return body.join("\n");
+}
+// Pretty Print the data
+var prepareManualReport = function(data, status, HTTPerror) {
+    var body = [];
+    body.push(createReadableReport(data));
+    body.push("Status: " + status);
+    body.push("HTTP error code: " + HTTPerror);    
+    $("#manual_submission").val(body.join("\n"));
 }
 
 // Check every domain of downloaded resource against malware-known domains
