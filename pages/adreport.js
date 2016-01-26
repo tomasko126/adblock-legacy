@@ -177,7 +177,6 @@ function sendReport() {
                       respObj.hasOwnProperty("helpdesk_ticket") &&
                       respObj["helpdesk_ticket"].hasOwnProperty("display_id")) {
                     var ticketID = respObj["helpdesk_ticket"]["display_id"];
-                    $("#step_response_success_link").text(ticketID);
                     var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
                     $("#step_response_success_link").attr("href", URL);
                     $("#step_response_success").parent().fadeIn();

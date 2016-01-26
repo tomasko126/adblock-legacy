@@ -123,7 +123,6 @@ $(document).ready(function() {
                     respText.hasOwnProperty("helpdesk_ticket") &&
                     respText["helpdesk_ticket"].hasOwnProperty("display_id")) {
                   var ticketID = respText["helpdesk_ticket"]["display_id"];
-                  $("#step_response_success_link").text(ticketID);
                   var URL = "http://help.getadblock.com/helpdesk/tickets/" + ticketID;
                   $("#step_response_success_link").attr("href", URL);
                   $("#step_response_success").fadeIn();
