@@ -188,7 +188,7 @@ function sendReport() {
                         scrollTop: $("#step_response_success").offset().top
                     }, 2000);
                   } else {
-                    prepareManualReport(report_data);
+                    prepareManualReport(report_data, null, null, respObj);
                     handleResponseError(respObj);
                   }
                 } catch(e) {
@@ -287,11 +287,18 @@ var createReadableReport = function(data) {
     return body.join("\n");
 }
 // Pretty Print the data
-var prepareManualReport = function(data, status, HTTPerror) {
+var prepareManualReport = function(data, status, HTTPerror, respObj) {
     var body = [];
     body.push(createReadableReport(data));
-    body.push("Status: " + status);
-    body.push("HTTP error code: " + HTTPerror);    
+    if (status) {
+      body.push("Status: " + status);
+    }
+    if (HTTPerror) {
+      body.push("HTTP error code: " + HTTPerror);
+    }
+    if (respObj) {
+      body.push("Server error information: " + JSON.stringify(respObj));
+    }
     $("#manual_submission").val(body.join("\n"));
 }
 

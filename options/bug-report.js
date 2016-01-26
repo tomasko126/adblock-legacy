@@ -135,7 +135,7 @@ $(document).ready(function() {
                       scrollTop: $("#step_response_success").offset().top
                   }, 2000);
                 } else {
-                  prepareManualReport(report_data);
+                  prepareManualReport(report_data, null, null, respObj);
                   handleResponseError(respObj);
                 }
               } catch(e) {
@@ -156,7 +156,7 @@ $(document).ready(function() {
   }
 
   // Preparation for manual report in case of error.
-  var prepareManualReport = function(data, status, HTTPerror){
+  var prepareManualReport = function(data, status, HTTPerror, respObj){
       var body = [];
       body.push("This bug report failed to send.");
       body.push("");
@@ -176,8 +176,15 @@ $(document).ready(function() {
       body.push("");
       body.push("===== Debug Info =====");
       body.push(text_debug_info);
-      body.push("Status: " + status);
-      body.push("HTTP error code: " + HTTPerror);
+      if (status) {
+        body.push("Status: " + status);
+      }
+      if (HTTPerror) {
+        body.push("HTTP error code: " + HTTPerror);
+      }
+      if (respObj) {
+        body.push("Server error information: " + JSON.stringify(respObj));
+      }
       $("#manual_submission").val(body.join("\n"));
   }
 
