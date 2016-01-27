@@ -171,7 +171,7 @@ $("#dbauth").click(function() {
 
 $("#dbauthinfo").click(function() {
     BGcall("openTab",
-           "http://support.getadblock.com/kb/technical-questions/how-do-i-use-the-dropbox-synchronization-feature");
+           "http://help.getadblock.com/support/solutions/articles/6000087888-how-do-i-use-dropbox-synchronization-");
 });
 
 // Change Dropbox button, when user has been logged in/out
