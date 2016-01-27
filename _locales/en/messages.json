@@ -576,7 +576,7 @@
     "description":"Instruction on ad report page"
   },
   "disableforchromestepone":{
-    "message":"Open the <a href='#'>extensions page<\/a>",
+    "message":"Open the <a href='#'>extensions page<\/a>.",
     "description":"Step 1 for disabling Chrome extensions"
   },
   "clickdisableotherextensions":{
@@ -600,7 +600,7 @@
     "description":"On the ad report page, alert notifying users that we've disabled all other extensions"
   },
   "disableforchromeandsafaristeptwo":{
-    "message":"Uncheck the 'Enabled' checkbox next to every extension <b>except<\/b> for AdBlock.  <b>Leave AdBlock enabled<\/b>.",
+    "message":"Uncheck the \"Enabled\" checkbox next to every extension <b>except<\/b> for AdBlock.  <b>Leave AdBlock enabled<\/b>.",
     "description":"Step 2 for disabling Chrome and Safari extensions"
   },
   "disableforsafaristepone":{
@@ -1424,23 +1424,35 @@
     "description":"Shown when the user does enter all of the required information."
   },
   "adreport_response_invalid_file":{
-    "message":"Invalid file type, file does contain not an image",
+    "message":"That's not an image file. Please upload a .png, .gif, or .jpg file.",
     "description":"Shown when the user uploads an invalid file type (not an image file)."
-  },  
+  },
   "adreport_response_large_file":{
-    "message":"Uploaded file is too large (great than 10 MB), please reduce the size of the file.",
+    "message":"That file is too big. Please make sure your file is less than 10 MB.",
     "description":"Shown when the user uploads a large image file."
-  },   
+  },
   "adreport_response_save_error":{
     "message":"Error saving the uploaded file.",
     "description":"Shown when the server could not save the file on the server."
-  },  
+  },
   "adreport_response_file_name":{
-    "message":"Invalid file name.  The file name is greater than 255 characters.",
+    "message":"That file name is too long. Please give your file a shorter name.",
     "description":"Shown when the image file name is greater than 255 characters."
-  },  
+  },
   "adreport_all_debug_info":{
     "message":"The following information will also be included in the ad report.",
     "description":"Shown when the user does enter all of the required information."
+  },
+  "adreport_server_response_error_msg":{
+    "message":"There was an error processing your request.",
+    "description":"Shown when an new problem ticket is submit from the 'Report an Ad' page, and the server had problem processing the data."
+  },
+  "adreport_server_response_error__manual_msg_step1":{
+    "message":"Please go to <a>our support website<\/a>.",
+    "description":"Shown when the server has an unrecoverable error"
+  },
+  "adreport_server_response_error__manual_msg_step2":{
+    "message":"And manually create a ticket, and copy and paste the information below into the \"Fill in any details you think will help us understand your issue\" section",
+    "description":"Shown when the server has an unrecoverable error"
   }
 }

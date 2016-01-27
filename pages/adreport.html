@@ -98,7 +98,7 @@
         max-width: 1000px;
         padding: 20px 20px 20px 0px;
       }
-      #manual_report_DIV, #step_report_DIV, #manual_report_DIV, #step_update_aa_DIV, #step_language_DIV, #step_update_filters_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_DIV, #step_malware_checking_DIV, #step_response_success, #step_response_error  {
+      #step_report_DIV, #step_update_aa_DIV, #step_language_DIV, #step_update_filters_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_DIV, #step_malware_checking_DIV, #step_response_success, #step_response_error  {
         position: relative;
         margin: 0px auto;
         max-width: 1000px;
@@ -117,7 +117,7 @@
         .social {
           display: none;
         }
-        #manual_report_DIV, #step_report_DIV, #manual_report_DIV, #step_update_aa_DIV, #step_update_filters_DIV, #step_disable_extensions_DIV, #step_language_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_div, #step_malware_checking_DIV, #step_response_success, #step_response_error  {
+        #step_report_DIV, #step_update_aa_DIV, #step_update_filters_DIV, #step_disable_extensions_DIV, #step_language_DIV, #step_firefox_DIV, #step_flash_DIV, #step_malware_DIV, #step_everywhere_div, #step_malware_checking_DIV, #step_response_success, #step_response_error  {
           padding: 20px 20px 20px 0px;
         }
         #info {
@@ -314,7 +314,6 @@
         <span class="redText" style="margin-left: 15px;">* Required information</span>
         <div class="form" id="step_report">
           <p class="missingInfoMessage" i18n="adreport_missing_info" id="adreport_missing_info"></p>
-          <p class="missingInfoMessage" i18n="adreport_missing_screenshot" id="adreport_missing_screenshot"></p>
           <label for="step_report_name" ><span i18n="adreport_name"></span><span class="redText">&nbsp;*</span></label><br/>
           <input type="text" id="step_report_name" size="35" /><br/>
           <label for="step_report_email"><span i18n="adreport_email"></span> (<span i18n="adreport_email_privacy"></span>)<span class="redText">&nbsp;*</span></label><br/>
@@ -325,7 +324,9 @@
           <sup>
               [<a id="data_collection_help" i18n="how" href="http://help.getadblock.com/solution/articles/6000107188" target="_blank"></a>]
           </sup><br/>
-          <input type="file" id="screen_capture_file" /><br/><br/>
+          <input type="file" id="screen_capture_file" />
+          <span class="missingInfoMessage" i18n="adreport_missing_screenshot" id="adreport_missing_screenshot"></span>
+          <br/><br/>
           <label for="step_report_filter" i18n="adreport_filter"></label><br/>
           <textarea id="step_report_filter" cols="80" rows="2"></textarea><br/><br/>
           <button id="step_report_submit" i18n="buttonsubmit"></button><br/><br/>
@@ -345,11 +346,13 @@
     <!-- Only show if response error -->
     <div class="result section">
       <div id="step_response_error">
-        <p>There was an error processing your request.</p>
+        <p i18n="adreport_server_response_error_msg"></p>
         <p id="step_response_error_msg"></p>
-        <p>Please go to <a href="https://adblocksupport.freshdesk.com/support/tickets/new" target="_blank">our support website</a>.</p>
-        <p>And manually create a ticket, and copy and paste the information below into the "Fill in any details you think will help us understand your issue" section</p>
-        <textarea id="manual_submission" rows="25" cols="80"></textarea>
+        <div id="step_response_error_manual_submission">
+          <p i18n="adreport_server_response_error__manual_msg_step1"></p>
+          <p i18n="adreport_server_response_error__manual_msg_step2"></p>
+          <textarea id="manual_submission" rows="25" cols="80"></textarea>
+        </div>
       </div>
     </div>
 

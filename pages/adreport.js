@@ -32,7 +32,7 @@ $(function() {
 
     // add the link to the anchor in "adreport2"
     $("a", "#info").
-      attr("href", "http://help.getadblock.com/support/solutions/articles/6000061202-i-found-an-ad-adblock-doesn-t-block-how-can-i-block-it-").
+      attr("href", "http://help.getadblock.com/support/solutions/articles/6000061202").
       attr("target", "_blank");
 });
 
@@ -55,7 +55,6 @@ BGcall("getDebugInfo", function(info) {
 });
 
 function sendReport() {
-
     // Cache access to input boxes
     var $name = $("#step_report_name");
     var $email = $("#step_report_email");
@@ -66,6 +65,8 @@ function sendReport() {
     $('#screen_capture_file_label').css("color", "black");
     $email.removeClass("inputError");
     $name.removeClass("inputError");
+    $("#step_response_error").parent().fadeOut();
+    $("#step_response_success").parent().fadeOut();
     $("#adreport_missing_info").hide();
     $("#adreport_missing_screenshot").hide();
     // Validate user entered info
@@ -138,7 +139,7 @@ function sendReport() {
                           extInfo.push("  type: " + result[i].type);
                           extInfo.push("");
                       }
-                      report_data.extensions = extInfo.join("\n\n");
+                      report_data.extensions = extInfo.join("\n");
                       chrome.permissions.remove({
                           permissions: ['management']
                       }, function(removed) {});
@@ -153,6 +154,8 @@ function sendReport() {
                 }
               });
           } else {
+            //user didn't grant us permission
+            report_data.extensions = "Extension information not avaiable";
             sendData();
           }
     };//end of askUserToGatherExtensionInfo
@@ -200,41 +203,58 @@ function sendReport() {
                 handleResponseError();
               }
           },
-          error: function(xhrInfo, status, HTTPerror){
+          error: function(xhrInfo, status, HTTPerror) {
             prepareManualReport(report_data, status, HTTPerror);
             handleResponseError();
       		},
           type: "POST"
       });
     };
-
     if (chrome &&
         chrome.tabs &&
         chrome.tabs.detectLanguage) {
-      chrome.tabs.detectLanguage(parseInt(tabId), function(language) {
-          if (language) {
-              report_data.language = language;
-          }
-          askUserToGatherExtensionInfo();
+        var tabIdInt = -1;
+        try {
+            tabIdInt = parseInt(tabId);
+        } catch (e) {
+            report_data.language = "unknown"
+            askUserToGatherExtensionInfo();
+            return;
+        }
+        chrome.tabs.detectLanguage(tabIdInt, function(language) {
+            if (language) {
+                report_data.language = language;
+            }
+            askUserToGatherExtensionInfo();
         });//end of detectLanguage
     } else {
         report_data.language = "unknown"
         askUserToGatherExtensionInfo();
     }
 
+    // Handle any HTTP or server errors
     var handleResponseError = function(respObj) {
-        $("#step_report_submit").prop("disabled",true);
-        $("#manual_report_DIV").show();
+        $("#step_response_error").parent().fadeIn();
         if (respObj &&
             respObj.hasOwnProperty("error_msg")) {
             $("#step_response_error_msg").text(translate(respObj["error_msg"]));
         }
-        $("#step_response_error").parent().fadeIn();
+        //re-enable the button(s) if the error is recoverable (the user can re-submit)
+        if (respObj &&
+            respObj.hasOwnProperty("retry_allowed") &&
+            respObj["retry_allowed"] === "true") {
+            $("#step_report_submit").prop("disabled",false);
+            $("#step_response_error_manual_submission").hide();
+        } else {
+            $("#step_response_error_manual_submission a").attr("href", "https://adblocksupport.freshdesk.com/support/tickets/new");
+            $("#step_response_error_manual_submission a").attr("target", "_blank");
+            $("#step_response_error_manual_submission").show();
+        }
         $('html, body').animate({
             scrollTop: $("#step_response_error").offset().top
         }, 2000);
-    }
-}
+    };
+} // end of sendReport()
 
 var createReadableReport = function(data) {
     var body = [];
@@ -674,7 +694,7 @@ $("#step_flash_no").click(function() {
 });
 
 // STEP 7: Ad Report
-$("#step_report_submit").click(function(){
+$("#step_report_submit").click(function() {
   sendReport();
 });
 
