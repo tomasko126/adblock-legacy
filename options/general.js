@@ -127,13 +127,9 @@ $("#enable_safari_content_blocking").change(function() {
     });
     // If the user has enabled Safari content blocking enabled, and subscribed to AA
     // automatically unselect unscribed to AA and Content Blocking
-    BGcall("get_subscriptions_minus_text", function(subs) {
-      //if the user is currently subscribed to AA
-      //then 'check' the acceptable ads button.
-      if (subs["acceptable_ads"].subscribed) {
-        $("#acceptable_ads").trigger("click");
-      }
-    });    
+    if ($("#"acceptable_ads"").is(':checked')) {
+      $("#acceptable_ads").trigger("click");
+    }
   } else {
     $(".exclude_safari_content_blocking").show();
     $("#safari_content_blocking_bmessage").text(translate("browserestartrequired")).show();
