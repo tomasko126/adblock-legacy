@@ -36,15 +36,15 @@ $(function() {
       if (is_enabled) {
         $("#acceptable_ads_info").slideUp();
         BGcall("subscribe", {id: "acceptable_ads"});
+        // If the user has Safari content blocking enabled
+        // automatically unselect it due to conflicts between AA and Content Blocking
+        if (optionalSettings &&
+            optionalSettings.safari_content_blocking) {
+          $("#enable_safari_content_blocking").prop("checked", false);
+        }
       } else {
         $("#acceptable_ads_info").slideDown();
         BGcall("unsubscribe", {id:"acceptable_ads", del:false});
-      }
-      // If the user has Safari content blocking enabled, then update the filter lists when
-      // a user subscribes to AA
-      if (optionalSettings &&
-          optionalSettings.safari_content_blocking) {
-        BGcall("update_subscriptions_now");
       }
       return;
     }
@@ -60,9 +60,15 @@ $(function() {
     if (name === "data_collection") {
       BGcall("update_subscriptions_now");
     }
+    if (this.id === "safari_content_blocking") {
+      // If the user has Safari content blocking enabled
+      // automatically unselect AA due to conflicts between AA and Content Blocking
+      $("#acceptable_ads").prop("checked", false);
+    }
     BGcall("get_settings", function(settings) {
         optionalSettings = settings;
     });
+
   });
 
   //if safari content blocking is available...
