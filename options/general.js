@@ -125,9 +125,8 @@ $("#enable_safari_content_blocking").change(function() {
     $(".exclude_safari_content_blocking > input").each(function(index) {
       $(this).prop("checked", false);
     });
-    // If the user has Safari content blocking enabled
     // automatically unselect AA due to conflicts between AA and Content Blocking
-    $("#acceptable_ads").prop("checked", false);
+    $("#acceptable_ads").trigger("click");
   } else {
     $(".exclude_safari_content_blocking").show();
     $("#safari_content_blocking_bmessage").text(translate("browserestartrequired")).show();
