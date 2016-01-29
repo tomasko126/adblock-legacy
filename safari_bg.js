@@ -234,8 +234,8 @@ function set_content_scripts() {
 }
 set_content_scripts();
 
-// Check if the user has Safari content blocking enabled
-// automatically unsubscribe to AA, due to conflicts between AA and Content Blocking
+// Check if the user has Safari content blocking enabled and subscribed to AA
+// If so, unsubscribe to AA, due to conflicts between AA and Content Blocking
 function checkContentBlocking() {
   var subs = get_subscriptions_minus_text();
   if (subs["acceptable_ads"].subscribed &&
