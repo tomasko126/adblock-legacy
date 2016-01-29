@@ -125,8 +125,15 @@ $("#enable_safari_content_blocking").change(function() {
     $(".exclude_safari_content_blocking > input").each(function(index) {
       $(this).prop("checked", false);
     });
-    // automatically unselect AA due to conflicts between AA and Content Blocking
-    $("#acceptable_ads").trigger("click");
+    // If the user has enabled Safari content blocking enabled, and subscribed to AA
+    // automatically unselect unscribed to AA and Content Blocking
+    BGcall("get_subscriptions_minus_text", function(subs) {
+      //if the user is currently subscribed to AA
+      //then 'check' the acceptable ads button.
+      if (subs["acceptable_ads"].subscribed) {
+        $("#acceptable_ads").trigger("click");
+      }
+    });    
   } else {
     $(".exclude_safari_content_blocking").show();
     $("#safari_content_blocking_bmessage").text(translate("browserestartrequired")).show();
