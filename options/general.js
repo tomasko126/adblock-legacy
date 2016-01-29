@@ -36,8 +36,8 @@ $(function() {
       if (is_enabled) {
         $("#acceptable_ads_info").slideUp();
         BGcall("subscribe", {id: "acceptable_ads"});
-        // If the user has Safari content blocking enabled
-        // automatically unselect it due to conflicts between AA and Content Blocking
+        // If the user has enabled AA, and Safari content blocking enabled
+        // automatically unselect content blocking due to conflicts between AA and Content Blocking
         if (optionalSettings &&
             optionalSettings.safari_content_blocking) {
           $("#enable_safari_content_blocking").prop("checked", false);
