@@ -127,7 +127,7 @@ $("#enable_safari_content_blocking").change(function() {
     });
     // If the user has enabled Safari content blocking enabled, and subscribed to AA
     // automatically unselect unscribed to AA and Content Blocking
-    if ($("#"acceptable_ads"").is(':checked')) {
+    if ($("#acceptable_ads").is(':checked')) {
       $("#acceptable_ads").trigger("click");
     }
   } else {
