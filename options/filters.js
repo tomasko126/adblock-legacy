@@ -466,7 +466,7 @@ SubscriptionUtil.subscribe = function(id, title) {
     BGcall("get_settings", function(settings) {
       if (settings &&
           settings.safari_content_blocking) {
-        BGcall("set_setting", name, false, true);
+        BGcall("set_setting", "safari_content_blocking", false, true);
       }
     });
   }
