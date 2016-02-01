@@ -1359,6 +1359,14 @@
     "message":"You can turn this back on and support the websites you love by selecting \"Allow some non-intrusive advertising\" below.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"Acceptable Ads has been disabled because you've enabled content blocking (both options can not be enabled at the same time).",
+    "description":"Message shown to Safari users when content blocking is enabled OR AA is enabled"
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"Content Blocking has been disabled because you've enabled Acceptable Ads (both options can not be enabled at the same time).",
+    "description":"Message shown to Safari users when content blocking is enabled OR AA is enabled"
+  },
   "adreport_laststep":{
     "message":"Last step: report the issue to us.",
     "description":"Heading on the ad report page for the last step when the user needs to send us an ad report."

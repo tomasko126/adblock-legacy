@@ -40,10 +40,19 @@ $(function() {
         // automatically unselect content blocking due to conflicts between AA and Content Blocking
         if (optionalSettings &&
             optionalSettings.safari_content_blocking) {
-          $("#enable_safari_content_blocking").prop("checked", false);
+          $("#acceptable_ads_content_blocking_info").text(translate("content_blocking_acceptable_ads_disbled_message")).slideDown();
+          $("#enable_safari_content_blocking").trigger("click");
         }
       } else {
+        BGcall("get_settings", function(settings) {
+            optionalSettings = settings;
+            if (optionalSettings &&
+                !optionalSettings.safari_content_blocking) {
+              $("#acceptable_ads_content_blocking_info").text("").slideUp();
+            }
+        });
         $("#acceptable_ads_info").slideDown();
+        $("#acceptable_ads_content_blocking_message").text("").slideUp();
         BGcall("unsubscribe", {id:"acceptable_ads", del:false});
       }
       return;
@@ -64,7 +73,35 @@ $(function() {
         optionalSettings = settings;
     });
 
-  });
+    if (name === "safari_content_blocking") {
+      if (is_enabled) {
+        $(".exclude_safari_content_blocking").hide();
+        $("#safari_content_blocking_bmessage").text("");
+        // message to users on the Custom tab
+        $("#safariwarning").text(translate("contentblockingwarning")).show();
+        // uncheck any incompatable options, and then hide them
+        $(".exclude_safari_content_blocking > input").each(function(index) {
+          $(this).prop("checked", false);
+        });
+        // If the user has enabled Safari content blocking enabled, and subscribed to AA
+        // automatically unselect unscribed to AA and Content Blocking
+        if ($("#acceptable_ads").is(':checked')) {
+            $("#acceptable_ads_content_blocking_info").text(translate("acceptable_ads_content_blocking_disbled_message")).slideDown();
+            $("#acceptable_ads").trigger("click");
+        }
+      } else {
+        if (!$("#acceptable_ads").is(':checked')) {
+            $("#acceptable_ads_content_blocking_info").text("").slideUp();
+        }
+        $(".exclude_safari_content_blocking").show();
+        $("#safari_content_blocking_bmessage").text(translate("browserestartrequired")).show();
+        // message to users on the Custom tab
+        $("#safariwarning").text("").hide();
+      }
+      BGcall("set_content_scripts");
+      BGcall("update_subscriptions_now");
+    }
+  }); // end of change handler
 
   //if safari content blocking is available...
   //  - display option to user
@@ -114,31 +151,7 @@ $("#enable_show_advanced_options").change(function() {
   }, 50);
 });
 
-$("#enable_safari_content_blocking").change(function() {
-  var is_enabled = $(this).is(':checked');
-  if (is_enabled) {
-    $(".exclude_safari_content_blocking").hide();
-    $("#safari_content_blocking_bmessage").text("");
-    // message to users on the Custom tab
-    $("#safariwarning").text(translate("contentblockingwarning")).show();
-    // uncheck any incompatable options, and then hide them
-    $(".exclude_safari_content_blocking > input").each(function(index) {
-      $(this).prop("checked", false);
-    });
-    // If the user has enabled Safari content blocking enabled, and subscribed to AA
-    // automatically unselect unscribed to AA and Content Blocking
-    if ($("#acceptable_ads").is(':checked')) {
-      $("#acceptable_ads").trigger("click");
-    }
-  } else {
-    $(".exclude_safari_content_blocking").show();
-    $("#safari_content_blocking_bmessage").text(translate("browserestartrequired")).show();
-    // message to users on the Custom tab
-    $("#safariwarning").text("").hide();
-  }
-  BGcall("set_content_scripts");
-  BGcall("update_subscriptions_now");
-});
+
 function getSafariContentBlockingMessage() {
   BGcall('sessionstorage_get', 'contentblockingerror', function(messagecode) {
     //if the message exists, it should already be translated.
