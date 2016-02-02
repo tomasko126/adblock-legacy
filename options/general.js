@@ -40,7 +40,8 @@ $(function() {
         // automatically unselect content blocking due to conflicts between AA and Content Blocking
         if (optionalSettings &&
             optionalSettings.safari_content_blocking) {
-          $("#acceptable_ads_content_blocking_info").text(translate("content_blocking_acceptable_ads_disbled_message")).slideDown();
+          $("#acceptable_ads_content_blocking_info").html(translate("content_blocking_acceptable_ads_disbled_message")).slideDown();
+          $("#acceptable_ads_content_blocking_info a").attr("href", "http://help.getadblock.com/solution/articles/6000099239").attr("target", "_blank");
           $("#enable_safari_content_blocking").trigger("click");
         }
       } else {
@@ -86,7 +87,8 @@ $(function() {
         // If the user has enabled Safari content blocking enabled, and subscribed to AA
         // automatically unselect unscribed to AA and Content Blocking
         if ($("#acceptable_ads").is(':checked')) {
-            $("#acceptable_ads_content_blocking_info").text(translate("acceptable_ads_content_blocking_disbled_message")).slideDown();
+            $("#acceptable_ads_content_blocking_info").html(translate("acceptable_ads_content_blocking_disbled_message")).slideDown();
+            $("#acceptable_ads_content_blocking_info a").attr("href", "http://help.getadblock.com/solution/articles/6000099239").attr("target", "_blank");
             $("#acceptable_ads").trigger("click");
         }
       } else {
