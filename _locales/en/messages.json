@@ -968,7 +968,7 @@
     "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled"
   },
   "browserestartrequired":{
-    "message":"Disabling this feature requires restarting your browser.",
+    "message":"Please restart Safari to finish turning off content blocking.",
     "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
   },
   "safarinotificationtitle":{
@@ -1358,6 +1358,14 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"You can turn this back on and support the websites you love by selecting \"Allow some non-intrusive advertising\" below.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"We unsubscribed you from Acceptable Ads because you turned on content blocking.  You can only select one at a time. <a>(Why?)<\/a>",
+    "description":"Message shown to Safari users when content blocking is enabled OR AA is enabled"
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"We turned off content blocking because you opted to allow non-intrusive ads. You can only select one at a time. <a>(Why?)<\/a>",
+    "description":"Message shown to Safari users when content blocking is enabled OR AA is enabled"
   },
   "adreport_laststep":{
     "message":"Last step: report the issue to us.",
