@@ -180,8 +180,8 @@ _placementFor: function(el) {
   }
 
   var result = this._fit(pic, t);
-  //result.url = chrome.extension.getURL("picreplacement/img/" + pic.filename);
-  result.url = "https://ping.getadblock.com/qa-stats/cats/" + pic.filename;
+  result.url = chrome.extension.getURL("picreplacement/img/" + pic.filename);
+  //result.url = "https://ping.getadblock.com/qa-stats/cats/" + pic.filename;
   BGcall("incrementCatsShownCount", location.href)
   return result;
 },
