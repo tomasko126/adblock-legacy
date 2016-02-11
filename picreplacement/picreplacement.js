@@ -2,14 +2,16 @@ var picreplacement = {
 
 // data: {el, elType, blocked}
 augmentIfAppropriate: function(data) {
+
   if (this._inHiddenSection(data.el)) {
     this._replaceHiddenSectionContaining(data.el);
   }
   else {
     var okTypes = (ElementTypes.image | ElementTypes.subdocument | ElementTypes["object"]);
     var replaceable = (data.el.nodeName !== "FRAME" && (data.elType & okTypes));
-    if (data.blocked && replaceable)
+    if (data.blocked && replaceable) {
       this._replace(data.el);
+    }
   }
 },
 
@@ -114,7 +116,9 @@ _dim: function(el, prop) {
     // Match two or more digits; treat < 10 as missing.  This lets us set
     // dims that look good for e.g. 1px tall ad holders (cnn.com footer.)
     var match = (val || "").match(/^([1-9][0-9]+)(px)?$/);
-    if (!match) return undefined;
+    if (!match) {
+      return undefined;
+    }
     return parseInt(match[1]);
   }
   return ( intFor(el.getAttribute(prop)) ||
@@ -176,7 +180,9 @@ _placementFor: function(el) {
   }
 
   var result = this._fit(pic, t);
-  result.url = chrome.extension.getURL("picreplacement/img/" + pic.filename);
+  //result.url = chrome.extension.getURL("picreplacement/img/" + pic.filename);
+  result.url = "https://ping.getadblock.com/qa-stats/cats/" + pic.filename;
+  BGcall("incrementCatsShownCount", location.href)
   return result;
 },
 
@@ -185,10 +191,14 @@ _placementFor: function(el) {
 // element could not be replaced.
 _replace: function(el) {
   var placement = this._placementFor(el);
-  if (!placement)
+  if (!placement) {
+    console.log("return 1");
     return null; // don't know how to replace |el|
-  if (document.getElementsByClassName("picreplacement-image").length > 0)
+  }
+  if (document.getElementsByClassName("picreplacement-image").length > 0) {
+    console.log("return 2");
     return null; //we only want to show 1 ad per page
+  }
   var newPic = document.createElement("img");
   newPic.classList.add("picreplacement-image");
 
@@ -202,6 +212,7 @@ _replace: function(el) {
     // nytimes.com float:right ad at top is on the left without this
     "float": (window.getComputedStyle(el)["float"] || undefined)
   };
+  console.log("css", css);
   for (var k in css) {
     newPic.style[k] = css[k];
   }
@@ -226,7 +237,7 @@ _replace: function(el) {
   // No need to hide the replaced element -- regular AdBlock will do that.
   el.dataset.picreplacementreplaced = "true";
   el.parentNode.insertBefore(newPic, el);
-
+  console.log("returning newPic", newPic);
   return newPic;
 },
 

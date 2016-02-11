@@ -347,7 +347,8 @@
         // receive this or not.  Because the #anchor of a page can change without navigating
         // the frame, ignore the anchor when matching.
         var frameUrl = frameData.get(tabId, requestingFrameId).url.replace(/#.*$/, "");
-        var picreplacement_enabled = picreplacement_checker.enabled(frameUrl);
+        //var picreplacement_enabled = picreplacement_checker.enabled(frameUrl);
+        var picreplacement_enabled = true;
         var data = { command: "purge-elements", tabId: tabId, frameUrl: frameUrl, url:details.url, elType: elType, picreplacement_enabled: picreplacement_enabled };
         chrome.tabs.sendRequest(tabId, data);
       }
@@ -1585,4 +1586,12 @@
   }
 
   log("\n===FINISHED LOADING===\n\n");
+catShownCount = 0;
+var incrementCatsShownCount = function(url) {
+  if (url) {
+    console.log("cat shown on ", url);
+  }
+  catShownCount = catShownCount + 1;
+}
 
+console.log("done");

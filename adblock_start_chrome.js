@@ -13,7 +13,6 @@ var elementPurger = {
     var elType = request.elType;
     var url = request.url;
 
-    log("[DEBUG]", "Purging:", lastTry, elType, url);
 
     var tags = {};
     tags[ElementTypes.image] = { IMG:1 };
@@ -28,7 +27,7 @@ var elementPurger = {
         var selector = tag + '[' + attr + src.op + '"' + src.text + '"]';
 
         var results = document.querySelectorAll(selector);
-        log("[DEBUG]", "  ", results.length, "results for selector:", selector);
+        console.log("[DEBUG]", "  ", results.length, "results for selector:", selector);
         if (results.length) {
           for (var j=0; j < results.length; j++) {
             if (request.picreplacement_enabled) {
@@ -36,9 +35,10 @@ var elementPurger = {
             }            
             destroyElement(results[j], elType);
           }
-          var externalId = "kodkhcagmjcidjgljmbfiaconnbnohho";
-          request.selector = selector;
-          chrome.extension.sendRequest(externalId, request); 
+          //var externalId = "gdbhnbcbbdldnpkeoiafoeanbkijbcni";
+          //request.selector = selector;
+            //chrome.extension.sendRequest(externalId, request); 
+          //console.log("sent request", externalId, request);
           return; // I doubt the same URL was loaded via 2 different src attrs.
         }
       }

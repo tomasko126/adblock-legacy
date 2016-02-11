@@ -23,7 +23,16 @@ picreplacement_checker = {
     // like to say hi! - Michael
     var today = new Date();
     //TODO - update dates
-    return today < new Date(2015, 1, 10) || today >= new Date(2015, 2, 3);
+    //Below will return false (will be live on March 3, 2016
+//var denying_existence = function(today) {
+//  return (today < new Date(2016, 2, 3) || today >= new Date(2016, 2, 4));
+//};
+//(denying_existence(new Date(2016, 2, 3)) === false);
+//(denying_existence(new Date(2016, 2, 4)) === true);
+//(denying_existence(new Date(2016, 3, 4)) === true);
+//(denying_existence(new Date(2016, 2, 2)) === true);
+//(denying_existence(new Date(2016, 1, 2)) === true);    
+    return (today < new Date(2016, 2, 3) || today >= new Date(2016, 2, 4));
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))
