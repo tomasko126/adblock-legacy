@@ -35,6 +35,10 @@ function weakDestroyElement(el, elType) {
 };
 
 beforeLoadHandler = function(event) {
+  // Since we don't block non-HTTP requests, return
+  // without asking the background page.
+  if (/^(?!https?:)[\w-]+:/.test(event.url))
+    return;
   var el = event.target;
   if (!el.nodeName) return; // issue 6256
   // Cancel the load if canLoad is false.
@@ -42,6 +46,8 @@ beforeLoadHandler = function(event) {
   var data = {
     url: relativeToAbsoluteUrl(event.url),
     elType: elType,
+    referrer: document.referrer,
+    isPopup: window.opener !== null,
     frameDomain: document.location.hostname,
     frameInfo: chrome._tabInfo.gatherFrameInfo()
   };
@@ -57,32 +63,26 @@ beforeLoadHandler = function(event) {
     if (beforeLoadHandler.blockCount > 250) {
       log("ABORTING: blocked over 250 requests, probably an infinite loading loop");
       beforeLoadHandler.blockCount = 0;
-    } else
+    } else {
       event.preventDefault();
-
+      // from ABP - content.js
+      // Safari doesn't dispatch the expected events for elements that have been
+      // prevented from loading by having their "beforeload" event cancelled.
+      // That is a "load" event for blocked frames, and an "error" event for
+      // other blocked elements. We need to dispatch those events manually here
+      // to avoid breaking element collapsing and pages that rely on those events.
+      var eventName = "error";
+      if (event.target.localName === "iframe") {
+        eventName = "load";
+      }
+      setTimeout(function() {
+        var evt = document.createEvent("Event");
+        evt.initEvent(eventName);
+        event.target.dispatchEvent(evt);
+      }, 0);
+    }
     if (!weakDestroyElement(el, elType))
       destroyElement(el, elType);
   }
 }
 beforeLoadHandler.blockCount = 0;
-
-adblock_begin({
-  startPurger: function() {
-    document.addEventListener("beforeload", beforeLoadHandler, true);
-  },
-  stopPurger: function() {
-    document.removeEventListener("beforeload", beforeLoadHandler, true);
-  },
-  handleHiding: function(data) {
-    if (data.hiding)
-      block_list_via_css(data.selectors);
-  },
-  success: function() {
-    onReady(function() { blockBackgroundImageAd(); });
-
-    // Add entries to right click menu of non-whitelisted pages.
-    window.addEventListener("contextmenu", function(event) {
-      safari.self.tab.setContextMenuEventUserInfo(event, true);
-    }, false);
-  }
-});

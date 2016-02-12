@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>Author</key>
-	<string>Michael Gundlach</string>
+	<string>BetaFish, Inc.</string>
 	<key>Builder Version</key>
-	<string>10600.3.18</string>
+	<string>11601.1.35.2</string>
 	<key>CFBundleDisplayName</key>
 	<string>AdBlock</string>
 	<key>CFBundleIdentifier</key>
@@ -13,9 +13,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.18</string>
+	<string>2.49</string>
 	<key>CFBundleVersion</key>
-	<string>102.18</string>
+	<string>102.49</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -55,23 +55,24 @@
 				<string>uiscripts/top_open_blacklist_ui.js</string>
 				<string>uiscripts/top_open_whitelist_ui.js</string>
 				<string>uiscripts/safari_hooks.js</string>
+				<string>notificationoverlay.js</string>
 			</array>
 			<key>Start</key>
 			<array>
+				<string>punycode.min.js</string>
 				<string>port.js</string>
 				<string>functions.js</string>
 				<string>filtering/filteroptions.js</string>
 				<string>bandaids.js</string>
-				<string>picreplacement/picreplacement.js</string>
 				<string>adblock_start_common.js</string>
 				<string>adblock_start_safari.js</string>
 			</array>
 		</dict>
 	</dict>
 	<key>Description</key>
-	<string>Blocks ads on all websites.  Also available for Chrome (getadblock.com)</string>
+	<string>Blocks ads on all websites automatically!</string>
 	<key>DeveloperIdentifier</key>
-	<string>KU3C4BJ8BD</string>
+	<string>UAMUU4S2D9</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
@@ -87,6 +88,6 @@
 	<key>Update Manifest URL</key>
 	<string>https://data.getadblock.com/safari/update.plist</string>
 	<key>Website</key>
-	<string>http://safariadblock.com</string>
+	<string>https://getadblock.com</string>
 </dict>
 </plist>

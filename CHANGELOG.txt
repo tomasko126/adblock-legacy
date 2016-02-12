@@ -2,6 +2,235 @@
 
 UNRELEASED:
 
+2.49:
+- Updated Translations.
+- Removed old code that is no longer needed with migration to the new AdBlock help / support site (#684).
+- Fixed the AdBlock logo image on the "Show all requests" page (#678).
+- Added a check for the tab 'id' property in the AdBlock popup (#674).
+- Refactored the logic on the AdBlock Options page.  Also, for Safari users, added a message that Acceptable Ads and Content blocking are mutual exclusive (#682).
+
+2.48:
+- Updated Translations.
+- Updated the placehodler text in the "Show ads on web page or domain" example URL (#669).
+- Removed duplicate logic on the General tab of the AdBlock Options page (#671).
+- Migrated links to the new AdBlock help site (#632).
+- Updated the "Report an Ad" and "Bug Report" pages to use the new AdBlock help site (#632).
+
+2.47:
+- Updated Translations
+- Removed duplicate strings from the translation (message) files (#666).
+- Added a timestamp query string to the Malware URL to prevent caching by the browser (#668).
+- For Safari users, content blocking will not be enabled by default (#665).
+- Updated the Polish filter list URL (#651).
+- Updated the Acceptable Ads un-subscribe message on Options page, General tab (#657).
+- Updated the AdBlock image files (#654).
+
+2.46:
+ - Fixed a typo in the description of the AdBlock Warning Removal list, it should be a lowercased 'b' (#658).
+ - Added a new parameter to the ping data to indicate if the advance setting is enabled (#660).
+ - Fixed an issue with the blocking assistant on some sites (#644). 
+ - For Chrome users, modified the "/installed" logic to use the Chrome specific chrome.runtime.onInstalled API (#656).
+ - For Safari users, AdBlock will now use the WebKit content blocking feature on new installations. (#619).
+ - For Safari users, fix a bug with the "Undo my blocks on this domain" feature (#570).
+
+2.45:
+- Added a new, advanced feature to view all HTTP Requests for a tab (#653).
+
+2.44:
+ - Updated the URL of filter lists hosted on AdBlock's servers.  (#652)
+ - Updated translations.
+
+2.43:
+ - Removed Michael's message. (#645)
+ - Added logic to the 'Report an Ad' page to check if Acceptable Ads is enabled.  (#646).
+ - Added language specific filter lists for Arabic, Estonian, Icelandic and Lithuanian.  (#647)
+
+2.42.1:
+  - Modified the block image logic to not redirect any images, but rather cancel the request.  (#642)
+
+2.42:
+ - Modified the block image logic to not redirect certain images, but rather cancel the request.  (#638)
+ - Added logic to log a message when user clicks the disable acceptable ads link on the '/installed'. (#639)
+
+2.41.3:
+ - Added required property for Safari 9 to info.plist file. (#636)
+
+2.41.2:
+ - Updated the style attributes of the Acceptable Ads message to better fit the page / tab. (#635)
+ - Updated the ping data to send a 'u' when the Acceptable Ads is undefined. (#635)
+
+2.41.1:
+ - Added missing image file for Safari.
+
+2.41:
+ - Added Acceptable Ads filter list. (#627)
+
+2.40.1:
+ - Remove the timestamp query string from the Malware filter list URL
+
+2.40:
+ - Updated Translations
+ - Updated Malware filter list URL
+ - For Safari users, the 'Author' field was changed from Michael Gundlach to BetaFish, Inc
+
+2.39.1:
+ - Removed the cache parameter for AdBlock CDN AJAX requests. (#626)
+
+2.39:
+ - Updated the AdBlock custom filter list URL. (#623)
+ - Update translations, remove unused entries. (#624)
+
+2.38:
+ - Made a runtime performance improvement for users subscribed to the Malware filter list. (#597)
+ - Removed some temporary, cleanup code related to old filter lists. (#594)
+ - Added the total block count and the AdBlock custom filter list update timestamp to the un-install URL to help determine why users are un-installing after just a few minutes of use. (621)
+ - Added the ping count to the ping data. (#618)
+ - Removed the 'View the Resource' page. (#614)
+ - Added formatting lines for the debug informating for Tender support tickets. (#613)
+ - Removed a site specific 'bandaid' for 'thepiratebay'.  (#593)
+
+2.37.3:
+- Updated the Safari description and website information.
+
+2.37.2:
+- Reverted the change that replaced 'Help Spread the Word' link in the AdBlock popup with an Amazon affiliate link. (#612)
+
+2.37.1:
+- To help with debugging AdBlock, the length of the error string sent to the getadblock.com server has been increased. (#611)
+
+2.37:
+- Added an user enabled option to anonymously send filter list usage metrics to us to help improvement the functionality and performance of AdBlock.  (#610)
+- For new installation, users will be subscribed to the malware filter list. (#606)
+- For users that have a locale of 'en-us', the 'Help Spread the Word' link in the AdBlock popup has been replace with an Amazon affiliate link. (#604)
+- Updated the malware notification text. (#598)
+- Removed old log messages. (#589)
+- Fixed a bug - Unicode domains in filter lists are now correctly processed. (#588)
+- Changed the CSS rules from 'visibility: none' to 'visibility: hidden'. (#585)
+- Fixed an issue with the AdBlock white-list and black-list wizards not appearing on certain sites. (#582)
+
+2.36.2:
+- Removed debug logging messages for Safari users. (#591)
+
+2.36.1:
+- Added debug logging messages for Safari users. (#590)
+
+2.36:
+- Added an if check to verify that domain is not undefined when processing URLs. (#579)
+- Changed the order of evaluation in the Survey processing. (#576)
+- Update the JavaScript error processing to include the stack trace information if it doesn't include an HTTP URL. (#575)
+- Updated the white-list filters for showing ads on Google Search when the 'show Google ads' option is enabled. (#573)
+- Removed Disconnect search code from AdBlock. (#568)
+- Update the height of the Subscribe popup. (#491)
+
+
+2.35.2:
+- Removed debug logging messages for Safari users. (#578)
+- Updated translations.
+
+2.35.1:
+- Added debug logging messages for Safari users. (#577)
+
+2.35:
+- For Safari users, AdBlock will now block popups on Safari. (#547)
+- For Safari users, the deleting of cached resource data when a tab or window is closed has been simplified and improved.  (#546)
+- For Chrome users, AdBlock will ping upon browser startup when the installation type is 'admin'.  (#566)
+- For Chrome users, AdBlock will retry to open the 'getadblock.com/installed' page when it fails to open initially.  (#564)
+- Modified the translation of the DropBox error message to be easier for the translation team.  (#562)
+
+2.34:
+- On the 'Report an Ad' page, the support / forum URLs for three filter lists (Korean, Sweden, Turkish) were updated. (#560)
+- In Chrome, removed the normalizing of the type on URL requests for fonts since it is not needed.  (#553)
+- In Safari, improved the removal of pre-roll ads on YouTube.  (#552)
+- On the Custom tab, under AdBlock options, added the display of error messages when an invalid filter is found during a save of custom filters. (#545)
+- Added the ability to whitelist frames. (#521 & #518)
+- Improved the YouTube channel whitelist feature, so that a YouTube page is only reloaded when required.  (#504)
+- In Chrome, the 'number of ads blocked' counter is incremented when a popup is blocked. (#497)
+- In Chrome, on the 'Report an Ad' page, an option was added to enable and disable other extensions to help find the source of an ad.  Also, The debug information from the 'Report an Ad' page, and the Support tab, will include other extension information (if allowed by the user) to help us better resolve issues. (#462)
+
+
+2.33:
+- Removed the retry logic when the "/installed" page open on getadblock.com. (#551)
+
+2.32:
+- Fixed a bug in the retry logic when trying to open the "/installed" page on getadblock.com. (#548)
+- Added retry logic when the user is the "/question" page on getadblock.com. (#543)
+- Added the filter text to the JavaScript exception message when an invalid option is found in a filter. (#537)
+- Fixed the logic for creating a YouTube whitelist channel filter to avoid white-listing other channels. (#534)
+- Fixed an issue with the whitelist / blacklist wizards not being displayed correctly on certain sites. (#527)
+- Added support for Internationalized domains (IDN) throughout AdBlock. (#495)
+- Updated Translations
+
+2.31:
+- New language: Gujarati
+
+2.30:
+- Name change to back to "AdBlock"
+- Updated Translations
+
+2.29:
+- Name change to "BetaFish Adblocker" (temporary)
+
+2.28:
+- For Chrome, added installation type to the ping data. (#530)
+
+2.27:
+- For Chrome, added retry logic when the '/installed' page fails to open.  (#525)
+- For Chrome, added a message to include installation type, when AdBlock is installed.  (#526)
+
+2.26:
+- Added the extension Id to the data included with the JavaScript error message.  (#523)
+- For Chrome only, improved / fixed the logic that is checking if the '/installed' page is opened correctly. (#522)
+- For Chrome only, added the approximate installation duration to the uninstall URL. (#522)
+
+2.25:
+- Fixed an issue with the DropBox sync processing duplicating filters during browser start. (#442)
+- Added a message to the options page when the DropBox sync processing failed due to a large number of custom filters. (#474)
+- Updated Translations
+
+2.24:
+- Fixed JavaScript stack exception processing. (#515)
+- Modified the new install check logic to only send a message when first run is true. (#513)
+- Modified the survey acknowledgement processing to log the 'message' property of chrome.runtime.lastError (if it exists). (#516)
+
+2.23:
+- Added browser and os version information to ping data (#510)
+- Added validation logic to help detect an invalid installation state (#510)
+- Added acknowledgement processing from overlay surveys (#510)
+- Added 'stringify' to the AdBlock settings in the debug data (#512)
+- Added a style tag of 'display:none' to Beta div tag in the AdBlock pop up menu. (#508)
+
+2.22:
+- Enhanced survey processing (#453)
+
+2.21.1:
+- For Safari users, added a user confirmation prompt when subscribing to a new filter lists using the ABP syntax. (#502)
+
+2.21:
+- Removed the Norwegian filter list since it is no longer active. (#489)
+- For each subscribe filter list, added the last update timestamp to debug data. (#482)
+- Added the malware notification setting to debug data. (#458)
+- Added additional CSS to whitelist/blacklist dialogs to avoid display issues on some websites. (#460)
+- Removed an unnecessary call to sendResponse. (#484)
+- For Chrome users, added a user confirmation prompt when subscribing to a new filter lists using the ABP syntax. (#486)
+- Fixed an issue when the request URL didn't contain a '.' (#500)
+- Updated the Chrome web store description.(#501)
+
+2.20.1:
+- Updated Translations
+- In Chrome, added an uninstall URL (#493)
+
+2.19:
+- Updated Translations
+- In Safari, logic was added to dispatch an event when the extension blocked content (#478)
+- Fixed a small memory leak (#456)
+- Added the extension installation Date to ping data  (#448)
+- Fixed a JavaScript error in Chrome when updating badge text (#446)
+- Updated the workaround logic to Chrome's reporting fonts as "other" types (#439)
+
+2.18.1:
+- Updated Translations
+- Remove unnecessary code from ping processing.
+
 2.18:
 - Fixed an issue when syncing custom filters using DropBox. (#413)
 - Fixed an issue with the number of blocked ads on single page sites. (#414)

@@ -26,6 +26,12 @@
         "username": "uhoj999",
         "proofreader": false,
         "joined": "2013-08"
+      },
+      {
+        "credit": "2B-4G10",
+        "username": "2B-4G10",
+        "proofreader": false,
+        "joined": "2015-10"
       }
     ]
   },
@@ -66,7 +72,7 @@
       {
         "credit": "Viktor De Pasquale",
         "username": "neytireyqa",
-        "proofreader": false,
+        "proofreader": true,
         "joined": "2015-01"
       }
     ]
@@ -126,7 +132,7 @@
       {
         "credit": "Νίκος Αγγελής",
         "username": "Nikos_Aggelis",
-        "proofreader": false,
+        "proofreader": true,
         "joined": "2014-12"
       }
     ]
@@ -197,6 +203,18 @@
       }
     ]
   },
+  "gu":{
+    "language": "Gujarati",
+    "localized": "ગુજરાતી",
+    "translators":[
+      {
+        "credit": "Vatsal Shah (imvatsalshah)",
+        "username": "imvatsalshah",
+        "proofreader": false,
+        "joined": "2015-04"
+      }
+    ]
+  },
   "he":{
     "language": "Hebrew",
     "localized": "עברית",
@@ -242,6 +260,12 @@
         "username": "AllenWalkerHU",
         "proofreader": true,
         "joined": "2014-08"
+      },
+      {
+        "credit": "Moonline",
+        "username": "Moonline",
+        "proofreader": false,
+        "joined": "2014-06"
       }
     ]
   },
@@ -260,6 +284,12 @@
         "username": "azbez",
         "proofreader": false,
         "joined": "2014-07"
+      },
+      {
+        "credit": "M. Ridwan Hakim",
+        "username": "Remoirex",
+        "proofreader": true,
+        "joined": "2014-11"
       }
     ]
   },
@@ -302,6 +332,12 @@
         "username": "randplus",
         "proofreader": false,
         "joined": "2014-07"
+      },
+      {
+        "credit": "lindwurm",
+        "username": "lindwurm",
+        "proofreader": false,
+        "joined": "2015-06"
       }
     ]
   },
@@ -314,6 +350,12 @@
         "username": null,
         "proofreader": false,
         "joined": "2010-08"
+      },
+      {
+        "credit": "Hongjoo Lee",
+        "username": "mamadontgodaddycomehome",
+        "proofreader": false,
+        "joined": "2014-08"
       }
     ]
   },
@@ -348,7 +390,7 @@
       {
         "credit": "Erling Stangnes",
         "username": "erlingstangnes",
-        "proofreader": true,
+        "proofreader": false,
         "joined": "2013-08"
       }
     ]
@@ -374,6 +416,36 @@
         "username": null,
         "proofreader": false,
         "joined": "2012-10"
+      },
+      {
+        "credit": "skmedix",
+        "username": "skmedix",
+        "proofreader": false,
+        "joined": "2014-06"
+      },
+      {
+        "credit": "Piter432",
+        "username": "Piter432",
+        "proofreader": false,
+        "joined": "2014-07"
+      },
+      {
+        "credit": "damian1432",
+        "username": "damian1432",
+        "proofreader": false,
+        "joined": "2015-01"
+      },
+      {
+        "credit": "maciejka45",
+        "username": "maciejka45",
+        "proofreader": false,
+        "joined": "2015-02"
+      },
+      {
+        "credit": "zioxei",
+        "username": "zioxei",
+        "proofreader": false,
+        "joined": "2015-06"
       }
     ]
   },
@@ -402,8 +474,14 @@
       {
         "credit": "tsippert",
         "username": "tsippert",
-        "proofreader": false,
+        "proofreader": true,
         "joined": "2014-10"
+      },
+      {
+        "credit": "Ezequiel Reynaud",
+        "username": "ezreynaud",
+        "proofreader": false,
+        "joined": "2015-06"
       }
     ]
   },
@@ -440,6 +518,36 @@
         "username": "gamangabriel",
         "proofreader": false,
         "joined": "2014-07"
+      },
+      {
+        "credit": "Marina Bercea",
+        "username": "marinab",
+        "proofreader": false,
+        "joined": "2015-02"
+      },
+      {
+        "credit": "Silviu Iacob",
+        "username": "Sylvester08",
+        "proofreader": false,
+        "joined": "2015-07"
+      },
+      {
+        "credit": "pompierul31",
+        "username": "pompierul31",
+        "proofreader": false,
+        "joined": "2015-08"
+      },
+      {
+        "credit": "Diana Zlotea",
+        "username": "zloteadiana",
+        "proofreader": false,
+        "joined": "2015-09"
+      },
+      {
+        "credit": "gotaioan16",
+        "username": "gotaioan16",
+        "proofreader": false,
+        "joined": "2015-10"
       }
     ]
   },
@@ -500,6 +608,12 @@
         "username": "stefanbajic1",
         "proofreader": true,
         "joined": "2013-05"
+      },
+      {
+        "credit": "Aleksa Marković",
+        "username": "topofkeks",
+        "proofreader": false,
+        "joined": "2015-06"
       }
     ]
   },
@@ -534,7 +648,7 @@
       {
         "credit": "Necip Ateş",
         "username": "NightWatch",
-        "proofreader": true,
+        "proofreader": false,
         "joined": "2012-06"
       }
     ]
@@ -548,6 +662,48 @@
         "username": "yurqua",
         "proofreader": false,
         "joined": "2011-06"
+      },
+      {
+        "credit": "Maksym Tymoshyk",
+        "username": "maximillian_",
+        "proofreader": false,
+        "joined": "2015-01"
+      },
+      {
+        "credit": "Тимур Роман",
+        "username": "TSpell",
+        "proofreader": false,
+        "joined": "2015-01"
+      },
+      {
+        "credit": "Євген Гіль",
+        "username": "IevgenGil",
+        "proofreader": false,
+        "joined": "2015-03"
+      },
+      {
+        "credit": "Александр Степанов",
+        "username": "tuitioner",
+        "proofreader": false,
+        "joined": "2015-06"
+      },
+      {
+        "credit": "Павло Тимошенко",
+        "username": "poru",
+        "proofreader": false,
+        "joined": "2015-06"
+      },
+      {
+        "credit": "cutepenguin",
+        "username": "cutepenguin",
+        "proofreader": false,
+        "joined": "2015-08"
+      },
+      {
+        "credit": "Александр Невидомский",
+        "username": "neviksasha",
+        "proofreader": true,
+        "joined": "2015-11"
       }
     ]
   },
@@ -614,6 +770,24 @@
         "username": null,
         "proofreader": false,
         "joined": "2010-10"
+      },
+      {
+        "credit": "Tong Tom",
+        "username": "hkcryinglion",
+        "proofreader": false,
+        "joined": "2014-06"
+      },
+      {
+        "credit": "PG",
+        "username": "smartPG",
+        "proofreader": false,
+        "joined": "2015-06"
+      },
+      {
+        "credit": "iF Chen",
+        "username": "ifchen0",
+        "proofreader": false,
+        "joined": "2015-07"
       }
     ]
   }
