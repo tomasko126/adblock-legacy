@@ -4,6 +4,8 @@ picreplacement_checker = {
     try {
       if (this.denying_existence())
         return false;
+      if (/^https:/.test(url))
+        return false;        
       // Honor their choice. If there is none, default to "on" on day 1 only.
       var stored_settings = storage_get("settings") || {};
       var choice = stored_settings.do_picreplacement;
