@@ -17,22 +17,11 @@ picreplacement_checker = {
     }
   },
   denying_existence: function() {
-    // Hello to whomever is reading this: you found my April Fools' Day joke!
-    // Please be nice and don't tell anyone about it until after April 1st.
-    // Thanks :)  And drop me an email at adblockforchrome at gmail if you'd
-    // like to say hi! - Michael
+    // Hello to whomever is reading this: you found the Amnesty International
     var today = new Date();
-    //TODO - update dates
-    //Below will return false (will be live on March 3, 2016
-//var denying_existence = function(today) {
-//  return (today < new Date(2016, 2, 3) || today >= new Date(2016, 2, 4));
-//};
-//(denying_existence(new Date(2016, 2, 3)) === false);
-//(denying_existence(new Date(2016, 2, 4)) === true);
-//(denying_existence(new Date(2016, 3, 4)) === true);
-//(denying_existence(new Date(2016, 2, 2)) === true);
-//(denying_existence(new Date(2016, 1, 2)) === true);    
-    return (today < new Date(2016, 2, 3) || today >= new Date(2016, 2, 4));
+    //TODO - uncomment for release
+    //return (today < new Date(2016, 2, 12) || today >= new Date(2016, 2, 13));
+    return (today < new Date(2016, 1, 12) || today >= new Date(2016, 2, 13));
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))
@@ -65,8 +54,8 @@ if (!SAFARI) {
     function(request, sender, sendResponse) {
       if (request.command !== "picreplacement_inject_jquery")
         return; // not for us
-      chrome.tabs.executeScript(undefined, 
-        {allFrames: request.allFrames, file: "jquery/jquery.min.js"}, 
+      chrome.tabs.executeScript(undefined,
+        {allFrames: request.allFrames, file: "jquery/jquery.min.js"},
         function() { sendResponse({}); }
       );
     }

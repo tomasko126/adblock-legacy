@@ -883,7 +883,7 @@
 //          disabled: "img/icon19-grayscale.png",
 //          whitelisted: "img/icon19-whitelisted.png"
 //        };
-//        icons = picreplacement_checker.get_icons(icons, info.tab.url);        
+//        icons = picreplacement_checker.get_icons(icons, info.tab.url);
         chrome.browserAction.setBadgeText({text: "", tabId: tabId});
         if (adblock_is_paused()) {
           chrome.browserAction.setIcon({path:{'19': "img/icon19-grayscale.png", '38': "img/icon38-grayscale.png"}, tabId: tabId});
@@ -1586,12 +1586,3 @@
   }
 
   log("\n===FINISHED LOADING===\n\n");
-catShownCount = 0;
-var incrementCatsShownCount = function(url) {
-  if (url) {
-    console.log("cat shown on ", url);
-  }
-  catShownCount = catShownCount + 1;
-}
-
-console.log("done");

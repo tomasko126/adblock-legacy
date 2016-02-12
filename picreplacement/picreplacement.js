@@ -2,11 +2,9 @@ var picreplacement = {
 
 // data: {el, elType, blocked}
 augmentIfAppropriate: function(data) {
-
   if (this._inHiddenSection(data.el)) {
     this._replaceHiddenSectionContaining(data.el);
-  }
-  else {
+  } else {
     var okTypes = (ElementTypes.image | ElementTypes.subdocument | ElementTypes["object"]);
     var replaceable = (data.el.nodeName !== "FRAME" && (data.elType & okTypes));
     if (data.blocked && replaceable) {
@@ -74,7 +72,7 @@ _fit: function (pic, target) {
   var crop_left = p.left * (crop_x / crop_max);
 
   // Step 3: Calculate how much we must scale up or down the original picture.
-  
+
   var scale = t.x / (p.x - crop_x);
 
   // Scale the original picture and crop amounts in order to determine the width
@@ -101,7 +99,7 @@ _fit: function (pic, target) {
 
 // Rotate a picture/target about its NW<->SE axis.
 _rotate: function(o) {
-  var pairs = [ ["x", "y"], ["top", "left"], ["bot", "right"], 
+  var pairs = [ ["x", "y"], ["top", "left"], ["bot", "right"],
                 ["offsettop", "offsetleft"], ["width", "height"] ];
   pairs.forEach(function(pair) {
     var a = pair[0], b = pair[1], tmp;
@@ -157,7 +155,7 @@ _targetSize: function(el) {
 // Returns placement details to replace |el|, or null
 // if we do not have enough info to replace |el|.
 _placementFor: function(el) {
-    
+
   var t = this._targetSize(el);
   var pics = this._picdata[t.type];
   var pic = pics[Math.floor(Math.random() * pics.length)];
@@ -176,13 +174,13 @@ _placementFor: function(el) {
     t.x = (parentX ? Math.min(newX, parentX) : newX);
   }
   if (!t.x || !t.y || t.x < 40 || t.y < 40) {
-    return null; // unknown dims or too small to bother
+    return null; // zero or unknown dims or too small to bother
   }
 
   var result = this._fit(pic, t);
-  result.url = chrome.extension.getURL("picreplacement/img/" + pic.filename);
-  //result.url = "https://ping.getadblock.com/qa-stats/cats/" + pic.filename;
-  BGcall("incrementCatsShownCount", location.href)
+  //TODO - update URL
+  result.url = "https://ping.getadblock.com/qa-stats/img/" + pic.filename;
+  result.info_url = pic.info_url;
   return result;
 },
 
@@ -192,11 +190,9 @@ _placementFor: function(el) {
 _replace: function(el) {
   var placement = this._placementFor(el);
   if (!placement) {
-    console.log("return 1");
     return null; // don't know how to replace |el|
   }
   if (document.getElementsByClassName("picreplacement-image").length > 0) {
-    console.log("return 2");
     return null; //we only want to show 1 ad per page
   }
   var newPic = document.createElement("img");
@@ -212,7 +208,7 @@ _replace: function(el) {
     // nytimes.com float:right ad at top is on the left without this
     "float": (window.getComputedStyle(el)["float"] || undefined)
   };
-  console.log("css", css);
+
   for (var k in css) {
     newPic.style[k] = css[k];
   }
@@ -237,7 +233,6 @@ _replace: function(el) {
   // No need to hide the replaced element -- regular AdBlock will do that.
   el.dataset.picreplacementreplaced = "true";
   el.parentNode.insertBefore(newPic, el);
-  console.log("returning newPic", newPic);
   return newPic;
 },
 
@@ -254,9 +249,9 @@ _addInfoCardTo: function(newPic, placement) {
     if (newPic.infoCard)
       return; // already created card
     function after_jquery_is_available() {
-      var cardsize = { 
-        width: Math.max(placement.width, 180), 
-        height: Math.max(placement.height, 100) 
+      var cardsize = {
+        width: Math.max(placement.width, 180),
+        height: Math.max(placement.height, 100)
       };
       function position_card(card) {
         var pos = $(newPic).offset();
@@ -268,7 +263,7 @@ _addInfoCardTo: function(newPic, placement) {
 
       newPic.infoCard = $("<div>", {
         "class": "picreplacement-infocard",
-        css: { 
+        css: {
           "position": "absolute",
           "min-width": cardsize.width,
           "min-height": cardsize.height,
@@ -288,7 +283,7 @@ _addInfoCardTo: function(newPic, placement) {
             // independent.co.uk borders all imgs
             border: "none",
           },
-          src: chrome.extension.getURL("img/icon24.png") 
+          src: chrome.extension.getURL("img/icon24.png")
         })).
         append("<br>");
 
@@ -302,8 +297,8 @@ _addInfoCardTo: function(newPic, placement) {
       var translate = picreplacement.translate;
       wrapper.
         append(translate("explanation") + " ").
-        append($("<a>", { 
-            href: translate("the_url"),
+        append($("<a>", {
+            href: placement.info_url,
             target: "_blank",
             text: translate("learn_more")
           })).
@@ -334,7 +329,7 @@ _addInfoCardTo: function(newPic, placement) {
       });
       // Known bug: mouseleave is not called if you mouse over only 1 pixel
       // of newPic, then leave.  So infoCard is not removed.
-      newPic.infoCard.mouseleave(function() { 
+      newPic.infoCard.mouseleave(function() {
         $(".picreplacement-infocard:visible").hide();
       });
 
@@ -351,7 +346,7 @@ _addInfoCardTo: function(newPic, placement) {
     }
     else {
       chrome.extension.sendRequest(
-        { command:"picreplacement_inject_jquery", allFrames: (window !== window.top) }, 
+        { command:"picreplacement_inject_jquery", allFrames: (window !== window.top) },
         after_jquery_is_available
       );
     }
@@ -437,10 +432,6 @@ translate: function(key) {
       ru: "Подробнее",
       nl: "Meer informatie",
       zh: "了解更多信息",
-    },
-    "the_url": {
-      // don't translate into other locales
-      en: "https://chromeadblock.com/catblock/"
     }
   };
   var locale = navigator.language.substring(0, 2);
@@ -448,79 +439,60 @@ translate: function(key) {
   return msg[locale] || msg["en"];
 },
 
-_picdata: { 
+_picdata: {
   "big": [
-    { filename: "5.jpg", 
-      x: 270, y: 256, left: 20, right: 5, top: 27, bot: 0 },
-    { filename: "6.jpg", 
-      x: 350, y: 263, left: 153, right: 54, top: 45, bot: 87 },
-    { filename: "big1.jpg", 
-      x: 228, y: 249, left: 96, right: 52, top: 68, bot: 67 },
-    { filename: "big2.jpg", 
-      x: 236, y: 399, left: 41, right: 0, top: 0, bot: 50 },
-    { filename: "big3.jpg", 
-      x: 340, y: 375, left: 0, right: 52, top: 42, bot: 10 },
-    { filename: "big4.jpg", 
-      x: 170, y: 240, left: 28, right: 87, top: 20, bot: 4 },
-    { filename: "1.jpg", 
-      x: 384, y: 288, left: 52, right: 121, top: 73, bot: 36 },
+    { filename: "banner_336x280.gif",
+      info_url: "https://getadblock.com/",
+      x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_300x250.gif",
+      info_url: "https://getadblock.com/",
+      x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_250x250.gif",
+      info_url: "https://getadblock.com/",
+      x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_120x240.gif",
+      info_url: "https://getadblock.com/",
+      x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_234x60.gif",
+      info_url: "https://getadblock.com/",
+      x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_180x150.gif",
+      info_url: "https://getadblock.com/",
+      x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_125x125.gif",
+      info_url: "https://getadblock.com/",
+      x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_120x90.gif",
+      info_url: "https://getadblock.com/",
+      x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_120x60.gif",
+      info_url: "https://getadblock.com/",
+      x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
   ],
   "small": [
-    { filename: "7.jpg", 
-      x: 132, y: 91, left: 33, right: 26, top: 0, bot: 0 },
-    { filename: "9.jpg", 
-      x: 121, y: 102, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "small1.jpg", 
-      x: 115, y: 125, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "small2.jpg", 
-      x: 126, y: 131, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "small3.jpg", 
-      x: 105, y: 98, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "small4.jpg", 
-      x: 135, y: 126, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "small5.jpg", 
-      x: 133, y: 108, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "small6.jpg", 
-      x: 120, y: 99, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "small7.jpg", 
-      x: 124, y: 96, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "small8.jpg", 
-      x: 119, y: 114, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_88x31.gif",
+      info_url: "https://getadblock.com/",
+      x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
   ],
   "wide": [
-    { filename: "wide1.jpg",
-      x: 382, y: 137, left: 0, right: 0, top: 9, bot: 5 },
-    { filename: "wide2.jpg", 
-      x: 470, y: 102, left:0, right: 0, top: 0, bot: 0 },
-    { filename: "wide3.jpg", 
-      x: 251, y: 90, left:0, right: 0, top: 0, bot: 0 },
-    { filename: "wide4.jpg", 
-      x: 469, y: 162, left:0, right: 0, top: 22, bot: 12 },
-    { filename: "big3.jpg",  // big
-      x: 340, y: 375, left: 0, right: 0, top: 66, bot: 226 },
-    { filename: "1.jpg",  // big
-      x: 384, y: 288, left: 0, right: 0, top: 116, bot: 117 },
-    { filename: "6.jpg",  // big
-      x: 350, y: 263, left: 0, right: 0, top: 73, bot: 100 },
+    { filename: "banner_468x60.gif",
+      info_url: "https://getadblock.com/",
+      x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_728x90.gif",
+      info_url: "https://getadblock.com/",
+      x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
   ],
   "tall": [
-    { filename: "8.jpg", 
-      x: 240, y: 480, left: 69, right: 51, top: 0, bot: 0 },
-    { filename: "tall3.jpg", 
-      x: 103, y: 272, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "tall4.jpg", 
-      x: 139, y: 401, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "tall5.jpg",
-      x: 129, y: 320, left: 5, right: 28, top: 0, bot: 0 },
-    { filename: "tall6.jpg", 
-      x: 109, y: 385, left: 9, right: 7, top: 0, bot: 0 },
-    { filename: "5.jpg",  // big
-      x: 270, y: 256, left: 180, right: 45, top: 0, bot: 0 },
-    { filename: "big1.jpg",  // big
-      x: 228, y: 249, left: 96, right: 52, top: 0, bot: 0 },
-    { filename: "big3.jpg",  // big
-      x: 340, y: 375, left: 159, right: 60, top: 0, bot: 0 },
-  ],
+    { filename: "banner_160x600.gif",
+      info_url: "https://getadblock.com/",
+      x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_120x600.gif",
+      info_url: "https://getadblock.com/",
+      x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+    { filename: "banner_240x400.gif",
+      info_url: "https://getadblock.com/",
+      x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+  ]
 }
 
 }; // end picreplacement
