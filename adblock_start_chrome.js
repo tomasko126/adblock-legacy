@@ -27,7 +27,7 @@ var elementPurger = {
         var selector = tag + '[' + attr + src.op + '"' + src.text + '"]';
 
         var results = document.querySelectorAll(selector);
-        console.log("[DEBUG]", "  ", results.length, "results for selector:", selector);
+        log("[DEBUG]", "  ", results.length, "results for selector:", selector);
         if (results.length) {
           for (var j=0; j < results.length; j++) {
             if (request.picreplacement_enabled) {
