@@ -724,7 +724,7 @@
     "description":"Multiple choice option"
   },
   "orchrome":{
-    "message":"или Chrome",
+    "message":" или Chrome",
     "description":"Used for placeholder in checkinfirefoxtitle and checkinfirefox_1 strings"
   },
   "oradblockforchrome":{
@@ -752,7 +752,7 @@
     }
   },
   "checkinfirefoxtitle":{
-    "message":"Проверете с Firefox $chrome$",
+    "message":"Проверете с Firefox$chrome$",
     "description":"Tell a user to see if a reported ad also appears in Firefox\/Chrome",
     "placeholders":{
       "chrome":{
@@ -762,7 +762,7 @@
     }
   },
   "checkinfirefox_1":{
-    "message":"Инсталирайте Firefox $chrome$, ако го нямате.",
+    "message":"Инсталирайте Firefox$chrome$, ако го нямате.",
     "description":"instruction for how to check Firefox\/Chrome for a reported ad",
     "placeholders":{
       "chrome":{
@@ -772,7 +772,7 @@
     }
   },
   "checkinfirefox_2":{
-    "message":"Инсталирайте Adblock Plus за Firefox $chrome$, ако го нямате.",
+    "message":"Инсталирайте Adblock Plus за Firefox$chrome$, ако го нямате.",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad. Don't translate the name 'Adblock Plus'.",
     "placeholders":{
       "chrome":{

@@ -1113,6 +1113,10 @@
     "message":"Що це таке?",
     "description":"Text of a link pointing to the explanation of a new feature"
   },
+  "how":{
+    "message":"Як?",
+    "description":"Text of a link pointing to instructions on how to do something"
+  },
   "selectlanguage":{
     "message":" -- Оберіть якою -- ",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
@@ -1325,12 +1329,44 @@
     "message":"Ви можете знову увімкнути це і підтримати улюблені веб-сайти, просто оберіть \"Дозволити деяку ненав’язливу рекламу\" нижче.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
+  "adreport_name":{
+    "message":"Як Вас звуть?",
+    "description":"Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email":{
+    "message":"Адреса Вашої електронної пошти?",
+    "description":"Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
   "adreport_email_privacy":{
     "message":"Ми будемо використовувати його тільки для зв'язку з Вами, якщо нам потрібно буде більше інформації.",
     "description":"Let the user know that their email address won't be used for reasons other than contacting them about their bug or ad report."
   },
+  "adreport_location":{
+    "message":"Де саме на цій сторінці з'являється реклама? Як це виглядає?",
+    "description":"Question on the ad report page asking the user to describe the ad and its location on a webpage."
+  },
   "buttonsubmit":{
     "message":"Надіслати",
     "description":"Button to send a form."
+  },
+  "adreport_missing_info":{
+    "message":"Обов'язкова інформація відсутня або неприпустима.  Будь ласка, дайте відповідь на запитання в червоних рамках.",
+    "description":"Error message shown when the user doesn't enter anything in some of the text fields."
+  },
+  "adreport_response_invalid_file":{
+    "message":"Цей файл не є зображенням. Будь ласка, завантажте файл .png, .gif, або .jpg.",
+    "description":"Error message shown when the user uploads an invalid file type."
+  },
+  "adreport_response_save_error":{
+    "message":"Помилка під час збереження завантаженого файлу.",
+    "description":"Error message shown when the server could not save an attached file."
+  },
+  "adreport_response_file_name":{
+    "message":"Це ім'я файлу занадто довге. Будь ласка, дайте Вашому файлу більш коротке ім'я.",
+    "description":"Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
+  },
+  "adreport_server_response_error__manual_msg_step1":{
+    "message":"Будь ласка, перейдіть на <a>наш сайт підтримки<\/a>.",
+    "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
   }
 }

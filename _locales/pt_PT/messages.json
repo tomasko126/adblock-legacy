@@ -244,7 +244,7 @@
     "description":"Checkbox on the 'General' tab of the Options page. Allow AdBlock and the ClickToFlash Safari extension to work simultaneously on YouTube."
   },
   "safaricontentblocking":{
-    "message":"Ativar o Bloqueio de Conteúdo do Safari",
+    "message":"Ativar o Bloqueio de Conteúdos do Safari",
     "description":"Checkbox on the 'General' tab of the Options page. 'Content Blocking' is the name of a different way of blocking resources introduced in Safari 9."
   },
   "debuginlogoption":{
@@ -474,6 +474,10 @@
   "filtersavewarning":{
     "message":"Tenha cuidado: se cometer um erro aqui, muitos dos outros filtros, incluindo os oficiais, vão deixar de funcionar!<br\/>Leia o <a>tutorial da sintaxe de filtros<\/a> para aprender a adicionar avançadas listas negras e listas brancas manualmente.",
     "description":"Warning when blacklisting manually"
+  },
+  "contentblockingwarning":{
+    "message":"Nota: Colocar na lista branca (permitir anúncios) numa página ou num site não é compatível com o Bloqueio de Conteúdos do Safari ativado.",
+    "description":"Notice shown on the 'Customize' tab of the options page when Safari Content Blocking is enabled"
   },
   "savebutton":{
     "message":"Guardar",
@@ -956,7 +960,7 @@
     "description":"Menu entry to pause AdBlock"
   },
   "safaricontentblockingpausemessage":{
-    "message":"Para pausar o AdBlock com Bloqueio de Conteúdo ativado, por favor selecione Safari (na barra de menus) > Preferências > Extensões > AdBlock e desmarque a opção 'Ativar AdBlock'.",
+    "message":"Para pausar o AdBlock com Bloqueio de Conteúdos ativado, por favor selecione Safari (na barra de menus) > Preferências > Extensões > AdBlock e desmarque a opção 'Ativar AdBlock'.",
     "description":"Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled"
   },
   "browserestartrequired":{
@@ -964,7 +968,7 @@
     "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
   },
   "safarinotificationtitle":{
-    "message":"Limite da regra de Bloqueio de Conteúdo ultrapassado",
+    "message":"Limite da regra de Bloqueio de Conteúdos ultrapassado",
     "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules"
   },
   "safarinotificationbody":{

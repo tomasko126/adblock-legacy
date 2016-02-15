@@ -575,6 +575,10 @@
     "message":"Onemogućite sva proširenja osim AdBlock-a:",
     "description":"Instruction on ad report page"
   },
+  "disableforchromestepone":{
+    "message":"Otvori <a href='#'>stranicu proširenja<\/a>.",
+    "description":"Step 1 for disabling Chrome extensions"
+  },
   "clickdisableotherextensions":{
     "message":"<b>ILI<\/b>, samo kliknite ovaj gumb kako bi uradili sve ovo iznad: <a>Onemogući sva druga proširenja<\/a>",
     "description":"On the ad report page, an alternative way to disable other extensions"
@@ -1129,6 +1133,10 @@
     "message":"Što je ovo?",
     "description":"Text of a link pointing to the explanation of a new feature"
   },
+  "how":{
+    "message":"Kako?",
+    "description":"Text of a link pointing to instructions on how to do something"
+  },
   "selectlanguage":{
     "message":"-- Odaberite jezik --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
@@ -1234,6 +1242,10 @@
   "debuginfo":{
     "message":"Da li je naš tim zatražio informacije o grešci? Kliknite <a href='#' id='debug'>ovdje<\/a> za to!",
     "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Zašto nam ne pošaljete <a>izvještaj greške<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
   },
   "supportsite":{
     "message":"Recite nam na našoj <a>stranici podrške<\/a>!",
@@ -1347,8 +1359,80 @@
     "message":"Možete ovo omogućite i podržati stranice koje volite odabiranjem \"Dopusti neke nenametljive reklame\" ispod.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
+  "adreport_laststep":{
+    "message":"Zadnji korak: prijavite grešku nama.",
+    "description":"Heading on the ad report page. Shown when the ad needs to be reported to AdBlock, and not filter list maintainers."
+  },
+  "adreport_name":{
+    "message":"Kako se zovete?",
+    "description":"Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email":{
+    "message":"Vaša email adresa?",
+    "description":"Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
+  "adreport_email_privacy":{
+    "message":"Koristiti ćemo ovo samo ako budemo trebali još informacija.",
+    "description":"Let the user know that their email address won't be used for reasons other than contacting them about their bug or ad report."
+  },
+  "adreport_location":{
+    "message":"Gdje točno na stranici se nalazi reklama? Kako izgleda?",
+    "description":"Question on the ad report page asking the user to describe the ad and its location on a webpage."
+  },
+  "adreport_screen_cap_upload":{
+    "message":"Dodajte snimak ekrana:",
+    "description":"Label next to a file upload button."
+  },
+  "adreport_filter":{
+    "message":"Ako ste stvorili filter koji radi koristeći čarobnjaka \"Blokiraj oglas\", zalijepite ga u prostor ispod:",
+    "description":"Optional question on the ad report page when the ad needs to be reported to AdBlock."
+  },
   "buttonsubmit":{
     "message":"Pošalji",
     "description":"Button to send a form."
+  },
+  "adreport_missing_info":{
+    "message":"Tražene informacije nedostaju ili nisu valjane. Molimo ispunite pitanja koja su označena crveno.",
+    "description":"Error message shown when the user doesn't enter anything in some of the text fields."
+  },
+  "adreport_missing_screenshot":{
+    "message":"Zaboravili ste prikvačiti snimak zaslona! Ne možemo Vam pomoći ako ne vidimo o kakvom se oglasu radi.",
+    "description":"Error message shown when the user doesn't attach a screenshot to an ad report."
+  },
+  "adreport_response_success":{
+    "message":"Sve gotovo! Uskoro ćemo se opet čuti, već kroz jedan dan vjerojatno, dva ako je praznik. U međuvremenu, potražite email od AdBlock-a. Naći ćete poveznicu za vašu prijavnicu na našoj stranici za pomoć. Ako preferirate koristiti email, možete i tako nastaviti!",
+    "description":"Shown when a ticket has been sumbitted to AdBlock's support site successfully."
+  },
+  "adreport_response_invalid_file":{
+    "message":"To nije slikovna datoteka. Molimo pošaljite .png, .gif, ili .jpg datoteku.",
+    "description":"Error message shown when the user uploads an invalid file type."
+  },
+  "adreport_response_large_file":{
+    "message":"Ova datoteka je prevelika. Molimo provjerite veličinu, maksimalno je 10 MB.",
+    "description":"Error message shown when the user tries to upload a large image file."
+  },
+  "adreport_response_save_error":{
+    "message":"Greška pri spremanju poslane datoteke.",
+    "description":"Error message shown when the server could not save an attached file."
+  },
+  "adreport_response_file_name":{
+    "message":"Naziv datoteke je prevelik. Molimo skratite naziv datoteke.",
+    "description":"Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
+  },
+  "adreport_all_debug_info":{
+    "message":"Slijedeće informacije biti će također uključene u prijavu oglasa.",
+    "description":"Shows the user the debug information that will be sent along with their report."
+  },
+  "adreport_server_response_error_msg":{
+    "message":"Greška pri analiziranju vašeg zahtjeva.",
+    "description":"Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
+  },
+  "adreport_server_response_error__manual_msg_step1":{
+    "message":"Molimo idite na <a>našu stranicu za podršku<\/a>.",
+    "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
+  },
+  "adreport_server_response_error__manual_msg_step2":{
+    "message":"I ručno napravite prijavnicu, kopirajte i zalijepite informacije ispod u sekciju \"Fill in any details you think will help us understand your issue\".",
+    "description":"Error message shown when the server has an unrecoverable error during the submission of an ad or bug report."
   }
 }
