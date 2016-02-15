@@ -43,10 +43,6 @@
     "message":"Pour masquer ce bouton, faites un clic droit dessus et choisissez \"Personnaliser la barre d'outils\". Vous pouvez ensuite le faire glisser hors de la barre d'outils. Pour l'afficher à nouveau, glissez-le dans la barre d'outils.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
-  "ff_button_how_to_hide":{
-    "message":"Pour masquer ce bouton, faites un clic droit dessus et choisissez \"Retirer de la barre d'outils\". Pour l'afficher à nouveau, allez dans le menu Firefox -> Personnaliser.",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
-  },
   "sliderexplanation":{
     "message":"Faites glisser le curseur jusqu'à ce que la pub disparaisse, et que l'élément bloqué semble correct.",
     "description":"Blacklister slider page message"
@@ -793,30 +789,6 @@
     "message":"Est-ce que la publicité apparaît aussi dans cet autre navigateur ?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
-  "ff_checkinchrometitle":{
-    "message":"Vérifier dans Chrome",
-    "description":"Tell a user to see if a reported ad also appears in Chrome"
-  },
-  "ff_checkinchrome_1":{
-    "message":"Installez Chrome si vous ne l'avez pas.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_2":{
-    "message":"Installez AdBlock pour Chrome si vous ne l'avez pas.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_3":{
-    "message":"Dans Chrome, abonnez-vous aux mêmes listes de filtres que vous avez ici.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_4":{
-    "message":"Dans Chrome, ouvrez la page avec la publicité.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_5":{
-    "message":"Est-ce que la publicité apparaît aussi dans Chrome ?",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
   "refusetocheck":{
     "message":"Je ne veux pas vérifier cela",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -830,10 +802,6 @@
         "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
       }
     }
-  },
-  "reporttous2":{
-    "message":"Si vous parlez anglais, vous pouvez nous rapporter cette publicité dans le <a>suivi de problèmes<\/a>.",
-    "description":"NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us <a>in the issue tracker<\/a>.'"
   },
   "fixityourself":{
     "message":"D'accord, vous pouvez tout de même bloquer cette publicité pour vous-même dans les options.",
@@ -931,10 +899,6 @@
     "message":"Désolé, AdBlock est désactivé sur cette page par un ou plusieurs de vos filtres.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
   },
-  "status_disabled":{
-    "message":"AdBlock ne peut pas fonctionner sur ce domaine.",
-    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank"
-  },
   "dont_run_on_pages_on_domain":{
     "message":"Ne rien bloquer sur les pages de ce domaine",
     "description":"Menu entry to open the whitelist wizard"
@@ -968,7 +932,7 @@
     "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled"
   },
   "browserestartrequired":{
-    "message":"Désactiver cette option nécessite de relancer votre navigateur.",
+    "message":"Merci de relancer Safari pour terminer la désactivation du Blocage de Contenu.",
     "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
   },
   "safarinotificationtitle":{
@@ -1187,10 +1151,6 @@
       }
     }
   },
-  "ff_adblock_outdated":{
-    "message":"Vous utilisez une version obsolète d'AdBlock. Cliquez sur le menu Firefox et sélectionnez Modules. Ensuite, sur la page des modules, cliquez sur l'icône d'engrenage (Outils pour tous les modules) et choisissez \"Rechercher des mises à jour\".",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
-  },
   "adblocksupport":{
     "message":"Support AdBlock",
     "description":"Title of the support tab"
@@ -1358,6 +1318,14 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"Vous pouvez vous y réabonner et soutenir les sites que vous aimez en sélectionnant \"Autoriser certaines publicités non-intrusives\" ci-dessous.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"Vous avez été désabonné de la liste de filtres Publicités Acceptables parce que vous avez activé le Blocage de Contenu Safari. Vous ne pouvez pas activer les deux à la fois. (<a>Pourquoi ?<\/a>)",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"Le Blocage de Contenu Safari a été désactivé car vous avez choisi d'autoriser les publicités non-intrusives. Vous ne pouvez pas activer les deux à la fois. (<a>Pourquoi ?<\/a>)",
+    "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
   },
   "adreport_laststep":{
     "message":"Dernière étape : signalez-nous le problème.",
