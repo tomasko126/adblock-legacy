@@ -2,7 +2,7 @@ var picreplacement = {
 
 // data: {el, elType, blocked}
 augmentIfAppropriate: function(data) {
-  
+
   if (this._inHiddenSection(data.el)) {
     this._replaceHiddenSectionContaining(data.el);
   } else {
