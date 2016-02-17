@@ -212,6 +212,13 @@ function adblock_begin(inputs) {
       if (typeof run_bandaids === "function") {
         run_bandaids("new");
       }
+      if (data && data.settings && data.settings.do_picreplacement) {
+        var googleAds = document.getElementsByClassName("adsbygoogle");
+        if (googleAds &&
+            googleAds.length > 0) {
+          picreplacement.augmentIfAppropriate({el: googleAds[0], elType: ElementTypes.image, blocked: true});
+        }
+      }
 
       handleABPLinkClicks();
     });
