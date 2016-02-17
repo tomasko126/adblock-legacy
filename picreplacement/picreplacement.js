@@ -2,6 +2,7 @@ var picreplacement = {
 
 // data: {el, elType, blocked}
 augmentIfAppropriate: function(data) {
+  
   if (this._inHiddenSection(data.el)) {
     this._replaceHiddenSectionContaining(data.el);
   } else {
@@ -192,8 +193,8 @@ _replace: function(el) {
   if (!placement) {
     return null; // don't know how to replace |el|
   }
-  if (document.getElementsByClassName("picreplacement-image").length > 0) {
-    return null; //we only want to show 1 ad per page
+  if (document.getElementsByClassName("picreplacement-image").length > 1) {
+    return null; //we only want to show 2 ad per page
   }
   var newPic = document.createElement("img");
   newPic.classList.add("picreplacement-image");
