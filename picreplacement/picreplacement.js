@@ -258,7 +258,12 @@ _addInfoCardTo: function(newPic, placement) {
         var pos = $(newPic).offset();
         pos.top += (placement.height - cardsize.height) / 2;
         pos.left += (placement.width - cardsize.width) / 2;
-        if (pos.top < 0) pos.top = 0; if (pos.left < 0) pos.left = 0;
+        if (pos.top < 0) {
+           pos.top = 0; 
+        }
+        if (pos.left < 0) {
+           pos.left = 0;
+        }
         card.css(pos);
       };
 
@@ -269,12 +274,12 @@ _addInfoCardTo: function(newPic, placement) {
           "min-width": cardsize.width,
           "min-height": cardsize.height,
           "z-index": 1000000,
-          "padding": 3,
+          "padding": 0,
           "box-sizing": "border-box",
-          "border": "2px solid rgb(128, 128, 128)",
+          "border": "1px solid yellow",
           "font": "normal small Arial, sans-serif",
-          "color": "black",
-          "background-color": "rgba(188, 188, 188, 0.7)",
+          "color": "yellow",
+          "background-color": "grey",
         } });
       newPic.infoCard.appendTo("body");
       newPic.infoCard.
@@ -285,27 +290,45 @@ _addInfoCardTo: function(newPic, placement) {
             border: "none",
           },
           src: chrome.extension.getURL("img/icon24.png")
-        })).
-        append("<br>");
-
+        }));
       var wrapper = $("<div>", {
         css: {
-          "max-width": 180,
           "margin": "0 auto",
-          "text-align": "center"
+          "text-align": "center",
+          "border": "1px solid yellow",
+          "width": "100%",
+          "height": "100%"
         }
       });
       var translate = picreplacement.translate;
       wrapper.
-        append(translate("explanation") + " ").
+        append($("<div>", {
+          css: {
+            "text-align": "center",
+            "background-color": "yellow",
+            "color": "black",
+            "vertical-align": "top"
+          },
+          text: translate("title")
+        })). 
+        append($("<div>", {
+          css: {
+            "text-align": "center",
+          },
+          text: translate("explanation") + " "
+        })).              
         append($("<a>", {
             href: placement.info_url,
             target: "_blank",
             text: translate("learn_more")
           })).
-        append("<br>").
         append("<br>");
-      $("<input type='button' disabled>").
+      $("<div>", {
+         css: {
+          "min-height": "1%"
+        }       
+      }).appendTo(wrapper);              
+      $("<div>").
         val(translate("stop_showing")).
         css("opacity", ".4").
         click(function() {
@@ -315,8 +338,34 @@ _addInfoCardTo: function(newPic, placement) {
           });
         }).
         appendTo(wrapper);
+      $("<input type='button' disabled>").
+        val(translate("stop_showing")).
+        css("opacity", ".4").
+        click(function() {
+          BGcall("set_setting", "do_picreplacement", false, function() {
+            $(".picreplacement-image, .picreplacement-infocard").remove();
+            alert(translate("ok_no_more"));
+          });
+        }).
+        appendTo(wrapper); 
+      $("<br>").appendTo(wrapper);
+      $("<div>", {
+         css: {
+          "min-height": "1%"
+        }       
+      }).appendTo(wrapper);     
+      $("<a>", {
+          css: {
+            "text-align": "center",
+            "bottom":"0"
+          },        
+          href: "http://getadblock.com/why",
+          target: "_blank",
+          text: translate("why")
+        }).
+        appendTo(wrapper);               
       wrapper.appendTo(newPic.infoCard);
-      wrapper.css("margin-top", (newPic.infoCard.height() - wrapper.height()) / 2);
+      //wrapper.css("margin-top", (newPic.infoCard.height() - wrapper.height()) / 2);
 
       // Now that all the elements are on the card so it knows its height...
       position_card(newPic.infoCard);
@@ -389,8 +438,17 @@ translate: function(key) {
       nl: "AdBlock toont je nu katten in plaats van advertenties!",
       zh: "现在显示的AdBlock猫，而不是广告！",
     },
+    "title": {
+      en: "Today is World Day Against Cyber Censorship!",
+      es: "AdBlock ahora muestra los gatos en lugar de anuncios!",
+      fr: "Dorénavant AdBlock affichera des chats à la place des publicités!",
+      de: "AdBlock ersetzt ab heute Werbung durch Katzen!",
+      ru: "AdBlock теперь отображается кошек вместо рекламы!",
+      nl: "AdBlock toont je nu katten in plaats van advertenties!",
+      zh: "现在显示的AdBlock猫，而不是广告！",
+    },    
     "stop_showing": {
-      en: "Stop showing these ads!",
+      en: "Stop showing me these banners!",
       es: "No mostrar los gatos!",
       fr: "Arrêter l'affichage des chats!",
       de: "Keine Katzen mehr anzeigen!",
@@ -398,6 +456,15 @@ translate: function(key) {
       nl: "Toon geen katten meer!",
       zh: "不显示猫图片！",
     },
+    "why": {
+      en: "WHY DID ADBLOCK ALLOW THIS \"AD\" TODAY?",
+      es: "No mostrar los gatos!",
+      fr: "Arrêter l'affichage des chats!",
+      de: "Keine Katzen mehr anzeigen!",
+      ru: "Не показывать кошек!",
+      nl: "Toon geen katten meer!",
+      zh: "不显示猫图片！",
+    },    
     "ok_no_more": {
       en: "OK, AdBlock will not show you any more AdBlock Apple Watch ads.\n\nHappy April Fools' Day!",
       es: "OK, AdBlock no te mostrará los gatos.\n\nFeliz Día de los Inocentes!",
@@ -426,7 +493,7 @@ translate: function(key) {
       zh: "显示漂亮的照片，而不是广告。",
     },
     "learn_more": {
-      en: "Learn more",
+      en: "Read it on Amnesty.org >",
       es: "Más información",
       fr: "En savoir plus",
       de: "Mehr Informationen",
