@@ -22,7 +22,8 @@ $(function() {
   }
   init_picreplacement();
   // Labels fall off on tab change for some reason: redo them.
-  $("#tabpages").bind("tabsshow", init_picreplacement);
+  $( "#tabpages" ).on( "tabsactivate", init_picreplacement);
+
   // Don't use standard enable_ machinery: this is too complicated.
   BGcall("picreplacement_is_happening", function(enabled) {
     var cb = $("#picreplacement").find(":checkbox");
