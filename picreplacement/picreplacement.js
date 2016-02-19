@@ -160,18 +160,27 @@ _placementFor: function(el) {
   var t = this._targetSize(el);
   var selectedColorIndex = Math.floor(Math.random() * piccolors.length);
   var selectedColor = piccolors[selectedColorIndex];
-  console.log("selectedColor", selectedColor);
   if (document.getElementsByClassName("picreplacement-" + selectedColor).length > 0) {
     // if the color is found, just use the next one
     selectedColorIndex++;
     if (selectedColorIndex >= piccolors.length) {
-      selectedColorIndex = 0;  
+      selectedColorIndex = 0;
     }
     selectedColor = piccolors[selectedColorIndex];
-    console.log("re-selectedColor", selectedColor);
-  }  
+  }
   var pics = this._picdata[t.type][selectedColor];
   var pic = pics[Math.floor(Math.random() * pics.length)];
+  // loop through available pics to find a best match,
+  // otherwise we'll use a random one
+  if (t.x) {     
+    for (var i = 0; i < pics.length; i++) {
+      var candiatePic = pics[i];
+      if (candiatePic.x <= t.x) {
+        pic = candiatePic;  
+        break;
+      }
+    }
+  }
 
   // If we only have one dimension, we may choose to use the picture's ratio;
   // but don't go over 180k pixels (so e.g. 1000x__ doesn't insert a 1000x1000
@@ -274,7 +283,7 @@ _addInfoCardTo: function(newPic, placement) {
         pos.top += (placement.height - cardsize.height) / 2;
         pos.left += (placement.width - cardsize.width) / 2;
         if (pos.top < 0) {
-           pos.top = 0; 
+           pos.top = 0;
         }
         if (pos.left < 0) {
            pos.left = 0;
@@ -325,13 +334,13 @@ _addInfoCardTo: function(newPic, placement) {
             "vertical-align": "top"
           },
           text: translate("title")
-        })). 
+        })).
         append($("<div>", {
           css: {
             "text-align": "center",
           },
           text: translate("explanation") + " "
-        })).              
+        })).
         append($("<a>", {
             href: placement.info_url,
             target: "_blank",
@@ -341,8 +350,8 @@ _addInfoCardTo: function(newPic, placement) {
       $("<div>", {
          css: {
           "min-height": "1%"
-        }       
-      }).appendTo(wrapper);              
+        }
+      }).appendTo(wrapper);
       $("<div>").
         val(translate("stop_showing")).
         css("opacity", ".4").
@@ -362,23 +371,23 @@ _addInfoCardTo: function(newPic, placement) {
             alert(translate("ok_no_more"));
           });
         }).
-        appendTo(wrapper); 
+        appendTo(wrapper);
       $("<br>").appendTo(wrapper);
       $("<div>", {
          css: {
           "min-height": "1%"
-        }       
-      }).appendTo(wrapper);     
+        }
+      }).appendTo(wrapper);
       $("<a>", {
           css: {
             "text-align": "center",
             "bottom":"0"
-          },        
+          },
           href: "http://getadblock.com/why",
           target: "_blank",
           text: translate("why")
         }).
-        appendTo(wrapper);               
+        appendTo(wrapper);
       wrapper.appendTo(newPic.infoCard);
       //wrapper.css("margin-top", (newPic.infoCard.height() - wrapper.height()) / 2);
 
@@ -461,7 +470,7 @@ translate: function(key) {
       ru: "AdBlock теперь отображается кошек вместо рекламы!",
       nl: "AdBlock toont je nu katten in plaats van advertenties!",
       zh: "现在显示的AdBlock猫，而不是广告！",
-    },    
+    },
     "stop_showing": {
       en: "Stop showing me these banners!",
       es: "No mostrar los gatos!",
@@ -479,7 +488,7 @@ translate: function(key) {
       ru: "Не показывать кошек!",
       nl: "Toon geen katten meer!",
       zh: "不显示猫图片！",
-    },    
+    },
     "ok_no_more": {
       en: "OK, AdBlock will not show you any more AdBlock Apple Watch ads.\n\nHappy April Fools' Day!",
       es: "OK, AdBlock no te mostrará los gatos.\n\nFeliz Día de los Inocentes!",
@@ -524,7 +533,7 @@ translate: function(key) {
 
 _picdata: {
   "big": {
-    "red": [         
+    "red": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
@@ -553,7 +562,7 @@ _picdata: {
         info_url: "https://getadblock.com/",
         x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "green": [         
+    "green": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
@@ -582,7 +591,7 @@ _picdata: {
         info_url: "https://getadblock.com/",
         x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
    ],
-    "blue": [          
+    "blue": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
@@ -610,8 +619,8 @@ _picdata: {
       { filename: "b_12__6_",
         info_url: "https://getadblock.com/",
         x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-     ],  
-    "magenta": [        
+     ],
+    "magenta": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
@@ -639,8 +648,8 @@ _picdata: {
       { filename: "b_12__6_",
         info_url: "https://getadblock.com/",
         x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-    ], 
-    "orange": [         
+    ],
+    "orange": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
@@ -667,79 +676,79 @@ _picdata: {
         x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6_",
         info_url: "https://getadblock.com/",
-        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 }, 
-    ]                               
+        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    ]
   },
   "small": {
-    "red": [     
+    "red": [
       { filename: "b_88_31",
         info_url: "https://getadblock.com/",
         x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "green": [            
+    "green": [
       { filename: "b_88_31",
         info_url: "https://getadblock.com/",
         x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
    ],
-    "blue": [         
+    "blue": [
       { filename: "b_88_31",
         info_url: "https://getadblock.com/",
         x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
-     ],  
-    "magenta": [          
+     ],
+    "magenta": [
       { filename: "b_88_31",
         info_url: "https://getadblock.com/",
         x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
-     ], 
-    "orange": [        
+     ],
+    "orange": [
       { filename: "b_88_31",
         info_url: "https://getadblock.com/",
         x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
-     ]                        
+     ]
   },
   "wide": {
-    "red": [    
-      { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
-        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    "red": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_468_6_",
+        info_url: "https://getadblock.com/",
+        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "green": [          
-      { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
-        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    "green": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_468_6_",
+        info_url: "https://getadblock.com/",
+        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "blue": [      
-      { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
-        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    "blue": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-     ],  
-    "magenta": [       
       { filename: "b_468_6_",
         info_url: "https://getadblock.com/",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+     ],
+    "magenta": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-    ], 
-    "orange": [        
       { filename: "b_468_6_",
         info_url: "https://getadblock.com/",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    ],
+    "orange": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
-        x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 }, 
-    ]                   
+        x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_468_6_",
+        info_url: "https://getadblock.com/",
+        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    ]
   },
-  "tall": { 
+  "tall": {
     "red": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
@@ -772,7 +781,7 @@ _picdata: {
       { filename: "b_24__4__",
         info_url: "https://getadblock.com/",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-    ],  
+    ],
     "magenta": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
@@ -783,7 +792,7 @@ _picdata: {
       { filename: "b_24__4__",
         info_url: "https://getadblock.com/",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-    ], 
+    ],
     "orange": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
@@ -794,7 +803,7 @@ _picdata: {
       { filename: "b_24__4__",
         info_url: "https://getadblock.com/",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-    ] 
+    ]
   }
 }
 
