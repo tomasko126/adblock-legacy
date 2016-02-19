@@ -156,9 +156,21 @@ _targetSize: function(el) {
 // Returns placement details to replace |el|, or null
 // if we do not have enough info to replace |el|.
 _placementFor: function(el) {
-
+  var piccolors = [ "red", "green", "blue", "magenta", "orange" ];
   var t = this._targetSize(el);
-  var pics = this._picdata[t.type];
+  var selectedColorIndex = Math.floor(Math.random() * piccolors.length);
+  var selectedColor = piccolors[selectedColorIndex];
+  console.log("selectedColor", selectedColor);
+  if (document.getElementsByClassName("picreplacement-" + selectedColor).length > 0) {
+    // if the color is found, just use the next one
+    selectedColorIndex++;
+    if (selectedColorIndex >= piccolors.length) {
+      selectedColorIndex = 0;  
+    }
+    selectedColor = piccolors[selectedColorIndex];
+    console.log("re-selectedColor", selectedColor);
+  }  
+  var pics = this._picdata[t.type][selectedColor];
   var pic = pics[Math.floor(Math.random() * pics.length)];
 
   // If we only have one dimension, we may choose to use the picture's ratio;
@@ -180,8 +192,10 @@ _placementFor: function(el) {
 
   var result = this._fit(pic, t);
   //TODO - update URL
-  result.url = "https://ping.getadblock.com/qa-stats/img/" + pic.filename;
+  result.url = "https://ping.getadblock.com/qa-stats/img/" + pic.filename + selectedColor + ".gif";
+  console.log("url", result.url);
   result.info_url = pic.info_url;
+  result.color = selectedColor;
   return result;
 },
 
@@ -198,6 +212,7 @@ _replace: function(el) {
   }
   var newPic = document.createElement("img");
   newPic.classList.add("picreplacement-image");
+  newPic.classList.add("picreplacement-" + placement.color);
 
   var css = {
     width: placement.width + "px",
@@ -508,59 +523,279 @@ translate: function(key) {
 },
 
 _picdata: {
-  "big": [
-    { filename: "b_336_28_.gif",
-      info_url: "https://getadblock.com/",
-      x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_3___25_.gif",
-      info_url: "https://getadblock.com/",
-      x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_25__25_.gif",
-      info_url: "https://getadblock.com/",
-      x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_12__24_.gif",
-      info_url: "https://getadblock.com/",
-      x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_234_6_.gif",
-      info_url: "https://getadblock.com/",
-      x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_18__15_.gif",
-      info_url: "https://getadblock.com/",
-      x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_125_125.gif",
-      info_url: "https://getadblock.com/",
-      x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_12__9_.gif",
-      info_url: "https://getadblock.com/",
-      x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_12__6_.gif",
-      info_url: "https://getadblock.com/",
-      x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-  ],
-  "small": [
-    { filename: "b_88_31.gif",
-      info_url: "https://getadblock.com/",
-      x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
-  ],
-  "wide": [
-    { filename: "b_468_6_.gif",
-      info_url: "https://getadblock.com/",
-      x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_728_9_.gif",
-      info_url: "https://getadblock.com/",
-      x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-  ],
-  "tall": [
-    { filename: "b_16__6__.gif",
-      info_url: "https://getadblock.com/",
-      x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_12__6__.gif",
-      info_url: "https://getadblock.com/",
-      x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
-    { filename: "b_24__4__.gif",
-      info_url: "https://getadblock.com/",
-      x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-  ]
+  "big": {
+    "red": [         
+      { filename: "b_336_28_",
+        info_url: "https://getadblock.com/",
+        x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_3___25_",
+        info_url: "https://getadblock.com/",
+        x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_25__25_",
+        info_url: "https://getadblock.com/",
+        x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_18__15_",
+        info_url: "https://getadblock.com/",
+        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_125_125",
+        info_url: "https://getadblock.com/",
+        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__9_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    ],
+    "green": [         
+      { filename: "b_336_28_",
+        info_url: "https://getadblock.com/",
+        x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_3___25_",
+        info_url: "https://getadblock.com/",
+        x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_25__25_",
+        info_url: "https://getadblock.com/",
+        x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_18__15_",
+        info_url: "https://getadblock.com/",
+        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_125_125",
+        info_url: "https://getadblock.com/",
+        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__9_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+   ],
+    "blue": [          
+      { filename: "b_336_28_",
+        info_url: "https://getadblock.com/",
+        x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_3___25_",
+        info_url: "https://getadblock.com/",
+        x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_25__25_",
+        info_url: "https://getadblock.com/",
+        x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_18__15_",
+        info_url: "https://getadblock.com/",
+        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_125_125",
+        info_url: "https://getadblock.com/",
+        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__9_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+     ],  
+    "magenta": [        
+      { filename: "b_336_28_",
+        info_url: "https://getadblock.com/",
+        x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_3___25_",
+        info_url: "https://getadblock.com/",
+        x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_25__25_",
+        info_url: "https://getadblock.com/",
+        x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_18__15_",
+        info_url: "https://getadblock.com/",
+        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_125_125",
+        info_url: "https://getadblock.com/",
+        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__9_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+    ], 
+    "orange": [         
+      { filename: "b_336_28_",
+        info_url: "https://getadblock.com/",
+        x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_3___25_",
+        info_url: "https://getadblock.com/",
+        x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_25__25_",
+        info_url: "https://getadblock.com/",
+        x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_18__15_",
+        info_url: "https://getadblock.com/",
+        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_125_125",
+        info_url: "https://getadblock.com/",
+        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__9_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6_",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 }, 
+    ]                               
+  },
+  "small": {
+    "red": [     
+      { filename: "b_88_31",
+        info_url: "https://getadblock.com/",
+        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
+    ],
+    "green": [            
+      { filename: "b_88_31",
+        info_url: "https://getadblock.com/",
+        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
+   ],
+    "blue": [         
+      { filename: "b_88_31",
+        info_url: "https://getadblock.com/",
+        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
+     ],  
+    "magenta": [          
+      { filename: "b_88_31",
+        info_url: "https://getadblock.com/",
+        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
+     ], 
+    "orange": [        
+      { filename: "b_88_31",
+        info_url: "https://getadblock.com/",
+        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
+     ]                        
+  },
+  "wide": {
+    "red": [    
+      { filename: "b_468_6_",
+        info_url: "https://getadblock.com/",
+        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_728_9_",
+        info_url: "https://getadblock.com/",
+        x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+    ],
+    "green": [          
+      { filename: "b_468_6_",
+        info_url: "https://getadblock.com/",
+        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_728_9_",
+        info_url: "https://getadblock.com/",
+        x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+    ],
+    "blue": [      
+      { filename: "b_468_6_",
+        info_url: "https://getadblock.com/",
+        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_728_9_",
+        info_url: "https://getadblock.com/",
+        x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+     ],  
+    "magenta": [       
+      { filename: "b_468_6_",
+        info_url: "https://getadblock.com/",
+        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_728_9_",
+        info_url: "https://getadblock.com/",
+        x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
+    ], 
+    "orange": [        
+      { filename: "b_468_6_",
+        info_url: "https://getadblock.com/",
+        x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_728_9_",
+        info_url: "https://getadblock.com/",
+        x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 }, 
+    ]                   
+  },
+  "tall": { 
+    "red": [
+      { filename: "b_16__6__",
+        info_url: "https://getadblock.com/",
+        x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6__",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_24__4__",
+        info_url: "https://getadblock.com/",
+        x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+    ],
+    "green": [
+      { filename: "b_16__6__",
+        info_url: "https://getadblock.com/",
+        x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6__",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_24__4__",
+        info_url: "https://getadblock.com/",
+        x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+    ],
+    "blue": [
+      { filename: "b_16__6__",
+        info_url: "https://getadblock.com/",
+        x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6__",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_24__4__",
+        info_url: "https://getadblock.com/",
+        x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+    ],  
+    "magenta": [
+      { filename: "b_16__6__",
+        info_url: "https://getadblock.com/",
+        x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6__",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_24__4__",
+        info_url: "https://getadblock.com/",
+        x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+    ], 
+    "orange": [
+      { filename: "b_16__6__",
+        info_url: "https://getadblock.com/",
+        x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__6__",
+        info_url: "https://getadblock.com/",
+        x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_24__4__",
+        info_url: "https://getadblock.com/",
+        x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+    ] 
+  }
 }
 
 }; // end picreplacement
