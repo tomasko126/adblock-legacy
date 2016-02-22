@@ -9,8 +9,8 @@ picreplacement_checker = {
       // Honor their choice. If there is none, default to "on" on day 1 only.
       var stored_settings = storage_get("settings") || {};
       var choice = stored_settings.do_picreplacement;
-      var default_setting = (new Date() < new Date(2016, 2, 13) ? true : false);
-      return (choice === undefined ? default_setting : choice);
+      var default_setting = (new Date() < new Date(2016, 2, 20) ? true : false);
+      return true;
     }
     catch (ex) {
       return false;
@@ -21,7 +21,8 @@ picreplacement_checker = {
     var today = new Date();
     //TODO - uncomment for release
     //return (today < new Date(2016, 2, 12) || today >= new Date(2016, 2, 13));
-    return (today < new Date(2016, 1, 12) || today >= new Date(2016, 2, 13));
+    //return (today < new Date(2016, 1, 12) || today >= new Date(2016, 2, 20));
+    return false;
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))
