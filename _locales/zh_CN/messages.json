@@ -931,6 +931,10 @@
     "message":"过滤列表中规则的数量超出了50,000条的限制，并已自动删减。请取消订阅一些过滤列表或禁用Safari内容屏蔽!",
     "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled"
   },
+  "browserestartrequired":{
+    "message":"请重启Safari以关闭内容屏蔽。",
+    "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
+  },
   "safarinotificationtitle":{
     "message":"内容屏蔽规则数量超出限制",
     "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules"
@@ -1314,6 +1318,14 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"您可以通过勾选下面的“允许一些非侵入式广告”来重新启用它并支持一些您喜爱的网站。",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"因为您开启了Safari内容屏蔽，我们为您取消订阅了可接受广告列表。这两者您只能选择其一。(<a>为什么?<\/a>)",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"因为您选择允许非侵入式的广告，我们为您关闭了Safari内容屏蔽。这两者您只能选择其一。(<a>为什么?<\/a>)",
+    "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
   },
   "adreport_laststep":{
     "message":"最后一步: 向我们报告问题",

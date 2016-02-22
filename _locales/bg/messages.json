@@ -931,6 +931,10 @@
     "message":"Надхвърляте ограничението от 50 000 правила и броят им автоматично беше намален. Моля, прекратете абонамента си за някои от филтрите или забранете блокиране на съдържание в Safari!",
     "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled"
   },
+  "browserestartrequired":{
+    "message":"Моля, пуснете повторно Safari, за да завърши изключването на блокирането на съдържание.",
+    "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
+  },
   "safarinotificationtitle":{
     "message":"Надхвърлена квота към блокиране на съдържание",
     "description":"Title of a notification shown to Safari Content Blocking users with too many filter list rules"
@@ -1314,6 +1318,14 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"Можете да го включите в подкрепа на любимите си сайтовете пак, като по-долу изберете „Позволи определени ненатрапчиви реклами“.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"Абонаментът за Приемливи реклами е прекратен, защото включихте блокиране на съдържание в Safari. По едно и също време можете да разрешите или едното, или другото. (<a>Защо?<\/a>)",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"Блокирането на съдържание в Safari изключи, защото избрахте ненатрапчиви реклами. По едно и също време можете да разрешите или едното, или другото. (<a>Защо?<\/a>)",
+    "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
   },
   "adreport_laststep":{
     "message":"Последна стъпка: докладвайте я на нас.",
