@@ -145,7 +145,7 @@ _targetSize: function(el) {
     t.type = "wide";
   else if (t.y && !t.x && t.y > 400)
     t.type = "tall";
-  else if (Math.max(t.x,t.y) / Math.min(t.x,t.y) >= 2) // false unless (t.x && t.y)
+  else if (Math.max(t.x,t.y) / Math.min(t.x,t.y) >= 1.5) // false unless (t.x && t.y)
     t.type = (t.x > t.y ? "wide" : "tall");
 
   if (!t.type) // we didn't choose wide/tall
@@ -173,12 +173,36 @@ _placementFor: function(el) {
   // loop through available pics to find a best match,
   // otherwise we'll use a random one
   if (t.x) {
+    var candidatePic = null;
+    var minDiff = -1;
     for (var i = 0; i < pics.length; i++) {
-      var candiatePic = pics[i];
-      if (candiatePic.x <= t.x) {
-        pic = candiatePic;
-        break;
+      var cp = pics[i];
+      var diff = Math.abs(cp.x - t.x);
+      if (minDiff == -1 || diff < minDiff) {
+          candidatePic = cp;
+          minDiff = diff;
       }
+    }
+    if (minDiff != -1 && candidatePic != null) {
+        pic = candidatePic;
+    }
+
+    // now see if we can best fit on y
+    if (t.y) {
+        var minDiff = -1;
+        for (var i = 0; i < pics.length; i++) {
+            var cp = pics[i];
+            var diff = Math.abs(cp.y - t.y);
+            if (t.x == cp.x && (minDiff == -1 || diff < minDiff)) {
+                candidatePic = cp;
+                minDiff = diff;
+            }
+        }
+        
+        // if different then set new candidate
+        if (candidatePic != pic) {
+            pic = candidatePic;
+        }
     }
   }
 
@@ -713,30 +737,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_18__15_",
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_125_125",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__9_",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__6_",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "green": [
       { filename: "b_336_28_",
@@ -751,30 +755,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_18__15_",
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_125_125",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__9_",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__6_",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
    ],
     "blue": [
       { filename: "b_336_28_",
@@ -789,30 +773,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_18__15_",
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_125_125",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__9_",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__6_",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "magenta": [
       { filename: "b_336_28_",
@@ -827,30 +791,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_18__15_",
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_125_125",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__9_",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__6_",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "orange": [
       { filename: "b_336_28_",
@@ -865,30 +809,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_18__15_",
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_125_125",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__9_",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__6_",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "yellow": [
       { filename: "b_336_28_",
@@ -903,68 +827,24 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_18__15_",
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_125_125",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 125, y: 125, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__9_",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 120, y: 90, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__6_",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 120, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ]
   },
   "small": {
     "red": [
-      { filename: "b_88_31",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "green": [
-      { filename: "b_88_31",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
    ],
     "blue": [
-      { filename: "b_88_31",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "magenta": [
-      { filename: "b_88_31",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "orange": [
-      { filename: "b_88_31",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "yellow": [
-      { filename: "b_88_31",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 88, y: 31, left: 0, right: 0, top: 0, bot: 0 },
      ]
   },
   "wide": {
@@ -977,6 +857,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        text: "snowden",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "green": [
       { filename: "b_728_9_",
@@ -987,6 +871,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        text: "aiweiwei",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "blue": [
       { filename: "b_728_9_",
@@ -997,6 +885,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        text: "pussyriot",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "magenta": [
       { filename: "b_728_9_",
@@ -1007,6 +899,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        text: "northkorea",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "orange": [
       { filename: "b_728_9_",
@@ -1017,6 +913,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        text: "cuba",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "yellow": [
       { filename: "b_728_9_",
@@ -1027,6 +927,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_234_6_",
+        info_url: "https://getadblock.com/",
+        text: "adblock",
+        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ]
   },
   "tall": {
@@ -1043,6 +947,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        text: "snowden",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "green": [
       { filename: "b_16__6__",
@@ -1057,6 +965,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        text: "aiweiwei",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "blue": [
       { filename: "b_16__6__",
@@ -1071,6 +983,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        text: "pussyriot",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "magenta": [
       { filename: "b_16__6__",
@@ -1085,6 +1001,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        text: "northkorea",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "orange": [
       { filename: "b_16__6__",
@@ -1099,6 +1019,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        text: "cuba",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "yellow": [
       { filename: "b_16__6__",
@@ -1113,6 +1037,10 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
+      { filename: "b_12__24_",
+        info_url: "https://getadblock.com/",
+        text: "adblock",
+        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ]
   }
 }
