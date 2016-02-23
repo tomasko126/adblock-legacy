@@ -321,6 +321,23 @@ _addInfoCardTo: function(newPic, placement) {
           src: chrome.extension.getURL("img/icon24.png")
         }))
 
+      newPic.infoCard
+        .append($("<img>", {
+          css: {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: 20,
+            height: 20,
+            // independent.co.uk borders all imgs
+            border: "none",
+          },
+          src: chrome.extension.getURL("img/close_icon.png")
+        }))
+        .click(function(e) {
+            newPic.infoCard.remove();
+            newPic.remove();
+        });
 
       // BANNER WRAPPER
       var wrapper = $("<div>", {
@@ -332,20 +349,29 @@ _addInfoCardTo: function(newPic, placement) {
         }
       });
 
-      // CONTENT WRAPPER
-      var content_wrapper = $("<div>", {
+      // CONTENT CONTAINER
+      var content_container = $("<div>", {
         css: {
           "margin": "0 auto",
           "text-align": "center",
           "width": "100%",
+          "display": "table"
+        }
+      });
+
+
+      // CONTENT WRAPPER
+      var content_wrapper = $("<div>", {
+        css: {
+            "display": "table-cell",
+            "vertical-align": "middle"
         }
       });
 
       var translate = picreplacement.translate;
 
       // BANNER TITLE (TODAY IS NATIONAL ETC)
-      wrapper.
-        append($("<div>", {
+      var header = $("<div>", {
           css: {
             "display": "table",
             "background-color": "yellow",
@@ -360,10 +386,11 @@ _addInfoCardTo: function(newPic, placement) {
               "vertical-align": "middle",
               "color": "black",
               "font-weight": "bold",
-              "margin-right": "30px"
+              "padding": "0 24px",
             }
           })
-        })) 
+        }) 
+      wrapper.append(header);
 
         content_wrapper.
         // CONTENT PITCH (WHO'S ARTICLE)
@@ -416,7 +443,7 @@ _addInfoCardTo: function(newPic, placement) {
                 "font-size": "10px",
                 "cursor": "pointer",
                 "text-decoration": "underline",
-				"margin-bottom": "25px",
+				"margin-bottom": "35px",
             }
           }).
             click(function() {
@@ -428,12 +455,13 @@ _addInfoCardTo: function(newPic, placement) {
       }).
         appendTo(content_wrapper); 
 
-       content_wrapper.appendTo(wrapper); 
+       content_wrapper.appendTo(content_container); 
+       content_container.appendTo(wrapper); 
 
       $("<br>").appendTo(wrapper);
 
       // WHY ARE WE DOING THIS??!?!
-      $("<div>", {
+      var footer = $("<div>", {
           css: {
               "min-height": "30px",
               "background": "black",
@@ -454,13 +482,28 @@ _addInfoCardTo: function(newPic, placement) {
               target: "_blank",
               text: translate("why")
           })
-      }).
-      appendTo(wrapper);
+      });
+      footer.appendTo(wrapper);
       wrapper.appendTo(newPic.infoCard);
       //wrapper.css("margin-top", (newPic.infoCard.height() - wrapper.height()) / 2);
 
       // Now that all the elements are on the card so it knows its height...
       position_card(newPic.infoCard);
+
+      newPic.infoCard.css({
+          "height": content_container.height() + header.height() + footer.height(),
+      });
+      content_container.css({
+          "height": newPic.infoCard.height() - header.height(),
+      });
+
+      wrapper.css({
+          "height": newPic.infoCard.height() - header.height(),
+      });
+      content_container.css({
+          "height": newPic.infoCard.height() - header.height(),
+      });
+
 
       $(newPic).mouseover(function() {
         $(".picreplacement-infocard:visible").hide();
@@ -585,7 +628,7 @@ translate: function(key) {
       zh: "显示漂亮的照片，而不是广告。",
     },
     "learn_more": {
-      en: "Read it on Amnesty.org >",
+      en: "Read it on Amnesty.org>",
       es: "Más información",
       fr: "En savoir plus",
       de: "Mehr Informationen",
