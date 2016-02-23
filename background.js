@@ -488,7 +488,10 @@
               url = url.replace(/((http|https):\/\/)?(www.)?/, "").split(/[/?#]/)[0];
 
               text = text + "|~" + url;
-              set_custom_filters_text(text);
+              custom_filters.splice(i, 1); // Remove the old filter text
+              custom_filters.push(text); // add the new filter text to original array
+              var new_text = custom_filters.join('\n');
+              set_custom_filters_text(new_text);
               return true;
           } else {
               if (!Filter.isWhitelistFilter(text))
