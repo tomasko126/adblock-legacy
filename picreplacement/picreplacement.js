@@ -530,7 +530,6 @@ _addInfoCardTo: function(newPic, placement) {
           "height": newPic.infoCard.height() - header.height(),
       });
 
-
       $(newPic).mouseover(function() {
         $(".picreplacement-infocard:visible").hide();
         // newPic may have moved relative to the document, so recalculate
@@ -541,7 +540,7 @@ _addInfoCardTo: function(newPic, placement) {
       // Known bug: mouseleave is not called if you mouse over only 1 pixel
       // of newPic, then leave.  So infoCard is not removed.
       newPic.infoCard.mouseleave(function() {
-        //$(".picreplacement-infocard:visible").hide();
+        $(".picreplacement-infocard:visible").hide();
       });
 
       // The first time I show the card, the button is disabled.  Enable after
@@ -729,7 +728,7 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_3___25_",
+      { filename: "b_3__25_",
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
@@ -747,7 +746,7 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_3___25_",
+      { filename: "b_3__25_",
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
@@ -765,7 +764,7 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_3___25_",
+      { filename: "b_3__25_",
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
@@ -783,7 +782,7 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_3___25_",
+      { filename: "b_3__25_",
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
@@ -801,7 +800,7 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_3___25_",
+      { filename: "b_3__25_",
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
@@ -819,7 +818,7 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_3___25_",
+      { filename: "b_3__25_",
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },

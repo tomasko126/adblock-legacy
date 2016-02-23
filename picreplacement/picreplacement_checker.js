@@ -9,8 +9,8 @@ picreplacement_checker = {
       // Honor their choice. If there is none, default to "on" on day 1 only.
       var stored_settings = storage_get("settings") || {};
       var choice = stored_settings.do_picreplacement;
-      var default_setting = (new Date() < new Date(2016, 2, 20) ? true : false);
-      return true;
+      var default_setting = (new Date() < new Date(2016, 3, 12) ? true : false);
+      return (choice === undefined ? default_setting : choice);
     }
     catch (ex) {
       return false;
