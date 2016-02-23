@@ -356,12 +356,12 @@ _addInfoCardTo: function(newPic, placement) {
             // independent.co.uk borders all imgs
             border: "none",
           },
-          src: chrome.extension.getURL("img/close_icon.png")
-        }))
-        .click(function(e) {
+          src: chrome.extension.getURL("img/close_icon.png"),
+          click: function(e) {
             newPic.infoCard.remove();
             newPic.remove();
-        });
+          }
+        }))
 
       // BANNER WRAPPER
       var wrapper = $("<div>", {
