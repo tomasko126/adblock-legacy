@@ -178,12 +178,12 @@ _placementFor: function(el) {
     for (var i = 0; i < pics.length; i++) {
       var cp = pics[i];
       var diff = Math.abs(cp.x - t.x);
-      if (minDiff == -1 || diff < minDiff) {
+      if (minDiff === -1 || diff < minDiff) {
           candidatePic = cp;
           minDiff = diff;
       }
     }
-    if (minDiff != -1 && candidatePic != null) {
+    if (minDiff !== -1 && candidatePic !== null) {
         pic = candidatePic;
     }
 
@@ -193,14 +193,14 @@ _placementFor: function(el) {
         for (var i = 0; i < pics.length; i++) {
             var cp = pics[i];
             var diff = Math.abs(cp.y - t.y);
-            if (t.x == cp.x && (minDiff == -1 || diff < minDiff)) {
+            if (t.x === cp.x && (minDiff === -1 || diff < minDiff)) {
                 candidatePic = cp;
                 minDiff = diff;
             }
         }
         
         // if different then set new candidate
-        if (candidatePic != pic) {
+        if (candidatePic !== pic) {
             pic = candidatePic;
         }
     }
