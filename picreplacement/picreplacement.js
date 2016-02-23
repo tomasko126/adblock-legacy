@@ -225,7 +225,7 @@ _placementFor: function(el) {
 
   var result = this._fit(pic, t);
   //TODO - update URL
-  result.url = "https://ping.getadblock.com/qa-stats/img/" + pic.filename + selectedColor + ".gif";
+  result.url = "https://adblockcdn.com/img/" + pic.filename + selectedColor + ".gif";
   console.log("url", result.url);
   result.info_url = pic.info_url;
   result.text = pic.text;
