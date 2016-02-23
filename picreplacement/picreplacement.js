@@ -410,12 +410,14 @@ _addInfoCardTo: function(newPic, placement) {
 
         // READ ON AMNESTY 
         append($("<div>", {
+            css: {
+            },
             html: $("<button>", {
                 css: {
                   "padding": "5px",
-                  "margin": "0 5px",
+                  "margin": "12px 5px",
                   "background": "yellow",
-                  "border": "0"
+                  "border": "0",
                 },
                 html: $("<a>", {
                   href: placement.info_url,
@@ -425,11 +427,11 @@ _addInfoCardTo: function(newPic, placement) {
                       "text-decoration": "none",
                       "text-transform": "uppercase",
                       "font-weight": "bold",
+                      "letter-spacing": "-0.5px"
                   }
                 })
             })
-        })).
-        append("<br>");
+        }))
 
       // STOP SHOWING BUTTON 
       $("<div>", {
@@ -628,7 +630,7 @@ translate: function(key) {
       zh: "显示漂亮的照片，而不是广告。",
     },
     "learn_more": {
-      en: "Read it on Amnesty.org>",
+      en: "Read it on Amnesty.org >",
       es: "Más información",
       fr: "En savoir plus",
       de: "Mehr Informationen",
