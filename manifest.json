@@ -16,7 +16,6 @@
       "filtering/myfilters.js",
       "filtering/filternormalizer.js",
       "idlehandler.js",
-      "dropbox-datastores.js",
       "gab_question.js",
       "background.js",
       "datacollection.js"
@@ -95,7 +94,6 @@
     "jquery/css/images/ui-icons_056b93_256x240.png",
     "jquery/css/images/ui-icons_d8e7f3_256x240.png",
     "jquery/css/jquery-ui.custom.css",
-    "jquery/css/override-page.css",
-    "chrome_oauth_receiver.html"
+    "jquery/css/override-page.css"
   ]
 }
