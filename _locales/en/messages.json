@@ -360,7 +360,7 @@
     "description":"A filter list"
   },
   "filterannoyances":{
-    "message":"Fanboy's Annoyances (removes annoyances on the Web)",
+    "message":"Fanboy's Annoyances (blocks in-page pop-ups, social media and related widgets, and other annoyances)",
     "description":"A filter list"
   },
   "filterwarning_removal":{
