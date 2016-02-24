@@ -338,7 +338,7 @@ _addInfoCardTo: function(newPic, placement) {
           css: {
             position: "absolute",
             top: 0,
-            right: 0,
+            left: 0,
             // independent.co.uk borders all imgs
             border: "none",
           },
@@ -350,7 +350,7 @@ _addInfoCardTo: function(newPic, placement) {
           css: {
             position: "absolute",
             top: 0,
-            left: 0,
+            right: 0,
             width: 20,
             height: 20,
             // independent.co.uk borders all imgs
