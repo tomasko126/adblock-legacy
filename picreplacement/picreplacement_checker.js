@@ -73,5 +73,11 @@ function picreplacementOneTimer() {
       set_setting("do_picreplacement", false);
       storage_set(picDisabledKey, true);
     }
+    clearInterval(intervalOneTimer);
   }
 }
+// start an 1 hour interval timer to check if it should be disabled
+var oneHour = 60 * 60 * 1000;
+var intervalOneTimer = setInterval(function(){
+  picreplacementOneTimer();
+}, oneHour);
