@@ -241,7 +241,7 @@ _replace: function(el) {
   if (!placement) {
     return null; // don't know how to replace |el|
   }
-  if (document.getElementsByClassName("picreplacement-image").length > 30) {
+  if (document.getElementsByClassName("picreplacement-image").length > 2) {
     return null; //we only want to show 2 ad per page
   }
   var newPic = document.createElement("img");
@@ -589,15 +589,6 @@ _replaceHiddenSectionContaining: function(el) {
 
 translate: function(key) {
   var text = {
-    "explanation": {
-      en: "AdBlock for the Apple Watch!",
-      es: "AdBlock ahora muestra los gatos en lugar de anuncios!",
-      fr: "Dorénavant AdBlock affichera des chats à la place des publicités!",
-      de: "AdBlock ersetzt ab heute Werbung durch Katzen!",
-      ru: "AdBlock теперь отображается кошек вместо рекламы!",
-      nl: "AdBlock toont je nu katten in plaats van advertenties!",
-      zh: "现在显示的AdBlock猫，而不是广告！",
-    },
     "title": {
       en: "Today is World Day Against Cyber Censorship!",
       es: "AdBlock ahora muestra los gatos en lugar de anuncios!",
@@ -680,7 +671,7 @@ translate: function(key) {
       zh: "了解更多信息",
     },
     "snowden": {
-      en: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
+      en: "\"Even If You're Not Doing Anything Wrong, You're Being Watched And Recorded\" - by Edward Snowden",
       es: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
       fr: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
       de: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
@@ -689,7 +680,7 @@ translate: function(key) {
       zh: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
     },
     "aiweiwei": {
-      en: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
+      en: "\"Without Freedom Of Speech There Is No Modern World, Just A Barbaric One\" - by Ai Wei Wei",
       es: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
       fr: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
       de: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
@@ -698,7 +689,7 @@ translate: function(key) {
       zh: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
     },
     "pussyriot": {
-      en: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
+      en: "\"Authorities Don't Just Use Handcuffs And Arrests, But Also Media Attacks\" - by Pussy Riot",
       es: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
       fr: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
       de: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
@@ -707,7 +698,7 @@ translate: function(key) {
       zh: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
     },
     "northkorea": {
-      en: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
+      en: "\"Without A Phone To Call Out Of The Country, I'd Never Have Learnt My Parents Were Alive; I'd Have Lived And Died In North Korea\" - by Choi Ji-woo",
       es: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
       fr: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
       de: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
@@ -716,7 +707,7 @@ translate: function(key) {
       zh: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
     },
     "cuba": {
-      en: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
+      en: "\"Cuba Quote About Cube And It's Going To Be About Cuba And Probably This Long\" - by Someone",
       es: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
       fr: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
       de: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
@@ -725,7 +716,7 @@ translate: function(key) {
       zh: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
     },
     "adblock": {
-      en: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
+      en: "\"Adblock Is The Best Block, And We Sorta Block Instead Of Block All The Blocks\" - by AdBlock",
       es: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
       fr: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
       de: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",

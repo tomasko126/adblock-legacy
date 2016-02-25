@@ -20,7 +20,8 @@ picreplacement_checker = {
     // Hello to whomever is reading this: you found the Amnesty International
     var today = new Date();
     //TODO - uncomment for release
-    return (today < new Date(2016, 2, 12));
+    //return (today < new Date(2016, 2, 12));
+    return false;
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))
