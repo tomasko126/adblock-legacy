@@ -17,7 +17,9 @@ picreplacement_checker = {
     }
   },
   denying_existence: function() {
-    return (new Date() < new Date(2016, 2, 12));
+    //TODO
+    return false;
+    //return (new Date() < new Date(2016, 2, 12));
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))

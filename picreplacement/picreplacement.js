@@ -177,10 +177,19 @@ _placementFor: function(el) {
     var minDiff = -1;
     for (var i = 0; i < pics.length; i++) {
       var cp = pics[i];
-      var diff = Math.abs(cp.x - t.x);
-      if (minDiff === -1 || diff < minDiff) {
-          candidatePic = cp;
-          minDiff = diff;
+      var diff = (t.x - cp.x);
+      // don't select an image that bigger than the original
+      if (diff < 0) {
+        continue;
+      }
+      // select an exact match
+      else if (diff === 0) {
+        candidatePic = cp;
+        break;  
+      }
+      else if (minDiff === -1 || diff < minDiff) {
+        candidatePic = cp;
+        minDiff = diff;
       }
     }
     if (minDiff !== -1 && candidatePic !== null) {
@@ -192,8 +201,13 @@ _placementFor: function(el) {
         var minDiff = -1;
         for (var i = 0; i < pics.length; i++) {
             var cp = pics[i];
-            var diff = Math.abs(cp.y - t.y);
-            if (t.x === cp.x && (minDiff === -1 || diff < minDiff)) {
+            var diff = (t.y - cp.y);
+            if(diff < 0) {
+              continue;
+            } else if (diff === 0) {
+              candidatePic = cp;
+              break;               
+            } else if (pic.x === cp.x && (minDiff === -1 || diff < minDiff)) {
                 candidatePic = cp;
                 minDiff = diff;
             }
@@ -203,7 +217,13 @@ _placementFor: function(el) {
         if (candidatePic !== pic) {
             pic = candidatePic;
         }
+    } else {
+      // no height,just return;
+      return null;
     }
+  } else {
+    // no width,just return;
+    return null;
   }
 
   // If we only have one dimension, we may choose to use the picture's ratio;
@@ -223,10 +243,9 @@ _placementFor: function(el) {
     return null; // zero or unknown dims or too small to bother
   }
 
-  var result = this._fit(pic, t);
+  var result = this._fit(pic, t);   
   //TODO - update URL
   result.url = "https://adblockcdn.com/img/" + pic.filename + selectedColor + ".gif";
-  console.log("url", result.url);
   result.info_url = pic.info_url;
   result.text = pic.text;
   result.color = selectedColor;
