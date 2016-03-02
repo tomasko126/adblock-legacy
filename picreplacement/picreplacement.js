@@ -156,19 +156,19 @@ _targetSize: function(el) {
 // Returns placement details to replace |el|, or null
 // if we do not have enough info to replace |el|.
 _placementFor: function(el) {
-  var piccolors = [ "red", "green", "blue", "magenta", "orange", "yellow" ];
+  var picthemes = [ "snowden", "aiweiwei", "priot", "nkorea", "cuba", "adblock" ];
   var t = this._targetSize(el);
-  var selectedColorIndex = Math.floor(Math.random() * piccolors.length);
-  var selectedColor = piccolors[selectedColorIndex];
-  if (document.getElementsByClassName("picreplacement-" + selectedColor).length > 0) {
+  var selectedThemeIndex = Math.floor(Math.random() * picthemes.length);
+  var selectedTheme = picthemes[selectedThemeIndex];
+  if (document.getElementsByClassName("picreplacement-" + selectedTheme).length > 0) {
     // if the color is found, just use the next one
-    selectedColorIndex++;
-    if (selectedColorIndex >= piccolors.length) {
-      selectedColorIndex = 0;
+    selectedThemeIndex++;
+    if (selectedThemeIndex >= piccolors.length) {
+      selectedThemeIndex = 0;
     }
-    selectedColor = piccolors[selectedColorIndex];
+    selectedTheme = piccolors[selectedThemeIndex];
   }
-  var pics = this._picdata[t.type][selectedColor];
+  var pics = this._picdata[t.type][selectedTheme];
   var pic = pics[Math.floor(Math.random() * pics.length)];
   // loop through available pics to find a best match,
   // otherwise we'll use a random one
@@ -217,9 +217,6 @@ _placementFor: function(el) {
         if (candidatePic !== pic) {
             pic = candidatePic;
         }
-    } else {
-      // no height,just return;
-      return null;
     }
   } else {
     // no width,just return;
@@ -244,11 +241,11 @@ _placementFor: function(el) {
   }
 
   var result = this._fit(pic, t);   
-  //TODO - update URL
-  result.url = "https://adblockcdn.com/img/" + pic.filename + selectedColor + ".gif";
+  //TODO - update URL to include localizations
+  result.url = "https://adblockcdn.com/img/" + pic.filename + selectedTheme + "_english.png";
   result.info_url = pic.info_url;
   result.text = pic.text;
-  result.color = selectedColor;
+  result.color = selectedTheme;
   return result;
 },
 
@@ -756,7 +753,7 @@ translate: function(key) {
 
 _picdata: {
   "big": {
-    "red": [
+    "snowden": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         text: "snowden",
@@ -774,7 +771,7 @@ _picdata: {
         text: "snowden",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "green": [
+    "aiweiwei": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
@@ -792,7 +789,7 @@ _picdata: {
         text: "aiweiwei",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
    ],
-    "blue": [
+    "priot": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         text: "pussyriot",
@@ -810,7 +807,7 @@ _picdata: {
         text: "pussyriot",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
      ],
-    "magenta": [
+    "nkorea": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         text: "northkorea",
@@ -828,7 +825,7 @@ _picdata: {
         text: "northkorea",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "orange": [
+    "cuba": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         text: "cuba",
@@ -846,7 +843,7 @@ _picdata: {
         text: "cuba",
         x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "yellow": [
+    "adblock": [
       { filename: "b_336_28_",
         info_url: "https://getadblock.com/",
         text: "adblock",
@@ -866,21 +863,21 @@ _picdata: {
     ]
   },
   "small": {
-    "red": [
+    "snowden": [
     ],
-    "green": [
+    "aiweiwei": [
    ],
-    "blue": [
+    "priot": [
      ],
-    "magenta": [
+    "nkorea": [
      ],
-    "orange": [
+    "cuba": [
      ],
-    "yellow": [
+    "adblock": [
      ]
   },
   "wide": {
-    "red": [
+    "snowden": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         text: "snowden",
@@ -894,7 +891,7 @@ _picdata: {
         text: "snowden",
         x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "green": [
+    "aiweiwei": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
@@ -908,7 +905,7 @@ _picdata: {
         text: "aiweiwei",
         x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "blue": [
+    "priot": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         text: "pussyriot",
@@ -922,7 +919,7 @@ _picdata: {
         text: "pussyriot",
         x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
      ],
-    "magenta": [
+    "nkorea": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         text: "northkorea",
@@ -936,7 +933,7 @@ _picdata: {
         text: "northkorea",
         x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "orange": [
+    "cuba": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         text: "cuba",
@@ -950,7 +947,7 @@ _picdata: {
         text: "cuba",
         x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "yellow": [
+    "adblock": [
       { filename: "b_728_9_",
         info_url: "https://getadblock.com/",
         text: "adblock",
@@ -966,7 +963,7 @@ _picdata: {
     ]
   },
   "tall": {
-    "red": [
+    "snowden": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
         text: "snowden",
@@ -984,7 +981,7 @@ _picdata: {
         text: "snowden",
         x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "green": [
+    "aiweiwei": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
@@ -1002,7 +999,7 @@ _picdata: {
         text: "aiweiwei",
         x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "blue": [
+    "priot": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
         text: "pussyriot",
@@ -1020,7 +1017,7 @@ _picdata: {
         text: "pussyriot",
         x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "magenta": [
+    "nkorea": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
         text: "northkorea",
@@ -1038,7 +1035,7 @@ _picdata: {
         text: "northkorea",
         x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "orange": [
+    "cuba": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
         text: "cuba",
@@ -1056,7 +1053,7 @@ _picdata: {
         text: "cuba",
         x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
-    "yellow": [
+    "adblock": [
       { filename: "b_16__6__",
         info_url: "https://getadblock.com/",
         text: "adblock",
