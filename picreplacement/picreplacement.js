@@ -169,7 +169,7 @@ _placementFor: function(el) {
     selectedTheme = picthemes[selectedThemeIndex];
   }
   var pics = this._picdata[t.type][selectedTheme];
-  var pic = pics[Math.floor(Math.random() * pics.length)];
+  var pic = null;
   // loop through available pics to find a best match,
   // otherwise we'll use a random one
   if (t.x) {
@@ -185,6 +185,7 @@ _placementFor: function(el) {
       // select an exact match
       else if (diff === 0) {
         candidatePic = cp;
+        minDiff = 0;
         break;  
       }
       else if (minDiff === -1 || diff < minDiff) {
@@ -197,19 +198,19 @@ _placementFor: function(el) {
     }
 
     // now see if we can best fit on y
-    if (t.y) {
+    if (t.y && pic !== null) {
         var minDiff = -1;
         for (var i = 0; i < pics.length; i++) {
             var cp = pics[i];
             var diff = (t.y - cp.y);
             if(diff < 0) {
               continue;
-            } else if (diff === 0) {
+            } else if (pic.x === cp.x && diff === 0) {
               candidatePic = cp;
               break;               
             } else if (pic.x === cp.x && (minDiff === -1 || diff < minDiff)) {
-                candidatePic = cp;
-                minDiff = diff;
+              candidatePic = cp;
+              minDiff = diff;
             }
         }
 
@@ -316,8 +317,8 @@ _addInfoCardTo: function(newPic, placement) {
       return; // already created card
     function after_jquery_is_available() {
       var cardsize = {
-        width: Math.max(placement.width, 200),
-        height: Math.max(placement.height, 175)
+        width: placement.width,
+        height: Math.max(placement.height, 100)
       };
       function position_card(card) {
         var pos = $(newPic).offset();
