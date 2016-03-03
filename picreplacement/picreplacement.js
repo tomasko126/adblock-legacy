@@ -247,6 +247,7 @@ _placementFor: function(el) {
   result.info_url = pic.info_url;
   result.text = pic.text;
   result.color = selectedTheme;
+  result.type = t.type;
   return result;
 },
 
@@ -439,7 +440,7 @@ _addInfoCardTo: function(newPic, placement) {
           css: {
               "margin": "0 5%",
           },
-          html: $("<p>", {
+          html: $("<div>", {
               css: {
                   "text-align": "center",
                   "color": "white",
@@ -478,7 +479,7 @@ _addInfoCardTo: function(newPic, placement) {
       $("<div>", {
         css: {
         },
-        html: $("<p>", {
+        html: $("<div>", {
             text: translate("stop_showing"),
             css: {
                 "opacity": ".8",
@@ -486,7 +487,7 @@ _addInfoCardTo: function(newPic, placement) {
                 "font-size": "10px",
                 "cursor": "pointer",
                 "text-decoration": "underline",
-				"margin-bottom": "35px",
+				"margin-bottom": placement.type === "wide" ? "20px" : "35px",
             }
           }).
             click(function() {
@@ -733,7 +734,7 @@ translate: function(key) {
       zh: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
     },
     "adblock": {
-      en: "\"Adblock Is The Best Block, And We Sorta Block Instead Of Block All The Blocks\" - by AdBlock",
+      en: "\"Why AdBlock Is \"Un-Blocking\" Amnesty Banners Today\" - by Gabriel Cubbage",
       es: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
       fr: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
       de: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
@@ -741,11 +742,6 @@ translate: function(key) {
       nl: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
       zh: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
     },
-    "the_url": {
-      // don't translate into other locales
-      // TODO - update URL
-      en: "https://www.amnesty.org"
-    }
   };
   var locale = navigator.language.substring(0, 2);
   var msg = text[key] || {};
@@ -767,10 +763,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_18__15_",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_336_28_",
@@ -785,10 +777,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_18__15_",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
    ],
     "priot": [
       { filename: "b_336_28_",
@@ -803,10 +791,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_18__15_",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "nkorea": [
       { filename: "b_336_28_",
@@ -821,10 +805,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_18__15_",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_336_28_",
@@ -839,10 +819,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_18__15_",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_336_28_",
@@ -857,10 +833,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_18__15_",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 180, y: 150, left: 0, right: 0, top: 0, bot: 0 },
     ]
   },
   "small": {
@@ -887,10 +859,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_728_9_",
@@ -901,10 +869,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "priot": [
       { filename: "b_728_9_",
@@ -915,10 +879,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "nkorea": [
       { filename: "b_728_9_",
@@ -929,10 +889,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_728_9_",
@@ -943,10 +899,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_728_9_",
@@ -957,10 +909,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_234_6_",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 234, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ]
   },
   "tall": {
@@ -977,10 +925,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "snowden",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "snowden",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_16__6__",
@@ -995,10 +939,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "aiweiwei",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "priot": [
       { filename: "b_16__6__",
@@ -1013,10 +953,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "pussyriot",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "nkorea": [
       { filename: "b_16__6__",
@@ -1031,10 +967,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "northkorea",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_16__6__",
@@ -1049,10 +981,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "cuba",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "cuba",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_16__6__",
@@ -1067,10 +995,6 @@ _picdata: {
         info_url: "https://getadblock.com/",
         text: "adblock",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
-      { filename: "b_12__24_",
-        info_url: "https://getadblock.com/",
-        text: "adblock",
-        x: 120, y: 240, left: 0, right: 0, top: 0, bot: 0 },
     ]
   }
 }
