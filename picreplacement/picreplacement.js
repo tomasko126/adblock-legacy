@@ -633,7 +633,7 @@ translate: function(key) {
       zh: "不显示猫图片！",
     },
     "ok_no_more": {
-      en: "OK, you won't see any more banners about World Day Against Cybercensorship!",
+      en: "OK, you won't see any more banners about World Day Against Cyber Censorship!",
       es: "OK, AdBlock no te mostrará los gatos.\n\nFeliz Día de los Inocentes!",
       fr: "OK, AdBlock n'affichera plus de chats.\n\nJ'espère que mon poisson d'avril vous a plu!",
       de: "AdBlock wird keine Katzen mehr anzeigen.\n\nApril, April!",
