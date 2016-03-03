@@ -242,7 +242,7 @@ _placementFor: function(el) {
 
   var result = this._fit(pic, t);   
   //TODO - update URL to include localizations
-  result.url = "https://adblockcdn.com/img/" + pic.filename + selectedTheme + "_english.png";
+  result.url = "https://adblockcdn.com/img/" + pic.filename + selectedTheme + "_en.png";
   result.info_url = pic.info_url;
   result.text = pic.text;
   result.color = selectedTheme;
