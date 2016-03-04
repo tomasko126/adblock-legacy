@@ -258,8 +258,9 @@ _placementFor: function(el) {
 
   var result = this._fit(pic, t);   
   //TODO - update URL to include localizations
-  result.url = "https://adblockcdn.com/img/" + pic.filename + selectedTheme + "_en.png";
-  result.info_url = pic.info_url;
+  result.url = "https://adblockcdn.com/img/" + pic.filename + selectedTheme + "_" + this._determineLanguage() + ".png";
+  //TODO - update URL
+  result.info_url = "https://dev.getadblock.com/amnesty_url/?l=" + this._determineLanguage() + "&v=" + selectedTheme + "&s=" + pic.x + "x" + pic.y;
   result.text = pic.text;
   result.color = selectedTheme;
   result.type = t.type;
@@ -274,7 +275,7 @@ _replace: function(el) {
   if (!placement) {
     return null; // don't know how to replace |el|
   }
-  if (document.getElementsByClassName("picreplacement-image").length > 30) {
+  if (document.getElementsByClassName("picreplacement-image").length > 2) {
     return null; //we only want to show 2 ad per page
   }
   var newPic = document.createElement("img");
@@ -317,6 +318,17 @@ _replace: function(el) {
   el.dataset.picreplacementreplaced = "true";
   el.parentNode.insertBefore(newPic, el);
   return newPic;
+},
+
+_determineLanguage: function() {
+    var lang = determineUserLanguage();
+    if (lang === "en" ||
+        lang === "fr" ||
+        lang === "es" ||
+        lang === "ar") {
+        return lang;
+    }
+    return "en";
 },
 
 // Add an info card to |newPic| that appears on hover.
@@ -463,56 +475,120 @@ _addInfoCardTo: function(newPic, placement) {
               },
               text: translate(placement.text) + " "
           })
-        })).
-
-        // READ ON AMNESTY
-        append($("<div>", {
-            css: {
-            },
-            html: $("<button>", {
-                css: {
-                  "padding": "5px",
-                  "margin": "12px 5px",
-                  "background": "yellow",
-                  "border": "0",
-                },
-                html: $("<a>", {
-                  href: placement.info_url,
-                  target: "_blank",
-                  text: translate("learn_more"),
-                  css: {
-                      "text-decoration": "none",
-                      "text-transform": "uppercase",
-                      "font-weight": "bold",
-                      "letter-spacing": "-0.5px"
-                  }
-                })
-            })
         }))
 
-      // STOP SHOWING BUTTON
-      $("<div>", {
-        css: {
-        },
-        html: $("<div>", {
-            text: translate("stop_showing"),
+        if (placement.type !== "wide") {
+            // READ ON AMNESTY
+            content_wrapper.
+            append($("<div>", {
+                css: {
+                },
+                html: $("<button>", {
+                    css: {
+                      "padding": "5px",
+                      "margin": "12px 5px",
+                      "background": "yellow",
+                      "border": "0",
+                    },
+                    html: $("<a>", {
+                      href: placement.info_url,
+                      target: "_blank",
+                      text: translate("learn_more"),
+                      css: {
+                          "text-decoration": "none",
+                          "text-transform": "uppercase",
+                          "font-weight": "bold",
+                          "letter-spacing": "-0.5px"
+                      }
+                    })
+                })
+            }))
+
+          // STOP SHOWING BUTTON
+          $("<div>", {
             css: {
-                "opacity": ".8",
-                "color": "white",
-                "font-size": "10px",
-                "cursor": "pointer",
-                "text-decoration": "underline",
-				"margin-bottom": placement.type === "wide" ? "20px" : "35px",
-            }
+            },
+            html: $("<div>", {
+                text: translate("stop_showing"),
+                css: {
+                    "opacity": ".8",
+                    "color": "white",
+                    "font-size": "10px",
+                    "cursor": "pointer",
+                    "text-decoration": "underline",
+                    "margin-bottom": "35px"
+                }
+              }).
+                click(function() {
+                  BGcall("set_setting", "do_picreplacement", false, function() {
+                    $(".picreplacement-image, .picreplacement-infocard").remove();
+                    alert(translate("ok_no_more"));
+                  });
+                }),
           }).
-            click(function() {
-              BGcall("set_setting", "do_picreplacement", false, function() {
-                $(".picreplacement-image, .picreplacement-infocard").remove();
-                alert(translate("ok_no_more"));
+            appendTo(content_wrapper);
+        } else {
+            var middle_div = $("<div>", {
+                css: {
+                    "width": "100%",
+                },
+            });
+            
+            // READ ON AMNESTY
+            var read_on_amnesty = $("<div>", {
+                css: {
+                    "width": "50%",
+                    "float": "left",
+                },
+                html: $("<button>", {
+                    css: {
+                        "background": "yellow",
+                        "border": "0",
+                    },
+                    html: $("<a>", {
+                        href: placement.info_url,
+                        target: "_blank",
+                        text: translate("learn_more"),
+                        css: {
+                            "text-decoration": "none",
+                            "text-transform": "uppercase",
+                            "font-weight": "bold",
+                            "letter-spacing": "-0.5px"
+                        }
+                    })
+                })
               });
-            }),
-      }).
-        appendTo(content_wrapper);
+
+              // STOP SHOWING BUTTON
+              var stop_div = $("<div>", {
+                  css: {
+                      "width": "50%",
+                      "float": "left",
+                  },
+                  html: $("<div>", {
+                      text: translate("stop_showing"),
+                      css: {
+                          "opacity": ".8",
+                          "color": "white",
+                          "font-size": "10px",
+                          "cursor": "pointer",
+                          "text-decoration": "underline",
+                      }
+                  }).
+                  click(function() {
+                      BGcall("set_setting", "do_picreplacement", false, function() {
+                          $(".picreplacement-image, .picreplacement-infocard").remove();
+                          alert(translate("ok_no_more"));
+                      });
+                  })
+              });
+
+            middle_div.append(stop_div);
+            middle_div.append(read_on_amnesty);
+            content_wrapper.append($("<div>", { text: "&nbsp;" }));
+            middle_div.appendTo(content_wrapper)
+            content_wrapper.append($("<div>", { text: "&nbsp;", css: { "margin-bottom": "15px" }}));
+        }
 
        content_wrapper.appendTo(content_container);
        content_container.appendTo(wrapper);
@@ -574,7 +650,7 @@ _addInfoCardTo: function(newPic, placement) {
       // Known bug: mouseleave is not called if you mouse over only 1 pixel
       // of newPic, then leave.  So infoCard is not removed.
       newPic.infoCard.mouseleave(function() {
-        $(".picreplacement-infocard:visible").hide();
+        //$(".picreplacement-infocard:visible").hide();
       });
 
       // The first time I show the card, the button is disabled.  Enable after
@@ -723,85 +799,67 @@ _picdata: {
   "big": {
     "snowden": [
       { filename: "b_336_28_",
-        info_url: "https://getadblock.com/",
         text: "snowden",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        info_url: "https://getadblock.com/",
         text: "snowden",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        info_url: "https://getadblock.com/",
         text: "snowden",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_336_28_",
-        info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
    ],
     "priot": [
       { filename: "b_336_28_",
-        info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "nkorea": [
       { filename: "b_336_28_",
-        info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_336_28_",
-        info_url: "https://getadblock.com/",
         text: "cuba",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        info_url: "https://getadblock.com/",
         text: "cuba",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        info_url: "https://getadblock.com/",
         text: "cuba",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_336_28_",
-        info_url: "https://getadblock.com/",
         text: "adblock",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        info_url: "https://getadblock.com/",
         text: "adblock",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        info_url: "https://getadblock.com/",
         text: "adblock",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
     ]
@@ -823,61 +881,49 @@ _picdata: {
   "wide": {
     "snowden": [
       { filename: "b_728_9_",
-        info_url: "https://getadblock.com/",
         text: "snowden",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
         text: "snowden",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_728_9_",
-        info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "priot": [
       { filename: "b_728_9_",
-        info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "nkorea": [
       { filename: "b_728_9_",
-        info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_728_9_",
-        info_url: "https://getadblock.com/",
         text: "cuba",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
         text: "cuba",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_728_9_",
-        info_url: "https://getadblock.com/",
         text: "adblock",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        info_url: "https://getadblock.com/",
         text: "adblock",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ]
@@ -885,85 +931,67 @@ _picdata: {
   "tall": {
     "snowden": [
       { filename: "b_16__6__",
-        info_url: "https://getadblock.com/",
         text: "snowden",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        info_url: "https://getadblock.com/",
         text: "snowden",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        info_url: "https://getadblock.com/",
         text: "snowden",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_16__6__",
-        info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        info_url: "https://getadblock.com/",
         text: "aiweiwei",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "priot": [
       { filename: "b_16__6__",
-        info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        info_url: "https://getadblock.com/",
         text: "pussyriot",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "nkorea": [
       { filename: "b_16__6__",
-        info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        info_url: "https://getadblock.com/",
         text: "northkorea",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_16__6__",
-        info_url: "https://getadblock.com/",
         text: "cuba",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        info_url: "https://getadblock.com/",
         text: "cuba",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        info_url: "https://getadblock.com/",
         text: "cuba",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_16__6__",
-        info_url: "https://getadblock.com/",
         text: "adblock",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        info_url: "https://getadblock.com/",
         text: "adblock",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        info_url: "https://getadblock.com/",
         text: "adblock",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ]
