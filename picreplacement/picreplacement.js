@@ -275,7 +275,7 @@ _replace: function(el) {
   if (!placement) {
     return null; // don't know how to replace |el|
   }
-  if (document.getElementsByClassName("picreplacement-image").length > 2) {
+  if (document.getElementsByClassName("picreplacement-image").length > 1) {
     return null; //we only want to show 2 ad per page
   }
   var newPic = document.createElement("img");
