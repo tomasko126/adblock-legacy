@@ -585,9 +585,9 @@ _addInfoCardTo: function(newPic, placement) {
 
             middle_div.append(stop_div);
             middle_div.append(read_on_amnesty);
-            content_wrapper.append($("<div>", { text: "&nbsp;" }));
+            content_wrapper.append($("<div>", { html: "&nbsp;" }));
             middle_div.appendTo(content_wrapper)
-            content_wrapper.append($("<div>", { text: "&nbsp;", css: { "margin-bottom": "15px" }}));
+            content_wrapper.append($("<div>", { html: "&nbsp;", css: { "margin-bottom": "15px" }}));
         }
 
        content_wrapper.appendTo(content_container);
