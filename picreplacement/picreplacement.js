@@ -650,7 +650,7 @@ _addInfoCardTo: function(newPic, placement) {
       // Known bug: mouseleave is not called if you mouse over only 1 pixel
       // of newPic, then leave.  So infoCard is not removed.
       newPic.infoCard.mouseleave(function() {
-        //$(".picreplacement-infocard:visible").hide();
+        $(".picreplacement-infocard:visible").hide();
       });
 
       // The first time I show the card, the button is disabled.  Enable after
