@@ -260,7 +260,7 @@ _placementFor: function(el) {
   //TODO - update URL to include localizations
   result.url = "https://adblockcdn.com/img/" + pic.filename + selectedTheme + "_" + this._determineLanguage() + ".png";
   //TODO - update URL
-  result.info_url = "https://dev.getadblock.com/amnesty_url/?l=" + this._determineLanguage() + "&v=" + selectedTheme + "&s=" + pic.x + "x" + pic.y;
+  result.info_url = "http://dev.getadblock.com/amnesty_url/?l=" + this._determineLanguage() + "&v=" + selectedTheme + "&s=" + pic.x + "x" + pic.y;
   result.text = pic.text;
   result.color = selectedTheme;
   result.type = t.type;
