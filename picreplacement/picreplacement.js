@@ -206,6 +206,7 @@ _placementFor: function(el) {
             if(diff < 0) {
               continue;
             } else if (pic.x === cp.x && diff === 0) {
+              minDiff = 0;
               candidatePic = cp;
               break;               
             } else if (pic.x === cp.x && (minDiff === -1 || diff < minDiff)) {
@@ -214,9 +215,23 @@ _placementFor: function(el) {
             }
         }
 
+        // We didn't find an image where the height is smaller than the placement container.
+        // For now return null because we want to make sure the candidate image will 
+        // fit in the container.
+        if (minDiff === -1) {
+            return null;
+        }
+
         // if different then set new candidate
         if (candidatePic !== pic) {
             pic = candidatePic;
+        }
+    } else {
+        // If t.y isn't known don't use the only image that matches the height, or things 
+        // could get crowded.  Make sure that the width is > 250 so that an image of 
+        // big or wide size is used.
+        if (t.x < 250) {
+            return null;
         }
     }
   } else {
@@ -346,7 +361,7 @@ _addInfoCardTo: function(newPic, placement) {
           "box-sizing": "border-box",
           "border": "2px solid yellow",
           "font": "normal small Arial, sans-serif",
-          "background-color": "rgba(0, 0, 0, 0.8)"
+          "background-color": "rgba(0, 0, 0, 0.9)"
         } });
       newPic.infoCard.appendTo("body");
 
@@ -522,7 +537,8 @@ _addInfoCardTo: function(newPic, placement) {
                 "vertical-align": "middle",
                 "display": "table-cell",
               },
-              href: "http://getadblock.com/why",
+              // TODO: Change URL
+              href: "http://dev.getadblock.com/amnesty2016",
               target: "_blank",
               text: translate("why")
           })
@@ -611,136 +627,91 @@ translate: function(key) {
       en: "Today is World Day Against Cyber Censorship!",
       es: "AdBlock ahora muestra los gatos en lugar de anuncios!",
       fr: "Dorénavant AdBlock affichera des chats à la place des publicités!",
-      de: "AdBlock ersetzt ab heute Werbung durch Katzen!",
-      ru: "AdBlock теперь отображается кошек вместо рекламы!",
-      nl: "AdBlock toont je nu katten in plaats van advertenties!",
-      zh: "现在显示的AdBlock猫，而不是广告！",
+      ar: "现在显示的AdBlock猫，而不是广告！",
     },
     "stop_showing": {
       en: "Stop showing me these banners!",
       es: "No mostrar los gatos!",
       fr: "Arrêter l'affichage des chats!",
-      de: "Keine Katzen mehr anzeigen!",
-      ru: "Не показывать кошек!",
-      nl: "Toon geen katten meer!",
-      zh: "不显示猫图片！",
+      ar: "不显示猫图片！",
     },
     "why": {
       en: "WHY DID ADBLOCK ALLOW THIS \"AD\" TODAY?",
       es: "No mostrar los gatos!",
       fr: "Arrêter l'affichage des chats!",
-      de: "Keine Katzen mehr anzeigen!",
-      ru: "Не показывать кошек!",
-      nl: "Toon geen katten meer!",
-      zh: "不显示猫图片！",
+      ar: "不显示猫图片！",
     },
     "ok_no_more": {
       en: "OK, you won't see any more banners about World Day Against Cyber Censorship!",
       es: "OK, AdBlock no te mostrará los gatos.\n\nFeliz Día de los Inocentes!",
       fr: "OK, AdBlock n'affichera plus de chats.\n\nJ'espère que mon poisson d'avril vous a plu!",
-      de: "AdBlock wird keine Katzen mehr anzeigen.\n\nApril, April!",
-      ru: "Хорошо, AdBlock не будет отображаться кошек.\n\nЕсть счастливый День дурака",
-      nl: "1 April!!\n\nAdBlock zal vanaf nu geen katten meer tonen.",
-      zh: "OK，的AdBlock不会显示猫。\n\n幸福四月愚人节！",
+      ar: "OK，的AdBlock不会显示猫。\n\n幸福四月愚人节！",
     },
     "new": {
       en: "Today only!",
       es: "Nuevo!",
       fr: "Nouveau!",
-      de: "Neu!",
-      ru: "новое!",
-      nl: "Nieuw!",
-      zh: "新！",
+      ar: "新！",
     },
     "new_after": {
       en: "Re-enable the free speech banners!",
       es: "Nuevo!",
       fr: "Nouveau!",
-      de: "Neu!",
-      ru: "новое!",
-      nl: "Nieuw!",
-      zh: "新！",
+      ar: "新！",
     },
     "enable_picreplacement": {
       en: "For 24 hours, promote <a id=\"wikipedia_link\" target=\"_blank\">World Day Against Cyber Censorship<\/a> by replacing ads with banners linking to Amnesty International articles about freedom of speech by Edward Snowden and others. <a id=\"adblock_link\" target=\"_blank\">Why is AdBlock doing this today?<\/a>",
       es: "Mostrar una foto bonita en lugar de anuncios.",
       fr: "Afficher des belles images à la place des publicités.",
-      de: "Werbung durch schöne Bilder ersetzen.",
-      ru: "Показать красивую картинку вместо объявления.",
-      nl: "Toon een leuke afbeelding op de plaats waar advertenties stonden.",
-      zh: "显示漂亮的照片，而不是广告。",
+      ar: "显示漂亮的照片，而不是广告。",
     },
     "enable_picreplacement_after": {
       en: "Temporarily bring back the <a id=\"wikipedia_link\" target=\"_blank\">World Day Against Cyber Censorship<\/a> ads AdBlock allowed through on March 12, in partnership with Amnesty International. (Note: This option will be completely removed soon.) <a id=\"adblock_link\" target=\"_blank\">Why did AdBlock do this?<\/a>",
       es: "Mostrar una foto bonita en lugar de anuncios.",
       fr: "Afficher des belles images à la place des publicités.",
-      de: "Werbung durch schöne Bilder ersetzen.",
-      ru: "Показать красивую картинку вместо объявления.",
-      nl: "Toon een leuke afbeelding op de plaats waar advertenties stonden.",
-      zh: "显示漂亮的照片，而不是广告。",
+      ar: "显示漂亮的照片，而不是广告。",
     },
     "learn_more": {
       en: "Read it on Amnesty.org >",
       es: "Más información",
       fr: "En savoir plus",
-      de: "Mehr Informationen",
-      ru: "Подробнее",
-      nl: "Meer informatie",
-      zh: "了解更多信息",
+      ar: "了解更多信息",
     },
     "snowden": {
       en: "\"Even If You're Not Doing Anything Wrong, You're Being Watched And Recorded\" - by Edward Snowden",
       es: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
       fr: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
-      de: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
-      ru: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
-      nl: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
-      zh: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
+      ar: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
     },
     "aiweiwei": {
       en: "\"Without Freedom Of Speech There Is No Modern World, Just A Barbaric One\" - by Ai Wei Wei",
       es: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
       fr: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
-      de: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
-      ru: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
-      nl: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
-      zh: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
+      ar: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
     },
     "pussyriot": {
       en: "\"Authorities Don't Just Use Handcuffs And Arrests, But Also Media Attacks\" - by Pussy Riot",
       es: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
       fr: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
-      de: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
-      ru: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
-      nl: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
-      zh: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
+      ar: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
     },
     "northkorea": {
       en: "\"Without A Phone To Call Out Of The Country, I'd Never Have Learnt My Parents Were Alive; I'd Have Lived And Died In North Korea\" - by Choi Ji-woo",
       es: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
       fr: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
-      de: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
-      ru: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
-      nl: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
-      zh: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
+      ar: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
     },
     "cuba": {
       en: "\"Cuba Quote About Cube And It's Going To Be About Cuba And Probably This Long\" - by Someone",
       es: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
       fr: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
-      de: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
-      ru: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
-      nl: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
-      zh: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
+      ar: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
     },
     "adblock": {
       en: "\"Why AdBlock Is \"Un-Blocking\" Amnesty Banners Today\" - by Gabriel Cubbage",
       es: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
       fr: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
-      de: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
-      ru: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
-      nl: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
-      zh: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
+      ar: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
     },
   };
   var locale = navigator.language.substring(0, 2);
