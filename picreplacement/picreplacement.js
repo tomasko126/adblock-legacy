@@ -120,6 +120,16 @@ _dim: function(el, prop) {
     }
     return parseInt(match[1]);
   }
+  // all of valid elements that we care about should have a tagName
+  if (el.tagName === undefined) {
+    return undefined;
+  }
+  if (typeof el.getAttribute === 'function') {
+    return ( intFor(el.getAttribute(prop)) ||
+             intFor(window.getComputedStyle(el)[prop]) );
+  } else {
+    return intFor(window.getComputedStyle(el)[prop]);
+  }
   return ( intFor(el.getAttribute(prop)) ||
            intFor(window.getComputedStyle(el)[prop]) );
 },
@@ -186,7 +196,7 @@ _placementFor: function(el) {
       else if (diff === 0) {
         candidatePic = cp;
         minDiff = 0;
-        break;  
+        break;
       }
       else if (minDiff === -1 || diff < minDiff) {
         candidatePic = cp;
@@ -208,7 +218,7 @@ _placementFor: function(el) {
             } else if (pic.x === cp.x && diff === 0) {
               minDiff = 0;
               candidatePic = cp;
-              break;               
+              break;
             } else if (pic.x === cp.x && (minDiff === -1 || diff < minDiff)) {
               candidatePic = cp;
               minDiff = diff;
@@ -216,7 +226,7 @@ _placementFor: function(el) {
         }
 
         // We didn't find an image where the height is smaller than the placement container.
-        // For now return null because we want to make sure the candidate image will 
+        // For now return null because we want to make sure the candidate image will
         // fit in the container.
         if (minDiff === -1) {
             return null;
@@ -227,8 +237,8 @@ _placementFor: function(el) {
             pic = candidatePic;
         }
     } else {
-        // If t.y isn't known don't use the only image that matches the height, or things 
-        // could get crowded.  Make sure that the width is > 250 so that an image of 
+        // If t.y isn't known don't use the only image that matches the height, or things
+        // could get crowded.  Make sure that the width is > 250 so that an image of
         // big or wide size is used.
         if (t.x < 250) {
             return null;
@@ -256,7 +266,7 @@ _placementFor: function(el) {
     return null; // zero or unknown dims or too small to bother
   }
 
-  var result = this._fit(pic, t);   
+  var result = this._fit(pic, t);
   //TODO - update URL to include localizations
   result.url = "https://adblockcdn.com/img/" + pic.filename + selectedTheme + "_" + this._determineLanguage() + ".png";
   //TODO - update URL
@@ -533,7 +543,7 @@ _addInfoCardTo: function(newPic, placement) {
                     "width": "100%",
                 },
             });
-            
+
             // READ ON AMNESTY
             var read_on_amnesty = $("<div>", {
                 css: {
@@ -588,7 +598,7 @@ _addInfoCardTo: function(newPic, placement) {
 
             middle_div.append(stop_div);
             middle_div.append(read_on_amnesty);
-            content_wrapper.append($("<div>", { 
+            content_wrapper.append($("<div>", {
                 html: "&nbsp;",
                 css: {
                     "top-margin": "5px",
