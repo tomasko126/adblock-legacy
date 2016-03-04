@@ -564,6 +564,7 @@ _addInfoCardTo: function(newPic, placement) {
                   css: {
                       "width": "50%",
                       "float": "left",
+                      "display": "table",
                   },
                   html: $("<div>", {
                       text: translate("stop_showing"),
@@ -573,6 +574,8 @@ _addInfoCardTo: function(newPic, placement) {
                           "font-size": "10px",
                           "cursor": "pointer",
                           "text-decoration": "underline",
+                          "display": "table-cell",
+                          "vertical-align": "middle",
                       }
                   }).
                   click(function() {
@@ -585,7 +588,12 @@ _addInfoCardTo: function(newPic, placement) {
 
             middle_div.append(stop_div);
             middle_div.append(read_on_amnesty);
-            content_wrapper.append($("<div>", { html: "&nbsp;" }));
+            content_wrapper.append($("<div>", { 
+                html: "&nbsp;",
+                css: {
+                    "top-margin": "5px",
+                },
+            }));
             middle_div.appendTo(content_wrapper)
             content_wrapper.append($("<div>", { html: "&nbsp;", css: { "margin-bottom": "15px" }}));
         }
@@ -625,6 +633,11 @@ _addInfoCardTo: function(newPic, placement) {
 
       // Now that all the elements are on the card so it knows its height...
       position_card(newPic.infoCard);
+
+      stop_div.css({
+          "height": read_on_amnesty.height(),
+      });
+
 
       newPic.infoCard.css({
           "height": content_container.height() + header.height() + footer.height(),
