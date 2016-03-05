@@ -2,7 +2,6 @@ var picreplacement = {
 
 // data: {el, elType, blocked}
 augmentIfAppropriate: function(data) {
-
   if (this._inHiddenSection(data.el)) {
     this._replaceHiddenSectionContaining(data.el);
   } else {
@@ -130,8 +129,6 @@ _dim: function(el, prop) {
   } else {
     return intFor(window.getComputedStyle(el)[prop]);
   }
-  return ( intFor(el.getAttribute(prop)) ||
-           intFor(window.getComputedStyle(el)[prop]) );
 },
 
 _parentDim: function(el, prop) {
