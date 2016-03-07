@@ -548,6 +548,7 @@ _addInfoCardTo: function(newPic, placement) {
                 html: $("<button>", {
                     css: {
                         "background": "yellow",
+                        "padding": "5px",
                         "border": "0",
                     },
                     html: $("<a>", {
