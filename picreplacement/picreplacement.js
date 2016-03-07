@@ -455,7 +455,7 @@ _addInfoCardTo: function(newPic, placement) {
             "width": "100%",
           },
           html: $("<div>", {
-            text: translate("title"),
+            text: translate("AI_title"),
             css: {
               "display": "table-cell",
               "vertical-align": "middle",
@@ -484,7 +484,6 @@ _addInfoCardTo: function(newPic, placement) {
         }));
 
         if (placement.type !== "wide") {
-          console.log("not wide");
             // READ ON AMNESTY
             content_wrapper.
             append($("<div>", {
@@ -500,7 +499,7 @@ _addInfoCardTo: function(newPic, placement) {
                     html: $("<a>", {
                       href: placement.info_url,
                       target: "_blank",
-                      text: translate("learn_more"),
+                      text: translate("AI_learn_more"),
                       css: {
                           "text-decoration": "none",
                           "text-transform": "uppercase",
@@ -516,7 +515,7 @@ _addInfoCardTo: function(newPic, placement) {
             css: {
             },
             html: $("<div>", {
-                text: translate("stop_showing"),
+                text: translate("AI_stop_showing"),
                 css: {
                     "opacity": ".8",
                     "color": "white",
@@ -529,7 +528,7 @@ _addInfoCardTo: function(newPic, placement) {
                 click(function() {
                   BGcall("set_setting", "do_picreplacement", false, function() {
                     $(".picreplacement-image, .picreplacement-infocard").remove();
-                    alert(translate("ok_no_more"));
+                    alert(translate("AI_ok_no_more"));
                   });
                 }),
           }).
@@ -556,7 +555,7 @@ _addInfoCardTo: function(newPic, placement) {
                     html: $("<a>", {
                         href: placement.info_url,
                         target: "_blank",
-                        text: translate("learn_more"),
+                        text: translate("AI_learn_more"),
                         css: {
                             "text-decoration": "none",
                             "text-transform": "uppercase",
@@ -575,7 +574,7 @@ _addInfoCardTo: function(newPic, placement) {
                       "display": "table",
                   },
                   html: $("<div>", {
-                      text: translate("stop_showing"),
+                      text: translate("AI_stop_showing"),
                       css: {
                           "opacity": ".8",
                           "color": "white",
@@ -589,7 +588,7 @@ _addInfoCardTo: function(newPic, placement) {
                   click(function() {
                       BGcall("set_setting", "do_picreplacement", false, function() {
                           $(".picreplacement-image, .picreplacement-infocard").remove();
-                          alert(translate("ok_no_more"));
+                          alert(translate("AI_ok_no_more"));
                       });
                   })
               });
@@ -632,7 +631,7 @@ _addInfoCardTo: function(newPic, placement) {
               // TODO: Change URL
               href: "http://dev.getadblock.com/amnesty2016",
               target: "_blank",
-              text: translate("why")
+              text: translate("AI_why")
           })
       });
       footer.appendTo(wrapper);
@@ -641,7 +640,7 @@ _addInfoCardTo: function(newPic, placement) {
 
       // Now that all the elements are on the card so it knows its height...
       position_card(newPic.infoCard);
-      
+
       if (stop_div) {
         stop_div.css({
             "height": read_on_amnesty.height(),
@@ -720,75 +719,75 @@ _replaceHiddenSectionContaining: function(el) {
 },
 
 translate: function(key) {
-  return chrome.i18n.getMessage("AI_" + key);
+  return chrome.i18n.getMessage(key);
 },
 
 _picdata: {
   "big": {
     "snowden": [
       { filename: "b_336_28_",
-        text: "snowden",
+        text: "AI_snowden",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        text: "snowden",
+        text: "AI_snowden",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        text: "snowden",
+        text: "AI_snowden",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_336_28_",
-        text: "aiweiwei",
+        text: "AI_aiweiwei",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        text: "aiweiwei",
+        text: "AI_aiweiwei",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        text: "aiweiwei",
+        text: "AI_aiweiwei",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
    ],
     "priot": [
       { filename: "b_336_28_",
-        text: "pussyriot",
+        text: "AI_pussyriot",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        text: "pussyriot",
+        text: "AI_pussyriot",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        text: "pussyriot",
+        text: "AI_pussyriot",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "nkorea": [
       { filename: "b_336_28_",
-        text: "northkorea",
+        text: "AI_northkorea",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        text: "northkorea",
+        text: "AI_northkorea",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        text: "northkorea",
+        text: "AI_northkorea",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_336_28_",
-        text: "cuba",
+        text: "AI_cuba",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        text: "cuba",
+        text: "AI_cuba",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        text: "cuba",
+        text: "AI_cuba",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_336_28_",
-        text: "adblock",
+        text: "AI_adblock",
         x: 336, y: 280, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_3___25_",
-        text: "adblock",
+        text: "AI_adblock",
         x: 300, y: 250, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_25__25_",
-        text: "adblock",
+        text: "AI_adblock",
         x: 250, y: 250, left: 0, right: 0, top: 0, bot: 0 },
     ]
   },
@@ -809,118 +808,118 @@ _picdata: {
   "wide": {
     "snowden": [
       { filename: "b_728_9_",
-        text: "snowden",
+        text: "AI_snowden",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        text: "snowden",
+        text: "AI_snowden",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_728_9_",
-        text: "aiweiwei",
+        text: "AI_aiweiwei",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        text: "aiweiwei",
+        text: "AI_aiweiwei",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "priot": [
       { filename: "b_728_9_",
-        text: "pussyriot",
+        text: "AI_pussyriot",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        text: "pussyriot",
+        text: "AI_pussyriot",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
      ],
     "nkorea": [
       { filename: "b_728_9_",
-        text: "northkorea",
+        text: "AI_northkorea",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        text: "northkorea",
+        text: "AI_northkorea",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_728_9_",
-        text: "cuba",
+        text: "AI_cuba",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        text: "cuba",
+        text: "AI_cuba",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_728_9_",
-        text: "adblock",
+        text: "AI_adblock",
         x: 728, y: 90, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_468_6_",
-        text: "adblock",
+        text: "AI_adblock",
         x: 468, y: 60, left: 0, right: 0, top: 0, bot: 0 },
     ]
   },
   "tall": {
     "snowden": [
       { filename: "b_16__6__",
-        text: "snowden",
+        text: "AI_snowden",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        text: "snowden",
+        text: "AI_snowden",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        text: "snowden",
+        text: "AI_snowden",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "aiweiwei": [
       { filename: "b_16__6__",
-        text: "aiweiwei",
+        text: "AI_aiweiwei",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        text: "aiweiwei",
+        text: "AI_aiweiwei",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        text: "aiweiwei",
+        text: "AI_aiweiwei",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "priot": [
       { filename: "b_16__6__",
-        text: "pussyriot",
+        text: "AI_pussyriot",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        text: "pussyriot",
+        text: "AI_pussyriot",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        text: "pussyriot",
+        text: "AI_pussyriot",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "nkorea": [
       { filename: "b_16__6__",
-        text: "northkorea",
+        text: "AI_northkorea",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        text: "northkorea",
+        text: "AI_northkorea",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        text: "northkorea",
+        text: "AI_northkorea",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "cuba": [
       { filename: "b_16__6__",
-        text: "cuba",
+        text: "AI_cuba",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        text: "cuba",
+        text: "AI_cuba",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        text: "cuba",
+        text: "AI_cuba",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ],
     "adblock": [
       { filename: "b_16__6__",
-        text: "adblock",
+        text: "AI_adblock",
         x: 160, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_12__6__",
-        text: "adblock",
+        text: "AI_adblock",
         x: 120, y: 600, left: 0, right: 0, top: 0, bot: 0 },
       { filename: "b_24__4__",
-        text: "adblock",
+        text: "AI_adblock",
         x: 240, y: 400, left: 0, right: 0, top: 0, bot: 0 },
     ]
   }
