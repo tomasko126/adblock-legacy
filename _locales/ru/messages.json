@@ -43,10 +43,6 @@
     "message":"Чтобы скрыть кнопку, щелкните правой кнопкой мыши по панели инструментов Safari и выберите Настроить панель инструментов, а затем перетащите кнопку AdBlock с панели инструментов. Вы можете показать её снова, перетащив обратно на панель инструментов.",
     "description":"Message explaining how to hide the AdBlock toolbar button. 'Customize Toolbar' should match the text that Safari displays in the toolbar's context menu."
   },
-  "ff_button_how_to_hide":{
-    "message":"Чтобы скрыть кнопку, щелкните правой кнопкой мыши и выберите Удалить в панели инструментов.  Вы можете отобразить её снова, используя меню Firefox -> Customize.",
-    "description":"Message explaining how to hide the AdBlock toolbar button. 'Remove from Toolbar' should match the text that Firefox displays when you right click a toolbar button, and 'Customize' should match the text that shows when you click the button on the Firefox toolbar with three lines."
-  },
   "sliderexplanation":{
     "message":"Сдвигайте ползунок до тех пор, пока реклама не будет заблокирована правильно, а заблокированный элемент выглядит пригодным.",
     "description":"Blacklister slider page message"
@@ -793,30 +789,6 @@
     "message":"Реклама появляется в этом браузере тоже?",
     "description":"Instruction for how to check Firefox\/Chrome for a reported ad"
   },
-  "ff_checkinchrometitle":{
-    "message":"Проверить в Chrome",
-    "description":"Tell a user to see if a reported ad also appears in Chrome"
-  },
-  "ff_checkinchrome_1":{
-    "message":"Установить Chrome, если у Вас нет его.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_2":{
-    "message":"Установить AdBlock для Chrome, если у Вас нет его.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_3":{
-    "message":"В Chrome подпишитесь на те же списки фильтров, как и здесь.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_4":{
-    "message":"В Chrome загрузите страницу с рекламой.",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
-  "ff_checkinchrome_5":{
-    "message":"Реклама появляется в Chrome тоже?",
-    "description":"Instruction for how to check Chrome for a reported ad"
-  },
   "refusetocheck":{
     "message":"Я не хочу проверять это",
     "description":"User is telling us they don't wish to investigate something for us"
@@ -830,10 +802,6 @@
         "example":"EXAMPLE 1: <a href='mailto:someguy@list.com'>John Doe<\/a>  EXAMPLE 2: <a href='http:\/\/easylist.org'>EasyList forums<\/a>"
       }
     }
-  },
-  "reporttous2":{
-    "message":"Если Вы знаете английский, Вы можете сообщить нам о рекламе <a>в трекер вопросов<\/a>.",
-    "description":"NOTE: non-English translations should replace the first sentence and instead say 'If you can speak English, you can report the ad to us <a>in the issue tracker<\/a>.'"
   },
   "fixityourself":{
     "message":"OK, Вы все равно можете заблокировать эту рекламу для себя на странице Параметры. Спасибо!",
@@ -931,10 +899,6 @@
     "message":"Извените, AdBlock отключен на этой странице одним из списков фильтров.",
     "description":"Message shown when a user tries to unwhitelist a web page that has been whitelisted by a rule in a subscribed filter list"
   },
-  "status_disabled":{
-    "message":"AdBlock не работает на этом домене.",
-    "description":"Message shown in toolbar button on web pages that disallow extensions, such as the Extensions Gallery or about:blank"
-  },
   "dont_run_on_pages_on_domain":{
     "message":"Не запускать на страницах этого домена",
     "description":"Menu entry to open the whitelist wizard"
@@ -966,10 +930,6 @@
   "safaricontentblockinglimitexceeded":{
     "message":"Количество правил списка фильтров превышает ограничение в 50 000 и автоматически уменьшено. Пожалуйста, отпишитесь от некоторых списков фильтров или отключите блокирование содержимого Safari!",
     "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled"
-  },
-  "browserestartrequired":{
-    "message":"Отключение этой функции требует перезапуска браузера.",
-    "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
   },
   "safarinotificationtitle":{
     "message":"Превышено ограничение правил Блокировки Содержимого",
@@ -1186,10 +1146,6 @@
         "example":"<a>here<\/a>"
       }
     }
-  },
-  "ff_adblock_outdated":{
-    "message":"Вы используете старую версию AdBlock. Пожалуйста, нажмите на кнопку меню Firefox и выберите Дополнения. Затем на странице Дополнений, нажмите на значок шестеренки (инструменты для всех Дополнений) и выберите «Проверить наличие обновлений».",
-    "description":"On the Options > Support page, shows when there is an update available for AdBlock. 'Add-ons', 'Tools for all add-ons' and 'Check for Updates' should match the strings displayed by Firefox."
   },
   "adblocksupport":{
     "message":"Поддержка AdBlock",
