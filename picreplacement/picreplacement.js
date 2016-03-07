@@ -330,7 +330,7 @@ _determineLanguage: function() {
     if (lang === "en" ||
         lang === "fr" ||
         lang === "es" ||
-        lang === "ar") {
+        lang === "ru") {
         return lang;
     }
     return "en";
