@@ -721,93 +721,108 @@ translate: function(key) {
   var text = {
     "title": {
       en: "Today is World Day Against Cyber Censorship!",
-      es: "AdBlock ahora muestra los gatos en lugar de anuncios!",
-      fr: "Dorénavant AdBlock affichera des chats à la place des publicités!",
-      ar: "现在显示的AdBlock猫，而不是广告！",
+      es: "¡Hoy es el Día Mundial contra la Censura en Internet!",
+      fr: "Ce jour marque la journée mondiale contre la cyber-censure.",
+      ar: "اليوم هو اليوم العالمي لمكافحة الرقابة الإلكترونية",
+      ru: "Сегодня Всемирный день борьбы против кибер-цензуры!",
     },
     "stop_showing": {
       en: "Stop showing me these banners!",
-      es: "No mostrar los gatos!",
-      fr: "Arrêter l'affichage des chats!",
-      ar: "不显示猫图片！",
+      es: "¡Deja de mostrarme estos banners!",
+      fr: "Arrêtez de me montrer ces bannières !",
+      ar:  "إيقاف عرض هذه اللافتات!",
+      ru: "Перестаньте показывать мне эти баннеры!"
     },
     "why": {
       en: "WHY DID ADBLOCK ALLOW THIS \"AD\" TODAY?",
-      es: "No mostrar los gatos!",
-      fr: "Arrêter l'affichage des chats!",
-      ar: "不显示猫图片！",
+      es: "¿POR QUÉ NO ELIMINA ADBLOCK ESTE \"ANUNCIO\" HOY?",
+      fr: "POURQUOI ADBLOCK A-T-IL PERMIS CETTE « PUB » AUJOURD'HUI ?",
+      ar: "لماذا سمح ADBLOCK بهذا ال \"AD\" اليوم؟",
+      ru: "ПОЧЕМУ ADBLOCK ПРОПУСТИЛ ЭТУ \"РЕКЛАМУ\" СЕГОДНЯ?"
     },
     "ok_no_more": {
       en: "OK, you won't see any more banners about World Day Against Cyber Censorship!",
-      es: "OK, AdBlock no te mostrará los gatos.\n\nFeliz Día de los Inocentes!",
-      fr: "OK, AdBlock n'affichera plus de chats.\n\nJ'espère que mon poisson d'avril vous a plu!",
-      ar: "OK，的AdBlock不会显示猫。\n\n幸福四月愚人节！",
+      es: "¡De acuerdo, no verás más estos banners del Día Mundial contra la Censura en Internet!",
+      fr: "D'accord, vous ne verrez plus de bannières concernant la Journée mondiale contre la cyber-censure !",
+      ar: "تشير Banners إلى لافتة الإعلانات على موقع شبكة الانترنت.",
+      ru: "Хорошо, вы больше не увидите никаких баннеров о Всемирном Дне борьбы против кибер-цензуры!"
     },
     "new": {
       en: "Today only!",
-      es: "Nuevo!",
-      fr: "Nouveau!",
-      ar: "新！",
+      es: "¡Solo hoy!",
+      fr: "Aujourd'hui seulement !",
+      ar: "اليوم فقط!",
+      ru: "Только сегодня!"
     },
     "new_after": {
       en: "Re-enable the free speech banners!",
-      es: "Nuevo!",
-      fr: "Nouveau!",
-      ar: "新！",
+      es: "Volver a mostrar los banners de Amnistía Internacional.",
+      fr: "Réactiver les bannières d'Amnesty.",
+      ar: "إعادة تمكين لافتات Amnesty.",
+      ru: "Разрешите баннеры Amnesty."
     },
     "enable_picreplacement": {
       en: "For 24 hours, promote <a id=\"wikipedia_link\" target=\"_blank\">World Day Against Cyber Censorship<\/a> by replacing ads with banners linking to Amnesty International articles about freedom of speech by Edward Snowden and others. <a id=\"adblock_link\" target=\"_blank\">Why is AdBlock doing this today?<\/a>",
-      es: "Mostrar una foto bonita en lugar de anuncios.",
-      fr: "Afficher des belles images à la place des publicités.",
-      ar: "显示漂亮的照片，而不是广告。",
+      es: "Durante 24 horas, sustituir ciertos anuncios con banners a favor del Día Mundial contra la Censura en Internet. <a id=\"adblock_link\" target=\"_blank\">¿Por qué hace esto AdBlock hoy?</a>",
+      fr: "Remplacer pendant 24 heures certaines pubs avec des bannières de soutien de la Journée mondiale contre la cyber-censure. <a id=\"adblock_link\" target=\"_blank\">Pourquoi AdBlock fait-il ceci aujourd'hui ?</a>",
+      ar: "استبدال بعض لافتات الإعلانات لدعم اليوم العالمي لمكافحة الرقابة الإلكترونية لمدة 24 ساعة. <a id=\"adblock_link\" target=\"_blank\">لماذا يقوم AdBlock بهذا اليوم؟</a>",
+      ru: "В течение 24 часов заменить некоторую рекламу баннерами в поддержку Всемирного Дня борьбы против кибер-цензуры. <a id=\"adblock_link\" target=\"_blank\">Почему AdBlock делает это сегодня?</a>"
     },
     "enable_picreplacement_after": {
       en: "Temporarily bring back the <a id=\"wikipedia_link\" target=\"_blank\">World Day Against Cyber Censorship<\/a> ads AdBlock allowed through on March 12, in partnership with Amnesty International. (Note: This option will be completely removed soon.) <a id=\"adblock_link\" target=\"_blank\">Why did AdBlock do this?<\/a>",
-      es: "Mostrar una foto bonita en lugar de anuncios.",
-      fr: "Afficher des belles images à la place des publicités.",
-      ar: "显示漂亮的照片，而不是广告。",
+      es: "Restaurar temporalmente los anuncios del Día Mundial contra la Censura en Internet desbloqueados el 12 de marzo. (Esta opción desaparecerá en breve.) <a id=\"adblock_link\" target=\"_blank\">¿Por qué ha hecho esto AdBlock?</a>",
+      fr: "Débloquer temporairement les annonces concernant la Journée mondiale contre la cyber-censure du 12 mars. (Cette option expirera bientôt.) <a id=\"adblock_link\" target=\"_blank\">Pourquoi AdBlock a-t-il agi ainsi ?</a>",
+      ar: "إظهار مؤقتا إعلانات الرقابة لليوم العالمي لمكافحة السايبر برفع الحجب يوم ١٢ مارس. (هذا الخيار سينتهي قريبا.) <a id=\"adblock_link\" target=\"_blank\">لماذا يقوم AdBlock بذلك؟</a>",
+      ru: "Временно вернуть рекламу Всемирного Дня борьбы против кибер-цензуры, разблокированную 12 марта. (Срок действия этой функции истекает в ближайшее время). <a id=\"adblock_link\" target=\"_blank\">Почему AdBlock сделал это?</a>"
     },
     "learn_more": {
       en: "Read it on Amnesty.org >",
-      es: "Más información",
-      fr: "En savoir plus",
-      ar: "了解更多信息",
+      es: "Léelo en Amnesty.org >",
+      fr: "Lire sur Amnesty.org >",
+      ar: "اقرأ ذلك على Amnesty.org>",
+      ru: "Узнайте это на Amnesty.org >"
     },
     "snowden": {
       en: "\"Even If You're Not Doing Anything Wrong, You're Being Watched And Recorded\" - by Edward Snowden",
-      es: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
-      fr: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
-      ar: "\"EVEN IF YOU'RE NOT DOING ANYTHING WRONG, YOU'RE BEING WATCHED AND RECORDED\" - by Edward Snowden",
+      es: "\"Aunque no hagas nada malo, te están espiando y grabando\", de Edward Snowden",
+      fr: "« Même si vous ne faites rien de mal, vous êtes surveillé et enregistré » - par Edward Snowden",
+      ar: "\"حتى إذا كنت لا تفعل أي شيء خاطئ، فأنت تحت الرقابة ومسجل\" - من طرف Edward Snowden",
+      ru: "\"Даже если вы не делаете ничего плохого, за вами следят и записывают\" - Эдвард Сноуден"
     },
     "aiweiwei": {
       en: "\"Without Freedom Of Speech There Is No Modern World, Just A Barbaric One\" - by Ai Wei Wei",
-      es: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
-      fr: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
-      ar: "\"WITHOUT FREEDOM OF SPEECH THERE IS NO MODERN WORLD, JUST A BARBARIC ONE\" - by Ai Wei Wei",
+      es: "\"Sin libertad de expresión no existe el mundo moderno, solo la barbarie\", de Ai Wei Wei",
+      fr: "« Sans liberté d'expression, il n'y a pas de monde moderne mais uniquement un monde barbare » - par Ai Wei Wei",
+      ar: "\"لا وجود لعالم حديث بدون وجود لحرية التعبير، بل هو عالم همجي\" - من Ai Wei Wei",
+      ru: "\"Без свободы слова — нет современного мира, но только варварский мир\" - Ай Вэйвэй"
     },
     "pussyriot": {
       en: "\"Authorities Don't Just Use Handcuffs And Arrests, But Also Media Attacks\" - by Pussy Riot",
-      es: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
-      fr: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
-      ar: "\"AUTHORITIES DON'T JUST USE HANDCUFFS AND ARRESTS, BUT ALSO MEDIA ATTACKS\" - by Pussy Riot",
+      es: "\"Las autoridades no usan solo esposas y detenciones, sino que también atacan con los medios de comunicación\", de Pussy Riot",
+      fr: "« Les autorités ne se contentent pas d'utiliser des menottes et des arrestations, mais attaquent également les médias » - par Pussy Riot",
+      ar: "\"لا تقوم السلطات بوضع الأصفاد والقيام بالاعتقالات فقط، ولكن أيضا بهجمات إعلامية\" - من Pussy Riot",
+      ru: "\"Власти используют не только наручники и аресты, но и атаки СМИ\" - Pussy Riot"
     },
     "northkorea": {
-      en: "\"Without A Phone To Call Out Of The Country, I'd Never Have Learnt My Parents Were Alive; I'd Have Lived And Died In North Korea\" - by Choi Ji-woo",
-      es: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
-      fr: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
-      ar: "\"WITHOUT A PHONE TO CALL OUT OF THE COUNTRY, I'D NEVER HAVE LEARNT MY PARENTS WERE ALIVE; I'D HAVE LIVED AND DIED IN NORTH KOREA\" - by Choi Ji-woo",
+      en: "\"لولا وجود الهاتف للاتصال خارج البلاد، لما كنت لأعرف أن والداي على قيد الحياة، كنت قد أعيش وأموت في كوريا الشمالية\" - Choi Ji-woo",
+      es: "\"Si no hubiera recibido una llamda de fuera del país, nunca habría sabido que mis padres estaban vivos; habría vivido y muerto en Corea del Norte\", de Choi Ji-woo",
+      fr: "« Sans un téléphone pour appeler à l'étranger, je n'aurais jamais appris que mes parents étaient en vie ; j'aurai vécu et je serai mort en Corée du Nord » - par Choi Ji-woo",
+      ar: "عنوان ومؤلف المقال. \"Choi Ji-woo \" لا ينبغي أن تترجم.",
+      ru: "\"Без телефона, чтобы позвонить заграницу, я никогда не узнала бы, что мои родители живы, я жила бы и умерла в Северной Корее\" - Чхве Джиу"
     },
     "cuba": {
       en: "\"Cuba Quote About Cube And It's Going To Be About Cuba And Probably This Long\" - by Someone",
-      es: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
-      fr: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
-      ar: "\"CUBA QUOTE ABOUT CUBE AND IT'S GOING TO BE ABOUT CUBA AND PROBABLY THIS LONG\" - by Someone",
+      es: "\"En Cuba puedes acabar en la cárcel por culpa de la libertad de expresión\", de James Burke",
+      fr: "« La liberté d'expression peut vous conduire en prison à Cuba » - par James Burke",
+      ar: "\"حرية التعبير يمكن أن تأخذك إلى السجن في كوبا\" - James Burke",
+      ru: "\"Свобода слова может привести вас в тюрьму на Кубе\" - Джеймс Берк"
     },
     "adblock": {
       en: "\"Why AdBlock Is \"Un-Blocking\" Amnesty Banners Today\" - by Gabriel Cubbage",
-      es: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
-      fr: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
-      ar: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
+      es: "\"Por qué AdBlock ha “desbloqueado” los banners de Amnistía Internacional hoy\", de Gabriel Cubbage",
+      fr: "« Pourquoi AdBlock « débloque-t-il » aujourd'hui les bannières d'Amnesty » – par Gabriel Cubbage",
+      ar: "\"لماذا يقوم AdBlock \" برفع الحظر على \"لافتات Amnesty اليوم\" - Gabriel Cubbage",
+      ru: "\"Почему AdBlock \"разблокирует\" сегодня баннеры Amnesty\" - Габриэль Каббэдж"
     },
   };
   var locale = navigator.language.substring(0, 2);
@@ -1019,4 +1034,3 @@ _picdata: {
 }
 
 }; // end picreplacement
-//Test 7-march-2016
