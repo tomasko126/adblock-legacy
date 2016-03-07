@@ -395,7 +395,7 @@ _addInfoCardTo: function(newPic, placement) {
             border: "none",
           },
           src: chrome.extension.getURL("img/icon24.png")
-        }))
+        }));
 
       newPic.infoCard
         .append($("<img>", {
@@ -435,7 +435,6 @@ _addInfoCardTo: function(newPic, placement) {
         }
       });
 
-
       // CONTENT WRAPPER
       var content_wrapper = $("<div>", {
         css: {
@@ -468,7 +467,7 @@ _addInfoCardTo: function(newPic, placement) {
         })
       wrapper.append(header);
 
-        content_wrapper.
+      content_wrapper.
         // CONTENT PITCH (WHO'S ARTICLE)
         append($("<div>", {
           css: {
@@ -482,9 +481,10 @@ _addInfoCardTo: function(newPic, placement) {
               },
               text: translate(placement.text) + " "
           })
-        }))
+        }));
 
         if (placement.type !== "wide") {
+          console.log("not wide");
             // READ ON AMNESTY
             content_wrapper.
             append($("<div>", {
@@ -509,7 +509,7 @@ _addInfoCardTo: function(newPic, placement) {
                       }
                     })
                 })
-            }))
+            }));
 
           // STOP SHOWING BUTTON
           $("<div>", {
@@ -534,6 +534,7 @@ _addInfoCardTo: function(newPic, placement) {
                 }),
           }).
             appendTo(content_wrapper);
+
         } else {
             var middle_div = $("<div>", {
                 css: {
@@ -567,7 +568,7 @@ _addInfoCardTo: function(newPic, placement) {
               });
 
               // STOP SHOWING BUTTON
-              var stop_div = $("<div>", {
+            var stop_div = $("<div>", {
                   css: {
                       "width": "50%",
                       "float": "left",
@@ -601,7 +602,7 @@ _addInfoCardTo: function(newPic, placement) {
                     "top-margin": "5px",
                 },
             }));
-            middle_div.appendTo(content_wrapper)
+            middle_div.appendTo(content_wrapper);
             content_wrapper.append($("<div>", { html: "&nbsp;", css: { "margin-bottom": "15px" }}));
         }
 
@@ -640,11 +641,12 @@ _addInfoCardTo: function(newPic, placement) {
 
       // Now that all the elements are on the card so it knows its height...
       position_card(newPic.infoCard);
-
-      stop_div.css({
-          "height": read_on_amnesty.height(),
-      });
-
+      
+      if (stop_div) {
+        stop_div.css({
+            "height": read_on_amnesty.height(),
+        });
+      }
 
       newPic.infoCard.css({
           "height": content_container.height() + header.height() + footer.height(),
