@@ -23,8 +23,7 @@ $(function() {
         $(this).html(picreplacement.translate(key));
       });
       $("#wikipedia_link").prop("href", "https://www.wikipedia.org/wiki/World_Day_Against_Cyber_Censorship");
-      // TODO - update URL
-      $("#adblock_link").prop("href", "http://blog.getadblock.com/2012/03/inturdusing-catblock.html");
+      $("#adblock_link").prop("href", "http://getadblock.com/amnesty2016");
       $("#picreplacement_link").prop("href", picreplacement.translate("the_url"));
     });
   }

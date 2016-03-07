@@ -264,10 +264,8 @@ _placementFor: function(el) {
   }
 
   var result = this._fit(pic, t);
-  //TODO - update URL to include localizations
   result.url = "https://adblockcdn.com/img/" + pic.filename + selectedTheme + "_" + this._determineLanguage() + ".png";
-  //TODO - update URL
-  result.info_url = "http://dev.getadblock.com/amnesty_url/?l=" + this._determineLanguage() + "&v=" + selectedTheme + "&s=" + pic.x + "x" + pic.y;
+  result.info_url = "http://getadblock.com/amnesty_url/?l=" + this._determineLanguage() + "&v=" + selectedTheme + "&s=" + pic.x + "x" + pic.y;
   result.text = pic.text;
   result.color = selectedTheme;
   result.type = t.type;
@@ -628,8 +626,7 @@ _addInfoCardTo: function(newPic, placement) {
                 "vertical-align": "middle",
                 "display": "table-cell",
               },
-              // TODO: Change URL
-              href: "http://dev.getadblock.com/amnesty2016",
+              href: "http://getadblock.com/amnesty2016",
               target: "_blank",
               text: translate("AI_why")
           })
