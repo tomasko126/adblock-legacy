@@ -502,7 +502,8 @@ _addInfoCardTo: function(newPic, placement) {
                           "text-decoration": "none",
                           "text-transform": "uppercase",
                           "font-weight": "bold",
-                          "letter-spacing": "-0.5px"
+                          "letter-spacing": "-0.5px",
+                          "color": "black"
                       }
                     })
                 })
@@ -559,7 +560,8 @@ _addInfoCardTo: function(newPic, placement) {
                             "text-decoration": "none",
                             "text-transform": "uppercase",
                             "font-weight": "bold",
-                            "letter-spacing": "-0.5px"
+                            "letter-spacing": "-0.5px",
+                            "color": "black"
                         }
                     })
                 })
