@@ -24,7 +24,6 @@ $(function() {
       });
       $("#wikipedia_link").prop("href", "https://www.wikipedia.org/wiki/World_Day_Against_Cyber_Censorship");
       $("#adblock_link").prop("href", "http://getadblock.com/amnesty2016");
-      $("#picreplacement_link").prop("href", picreplacement.translate("the_url"));
     });
   }
   init_picreplacement();

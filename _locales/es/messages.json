@@ -1166,7 +1166,7 @@
     "description": "Title and author of an essay. 'James Burke' should not be translated."
   },
   "AI_adblock": {
-    "message": "\"Por qué AdBlock ha “desbloqueado” los banners de Amnistía Internacional hoy\", de Gabriel Cubbage",
+    "message": "\"Por qué AdBlock ha 'desbloqueado' los banners de Amnistía Internacional hoy\", de Gabriel Cubbage",
     "description": "Title and author of an essay. 'Gabriel Cubbage', 'AdBlock', and 'Amnesty' should not be translated."
   }  
 }
