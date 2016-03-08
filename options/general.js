@@ -17,13 +17,24 @@ $(function() {
       p.find("[i18n]").each(function() {
         var today = new Date();
         var key = $(this).attr("i18n");
-        if (today >= new Date(2016, 2, 13)) {          
-          key = $(this).attr("i18nafter") || $(this).attr("i18n"); 
+        if (today >= new Date(2016, 2, 13)) {
+          key = $(this).attr("i18nafter") || $(this).attr("i18n");
         }
         $(this).html(picreplacement.translate(key));
       });
       $("#wikipedia_link").prop("href", "https://www.wikipedia.org/wiki/World_Day_Against_Cyber_Censorship");
-      $("#adblock_link").prop("href", "http://getadblock.com/amnesty2016");
+      var _determineLanguage = function() {
+          var lang = determineUserLanguage();
+          if (lang === "en" ||
+              lang === "fr" ||
+              lang === "es" ||
+              lang === "ru") {
+              return lang;
+          }
+          return "en";
+      };
+      //TODO - update link below
+      $("#adblock_link").prop("href", "http://getadblock.com/amnesty_url/?l=" + _determineLanguage() + "&v=adblock&s=");
     });
   }
   init_picreplacement();
