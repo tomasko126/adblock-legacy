@@ -33,7 +33,6 @@ $(function() {
           }
           return "en";
       };
-      //TODO - update link below
       $("#adblock_link").prop("href", "http://getadblock.com/amnesty_url/?l=" + _determineLanguage() + "&v=adblock&s=");
     });
   }
