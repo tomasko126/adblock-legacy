@@ -928,8 +928,12 @@
     "description":"Alert displayed after clicking 'Pause AdBlock' in the AdBlock menu while Safari Content blocking is enabled"
   },
   "safaricontentblockinglimitexceeded":{
-    "message":"Ο αριθμός των κανόνων στη λίστα φίλτρου υπερβαίνει το όριο των 50.000, και έχει μειωθεί αυτόματα. Παρακαλώ διαγραφτείτε από μερικές λίστες φίλτρων ή απενεργοποιήστε τον αποκλεισμό περιεχομένου Safari!",
+    "message":"Ο αριθμός των κανόνων στη λίστα φίλτρου υπερβαίνει το όριο των 50.000, και έχει μειωθεί αυτόματα. Παρακαλώ αναιρέστε την εγγραφή σας από μερικές λίστες φίλτρων ή απενεργοποιήστε τον Αποκλεισμό Περιεχομένου Safari!",
     "description":"Displayed when the number of rules in the subscribed filter lists is larger than the number supported by Safari Content Blocking, if that option is enabled"
+  },
+  "browserestartrequired":{
+    "message":"Παρακαλούμε κάντε επανεκκίνηση το Safari για να ολοκληρώσετε την απενεργοποίηση φραγής περιεχομένου.",
+    "description":"Displayed after disabling Safari Content Blocking, which requres a browser relaunch"
   },
   "safarinotificationtitle":{
     "message":"Υπέρβαση ορίου κανόνων αποκλεισμού περιεχομένου",
@@ -960,7 +964,7 @@
     "description":"Text of a share link"
   },
   "pwyw":{
-    "message":"Πληρώστε ότι θέλετε!",
+    "message":"Πληρώστε ό,τι θέλετε!",
     "description":"Text of a payment request link"
   },
   "translator_credit":{
@@ -1012,7 +1016,7 @@
     "description":"Message on the 'Customize' tab of the options page, explaining the danger of adding a blacklisting filter"
   },
   "storage_quota_exceeded":{
-    "message":"Ξεπεράσατε το όριο αποθήκευσης που το AdBlock μπορεί να κάνει χρήση. Παρακαλώ αναιρέστε την εγγραφή σας από μερικές λίστες φίλτρων.",
+    "message":"Ξεπεράσατε το όριο αποθήκευσης που το AdBlock μπορεί να κάνει χρήση. Παρακαλούμε αναιρέστε την εγγραφή σας από μερικές λίστες φίλτρων.",
     "description":"Message shown when the user uses more storage than allowed by the browser"
   },
   "safari50_updatenotice":{
@@ -1314,6 +1318,14 @@
   "acceptableadsdisable_how_to_reenable":{
     "message":"Μπορείτε να το ενεργοποιήσετε ξανά παρακάτω και να υποστηρίζετε τις ιστοσελίδες που αγαπάτε επιλέγοντας \"Να επιτρέπονται ορισμένες μη-παρεμβατικές διαφημίσεις\".",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
+  },
+  "acceptable_ads_content_blocking_disbled_message":{
+    "message":"Αναιρέσαμε την εγγραφή σας από τις αποδεκτές διαφημίσεις, διότι έχετε ενεργοποιήσει την Φραγή Περιεχομένου Safari. Μπορείτε να επιλέξετε μόνο ένα κάθε φορά. (<a>Γιατί;<\/a>)",
+    "description":"Warning shown when Safari Content Blocking is enabled while the Acceptable Ads filter list was already enabled."
+  },
+  "content_blocking_acceptable_ads_disbled_message":{
+    "message":"Απενεργοποιήσαμε την Φραγή Περιεχομένου Safari επειδή έχετε επιλέξει να επιτρέπονται μη παρεμβατικές διαφημίσεις. Μπορείτε να επιλέξετε μόνο ένα κάθε φορά. (<a>Γιατί;<\/a>)",
+    "description":"Warning shown when the Acceptable Ads filter list is enabled while Safari Content Blocking was already enabled."
   },
   "adreport_laststep":{
     "message":"Τελευταίο βήμα: αναφέρετε το πρόβλημα σε εμάς.",

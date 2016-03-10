@@ -1089,6 +1089,10 @@
     "message":"Mehr Informationen",
     "description":"Text of a link pointing to the explanation of a new feature"
   },
+  "how":{
+    "message":"Wie?",
+    "description":"Text of a link pointing to instructions on how to do something"
+  },
   "selectlanguage":{
     "message":"-- Sprache auswählen --",
     "description":"Text for the first option in Langage Dropdown for Filter Lists tab in options. Include the ' -- ' on either side of your translation."
@@ -1190,6 +1194,10 @@
   "debuginfo":{
     "message":"Hat unser Team Sie nach Debug-Informationen gefragt? Klicken Sie  <a href='#' id='debug'>hier<\/a> um die Informationen anzuzeigen.",
     "description":"Users can click this link to provide debug information to AdBlock staff"
+  },
+  "bugreport":{
+    "message":"Warum senden Sie uns nicht einfach einen <a>Fehlerbericht<\/a>?",
+    "description":"Link to send a bug report on the Support tab of the options"
   },
   "supportsite":{
     "message":"Teilen Sie uns Ihre Idee oder Ihre Frage auf unserer <a>Support-Seite<\/a> mit.",
@@ -1303,8 +1311,48 @@
     "message":"Sie können dies wieder aktivieren und die Webseiten die Sie mögen unterstützen indem Sie weiter unten \"Einige nicht aufdringliche Werbung zulassen\" aktivieren.",
     "description":"Message shown to users after disabling Acceptable Ads via update page."
   },
+  "adreport_name":{
+    "message":"Name",
+    "description":"Label for a textbox where the user enters their name (or nickname) to submit a bug or ad report."
+  },
+  "adreport_email":{
+    "message":"E-Mail-Adresse",
+    "description":"Label for a textbox where the user enters their email address to submit a bug or ad report."
+  },
+  "adreport_email_privacy":{
+    "message":"Wir werden Sie nur im Falle von fehlenden Informationen kontaktieren.",
+    "description":"Let the user know that their email address won't be used for reasons other than contacting them about their bug or ad report."
+  },
+  "adreport_location":{
+    "message":"Wo ist genau auf dieser Seite ist die Werbung? Wie sieht sie aus?",
+    "description":"Question on the ad report page asking the user to describe the ad and its location on a webpage."
+  },
+  "adreport_screen_cap_upload":{
+    "message":"Screenshot anhängen:",
+    "description":"Label next to a file upload button."
+  },
   "buttonsubmit":{
     "message":"Senden",
     "description":"Button to send a form."
+  },
+  "adreport_response_invalid_file":{
+    "message":"Datei ist keine Bilddatei. Bitte laden Sie eine Datei hoch die mit .png, .gif, oder .jpg endet.",
+    "description":"Error message shown when the user uploads an invalid file type."
+  },
+  "adreport_response_large_file":{
+    "message":"Datei ist zu groß. Bitte stellen Sie sicher, dass Ihre Datei kleiner als 10 MB ist.",
+    "description":"Error message shown when the user tries to upload a large image file."
+  },
+  "adreport_response_save_error":{
+    "message":"Speichern der hochgeladenen Datei fehlgeschlagen.",
+    "description":"Error message shown when the server could not save an attached file."
+  },
+  "adreport_response_file_name":{
+    "message":"Der Dateiname ist zu lang. Bitte geben Sie Ihrer Datei einen kürzeren Namen.",
+    "description":"Error message shown when the file name of an attachement the user is trying to submit in a report is longer than 255 characters."
+  },
+  "adreport_server_response_error_msg":{
+    "message":"Bei der Bearbeitung Ihrer Anfrage ist ein Fehler aufgetreten.",
+    "description":"Error message shown when an new ticket is sumbitted for an ad or bug report, and the server had an issue while processing the data."
   }
 }
