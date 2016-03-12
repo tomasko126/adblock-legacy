@@ -15,9 +15,17 @@ $(function() {
       var p = $("#picreplacement");
       p.toggle(show);
       p.find("[i18n]").each(function() {
-        $(this).text(picreplacement.translate($(this).attr("i18n")));
+        var today = new Date();
+        var key = $(this).attr("i18n");
+        if (today >= new Date(2016, 2, 13)) {          
+          key = $(this).attr("i18nafter") || $(this).attr("i18n"); 
+        }
+        $(this).html(picreplacement.translate(key));
       });
-      p.find("a").prop("href", picreplacement.translate("the_url"));
+      $("#wikipedia_link").prop("href", "https://www.wikipedia.org/wiki/World_Day_Against_Cyber_Censorship");
+      // TODO - update URL
+      $("#adblock_link").prop("href", "http://blog.getadblock.com/2012/03/inturdusing-catblock.html");
+      $("#picreplacement_link").prop("href", picreplacement.translate("the_url"));
     });
   }
   init_picreplacement();

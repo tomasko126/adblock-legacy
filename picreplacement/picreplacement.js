@@ -198,7 +198,7 @@ _placementFor: function(el) {
                 minDiff = diff;
             }
         }
-        
+
         // if different then set new candidate
         if (candidatePic !== pic) {
             pic = candidatePic;
@@ -413,7 +413,7 @@ _addInfoCardTo: function(newPic, placement) {
               "padding": "0 24px",
             }
           })
-        }) 
+        })
       wrapper.append(header);
 
         content_wrapper.
@@ -430,9 +430,9 @@ _addInfoCardTo: function(newPic, placement) {
               },
               text: translate(placement.text) + " "
           })
-        })).              
+        })).
 
-        // READ ON AMNESTY 
+        // READ ON AMNESTY
         append($("<div>", {
             css: {
             },
@@ -457,7 +457,7 @@ _addInfoCardTo: function(newPic, placement) {
             })
         }))
 
-      // STOP SHOWING BUTTON 
+      // STOP SHOWING BUTTON
       $("<div>", {
         css: {
         },
@@ -479,10 +479,10 @@ _addInfoCardTo: function(newPic, placement) {
               });
             }),
       }).
-        appendTo(content_wrapper); 
+        appendTo(content_wrapper);
 
-       content_wrapper.appendTo(content_container); 
-       content_container.appendTo(wrapper); 
+       content_wrapper.appendTo(content_container);
+       content_container.appendTo(wrapper);
 
       $("<br>").appendTo(wrapper);
 
@@ -503,7 +503,7 @@ _addInfoCardTo: function(newPic, placement) {
                 "font-size": "12px",
                 "vertical-align": "middle",
                 "display": "table-cell",
-              },        
+              },
               href: "http://getadblock.com/why",
               target: "_blank",
               text: translate("why")
@@ -626,7 +626,7 @@ translate: function(key) {
       zh: "不显示猫图片！",
     },
     "ok_no_more": {
-      en: "OK, AdBlock will not show you any more AdBlock Apple Watch ads.\n\nHappy April Fools' Day!",
+      en: "OK, you won't see any more banners about World Day Against Cybercensorship!",
       es: "OK, AdBlock no te mostrará los gatos.\n\nFeliz Día de los Inocentes!",
       fr: "OK, AdBlock n'affichera plus de chats.\n\nJ'espère que mon poisson d'avril vous a plu!",
       de: "AdBlock wird keine Katzen mehr anzeigen.\n\nApril, April!",
@@ -635,7 +635,16 @@ translate: function(key) {
       zh: "OK，的AdBlock不会显示猫。\n\n幸福四月愚人节！",
     },
     "new": {
-      en: "New!",
+      en: "Today only!",
+      es: "Nuevo!",
+      fr: "Nouveau!",
+      de: "Neu!",
+      ru: "новое!",
+      nl: "Nieuw!",
+      zh: "新！",
+    },
+    "new_after": {
+      en: "Re-enable the free speech banners!",
       es: "Nuevo!",
       fr: "Nouveau!",
       de: "Neu!",
@@ -644,7 +653,16 @@ translate: function(key) {
       zh: "新！",
     },
     "enable_picreplacement": {
-      en: "Display a pretty picture in place of ads.",
+      en: "For 24 hours, promote <a id=\"wikipedia_link\" target=\"_blank\">World Day Against Cyber Censorship<\/a> by replacing ads with banners linking to Amnesty International articles about freedom of speech by Edward Snowden and others. <a id=\"adblock_link\" target=\"_blank\">Why is AdBlock doing this today?<\/a>",
+      es: "Mostrar una foto bonita en lugar de anuncios.",
+      fr: "Afficher des belles images à la place des publicités.",
+      de: "Werbung durch schöne Bilder ersetzen.",
+      ru: "Показать красивую картинку вместо объявления.",
+      nl: "Toon een leuke afbeelding op de plaats waar advertenties stonden.",
+      zh: "显示漂亮的照片，而不是广告。",
+    },
+    "enable_picreplacement_after": {
+      en: "Temporarily bring back the <a id=\"wikipedia_link\" target=\"_blank\">World Day Against Cyber Censorship<\/a> ads AdBlock allowed through on March 12, in partnership with Amnesty International. (Note: This option will be completely removed soon.) <a id=\"adblock_link\" target=\"_blank\">Why did AdBlock do this?<\/a>",
       es: "Mostrar una foto bonita en lugar de anuncios.",
       fr: "Afficher des belles images à la place des publicités.",
       de: "Werbung durch schöne Bilder ersetzen.",
@@ -714,6 +732,11 @@ translate: function(key) {
       ru: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
       nl: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
       zh: "\"ADBLOCK IS THE BEST BLOCK, AND WE SORTA BLOCK INSTEAD OF BLOCK ALL THE BLOCKS\" - by AdBlock",
+    },
+    "the_url": {
+      // don't translate into other locales
+      // TODO - update URL
+      en: "https://www.amnesty.org"
     }
   };
   var locale = navigator.language.substring(0, 2);

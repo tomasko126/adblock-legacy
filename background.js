@@ -1852,4 +1852,6 @@
       }
   }
 
+  picreplacementOneTimer();
+
   log("\n===FINISHED LOADING===\n\n");

@@ -5,7 +5,7 @@ picreplacement_checker = {
       if (this.denying_existence())
         return false;
       if (/^https:/.test(url))
-        return false;        
+        return false;
       // Honor their choice. If there is none, default to "on" on day 1 only.
       var stored_settings = storage_get("settings") || {};
       var choice = stored_settings.do_picreplacement;
@@ -20,9 +20,7 @@ picreplacement_checker = {
     // Hello to whomever is reading this: you found the Amnesty International
     var today = new Date();
     //TODO - uncomment for release
-    //return (today < new Date(2016, 2, 12) || today >= new Date(2016, 2, 13));
-    //return (today < new Date(2016, 1, 12) || today >= new Date(2016, 2, 20));
-    return false;
+    return (today < new Date(2016, 2, 12));
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))
@@ -61,4 +59,18 @@ if (!SAFARI) {
       );
     }
   );
+}
+// After 12-March-2016, automatically disable the pic_replacement setting
+// This only needs to be done once, hence the use of "picdisabledOneTimer"
+// This is invoked from the background script because of the dependency on Settings.
+function picreplacementOneTimer() {
+  var today = new Date();
+  if (today >= new Date(2016, 2, 13)) {
+    var picDisabledKey = "picdisabledOneTimer";
+    var picDisabled = storage_get(picDisabledKey);
+    if (picDisabled === undefined) {
+      set_setting("do_picreplacement", false);
+      storage_set(picDisabledKey, true);
+    }
+  }
 }
