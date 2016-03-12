@@ -9,7 +9,7 @@ picreplacement_checker = {
       // Honor their choice. If there is none, default to "on" on day 1 only.
       var stored_settings = storage_get("settings") || {};
       var choice = stored_settings.do_picreplacement;
-      var default_setting = (new Date() < new Date(2016, 3, 12) ? true : false);
+      var default_setting = (new Date() < new Date(2016, 2, 13) ? true : false);
       return (choice === undefined ? default_setting : choice);
     }
     catch (ex) {
@@ -17,11 +17,7 @@ picreplacement_checker = {
     }
   },
   denying_existence: function() {
-    // Hello to whomever is reading this: you found the Amnesty International
-    var today = new Date();
-    //TODO - uncomment for release
-    //return (today < new Date(2016, 2, 12));
-    return false;
+    return (new Date() < new Date(2016, 2, 12));
   },
   get_icons: function(icons, url) {
     if (!this.enabled(url))
