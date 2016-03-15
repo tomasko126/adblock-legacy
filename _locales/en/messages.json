@@ -691,6 +691,10 @@
     "message":"Slovak",
     "description":"language"
   },
+  "lang_spanish":{
+    "message":"Spanish",
+    "description":"language"
+  },  
   "filtereasylist_plus_spanish":{
     "message":"Spanish",
     "description":"language"
