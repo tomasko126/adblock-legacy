@@ -1089,10 +1089,6 @@
       }
     }
   },
-  "dropboxerrorforfilters":{
-    "message":"You have exceeded the Dropbox size limit. Please remove some entries from your custom or disabled filters, and try again.",
-    "description":"Message to Dropbox sync users on the Customize tab, custom filters \/ disabled."
-  },
   "languagedropdowndescription":{
     "message":"Add filters for another language: ",
     "description":"Dropdown list for language-specific filters"
